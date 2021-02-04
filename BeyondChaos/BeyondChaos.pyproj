@@ -91,6 +91,9 @@
     <Compile Include="TowerRandomizer.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Updater.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Utils.py">
       <SubType>Code</SubType>
     </Compile>
