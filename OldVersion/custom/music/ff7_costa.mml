@@ -1,0 +1,175 @@
+#TITLE Costa del Sol
+#ALBUM Final Fantasy VII
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#VARIANT ~ enh
+#VARIANT / nat
+
+#WAVE 0x20 ~0x42~/0x20/
+#WAVE 0x21 ~0x07~/0x07/
+#WAVE 0x22 ~0x01~/0x01/
+#WAVE 0x23 ~0x18~/0x18/
+#WAVE 0x2A ~0x2F~/0x2F/
+#WAVE 0x2B ~0x55~/0x37/
+#WAVE 0x2C ~0x22~/0x22/
+#WAVE 0x2D ~0x85~/0x14/
+#WAVE 0x2E ~0x2E~/0x2E/
+#WAVE 0x2F ~0x2B~/0x2B/
+
+##shaker
+#drum "m"=5f+ |A %e0 v64 p100
+#drum "n"=5f+ |A %e0 v24 p100
+
+##tamb
+#drum "t"=~5f+~/6f+/ |B %e1 v40 p30
+#drum "u"=~5f+~/6f+/ |B %e1 v28 p30
+#drum "v"=~5f+~/6f+/ |B %e1 v16 p30
+
+##conga
+#drum "a"=4a |E %e0 v80 p20
+#drum "b"=4a |E %e0 v67 p20
+#drum "c"=4a |E %e0 v53 p20
+#drum "d"=4a |E %e0 v40 p20
+#drum "s"=~5g~/6g/ |D %e1 v64 p20
+#drum "a-"=4a |E %e0 v73 p20
+#drum "b-"=4a |E %e0 v60 p20
+#drum "c-"=4a |E %e0 v47 p20
+#drum "d-"=4a |E %e0 v33 p20
+
+##drumset
+#drum "k"=5f |C %e0 v96 p64
+#drum "r"=5a+ |F %e0 v96 p100
+
+## priority: sratm bcnku dv
+## standard drum pattern
+## 12345678 12345678
+## k  kk  k k  kk  k
+##   r  r   r  r  r 
+## nnmnnnmn nnmnnnmn
+## acscasc* asccscs+   * = b16c16 , + = a32b32c32d32
+## uvttuvtt uvttuvtt
+
+## 12345678 12345678 priority mixdown
+## acstastt rstrscs+
+## nnrcnrm* anmtnnrt
+## kvtnkncn nvcckvtn
+## u mkuv k k  ku mk
+##          u  n
+
+#def global= t115 %x224 %b0,70 %v50 %f0,0
+
+#def gt= |2 o5 p40 v80 %e1 m48,18,96
+#def fb= |3 o7 p64 v127 %e1 m
+#def fl= |1 o4 p50 v64 %e1 m48,18,207 %r5
+#def ep= |0 ~o4~/o5/ p90 v64 %e1 m48,18,223 %y0%s1%r6
+
+{1}
+'global'
+$
+'gt' l8 [4grg4.g4f+4f+4f+j4r4f+4]
+'ep'< rced
+##9
+[^^2>gg+a ^^2ega ^4aga<c4d ^>a2a<c>b
+ a+2rff+g ^^2gaa+ ^aa+<cdf4e ^^2j2ced]
+##17
+# ^^ 2
+'fl'< e4d
+##25
+e1.rg4f e1.re4f f+1.ra4g f+1. "!!!o nnmn"
+;
+
+{2}
+$
+'gt' l8 [4ere4.e4e4e4er4j4e4] f+4
+##9
+[[grg4.g4f+4f+4f+>d4<f+4]
+ [frf4.f4e4e4e>c4<e4]]
+##17
+# ^^ 2
+##25
+['gt' ere4.e4f 'ep'<d4>a2.] ['gt'f+rf+4.f+4g 'ep'<c+4>g2.]
+;
+
+{3}
+$
+'gt'> l2 [>aa<dd]
+##5
+['fb'> l8 >a4"!!!os"'fb'>>aa4.a <d4.d4j2>f+gg+]d4d
+##9
+>[[a4"!!!os"'fb'>>aa4.a <d4.j2d4>f+gg+]dd4>ag+
+  [g4"!!!os"'fb'>>gg4.g<c4.j2c4>eff+]cc4>a+4]
+##17
+# ^^ 2
+##25
+['fb'>> f4"!!!os"'fb'>>ff4.f "!!!or" 'ep' a+4f2^]
+['fb'>> g4"!!!os"'fb'>>gg4.g "!!!or" 'ep' a4e2^]
+;
+
+{4}
+$
+l8 [3"nnmnnnmn"] "nnmnnnma32b32c32d32"
+##5
+[10"!!!o acrtastt rstrscs a32b32c32d32"]
+##9
+# ^^ 3-6
+##17
+# ^^ 7-10
+##25
+[4"acrtastt" "ast"j4"r ncs a32b32c32d32"] l32 ":t:aa-bb-cc-dd-" r4.
+;
+
+{5}
+$
+'gt' l8 [4crc4.c4c4c4cr4j4c4] e4
+##9
+[[ere4.e4e4e4e"!!!onn"'gt'e4]
+[drd4.d4d4d4d"!!!onn"'gt'd4]]
+##17
+# ^^ 2
+##25
+[crc4.c4d4f4f>>a+4<<f4] [drd4.d4e4g4j2g>>a4<<g4]g2^
+;
+
+{6}
+$
+r1r1r1r2.. "n8"
+##
+l8 [10"!!!o nntcnrmb16c16 anmtkvrt"]
+##9
+# ^^ 3-6
+##17
+# ^^ 7-10
+##25
+["!!!o nntcnrmb16c16" 'fb'>>a+4"!!!om"'fb'>>a+a+4"!!!or"'fb'>>a+]
+["!!!o nntcnrmb16c16" 'fb'>>a4"!!!om"'fb'>>j2aa4"!!!or"'fb'>>a]a2^
+;
+
+{7}
+$
+r1r1r1r1
+##
+l8 [10"kvmnkncn nvccu4tn"]
+##9
+# ^^ 3-6
+##17
+# ^^ 7-10
+##25
+["!!!o kvmnkncn n" 'gt' d4d"!!!okn"'gt'd4]
+["!!!o kvmnkncn n" 'gt' e4j2e"!!!okn"'gt'e4]e2^
+;
+
+{8}
+$
+r1r1r1r1
+##
+'gt'> l2 >aa<dd >aa<dd4<c4
+##9
+l8 [[crc"!!!oku"'gt'c4c"!!!ok"'gt'c4cr4c"!!!ok"'gt']
+>[a+ra+"!!!oku"'gt'>a+4a+"!!!ok"'gt'>a+4a+r4a+"!!!ok"'gt'>]<]
+##17
+# ^^ 2
+##25
+['gt'> ara"!!!oku"'gt'>a4a "!!!o knctuvtt"]
+['gt'> brb"!!!oku"'gt'>b4b "!!!o knct"j2"uvtt"]r2
+;

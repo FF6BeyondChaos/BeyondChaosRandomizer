@@ -1,0 +1,109 @@
+#TITLE Battle #2
+#ALBUM Lufia and the Fortress of Doom
+#COMPOSER Yasunori Shiono
+#ARRANGED Gi Nattak & emberling
+# Converted from binary by mfvitools
+
+#VARIANT ~ enh
+#VARIANT / nat
+
+#WAVE 0x20 -- 0x0D
+#WAVE 0x21 -- ~0x6B~ /0x02/
+#WAVE 0x22 -- ~0x65~ /0x22/
+#WAVE 0x23 -- ~0x56~ /0x21/
+#WAVE 0x24 -- ~0x5A~ /0x11/
+#WAVE 0x25 -- ~0x50~ /0x12/
+#WAVE 0x26 -- 0x0F
+#WAVE 0x27 -- 0x1A
+
+#drum "k"=5g |2 v127 p64 %e0
+#drum "s"=5f |3 v127 p64 %e1
+#drum "o"=5g |4 v64 p64 %e0
+#drum "c"=5g+ |6 v64 p64 %e0
+#drum "y"=5f |5 v127 p64 %r18 %e0
+
+#def org= |7 o7 m48,18,63 %e1 %r2
+
+{1}
+l16t90%v25%x224%b0,70%f0,0%e1v112p84@32 m48,18,223
+o5>ab<c>b<cdcdedefefgg+  
+>a4^a<ceg8^e8^g8   $1 f+1  >a4^a<ceg8^e8^g8  f+1  
+f4^fgag+8^e8^<c8  >b8^a2^8>ab<c  d8^c8^d8^c8^d8d+8  e2>b2  
+a4^a<ceg8^e8^g8  f+1  >a4^a<ceg8^e8^g8  f+1  
+f4^fgag+8^e8^<c8  >b8^a2^8>ab<c  d8^c8^d8^c8^d8d+8  e2er4^e8  
+<c8^>a8^b8<c8^>b8^a8  b8^<d8^>g2^8  a8^f8^g8a8^g8^f8  e8^g2^8^fe  
+f8^d8^e8f8^e8^d8  e8^c8^e8a4^8b8  <c8^c4^8^c8>b8a8  b2<d2  
+o4a4^a<ceg8^e8^g8  
+;1
+
+l16
+{2}
+l16%e1v112p74@32o5 m48,18,207
+r1  >e4^ea<ce8^c8^e8  
+ $2 d1  >e4^ea<ce8^c8^e8  d1  >a4<cr8^d8^>b8^g+8  
+a2>ab<c>b<cdeg  b8^a8^b8^a8^b8a8  g+2e2  e4^ea<ce8^c8^e8  
+d1  >e4^ea<ce8^c8^e8  d1  >a4<cr8^d8^>b8^g+8  
+a2>ab<c>b<cdeg  b8^a8^b8^a8^b8a8  g+2g+r4^g+8  a4^8ab<c4d4  
+g2d2  >f4^8fga4<c4  >b2g4^8fe  d4^8def8^g8^f8  
+e4d4c4cdec  >a2<a4<c4  >b2g+2  e4^ea<ce8^c8^e8  
+
+;2
+
+l16
+{3}
+l16%e1v104p64@33o5ab<c>b<cdcdedefefgg+  aaaaaaggaaaaaagg  
+ $3 dddddddddddddc>ba+  <aaaaaaggaaaaaagg  dddddddddddddc>ba+  <ffffffffeeeeeeee  
+aaaaaaaaab<c>b<cdcd  >ffffffffffffffff  e2^4^8e8  aaaaaaggaaaaaagg  
+dddddddddddddc>ba+  <aaaaaaggaaaaaagg  dddddddddddddc>ba+  <ffffffffeeeeeeee  
+aaaaaaaaab<c>b<cdcd  >ffffffffffffffff  eeeeeeeeer4^e8  
+ffffffffffffffff  eeeeeeeeeeeeeeee  dddddddddddddddd  cccccccccccccccc  
+dddddddddddddddd  <cccc>bbbbaaaagggg  ffffffffffffffff  <e8^e8^e8e2  
+>aaaaaaggaaaaaagg  
+;3
+
+{4}
+l16 "k8k8k8k8" [3"sk32k32"j3"k"]
+$
+["!!!o k8s8.ks8 k8sk8ks8" "skkskkskskkskksk32k32"]
+[3"!!!o k8s8.ks8 k8sk8ks8"] [6"!ok8"]"kk32k32s8"
+["!!!o k8s8.ks8 k8sk8ks8" "skkskkskskkskksk32k32"]
+[3"!!!o k8s8.ks8 k8sk8ks8"] "skkskksks^4k32k32s8"
+[7"!!!o k8s8.ks8 k8sk8ks8"] "skkskksks^4k32k32s8"
+;
+
+{5}
+l16 r1
+$
+'org'> v32 p34
+[[a2 ar8ar8ar  f+r8f+r8f+r f+r8f+r<d>af+]
+f2e4g+4 e2e4d4 fr8fr8fr8fr8frfr e2j2g+2] g+rr4g+8
+f1 g1 f1 e1    f1 <c4>b4a4g4 f1 e1
+;
+
+{6}
+l16 "o8o8o8o8 y8.y8.y8"
+$
+["y8"[14"c"] ["y8.y8.y8"]]
+"y8"[62"c"]
+["y8"[14"c"] ["y8.y8.y8"]]
+"y8"[46"c"] "y8.y8.y8y2"
+[3"y8"[30"c"]] "y8"[14"c"] "y8.y8.y8y4.y8"
+;
+
+{7}
+l16 r1
+$
+'org' v28 p54
+[[e2 er8er8er  dr8dr8dr dr8dr4]
+c2>b4<e4 c2c4>b4< cr8cr8cr8cr8crcr >b2<j2e2] err4e8
+c1 e1 d1 c1    d1 r1 c1 >b1
+;
+
+{8}
+l16 r1
+$
+'org'> v24 p44
+[[<c2 cr8cr8cr >ar8ar8ar ar8ar4]
+a2g+4b4 a2a4g4 ar8ar8ar8ar8arar g+2j2b2] brr4b8
+a1 b1 a1 g1    a1 <e4d4c4>b4 a1 g+1
+;
