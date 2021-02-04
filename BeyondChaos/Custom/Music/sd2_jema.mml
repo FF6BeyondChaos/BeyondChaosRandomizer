@@ -1,0 +1,271 @@
+#TITLE Calm Before the Storm
+#ALBUM Secret of Mana
+#COMPOSER Hiroki Kikuta
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.2
+
+#VARIANT ~
+#VARIANT / vic
+
+#WAVE 0x20 0x46
+#WAVE 0x21 0x92
+#WAVE 0x22 0x5C
+#WAVE 0x23 0x07
+#WAVE 0x24 ~0x65~/0x22/
+#WAVE 0x25 0x71
+#WAVE 0x26 0x51
+#WAVE 0x27 ~0x6B~/0x02/
+#WAVE 0x28 0x4A
+#WAVE 0x29 ~0x50~/0x8E/
+#WAVE 0x2A 0x91
+#WAVE 0x2B 0x40
+#WAVE 0x2C 0x42
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v50
+#def 2f= v1,50
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |4
+#def 4o=   o5
+#def 4v=   v100
+#def 4f= v1,100
+
+#def 5i=   |5
+#def 5o=   o5
+#def 5v=   v100
+#def 5f= v1,100
+
+#def 6i=   |6
+#def 6o=   o5
+#def 6v=   v100
+#def 6f= v1,100
+
+#def 7i=   |7
+#def 7o=   o6
+#def 7v=   v100
+#def 7f= v1,100
+
+#def 8i=   |8
+#def 8o=   o5
+#def 8v=   v100
+#def 8f= v1,100
+
+#def 9i=   |9
+#def 9o=   o5
+#def 9v=   v100
+#def 9f= v1,100
+
+#def Ai=   |A
+#def Ao=   o5
+#def Av=   v100
+#def Af= v1,100
+
+#def Bi=   |B
+#def Bo=   o5
+#def Bv=   v100
+#def Bf= v1,100
+
+#def Ci=   |C
+#def Co=   o5
+#def Cv=   v100
+#def Cf= v1,100
+
+## auto percussion  0x24
+#drum "h"= 5g
+#drum "i"= 5a
+## auto percussion  0x25
+#drum "j"= 7c
+## auto percussion  0x26
+#drum "k"= 5d+
+#drum "l"= 5f
+## auto percussion  0x29
+#drum "m"= ~5a~/5e/
+
+
+{8}
+r64
+$101[p64'4v*v.80'
+'4i' [[3'4o'" !!!o i16"r4r16"i16i16i16"r16"i16"r4r16]"i16"r4r16"i16i16
+i16"r16"i16"r8."i16"r16]'0v*v.52'
+'0i' p86%e1'0o'd+2.f12d+12d12d+2d+6d+6g+6g2.g+12g12f12g2.r4'4v*v.80'
+'4i' p64%e0[3" !!!o i16"r4r16"i16i16i16"r16"i16"r4r16]"i16"r4r16"i16i16
+i16"r16"i16"r8."i16"r16]"h8"r2.r8r1"h8"r2.r8"h8"r2.r8"h8"r2.r8"h8"r2.r8
+"h8"r4."h8"r4."h8"r4."h8"r8"h8"r8[3" !!!o i8"r8"h12h12h12i8"r4.]"i8"r8
+"h12h12h12i8"r8"i12"r12"i12i8"r8"h12h12h12i8"r4."i8"r8"h12h12h12i8"r4.
+"i8"r4."i8"r4."i8"r8"h12h12h12i8"r4."i8"r4."i12"r12"h12"r12"i12"r12"i8
+"r4."i8"r4."i8"r4."i8"r4."i8"r8"h12h12h12i8"r8"h12h12h12i16"r4r16"i16i16
+i16"r16"i16"r4r16"i16"r4r16"i16i16i16"r16"i16"r4r16
+;101
+
+
+{5}
+r64p64'9v*v.90'
+$201[[4'9o'
+'9i' '9v*v.90'" !!!o m4."
+'6i' '6v*v.90'" !!!o k16k16k8k4.k4.k16k16k8k4k16"r16]r1r1r1r1[
+'9i' '9v*v.90'" !!!o m4."
+'6i' '6v*v.90'" !!!o k16k16k8k4.k4.k16k16k8k4k16"r16]]
+'9i' '9v*v.90'" !!!o m2"^16r4.r16r1'5v*v.60'
+'5i' [" !!!o j12"r6"j12j12j12j12"r6"j12j12j12j12"r6"j12j12j12j12"r12"j12
+"r12"j48j48j48j48j48j48j48j48"]"j12"r6"j12j12j12j12"r6"j12j12j12j12"r6
+"j12j12j12j12"r6'6v*v.90'
+'6i' " !!!o l8"r8
+'9i' '9v*v.90'" !!!o m4"^16r8.
+'6i' '6v*v.90'" !!!o k8"r8'5v*v.60'
+'5i' " !!!o j12j12j12"'9v*v.90'
+'9i' " !!!o m4"^16r8.
+'6i' '6v*v.90'" !!!o k8"r8'5v*v.60'
+'5i' " !!!o j12j12j12"'9v*v.90'
+'9i' " !!!o m4"^16r8.
+'6i' '6v*v.90'" !!!o k8"r8'5v*v.60'
+'5i' " !!!o j12j12j12"'9v*v.90'
+'9i' " !!!o m4"^16r8.
+'6i' '6v*v.90'" !!!o k8"r8"k12k12k12"
+'9i' '9v*v.90'" !!!o m4"^16r8.
+'6i' '6v*v.90'" !!!o k8"r8'5v*v.60'
+'5i' " !!!o j12j12j12"'9v*v.90'
+'9i' " !!!o m4"^16r8.
+'6i' '6v*v.90'" !!!o k8"r8'5v*v.60'
+'5i' " !!!o j12j12j12"'9v*v.90'
+'9i' " !!!o m4"^16r8."m4"^16r8.
+'9i' "m4"^16r8.
+'6i' '6v*v.90'" !!!o k8"r8"k12k12k12"
+'9i' '9v*v.90'" !!!o m4"^16r8.
+'6i' '6v*v.90'" !!!o k12"r4"k6"
+'9i' '9v*v.90'" !!!o m4"^16r8.
+'6i' '6v*v.90'" !!!o k8"r4.
+'9i' '9v*v.90'" !!!o m4"^16r8.
+'6i' '6v*v.90'" !!!o k8"r4.
+'9i' '9v*v.90'" !!!o m4"^16r8.
+'6i' '6v*v.90'" !!!o k8"r8"k12k12k12"
+'9i' '9v*v.90'" !!!o m4."
+'6i' '6v*v.90'" !!!o k16k16k8k4.k4k16k16k16k16k8k4k8
+";201
+
+
+{4}
+r64p64
+$301['8v*v.80'
+'8i' '8o+o1'c8r4c16c16c8c8r4>a+8r4a+16a+16a+8a+8r8a+16r16<c8r4c16c16c8
+c8r4>f8r4f16f16f8f8r8f8<c8r4c16c16c8c8r4>a+8r4a+16a+16a+8a+8r8<d8d+8r4
+d+16d+16d+8d+8r4d+8r4d+16d+16d+8d+8r8d+8'7v*v.57'
+'7i' %r9'7o'f2.g8g+8a+2.f4d+2.f8f+8g2c2%y'8v*v.80'
+'8i' '8o'g+8r4g+16g+16g+8g+8r4a+8r4a+16a+16a+8a+8r8a+8<c8r4c16c16c8c8r4
+c8r4c16c16c8c8r8c8]r1r1r1r1r1r1g12r6c12r6g12r6<c12>g12f12c12r6>g12r6c4
+^16^24r8r48g+12r6g+12g+12g+12g+6g+6g+6a+12r6a+12a+12a+12a+6a+6a+6<c12r6
+c12c12c12>b12r6b12b12b12a+12r6a+12a+12a+12a6a6a6g+12r6g+12g+12g+12g+6g+6
+g+6a+12r6a+12a+12a+12a+6f6a+6g+12r6g+12d+12g+12g12r6g12a+12<c12c+12r6c+12
+d+12c+12c8r8>g8r8<c+6r12c+12d+12f12d+6a+12r12<d+12r12>g+6r12g+12<d+12>
+g12f6c12r12>f12r12a+12r6a+12a+12a+12a+12r6a+12a+12g+12f+12r6f+12f+12f+12
+f+12r6f+12g+12d+12f12r6f12f12f12f12r6f12a+12<c12f12r6f12f12f12f12r6f12
+c12>a+12
+;301
+
+
+{1}
+t119%x255%v50%b0,70%f0,0
+r48
+$401[%e1'0v*v.52'
+'0i' p86'0o+o1'c4f8g8e4c4f4e4d4>a+4<c6d6c6>g2^2.g4<c4f8g8e4c4f4e4d4a+4
+<c1^2.>d4>>g+1g+2g+6g+6a+6<c1>a+2.<<g4f4.c4.d+4f4.d4.>a+4<c1^2.^8r8][p64
+d+4r8d+16d+16d+2^6r12d+12f12d12d+6d+6f6g12r12f12g2g+12g12f12g12r12g12g2
+r4]>d+1f1g1^1d+1f2.f12d+12f12g+4g+12g12g+12g4g12r12c12a+4<c+12>a+12r12
+<e4r8c8g+2g4.f8d+4g+4c4>g+4<c+8d+8c8>g+8<c+4.c16>b16a+4<c+4f+4a+4<c2.^8
+>a+16g16a1
+;401
+
+
+{2}
+r64p41%e1
+$501['1v*v.60'
+'1i' '1o'c4f8g8e4c4f4e4d4>a+4<e6f6e6c2>f2f8g8a8f8<c4f8g8e4c4f4e4d4a+4<
+c1^2.>b16<c16c+16d16d+2c2^2.c4>a+6<c6>a+6g2^2.g4f4.c4.d+4f4.d4.>a+4<c1
+^2.^8r8]'0v*v.52'
+'0i' p64'0o+o1'[c4r8c16c16c2^6r12c12c12c12c6c6c6e12r12d12e2f12e12d12e12
+r12e12e2r4]>c1d1d+1^1c1d2.d12c12d12f4f12d+12f12d+4d+12d+12>g+12<f+4.^24
+<f12c4r8'1v*v.60'
+'1i' p41'1o+o1'c8f2d+4.c+8c4d+4>g+4f4a+8b32<c16^32>g+8f8a+4a+16a16g+16
+g16f+4a+4<c+4d+4f2.^8f16d+16f2.>>f+24g24g+24a24a+24b24
+;501
+
+
+{6}
+r48p64%e1
+$601['2v*v.35'
+'2i' '2o'c16r4r16d16c16d8c16r8.c16r16>a+16r4r16a+16a16a+8a16r8.f16r16<
+c16r4r16d16c16d8c16r8.c16r16a16r4r16a16g16a8g16r8.f16r16c16r4r16d16c16
+d8c16r8.c16r16>a+16r4r16a+16a16a+8a16r8.<d16r16d+16r4r16d16d+16d+8f16r8.
+d16r16d+16r4r16d16d+16f8d+16r8.d16r16%a6m2,18,197<<d+2c2^2.c4>g6g+6g6d+2
+^2.r4%ym>c16r4r16c16c16c8c16r8.c16r16d16r4r16d16d16d8d16r8.d16r16c16r4
+r16c16c16f8e16r8.d16r16c16r4r16c16c16c8c16r8.c16r16]'0v*v.52'
+'0i' ['0o'g+4r8g+16g+16g+2^6r12g+12g+12g+12g+6g+6a+6<c12r12c12c2c12c12
+c12c12r12c12c2r4]>>g+1a+1<c2>b2a+2a2g+1a+1<c+2c4c12>g12d+12<c+4.^24f12
+g4r4'2v*v.35'
+'2i' '2o'f4f12c+12f12g4g12d+12g12g+12<c12d+12g+12d+12>g12f8g+8d+8c8c+2.
+c4>b2.g+4a+2a4.g8a4g8f8d+4f4
+;601
+
+
+{3}
+r64p64%e1
+$701['3v*v.40'
+'3i' p41r1r1r2.'3o'g32g+32a32a+32<c32d32e32f32g16r8.>g32g+32a32a+32<c32
+d32e32f32g32a32g32a32g32a32g32a32g32a32g32a32g32a32g32a32r1r1'Bv*v.40'
+
+'Bi' p86r4'Bo+o1'c+24d24d+24e24f24f+24g12f12g12f12d+12d12d+12d12d+12d12
+c12>a+12<c12>a+12<c12>a+12a12g12'3v*v.40'
+'3i' p64p0,192,128'3o'g+16g16f16d+16c16d+16f16g16g+16g16f16d+16c16d+16
+f16g16g+16g16f16d+16c16d+16f16g16g+16g16f16d+16c16d+16f16g+16g16f16d16
+c16>g16<c16d16f16g16f16d16c16>g16<c16d16f16g16f16d16c16>g16<c16d16f16g16
+f16d16c16>g16<c16d16g16pr1r1'Av*v.85'
+'Ai' p79'Ao'c4p45g4p67f+4p34d4p95a4p56e4p108b4p41d4]r1r1r1r1'Bv*v.40'
+'Bi' p86'Bo'f12a+12<c12f12c12>a+12f12a+12<c12f12c12>a+12f12a+12<c12f12
+c12>a+12f12a+12<c12f12c12>a+12g12<c12f12g12f12c12>g12<c12f12g12f12c12>
+g12<c12f12g24f+24f24e24d+24d24c+24c24>b24a+24a24g+24g24f+24f24e24d+24d24
+'3v*v.35'
+'3i' '3o+o2'c4>a+12g+12g12f6g6d+6f12r12a+12f2f12d+12d12c4c12d12d+12f4f12
+d12>a+12g12f12a+12g2<c12d+12g12<c4c12>a+12g+12g6g+6g6f12r12a+12f2f12d+12
+f12g+4g+12f12g+12a+4<c12>g12c12f4<c+12>g+12<c+12c4r4'Bv*v.40'
+'Bi' 'Bo+o1'f2d+4.c+8c4d+4>g+4f4a+8b32<c16^32>g+8f8a+4.g+8f+4a+4<c+4f+4
+'3v*v.40'
+'3i' '3o'f16a+16<c16d+16f16>a+16<c16f16<c16>a16f16c16a16f16c16>a16f16a+16
+<c16d+16f16>a+16<c16f16<c16>a16f16c16>f16c16>a+16f16
+;701
+
+
+{7}
+r64p64%e1
+$801['2v*v.35'
+'2i' '2o-o1'g16r4r16g16g16g8g16r8.g16r16f16r4r16f16f16f8f16r8.d16r16g16
+r4r16g16g16g8g16r8.g16r16<f16r4r16f16e16f8e16r8.d16r16>g16r4r16g16g16g8
+g16r8.g16r16f16r4r16f16f16f8f16r8.g16r16a+16r4r16a16a+16a+8a+16r8.a+16
+r16a+16r4r16a16a+16a+8a+16r8.a+16r16'Cv*v.35'
+'Ci' 'Co+o2'd+2c2^2.c4>a+6<c6>a+6g2^2.r4'2v*v.35'
+'2i' '2o-o1'g+16r4r16g+16d+16g+8d+16r8.d+16r16a+16r4r16a+16f16a+8f16r8.
+a+16r16g16r4r16g16g16a8g16r8.g16r16g16r4r16g16g16g8e16r8.e16r16]r1r1r1
+'Cv*v.35'
+'Ci' r2'Co+o1'd24d+24e24f24f+24g24f24f+24g24g+24a24a+24<c4>f4g4c4<c4>f4
+g4c4<c4>f4g4c4<c4>f4g4c4'3v*v.35'
+'3i' p41'3o+o1'c4>a+12g+12g12f6g6d+6f12r12a+12f2f12d+12d12c4c12d12d+12
+f4f12d12>a+12g12f12a+12g2<c12d+12g12<c4c12>a+12g+12g6g+6g6f12r12a+12f2
+f12d+12f12g+4g+12f12g+12a+4<c12>g12c12f4<c+12>g+12<c+12c4r4'2v*v.35'
+'2i' p64'2o'c+4c+12>g+12<c+12d+4d+12>a+12<d+12c4>a+4g+4g4g+4f8g8g+4g4f+4
+d+8f8f+4d+4f2f4.f8f4d+8d8c4d4
+;801
+
