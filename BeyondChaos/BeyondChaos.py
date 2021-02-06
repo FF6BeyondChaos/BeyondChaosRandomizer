@@ -10,6 +10,8 @@ from PyQt5.QtWidgets import QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel
 
 import Options
 import Randomizer
+import Update
+import Constants
 
 print("Loading Complete! Any errors shown here should be reported to Green Knight")
 
@@ -104,7 +106,7 @@ class Window(QWidget):
         # Primary Vertical Box Layout
         vbox = QVBoxLayout()
 
-        titleLabel = QLabel("Beyond Chaos EX Randomizer (v4.0.1)")
+        titleLabel = QLabel("Beyond Chaos EX Randomizer (" + Constants.Version + ")")
         font = QtGui.QFont("Arial", 24, QtGui.QFont.Black)
         titleLabel.setFont(font)
         titleLabel.setAlignment(QtCore.Qt.AlignCenter)
@@ -586,6 +588,7 @@ class Window(QWidget):
 
 
 if __name__ == "__main__":
+    Update.update()
     App = QApplication(sys.argv)
     window = Window()
     sys.exit(App.exec())
