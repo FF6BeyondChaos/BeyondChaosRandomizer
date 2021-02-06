@@ -1,6 +1,6 @@
 
 #!/usr/bin/env python3
-Version = "v4.0.2"
+Version = "v4.0.3"
 UpdateRequest = "Would you like to check for updates? (y(default)/n)"
 UpdateCheck = "Checking for new updates please wait."
 UpdateFound = "Update found, applying update..."
