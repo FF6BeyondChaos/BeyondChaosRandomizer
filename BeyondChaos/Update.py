@@ -26,11 +26,11 @@ def update():
             downloadlink = x['assets'][0]['browser_download_url']
             download_file(downloadlink)
             print(Constants.UpdateLaunching)
-            subprocess.run("test1.py", shell=True)
+            #launch the updater process
+            subprocess.run("BeyondChaosUpdater.exe", shell=True)
             #wait 3 seconds
             time.sleep(3)
-            #unzip the file
-            #run updater.exe and sysexit this.
+            SystemExit();
         else:
             print(Constants.UpdateNotFound)
             return;
