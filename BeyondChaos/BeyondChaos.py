@@ -60,8 +60,9 @@ class Window(QWidget):
         self.major = {}
         self.minor = {}
         self.simple = {}
+        self.beta = {}
         self.dictionaries = [self.simple, self.aesthetic, self.major,
-                             self.minor, self.experimental, self.gamebreaking]
+                             self.minor, self.experimental, self.gamebreaking, self.beta]
 
         # dictionary? of saved presets
         self.savedPresets = {}
@@ -75,8 +76,9 @@ class Window(QWidget):
         self.tab4 = QWidget()
         self.tab5 = QWidget()
         self.tab6 = QWidget()
+        self.tab7 = QWidget()
         self.middleLeftGroupBox = QGroupBox()
-        self.tablist = [self.tab1, self.tab2, self.tab3, self.tab4, self.tab5, self.tab6]
+        self.tablist = [self.tab1, self.tab2, self.tab3, self.tab4, self.tab5, self.tab6, self.tab7]
 
         # ----------- Begin buiding program/window ------------------------------
 
@@ -106,7 +108,7 @@ class Window(QWidget):
         # Primary Vertical Box Layout
         vbox = QVBoxLayout()
 
-        titleLabel = QLabel("Beyond Chaos EX Randomizer (" + Constants.Version + ")")
+        titleLabel = QLabel("Beyond Chaos Randomizer (" + Constants.Version + ")")
         font = QtGui.QFont("Arial", 24, QtGui.QFont.Black)
         titleLabel.setFont(font)
         titleLabel.setAlignment(QtCore.Qt.AlignCenter)
@@ -202,7 +204,7 @@ class Window(QWidget):
         middleRightGroupBox = QGroupBox("Flag Selection")
         tabVBoxLayout = QVBoxLayout()
         tabs = QTabWidget()
-        tabNames = ["Simple", "Aesthetic", "Major", "Minor", "Experimental", "Gamebreaking"]
+        tabNames = ["Simple", "Aesthetic", "Major", "Minor", "Experimental", "Gamebreaking", "Beta"]
 
         ############## Only checkboxes, no inline description ###############
 
@@ -254,9 +256,6 @@ class Window(QWidget):
         widgetV.setLayout(widgetVBoxLayout)
 
         widgetVBoxLayout.addWidget(QLabel("Text-string of selected flags:"))
-
-        self.flagString.setReadOnly(True)
-        self.flagString.setStyleSheet("background:lightgrey;")
         widgetVBoxLayout.addWidget(self.flagString)
 
         saveButton = QPushButton("Save flags selection")
@@ -300,6 +299,8 @@ class Window(QWidget):
         self.comboBox.currentTextChanged.connect(lambda: self.updatePresetDropdown())
         bottomHBox.addWidget(self.comboBox)
 
+        #todo: Add amount of seeds to generate here.
+        #todo: Add retry on failure checkbox
 
         deleteButton = QPushButton("Delete selection")
         deleteButton.clicked.connect(lambda: self.deleteSeed())
@@ -333,6 +334,8 @@ class Window(QWidget):
                 d = self.major
             elif code.category == "minor":
                 d = self.minor
+            elif code.category == "beta":
+                d = self.beta
             else:
                 print(f"Code {code.name} does not have a valid category.")
                 continue
@@ -473,6 +476,8 @@ class Window(QWidget):
                 d = self.major
             elif code.category == "minor":
                 d = self.minor
+            elif code.category == "beta":
+                d = self.beta
             else:
                 print(f"Code {code.name} does not have a valid category.")
                 continue
@@ -583,7 +588,7 @@ class Window(QWidget):
     # update list variable with data from currently loaded dictionaries
     def updateDictionaries(self):
         self.dictionaries = [self.simple, self.aesthetic, self.major,
-                             self.minor, self.experimental, self.gamebreaking]
+                             self.minor, self.experimental, self.gamebreaking, self.beta]
 
 
 
