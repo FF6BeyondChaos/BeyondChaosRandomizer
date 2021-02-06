@@ -34,6 +34,9 @@
     <Compile Include="ChestRandomizer.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Constants.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Decompress.py">
       <SubType>Code</SubType>
     </Compile>
@@ -91,7 +94,7 @@
     <Compile Include="TowerRandomizer.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Updater.py">
+    <Compile Include="Update.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Utils.py">

@@ -1,3 +1,5 @@
 *.pyc
 /BeyondChaos/build/beyondchaos_ex
 /BeyondChaos/beyondchaos_ex.spec
+/Updater/build/BeyondChaosUpdater
+/Updater/dist
