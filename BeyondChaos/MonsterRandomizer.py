@@ -70,8 +70,7 @@ statusdict = {
     "floating": (3, 0x80)}
 reverse_statusdict = {value: key for (key, value) in list(statusdict.items())}
 
-early_bosses = [
-    308, # head
+early_bosses = [308, # head
     333, # ipooh
     341, # rizopas
     262, # ghosttrain
@@ -138,7 +137,7 @@ def read_ai_table(table):
 
 def get_item_normal():
     items = get_ranked_items()
-    base = ((len(items)-1) // 2)
+    base = ((len(items) - 1) // 2)
     index = random.randint(0, base) + random.randint(0, base)
     if len(items) > (base * 2) + 1:
         index += random.randint(0, 1)
@@ -266,8 +265,7 @@ class MonsterBlock:
 
     @property
     def statuses_str(self):
-        full24 = bin(self.immunities[0] | (self.immunities[1] << 8) |
-                     (self.immunities[2] << 16))
+        full24 = bin(self.immunities[0] | (self.immunities[1] << 8) | (self.immunities[2] << 16))
         full24 = full24[2:]
         full24 = "{0:0>24}".format(full24)
         if full24.count("1") > full24.count("0"):
@@ -351,8 +349,7 @@ class MonsterBlock:
             for name in statnames:
                 name = get_shortname(name)
                 value = values[name]
-                rows.append(substr.format(
-                    name.upper() + ":", value))
+                rows.append(substr.format(name.upper() + ":", value))
 
             width = max(len(row) for row in rows)
             for i, row in enumerate(rows):
@@ -416,8 +413,7 @@ class MonsterBlock:
         s += ("DROPS: %s" % ", ".join(drops)).strip() + "\n"
 
         if not self.cantmorph:
-            s += "MORPH (%s%%): %s\n" % (self.morphrate, ", ".join(
-                sorted([i.name for i in self.get_morph_items()])))
+            s += "MORPH (%s%%): %s\n" % (self.morphrate, ", ".join(sorted([i.name for i in self.get_morph_items()])))
         s += ("LOCATION: %s" % self.display_location).strip() + "\n"
 
         return s.strip()
@@ -458,8 +454,7 @@ class MonsterBlock:
 
     @property
     def boss_death(self):
-        return (bytearray([0xF5, 0x0C, 0x01, 0xFF]) in self.aiscript or
-                bytearray([0xF5, 0x0C, 0x01, 0x00]) in self.aiscript)
+        return (bytearray([0xF5, 0x0C, 0x01, 0xFF]) in self.aiscript or bytearray([0xF5, 0x0C, 0x01, 0x00]) in self.aiscript)
 
     @property
     def battle_event(self):
@@ -513,7 +508,7 @@ class MonsterBlock:
         candidates = [c for c in candidates if
                       c.width == self.width and c.height == self.height]
         candidates = [c for c in candidates if c.graphics.graphics not in [0, 0x5376]]
-        candidates = [c for c in candidates if c.name != "_"*10]
+        candidates = [c for c in candidates if c.name != "_" * 10]
 
         if not self.graphics.large:
             if self.miny <= 3:
@@ -535,7 +530,7 @@ class MonsterBlock:
     def randomize_boost_level(self, limit=99):
         level = self.stats['level']
         diff = limit - level
-        level += random.randint(0, diff//2) + random.randint(0, diff//2)
+        level += random.randint(0, diff // 2) + random.randint(0, diff // 2)
         if diff % 2 == 1:
             level += random.randint(0, 1)
         assert self.stats['level'] <= level <= limit
@@ -545,22 +540,22 @@ class MonsterBlock:
         level = self.stats['level']
         diff = limit - level
 
-        level_add = diff//2
+        level_add = diff // 2
         if level <= 7:
-            level_add = diff//16
+            level_add = diff // 16
         elif level <= 15:
-            level_add = diff//8
+            level_add = diff // 8
         elif level <= 30:
-            level_add = diff//4
+            level_add = diff // 4
 
         factors = {
-            'mpow': 5/4,
-            'attack': 5/4,
-            'def': 5/4,
-            'mdef': 5/4,
-            'speed': 5/4,
-            'evade%': 5/4,
-            'mblock%': 9/8,
+            'mpow': 5 / 4,
+            'attack': 5 / 4,
+            'def': 5 / 4,
+            'mdef': 5 / 4,
+            'speed': 5 / 4,
+            'evade%': 5 / 4,
+            'mblock%': 9 / 8,
         }
 
         hp_add = (750, 1500) if level <= 30 else (2500, 5000)
@@ -571,24 +566,24 @@ class MonsterBlock:
         if self.is_boss and self.id not in early_bosses:
             hp_add = (0, 0)
             factors = {
-                'hp': 5/2,
-                'mpow': 3/2,
-                'attack': 3/2,
-                'def': 5/4,
-                'mdef': 5/4,
-                'speed': 3/2,
-                'evade%': 4/4,
-                'mblock%': 9/8,
+                'hp': 5 / 2,
+                'mpow': 3 / 2,
+                'attack': 3 / 2,
+                'def': 5 / 4,
+                'mdef': 5 / 4,
+                'speed': 3 / 2,
+                'evade%': 4 / 4,
+                'mblock%': 9 / 8,
             }
 
         for stat in self.stats:
             self.stats[stat] = int(self.stats[stat] * factors.get(stat, 1))
 
         if self.stats['evade%'] == 0:
-            self.stats['evade%'] = level//2
+            self.stats['evade%'] = level // 2
 
         if self.stats['mblock%'] == 0:
-            self.stats['mblock%'] = level//4
+            self.stats['mblock%'] = level // 4
 
         stat_max = {
             'hp': 65535,
@@ -725,8 +720,7 @@ class MonsterBlock:
     def set_minimum_mp(self):
         skillset = self.get_skillset(ids_only=False)
         factor = random.uniform(1.0, 2.0)
-        self.stats['mp'] = int(
-            round(max(self.stats['mp'], factor * max(s.mp for s in skillset))))
+        self.stats['mp'] = int(round(max(self.stats['mp'], factor * max(s.mp for s in skillset))))
 
     def mutate_ai(self, Options_, change_skillset=True, safe_solo_terra=True):
         itembreaker = Options_.is_code_active("collateraldamage")
@@ -778,8 +772,7 @@ class MonsterBlock:
                     skillset.remove(skill.spellid)
                     candidates = [s for s in all_spells if similar(s, skill)]
                     candidates = [s for s in candidates if not
-                                  (s.is_blitz or s.is_swdtech or s.is_esper
-                                   or s.is_slots)]
+                                  (s.is_blitz or s.is_swdtech or s.is_esper or s.is_slots)]
                     if random.choice([True, False]):
                         candidates = [c for c in candidates if c.valid]
                     candidates = [c for c in candidates if
@@ -853,8 +846,7 @@ class MonsterBlock:
                             # global timer greater than value
                             value = action[2]
                             step = value // 2
-                            value = (step + random.randint(0, step) +
-                                     random.randint(0, step//2))
+                            value = (step + random.randint(0, step) + random.randint(0, step // 2))
                             value = min(0xFF, max(0, value))
                             action[2] = value
                         if action[1] in [0x0C, 0x0D]:
@@ -880,7 +872,7 @@ class MonsterBlock:
                         index = mutate_index(index, len(candidates),
                                              [False, True, True],
                                              (-1, 4), (-1, 4))
-                        action[i+2] = candidates[index].itemid
+                        action[i + 2] = candidates[index].itemid
 
                 elif action[0] in [0xFD, 0xFE, 0xFF]:
                     targeting = None
@@ -971,8 +963,7 @@ class MonsterBlock:
 
     def write_ai(self, fout):
         for (i, action) in enumerate(self.aiscript):
-            if (len(action) == 4 and action[0] == 0xf0 and
-                    action[1] == 0x55):
+            if (len(action) == 4 and action[0] == 0xf0 and action[1] == 0x55):
                 # fix Cyan's AI at imperial camp
                 action = bytearray([0xF0, 0xEE, 0xEE, 0xEE])
                 self.aiscript[i] = action
@@ -1182,7 +1173,7 @@ class MonsterBlock:
             low = value
             high = int(value + (value * (level / 100.0)))
             diff = high - low
-            value += -diff//4 + random.randint(0, diff) + random.randint(0, diff)
+            value += -diff // 4 + random.randint(0, diff) + random.randint(0, diff)
             if value & 0xFF == 0xFF:
                 value = value - 1
 
@@ -1349,7 +1340,7 @@ class MonsterBlock:
             self.null &= denullify
             self.absorb &= denullify
 
-    def mutate_items(self):
+    def mutate_items(self, katnFlag = False):
         if random.choice([True, False]):
             random.shuffle(self.items)
 
@@ -1377,6 +1368,17 @@ class MonsterBlock:
         steals, drops = (new_items[:2], new_items[2:])
         steals = sorted(steals, key=lambda i: i.rank() if i else 0, reverse=True)
         drops = sorted(drops, key=lambda i: i.rank() if i else 0, reverse=True)
+        
+        if katnFlag:
+            if None in drops:
+                 temp = [d for d in drops if d]
+                 if temp:
+                     drops = temp * 2
+            if None in steals:
+                 temp = [s for s in steals if s]
+                 if temp:
+                     steals = temp * 2
+            new_items = [i.itemid if i else 0xFF for i in steals + drops]
 
         if self.boss_death and None in drops:
             temp = [d for d in drops if d]
@@ -1387,8 +1389,7 @@ class MonsterBlock:
             pass
         else:
             if random.randint(1, 5) != 5:
-                if (new_items[2] != new_items[3] or
-                        random.choice([True, False])):
+                if (new_items[2] != new_items[3] or random.choice([True, False])):
                     new_items[3] = 0xFF
 
         self.items = new_items
@@ -1403,9 +1404,9 @@ class MonsterBlock:
         items = get_ranked_items()
         rank = self.level_rank()
         index = int(len(items) * rank)
-        if Options_.mode.name == "katn":
-            if index <= 0:
-                index =1
+        #if Options_.mode.name == "katn":
+        #    if index <= 0:
+        #        index = 1
         index = mutate_index(index, len(items),
                              [False, True],
                              (-3, 3), (-2, 2))
@@ -1525,7 +1526,7 @@ class MonsterBlock:
                 for c in list(candidates)[:-2]:
                     if len(candidates) <= 2:
                         break
-                    if random.randint(1, len(candidates)*2) >= 4:
+                    if random.randint(1, len(candidates) * 2) >= 4:
                         candidates.remove(c)
                     else:
                         break
@@ -1572,8 +1573,7 @@ class MonsterBlock:
 
     @property
     def physspecial(self):
-        return bool(self.special & 0x20 and
-                    self.special & 0x30 != 0x30)
+        return bool(self.special & 0x20 and self.special & 0x30 != 0x30)
 
     @property
     def deadspecial(self):
@@ -1607,8 +1607,7 @@ class MonsterBlock:
             index = mutate_index(index, len(valid), [False, True],
                                  (-5, 5), (-3, 3), disregard_multiplier=True)
             special = valid[index]
-            if special == 0x07 or (special not in [0x30, 0x31] and
-                                   random.choice([True, False])):
+            if special == 0x07 or (special not in [0x30, 0x31] and random.choice([True, False])):
                 special |= 0x40  # no HP damage
         elif branches[0] < branch <= branches[1]:
             # physical special
@@ -1695,8 +1694,7 @@ class MonsterBlock:
             setattr(other, attribute, a)
 
     def copy_all(self, other, everything=True):
-        attributes = [
-            "ai", "aiscript", "controls", "sketches", "stats",
+        attributes = ["ai", "aiscript", "controls", "sketches", "stats",
             "absorb", "null", "weakness", "special", "morph", "items",
             "misc1", "misc2", "immunities", "statuses", "attackanimation"]
         if "aiptr" in attributes:
@@ -1704,8 +1702,7 @@ class MonsterBlock:
         if not everything:
             samplesize = random.randint(0, len(attributes))
             attributes = random.sample(attributes, samplesize)
-            attributes = sorted(set(attributes) -
-                                set(["ai", "aiptr", "aiscript"]))
+            attributes = sorted(set(attributes) - set(["ai", "aiptr", "aiscript"]))
 
         for attribute in attributes:
             value = getattr(other, attribute)
@@ -1725,8 +1722,7 @@ class MonsterBlock:
         funcs['hp'] = lambda m: m.stats['hp']
         funcs['defense'] = lambda m: max(1, m.stats['def'] + m.stats['mdef'])
         funcs['offense'] = lambda m: max(1, m.stats['attack'], m.stats['mpow'])
-        funcs['evasion'] = lambda m: max(1, m.stats['evade%'] +
-                                         m.stats['mblock%'])
+        funcs['evasion'] = lambda m: max(1, m.stats['evade%'] + m.stats['mblock%'])
         funcs['speed'] = lambda m: m.stats['speed']
         funcs['elements'] = lambda m: max(1, bin(m.absorb | m.null).count('1'))
         funcs['immunities'] = lambda m: max(1, sum(bin(i).count('1')
@@ -1736,8 +1732,7 @@ class MonsterBlock:
             monsters = get_monsters()
             monsters = [m for m in monsters if not (m.is_boss or m.boss_death)]
             for key in funcs:
-                avgs[key] = (sum(funcs[key](m) for m in monsters) /
-                             float(len(monsters)))
+                avgs[key] = (sum(funcs[key](m) for m in monsters) / float(len(monsters)))
 
         if weights is None:
             if globalweights is None:
@@ -1746,7 +1741,7 @@ class MonsterBlock:
         elif isinstance(weights, int):
             weights = {k:50 for k in avgs}
 
-        LEVELFACTOR, HPFACTOR = len(avgs)*2, len(avgs)
+        LEVELFACTOR, HPFACTOR = len(avgs) * 2, len(avgs)
         total = 0
         for key in sorted(avgs):
             weighted = weights[key] * funcs[key](self) / avgs[key]
@@ -1772,7 +1767,7 @@ def _randomweight(key: str):
               'hp': (30, 100)}
     min_weight, max_weight = ranges.get(key, (2, 100))
     delta = max_weight - min_weight
-    return min_weight + random.randint(0, delta/2 + delta%2) + random.randint(0, delta/2)
+    return min_weight + random.randint(0, delta / 2 + delta % 2) + random.randint(0, delta / 2)
 
 def monsters_from_table(tablefile):
     monsters = []
@@ -1801,7 +1796,7 @@ def get_monsters(filename=None):
 
     mgs = []
     for j, m in enumerate(monsters):
-        mg = MonsterGraphicBlock(pointer=0x127000 + (5*j), name=m.name)
+        mg = MonsterGraphicBlock(pointer=0x127000 + (5 * j), name=m.name)
         mg.read_data(filename)
         m.set_graphics(graphics=mg)
         mgs.append(mg)
@@ -1904,12 +1899,12 @@ class MonsterGraphicBlock:
         f = open(filename, 'r+b')
         f.seek(self.pointer)
         self.graphics = read_multi(f, length=2)
-        f.seek(self.pointer+2)
+        f.seek(self.pointer + 2)
         self.palette = read_multi(f, length=2, reverse=False)
         self.large = bool(self.palette & 0x8000)
         self.palette_index = self.palette & 0x3FF
         self.palette_pointer = 0x127820 + (self.palette_index * 16)
-        f.seek(self.pointer+4)
+        f.seek(self.pointer + 4)
         self.size_template = ord(f.read(1))
 
         f.seek(self.palette_pointer)
@@ -1921,7 +1916,7 @@ class MonsterGraphicBlock:
             green = (color & 0x03e0) >> 5
             red = color & 0x001f
             self.palette_data.append(color)
-            self.palette_values.append(int(round(sum([red, green, blue])/3.0)))
+            self.palette_values.append(int(round(sum([red, green, blue]) / 3.0)))
         self.palette_data = tuple(self.palette_data)
         f.close()
 
@@ -1971,9 +1966,9 @@ class MonsterGraphicBlock:
 
         fout.seek(self.pointer)
         write_multi(fout, self.graphics, length=2)
-        fout.seek(self.pointer+2)
+        fout.seek(self.pointer + 2)
         write_multi(fout, palette, length=2, reverse=False)
-        fout.seek(self.pointer+4)
+        fout.seek(self.pointer + 4)
         fout.write(bytes([self.size_template]))
         if no_palette:
             return
@@ -2027,7 +2022,7 @@ def get_metamorphs(filename=None):
 
     metamorphs = []
     for i in range(32):
-        address = 0x47f40 + (i*4)
+        address = 0x47f40 + (i * 4)
         mm = MetamorphBlock(pointer=address)
         mm.read_data(filename)
         mm.id = i
@@ -2047,9 +2042,7 @@ def get_collapsing_house_help_skill():
                     status_specials.append(m.special & 0x3F)
                 skills = m.get_skillset(ids_only=False)
                 all_skills.extend([z for z in skills
-                                   if (z.target_enemy_default or
-                                       (z.target_everyone and not z.target_one_side_only)) and
-                                   z.spellid not in [0xEE, 0xEF, 0xFE, 0xFF]])
+                                   if (z.target_enemy_default or (z.target_everyone and not z.target_one_side_only)) and z.spellid not in [0xEE, 0xEF, 0xFE, 0xFF]])
 
     if status_specials:
         sleep_index = ranked.index(specialdict["sleep"])
