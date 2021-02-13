@@ -6,14 +6,13 @@ from PyQt5 import QtGui, QtCore
 from PyQt5.QtCore import pyqtRemoveInputHook
 from PyQt5.QtWidgets import QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel, QGroupBox, \
     QHBoxLayout, QLineEdit, QRadioButton, QGridLayout, QComboBox, QFileDialog, QApplication, \
-    QTabWidget, QInputDialog, QScrollArea, QMessageBox
+    QTabWidget, QInputDialog, QScrollArea, QMessageBox, QGraphicsDropShadowEffect
+from PyQt5.QtGui import QCursor
 
 import Options
 import Randomizer
 import Update
 import Constants
-
-print("Loading Complete! Any errors shown here should be reported to Green Knight")
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. Report this to Green Knight")
@@ -114,6 +113,21 @@ class Window(QWidget):
         titleLabel.setAlignment(QtCore.Qt.AlignCenter)
         titleLabel.setMargin(25)
         vbox.addWidget(titleLabel)
+         
+        update = Update.updateAvailable()
+        if (update):
+            updateButton = QPushButton("Update Available!")
+            updateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
+            width = 250
+            updateButton.setMaximumWidth(width)
+            updateButton.clicked.connect(Update.update)
+            updateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+            effect = QGraphicsDropShadowEffect()
+            effect.setBlurRadius(3);
+            updateButton.setGraphicsEffect(effect);
+
+            vbox.addWidget(updateButton, alignment= QtCore.Qt.AlignCenter)
+        
 
 
         vbox.addWidget(self.GroupBoxOneLayout()) # Adding first/top groupbox to the layout
@@ -538,7 +552,7 @@ class Window(QWidget):
                     QMessageBox.critical(self, "Error creating ROM", str(e), QMessageBox.Ok)
                 else:
                     QMessageBox.information(self, "Successfully created ROM", f"Result file: {result_file}", QMessageBox.Ok)
-                sys.exit()
+                #sys.exit() Lets no longer sysexit anymore so we don't have to reopen each time. The user can close the gui.
 
     # read each dictionary and update text field showing flag codes based upon
     #    flags denoted as 'True'
@@ -593,7 +607,8 @@ class Window(QWidget):
 
 
 if __name__ == "__main__":
-    Update.update()
+    print("Loading GUI, checking for updates please wait.")
+    Update.updaterExists()
     App = QApplication(sys.argv)
     window = Window()
     sys.exit(App.exec())

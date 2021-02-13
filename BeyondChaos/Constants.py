@@ -1,8 +1,6 @@
 
 #!/usr/bin/env python3
-Version = "v4.0.3"
-UpdateRequest = "Would you like to check for updates? (y(default)/n)"
-UpdateCheck = "Checking for new updates please wait."
-UpdateFound = "Update found, applying update..."
+Version = "4.0.3"
+UpdateFound = "Applying update..."
 UpdateNotFound = "There are no updates at this time"
 UpdateLaunching = "Launching the updater application. This application will now close automatically."

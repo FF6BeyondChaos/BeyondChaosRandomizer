@@ -265,6 +265,7 @@ NORMAL_CODES = [
     Code('thescenarionottaken', 'DIVERGENT PATHS MODE', "Changes the way the 3 scenarios are split up.", "major"),
     Code('worringtriad', "START IN WOR", "The player will start in the World of Ruin, with all of the World of Balance treasure chests, along with a guaranteed set of items, and more Lores.", "major"),
     Code('darkbucksmode', "All hail darkslash", "Hello friendo, would you like to go on a journey?", "beta"),
+    Code('3xexp', "3 Times Exp", "All battles will award 3 times exp", "beta"),
 ]
 
 MAKEOVER_MODIFIER_CODES = [
@@ -274,7 +275,7 @@ MAKEOVER_MODIFIER_CODES = [
 ]
 RESTRICTED_VANILLA_SPRITE_CODES = []
 
-makeover_groups = ["anime", "boys", "generic", "girls", "kids", "pets", "potato"]
+makeover_groups = ["anime", "boys", "generic", "girls", "kids", "pets", "potato", "custom"]
 for mg in makeover_groups:
     no = Code('no'+mg, f"NO {mg.upper()} ALLOWED MODE", f"Do not select {mg} sprites.", "aesthetic")
     MAKEOVER_MODIFIER_CODES.extend([
