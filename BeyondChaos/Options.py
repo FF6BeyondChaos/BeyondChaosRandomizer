@@ -275,7 +275,7 @@ MAKEOVER_MODIFIER_CODES = [
 ]
 RESTRICTED_VANILLA_SPRITE_CODES = []
 
-makeover_groups = ["anime", "boys", "generic", "girls", "kids", "pets", "potato"]
+makeover_groups = ["anime", "boys", "generic", "girls", "kids", "pets", "potato", "custom"]
 for mg in makeover_groups:
     no = Code('no'+mg, f"NO {mg.upper()} ALLOWED MODE", f"Do not select {mg} sprites.", "aesthetic")
     MAKEOVER_MODIFIER_CODES.extend([
