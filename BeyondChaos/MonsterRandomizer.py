@@ -1403,6 +1403,9 @@ class MonsterBlock:
         items = get_ranked_items()
         rank = self.level_rank()
         index = int(len(items) * rank)
+        if Options_.mode.name == "katn":
+            if index <= 0:
+                index =1
         index = mutate_index(index, len(items),
                              [False, True],
                              (-3, 3), (-2, 2))

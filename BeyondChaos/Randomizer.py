@@ -4781,12 +4781,14 @@ def randomize(args):
     if Options_.random_zerker or Options_.random_character_stats:
         manage_equip_umaro(event_freespaces)
 
-    if Options_.is_code_active('easymodo') or Options_.is_code_active('llg') or Options_.is_code_active('dearestmolulu'):
+    if Options_.is_code_active('easymodo') or Options_.is_code_active('llg') or Options_.is_code_active('dearestmolulu') or Options_.is_code_active('3xexp'):
         for m in monsters:
             if Options_.is_code_active('easymodo'):
                 m.stats['hp'] = 1
             if Options_.is_code_active('llg'):
                 m.stats['xp'] = 0
+            if Options_.is_code_active('3xexp'):
+                m.stats['xp'] = min(0xFFFF, 3 * m.stats['xp'])
             elif Options_.is_code_active('dearestmolulu'):
                 m.stats['xp'] = min(0xFFFF, 3 * m.stats['xp'])
             m.write_stats(fout)
