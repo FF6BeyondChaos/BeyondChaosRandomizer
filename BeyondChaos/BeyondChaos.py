@@ -114,19 +114,31 @@ class Window(QWidget):
         titleLabel.setMargin(25)
         vbox.addWidget(titleLabel)
          
-        update = Update.updateAvailable()
-        if (update):
-            updateButton = QPushButton("Update Available!")
-            updateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
+        coreUpdate = Update.updateAvailable()
+        spriteUpdate = Update.spriteUpdateAvailable()
+
+        if (coreUpdate):
+            coreUpdateButton = QPushButton("Core Update Available!")
+            coreUpdateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
             width = 250
-            updateButton.setMaximumWidth(width)
-            updateButton.clicked.connect(Update.update)
-            updateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+            coreUpdateButton.setMaximumWidth(width)
+            coreUpdateButton.clicked.connect(Update.update)
+            coreUpdateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
             effect = QGraphicsDropShadowEffect()
             effect.setBlurRadius(3);
-            updateButton.setGraphicsEffect(effect);
-
-            vbox.addWidget(updateButton, alignment= QtCore.Qt.AlignCenter)
+            coreUpdateButton.setGraphicsEffect(effect);
+            vbox.addWidget(coreUpdateButton, alignment= QtCore.Qt.AlignCenter)
+        if (spriteUpdate):
+            spriteUpdateButton = QPushButton("Sprite Update Available!")
+            spriteUpdateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
+            width = 250
+            spriteUpdateButton.setMaximumWidth(width)
+            spriteUpdateButton.clicked.connect(Update.update)
+            spriteUpdateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+            effect = QGraphicsDropShadowEffect()
+            effect.setBlurRadius(3);
+            spriteUpdateButton.setGraphicsEffect(effect);
+            vbox.addWidget(spriteUpdateButton, alignment= QtCore.Qt.AlignCenter)
         
 
 

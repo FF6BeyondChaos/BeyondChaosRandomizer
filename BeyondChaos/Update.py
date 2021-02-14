@@ -4,18 +4,17 @@ import shutil
 import Constants
 import time
 import subprocess
+import Config
 from pathlib import Path
 from zipfile import ZipFile
 
+
+
 #our entry point into the updater, called before we display the GUI to the user
 def update():
-    # Notify the user we are doing things
-    print(Constants.UpdateFound)
-    #ping github and see if there is a new version released
-    x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaos/releases/latest').json() 
-    #download the latest package
-    downloadlink = x['assets'][0]['browser_download_url']
-    download_file(downloadlink)
+    updateCore()
+    updateSprites()
+
     #launch the updater process
     subprocess.run("BeyondChaosUpdater.exe", shell=True)
     #wait 3 seconds
@@ -23,14 +22,42 @@ def update():
     SystemExit()
     return
 
+def updateCore():
+    #ping github and get the new released version
+    x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaos/releases/latest').json() 
+    # get the link to download the latest package
+    downloadlink = x['assets'][0]['browser_download_url']
+    #download the file and save it.
+    download_file(downloadlink)
+
+def updateSprites():
+    #ping github and get the new released version
+    x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaosSprites/releases/latest').json() 
+    # get the link to download the latest package
+    downloadlink = x['assets'][0]['browser_download_url']
+    #download the file and save it.
+    download_file(downloadlink)
+
 def updateAvailable():
     x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaos/releases/latest').json()   
     latestVersion = x['tag_name']
-    currentVersion = Constants.Version
+    coreVersion = Config.getCoreVersion()
 
     # We can not have a newer version over an older version if we are
     # checking updater.
-    if latestVersion != currentVersion:
+    if latestVersion != coreVersion:
+        return True
+    else:
+        return False
+
+def spriteUpdateAvailable():
+    x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaosSprites/releases/latest').json()   
+    latestVersion = x['tag_name']
+    spriteVersion = Config.SpriteVersion
+
+    # We can not have a newer version over an older version if we are
+    # checking updater.
+    if latestVersion != spriteVersion:
         return True
     else:
         return False

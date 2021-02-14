@@ -4,5 +4,6 @@
     <TargetProject>77dd98da-649b-418a-a9a1-6640a418833c</TargetProject>
     <FriendlyName>BeyondChaos</FriendlyName>
   </ProjectTarget>
+  <Reports />
   <UseVTune>false</UseVTune>
 </ProfilingTarget>

@@ -34,6 +34,9 @@
     <Compile Include="ChestRandomizer.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Config.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Constants.py">
       <SubType>Code</SubType>
     </Compile>
