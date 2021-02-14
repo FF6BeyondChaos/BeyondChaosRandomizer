@@ -13,6 +13,7 @@ import Options
 import Randomizer
 import Update
 import Constants
+import time
 
 
 if sys.version_info[0] < 3:
@@ -108,7 +109,7 @@ class Window(QWidget):
         # Primary Vertical Box Layout
         vbox = QVBoxLayout()
 
-        titleLabel = QLabel("Beyond Chaos Randomizer (" + Constants.Version + ")")
+        titleLabel = QLabel("Beyond Chaos Randomizer")
         font = QtGui.QFont("Arial", 24, QtGui.QFont.Black)
         titleLabel.setFont(font)
         titleLabel.setAlignment(QtCore.Qt.AlignCenter)
@@ -621,7 +622,11 @@ class Window(QWidget):
 
 if __name__ == "__main__":
     print("Loading GUI, checking for config file, updater file and updates please wait.")
-    Update.configExists()
-    App = QApplication(sys.argv)
-    window = Window()
-    sys.exit(App.exec())
+    try:
+        Update.configExists()
+        App = QApplication(sys.argv)
+        window = Window()
+        time.sleep(3)
+        sys.exit(App.exec())
+    except Exception:
+        traceback.print_exc()

@@ -1,5 +1,6 @@
 from configparser import ConfigParser
 from pathlib import Path
+import os
 config = ConfigParser()
 
 #plans:
@@ -18,7 +19,7 @@ SpriteVersion = ""
 #        config.write(f)
 
 def readConfig():
-    config.read('config.ini')
+    config.read(Path(os.getcwd()+"/config.ini"))
     CoreVersion = config.get('Version', 'Core') # -> "value1"
     SpriteVersion= config.get('Version', 'Sprite') # -> "value2"
     #print config.get('main', 'key3') # -> "value3"
@@ -33,7 +34,7 @@ def getSpriteVersion():
 
 
 def checkINI():
-    my_file = Path("config.ini")
+    my_file = Path(os.getcwd()+"/config.ini")
     if my_file.is_file():
         # file exists
         return True
