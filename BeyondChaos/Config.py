@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+from pathlib import Path
 config = ConfigParser()
 
 #plans:
@@ -6,31 +7,21 @@ config = ConfigParser()
 CoreVersion = ""
 SpriteVersion = ""
 
-def writeConfig():
-    config.read('config.ini')
-    config.add_section('Version')
-    config.set('Version', 'Core', CoreVersion)
-    config.set('Version', 'Sprite', SpriteVersion)
-    #config.set('main', 'key3', 'value3')
+#def writeConfig():
+#    config.read('config.ini')
+#    config.add_section('Version')
+#    config.set('Version', 'Core', CoreVersion)
+#    config.set('Version', 'Sprite', SpriteVersion)
+#    #config.set('main', 'key3', 'value3')
 
-    with open('config.ini', 'w') as f:
-        config.write(f)
+#    with open('config.ini', 'w') as f:
+#        config.write(f)
 
 def readConfig():
     config.read('config.ini')
     CoreVersion = config.get('Version', 'Core') # -> "value1"
     SpriteVersion= config.get('Version', 'Sprite') # -> "value2"
     #print config.get('main', 'key3') # -> "value3"
-
-def setCoreVersion(version):
-    readConfig()
-    CoreVersion = version
-    writeConfig()
-
-def setSpriteVersion(version):
-    readConfig()
-    SpriteVersion = version
-    writeConfig()
 
 def getCoreVersion():
     readConfig()
@@ -40,7 +31,11 @@ def getSpriteVersion():
     readConfig()
     return SpriteVersion
 
-#for version 4.0.5 only...
-def initialSetup():
-    CoreVersion = "4.0.4"
-    SpriteVersion = "1.0.1"
+
+def checkINI():
+    my_file = Path("config.ini")
+    if my_file.is_file():
+        # file exists
+        return True
+    else:
+        return False
