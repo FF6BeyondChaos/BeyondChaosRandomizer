@@ -24,7 +24,7 @@ def update():
 
 def updateCore():
     #ping github and get the new released version
-    x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaos/releases/latest').json() 
+    x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest').json() 
     # get the link to download the latest package
     downloadlink = x['assets'][0]['browser_download_url']
     #download the file and save it.
@@ -39,7 +39,7 @@ def updateSprites():
     download_file(downloadlink)
 
 def updateAvailable():
-    x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaos/releases/latest').json()   
+    x = requests.get('https://api.github.com/repos/BeyondChaos/BeyondChaosRandomizer/releases/latest').json()   
     latestVersion = x['tag_name']
     coreVersion = Config.getCoreVersion()
 
@@ -91,4 +91,17 @@ def updaterExists():
         with ZipFile('BeyondChaosUpdater.zip', 'r') as zipObj:
             # Extract all the contents of zip file in different directory
             zipObj.extractall()
+
+def configExists():
+    exists = Config.checkINI()
+    if exists:
+        #make sure our updater exists
+        updaterExists()
+        return
+    else:
+        runFirstTimeSetup()
+
+def runFirstTimeSetup():
+    #check for the updater
+    updaterExists()
 

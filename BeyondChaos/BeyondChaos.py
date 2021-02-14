@@ -14,6 +14,7 @@ import Randomizer
 import Update
 import Constants
 
+
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. Report this to Green Knight")
 
@@ -619,8 +620,8 @@ class Window(QWidget):
 
 
 if __name__ == "__main__":
-    print("Loading GUI, checking for updates please wait.")
-    Update.updaterExists()
+    print("Loading GUI, checking for config file, updater file and updates please wait.")
+    Update.configExists()
     App = QApplication(sys.argv)
     window = Window()
     sys.exit(App.exec())
