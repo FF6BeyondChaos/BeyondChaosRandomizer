@@ -5,6 +5,7 @@ import Constants
 import time
 import subprocess
 import Config
+import os
 from pathlib import Path
 from zipfile import ZipFile
 
@@ -16,7 +17,7 @@ def update():
     updateSprites()
 
     #launch the updater process
-    subprocess.run("BeyondChaosUpdater.exe", shell=True)
+    subprocess.call("BeyondChaosUpdater.exe")
     #wait 3 seconds
     time.sleep(3)
     SystemExit()
@@ -39,7 +40,7 @@ def updateSprites():
     download_file(downloadlink)
 
 def updateAvailable():
-    x = requests.get('https://api.github.com/repos/BeyondChaos/BeyondChaosRandomizer/releases/latest').json()   
+    x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest').json()   
     latestVersion = x['tag_name']
     coreVersion = Config.getCoreVersion()
 
@@ -104,4 +105,9 @@ def configExists():
 def runFirstTimeSetup():
     #check for the updater
     updaterExists()
+    time.sleep(3)
+    os.startfile("BeyondChaosUpdater.exe")
+    #wait 3 seconds
+    time.sleep(3)
+    SystemExit()
 
