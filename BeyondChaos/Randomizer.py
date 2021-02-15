@@ -3,6 +3,7 @@ import configparser
 from time import time, sleep, gmtime
 import re
 import sys
+import traceback
 from sys import argv
 from shutil import copyfile
 import os
@@ -19,7 +20,7 @@ from FormationRandomizer import (REPLACE_FORMATIONS, KEFKA_EXTRA_FORMATION, NORE
                                  get_formations, get_fsets, get_formation)
 from ItemRandomizer import (reset_equippable, get_ranked_items, get_item,
                             reset_special_relics, reset_rage_blizzard,
-                            reset_cursed_shield, unhardcode_tintinabar)
+                            reset_cursed_shield, unhardcode_tintinabar, cleanup)
 from LocationRandomizer import (get_locations, get_location, get_zones, get_npcs, randomize_forest)
 from MenuFeatures import (improve_item_display, improve_gogo_status_menu, improve_rage_menu,
                           show_original_names, improve_dance_menu, y_equip_relics, fix_gogo_portrait)
@@ -27,7 +28,7 @@ from MonsterRandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
                                get_metamorphs, get_ranked_monsters,
                                shuffle_monsters, get_monster, read_ai_table,
                                change_enemy_name, randomize_enemy_name,
-                               get_collapsing_house_help_skill)
+                               get_collapsing_house_help_skill, monsterCleanup)
 from MusicRandomizer import randomize_music, manage_opera, insert_instruments
 from Options import ALL_MODES, ALL_FLAGS, Options_
 from Patches import allergic_dog, banon_life3, vanish_doom, evade_mblock, death_abuse, no_kutan_skip, show_coliseum_rewards
@@ -48,6 +49,7 @@ from Utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    mutate_index, utilrandom as random, open_mei_fallback,
                    AutoLearnRageSub)
 from Wor import manage_wor_recruitment, manage_wor_skip
+
 
 
 VERSION = "4"
@@ -171,6 +173,11 @@ def rngstate():
     state = sum(random.getstate()[1])
     print(state)
     return state
+
+def Reset():
+    seedcounter = 0
+    cleanup()
+    monsterCleanup(sourcefile)
 
 
 def reseed():
@@ -4384,6 +4391,10 @@ def randomize(args):
         # do this before treasure
         if Options_.random_enemy_stats and Options_.random_treasure and Options_.random_character_stats:
             dirk = get_item(0)
+            if dirk == None:
+                cleanup()
+                items = get_ranked_items(sourcefile)
+                dirk = get_item(0)
             dirk.become_another()
             dirk.write_stats(fout)
             dummy_item(dirk)
@@ -4801,6 +4812,10 @@ def randomize(args):
     if Options_.is_code_active('bingoboingo'):
         manage_bingo()
 
+    try:
+        Reset()
+    except Exception as e:
+        traceback.print_exc()
     return outfile
 
 

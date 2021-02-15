@@ -13,15 +13,21 @@ from zipfile import ZipFile
 
 #our entry point into the updater, called before we display the GUI to the user
 def update():
-    updateCore()
-    updateSprites()
+    update = False
+    if (coreUpdateAvailable()):
+        updateCore()
+        update = True
+    if (spriteUpdateAvailable()):
+        updateSprites()
+        update = True
 
-    #launch the updater process
-    subprocess.call("BeyondChaosUpdater.exe")
-    #wait 3 seconds
-    time.sleep(3)
-    SystemExit()
-    return
+    if(update):
+        #launch the updater process
+        subprocess.call("BeyondChaosUpdater.exe")
+        #wait 3 seconds
+        time.sleep(1)
+        SystemExit()
+
 
 def updateCore():
     #ping github and get the new released version
@@ -39,7 +45,7 @@ def updateSprites():
     #download the file and save it.
     download_file(downloadlink)
 
-def updateAvailable():
+def coreUpdateAvailable():
     x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest').json()   
     latestVersion = x['tag_name']
     coreVersion = Config.getCoreVersion()
