@@ -1,5 +1,5 @@
 import copy
-
+import traceback
 from Utils import (write_multi, read_multi, ENEMY_TABLE,
                    name_to_bytes, get_palette_transformer, mutate_index,
                    make_table, utilrandom as random)
@@ -99,6 +99,18 @@ specialdict["mp drain"] = 0x31
 reverse_specialdict = {v: k for (k, v) in specialdict.items()}
 ranked = [specialdict[key] for key in ranked]
 
+def monsterCleanup(filename):
+    try:
+        globalweights, avgs = None, {}
+        metamorphs = None
+        all_spells = None
+        xps = []
+        gps = []
+        monsterdict.clear()
+        get_monsters(filename)
+    except Exception as e:
+        traceback.print_exc()
+        
 
 def change_enemy_name(fout, enemy_id, name):
     pointer = 0xFC050 + (enemy_id * 10)
@@ -637,63 +649,66 @@ class MonsterBlock:
         global all_spells
         global HIGHEST_LEVEL
 
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        for key in stat_order:
-            self.stats[key] = ord(f.read(1))
-        self.stats['hp'] = read_multi(f, length=2)
-        self.stats['mp'] = read_multi(f, length=2)
-        self.stats['xp'] = read_multi(f, length=2)
-        self.stats['gp'] = read_multi(f, length=2)
-        self.stats['level'] = ord(f.read(1))
-        self.oldlevel = self.stats['level']
-        if self.stats['xp'] > 0:
-            xps.append((self.oldlevel, self.stats['xp']))
-        if self.stats['gp'] > 0:
-            gps.append((self.oldlevel, self.stats['gp']))
+        try:
+            f = open(filename, 'r+b')
+            f.seek(self.pointer)
+            for key in stat_order:
+                self.stats[key] = ord(f.read(1))
+            self.stats['hp'] = read_multi(f, length=2)
+            self.stats['mp'] = read_multi(f, length=2)
+            self.stats['xp'] = read_multi(f, length=2)
+            self.stats['gp'] = read_multi(f, length=2)
+            self.stats['level'] = ord(f.read(1))
+            self.oldlevel = self.stats['level']
+            if self.stats['xp'] > 0:
+                xps.append((self.oldlevel, self.stats['xp']))
+            if self.stats['gp'] > 0:
+                gps.append((self.oldlevel, self.stats['gp']))
 
-        self.morph = ord(f.read(1))
-        self.misc1 = ord(f.read(1))
-        self.misc2 = ord(f.read(1))
+            self.morph = ord(f.read(1))
+            self.misc1 = ord(f.read(1))
+            self.misc2 = ord(f.read(1))
 
-        f.seek(self.pointer + 20)
-        self.immunities = list(f.read(3))
-        self.absorb = ord(f.read(1))
-        self.null = ord(f.read(1))
-        self.weakness = ord(f.read(1))
+            f.seek(self.pointer + 20)
+            self.immunities = list(f.read(3))
+            self.absorb = ord(f.read(1))
+            self.null = ord(f.read(1))
+            self.weakness = ord(f.read(1))
 
-        f.seek(self.pointer + 26)
-        self.attackanimation = ord(f.read(1))
+            f.seek(self.pointer + 26)
+            self.attackanimation = ord(f.read(1))
 
-        f.seek(self.pointer + 27)
-        self.statuses = list(f.read(4))
-        self.special = ord(f.read(1))
+            f.seek(self.pointer + 27)
+            self.statuses = list(f.read(4))
+            self.special = ord(f.read(1))
 
-        f.seek(self.itemptr)
-        self.items = list(f.read(4))
-        self.original_drops = self.drops
+            f.seek(self.itemptr)
+            self.items = list(f.read(4))
+            self.original_drops = self.drops
 
-        f.seek(self.controlptr)
-        self.controls = list(f.read(4))
+            f.seek(self.controlptr)
+            self.controls = list(f.read(4))
 
-        f.seek(self.sketchptr)
-        self.sketches = list(f.read(2))
+            f.seek(self.sketchptr)
+            self.sketches = list(f.read(2))
 
-        if not self.is_boss:
-            f.seek(self.rageptr)
-            self.rages = list(f.read(2))
-        else:
-            self.rages = None
+            if not self.is_boss:
+                f.seek(self.rageptr)
+                self.rages = list(f.read(2))
+            else:
+                self.rages = None
 
-        f.seek(self.aiptr)
-        self.ai = read_multi(f, length=2)
+            f.seek(self.aiptr)
+            self.ai = read_multi(f, length=2)
 
-        if all_spells is None:
-            all_spells = get_ranked_spells(filename)
+            if all_spells is None:
+                all_spells = get_ranked_spells(filename)
 
-        f.close()
+            f.close()
 
-        self.read_ai(filename)
+            self.read_ai(filename)
+        except Exception as e:
+            traceback.print_exc()
 
     def get_skillset(self, ids_only=True):
         skillset = set([])
@@ -927,32 +942,35 @@ class MonsterBlock:
         self.aiscript = newscript
 
     def read_ai(self, filename):
-        f = open(filename, 'r+b')
-        pointer = self.ai + 0xF8700
-        f.seek(pointer)
-        seen = False
-        script = []
-        while True:
-            value = f.read(1)
-            try:
-                numargs = AICODES[ord(value)]
-                args = f.read(numargs)
-            except KeyError:
-                args = b""
-            script.append(bytearray(value + args))
-            if ord(value) == 0xFF:
-                if seen:
-                    break
-                else:
-                    seen = True
+        try:
+            f = open(filename, 'r+b')
+            pointer = self.ai + 0xF8700
+            f.seek(pointer)
+            seen = False
+            script = []
+            while True:
+                value = f.read(1)
+                try:
+                    numargs = AICODES[ord(value)]
+                    args = f.read(numargs)
+                except KeyError:
+                    args = b""
+                script.append(bytearray(value + args))
+                if ord(value) == 0xFF:
+                    if seen:
+                        break
+                    else:
+                        seen = True
 
-        self.aiscript = script
+            self.aiscript = script
 
-        if self.id == 0xF3:
-            # account for brown Mag Roader bug
-            self.aiscript = self.aiscript[:4]
+            if self.id == 0xF3:
+                # account for brown Mag Roader bug
+                self.aiscript = self.aiscript[:4]
 
-        return self.aiscript
+            return self.aiscript
+        except Exception as e:
+            traceback.print_exc()
 
     def set_relative_ai(self, pointer):
         self.ai = pointer - 0xF8700
@@ -1786,22 +1804,25 @@ def monsters_from_table(tablefile):
 
 
 def get_monsters(filename=None):
-    if monsterdict:
-        return sorted(list(monsterdict.values()), key=lambda m: m.id)
+    try:
+        if monsterdict:
+            return sorted(list(monsterdict.values()), key=lambda m: m.id)
 
-    get_ranked_items(filename)
-    monsters = monsters_from_table(ENEMY_TABLE)
-    for m in monsters:
-        m.read_stats(filename)
+        get_ranked_items(filename)
+        monsters = monsters_from_table(ENEMY_TABLE)
+        for m in monsters:
+            m.read_stats(filename)
 
-    mgs = []
-    for j, m in enumerate(monsters):
-        mg = MonsterGraphicBlock(pointer=0x127000 + (5 * j), name=m.name)
-        mg.read_data(filename)
-        m.set_graphics(graphics=mg)
-        mgs.append(mg)
+        mgs = []
+        for j, m in enumerate(monsters):
+            mg = MonsterGraphicBlock(pointer=0x127000 + (5 * j), name=m.name)
+            mg.read_data(filename)
+            m.set_graphics(graphics=mg)
+            mgs.append(mg)
 
-    return monsters
+        return monsters
+    except Exception as e:
+        traceback.print_exc()
 
 
 def get_monster(monster_id):

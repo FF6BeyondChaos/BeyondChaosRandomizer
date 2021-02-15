@@ -84,6 +84,9 @@ class Window(QWidget):
         self.middleLeftGroupBox = QGroupBox()
         self.tablist = [self.tab1, self.tab2, self.tab3, self.tab4, self.tab5, self.tab6, self.tab7]
 
+        #global busy notifications
+        flagsChanging = False
+
         # ----------- Begin buiding program/window ------------------------------
 
         # pull data from files
@@ -97,6 +100,7 @@ class Window(QWidget):
         self.updateDictionaries()
         self.updateFlagString()
         self.updateFlagCheckboxes()
+        self.flagButtonClicked()
 
     def InitWindow(self):
         self.setWindowTitle(self.title)
@@ -119,31 +123,16 @@ class Window(QWidget):
         titleLabel.setMargin(25)
         vbox.addWidget(titleLabel)
          
-        coreUpdate = Update.updateAvailable()
-        spriteUpdate = Update.spriteUpdateAvailable()
-
-        if (coreUpdate):
-            coreUpdateButton = QPushButton("Core Update Available!")
-            coreUpdateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
-            width = 250
-            coreUpdateButton.setMaximumWidth(width)
-            coreUpdateButton.clicked.connect(Update.update)
-            coreUpdateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-            effect = QGraphicsDropShadowEffect()
-            effect.setBlurRadius(3);
-            coreUpdateButton.setGraphicsEffect(effect);
-            vbox.addWidget(coreUpdateButton, alignment= QtCore.Qt.AlignCenter)
-        if (spriteUpdate):
-            spriteUpdateButton = QPushButton("Sprite Update Available!")
-            spriteUpdateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
-            width = 250
-            spriteUpdateButton.setMaximumWidth(width)
-            spriteUpdateButton.clicked.connect(Update.update)
-            spriteUpdateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-            effect = QGraphicsDropShadowEffect()
-            effect.setBlurRadius(3);
-            spriteUpdateButton.setGraphicsEffect(effect);
-            vbox.addWidget(spriteUpdateButton, alignment= QtCore.Qt.AlignCenter)
+        updateButton = QPushButton("Check for Updates")
+        updateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
+        width = 250
+        updateButton.setMaximumWidth(width)
+        updateButton.clicked.connect(lambda: self.update())
+        updateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+        effect = QGraphicsDropShadowEffect()
+        effect.setBlurRadius(3);
+        updateButton.setGraphicsEffect(effect);
+        vbox.addWidget(updateButton, alignment= QtCore.Qt.AlignCenter)
         
 
 
@@ -152,6 +141,10 @@ class Window(QWidget):
         vbox.addWidget(self.GroupBoxThreeLayout()) # Adding third/bottom groupbox
 
         self.setLayout(vbox)
+
+    def update(self):
+        QMessageBox.information(self, "Update Process", "Checking for updates, if found this will automatically close", QMessageBox.Ok)
+        Update.update()
 
     # Top groupbox consisting of ROM selection, and Seed number input
     def GroupBoxOneLayout(self):
@@ -319,7 +312,11 @@ class Window(QWidget):
         return groupBoxTwo
 
     def textchanged(self, text):
+        if (self.flagsChanging):
+            return
         values = text.split()
+        self.flags.clear()
+        self.flagString.clear()
         for v in values:
             for d in self.dictionaries:
                 for flagname in d:
@@ -438,7 +435,8 @@ class Window(QWidget):
         self.seed = ""
         self.flags.clear
         self.seedInput.setText(self.seed)
-        self.flagString.setText(self.flags)
+        self.flagString.clear()
+        self.flags.clear()
 
         for i in self.middleLeftGroupBox.findChildren((QRadioButton)):
             if i.mode == 'normal':
@@ -451,19 +449,23 @@ class Window(QWidget):
         self.updateDictionaries()
         self.updateFlagString()
         self.updateFlagCheckboxes()
+        self.flagButtonClicked()
 
 
     # when flag UI button is checked, update corresponding dictionary values
     def flagButtonClicked(self):
+        self.flags.clear()
         for t, d in zip(self.tablist, self.dictionaries):
             children = t.findChildren(FlagCheckBox)
             for c in children:
                 if c.isChecked():
                     d[c.value]['checked'] = True
-                    flagset = true
+                    flagset = False
                     for flag in self.flags:
                         if flag==d[c.value]:
                             flagset = true
+                    if flagset == False:
+                        self.flags.append(c.value)
                 else:
                     d[c.value]['checked'] = False
         self.updateDictionaries()
@@ -558,18 +560,23 @@ class Window(QWidget):
             if self.seed == "":
                 displaySeed = "(none)" # pretty-printing :)
 
-            flags = (self.flags).strip().replace(" ", "\n----") # more pretty-printing
+            flagMode =""
+            for flag in self.flags:
+                if flagMode !="":
+                    flagMode += "\n----"
+                flagMode += flag
+                
 
             # This makes the flag string more readable in the confirm dialog
             message = ((f"Rom: {self.romText}\n"
                         f"Seed: {displaySeed}\n"
                         f"Mode: {self.mode}\n"
-                        f"Flags: \n----{flags}\n"
+                        f"Flags: \n----{flagMode}\n"
                         f"(Hyphens are not actually used in seed generation)"))
             messBox = QMessageBox.question(self, "Confirm Seed Generation?", message, QMessageBox.Yes| QMessageBox.Cancel)
             if messBox == 16384:  # User selects confirm/accept/yes option
-                finalFlags = self.flags.replace(" ", "")
-                bundle = f"{self.version}.{self.mode}.{finalFlags}.{self.seed}"
+                #finalFlags = self.flags.replace(" ", "")
+                bundle = f"{self.version}.{self.mode}.{flagMode}.{self.seed}"
                 # remove spam if the Randomizer asks for input
                 # TODO: guify that stuff
                 # Hash check can be moved out to when you pick the file.
@@ -584,19 +591,25 @@ class Window(QWidget):
                 # Exit so people don't try it.
                 # TODO: fix global state then remove this
                 except Exception as e:
+                    traceback.print_exc()
                     QMessageBox.critical(self, "Error creating ROM", str(e), QMessageBox.Ok)
                 else:
                     QMessageBox.information(self, "Successfully created ROM", f"Result file: {result_file}", QMessageBox.Ok)
+                    return
                 #sys.exit() Lets no longer sysexit anymore so we don't have to reopen each time. The user can close the gui.
 
     # read each dictionary and update text field showing flag codes based upon
     #    flags denoted as 'True'
     def updateFlagString(self):
+        self.flagsChanging = True
+        self.flagString.clear()
         temp = ""
-        for flag in flags:
+        for x in range(0, len(self.flags)):
+            flag = self.flags[x]
             temp+= flag
             temp+=" "
-        self.flagString.setText(self.flags)
+        self.flagString.setText(temp)
+        self.flagsChanging=False
 
     # read through dictionaries and set flag checkboxes as 'checked'
     def updateFlagCheckboxes(self):

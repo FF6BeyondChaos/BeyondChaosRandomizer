@@ -1,3 +1,4 @@
+import traceback
 from Utils import (hex2int, write_multi, read_multi, ITEM_TABLE,
                    CUSTOM_ITEMS_TABLE, mutate_index,
                    name_to_bytes, utilrandom as random,
@@ -26,6 +27,7 @@ STATPROTECT = {"fieldeffect": 0xdc,
                "statusacquire2": 0x00}
 
 all_spells = None
+effects_used = None
 effects_used = []
 itemdict = {}
 customs = {}
@@ -34,6 +36,13 @@ changed_commands = []
 break_unused_dict = {0x09: list(range(0xA3, 0xAB)),
                      0x08: list(range(0xAB, 0xB0)) + list(range(0x41, 0x44))}
 
+def cleanup():
+    changed_commands =[]
+    all_spells = None
+    itemdict ={}
+    customs = {}
+    effects_used = None
+    unbanItems()
 
 def set_item_changed_commands(commands):
     global changed_commands
@@ -974,6 +983,14 @@ def get_item(itemid, allow_banned=False):
         return None
     return item
 
+def unbanItems():
+    try:
+        for x in range(0, len(itemdict)):
+            item = itemdict[x]
+            if item != None:
+                item.banned = False
+    except Exception as e:
+        traceback.print_exc()
 
 def get_secret_item():
     item = get_item(0, allow_banned=True)
