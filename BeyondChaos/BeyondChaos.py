@@ -14,6 +14,7 @@ import Randomizer
 import Update
 import Constants
 import time
+import traceback
 
 
 if sys.version_info[0] < 3:
@@ -51,7 +52,7 @@ class Window(QWidget):
         self.version = "4"
         self.mode = "normal" # default
         self.seed = ""
-        self.flags = ""
+        self.flags = []
 
 
         # dictionaries to hold flag data
@@ -64,6 +65,8 @@ class Window(QWidget):
         self.beta = {}
         self.dictionaries = [self.simple, self.aesthetic, self.major,
                              self.minor, self.experimental, self.gamebreaking, self.beta]
+        #keep a list of all checkboxes
+        self.checkBoxes = []
 
         # dictionary? of saved presets
         self.savedPresets = {}
@@ -265,6 +268,7 @@ class Window(QWidget):
             tablayout = QVBoxLayout()
             for flagname, flagdesc in d.items():
                 cbox = FlagCheckBox(f"{flagname}  -  {flagdesc['explanation']}", flagname)
+                self.checkBoxes.append(cbox)
                 tablayout.addWidget(cbox)
                 #cbox.setCheckable(True)
                 #cbox.setToolTip(flagdesc['explanation'])
@@ -284,6 +288,7 @@ class Window(QWidget):
         widgetV.setLayout(widgetVBoxLayout)
 
         widgetVBoxLayout.addWidget(QLabel("Text-string of selected flags:"))
+        self.flagString.textChanged.connect(self.textchanged)
         widgetVBoxLayout.addWidget(self.flagString)
 
         saveButton = QPushButton("Save flags selection")
@@ -313,6 +318,18 @@ class Window(QWidget):
 
         return groupBoxTwo
 
+    def textchanged(self, text):
+        values = text.split()
+        for v in values:
+            for d in self.dictionaries:
+                for flagname in d:
+                    if v == flagname:
+                        for c in self.checkBoxes:
+                            if v== c.value:
+                                c.setChecked(True)
+                                self.flags.append(c.value)
+                                self.updateFlagString()
+                        
 
     # Bottom groupbox consisting of saved seeds selection box, and button to generate seed
     def GroupBoxThreeLayout(self):
@@ -419,7 +436,7 @@ class Window(QWidget):
     def clearUI(self):
         self.mode = "normal"
         self.seed = ""
-        self.flags = ""
+        self.flags.clear
         self.seedInput.setText(self.seed)
         self.flagString.setText(self.flags)
 
@@ -443,6 +460,10 @@ class Window(QWidget):
             for c in children:
                 if c.isChecked():
                     d[c.value]['checked'] = True
+                    flagset = true
+                    for flag in self.flags:
+                        if flag==d[c.value]:
+                            flagset = true
                 else:
                     d[c.value]['checked'] = False
         self.updateDictionaries()
@@ -557,7 +578,7 @@ class Window(QWidget):
                 QtCore.pyqtRemoveInputHook()
                 # TODO: put this in a new thread
                 try:
-                    result_file = Randomizer.randomize(args=['gui.py', self.romText, bundle, "test"])
+                    result_file = Randomizer.randomize(args=['BeyondChaos.py', self.romText, bundle, "test"])
                 #call(["py", "Randomizer.py", self.romText, bundle, "test"])
                 # Running the Randomizer twice in one session doesn't work because of global state.
                 # Exit so people don't try it.
@@ -572,18 +593,9 @@ class Window(QWidget):
     #    flags denoted as 'True'
     def updateFlagString(self):
         temp = ""
-        space = False
-        for d in self.dictionaries:
-            for flagname, flagdesc in d.items():
-                if space:
-                    temp += " "
-                    space = False
-
-                if flagdesc['checked']:
-                    temp += flagname
-                    space = True
-
-        self.flags = temp
+        for flag in flags:
+            temp+= flag
+            temp+=" "
         self.flagString.setText(self.flags)
 
     # read through dictionaries and set flag checkboxes as 'checked'
