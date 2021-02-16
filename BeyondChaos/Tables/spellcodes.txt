@@ -238,18 +238,18 @@ EC,medium,Fire Wall
 ED,medium,Slide
 EE,broken,Battle
 EF,broken,Special
-F0,broken,Riot Blade
-F1,broken,Mirager
-F2,broken,Back Blade
-F3,broken,ShadowFang
-F4,broken,RoyalShock
-F5,broken,TigerBreak
-F6,broken,Spin Edge
-F7,broken,Sabre Soul
-F8,broken,Star Prism
-F9,broken,Red Card
-FA,broken,MoogleRush
-FB,broken,X-Meteo
-FC,broken,Takedown
+F0,strong,Riot Blade
+F1,strong,Mirager
+F2,strong,Back Blade
+F3,strong,ShadowFang
+F4,strong,RoyalShock
+F5,strong,TigerBreak
+F6,strong,Spin Edge
+F7,strong,Sabre Soul
+F8,strong,Star Prism
+F9,strong,Red Card
+FA,strong,MoogleRush
+FB,strong,X-Meteo
+FC,strong,Takedown
 FD,broken,Wild Fang
 FE,weak,Lagomorph
