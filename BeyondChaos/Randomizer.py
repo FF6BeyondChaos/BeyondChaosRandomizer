@@ -2131,8 +2131,8 @@ def manage_reorder_rages(freespaces):
     pointer = 0x301416
 
     monsters = get_monsters()
-    monsters = sorted(monsters, key=lambda m: m.display_name)
     monsters = [m for m in monsters if m.id <= 0xFE]
+    monsters = sorted(monsters, key=lambda m: m.display_name)
     assert len(monsters) == 255
     monster_order = [m.id for m in monsters]
 
