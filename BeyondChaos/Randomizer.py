@@ -4809,6 +4809,10 @@ def randomize(args):
                 m.stats['xp'] = min(0xFFFF, 3 * m.stats['xp'])
             m.write_stats(fout)
 
+    if Options_.is_code_active('gp'):
+        for m in monsters:
+                m.stats['gp'] = min(0xFFFF, 3 * m.stats['xp'])
+
     if Options_.is_code_active('naturalmagic') or Options_.is_code_active('naturalstats'):
         espers = get_espers(sourcefile)
         if Options_.is_code_active('naturalstats'):
