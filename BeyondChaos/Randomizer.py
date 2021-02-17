@@ -931,8 +931,13 @@ def manage_commands_new(commands):
                         s.set_spells(valid_spells, "Limit")
                         limitCounter = limitCounter +1
                     else:
+                        limitbad = True
                         s.set_spells(valid_spells)
-                        if s.name == "Limit" and not Options_.is_code_active('desperation') :
+                        while limitbad:
+                            if s.name == "Limit" and not Options_.is_code_active('desperation'):
+                                s.set_spells(valid_spells)
+                            else:
+                                limitbad = False
                 except ValueError:
                     continue
 
