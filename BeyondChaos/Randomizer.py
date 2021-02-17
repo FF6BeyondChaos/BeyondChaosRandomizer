@@ -3,6 +3,7 @@ import configparser
 from time import time, sleep, gmtime
 import re
 import sys
+import traceback
 from sys import argv
 from shutil import copyfile
 import os
@@ -19,7 +20,7 @@ from FormationRandomizer import (REPLACE_FORMATIONS, KEFKA_EXTRA_FORMATION, NORE
                                  get_formations, get_fsets, get_formation)
 from ItemRandomizer import (reset_equippable, get_ranked_items, get_item,
                             reset_special_relics, reset_rage_blizzard,
-                            reset_cursed_shield, unhardcode_tintinabar)
+                            reset_cursed_shield, unhardcode_tintinabar, cleanup)
 from LocationRandomizer import (get_locations, get_location, get_zones, get_npcs, randomize_forest)
 from MenuFeatures import (improve_item_display, improve_gogo_status_menu, improve_rage_menu,
                           show_original_names, improve_dance_menu, y_equip_relics, fix_gogo_portrait)
@@ -27,7 +28,7 @@ from MonsterRandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
                                get_metamorphs, get_ranked_monsters,
                                shuffle_monsters, get_monster, read_ai_table,
                                change_enemy_name, randomize_enemy_name,
-                               get_collapsing_house_help_skill)
+                               get_collapsing_house_help_skill, monsterCleanup)
 from MusicRandomizer import randomize_music, manage_opera, insert_instruments
 from Options import ALL_MODES, ALL_FLAGS, Options_
 from Patches import allergic_dog, banon_life3, vanish_doom, evade_mblock, death_abuse, no_kutan_skip, show_coliseum_rewards
@@ -48,6 +49,7 @@ from Utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    mutate_index, utilrandom as random, open_mei_fallback,
                    AutoLearnRageSub)
 from Wor import manage_wor_recruitment, manage_wor_skip
+
 
 
 VERSION = "4"
@@ -171,6 +173,11 @@ def rngstate():
     state = sum(random.getstate()[1])
     print(state)
     return state
+
+def Reset():
+    seedcounter = 0
+    cleanup()
+    monsterCleanup(sourcefile)
 
 
 def reseed():
@@ -740,6 +747,7 @@ def manage_commands_new(commands):
     used = []
     all_spells = get_ranked_spells(sourcefile)
     randomskill_names = set([])
+    limitCounter = 0
     for c in commands.values():
         if c.name in NEVER_REPLACE:
             continue
@@ -767,6 +775,15 @@ def manage_commands_new(commands):
         if Options_.is_code_active('allcombos'):
             random_skill = False
             combo_skill = True
+
+        #force first skill to limit break
+        if limitCounter != 3 and Options_.is_code_active('desperation'):
+            if Options_.is_code_active('allcombos'):
+                random_skill = False
+                combo_skill = True
+            else:
+                random_skill = True
+                combo_skill = False
 
         POWER_LEVEL = 130
         scount = 1
@@ -798,6 +815,33 @@ def manage_commands_new(commands):
                     return s.rank() <= power
 
                 valid_spells = list(filter(spell_is_valid, all_spells))
+                
+                for spell in all_spells:
+                    if spell.name == "Sabre Soul":
+                        valid_spells.append(spell)
+                    elif spell.name == "Star Prism":
+                        valid_spells.append(spell)
+                    elif spell.name == "Mirager":
+                        valid_spells.append(spell)
+                    elif spell.name == "TigerBreak":
+                        valid_spells.append(spell)
+                    elif spell.name == "Back Blade":
+                        valid_spells.append(spell)
+                    elif spell.name == "Riot Blade":
+                        valid_spells.append(spell)
+                    elif spell.name == "RoyalShock":
+                        valid_spells.append(spell)
+                    elif spell.name == "Spin Edge":
+                        valid_spells.append(spell)
+                    elif spell.name == "X-Meteo":
+                        valid_spells.append(spell)
+                    elif spell.name == "Red Card":
+                        valid_spells.append(spell)
+                    elif spell.name == "MoogleRush":
+                        valid_spells.append(spell)
+                    elif spell.name == "ShadowFang":
+                        valid_spells.append(spell)
+
                 if not valid_spells:
                     continue
 
@@ -846,7 +890,31 @@ def manage_commands_new(commands):
                 c.set_retarget(fout)
                 valid_spells = [v for v in all_spells if
                                 v.spellid <= 0xED and v.valid]
-
+                for spell in all_spells:
+                    if spell.name == "Sabre Soul":
+                        valid_spells.append(spell)
+                    elif spell.name == "Star Prism":
+                        valid_spells.append(spell)
+                    elif spell.name == "Mirager":
+                        valid_spells.append(spell)
+                    elif spell.name == "TigerBreak":
+                        valid_spells.append(spell)
+                    elif spell.name == "Back Blade":
+                        valid_spells.append(spell)
+                    elif spell.name == "Riot Blade":
+                        valid_spells.append(spell)
+                    elif spell.name == "RoyalShock":
+                        valid_spells.append(spell)
+                    elif spell.name == "Spin Edge":
+                        valid_spells.append(spell)
+                    elif spell.name == "X-Meteo":
+                        valid_spells.append(spell)
+                    elif spell.name == "Red Card":
+                        valid_spells.append(spell)
+                    elif spell.name == "MoogleRush":
+                        valid_spells.append(spell)
+                    elif spell.name == "ShadowFang":
+                        valid_spells.append(spell)
                 if scount == 1:
                     s = RandomSpellSub()
                 else:
@@ -858,12 +926,17 @@ def manage_commands_new(commands):
                         s = ChainSpellSub()
 
                 try:
-                    s.set_spells(valid_spells)
+                    if limitCounter != 3 and Options_.is_code_active('desperation'):
+                        s.set_spells(valid_spells, None, "Limit")
+                        limitCounter = limitCounter +1
+                    else:
+                        s.set_spells(valid_spells)
                 except ValueError:
                     continue
 
-                if s.name in randomskill_names:
-                    continue
+                if s.name != "Limit":
+                    if s.name in randomskill_names:
+                        continue
                 randomskill_names.add(s.name)
                 c.targeting = 0x2
                 if not s.spells:
@@ -904,6 +977,33 @@ def manage_commands_new(commands):
                     power = get_random_power()
                     valid_spells = [s for s in all_spells
                                     if spell_is_valid(s, power) and s not in myspells]
+
+                    for spell in all_spells:
+                        if spell.name == "Sabre Soul":
+                            valid_spells.append(spell)
+                        elif spell.name == "Star Prism":
+                            valid_spells.append(spell)
+                        elif spell.name == "Mirager":
+                            valid_spells.append(spell)
+                        elif spell.name == "TigerBreak":
+                            valid_spells.append(spell)
+                        elif spell.name == "Back Blade":
+                            valid_spells.append(spell)
+                        elif spell.name == "Riot Blade":
+                            valid_spells.append(spell)
+                        elif spell.name == "RoyalShock":
+                            valid_spells.append(spell)
+                        elif spell.name == "Spin Edge":
+                            valid_spells.append(spell)
+                        elif spell.name == "X-Meteo":
+                            valid_spells.append(spell)
+                        elif spell.name == "Red Card":
+                            valid_spells.append(spell)
+                        elif spell.name == "MoogleRush":
+                            valid_spells.append(spell)
+                        elif spell.name == "ShadowFang":
+                            valid_spells.append(spell)
+
                     if not valid_spells:
                         continue
                     myspells.append(random.choice(valid_spells))
@@ -1134,6 +1234,17 @@ def manage_suplex(commands, monsters):
     learn_blitz_sub.bytestring = [0xEA] * 4
     learn_blitz_sub.set_location(0xA18E)
     learn_blitz_sub.write(fout)
+
+def beta_manageDesperation():
+    try:
+        characters = get_characters()
+        if random.randint(0, 9) != 9:
+                num_deperate = 2
+                while num_deperate < len(characters) and random.choice([True, False]):
+                    num_deperate += 1
+        candidates = random.sample(characters, num_deperate)
+    except Exception:
+        traceback.print_exc()
 
 
 def manage_natural_magic():
@@ -1622,8 +1733,6 @@ def manage_rng():
         numbers = list(range(0x100))
     random.shuffle(numbers)
     fout.write(bytes(numbers))
-
-
 
 
 def manage_balance(newslots=True):
@@ -2818,10 +2927,6 @@ def assign_unused_enemy_formations():
         uf.set_appearing(random.randint(1, 13))
         add_orphaned_formation(uf)
 
-
-
-
-
 def manage_shops():
     buyables = set([])
     descriptions = []
@@ -2955,7 +3060,6 @@ def manage_colorize_dungeons(locations=None, freespaces=None):
         manage_colorize_wor()
         manage_colorize_esper_world()
 
-
 def manage_colorize_wor():
     transformer = get_palette_transformer(always=True)
     fout.seek(0x12ed00)
@@ -2999,14 +3103,11 @@ def manage_colorize_wor():
         for c in new_palette:
             write_multi(fout, c, length=2)
 
-
-
 def manage_colorize_esper_world():
     loc = get_location(217)
     chosen = random.choice([1, 22, 25, 28, 34, 38, 43])
     loc.palette_index = (loc.palette_index & 0xFFFFC0) | chosen
     loc.write_data(fout)
-
 
 def manage_encounter_rate():
     if Options_.is_code_active('dearestmolulu'):
@@ -3116,7 +3217,6 @@ def manage_encounter_rate():
     encrate_sub.set_location(0xC2BF)
     encrate_sub.bytestring = bytes(dungeon_rates)
     encrate_sub.write(fout)
-
 
 def manage_tower():
     locations = get_locations()
@@ -4384,6 +4484,10 @@ def randomize(args):
         # do this before treasure
         if Options_.random_enemy_stats and Options_.random_treasure and Options_.random_character_stats:
             dirk = get_item(0)
+            if dirk == None:
+                cleanup()
+                items = get_ranked_items(sourcefile)
+                dirk = get_item(0)
             dirk.become_another()
             dirk.write_stats(fout)
             dummy_item(dirk)
@@ -4693,17 +4797,21 @@ def randomize(args):
     if Options_.random_zerker or Options_.random_character_stats:
         manage_equip_umaro(event_freespaces)
 
-    if Options_.is_code_active('easymodo') or Options_.is_code_active('llg') or Options_.is_code_active('dearestmolulu') or Options_.is_code_active('3xexp'):
+    if Options_.is_code_active('easymodo') or Options_.is_code_active('llg') or Options_.is_code_active('dearestmolulu') or Options_.is_code_active('exp'):
         for m in monsters:
             if Options_.is_code_active('easymodo'):
                 m.stats['hp'] = 1
             if Options_.is_code_active('llg'):
                 m.stats['xp'] = 0
-            if Options_.is_code_active('3xexp'):
+            if Options_.is_code_active('exp'):
                 m.stats['xp'] = min(0xFFFF, 3 * m.stats['xp'])
             elif Options_.is_code_active('dearestmolulu'):
                 m.stats['xp'] = min(0xFFFF, 3 * m.stats['xp'])
             m.write_stats(fout)
+
+    if Options_.is_code_active('gp'):
+        for m in monsters:
+                m.stats['gp'] = min(0xFFFF, 3 * m.stats['xp'])
 
     if Options_.is_code_active('naturalmagic') or Options_.is_code_active('naturalstats'):
         espers = get_espers(sourcefile)
@@ -4801,6 +4909,11 @@ def randomize(args):
     if Options_.is_code_active('bingoboingo'):
         manage_bingo()
 
+    try:
+       # Reset()
+       a = 123 +1
+    except Exception as e:
+        traceback.print_exc()
     return outfile
 
 

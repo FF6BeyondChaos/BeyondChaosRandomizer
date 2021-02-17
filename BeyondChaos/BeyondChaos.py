@@ -13,6 +13,9 @@ import Options
 import Randomizer
 import Update
 import Constants
+import time
+import traceback
+
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. Report this to Green Knight")
@@ -49,7 +52,7 @@ class Window(QWidget):
         self.version = "4"
         self.mode = "normal" # default
         self.seed = ""
-        self.flags = ""
+        self.flags = []
 
 
         # dictionaries to hold flag data
@@ -62,6 +65,8 @@ class Window(QWidget):
         self.beta = {}
         self.dictionaries = [self.simple, self.aesthetic, self.major,
                              self.minor, self.experimental, self.gamebreaking, self.beta]
+        #keep a list of all checkboxes
+        self.checkBoxes = []
 
         # dictionary? of saved presets
         self.savedPresets = {}
@@ -79,6 +84,9 @@ class Window(QWidget):
         self.middleLeftGroupBox = QGroupBox()
         self.tablist = [self.tab1, self.tab2, self.tab3, self.tab4, self.tab5, self.tab6, self.tab7]
 
+        #global busy notifications
+        flagsChanging = False
+
         # ----------- Begin buiding program/window ------------------------------
 
         # pull data from files
@@ -92,6 +100,7 @@ class Window(QWidget):
         self.updateDictionaries()
         self.updateFlagString()
         self.updateFlagCheckboxes()
+        self.flagButtonClicked()
 
     def InitWindow(self):
         self.setWindowTitle(self.title)
@@ -107,26 +116,23 @@ class Window(QWidget):
         # Primary Vertical Box Layout
         vbox = QVBoxLayout()
 
-        titleLabel = QLabel("Beyond Chaos Randomizer (" + Constants.Version + ")")
+        titleLabel = QLabel("Beyond Chaos Randomizer")
         font = QtGui.QFont("Arial", 24, QtGui.QFont.Black)
         titleLabel.setFont(font)
         titleLabel.setAlignment(QtCore.Qt.AlignCenter)
         titleLabel.setMargin(25)
         vbox.addWidget(titleLabel)
          
-        update = Update.updateAvailable()
-        if (update):
-            updateButton = QPushButton("Update Available!")
-            updateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
-            width = 250
-            updateButton.setMaximumWidth(width)
-            updateButton.clicked.connect(Update.update)
-            updateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-            effect = QGraphicsDropShadowEffect()
-            effect.setBlurRadius(3);
-            updateButton.setGraphicsEffect(effect);
-
-            vbox.addWidget(updateButton, alignment= QtCore.Qt.AlignCenter)
+        updateButton = QPushButton("Check for Updates")
+        updateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
+        width = 250
+        updateButton.setMaximumWidth(width)
+        updateButton.clicked.connect(lambda: self.update())
+        updateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+        effect = QGraphicsDropShadowEffect()
+        effect.setBlurRadius(3);
+        updateButton.setGraphicsEffect(effect);
+        vbox.addWidget(updateButton, alignment= QtCore.Qt.AlignCenter)
         
 
 
@@ -135,6 +141,10 @@ class Window(QWidget):
         vbox.addWidget(self.GroupBoxThreeLayout()) # Adding third/bottom groupbox
 
         self.setLayout(vbox)
+
+    def update(self):
+        QMessageBox.information(self, "Update Process", "Checking for updates, if found this will automatically close", QMessageBox.Ok)
+        Update.update()
 
     # Top groupbox consisting of ROM selection, and Seed number input
     def GroupBoxOneLayout(self):
@@ -251,6 +261,7 @@ class Window(QWidget):
             tablayout = QVBoxLayout()
             for flagname, flagdesc in d.items():
                 cbox = FlagCheckBox(f"{flagname}  -  {flagdesc['explanation']}", flagname)
+                self.checkBoxes.append(cbox)
                 tablayout.addWidget(cbox)
                 #cbox.setCheckable(True)
                 #cbox.setToolTip(flagdesc['explanation'])
@@ -270,6 +281,7 @@ class Window(QWidget):
         widgetV.setLayout(widgetVBoxLayout)
 
         widgetVBoxLayout.addWidget(QLabel("Text-string of selected flags:"))
+        self.flagString.textChanged.connect(self.textchanged)
         widgetVBoxLayout.addWidget(self.flagString)
 
         saveButton = QPushButton("Save flags selection")
@@ -299,6 +311,22 @@ class Window(QWidget):
 
         return groupBoxTwo
 
+    def textchanged(self, text):
+        if (self.flagsChanging):
+            return
+        values = text.split()
+        self.flags.clear()
+        self.flagString.clear()
+        for v in values:
+            for d in self.dictionaries:
+                for flagname in d:
+                    if v == flagname:
+                        for c in self.checkBoxes:
+                            if v== c.value:
+                                c.setChecked(True)
+                                self.flags.append(c.value)
+                                self.updateFlagString()
+                        
 
     # Bottom groupbox consisting of saved seeds selection box, and button to generate seed
     def GroupBoxThreeLayout(self):
@@ -405,9 +433,10 @@ class Window(QWidget):
     def clearUI(self):
         self.mode = "normal"
         self.seed = ""
-        self.flags = ""
+        self.flags.clear
         self.seedInput.setText(self.seed)
-        self.flagString.setText(self.flags)
+        self.flagString.clear()
+        self.flags.clear()
 
         for i in self.middleLeftGroupBox.findChildren((QRadioButton)):
             if i.mode == 'normal':
@@ -420,15 +449,23 @@ class Window(QWidget):
         self.updateDictionaries()
         self.updateFlagString()
         self.updateFlagCheckboxes()
+        self.flagButtonClicked()
 
 
     # when flag UI button is checked, update corresponding dictionary values
     def flagButtonClicked(self):
+        self.flags.clear()
         for t, d in zip(self.tablist, self.dictionaries):
             children = t.findChildren(FlagCheckBox)
             for c in children:
                 if c.isChecked():
                     d[c.value]['checked'] = True
+                    flagset = False
+                    for flag in self.flags:
+                        if flag==d[c.value]:
+                            flagset = true
+                    if flagset == False:
+                        self.flags.append(c.value)
                 else:
                     d[c.value]['checked'] = False
         self.updateDictionaries()
@@ -523,18 +560,23 @@ class Window(QWidget):
             if self.seed == "":
                 displaySeed = "(none)" # pretty-printing :)
 
-            flags = (self.flags).strip().replace(" ", "\n----") # more pretty-printing
+            flagMode =""
+            for flag in self.flags:
+                if flagMode !="":
+                    flagMode += "\n----"
+                flagMode += flag
+                
 
             # This makes the flag string more readable in the confirm dialog
             message = ((f"Rom: {self.romText}\n"
                         f"Seed: {displaySeed}\n"
                         f"Mode: {self.mode}\n"
-                        f"Flags: \n----{flags}\n"
+                        f"Flags: \n----{flagMode}\n"
                         f"(Hyphens are not actually used in seed generation)"))
             messBox = QMessageBox.question(self, "Confirm Seed Generation?", message, QMessageBox.Yes| QMessageBox.Cancel)
             if messBox == 16384:  # User selects confirm/accept/yes option
-                finalFlags = self.flags.replace(" ", "")
-                bundle = f"{self.version}.{self.mode}.{finalFlags}.{self.seed}"
+                #finalFlags = self.flags.replace(" ", "")
+                bundle = f"{self.version}.{self.mode}.{flagMode}.{self.seed}"
                 # remove spam if the Randomizer asks for input
                 # TODO: guify that stuff
                 # Hash check can be moved out to when you pick the file.
@@ -543,34 +585,31 @@ class Window(QWidget):
                 QtCore.pyqtRemoveInputHook()
                 # TODO: put this in a new thread
                 try:
-                    result_file = Randomizer.randomize(args=['gui.py', self.romText, bundle, "test"])
+                    result_file = Randomizer.randomize(args=['BeyondChaos.py', self.romText, bundle, "test"])
                 #call(["py", "Randomizer.py", self.romText, bundle, "test"])
                 # Running the Randomizer twice in one session doesn't work because of global state.
                 # Exit so people don't try it.
                 # TODO: fix global state then remove this
                 except Exception as e:
+                    traceback.print_exc()
                     QMessageBox.critical(self, "Error creating ROM", str(e), QMessageBox.Ok)
                 else:
                     QMessageBox.information(self, "Successfully created ROM", f"Result file: {result_file}", QMessageBox.Ok)
+                    return
                 #sys.exit() Lets no longer sysexit anymore so we don't have to reopen each time. The user can close the gui.
 
     # read each dictionary and update text field showing flag codes based upon
     #    flags denoted as 'True'
     def updateFlagString(self):
+        self.flagsChanging = True
+        self.flagString.clear()
         temp = ""
-        space = False
-        for d in self.dictionaries:
-            for flagname, flagdesc in d.items():
-                if space:
-                    temp += " "
-                    space = False
-
-                if flagdesc['checked']:
-                    temp += flagname
-                    space = True
-
-        self.flags = temp
-        self.flagString.setText(self.flags)
+        for x in range(0, len(self.flags)):
+            flag = self.flags[x]
+            temp+= flag
+            temp+=" "
+        self.flagString.setText(temp)
+        self.flagsChanging=False
 
     # read through dictionaries and set flag checkboxes as 'checked'
     def updateFlagCheckboxes(self):
@@ -607,8 +646,12 @@ class Window(QWidget):
 
 
 if __name__ == "__main__":
-    print("Loading GUI, checking for updates please wait.")
-    Update.updaterExists()
-    App = QApplication(sys.argv)
-    window = Window()
-    sys.exit(App.exec())
+    print("Loading GUI, checking for config file, updater file and updates please wait.")
+    try:
+        Update.configExists()
+        App = QApplication(sys.argv)
+        window = Window()
+        time.sleep(3)
+        sys.exit(App.exec())
+    except Exception:
+        traceback.print_exc()

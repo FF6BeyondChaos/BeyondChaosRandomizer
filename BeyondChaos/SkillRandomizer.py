@@ -337,6 +337,32 @@ def get_spellsets(spells=None):
     spellsets = {}
     spellset_bans = []
     spells = [s for s in spells if s.spellid not in spellset_bans]
+    limitSpellids = []
+    for spell in spells:
+        if spell.name == "Sabre Soul":
+            limitSpellids.append(spell.spellid)
+        elif spell.name == "Star Prism":
+            limitSpellids.append(spell.spellid)
+        elif spell.name == "Mirager":
+            limitSpellids.append(spell.spellid)
+        elif spell.name == "TigerBreak":
+            limitSpellids.append(spell.spellid)
+        elif spell.name == "Back Blade":
+            limitSpellids.append(spell.spellid)
+        elif spell.name == "Riot Blade":
+            limitSpellids.append(spell.spellid)
+        elif spell.name == "RoyalShock":
+            limitSpellids.append(spell.spellid)
+        elif spell.name == "Spin Edge":
+            limitSpellids.append(spell.spellid)
+        elif spell.name == "X-Meteo":
+            limitSpellids.append(spell.spellid)
+        elif spell.name == "Red Card":
+            limitSpellids.append(spell.spellid)
+        elif spell.name == "MoogleRush":
+            limitSpellids.append(spell.spellid)
+        elif spell.name == "ShadowFang":
+            limitSpellids.append(spell.spellid)
     # Each spellset is a tuple of (description, spell list)
     spellsets['Chaos'] = ('skill (including broken and glitchy skills)', [])
     if wildspells is None:
@@ -423,6 +449,8 @@ def get_spellsets(spells=None):
                          [0x10, 0x11, 0x12, 0x13, 0x19, 0x1B, 0x1F, 0x20, 0x22,
                           0x26, 0x27, 0x28, 0x2A, 0x2B, 0x34, 0x89, 0x9B, 0xA0,
                           0xC9, 0xDF])
+    spellsets['Limit'] = ('Limit breaker',[l for l in limitSpellids])
+
     spellsets['Level'] = ('level-based skill',
                           [s for s in spells if s.level_spell])
     spellsets['Miss'] = ('skill with low accuracy',

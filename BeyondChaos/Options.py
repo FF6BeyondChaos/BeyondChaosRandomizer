@@ -98,7 +98,7 @@ class Options:
 
     def activate_from_string(self, flag_string):
         for code in self.mode.forced_codes:
-            self.activate_code(code)
+            self. activate_code(code)
 
         s = ""
         flags, codes = read_Options_from_string(flag_string, self.mode)
@@ -265,7 +265,10 @@ NORMAL_CODES = [
     Code('thescenarionottaken', 'DIVERGENT PATHS MODE', "Changes the way the 3 scenarios are split up.", "major"),
     Code('worringtriad', "START IN WOR", "The player will start in the World of Ruin, with all of the World of Balance treasure chests, along with a guaranteed set of items, and more Lores.", "major"),
     Code('darkbucksmode', "All hail darkslash", "Hello friendo, would you like to go on a journey?", "beta"),
-    Code('3xexp', "3 Times Exp", "All battles will award 3 times exp", "beta"),
+    Code('exp', "3 Times Exp", "All battles will award 3 times exp", "beta"),
+    Code('gp', "3 Times gp", "All battles will award 3 times gp", "beta"),
+    Code('mps', "3 Times magic points", "All battles will award 3 times magic points", "beta"),
+    Code('desperation', "When all options fail", "When the adventurer back is up against the wall. Break the wall.", "beta"),
 ]
 
 MAKEOVER_MODIFIER_CODES = [
@@ -299,6 +302,9 @@ SPECIAL_CODES = [
     Code('halloween', "ALL HALLOWS' EVE MODE", '', 'holiday')
 ]
 
+BETA_CODES = [
+    
+]
 
 ALL_CODES = NORMAL_CODES + MAKEOVER_MODIFIER_CODES + CAVE_CODES + SPECIAL_CODES
 
