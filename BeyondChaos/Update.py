@@ -113,7 +113,5 @@ def runFirstTimeSetup():
     updaterExists()
     time.sleep(3)
     os.startfile("BeyondChaosUpdater.exe")
-    #wait 3 seconds
-    time.sleep(3)
     SystemExit()
 

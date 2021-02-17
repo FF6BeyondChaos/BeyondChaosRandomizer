@@ -928,7 +928,7 @@ def manage_commands_new(commands):
 
                 try:
                     if limitCounter != 3 and Options_.is_code_active('desperation'):
-                        s.set_spells(valid_spells, None, "Limit")
+                        s.set_spells(valid_spells, "Limit")
                         limitCounter = limitCounter +1
                     else:
                         s.set_spells(valid_spells)
