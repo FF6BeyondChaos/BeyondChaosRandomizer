@@ -778,7 +778,7 @@ def manage_commands_new(commands):
             combo_skill = True
 
         #force first skill to limit break
-        if limitCounter != 3 and Options_.is_code_active('desperation'):
+        if limitCounter != 1 and Options_.is_code_active('desperation'):
             if Options_.is_code_active('allcombos'):
                 random_skill = False
                 combo_skill = True
@@ -927,11 +927,12 @@ def manage_commands_new(commands):
                         s = ChainSpellSub()
 
                 try:
-                    if limitCounter != 3 and Options_.is_code_active('desperation'):
+                    if limitCounter != 1 and Options_.is_code_active('desperation'):
                         s.set_spells(valid_spells, "Limit")
                         limitCounter = limitCounter +1
                     else:
                         s.set_spells(valid_spells)
+                        if s.name == "Limit" and not Options_.is_code_active('desperation') :
                 except ValueError:
                     continue
 
