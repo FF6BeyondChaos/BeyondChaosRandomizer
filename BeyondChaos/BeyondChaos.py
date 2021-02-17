@@ -111,6 +111,7 @@ class Window(QWidget):
 
         # show program onscreen
         self.show()
+        self.clearUI()
 
     def CreateLayout(self):
         # Primary Vertical Box Layout
@@ -562,16 +563,20 @@ class Window(QWidget):
 
             flagMode =""
             for flag in self.flags:
-                if flagMode !="":
-                    flagMode += "\n----"
                 flagMode += flag
+
+                flagMsg =""
+            for flag in self.flags:
+                if flagMsg !="":
+                    flagMsg += "\n----"
+                flagMsg += flag
                 
 
             # This makes the flag string more readable in the confirm dialog
             message = ((f"Rom: {self.romText}\n"
                         f"Seed: {displaySeed}\n"
                         f"Mode: {self.mode}\n"
-                        f"Flags: \n----{flagMode}\n"
+                        f"Flags: \n----{flagMsg}\n"
                         f"(Hyphens are not actually used in seed generation)"))
             messBox = QMessageBox.question(self, "Confirm Seed Generation?", message, QMessageBox.Yes| QMessageBox.Cancel)
             if messBox == 16384:  # User selects confirm/accept/yes option
