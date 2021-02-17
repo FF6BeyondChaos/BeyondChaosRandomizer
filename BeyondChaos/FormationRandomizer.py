@@ -1,5 +1,5 @@
 #! /usr/bin/env python3
-
+from Options import Options_
 from math import log
 
 from MonsterRandomizer import monsterdict, get_monsters
@@ -331,6 +331,8 @@ class Formation():
             while random.choice([True, False]):
                 self.ap += random.randint(-1, 1)
                 self.ap = min(100, max(self.ap, 0))
+            if Options_.is_code_active("mps"):
+                self.ap = self.ap *3
         if self.ambusher:
             if not (self.pincer_prohibited and self.back_prohibited):
                 self.misc1 |= 0x90

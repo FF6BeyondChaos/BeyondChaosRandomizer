@@ -266,6 +266,8 @@ NORMAL_CODES = [
     Code('worringtriad', "START IN WOR", "The player will start in the World of Ruin, with all of the World of Balance treasure chests, along with a guaranteed set of items, and more Lores.", "major"),
     Code('darkbucksmode', "All hail darkslash", "Hello friendo, would you like to go on a journey?", "beta"),
     Code('exp', "3 Times Exp", "All battles will award 3 times exp", "beta"),
+    Code('gp', "3 Times gp", "All battles will award 3 times gp", "beta"),
+    Code('mps', "3 Times magic points", "All battles will award 3 times magic points", "beta"),
     Code('desperation', "When all options fail", "When the adventurer back is up against the wall. Break the wall.", "beta"),
 ]
 
