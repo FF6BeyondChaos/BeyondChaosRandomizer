@@ -57,23 +57,38 @@ class Window(QWidget):
 
         # dictionaries to hold flag data
         self.aesthetic = {}
+        self.sprite = {}
         self.experimental = {}
         self.gamebreaking = {}
         self.major = {}
-        self.minor = {}
-        self.simple = {}
+        self.flag = {}
+        self.battle = {}
         self.beta = {}
-        self.dictionaries = [self.simple, self.aesthetic, self.major,
-                             self.minor, self.experimental, self.gamebreaking, self.beta]
+        self.dictionaries = [self.flag, self.sprite, self.aesthetic, self.major,
+                              self.experimental, self.gamebreaking, self.battle, self.beta]
         #keep a list of all checkboxes
         self.checkBoxes = []
 
         # dictionary? of saved presets
         self.savedPresets = {}
 
+        # array of supported game modes
+        self.supportedGameModes = ["normal", "katn", "ancientcave", "speedcave", "racecave", "dragonhunt" ]
+        # dictionary of game modes for drop down
+        self.GameModes = {}
+
+        # array of preset flags and codes
+        self.supportedPresets = ["newplayer", "intermediateplayer", "advancedplayer", "raceeasy", "racemedium", "raceinsane" ]
+        # dictionay of game presets from drop down
+        self.GamePresets = {}
+
         # ui elements
-        self.flagString = QLineEdit()
-        self.comboBox = QComboBox()
+        self.flagString = QLineEdit() #flag text box for displaying the flags
+        self.comboBox = QComboBox() #flag saved preset dropdown
+        self.modeBox = QComboBox() #game mode drop down to pick what gamemode
+        self.presetBox = QComboBox() #official supported preset flags
+        self.modeDescription = QLabel("Pick a Game Mode!")
+        #tabs: Flags, Sprites, Battle, etc...
         self.tab1 = QWidget()
         self.tab2 = QWidget()
         self.tab3 = QWidget()
@@ -81,8 +96,10 @@ class Window(QWidget):
         self.tab5 = QWidget()
         self.tab6 = QWidget()
         self.tab7 = QWidget()
-        self.middleLeftGroupBox = QGroupBox()
-        self.tablist = [self.tab1, self.tab2, self.tab3, self.tab4, self.tab5, self.tab6, self.tab7]
+        self.tab8 = QWidget()
+
+        self.middleLeftGroupBox = QGroupBox() #obsolted
+        self.tablist = [self.tab1, self.tab2, self.tab3, self.tab4, self.tab5, self.tab6, self.tab7, self.tab8]
 
         #global busy notifications
         flagsChanging = False
@@ -91,7 +108,8 @@ class Window(QWidget):
 
         # pull data from files
         self.initCodes()
-        self.compilePresets()
+        self.compileSavedPresets()
+        
 
         # create window using geometry data
         self.InitWindow()
@@ -106,12 +124,13 @@ class Window(QWidget):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
+        
         # build the UI
         self.CreateLayout()
 
         # show program onscreen
-        self.show()
-        self.clearUI()
+        self.showMaximized()    #maximize the randomizer
+        self.clearUI()          #clear the UI of all selections
 
     def CreateLayout(self):
         # Primary Vertical Box Layout
@@ -123,23 +142,12 @@ class Window(QWidget):
         titleLabel.setAlignment(QtCore.Qt.AlignCenter)
         titleLabel.setMargin(25)
         vbox.addWidget(titleLabel)
-         
-        updateButton = QPushButton("Check for Updates")
-        updateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
-        width = 250
-        updateButton.setMaximumWidth(width)
-        updateButton.clicked.connect(lambda: self.update())
-        updateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-        effect = QGraphicsDropShadowEffect()
-        effect.setBlurRadius(3);
-        updateButton.setGraphicsEffect(effect);
-        vbox.addWidget(updateButton, alignment= QtCore.Qt.AlignCenter)
         
 
-
-        vbox.addWidget(self.GroupBoxOneLayout()) # Adding first/top groupbox to the layout
-        vbox.addWidget(self.GroupBoxTwoLayout()) # Adding second/middle groupbox
-        vbox.addWidget(self.GroupBoxThreeLayout()) # Adding third/bottom groupbox
+        vbox.addWidget(self.GroupBoxOneLayout()) 
+        vbox.addWidget(self.GroupBoxTwoLayout()) # Adding second groupbox to the layout
+        vbox.addWidget(self.GroupBoxThreeLayout()) # Adding second/middle groupbox
+        vbox.addWidget(self.GroupBoxFourLayout()) # Adding third/bottom groupbox
 
         self.setLayout(vbox)
 
@@ -168,68 +176,121 @@ class Window(QWidget):
         self.seedInput.setPlaceholderText("Optional - WILL NOT SAVE TO PRESETS!")
         TopHBox.addWidget(self.seedInput)
 
+        #radioButton.clicked.connect(lambda: self.updateRadioSelection("racecave"))
         topGroupBox.setLayout(TopHBox)
 
         return topGroupBox
 
+    def GroupBoxTwoLayout(self):
+        self.compileModes()
+        self.compileSupportedPresets()
+        groupBoxTwo = QGroupBox()
+        middleHBox = QHBoxLayout()
+        middleHBox.addStretch(0)
+
+        # ---- Game Mode Drop Down ---- #
+        gameModeLabel = QLabel("Game Modes: a")
+        gameModeLabel.setMaximumWidth(60)
+        middleHBox.addWidget(gameModeLabel, alignment = QtCore.Qt.AlignLeft)
+       
+        self.modeBox.addItem("Select a mode")
+        for item in self.GameModes.items():
+            self.modeBox.addItem(item[0])
+        self.modeBox.currentTextChanged.connect(lambda: self.updateGameDescription())
+        middleHBox.addWidget(self.modeBox, alignment = QtCore.Qt.AlignLeft)
+
+        # ---- Mode Description ---- #
+        self.modeDescription.setStyleSheet("font-size:18px; height:24px; color:#253340;")
+        middleHBox.addWidget(self.modeDescription, alignment = QtCore.Qt.AlignLeft)
+        
+        # ---- Preset Flags Drop Down ---- #
+        presetModeLabel = QLabel("Preset Modes: a")
+        presetModeLabel.setMaximumWidth(60)
+        middleHBox.addWidget(presetModeLabel, alignment = QtCore.Qt.AlignLeft)
+        self.presetBox.addItem("Select a mode")
+        for item in self.GamePresets.items():
+            self.presetBox.addItem("")    
+            
+        self.presetBox.currentTextChanged.connect(lambda: self.updatePresetDropdown())
+        middleHBox.addWidget(self.presetBox,alignment = QtCore.Qt.AlignLeft)
+        
+        # ---- Update Button ---- #
+        updateButton = QPushButton("Check for Updates")
+        updateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
+        width = 250
+        height = 60
+        updateButton.setMaximumWidth(width)
+        updateButton.setMaximumHeight(height)
+        updateButton.clicked.connect(lambda: self.update())
+        updateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+        effect = QGraphicsDropShadowEffect()
+        effect.setBlurRadius(3);
+        updateButton.setGraphicsEffect(effect);
+        middleHBox.addWidget(updateButton,alignment = QtCore.Qt.AlignLeft )
+        
+        groupBoxTwo.setLayout(middleHBox)
+        return groupBoxTwo
+
+
 
     # Middle groupbox of sub-groupboxes. Consists of left section (game mode selection)
     #   and right section (flag selection -> tab-sorted)
-    def GroupBoxTwoLayout(self):
+    def GroupBoxThreeLayout(self):
         groupBoxTwo = QGroupBox()
         middleHBox = QHBoxLayout()
-
+        
+        #obsoleted
         # ------------ Part one (left side) of middle section - Mode radio buttons -------
 
-        self.middleLeftGroupBox.setTitle("Select Mode")
-        midLeftVBox = QVBoxLayout()
+        #self.middleLeftGroupBox.setTitle("Select Mode")
+        #midLeftVBox = QVBoxLayout()
 
-        radioButton = QRadioButton("Normal (Default)")
-        radioButton.setToolTip("Play through the normal story")
-        radioButton.setChecked(True)
-        radioButton.mode = "normal"
-        radioButton.clicked.connect(lambda: self.updateRadioSelection("normal"))
-        midLeftVBox.addWidget(radioButton)
+        #radioButton = QRadioButton("Normal (Default)")
+        #radioButton.setToolTip("Play through the normal story")
+        #radioButton.setChecked(True)
+        #radioButton.mode = "normal"
+        #radioButton.clicked.connect(lambda: self.updateRadioSelection("normal"))
+        #midLeftVBox.addWidget(radioButton)
 
-        radioButton = QRadioButton("Ancient Cave")
-        radioButton.setToolTip("Play though a long randomized dungeon")
-        radioButton.mode = "ancientcave"
-        radioButton.clicked.connect(lambda: self.updateRadioSelection("ancientcave"))
-        midLeftVBox.addWidget(radioButton)
+        #radioButton = QRadioButton("Ancient Cave")
+        #radioButton.setToolTip("Play though a long randomized dungeon")
+        #radioButton.mode = "ancientcave"
+        #radioButton.clicked.connect(lambda: self.updateRadioSelection("ancientcave"))
+        #midLeftVBox.addWidget(radioButton)
 
-        radioButton = QRadioButton("Speed Cave")
-        radioButton.setToolTip("Play through a medium-sized randomized dungeon")
-        radioButton.mode = "speedcave"
-        radioButton.clicked.connect(lambda: self.updateRadioSelection("speedcave"))
-        midLeftVBox.addWidget(radioButton)
+        #radioButton = QRadioButton("Speed Cave")
+        #radioButton.setToolTip("Play through a medium-sized randomized dungeon")
+        #radioButton.mode = "speedcave"
+        #radioButton.clicked.connect(lambda: self.updateRadioSelection("speedcave"))
+        #midLeftVBox.addWidget(radioButton)
 
-        radioButton = QRadioButton("Race Cave")
-        radioButton.setToolTip("Play through a short randomized dungeon")
-        radioButton.mode = "racecave"
-        radioButton.clicked.connect(lambda: self.updateRadioSelection("racecave"))
-        midLeftVBox.addWidget(radioButton)
+        #radioButton = QRadioButton("Race Cave")
+        #radioButton.setToolTip("Play through a short randomized dungeon")
+        #radioButton.mode = "racecave"
+        #radioButton.clicked.connect(lambda: self.updateRadioSelection("racecave"))
+        #midLeftVBox.addWidget(radioButton)
 
-        radioButton = QRadioButton("Kefka@Narshe")
-        radioButton.setToolTip("Play the normal story up to Kefka at Narshe, "
-                               "with extra wackiness. Intended for racing.")
-        radioButton.mode = "katn"
-        radioButton.clicked.connect(lambda: self.updateRadioSelection("katn"))
-        midLeftVBox.addWidget(radioButton)
+        #radioButton = QRadioButton("Kefka@Narshe")
+        #radioButton.setToolTip("Play the normal story up to Kefka at Narshe, "
+        #                       "with extra wackiness. Intended for racing.")
+        #radioButton.mode = "katn"
+        #radioButton.clicked.connect(lambda: self.updateRadioSelection("katn"))
+        #midLeftVBox.addWidget(radioButton)
 
-        radioButton = QRadioButton("Dragon Hunt")
-        radioButton.setToolTip("Kill all 8 dragons in the World of Ruin. Intended for racing.")
-        radioButton.mode = "dragonhunt"
-        radioButton.clicked.connect(lambda: self.updateRadioSelection("dragonhunt"))
-        midLeftVBox.addWidget(radioButton)
+        #radioButton = QRadioButton("Dragon Hunt")
+        #radioButton.setToolTip("Kill all 8 dragons in the World of Ruin. Intended for racing.")
+        #radioButton.mode = "dragonhunt"
+        #radioButton.clicked.connect(lambda: self.updateRadioSelection("dragonhunt"))
+        #midLeftVBox.addWidget(radioButton)
 
-        self.middleLeftGroupBox.setLayout(midLeftVBox)
+        #self.middleLeftGroupBox.setLayout(midLeftVBox)
         # ------------- Part one (left side) end ----------------------------------------------
 
         # ------------- Part two (right side) of middle section - Flag tabs -----------------
         middleRightGroupBox = QGroupBox("Flag Selection")
         tabVBoxLayout = QVBoxLayout()
         tabs = QTabWidget()
-        tabNames = ["Simple", "Aesthetic", "Major", "Minor", "Experimental", "Gamebreaking", "Beta"]
+        tabNames = ["Flags", "Sprites", "Battle", "Aesthetic", "Major", "Experimental", "Gamebreaking", "Beta"]
 
         ############## Only checkboxes, no inline description ###############
 
@@ -295,8 +356,12 @@ class Window(QWidget):
         flagTextHBox = QHBoxLayout()
         flagTextHBox.addWidget(widgetV)
         clearUiButton = QPushButton("Reset")
-        clearUiButton.setStyleSheet("font-size:12px; height:60px")
+        clearUiButton.setStyleSheet("font:bold; font-size:16px; height:60px; background-color: #5A8DBE; color: #E4E4E4;")
         clearUiButton.clicked.connect(lambda: self.clearUI())
+        clearUiButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+        effect = QGraphicsDropShadowEffect()
+        effect.setBlurRadius(3);
+        clearUiButton.setGraphicsEffect(effect);
         flagTextHBox.addWidget(clearUiButton)
         flagTextWidget.setLayout(flagTextHBox)
 
@@ -306,31 +371,16 @@ class Window(QWidget):
 
 
         # add widgets to HBoxLayout and assign to middle groupbox layout
-        middleHBox.addWidget(self.middleLeftGroupBox)
         middleHBox.addWidget(middleRightGroupBox)
         groupBoxTwo.setLayout(middleHBox)
 
         return groupBoxTwo
 
-    def textchanged(self, text):
-        if (self.flagsChanging):
-            return
-        values = text.split()
-        self.flags.clear()
-        self.flagString.clear()
-        for v in values:
-            for d in self.dictionaries:
-                for flagname in d:
-                    if v == flagname:
-                        for c in self.checkBoxes:
-                            if v== c.value:
-                                c.setChecked(True)
-                                self.flags.append(c.value)
-                                self.updateFlagString()
+  
                         
 
     # Bottom groupbox consisting of saved seeds selection box, and button to generate seed
-    def GroupBoxThreeLayout(self):
+    def GroupBoxFourLayout(self):
         bottomGroupBox = QGroupBox()
         bottomHBox = QHBoxLayout()
 
@@ -363,22 +413,41 @@ class Window(QWidget):
     # -------------- NO MORE LAYOUT DESIGN PAST THIS POINT ---------------------------
     # --------------------------------------------------------------------------------
 
+    def textchanged(self, text):
+        if (self.flagsChanging):
+            return
+        values = text.split()
+        self.flags.clear()
+        self.flagString.clear()
+        for v in values:
+            for d in self.dictionaries:
+                for flagname in d:
+                    if v == flagname:
+                        for c in self.checkBoxes:
+                            if v== c.value:
+                                c.setChecked(True)
+                                self.flags.append(c.value)
+                                self.updateFlagString()
+
+
     # (At startup) Opens reads code flags/descriptions and
     #   puts data into separate dictionaries
     def initCodes(self):
         for code in Options.NORMAL_CODES + Options.MAKEOVER_MODIFIER_CODES:
             if code.category == "aesthetic":
                 d = self.aesthetic
+            elif code.category == "sprite":
+                d = self.sprite
             elif code.category == "experimental":
                 d = self.experimental
             elif code.category == "gamebreaking":
                 d = self.gamebreaking
             elif code.category == "major":
                 d = self.major
-            elif code.category == "minor":
-                d = self.minor
             elif code.category == "beta":
                 d = self.beta
+            elif code.category == "battle":
+                d = self.battle
             else:
                 print(f"Code {code.name} does not have a valid category.")
                 continue
@@ -386,7 +455,7 @@ class Window(QWidget):
             d[code.name] = {'explanation': code.long_description, 'checked': False}
 
         for flag in sorted(Options.ALL_FLAGS):
-            self.simple[flag.name] = {'explanation': flag.description, 'checked': True}
+            self.flag[flag.name] = {'explanation': flag.description, 'checked': True}
 
 
     # opens input dialog to get a name to assign a desired seed flagset, then saves flags and selected mode to the cfg file
@@ -416,6 +485,34 @@ class Window(QWidget):
                 del self.savedPresets[seed]
                 self.comboBox.removeItem(self.comboBox.findText(seed))
 
+    def updateGameDescription(self):
+        self.modeDescription.clear()
+        index = self.modeBox.currentIndex()
+        for item in self.GameModes.items():
+            if index == 1:
+                if item[0] == "Normal":
+                    self.modeDescription.setText(item[1])
+            elif index == 2:
+                if item[0] == "Kefka @ Narshe":
+                    self.modeDescription.setText(item[1])
+            elif index == 3:
+                if item[0] == "Ancient Cave":
+                    self.modeDescription.setText(item[1])
+            elif index == 4:
+                if item[0] == "Speed Cave":
+                    self.modeDescription.setText(item[1])
+            elif index == 5:
+                if item[0] == "Race Cave":
+                    self.modeDescription.setText(item[1])
+            elif index == 6:
+                if item[0] == "Dragon Hunt":
+                    self.modeDescription.setText(item[1])
+            else:
+                self.modeDescription.setText("Pick a Game Mode!")
+
+        
+         
+        
 
     # when preset is selected from dropdown list, load the data into dictionaries
     #   and set the UI to reflect the settings stored in the preset.
@@ -429,6 +526,7 @@ class Window(QWidget):
             self.clearUI()
 
 
+        #todo: Fix the UI clearing based on new UI placement.
     # clear/reset UI and clear window object variables. Then reset data dictionaries
     #   to the default state of unset/unchecked flags and mode
     def clearUI(self):
@@ -482,7 +580,7 @@ class Window(QWidget):
         self.romInput.setText(str(file_path[0]))
 
 
-    def compilePresets(self):
+    def compileSavedPresets(self):
         config = configparser.ConfigParser()
         config.read('bcex.cfg')
 
@@ -495,6 +593,38 @@ class Window(QWidget):
                 if 'speeddial_{k}' not in self.savedPresets:
                     self.savedPresets[f'speeddial_{k}'] = f"4.normal.{v}."
         self.savedPresets['recommended new player preset'] = "4.normal.-dfklu partyparty makeover johnnydmad."
+
+    def compileModes(self):
+        for mode in self.supportedGameModes:
+            if mode == "normal":
+                self.GameModes['Normal'] = "Play through the normal story with randomized gameplay."
+            elif mode == "katn":
+                self.GameModes['Kefka @ Narshe'] = "Play the normal story up to Kefka at Narshe, with extra wackiness. Intended for racing."
+            elif mode == "ancientcave":
+                self.GameModes['Ancient Cave'] = "Play though a long randomized dungeon"
+            elif mode == "speedcave":
+                self.GameModes['Speed Cave'] = "Play through a medium-sized randomized dungeon."
+            elif mode == "racecave":
+                self.GameModes['Race Cave'] = "Play through a short randomized dungeon"
+            elif mode == "dragonhunt":
+                self.GameModes['Dragon Hunt'] = "Kill all 8 dragons in the World of Ruin. Intended for racing."
+
+    def compileSupportedPresets(self):
+        #self.supportedPresets = ["newplayer", "intermediateplayer", "advancedplayer", "raceeasy", "racemedium", "raceinsane" ]
+        for mode in self.supportedGameModes:
+            if mode == "newplayer":
+                self.GameModes['New Player'] = "d f k l u alasdraco capslockoff partyparty makeover johnnydmad"
+            elif mode == "intermediateplayer":
+                self.GameModes['Intermediate Player'] = "d f g i k l m o p u w z alasdraco capslockoff makeover partyparty johnnydmad notawaiter mimetime"
+            elif mode == "advancedplayer":
+                self.GameModes['Advanced Player'] = "b c d e f g i j k l m n o p q r s t u w y z alasdraco capslockoff johnnydmad makeover notawaiter partyparty dancingmaduin bsiab mimetime randombosses"
+            elif mode == "raceeasy":
+                self.GameModes['Race - Easy'] = "b c d e f g i j k m n o p q r s t w y z capslockoff johnnydmad makeover notawaiter partyparty madworld"
+            elif mode == "racemedium":
+                self.GameModes['Race - Medium'] = "b c d e f g i j k m n o p q r s t u w y z capslockoff johnnydmad makeover notawaiter partyparty electricboogaloo randombosses madworld"
+            elif mode == "raceinsane":
+                self.GameModes['Race - Insane'] = "b c d e f g i j k m n o p q r s t u w y z capslockoff johnnydmad makeover notawaiter partyparty darkworld madworld bsiab electricboogaloo randombosses"
+
 
     # Reads dictionary data from text file and populates class dictionaries
     def loadPreset(self, flagdict):
@@ -515,19 +645,21 @@ class Window(QWidget):
                 flagdesc['checked'] = False
 
         for flag in flags:
-            self.simple[flag.name]['checked'] = True
+            self.flag[flag.name]['checked'] = True
 
         for code in codes:
             if code.category == "aesthetic":
                 d = self.aesthetic
+            elif code.category == "sprite":
+                d = self.sprite
             elif code.category == "experimental":
                 d = self.experimental
             elif code.category == "gamebreaking":
                 d = self.gamebreaking
             elif code.category == "major":
                 d = self.major
-            elif code.category == "minor":
-                d = self.minor
+            elif code.category == "battle":
+                d = self.battle
             elif code.category == "beta":
                 d = self.beta
             else:
@@ -645,8 +777,8 @@ class Window(QWidget):
 
     # update list variable with data from currently loaded dictionaries
     def updateDictionaries(self):
-        self.dictionaries = [self.simple, self.aesthetic, self.major,
-                             self.minor, self.experimental, self.gamebreaking, self.beta]
+        self.dictionaries = [self.flag, self.sprite, self.aesthetic, self.major,
+                             self.experimental, self.gamebreaking, self.battle, self.beta]
 
 
 
