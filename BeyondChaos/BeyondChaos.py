@@ -629,6 +629,7 @@ class Window(QWidget):
     # Reads dictionary data from text file and populates class dictionaries
     def loadPreset(self, flagdict):
         parts = self.savedPresets[flagdict].split('.')
+        self.flags.clear()
         try:
             unused_version = parts[0]
             mode = parts[1]
@@ -667,6 +668,11 @@ class Window(QWidget):
                 continue
 
             d[code.name]['checked'] = True
+
+        for dict in self.dictionaries:
+            for codeName, values in dict.items():
+                if values['checked']:
+                    self.flags.append(codeName)
 
         self.mode = mode
 
