@@ -3,20 +3,25 @@ from pathlib import Path
 import os
 config = ConfigParser()
 
-#plans:
-# eventually this is where flags will be saved off to replacing whatever is in beyondchaos.py and moving towards an INI file to remember everything properly will be loaded and unloaded at launch.
 CoreVersion = ""
 SpriteVersion = ""
 
-#def writeConfig():
-#    config.read('config.ini')
-#    config.add_section('Version')
-#    config.set('Version', 'Core', CoreVersion)
-#    config.set('Version', 'Sprite', SpriteVersion)
-#    #config.set('main', 'key3', 'value3')
+def Writeflags(name, flags):
+    config.read(Path(os.getcwd()+"/config.ini"))
+    config.add_section('Version')
+    config.set('Version', 'Core', CoreVersion)
+    config.set('Version', 'Sprite', SpriteVersion)
+    config.add_section('Flags')
+    config.set('Flag', name, flags)
 
-#    with open('config.ini', 'w') as f:
-#        config.write(f)
+    with open('config.ini', 'w') as f:
+        config.write(f)
+
+def readflags():
+    config.read(Path(os.getcwd()+"/config.ini"))
+    flags = dict(Config.items('Flags'))
+    return flags
+
 
 def readConfig():
     config.read(Path(os.getcwd()+"/config.ini"))
