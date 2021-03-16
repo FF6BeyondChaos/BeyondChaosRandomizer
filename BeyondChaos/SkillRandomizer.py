@@ -522,7 +522,7 @@ class RandomSpellSub(Substitution):
     def write(self, fout):
         super(RandomSpellSub, self).write(fout)
 
-    def set_spells(self, valid_spells, spellsets=None, spellclass=None):
+    def set_spells(self, valid_spells, spellclass=None, spellsets=None ):
         spellsets = spellsets or get_spellsets(spells=valid_spells)
         spellclass = spellclass or random.choice(list(spellsets.keys()))
         self.name = spellclass

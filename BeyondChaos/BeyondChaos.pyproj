@@ -91,6 +91,7 @@
     <Compile Include="SillyClowns.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="sixtytworandomizer.py" />
     <Compile Include="SkillRandomizer.py">
       <SubType>Code</SubType>
     </Compile>

@@ -778,7 +778,7 @@ def manage_commands_new(commands):
             combo_skill = True
 
         #force first skill to limit break
-        if limitCounter != 3 and Options_.is_code_active('desperation'):
+        if limitCounter != 1 and Options_.is_code_active('desperation'):
             if Options_.is_code_active('allcombos'):
                 random_skill = False
                 combo_skill = True
@@ -927,11 +927,17 @@ def manage_commands_new(commands):
                         s = ChainSpellSub()
 
                 try:
-                    if limitCounter != 3 and Options_.is_code_active('desperation'):
-                        s.set_spells(valid_spells, None, "Limit")
+                    if limitCounter != 1 and Options_.is_code_active('desperation'):
+                        s.set_spells(valid_spells, "Limit")
                         limitCounter = limitCounter +1
                     else:
+                        limitbad = True
                         s.set_spells(valid_spells)
+                        while limitbad:
+                            if s.name == "Limit" and not Options_.is_code_active('desperation'):
+                                s.set_spells(valid_spells)
+                            else:
+                                limitbad = False
                 except ValueError:
                     continue
 
@@ -2125,8 +2131,8 @@ def manage_reorder_rages(freespaces):
     pointer = 0x301416
 
     monsters = get_monsters()
-    monsters = sorted(monsters, key=lambda m: m.display_name)
     monsters = [m for m in monsters if m.id <= 0xFE]
+    monsters = sorted(monsters, key=lambda m: m.display_name)
     assert len(monsters) == 255
     monster_order = [m.id for m in monsters]
 
