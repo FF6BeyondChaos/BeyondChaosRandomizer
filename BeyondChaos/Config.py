@@ -8,18 +8,23 @@ SpriteVersion = ""
 
 def Writeflags(name, flags):
     config.read(Path(os.getcwd()+"/config.ini"))
-    config.add_section('Version')
-    config.set('Version', 'Core', CoreVersion)
-    config.set('Version', 'Sprite', SpriteVersion)
-    config.add_section('Flags')
-    config.set('Flag', name, flags)
-
+    try:
+        config.add_section('Flags')    
+    except Exception:
+        print("Config Section Flags already exists, skipping writing new section.")
+    
+    config.set('Flags', name, flags)
     with open('config.ini', 'w') as f:
         config.write(f)
 
-def readflags():
+def readFlags():
+    print("Loading saved flags.")
     config.read(Path(os.getcwd()+"/config.ini"))
-    flags = dict(Config.items('Flags'))
+    try:
+        flags = dict(Config.items('Flags'))
+    except Exception:
+        print("No saved flags to load.")
+        return
     return flags
 
 

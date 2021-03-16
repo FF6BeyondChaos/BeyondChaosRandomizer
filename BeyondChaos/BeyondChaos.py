@@ -1,5 +1,5 @@
 
-import configparser
+import Config
 import sys
 from subprocess import call
 from PyQt5 import QtGui, QtCore
@@ -70,9 +70,6 @@ class Window(QWidget):
         #keep a list of all checkboxes
         self.checkBoxes = []
 
-        # dictionary?  of saved presets
-        self.savedPresets = {}
-
         # array of supported game modes
         self.supportedGameModes = ["normal", "katn", "ancientcave", "speedcave", "racecave", "dragonhunt"]
         # dictionary of game modes for drop down
@@ -123,7 +120,8 @@ class Window(QWidget):
         self.updateFlagString()
         self.updateFlagCheckboxes()
         self.flagButtonClicked()
-        self.updatePresetDropdown(1)
+        self.updatePresetDropdown()
+        self.clearUI()          #clear the UI of all selections
 
     def InitWindow(self):
         self.setWindowTitle(self.title)
@@ -136,7 +134,7 @@ class Window(QWidget):
         # show program onscreen
         self.show()    #maximize the randomizer
         #self.showMaximized()    #maximize the randomizer
-        self.clearUI()          #clear the UI of all selections
+        
         index = self.presetBox.currentIndex()
 
         
@@ -163,8 +161,9 @@ class Window(QWidget):
         self.setLayout(vbox)
 
     def update(self):
-        QMessageBox.information(self, "Update Process", "Checking for updates, if found this will automatically close", QMessageBox.Ok)
         Update.update()
+        QMessageBox.information(self, "Update Process", "Checking for updates, if found this will automatically close", QMessageBox.Ok)
+        
 
     # Top groupbox consisting of ROM selection, and Seed number input
     def GroupBoxOneLayout(self):
@@ -232,20 +231,20 @@ class Window(QWidget):
         gameModeLabel = QLabel("Game Mode")
         gameModeLabel.setMaximumWidth(60)
         topHBox.addWidget(gameModeLabel, alignment = QtCore.Qt.AlignLeft)
-       
-        self.modeBox.addItem("Select a mode")
         for item in self.GameModes.items():
             self.modeBox.addItem(item[0])
         self.modeBox.currentTextChanged.connect(lambda: self.updateGameDescription())
         topHBox.addWidget(self.modeBox, alignment = QtCore.Qt.AlignLeft)
         
         # ---- Preset Flags Drop Down ---- #
-        presetModeLabel = QLabel("Saved Flags")
+        presetModeLabel = QLabel("Preset Flags")
         presetModeLabel.setMaximumWidth(60)
-        topHBox.addWidget(presetModeLabel, alignment = QtCore.Qt.AlignLeft)
+        topHBox.addWidget(presetModeLabel, alignment = QtCore.Qt.AlignRight)
         self.presetBox.addItem("Select a flagset")
+        self.loadSavedFlags()
         for item in self.GamePresets.items():
-            self.presetBox.addItem(item[0])    
+            self.presetBox.addItem(item[0])
+        
             
         self.presetBox.currentTextChanged.connect(lambda: self.updatePresetDropdown())
         topHBox.addWidget(self.presetBox,alignment = QtCore.Qt.AlignLeft)
@@ -329,7 +328,7 @@ class Window(QWidget):
         widgetVBoxLayout.addWidget(self.flagString)
 
         saveButton = QPushButton("Save flags selection")
-        saveButton.clicked.connect(lambda: self.saveSeed())
+        saveButton.clicked.connect(lambda: self.saveFlags())
         widgetVBoxLayout.addWidget(saveButton)
 
         # This part makes a group box and adds the selected-flags display
@@ -428,7 +427,7 @@ class Window(QWidget):
         widgetVBoxLayout.addWidget(self.flagString)
 
         saveButton = QPushButton("Save flags selection")
-        saveButton.clicked.connect(lambda: self.saveSeed())
+        saveButton.clicked.connect(lambda: self.saveFlags())
         widgetVBoxLayout.addWidget(saveButton)
 
         # This part makes a group box and adds the selected-flags display
@@ -485,6 +484,7 @@ class Window(QWidget):
     def textchanged(self, text):
         if (self.flagsChanging):
             return
+        self.flagsChanging = True
         for c in self.checkBoxes:
             c.setChecked(False)
         values = text.split()
@@ -499,6 +499,7 @@ class Window(QWidget):
                                 c.setChecked(True)
                                 self.flags.append(c.value)
                                 self.updateFlagString()
+        self.flagsChanging = False
 
 
     # (At startup) Opens reads code flags/descriptions and
@@ -533,18 +534,26 @@ class Window(QWidget):
 
     # opens input dialog to get a name to assign a desired seed flagset, then
     # saves flags and selected mode to the cfg file
-    def saveSeed(self):
+    def saveFlags(self):
         text, okPressed = QInputDialog.getText(self, "Save Seed", "Enter a name for this flagset", QLineEdit.Normal, "")
         if okPressed and text != '':
-            self.savedPresets[text] = f"{self.version}.{self.mode}.{self.flags}."
-            config = configparser.ConfigParser()
-            config.read('bcex.cfg')
-            config['presets'] = self.savedPresets
-            with open('bcex.cfg', 'w') as cfg_file:
-                config.write(cfg_file)
-            self.comboBox.addItem(text) # update drop-down list with new preset
-            index = self.comboBox.findText(text)
-            self.comboBox.setCurrentIndex(index)
+            self.GamePresets[text] = self.flagString.text()
+            #flagString = self.flagString.text()
+            #for flag in self.flags:
+            #    flagString += flag + " "
+            Config.Writeflags(text, self.flagString.text())
+            index = self.presetBox.findText(text)
+            if index == -1:
+                self.presetBox.addItem(text)
+            else:
+                self.presetBox.removeItem(index)
+                self.presetBox.addItem(text)
+            
+            index = self.presetBox.findText(text)
+            self.presetBox.setCurrentIndex(index)
+
+    def loadSavedFlags(self):
+        flagset = Config.readFlags()
 
 
     # delete preset.  Dialog box confirms users choice to delete.  check is
@@ -564,22 +573,22 @@ class Window(QWidget):
         self.modeDescription.clear()
         index = self.modeBox.currentIndex()
         for item in self.GameModes.items():
-            if index == 1:
+            if index == 0:
                 if item[0] == "Normal":
                     self.modeDescription.setText(item[1])
-            elif index == 2:
+            elif index == 1:
                 if item[0] == "Race - Kefka @ Narshe":
                     self.modeDescription.setText(item[1])
-            elif index == 3:
+            elif index == 2:
                 if item[0] == "Ancient Cave":
                     self.modeDescription.setText(item[1])
-            elif index == 4:
+            elif index == 3:
                 if item[0] == "Speed Cave":
                     self.modeDescription.setText(item[1])
-            elif index == 5:
+            elif index == 4:
                 if item[0] == "Race - Randomized Cave":
                     self.modeDescription.setText(item[1])
-            elif index == 6:
+            elif index == 5:
                 if item[0] == "Race - Dragon Hunt":
                     self.modeDescription.setText(item[1])
             else:
@@ -587,69 +596,54 @@ class Window(QWidget):
 
 
     def updatePresetDropdown(self, index = -1):
-        self.flagDescription.clear()
-        if index == -1:
-            index = self.presetBox.currentIndex()
-        for item in self.GamePresets.items():
-            if index == 1:
-                if item[0] == "New Player":
-                    self.flagDescription.setText("Flags designed for a new player")
-                    self.flagString.setText(item[1])
-            elif index == 2:
-                if item[0] == "Intermediate Player":
-                    self.flagDescription.setText("Flags designed for an intermediate player")
-                    self.flagString.setText(item[1])
-            elif index == 3:
-                if item[0] == "Advanced Player":
-                    self.flagDescription.setText("Flags designed for an advanced player")
-                    self.flagString.setText(item[1])
-            elif index == 4:
-                if item[0] == "Race - Easy":
-                    self.flagDescription.setText("Flags designed for easy difficulty races")
-                    self.flagString.setText(item[1])
-            elif index == 5:
-                if item[0] == "Race - Medium":
-                    self.flagDescription.setText("Flags designed for medium difficulty races")
-                    self.flagString.setText(item[1])
-            elif index == 6:
-                if item[0] == "Race - Insane":
-                    self.flagDescription.setText("Flags designed for insane difficulty races")
-                    self.flagString.setText(item[1])
-            else:
-                self.flagDescription.setText("Pick a flag set!")
-                self.clearUI()
-         
         
-
-    # when preset is selected from dropdown list, load the data into
-    # dictionaries
-    #   and set the UI to reflect the settings stored in the preset.
-    # if the only saved preset is deleted, or user selects initial value of
-    #   'Select a preset' then the UI is reset (mainly to avoid runtime errors)
-
-
-
-        #todo: Fix the UI clearing based on new UI placement.
-    # clear/reset UI and clear window object variables.  Then reset data
-    # dictionaries
-    #   to the default state of unset/unchecked flags and mode
+        
+        text = self.presetBox.currentText()
+        index = self.presetBox.findText(text)
+        flags = self.GamePresets.get(text)
+        if index ==0:
+            self.clearUI()
+            self.flagDescription.clear()
+            self.flagDescription.setText("Pick a flag set!")            
+        elif index == 1:
+            self.flagDescription.setText("Flags designed for a new player")
+            self.flagString.setText(flags)
+        elif index == 2:
+            self.flagDescription.setText("Flags designed for an intermediate player")
+            self.flagString.setText(flags)
+        elif index == 3:
+            self.flagDescription.setText("Flags designed for an advanced player")
+            self.flagString.setText(flags)
+        elif index == 4:
+            self.flagDescription.setText("Flags designed for easy difficulty races")
+            self.flagString.setText(flags)
+        elif index == 5:
+            self.flagDescription.setText("Flags designed for medium difficulty races")
+            self.flagString.setText(flags)
+        elif index == 6:
+            self.flagDescription.setText("Flags designed for insane difficulty races")
+            self.flagString.setText(flags)
+        else:
+            self.flagDescription.setText("Custom saved flags")
+            self.flagString.setText(flags)
+                
+                
+         
     def clearUI(self):
-        self.mode = "normal"
         self.seed = ""
         self.flags.clear
         self.seedInput.setText(self.seed)
-        self.flagString.clear()
-        self.flags.clear()
-
-        self.comboBox.setCurrentIndex(0)
+        
+        self.modeBox.setCurrentIndex(0)
 
         self.initCodes()
-        #self.updateDictionaries()
-        self.updateFlagString()
         self.updateFlagCheckboxes()
         self.flagButtonClicked()
-        self.presetBox.setCurrentIndex(1)
-
+        self.flagString.clear()
+        self.flags.clear()
+        self.updateGameDescription()
+     
+        
 
     # when flag UI button is checked, update corresponding dictionary values
     def flagButtonClicked(self):
