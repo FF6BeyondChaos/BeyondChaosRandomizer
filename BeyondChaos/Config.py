@@ -21,7 +21,7 @@ def readFlags():
     print("Loading saved flags.")
     config.read(Path(os.getcwd()+"/config.ini"))
     try:
-        flags = dict(Config.items('Flags'))
+        flags = dict(config.items('Flags'))
     except Exception:
         print("No saved flags to load.")
         return
