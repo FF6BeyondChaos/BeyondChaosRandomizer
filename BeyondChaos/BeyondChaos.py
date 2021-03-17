@@ -554,8 +554,9 @@ class Window(QWidget):
 
     def loadSavedFlags(self):
         flagset = Config.readFlags()
-        for text, flags in flagset.items():
-             self.GamePresets[text] = flags
+        if flagset != None:
+            for text, flags in flagset.items():
+                self.GamePresets[text] = flags
 
 
     # delete preset.  Dialog box confirms users choice to delete.  check is
