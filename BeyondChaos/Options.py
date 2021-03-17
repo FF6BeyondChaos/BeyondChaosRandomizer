@@ -197,8 +197,7 @@ ALL_FLAGS = [
     Flag('o', 'shuffle_commands', "Shuffle characters' in-battle commands"),
     Flag('w', 'replace_commands', 'Generate new commands for characters, replacing old commands.'),
     Flag('z', 'sprint', 'Always have "Sprint Shoes" effect.'),
-    Flag('b', 'fix_exploits', 'Make the game more balanced by removing exploits such as Joker Doom, '
-                              'Vanish/Doom, and the Evade/Mblock bug.'),
+    Flag('b', 'fix_exploits', 'Make the game more balanced by removing known exploits.'),
     Flag('m', 'random_enemy_stats', 'Randomize enemy stats.'),
     Flag('c', 'random_palettes_and_names', 'Randomize palettes and names of various things.'),
     Flag('i', 'random_items', 'Randomize the stats of equippable items.'),
@@ -308,10 +307,10 @@ RESTRICTED_VANILLA_SPRITE_CODES = []
 #this is used for the no codes and only codes for sprites
 makeover_groups = ["anime", "boys", "generic", "girls", "kids", "pets", "potato", "custom"]
 for mg in makeover_groups:
-    no = Code('no'+mg, f"NO {mg.upper()} ALLOWED MODE", f"Do not select {mg} sprites.", "sprite")
+    no = Code('no'+mg, f"NO {mg.upper()} ALLOWED MODE", f"Do not select {mg} sprites.", "spriteCategories")
     MAKEOVER_MODIFIER_CODES.extend([
         no,
-        Code('only'+mg, f"{mg.upper()} WORLD MODE", f"Select only {mg} sprites.", "sprite")])
+        Code('only'+mg, f"{mg.upper()} WORLD MODE", f"Select only {mg} sprites.", "spriteCategories")])
     RESTRICTED_VANILLA_SPRITE_CODES.append(no)
 
 
