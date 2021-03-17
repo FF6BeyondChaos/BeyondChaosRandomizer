@@ -72,7 +72,8 @@ RESTRICTED_REPLACE = ["throw", "steal"]
 ALWAYS_REPLACE = ["leap", "possess", "health", "shock"]
 FORBIDDEN_COMMANDS = ["leap", "possess"]
 
-MD5HASH = "e986575b98300f721ce27c180264d890"
+MD5HASHNORMAL = "e986575b98300f721ce27c180264d890"
+MD5HASHTEXTLESS = "f08bf13a6819c421eee33ee29e640a1d"
 
 
 TEK_SKILLS = (# [0x18, 0x6E, 0x70, 0x7D, 0x7E] +
@@ -4031,13 +4032,13 @@ def manage_dances():
         log(dancestr, "dances")
 
     # Randomize dance backgrounds
-    backgrounds = [[0x00, 0x05, 0x06, 0x07, 0x36], #Wind Song
+    backgrounds = [[0x00, 0x05, 0x06, 0x36], #Wind Song
         [0x01, 0x03], #Forest Suite
         [0x02, 0x0E, 0x2F], #Desert Aria
         [0x04, 0x08, 0x10, 0x13, 0x14, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C,
          0x1D, 0x1E, 0x20, 0x24, 0x2B, 0x2D, 0x2E, 0x37], #Love Sonata
         [0x0B, 0x15, 0x16], #Earth Blues
-        [0x0D, 0x1F, 0x23], #Water Rondo
+        [0x0D, 0x23], #Water Rondo
         [0x09, 0x0A, 0x0C, 0x11, 0x22, 0x26, 0x28, 0x2A], #Dusk Requiem
         [0x12]] #Snowman Jazz
     fout.seek(0x11F9AB)
@@ -4218,7 +4219,7 @@ def randomize(args):
                 if size == 3145728 + 0x200:
                     data = data[0x200:]
                 h = md5(data).hexdigest()
-                if h == MD5HASH:
+                if h == MD5HASHNORMAL or h == MD5HASHTEXTLESS:
                     sourcefile = filename
                     break
             else:
@@ -4363,9 +4364,9 @@ def randomize(args):
         f.close()
 
     h = md5(data).hexdigest()
-    if h != MD5HASH:
+    if h != MD5HASHNORMAL and h != MD5HASHTEXTLESS:
         print("WARNING! The md5 hash of this file does not match the known "
-              "hash of the english FF6 1.0 rom!")
+              "hashes of the english FF6 1.0 rom!")
         x = input("Continue? y/n ")
         if not (x and x.lower()[0] == 'y'):
             return
