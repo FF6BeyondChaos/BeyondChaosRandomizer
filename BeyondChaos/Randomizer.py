@@ -892,7 +892,6 @@ def manage_commands_new(commands):
                 c.set_retarget(fout)
                 valid_spells = [v for v in all_spells if
                                 v.spellid <= 0xED and v.valid]
-
                 for spell in all_spells:
                     if spell.name == "Sabre Soul":
                         valid_spells.append(spell)
