@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys, os, re, traceback, copy, math
-from Mmltbl import *
+from mmltbl import *
 
 mml_log = "\n" if __name__ == "__main__" else None
 
