@@ -3,7 +3,7 @@ from sys import argv
 from shutil import copyfile
 import os
 from hashlib import md5
-from Utils import (ESPER_TABLE,
+from utils import (ESPER_TABLE,
                    CHAR_TABLE, COMMAND_TABLE, LOCATION_TABLE,
                    LOCATION_PALETTE_TABLE, CHARACTER_PALETTE_TABLE,
                    EVENT_PALETTE_TABLE, MALE_NAMES_TABLE, FEMALE_NAMES_TABLE,
@@ -19,7 +19,7 @@ from skillrandomizer import (SpellBlock, CommandBlock, SpellSub,
 from monsterrandomizer import (MonsterGraphicBlock, get_monsters,
                                get_metamorphs, get_ranked_monsters,
                                shuffle_monsters, get_monster, read_ai_table)
-from itemRrandomizer import (reset_equippable, get_ranked_items, get_item,
+from itemrandomizer import (reset_equippable, get_ranked_items, get_item,
                             reset_special_relics, reset_rage_blizzard,
                             reset_cursed_shield)
 from esperrandomizer import EsperBlock
