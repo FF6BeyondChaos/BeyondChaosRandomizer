@@ -337,32 +337,18 @@ def get_spellsets(spells=None):
     spellsets = {}
     spellset_bans = []
     spells = [s for s in spells if s.spellid not in spellset_bans]
-    limitSpellids = []
-    for spell in spells:
-        if spell.name == "Sabre Soul":
-            limitSpellids.append(spell.spellid)
-        elif spell.name == "Star Prism":
-            limitSpellids.append(spell.spellid)
-        elif spell.name == "Mirager":
-            limitSpellids.append(spell.spellid)
-        elif spell.name == "TigerBreak":
-            limitSpellids.append(spell.spellid)
-        elif spell.name == "Back Blade":
-            limitSpellids.append(spell.spellid)
-        elif spell.name == "Riot Blade":
-            limitSpellids.append(spell.spellid)
-        elif spell.name == "RoyalShock":
-            limitSpellids.append(spell.spellid)
-        elif spell.name == "Spin Edge":
-            limitSpellids.append(spell.spellid)
-        elif spell.name == "X-Meteo":
-            limitSpellids.append(spell.spellid)
-        elif spell.name == "Red Card":
-            limitSpellids.append(spell.spellid)
-        elif spell.name == "MoogleRush":
-            limitSpellids.append(spell.spellid)
-        elif spell.name == "ShadowFang":
-            limitSpellids.append(spell.spellid)
+    limitSpellids = [s for s in spells if s.name == "Sabre Soul" or 
+                     s.name == "Star Prism" or 
+                     s.name == "Mirager" or 
+                     s.name == "TigerBreak" or 
+                     s.name == "Back Blade" or 
+                     s.name == "Riot Blade" or 
+                     s.name == "RoyalShock" or 
+                     s.name == "Spin Edge" or 
+                     s.name == "X-Meteo" or 
+                     s.name == "Red Card" or 
+                     s.name == "MoogleRush" or 
+                     s.name == "ShadowFang"]
     # Each spellset is a tuple of (description, spell list)
     spellsets['Chaos'] = ('skill (including broken and glitchy skills)', [])
     if wildspells is None:

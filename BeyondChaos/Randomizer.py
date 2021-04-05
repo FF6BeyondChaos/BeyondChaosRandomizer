@@ -820,27 +820,27 @@ def manage_commands_new(commands):
                 if Options_.is_code_active('desperation'):
                     for spell in all_spells:
                         if spell.name == "Sabre Soul":
-                            valid_spells.append(spell)
+                            if spell not in valid_spells: valid_spells.append(spell)
                         elif spell.name == "Star Prism":
-                            valid_spells.append(spell)
+                            if spell not in valid_spells: valid_spells.append(spell)
                         elif spell.name == "Mirager":
-                            valid_spells.append(spell)
+                            if spell not in valid_spells: valid_spells.append(spell)
                         elif spell.name == "TigerBreak":
-                            valid_spells.append(spell)
+                            if spell not in valid_spells: valid_spells.append(spell)
                         elif spell.name == "Back Blade":
-                            valid_spells.append(spell)
+                            if spell not in valid_spells: valid_spells.append(spell)
                         elif spell.name == "Riot Blade":
-                            valid_spells.append(spell)
+                            if spell not in valid_spells: valid_spells.append(spell)
                         elif spell.name == "RoyalShock":
-                            valid_spells.append(spell)
+                            if spell not in valid_spells: valid_spells.append(spell)
                         elif spell.name == "Spin Edge":
-                            valid_spells.append(spell)
+                            if spell not in valid_spells: valid_spells.append(spell)
                         elif spell.name == "X-Meteo":
-                            valid_spells.append(spell)
+                            if spell not in valid_spells: valid_spells.append(spell)
                         elif spell.name == "Red Card":
-                            valid_spells.append(spell)
+                            if spell not in valid_spells: valid_spells.append(spell)
                         elif spell.name == "MoogleRush":
-                            valid_spells.append(spell)
+                            if spell not in valid_spells: valid_spells.append(spell)
                         elif spell.name == "ShadowFang":
                             valid_spells.append(spell)
 
@@ -892,31 +892,31 @@ def manage_commands_new(commands):
                 c.set_retarget(fout)
                 valid_spells = [v for v in all_spells if
                                 v.spellid <= 0xED and v.valid]
-                for spell in all_spells:
+                for spell in all_spells:                    
                     if spell.name == "Sabre Soul":
-                        valid_spells.append(spell)
+                        if spell not in valid_spells: valid_spells.append(spell)
                     elif spell.name == "Star Prism":
-                        valid_spells.append(spell)
+                        if spell not in valid_spells: valid_spells.append(spell)
                     elif spell.name == "Mirager":
-                        valid_spells.append(spell)
+                        if spell not in valid_spells: valid_spells.append(spell)
                     elif spell.name == "TigerBreak":
-                        valid_spells.append(spell)
+                        if spell not in valid_spells: valid_spells.append(spell)
                     elif spell.name == "Back Blade":
-                        valid_spells.append(spell)
+                        if spell not in valid_spells: valid_spells.append(spell)
                     elif spell.name == "Riot Blade":
-                        valid_spells.append(spell)
+                        if spell not in valid_spells: valid_spells.append(spell)
                     elif spell.name == "RoyalShock":
-                        valid_spells.append(spell)
+                        if spell not in valid_spells: valid_spells.append(spell)
                     elif spell.name == "Spin Edge":
-                        valid_spells.append(spell)
+                        if spell not in valid_spells: valid_spells.append(spell)
                     elif spell.name == "X-Meteo":
-                        valid_spells.append(spell)
+                        if spell not in valid_spells: valid_spells.append(spell)
                     elif spell.name == "Red Card":
-                        valid_spells.append(spell)
+                        if spell not in valid_spells: valid_spells.append(spell)
                     elif spell.name == "MoogleRush":
-                        valid_spells.append(spell)
+                        if spell not in valid_spells: valid_spells.append(spell)
                     elif spell.name == "ShadowFang":
-                        valid_spells.append(spell)
+                        if spell not in valid_spells: valid_spells.append(spell)
                 if scount == 1:
                     s = RandomSpellSub()
                 else:
@@ -929,7 +929,7 @@ def manage_commands_new(commands):
 
                 try:
                     if limitCounter != 1 and Options_.is_code_active('desperation'):
-                        s.set_spells(valid_spells, "Limit")
+                        s.set_spells(valid_spells, "Limit", None)
                         limitCounter = limitCounter +1
                     else:
                         limitbad = True
@@ -989,29 +989,29 @@ def manage_commands_new(commands):
                     if Options_.is_code_active('desperation'):
                         for spell in all_spells:
                             if spell.name == "Sabre Soul":
-                                valid_spells.append(spell)
+                                if spell not in valid_spells: valid_spells.append(spell)
                             elif spell.name == "Star Prism":
-                                valid_spells.append(spell)
+                                if spell not in valid_spells: valid_spells.append(spell)
                             elif spell.name == "Mirager":
-                                valid_spells.append(spell)
+                                if spell not in valid_spells: valid_spells.append(spell)
                             elif spell.name == "TigerBreak":
-                                valid_spells.append(spell)
+                                if spell not in valid_spells: valid_spells.append(spell)
                             elif spell.name == "Back Blade":
-                                valid_spells.append(spell)
+                                if spell not in valid_spells: valid_spells.append(spell)
                             elif spell.name == "Riot Blade":
-                                valid_spells.append(spell)
+                                if spell not in valid_spells: valid_spells.append(spell)
                             elif spell.name == "RoyalShock":
-                                valid_spells.append(spell)
+                                if spell not in valid_spells: valid_spells.append(spell)
                             elif spell.name == "Spin Edge":
-                                valid_spells.append(spellu)
+                                if spell not in valid_spells: valid_spells.append(spell)
                             elif spell.name == "X-Meteo":
-                                valid_spells.append(spell)
+                                if spell not in valid_spells: valid_spells.append(spell)
                             elif spell.name == "Red Card":
-                                valid_spells.append(spell)
+                                if spell not in valid_spells: valid_spells.append(spell)
                             elif spell.name == "MoogleRush":
-                                valid_spells.append(spell)
+                                if spell not in valid_spells: valid_spells.append(spell)
                             elif spell.name == "ShadowFang":
-                                valid_spells.append(spell)
+                                if spell not in valid_spells: valid_spells.append(spell)
 
                     if not valid_spells:
                         continue
