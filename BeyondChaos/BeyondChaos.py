@@ -579,21 +579,27 @@ class Window(QWidget):
             if index == 0:
                 if item[0] == "Normal":
                     self.modeDescription.setText(item[1])
+                    self.mode = "normal"
             elif index == 1:
                 if item[0] == "Race - Kefka @ Narshe":
                     self.modeDescription.setText(item[1])
+                    self.mode = "katn"
             elif index == 2:
                 if item[0] == "Ancient Cave":
                     self.modeDescription.setText(item[1])
+                    self.mode = "ancientcave"
             elif index == 3:
                 if item[0] == "Speed Cave":
                     self.modeDescription.setText(item[1])
+                    self.mode = "speedcave"
             elif index == 4:
                 if item[0] == "Race - Randomized Cave":
                     self.modeDescription.setText(item[1])
+                    self.mode = "racecave"
             elif index == 5:
                 if item[0] == "Race - Dragon Hunt":
                     self.modeDescription.setText(item[1])
+                    self.mode = "dragonhunt"
             else:
                 self.modeDescription.setText("Pick a Game Mode!")
 
@@ -696,9 +702,9 @@ class Window(QWidget):
     def compileSupportedPresets(self):
         for mode in self.supportedPresets:
             if mode == "newplayer":
-                self.GamePresets['New Player'] = "d f k l u alasdraco capslockoff partyparty makeover johnnydmad"
+                self.GamePresets['New Player'] = "b c e g i m n o p q r s t w y z alasdraco capslockoff partyparty makeover johnnydmad"
             elif mode == "intermediateplayer":
-                self.GamePresets['Intermediate Player'] = "d f g i k l m o p u w z alasdraco capslockoff makeover partyparty johnnydmad notawaiter mimetime"
+                self.GamePresets['Intermediate Player'] = "b c d e g i j k l m n o p q r s t w y z alasdraco capslockoff makeover partyparty johnnydmad notawaiter mimetime"
             elif mode == "advancedplayer":
                 self.GamePresets['Advanced Player'] = "b c d e f g i j k l m n o p q r s t u w y z alasdraco capslockoff johnnydmad makeover notawaiter partyparty dancingmaduin bsiab mimetime randombosses"
             elif mode == "raceeasy":
