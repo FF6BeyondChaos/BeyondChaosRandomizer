@@ -1,5 +1,5 @@
 
-import Config
+import config
 import sys
 from subprocess import call
 from PyQt5 import QtGui, QtCore
@@ -9,10 +9,10 @@ from PyQt5.QtWidgets import QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel
     QTabWidget, QInputDialog, QScrollArea, QMessageBox, QGraphicsDropShadowEffect, QSlider
 from PyQt5.QtGui import QCursor
 
-import Options
-import Randomizer
-import Update
-import Constants
+import options
+import randomizer
+import update
+import constants
 import time
 import traceback
 
@@ -505,7 +505,7 @@ class Window(QWidget):
     # (At startup) Opens reads code flags/descriptions and
     #   puts data into separate dictionaries
     def initCodes(self):
-        for code in Options.NORMAL_CODES + Options.MAKEOVER_MODIFIER_CODES:
+        for code in options.NORMAL_CODES + options.MAKEOVER_MODIFIER_CODES:
             if code.category == "aesthetic":
                 d = self.aesthetic
             elif code.category == "sprite":
@@ -528,7 +528,7 @@ class Window(QWidget):
 
             d[code.name] = {'explanation': code.long_description, 'checked': False}
 
-        for flag in sorted(Options.ALL_FLAGS):
+        for flag in sorted(options.ALL_FLAGS):
             self.flag[flag.name] = {'explanation': flag.description, 'checked': True}
 
 
@@ -553,7 +553,7 @@ class Window(QWidget):
             self.presetBox.setCurrentIndex(index)
 
     def loadSavedFlags(self):
-        flagset = Config.readFlags()
+        flagset = config.readFlags()
         if flagset != None:
             for text, flags in flagset.items():
                 self.GamePresets[text] = flags
@@ -579,21 +579,27 @@ class Window(QWidget):
             if index == 0:
                 if item[0] == "Normal":
                     self.modeDescription.setText(item[1])
+                    self.mode = "normal"
             elif index == 1:
                 if item[0] == "Race - Kefka @ Narshe":
                     self.modeDescription.setText(item[1])
+                    self.mode = "katn"
             elif index == 2:
                 if item[0] == "Ancient Cave":
                     self.modeDescription.setText(item[1])
+                    self.mode = "ancientcave"
             elif index == 3:
                 if item[0] == "Speed Cave":
                     self.modeDescription.setText(item[1])
+                    self.mode = "speedcave"
             elif index == 4:
                 if item[0] == "Race - Randomized Cave":
                     self.modeDescription.setText(item[1])
+                    self.mode = "racecave"
             elif index == 5:
                 if item[0] == "Race - Dragon Hunt":
                     self.modeDescription.setText(item[1])
+                    self.mode = "dragonhunt"
             else:
                 self.modeDescription.setText("Pick a Game Mode!")
 
@@ -696,9 +702,9 @@ class Window(QWidget):
     def compileSupportedPresets(self):
         for mode in self.supportedPresets:
             if mode == "newplayer":
-                self.GamePresets['New Player'] = "d f k l u alasdraco capslockoff partyparty makeover johnnydmad"
+                self.GamePresets['New Player'] = "b c e g i m n o p q r s t w y z alasdraco capslockoff partyparty makeover johnnydmad"
             elif mode == "intermediateplayer":
-                self.GamePresets['Intermediate Player'] = "d f g i k l m o p u w z alasdraco capslockoff makeover partyparty johnnydmad notawaiter mimetime"
+                self.GamePresets['Intermediate Player'] = "b c d e g i j k l m n o p q r s t w y z alasdraco capslockoff makeover partyparty johnnydmad notawaiter mimetime"
             elif mode == "advancedplayer":
                 self.GamePresets['Advanced Player'] = "b c d e f g i j k l m n o p q r s t u w y z alasdraco capslockoff johnnydmad makeover notawaiter partyparty dancingmaduin bsiab mimetime randombosses"
             elif mode == "raceeasy":
@@ -756,7 +762,7 @@ class Window(QWidget):
                 QtCore.pyqtRemoveInputHook()
                 # TODO: put this in a new thread
                 try:
-                    result_file = Randomizer.randomize(args=['BeyondChaos.py', self.romText, bundle, "test"])
+                    result_file = randomizer.randomize(args=['BeyondChaos.py', self.romText, bundle, "test"])
                 #call(["py", "Randomizer.py", self.romText, bundle, "test"])
                 # Running the Randomizer twice in one session doesn't work
                 # because of global state.
@@ -806,7 +812,7 @@ class Window(QWidget):
 if __name__ == "__main__":
     print("Loading GUI, checking for config file, updater file and updates please wait.")
     try:
-        Update.configExists()
+        update.configExists()
         App = QApplication(sys.argv)
         window = Window()
         time.sleep(3)
