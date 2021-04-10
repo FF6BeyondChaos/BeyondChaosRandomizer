@@ -541,7 +541,7 @@ class Window(QWidget):
             #flagString = self.flagString.text()
             #for flag in self.flags:
             #    flagString += flag + " "
-            Config.Writeflags(text, self.flagString.text())
+            config.Writeflags(text, self.flagString.text())
             index = self.presetBox.findText(text)
             if index == -1:
                 self.presetBox.addItem(text)
