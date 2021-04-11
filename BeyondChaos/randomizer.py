@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 import configparser
-from hashlib import md5
 import os
 import re
-from shutil import copyfile
 import sys
+from hashlib import md5
+from shutil import copyfile
 from sys import argv
 from time import time, sleep, gmtime
-import traceback
 from typing import BinaryIO, Callable, Dict, List, Set, Tuple
 
 import numpy.random
@@ -16,10 +15,8 @@ import character
 import esperrandomizer
 import formationrandomizer
 import locationrandomizer
-import musicrandomizer
 import options
 import towerrandomizer
-from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance
 from character import get_characters, get_character, equip_offsets
@@ -46,13 +43,13 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
                                get_metamorphs, get_ranked_monsters,
                                shuffle_monsters, get_monster, read_ai_table,
                                change_enemy_name, randomize_enemy_name,
-                               get_collapsing_house_help_skill,
-                               monsterCleanup, MonsterBlock)
-from musicrandomizer import randomize_music, manage_opera, insert_instruments
+                               get_collapsing_house_help_skill, monsterCleanup, MonsterBlock)
+from musicinterface import randomize_music, manage_opera, get_music_spoiler
 from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses)
+from randomizers.characterstats import CharacterStats
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -70,7 +67,6 @@ from utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    mutate_index, utilrandom as random, open_mei_fallback,
                    AutoLearnRageSub)
 from wor import manage_wor_recruitment, manage_wor_skip
-
 
 VERSION = "4"
 BETA = False
@@ -218,7 +214,6 @@ def Reset():
     character.cleanup()
     esperrandomizer.cleanup()
     locationrandomizer.cleanup()
-    musicrandomizer.cleanup()
     towerrandomizer.cleanup()
 
 
@@ -4949,17 +4944,15 @@ def randomize(args: List[str]) -> str:
     reseed()
 
     has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
-    if has_music or Options_.is_code_active('alasdraco'):
-        insert_instruments(fout, 0x310000)
-        opera = None
-
     if Options_.is_code_active('alasdraco'):
         opera = manage_opera(fout, has_music)
+    else:
+        opera = None
     reseed()
 
     if has_music:
-        music_log = randomize_music(fout, Options_=Options_, opera=opera, form_music_overrides=form_music)
-        log(music_log, section="music")
+        music_log = randomize_music(fout, Options_, opera=opera, form_music_overrides=form_music)
+        log(get_music_spoiler(), section="music")
     reseed()
 
     if Options_.mode.name == "katn":
