@@ -1,3 +1,5 @@
+*.smc
+ff6*.txt
 *.pyc
 /BeyondChaos/build/beyondchaos_ex
 /BeyondChaos/beyondchaos_ex.spec
