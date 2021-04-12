@@ -31,7 +31,8 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
                                get_collapsing_house_help_skill, monsterCleanup)
 from musicrandomizer import randomize_music, manage_opera, insert_instruments
 from options import ALL_MODES, ALL_FLAGS, Options_
-from patches import allergic_dog, banon_life3, vanish_doom, evade_mblock, death_abuse, no_kutan_skip, show_coliseum_rewards
+from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock, death_abuse, no_kutan_skip, show_coliseum_rewards,
+                     cycle_statuses)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -4871,6 +4872,7 @@ def randomize(args):
     allergic_dog(fout)
     y_equip_relics(fout)
     fix_gogo_portrait(fout)
+    cycle_statuses(fout)
 
     if not Options_.is_code_active('fightclub'):
         show_coliseum_rewards(fout)
