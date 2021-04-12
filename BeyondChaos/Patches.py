@@ -158,3 +158,118 @@ def show_coliseum_rewards(fout):
         ])
     rewards_sub.write(fout)
     
+def cycle_statuses(fout):
+    cycles_sub = Substitution()
+    cycles_sub.set_location(0x012E4F) #C12E4F
+    cycles_sub.bytestring = bytes([0x80, 0x2B])         #BRA $2E7C	    (+43)
+    cycles_sub.write(fout)
+
+    cycles_sub.set_location(0x012E5C) #C12E5C
+    cycles_sub.bytestring = bytes([0x80, 0x1E])         #BRA $2E7C	    (+30)
+    cycles_sub.write(fout)
+
+    cycles_sub.set_location(0x012E69) #C12E69
+    cycles_sub.bytestring = bytes([
+        0x80, 0x11,             #2E69                   BRA $2E7C	    (+17)
+        #Status checker for outline colours.
+        0xB9, 0xA9, 0x2E,       #2E6B/2E6C/2E6D         LDA $2EA9,Y     get current outline in rotation
+        0x24, 0x38,             #2E6E/2E6F              BIT $38         check against current status
+        0xD0, 0x10,             #2E70/2E71              BNE set_color   (+16) branch if a match was found 0x012E82
+        0x4A,                   #2E72                   LSR A           check next status
+        0x69, 0x00,             #2E73/2E74              ADC #$00        maintain wait bit
+        0x99, 0xA9, 0x2E,       #2E75/2E76/2E77         STA $2EA9,Y     update outline colour rotation
+        0xC9, 0x04,             #2E78/2E79              CMP #$20        loop over 6 statuses
+        0xB0, 0xF2,             #2E7A/2E7B              BCS $2E6E       (-14)
+        0xA9, 0x80,             #2E7C/2E7D              LDA #$80        no match found, reset to Rflect
+        0x99, 0xA9, 0x2E,       #2E7E/2E7F/2E80         STA $2EA9,Y
+        0x60,                   #2E81       RTS
+        #set_colour
+        0x29, 0xFC,             #2E82/2E83              AND #$FC        clear wait bit
+        0x20, 0x0F, 0x1A,       #2E84/2E85/2E86         JSR $1A0F
+        0xBF, 0x8B, 0x2E, 0xC1, #2E87/2E88/2E89/2E8A    LDA.l           outline_color_table,X  ; get outline colour
+        #outline_color_table
+        0x80, 0x36,             #2D8B/2E8C              BRA $2EC3	    (+54) Implement outline colour
+        0x04,                   #2E8D                   DB $04          Slow
+        0x03,                   #2E8E                   DB $03          Haste
+        0x07,                   #2E8F                   DB $07          Stop
+        0x02,                   #2E90                   DB $02          Shell
+        0x01,                   #2E91                   DB $01          Safe
+        0x00,                   #2E92                   DB $00          Rflect
+        0xB9, 0xA9, 0x2E,       #2E93/2E94/2E95         LDA $2EA9,Y     current outline color rotation
+        0x4A,                   #2E96                   LSR A           move one step forward
+        0xB0, 0xE3,             #2E97/2E98              BCS             reset_rotation (-29) if wait bit set, clear it, reset and exit
+        0x29, 0xFC,             #2E99/2E9A              AND $FC         keep 6 bits
+        0xF0, 0xDF,             #2E9B/2E9C              BEQ             reset_rotation (-11) if all clear, reset and exit
+        0x24, 0x38,             #2E9D/2E9E              BIT             $38 - check current status
+        0xF0, 0xF5,             #2E9F/2EA0              BEQ             rotation_loop (-11) loop until match found
+        0x80, 0xDB,             #2EA1/2EA2              BRA             update_rotation (-37) update outline rotation 0x012E7E
+        0xEA, 0xEA, 0xEA, 0xEA, #2EA3/2EA4/2EA5/2EA6    NOP
+        0xEA, 0xEA, 0xEA, 0xEA, #2EA7/2EA8/2EA9/2EAA    NOP
+        0xEA, 0xEA, 0xEA, 0xEA, #2EAB/2EAC/2EAD/2EAE    NOP
+        0xEA, 0xEA, 0xEA, 0xEA, #2EAF/2EB0/2EB1/2EB2    NOP
+        0xEA                    #2EB3                   NOP
+    ])
+    cycles_sub.write(fout)
+    
+    cycles_sub.set_location(0x012ECF) #C12ECF
+    cycles_sub.bytestring = bytes([
+        #outline_control
+        0xBF, 0xAA, 0xE3, 0xC2, #2ECF/2ED0/2ED1/2ED2    LDA $C2E3AA,X	Get colour change offset
+        0x18,                   #2ED3                   CLC
+        0x65, 0x2C,             #2ED4/2ED5              ADC $2C		    Add to current fade
+        0x85, 0x36,             #2ED6/2ED7              STA $36		    Save here
+        0x29, 0x3C,             #2ED8/2ED9              AND #$3C	    Isolate fade
+        0x4A,                   #2EDA                   LSR A
+        0x85, 0x2C,             #2EDB/2EDC              STA $2C		    Update fade
+        0x64, 0x2D,             #2EDD/2EDE              STZ $2D
+        0xA5, 0x36,             #2EDF                   LDA $36
+        0x0A, 0x0A,             #2EE1/2EE2              ASL x2		    Is fade decreasing?
+        0x90, 0x06,             #2EE3/2EE4              BCC $2EEB	    (+6) If so...
+        0xA9, 0x1F,             #2EE5/2EE6              LDA #$1F	    ...subtract from 31
+        0xE5, 0x2C,             #2EE7/2EE8              SBC $2C
+        0x85, 0x2C,             #2EE9/2EEA              STA $2C
+        0xA5, 0x2C,             #2EEB/2EEC              LDA $2C		    Get fade amount
+        0xC9, 0x1F,             #2EED/2EEE              CMP #$1F	    Is it fully faded?
+        0xD0, 0x06,             #2EEF/2EF0              BNE $2EF7       (+6) If so...
+        0x20, 0x93, 0x2E,       #2EF1/2EF2              JSR $2E93       ...rotate colour
+        0x80, 0x01,             #2EF3/2EF4              BRA $2EF7	    (+1)
+        0xEA                    #2EF5                   NOP
+    ])
+    cycles_sub.write(fout)
+
+    cycles_sub.set_location(0x02307D) #C2307D
+    cycles_sub.bytestring = bytes([
+        0xDA,                   #307D                   PHX			    Save party member index
+        0xA5, 0xFE,             #307E/307F              LDA $FE		    Get row
+        0x9D, 0xA1, 0x3A,       #3080/3081/3082         STA $3AA1,X	    Save to special props
+        0xBD, 0xD9, 0x3E,       #3083/3084/3085         LDA $3ED9,X	    Preserve special sprite
+        0x48,                   #3086                   PHA
+        0xA3, 0x05,             #3087/3088              LDA $05,S		Get loop variable
+        0x9D, 0xD9, 0x3E,       #3089/308A/308B         STA $3ED9,X	    Save to roster position
+        0x7B,                   #308C                   TDC
+        0x8A,                   #308D                   TXA
+        0x0A, 0x0A, 0x0A, 0x0A, #308E/308F/3090/3091    ASL x4
+        0xAA,                   #3092                   TAX
+        0xA9, 0x06,             #3093/3094              LDA #$06
+        0x85, 0xFE,             #3095/3096              STA $FE
+        0x5A,                   #3097                   PHY			    Preserve Y-loop index
+        0xB9, 0x01, 0x16,       #3098/3099/309A         LDA $1601,Y	    Get normal sprite & name
+        0x9D, 0xAE, 0x2E,       #309B/309C/309D         STA $2EAE,X	    Store to display vars
+        0xE8,                   #309E                   INX
+        0xC8,                   #309F                   INY
+        0xC6, 0xFE,             #30A0/30A1              DEC $FE		    7 iterations to loop
+        0x10, 0xF4,             #30A2/30A3              BPL $3098	    (-12)
+        0x7A,                   #30A4                   PLY			    Restore Y-loop index
+        0x68,                   #30A5                   PLA			    Restore special sprite
+        0xC9, 0xFF,             #30A6/30A7              CMP #$FF		Is it null?
+        0xF0, 0x03,             #30A8/30A9              BEQ $30AD	    (+3) If not...
+        0x9D, 0xA7, 0x2E,       #30AA/30AB              STA $2EA7,X	    ...overwrite sprite
+        0xA9, 0x81,             #30AC/30AD              LDA #$81		Reflect + wait bit
+        0x9D, 0xA2, 0x2E,       #30AE/30AF/30B0         STA $2EA2,X	    Init outline rotation
+        0xA3, 0x03,             #30B1/30B2              LDA $03,S		Get character ID
+        0x9D, 0xBF, 0x2E,       #30B3/30B4/30B5         STA $2EBF,X	    Save it
+        0xC9, 0x0E,             #30B6/30B7              CMP #$0E		Banon or higher?
+        0xC2, 0x20,             #30B8/30B9              REP #$20		16-bit A
+        0xAA                    #30BA                   TAX			    Move to X
+    ]) 
+    cycles_sub.write(fout)
