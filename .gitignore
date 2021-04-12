@@ -3,6 +3,8 @@ ff6*.txt
 *.pyc
 /BeyondChaos/build/beyondchaos_ex
 /BeyondChaos/beyondchaos_ex.spec
+/BeyondChaos/build/beyondchaos_console
+/BeyondChaos/beyondchaos_console.spec
 /Updater/build/BeyondChaosUpdater
 /Updater/dist
 /BeyondChaos/build/beyondchaos
