@@ -4,11 +4,11 @@ from functools import reduce
 from itertools import chain, repeat
 from typing import List
 
-from dialoguemanager import patch_dialogue, set_dialogue_var, set_location_name
-from itemrandomizer import get_item
-from monsterrandomizer import change_enemy_name, get_monster, MonsterGraphicBlock
-from skillrandomizer import get_ranked_spells, get_spell
-from utils import ESPER_TABLE, MAGICITE_TABLE, hex2int, int2bytes, name_to_bytes, Substitution, utilrandom as random
+from DialogueManager import patch_dialogue, set_dialogue_var, set_location_name
+from ItemRandomizer import get_item
+from MonsterRandomizer import change_enemy_name, get_monster, MonsterGraphicBlock
+from SkillRandomizer import get_ranked_spells, get_spell
+from Utils import ESPER_TABLE, MAGICITE_TABLE, hex2int, int2bytes, name_to_bytes, Substitution, utilrandom as random
 
 items = None
 
