@@ -1,13 +1,13 @@
-from character import get_characters, get_character
-from esperrandomizer import get_espers
-from formationrandomizer import (REPLACE_FORMATIONS, NOREPLACE_FORMATIONS, get_formations, get_fsets,
+from Character import get_characters, get_character
+from EsperRandomizer import get_espers
+from FormationRandomizer import (REPLACE_FORMATIONS, NOREPLACE_FORMATIONS, get_formations, get_fsets,
                                  get_formation, get_fset)
-from itemrandomizer import get_item
-from locationrandomizer import get_locations, get_location, get_npcs
-from monsterrandomizer import REPLACE_ENEMIES, get_monsters
-from shoprandomizer import get_shops
-from towerrandomizer import randomize_tower
-from utils import name_to_bytes, read_multi, Substitution, utilrandom as random, write_multi, AutoLearnRageSub
+from ItemRandomizer import get_item
+from LocationRandomizer import get_locations, get_location, get_npcs
+from MonsterRandomizer import REPLACE_ENEMIES, get_monsters
+from ShopRandomizer import get_shops
+from TowerRandomizer import randomize_tower
+from Utils import name_to_bytes, read_multi, Substitution, utilrandom as random, write_multi, AutoLearnRageSub
 
 
 def get_npc_palettes():
@@ -306,7 +306,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None):
     tower_msg_sub.set_location(0xA03A7)
     tower_msg_sub.write(fout)
 
-    from locationrandomizer import NPCBlock, EventBlock
+    from LocationRandomizer import NPCBlock, EventBlock
     falcon = get_location(0xb)
     save_point = NPCBlock(pointer=None, locid=falcon.locid)
     attributes = {
@@ -1144,7 +1144,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None):
                 if key > 0:
                     final_cut.bytestring += bytearray([0x3F, c, key])
         final_cut.bytestring += bytearray([0x99, 0x03, locked & 0xFF, locked >> 8])
-        from chestrandomizer import get_2pack
+        from ChestRandomizer import get_2pack
         event_bosses = {
             1: [0xC18A4, 0xC184B],
             2: [0xC16DD, 0xC171D, 0xC1756],

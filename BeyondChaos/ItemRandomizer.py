@@ -1,9 +1,9 @@
 import traceback
-from utils import (hex2int, write_multi, read_multi, ITEM_TABLE,
+from Utils import (hex2int, write_multi, read_multi, ITEM_TABLE,
                    CUSTOM_ITEMS_TABLE, mutate_index,
                    name_to_bytes, utilrandom as random,
                    Substitution)
-from skillrandomizer import get_ranked_spells
+from SkillRandomizer import get_ranked_spells
 # future blocks: chests, morphs, shops
 
 ITEM_STATS = ["learnrate", "learnspell", "fieldeffect",

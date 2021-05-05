@@ -9,7 +9,7 @@
 
 import os
 import re
-from utils import dialoguetexttable, bytes_to_dialogue, utilrandom as random, open_mei_fallback as open, read_multi, write_multi
+from Utils import dialoguetexttable, bytes_to_dialogue, utilrandom as random, open_mei_fallback as open, read_multi, write_multi
 
 try:
     from sys import _MEIPASS
