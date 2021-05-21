@@ -22,6 +22,18 @@
 	* Power Panda - Divergent Paths: The 3 Scenarios
 	* HatZen08 - Coliseum Rewards Display
 
+## SPRITE COLLECTION TEAM
+    * CtrlxZ - original sprite pack architect and all-around spritemaster (retired)
+    * HoxNorf
+    * someone fill the rest of this in idk who does sprites
+    * See custom/sprites/credits.txt for art credits.
+    
+## MUSIC COLLECTION TEAM
+    * Developer of johnnydmad and mfvitools - emberling
+    * Arrangers - emberling, Cecil188, HoxNorf, Rushlight
+    * Rippers - emberling, HoxNorf, A Tiny Spook
+    * See music/credits.txt for individual arrangement credits.
+    
 ## SPECIAL THANKS 
     * cecil188 - OG beyond chaos fan
     * fathlo23 - RPG speedrunner and BC challenge runner
