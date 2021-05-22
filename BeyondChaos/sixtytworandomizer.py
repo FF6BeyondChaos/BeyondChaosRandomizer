@@ -13,24 +13,24 @@ from utils import (ESPER_TABLE,
                    generate_swapfunc, shift_middle, get_palette_transformer,
                    battlebg_palettes,
                    mutate_index, utilrandom as random)
-from SkillRandomizer import (SpellBlock, CommandBlock, SpellSub,
+from skillrandomizer import (SpellBlock, CommandBlock, SpellSub,
                              RandomSpellSub, MultipleSpellSub,
                              get_ranked_spells, get_spell)
-from MonsterRandomizer import (MonsterGraphicBlock, get_monsters,
+from monsterrandomizer import (MonsterGraphicBlock, get_monsters,
                                get_metamorphs, get_ranked_monsters,
                                shuffle_monsters, get_monster, read_ai_table)
-from ItemRandomizer import (reset_equippable, get_ranked_items, get_item,
+from itemrandomizer import (reset_equippable, get_ranked_items, get_item,
                             reset_special_relics, reset_rage_blizzard,
                             reset_cursed_shield)
-from EsperRandomizer import EsperBlock
-from ShopRandomizer import ShopBlock
-from NameRandomizer import generate_name
-from FormationRandomizer import (get_formations, get_fsets,
+from esperrandomizer import EsperBlock
+from shoprandomizer import ShopBlock
+from namerandomizer import generate_name
+from formationrandomizer import (get_formations, get_fsets,
                                  get_formation, get_fset)
-from LocationRandomizer import (EntranceSet,
+from locationrandomizer import (EntranceSet,
                                 get_locations, get_location, get_zones)
-from TowerRandomizer import randomize_tower
-from Decompress import Decompressor
+from towerrandomizer import randomize_tower
+from decompress import Decompressor
 
 
 VERSION = "62"

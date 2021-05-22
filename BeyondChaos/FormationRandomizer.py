@@ -1,9 +1,9 @@
 #! /usr/bin/env python3
-from Options import Options_
+from options import Options_
 from math import log
 
-from MonsterRandomizer import monsterdict, get_monsters
-from Utils import read_multi, write_multi, utilrandom as random
+from monsterrandomizer import monsterdict, get_monsters
+from utils import read_multi, write_multi, utilrandom as random
 
 # Guardian x4, Broken Dirt Drgn, Kefka + Ice Dragon
 REPLACE_FORMATIONS = [0x20e, 0x1ca, 0x1e9, 0x1fa]

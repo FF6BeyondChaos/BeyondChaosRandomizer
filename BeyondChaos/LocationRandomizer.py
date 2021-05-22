@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 from copy import copy
-from FormationRandomizer import get_fset
-from Utils import (read_multi, write_multi, battlebg_palettes, MAP_NAMES_TABLE,
+from formationrandomizer import get_fset
+from utils import (read_multi, write_multi, battlebg_palettes, MAP_NAMES_TABLE,
                    UNUSED_LOCATIONS_TABLE, MAP_BATTLE_BG_TABLE,
                    ENTRANCE_REACHABILITY_TABLE, LOCATION_MAPS_TABLE,
                    utilrandom as random)
@@ -629,7 +629,7 @@ class Location():
         self.copy_chests(location)
 
     def read_chests(self, filename):
-        from ChestRandomizer import ChestBlock
+        from chestrandomizer import ChestBlock
         f = open(filename, 'r+b')
         f.seek(self.chestpointer)
         begin = read_multi(f, length=2)
@@ -676,7 +676,7 @@ class Location():
             self.events.append(e)
 
     def copy_chests(self, location):
-        from ChestRandomizer import ChestBlock
+        from chestrandomizer import ChestBlock
         self.chests = []
         for chest in location.chests:
             c = ChestBlock(pointer=None, location=self.locid)
