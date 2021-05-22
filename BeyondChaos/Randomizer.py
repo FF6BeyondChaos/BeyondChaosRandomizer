@@ -1873,6 +1873,7 @@ def manage_monsters():
     safe_solo_terra = not Options_.is_code_active("ancientcave")
     darkworld = Options_.is_code_active("darkworld")
     change_skillset = None
+    katn = Options_.mode.name == 'katn'
     final_bosses = (list(range(0x157, 0x160)) + list(range(0x127, 0x12b)) + [0x112, 0x11a, 0x17d])
     for m in monsters:
         if "zone eater" in m.name.lower():
@@ -1885,9 +1886,9 @@ def manage_monsters():
                 m.randomize_boost_level()
                 if darkworld:
                     m.increase_enemy_difficulty()
-                m.mutate(Options_=Options_, change_skillset=True, safe_solo_terra=False)
+                m.mutate(Options_=Options_, change_skillset=True, safe_solo_terra=False, katn=katn)
             else:
-                m.mutate(Options_=Options_, change_skillset=change_skillset, safe_solo_terra=False)
+                m.mutate(Options_=Options_, change_skillset=change_skillset, safe_solo_terra=False, katn=katn)
             if 0x127 <= m.id < 0x12a or m.id == 0x17d or m.id == 0x11a:
                 # boost statues, Atma, final kefka a second time
                 m.randomize_boost_level()
@@ -1898,7 +1899,7 @@ def manage_monsters():
         else:
             if darkworld:
                 m.increase_enemy_difficulty()
-            m.mutate(Options_=Options_, change_skillset=change_skillset, safe_solo_terra=safe_solo_terra)
+            m.mutate(Options_=Options_, change_skillset=change_skillset, safe_solo_terra=safe_solo_terra, katn=katn)
 
         m.tweak_fanatics()
         m.relevel_specifics()
@@ -2818,13 +2819,14 @@ def manage_formations_hidden(formations, freespaces, form_music_overrides=None, 
         ue.set_relative_ai(pointer)
         freespaces = determine_new_freespaces(freespaces, myfs, ue.aiscriptsize)
 
+        katn = Options_.mode.name == 'katn'
         ue.auxloc = "Missing (Boss)"
         ue.mutate_ai(change_skillset=True, Options_=Options_)
         ue.mutate_ai(change_skillset=True, Options_=Options_)
 
-        ue.mutate(change_skillset=True, Options_=Options_)
+        ue.mutate(change_skillset=True, Options_=Options_, katn=katn)
         if random.choice([True, False]):
-            ue.mutate(change_skillset=True, Options_=Options_)
+            ue.mutate(change_skillset=True, Options_=Options_, katn=katn)
         ue.treasure_boost()
         ue.graphics.mutate_palette()
         name = randomize_enemy_name(fout, ue.id)
@@ -4669,7 +4671,7 @@ def randomize(args):
 
         # do this after hidden formations
         katn = Options_.mode.name == 'katn'
-        manage_treasure(monsters, shops=True, no_charm_drops=katn, katnFlag = katn)
+        manage_treasure(monsters, shops=True, no_charm_drops=katn, katnFlag=katn)
         if not Options_.is_code_active('ancientcave'):
             manage_chests()
             mutate_event_items(fout, cutscene_skip=Options_.is_code_active('notawaiter'), crazy_prices=Options_.is_code_active('madworld'), no_monsters=Options_.is_code_active('nomiabs'), uncapped_monsters=Options_.is_code_active('bsiab'))
