@@ -1,14 +1,21 @@
 # Beyond Chaos - functions to interface with johnnydmad module
 #                (music randomizer)
 
+import configparser
 import os
 import sys
+
+from locationrandomizer import get_locations, get_location
+from dialoguemanager import set_dialogue_var, set_pronoun, patch_dialogue, load_patch_file
+from utils import utilrandom as random
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "music"))
 sys.path.append(os.path.join(os.path.dirname(__file__), "music", "mfvitools"))
 
-from musicrandomizer import process_music, process_formation_music_by_table, process_map_music, get_music_spoiler as get_spoiler
 from johnnydmad import add_music_player
+from musicrandomizer import process_music, process_formation_music_by_table, process_map_music, get_legacy_import, get_spc_memory_usage, get_music_spoiler as get_spoiler
+
+from insertmfvi import byte_insert
 
 BC_MUSIC_FREESPACE = ["53C5F-9FDFF", "310000-37FFFF", "410000-5FFFFF"]
 
@@ -25,7 +32,7 @@ def randomize_music(fout, options_, opera=None, form_music_overrides={}):
     metadata = {}
     ## For anyone who wants to add UI for playlist selection:
     ## If a playlist is selected, pass it as process_music(playlist_filename=...)
-    data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, subpath="music", freespace=BC_MUSIC_FREESPACE)
+    data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath="music", freespace=BC_MUSIC_FREESPACE)
     if not options_.is_any_code_active(['ancientcave', 'speedcave', 'racecave']):
         data = process_map_music(data)
     data = process_formation_music_by_table(data, form_music_overrides=form_music_overrides)
@@ -44,22 +51,38 @@ def manage_opera(fout, affect_music):
     fout.seek(0)
     data = fout.read()
     
-    #2088 blocks available for all 3 voices in Waltz 3
-    SAMPLE_MAX_SIZE = 0x4968 
+    SAMPLE_MAX_SIZE = 3746
     
     #Determine opera cast
     
     class OperaSinger:
-        def __init__(self, name, title, sprite, gender, file, sample, octave, volume, init):
+        def __init__(self, name, title, sprite, gender, file, sampletype, sample, octave, volume, init):
             self.name = name
             self.title = title
             self.sprite = sprite
             self.gender = gender
             self.file = file
-            self.sample = int(sample,16)
+            self.sampletype = sampletype
+            self.sample = sample
             self.octave = octave
             self.volume = volume
             self.init = init
+            self.sid = ("ext" if sampletype == "brr" else sampletype) + ":" + sample
+        
+            if self.sampletype not in ["brr", "ext"]:
+                try:
+                    self.sample = int(self.sample, 16)
+                except ValueError:
+                    print(f"WARNING: in opera config: {name}: invalid sample id for {sampletype}: {sample}")
+                    self.sample = 1
+                    
+        def get_sample_text(self, prg):
+            if self.sampletype in ["brr", "ext"]:
+                return f"\n#BRR 0x{prg:02X}; {self.sample}\n"
+            elif self.sampletype == "legacy":
+                return f"\n#BRR 0x{prg:02X}; {get_legacy_import(self.sample, subpath='music')}\n"
+            else:
+                return f"\n#WAVE 0x{prg:02X} 0x{self.sample:02X}\n"
     
     #voice range notes
     # Overture (Draco) ranges from B(o-1) to B(o)
@@ -70,35 +93,35 @@ def manage_opera(fout, affect_music):
     # Duel 4 (Draco) ranges from B(o-1) to F(o)
     # Duel 5 (Ralse) ranges from E(o) to B(o)
     
-    singer_Options = []
-    try:
-        with open(os.path.join('custom','opera.txt')) as f:
-            for line in f.readlines():
-                singer_Options.append([l.strip() for l in line.split('|')])
-    except IOError:
-        print("WARNING: failed to load opera config")
-        return
+    singer_options = []
+    opera_config = configparser.ConfigParser(interpolation=None)
+    opera_config.read(os.path.join('custom','opera.txt')) #TODO - this is probably not pyinstaller-safe
+    if 'Singers' not in opera_config or 'Factions' not in opera_config:
+        print("WARNING: failed to load opera config, or config file is invalid")
+        return        
         
-    singer_Options = [OperaSinger(*s) for s in singer_Options]
+    for k, v in opera_config.items('Singers'):
+        line = [k] + v.split('|')
+        singer_options.append([l.strip() for l in line])
+    singer_options = [OperaSinger(*s) for s in singer_options]
     
     #categorize by voice sample
     voices = {}
-    for s in singer_Options:
-        if s.sample in voices:
-            voices[s.sample].append(s)
+    for s in singer_options:
+        if s.sid in voices:
+            voices[s.sid].append(s)
         else:
-            voices[s.sample] = [s]
+            voices[s.sid] = [s]
     
     #find a set of voices that doesn't overflow SPC RAM
     sample_sizes = {}
     while True:
         vchoices = random.sample(list(voices.values()), 3)
-        for c in vchoices:
-            smp = c[0].sample
-            if smp not in sample_sizes:
-                sample_sizes[smp] = find_sample_size(data, smp)
-        sample_total_size = sum([sample_sizes[c[0].sample] for c in vchoices])
-        if sample_total_size <= SAMPLE_MAX_SIZE:
+        test_mml = read_opera_mml('duel')
+        for i, c in enumerate(vchoices):
+            test_mml += c[0].get_sample_text(i + 0x2A)
+        memusage = get_spc_memory_usage(test_mml, subpath="music")
+        if memusage <= SAMPLE_MAX_SIZE:
             break
 
     #select characters
@@ -111,7 +134,7 @@ def manage_opera(fout, affect_music):
     for c in ["Maria", "Draco", "Ralse"]:
         char[c] = charpool.pop()
     #by sprite/name, for impresario
-    charpool = [c for c in singer_Options if c not in char.values()]
+    charpool = [c for c in singer_options if c not in char.values()]
     char["Impresario"] = random.choice(charpool)
     
     #reassign sprites in npc data
@@ -119,7 +142,7 @@ def manage_opera(fout, affect_music):
     #first, free up space for a unique Ralse
     #choose which other NPCs get merged:
     # 0. id for new scholar, 1. offset for new scholar, 2. id for merged sprite, 3. offset for merged sprite, 4. spritesheet filename, 5. extra pose type
-    merge_Options = [
+    merge_options = [
         (32, 0x172C00, 33, 0x1731C0, "dancer.bin", "flirt"), #fancy gau -> dancer
         (32, 0x172C00, 35, 0x173D40, "gau-fancy.bin", "sideeye"), #clyde -> fancy gau
         (60, 0x17C4C0, 35, 0x173D40, "daryl.bin", "sideeye"), #clyde -> daryl
@@ -132,7 +155,7 @@ def manage_opera(fout, affect_music):
         (53, 0x17A1C0, 59, 0x17BFC0, "figaroguard.bin", None), #conductor -> figaro guard
         (45, 0x1776C0, 48, 0x178800, "maduin.bin", "prone"), #yura -> maduin
         ]
-    merge = random.choice(merge_Options)
+    merge = random.choice(merge_options)
     
     #merge sacrifice into new slot
     replace_npc(locations, (merge[0], None), merge[2])
@@ -272,67 +295,9 @@ def manage_opera(fout, affect_music):
     ### adjust script
     
     load_patch_file("opera")
-    factions = [
-        ("the East", "the West"),
-        ("the North", "the South"),
-        ("the Rebels", "the Empire"),
-        ("the Alliance", "the Horde"),
-        ("the Sharks", "the Jets"),
-        ("the Fire Nation", "the Air Nation"),
-        ("the Sith", "the Jedi"),
-        ("the X-Men", "the Sentinels"),
-        ("the X-Men", "the Inhumans"),
-        ("the Kree", "the Skrulls"),
-        ("the jocks", "the nerds"),
-        ("Palamecia", "the Wild Rose"),
-        ("Baron", "Mysidia"),
-        ("Baron", "Damcyan"),
-        ("Baron", "Fabul"),
-        ("AVALANCHE", "Shinra"),
-        ("Shinra", "Wutai"),
-        ("Balamb", "Galbadia"),
-        ("Galbadia", "Esthar"),
-        ("Alexandria", "Burmecia"),
-        ("Alexandria", "Lindblum"),
-        ("Zanarkand", "Bevelle"),
-        ("the Aurochs", "the Goers"),
-        ("Yevon", "the Al Bhed"),
-        ("the Gullwings", "the Syndicate"),
-        ("New Yevon", "the Youth League"),
-        ("Dalmasca", "Archadia"),
-        ("Dalmasca", "Rozarria"),
-        ("Cocoon", "Pulse"),
-        ("Lucis", "Niflheim"),
-        ("Altena", "Forcena"),
-        ("Nevarre", "Rolante"),
-        ("Wendel", "Ferolia"),
-        ("the Lannisters", "the Starks"),
-        ("the Hatfields", "the McCoys"),
-        ("the Aliens", "the Predators"),
-        ("cats", "dogs"),
-        ("YoRHa", "the machines"),
-        ("Shevat", "Solaris"),
-        ("U-TIC", "Kukai"),
-        ("the Bionis", "the Mechonis"),
-        ("Samaar", "the Ghosts"),
-        ("Mor Ardain", "Uraya"),
-        ("Marvel", "Capcom"),
-        ("Nintendo", "Sega"),
-        ("Subs", "Dubs"),
-        ("vampires", "werewolves"),
-        ("Guardia", "the Mystics"),
-        ("the Ascians", "the Scions"),
-        ("Garlemald", "Eorzea"),
-        ("Garlemald", "Ala Mhigo"),
-        ("Garlemald", "Doma"),
-        ("Ul'dah", "Sil'dih"),
-        ("Amdapor", "Mhach"),
-        ("Amdapor", "Nym"),
-        ("Nym", "Mhach"),
-        ("Ishgard", "Dravania"),
-        ("the Oronir", "the Dotharl"),
-        ("Allag", "Meracydia")
-        ]
+    factions = []
+    for f, _ in opera_config.items('Factions'):
+         factions.append([s.strip() for s in f.split('|')])
     factions = random.choice(factions)
     if random.choice([False, True]):
         factions = (factions[1], factions[0])
@@ -386,26 +351,29 @@ def manage_opera(fout, affect_music):
         
     ### adjust music
     opera = {}
+    maria_sample = char['Maria'].get_sample_text(0x2A)
+    draco_sample = char['Draco'].get_sample_text(0x2B)
+    ralse_sample = char['Ralse'].get_sample_text(0x2C)
     try:
         overture = read_opera_mml('overture')
-        overture += f"\n#WAVE 0x2B 0x{char['Draco'].sample:02X}\n"
+        overture += draco_sample
         overture += f"\n#def draco= |B o{char['Draco'].octave[0]} v{char['Draco'].volume} {char['Draco'].init}\n"
         seg = read_opera_mml(f"{char['Draco'].file}_overture")
         overture += seg
         
         aria = read_opera_mml('aria')
-        aria += f"\n#WAVE 0x2A 0x{char['Maria'].sample:02X}\n"
+        aria += maria_sample
         aria += f"\n#def maria= |A o{char['Maria'].octave[1]} v{char['Maria'].volume} {char['Maria'].init}\n"
         seg = read_opera_mml(f"{char['Maria'].file}_aria")
         aria += seg
         
         duel = read_opera_mml('duel')
-        duel += f"\n#WAVE 0x2A 0x{char['Maria'].sample:02X}\n"
+        duel += maria_sample
         duel += f"\n#def maria= |A o{char['Maria'].octave[3]} v{char['Maria'].volume} {char['Maria'].init}\n"
-        duel += f"\n#WAVE 0x2B 0x{char['Draco'].sample:02X}\n"
+        duel += draco_sample
         duel += f"\n#def draco= |B o{char['Draco'].octave[2]} v{char['Draco'].volume} {char['Draco'].init}\n"
         duel += f"\n#def draco2= |B o{char['Draco'].octave[5]} v{char['Draco'].volume} {char['Draco'].init}\n"
-        duel += f"\n#WAVE 0x2C 0x{char['Ralse'].sample:02X}\n"
+        duel += ralse_sample
         duel += f"\n#def ralse= |C o{char['Ralse'].octave[4]} v{char['Ralse'].volume} {char['Ralse'].init}\n"
         duel += f"\n#def ralse2= |C o{char['Ralse'].octave[6]} v{char['Ralse'].volume} {char['Ralse'].init}\n"
         duelists = ["Draco", "Maria", "Ralse", "Draco", "Ralse"]
@@ -413,15 +381,15 @@ def manage_opera(fout, affect_music):
             seg = read_opera_mml(f"{char[duelists[i]].file}_duel{i+1}")
             duel += seg
         
-        #print(overture)
-        #print("########")
-        #print(duel)
-        #print("########")
-        #print(aria)
+        print(overture)
+        print("########")
+        print(duel)
+        print("########")
+        print(aria)
         
-        opera['overture'] = mml_to_akao(overture)['_default_']
-        opera['duel'] = mml_to_akao(duel)['_default_']
-        opera['aria'] = mml_to_akao(aria)['_default_']
+        opera['opera_draco'] = overture
+        opera['wed_duel'] = duel
+        opera['aria'] = aria
         
     except IOError:
         print("opera music generation failed, reverting to default")

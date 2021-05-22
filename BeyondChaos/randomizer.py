@@ -4764,17 +4764,15 @@ def randomize(args):
     reseed()
 
     has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
-    if has_music or Options_.is_code_active('alasdraco'):
-        insert_instruments(fout, 0x310000)
-        opera = None
-
     if Options_.is_code_active('alasdraco'):
         opera = manage_opera(fout, has_music)
+    else:
+        opera = None
     reseed()
 
     if has_music:
-        music_log = randomize_music(fout, Options_=Options_, opera=opera, form_music_overrides=form_music)
-        log(music_log, section="music")
+        randomize_music(fout, Options_, opera=opera, form_music_overrides=form_music)
+        log(get_music_spoiler(), section="music")
     reseed()
 
     if Options_.mode.name == "katn":
