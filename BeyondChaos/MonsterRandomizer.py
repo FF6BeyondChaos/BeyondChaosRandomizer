@@ -70,11 +70,22 @@ statusdict = {
     "floating": (3, 0x80)}
 reverse_statusdict = {value: key for (key, value) in list(statusdict.items())}
 
-early_bosses = [308, # head
+early_bosses = [
+    256, # whelk shell
+    308, # head
+    259, # vargas
     333, # ipooh
     341, # rizopas
     262, # ghosttrain
-    300  # ultros 1
+    300, # ultros 1
+    260, # tunnel armor
+    334, # leader
+]
+
+solo_bosses = [
+    259, #vargas
+    334, #leader
+    260, #tunnel armor
 ]
 
 elemlist = ["fire", "ice", "bolt", "bio", "wind", "pearl", "earth", "water"]
@@ -1597,7 +1608,7 @@ class MonsterBlock:
     def deadspecial(self):
         return (self.special & 0x3F) in [0x07, 0x10, 0x18]
 
-    def mutate_special(self, darkworld=False, narshesafe=False):
+    def mutate_special(self, darkworld=False, narshesafe=False, katn=False):
         if self.goodspecial:
             return
 
@@ -1609,16 +1620,27 @@ class MonsterBlock:
         if branch <= branches[0]:
             # regular special
             valid = set(range(0, 0x0F))
+
             if narshesafe and not darkworld:
-                valid = [0, 2, 3, 5, 8, 9, 0xb, 0xc, 0xd, 0xe, 0xf,
-                         0x10, 0x12, 0x14, 0x18, 0x30, 0x31, 0x80]
-            else:
+                valid = [0, 3, 8, 9, 0xb, 0xe,
+                         0x11, 0x12, 0x30, 0x31, 0x80]
+            elif katn and not darkworld:
+                valid = [0, 1, 2, 3, 5, 6, 8, 9, 0xb, 0xc, 0xd, 0xe, 0xf,
+                         0x11, 0x12, 0x14, 0x30, 0x31, 0x80]
+            if self.id in solo_bosses and not darkworld:
+                valid = [0, 2, 3, 5, 8, 9, 0xb, 0xc, 0xe,
+                         0x11, 0x12, 0x30, 0x31, 0x80]
+            if darkworld: #darkworld
                 valid = [0, 1, 2, 3, 5, 6, 7, 8, 9, 0xb, 0xc, 0xd, 0xe, 0xf,
                          0x10, 0x12, 0x14, 0x18, 0x19, 0x30, 0x31, 0x80]
-            if random.randint(1, 1000) != 1000:
+            if self.id in solo_bosses and darkworld:
+                valid = [0, 2, 3, 8, 9, 0xb, 0xc, 0xe, 0xf,
+                         0x12, 0x14, 0x30, 0x31, 0x80]
+            if random.randint(1, 1000) != 1000 and 0x03 in valid:
                 valid.remove(0x03)  # Magitek
-            if random.randint(1, 5) != 5:
+            if random.randint(1, 5) != 5 and 0x10 in valid:
                 valid.remove(0x10)  # dance
+            if random.randint(1, 5) != 5 and 0x18 in valid:
                 valid.remove(0x18)  # rage
             valid = [r for r in ranked if r in valid]
             index = int(self.level_rank() * len(valid))
@@ -1657,7 +1679,7 @@ class MonsterBlock:
 
         self.special = special
 
-    def mutate(self, Options_, change_skillset=None, safe_solo_terra=True):
+    def mutate(self, Options_, change_skillset=None, safe_solo_terra=True, katn=False):
         randombosses = Options_.is_code_active("randombosses")
         darkworld = Options_.is_code_active("darkworld")
         madworld = Options_.is_code_active("madworld")
@@ -1669,16 +1691,16 @@ class MonsterBlock:
             manual_change = True
         self.mutate_stats()
         self.mutate_misc()
-        if madworld or random.randint(1, 10) > 5:
+        narshesafe = self.stats['level'] <= 7
+        if madworld or darkworld or random.randint(1, 10) > 5:
             self.mutate_statuses()
-        if madworld or random.randint(1, 10) > 5:
+        if madworld or darkworld or random.randint(1, 10) > 5:
             self.mutate_affinities(odds=5 if madworld else 10)
         if Options_.mode.name == 'katn':
-            self.mutate_special(darkworld=darkworld, narshesafe=True)
-        elif madworld or random.randint(1, 10) > 5:
+            self.mutate_special(darkworld=darkworld, narshesafe=narshesafe, katn=katn)
+        elif madworld or darkworld or narshesafe or random.randint(1, 10) > 5:
             # do this before mutate_control
-            narshesafe = self.stats['level'] <= 7
-            self.mutate_special(darkworld=darkworld, narshesafe=narshesafe)
+            self.mutate_special(darkworld=darkworld, narshesafe=narshesafe, katn=katn)
         if manual_change and change_skillset:
             value = 10
         else:
