@@ -290,6 +290,7 @@ NORMAL_CODES = [
     Code('worringtriad', "START IN WOR", "The player will start in the World of Ruin, with all of the World of Balance treasure chests, along with a guaranteed set of items, and more Lores.", "major"),
     
     Code('desperation', "When all options fail", "When the adventurer back is up against the wall. Break the wall.", "major"),
+    Code('nomiabs', "NO MIAB MODE", "Chest will never have monster encounters", "beta"),
     #Code('sixtytwoqd', "version 62 randomizer", "For quickdraw only, run version 62 of the randomizer", "beta"),
 ]
 
