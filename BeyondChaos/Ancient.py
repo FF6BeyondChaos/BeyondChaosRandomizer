@@ -1,13 +1,13 @@
-from Character import get_characters, get_character
-from EsperRandomizer import get_espers
-from FormationRandomizer import (REPLACE_FORMATIONS, NOREPLACE_FORMATIONS, get_formations, get_fsets,
+from character import get_characters, get_character
+from esperrandomizer import get_espers
+from formationrandomizer import (REPLACE_FORMATIONS, NOREPLACE_FORMATIONS, get_formations, get_fsets,
                                  get_formation, get_fset)
-from ItemRandomizer import get_item
-from LocationRandomizer import get_locations, get_location, get_npcs
-from MonsterRandomizer import REPLACE_ENEMIES, get_monsters
-from ShopRandomizer import get_shops
-from TowerRandomizer import randomize_tower
-from Utils import name_to_bytes, read_multi, Substitution, utilrandom as random, write_multi, AutoLearnRageSub
+from itemrandomizer import get_item
+from locationrandomizer import get_locations, get_location, get_npcs
+from monsterrandomizer import REPLACE_ENEMIES, get_monsters
+from shoprandomizer import get_shops
+from towerrandomizer import randomize_tower
+from utils import name_to_bytes, read_multi, Substitution, utilrandom as random, write_multi, AutoLearnRageSub
 
 
 def get_npc_palettes():

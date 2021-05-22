@@ -1,5 +1,5 @@
 
-import Config
+import config
 import sys
 from subprocess import call
 from PyQt5 import QtGui, QtCore
@@ -9,10 +9,10 @@ from PyQt5.QtWidgets import QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel
     QTabWidget, QInputDialog, QScrollArea, QMessageBox, QGraphicsDropShadowEffect, QSlider
 from PyQt5.QtGui import QCursor
 
-import Options
-import Randomizer
-import Update
-import Constants
+import options
+import randomizer
+import update
+import constants
 import time
 import traceback
 

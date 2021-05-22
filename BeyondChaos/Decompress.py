@@ -3,7 +3,7 @@
 from sys import argv
 from shutil import copyfile
 
-from Utils import read_multi, write_multi
+from utils import read_multi, write_multi
 
 def decompress(bytestring, simple=False, complicated=True, debug=False):
     result = bytearray([])

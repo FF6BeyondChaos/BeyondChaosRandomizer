@@ -1,5 +1,5 @@
-from ItemRandomizer import get_ranked_items
-from Utils import CHAR_TABLE, hex2int, utilrandom as random
+from itemrandomizer import get_ranked_items
+from utils import CHAR_TABLE, hex2int, utilrandom as random
 
 
 equip_offsets = {"weapon": 15,
@@ -66,7 +66,7 @@ class CharacterBlock:
             s += "Looks like: %s\n" % self.new_appearance
             s += "Originally: %s\n" % self.original_appearance
 
-        from Utils import make_table
+        from utils import make_table
         statblurbs = {}
         for name in CHARSTATNAMES:
             blurb = "{0:8} {1}".format(name.upper() + ":", self.stats[name])

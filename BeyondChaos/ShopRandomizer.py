@@ -1,5 +1,5 @@
-from Utils import SHOP_TABLE, utilrandom as random
-from ItemRandomizer import get_ranked_items, get_item
+from utils import SHOP_TABLE, utilrandom as random
+from itemrandomizer import get_ranked_items, get_item
 
 # Despite documentation, these are the only pricings available.
 # 0 x1 price
