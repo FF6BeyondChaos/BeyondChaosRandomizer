@@ -1,11 +1,11 @@
 import dataclasses
 
-from ChestRandomizer import get_event_items
-from Character import get_character, get_characters
-from DialogueManager import get_dialogue, set_dialogue
-from LocationRandomizer import get_location, get_locations, NPCBlock
-from MonsterRandomizer import change_enemy_name
-from Utils import (WOB_TREASURE_TABLE, WOR_ITEMS_TABLE, WOB_EVENTS_TABLE,
+from chestrandomizer import get_event_items
+from character import get_character, get_characters
+from dialoguemanager import get_dialogue, set_dialogue
+from locationrandomizer import get_location, get_locations, NPCBlock
+from monsterrandomizer import change_enemy_name
+from utils import (WOB_TREASURE_TABLE, WOR_ITEMS_TABLE, WOB_EVENTS_TABLE,
                    read_multi, Substitution, utilrandom as random, write_multi, bytes_to_dialogue)
 
 

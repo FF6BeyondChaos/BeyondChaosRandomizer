@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from Utils import (ENEMY_NAMES_TABLE, MODIFIERS_TABLE, MOVES_TABLE,
+from utils import (ENEMY_NAMES_TABLE, MODIFIERS_TABLE, MOVES_TABLE,
                    NAMEGEN_TABLE, utilrandom as random)
 
 modifiers = [line.strip() for line in open(MODIFIERS_TABLE)]

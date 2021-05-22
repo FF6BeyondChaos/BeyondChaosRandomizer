@@ -1,9 +1,9 @@
 import math
 
-from DialogueManager import set_dialogue
-from FormationRandomizer import get_formations, get_fsets
-from ItemRandomizer import get_ranked_items, get_item
-from Utils import read_multi, write_multi, mutate_index, utilrandom as random, Substitution
+from dialoguemanager import set_dialogue
+from formationrandomizer import get_formations, get_fsets
+from itemrandomizer import get_ranked_items, get_item
+from utils import read_multi, write_multi, mutate_index, utilrandom as random, Substitution
 
 
 valid_ids = list(range(1, 0x200))
@@ -37,7 +37,7 @@ def get_orphaned_formations(old_version=False):
         return orphaned_formations
 
     orphaned_formations = set([])
-    from MonsterRandomizer import get_monsters
+    from monsterrandomizer import get_monsters
     monsters = get_monsters()
     extra_miabs = get_extra_miabs(0)
     event_enemies = OLD_EVENT_ENEMIES if old_version else EVENT_ENEMIES
@@ -73,7 +73,7 @@ def get_appropriate_formations():
     if appropriate_formations is not None:
         return appropriate_formations
 
-    from FormationRandomizer import NOREPLACE_FORMATIONS
+    from formationrandomizer import NOREPLACE_FORMATIONS
     formations = get_formations()
     formations = [f for f in formations if not f.battle_event]
     formations = [f for f in formations if f.formid not in
@@ -315,7 +315,7 @@ class ChestBlock:
     @property
     def description(self):
         if self.monster:
-            from FormationRandomizer import get_fset
+            from formationrandomizer import get_fset
             s = "Enemy {0:03d}: ".format(self.effective_id)
             fset = get_fset(self.contents + 0x100)
             s += fset.formations[0].description(renamed=True, simple=True)
@@ -380,7 +380,7 @@ class ChestBlock:
             else:
                 value = self.contents
         elif self.monster:
-            from FormationRandomizer import get_fset
+            from formationrandomizer import get_fset
             formation = get_fset(self.contents | 0x100).formations[0]
             items = []
             for monster in formation.present_enemies:
@@ -408,7 +408,7 @@ class ChestBlock:
 
     def mutate_contents(self, guideline=None, monster=None,
                         guarantee_miab_treasure=False, enemy_limit=None,
-                        uniqueness=False, crazy_prices=False, uncapped_monsters=False):
+                        uniqueness=False, crazy_prices=False, uncapped_monsters=False, no_monsters=False):
         global used_formations, done_items
 
         if self.do_not_mutate and self.contents is not None:
@@ -441,13 +441,13 @@ class ChestBlock:
                                if f not in used_formations]
         extra_miabs = get_extra_miabs(0)
 
-        if monster is True:
+        if monster is True and not no_monsters:
             chance = 1
         elif monster is False:
             chance += 3
             chance = min(chance, 50)
         else:
-            if orphaned_formations or extra_miabs:
+            if orphaned_formations or extra_miabs and not no_monsters:
                 chance -= 2 if uncapped_monsters else 1
                 chance = max(chance, 1)
 
@@ -458,7 +458,7 @@ class ChestBlock:
             # monster
             self.set_content_type(0x20)
 
-            from LocationRandomizer import get_location
+            from locationrandomizer import get_location
             rank = self.rank
 
             if self.is_clock or not rank:
@@ -542,7 +542,7 @@ class EventItem:
         if no_monsters or cannot_show_text:
             monster = False
 
-        c.mutate_contents(monster=monster, crazy_prices=crazy_prices, uncapped_monsters=uncapped_monsters)
+        c.mutate_contents(monster=monster, crazy_prices=crazy_prices, uncapped_monsters=uncapped_monsters, no_monsters=no_monsters)
         # If we can't show text, we don't want it to be GP,
         # because that event takes 3 bytes instead of 2,
         # and I'd have to rearrange or remove stuff to fit it.

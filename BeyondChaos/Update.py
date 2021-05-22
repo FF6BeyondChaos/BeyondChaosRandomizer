@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import requests
 import shutil
-import Constants
+import constants
 import time
 import subprocess
-import Config
+import config
 import os
 from pathlib import Path
 from zipfile import ZipFile

@@ -4,10 +4,10 @@
 import configparser, os.path, re
 from copy import copy
 
-from LocationRandomizer import get_locations, get_location
-from DialogueManager import set_dialogue_var, set_pronoun, patch_dialogue, load_patch_file
-from Utils import (utilrandom as random, open_mei_fallback as open)
-from Mml2mfvi import mml_to_akao, get_variant_list
+from locationrandomizer import get_locations, get_location
+from dialoguemanager import set_dialogue_var, set_pronoun, patch_dialogue, load_patch_file
+from utils import (utilrandom as random, open_mei_fallback as open)
+from mml2mfvi import mml_to_akao, get_variant_list
 
 
 try:

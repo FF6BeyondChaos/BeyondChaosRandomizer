@@ -1,11 +1,11 @@
 import itertools
 import os
 
-from Character import get_characters
-from Options import Options_
-from LocationRandomizer import get_npcs
-from MonsterRandomizer import change_enemy_name
-from Utils import (CHARACTER_PALETTE_TABLE, EVENT_PALETTE_TABLE, FEMALE_NAMES_TABLE, MALE_NAMES_TABLE,
+from character import get_characters
+from options import Options_
+from locationrandomizer import get_npcs
+from monsterrandomizer import change_enemy_name
+from utils import (CHARACTER_PALETTE_TABLE, EVENT_PALETTE_TABLE, FEMALE_NAMES_TABLE, MALE_NAMES_TABLE,
                    MOOGLE_NAMES_TABLE, RIDING_SPRITE_TABLE, SPRITE_REPLACEMENT_TABLE,
                    generate_character_palette, get_palette_transformer, hex2int, name_to_bytes,
                    open_mei_fallback, read_multi, shuffle_char_hues,
