@@ -725,7 +725,7 @@ class Location():
         random.shuffle(self.chests)
         for c in self.chests:
             if self.locid in range(0x139, 0x13d) and c.empty:
-                c.mutate_contents(monster=True, guideline=guideline, crazy_prices=crazy_prices, uncapped_monsters=uncapped_monsters)
+                c.mutate_contents(monster=True, guideline=guideline, crazy_prices=crazy_prices, uncapped_monsters=uncapped_monsters, no_monsters=no_monsters)
                 continue
             elif self.locid == 0x147:
                 pass
