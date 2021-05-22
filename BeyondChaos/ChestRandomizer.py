@@ -441,16 +441,17 @@ class ChestBlock:
                                if f not in used_formations]
         extra_miabs = get_extra_miabs(0)
 
-        if monster is True and not no_monsters:
+        if monster is True:
             chance = 1
         elif monster is False:
             chance += 3
             chance = min(chance, 50)
         else:
-            if orphaned_formations or extra_miabs and not no_monsters:
+            if orphaned_formations or extra_miabs:
                 chance -= 2 if uncapped_monsters else 1
                 chance = max(chance, 1)
-
+        if no_monsters is True:
+            chance = random.randint(4, 50)
         formations = get_appropriate_formations()
         formations = [f for f in formations if
                       f.get_guaranteed_drop_value() >= value * 100]
