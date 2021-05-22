@@ -7,7 +7,7 @@ import sys
 
 from locationrandomizer import get_locations, get_location
 from dialoguemanager import set_dialogue_var, set_pronoun, patch_dialogue, load_patch_file
-from utils import utilrandom as random
+from utils import utilrandom as random, open_mei_fallback as open
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "music"))
 sys.path.append(os.path.join(os.path.dirname(__file__), "music", "mfvitools"))
@@ -95,9 +95,14 @@ def manage_opera(fout, affect_music):
     
     singer_options = []
     opera_config = configparser.ConfigParser(interpolation=None)
-    opera_config.read(os.path.join('custom','opera.txt')) #TODO - this is probably not pyinstaller-safe
+    try:
+        with open(os.path.join('custom','opera.txt'), "r") as f:
+            opera_config.read_file(f)
+    except OSError:
+        print("WARNING: failed to load opera config")
+        return
     if 'Singers' not in opera_config or 'Factions' not in opera_config:
-        print("WARNING: failed to load opera config, or config file is invalid")
+        print("WARNING: opera config is invalid, or failed to load")
         return        
         
     for k, v in opera_config.items('Singers'):
@@ -381,11 +386,11 @@ def manage_opera(fout, affect_music):
             seg = read_opera_mml(f"{char[duelists[i]].file}_duel{i+1}")
             duel += seg
         
-        print(overture)
-        print("########")
-        print(duel)
-        print("########")
-        print(aria)
+        #print(overture)
+        #print("########")
+        #print(duel)
+        #print("########")
+        #print(aria)
         
         opera['opera_draco'] = overture
         opera['wed_duel'] = duel
