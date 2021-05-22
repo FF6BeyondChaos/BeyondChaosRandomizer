@@ -256,11 +256,8 @@ NORMAL_CODES = [
     Code('bsiab', "UNBALANCED MONSTER CHESTS MODE", "Reverts the monster-in-a-box selection algorithm to be (mostly) the same as versions prior to EX v3.", "major"),
     Code('llg', "LOW LEVEL GAME MODE", "Stands for Low Level Game. No encounters will yield any Experience Points.", "major"),
     Code('mimetime', 'ALTERNATE GOGO MODE', "Gogo will be hidden somewhere in the world of ruin disguised as another character. Bring that character to him to recruit him.", "major"),
-    
-    
-    
-    
-    
+    Code('nomiabs', 'NO MIAB MODE', "Chests will never have monster encounters in them", "beta"),
+
     Code('dancingmaduin', "RESTRICTED ESPERS MODE", "Restricts Esper usage such that most Espers can only be equipped by one character. Also usually changes what spell the Paladin Shld teaches.", "major"),
     Code('darkworld', "SLASHER'S DELIGHT MODE", "Drastically increases the difficulty of the seed, akin to a hard mode. Mostly meant to be used in conjunction with the madworld code.", "major"),
     Code('dearestmolulu', "ENCOUNTERLESS MODE", "No random encounters occur. All encounters yield 3x EXP. Wearing a Moogle Charm or a piece of equipment with the Moogle Charm effect will cause a battle to occur on every step when encounters can be occur.", "major"),
