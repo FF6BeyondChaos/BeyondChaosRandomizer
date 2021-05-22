@@ -2449,7 +2449,7 @@ def manage_treasure(monsters, shops=True, no_charm_drops=False, katnFlag=False):
 
 def manage_chests():
     crazy_prices = Options_.is_code_active('madworld')
-    no_monsters = Options_.mode.name == 'katn'
+    no_monsters = Options_.is_code_active('nomiabs')
     uncapped_monsters = Options_.is_code_active('bsiab')
     locations = get_locations(sourcefile)
     locations = sorted(locations, key=lambda l: l.rank())
@@ -4672,7 +4672,7 @@ def randomize(args):
         manage_treasure(monsters, shops=True, no_charm_drops=katn, katnFlag = katn)
         if not Options_.is_code_active('ancientcave'):
             manage_chests()
-            mutate_event_items(fout, cutscene_skip=Options_.is_code_active('notawaiter'), crazy_prices=Options_.is_code_active('madworld'), no_monsters=katn, uncapped_monsters=Options_.is_code_active('bsiab'))
+            mutate_event_items(fout, cutscene_skip=Options_.is_code_active('notawaiter'), crazy_prices=Options_.is_code_active('madworld'), no_monsters=Options_.is_code_active('nomiabs'), uncapped_monsters=Options_.is_code_active('bsiab'))
             for fs in fsets:
                 # write new formation sets for MiaBs
                 fs.write_data(fout)
