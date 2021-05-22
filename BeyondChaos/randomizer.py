@@ -4951,7 +4951,7 @@ def randomize(args: List[str]) -> str:
     reseed()
 
     if has_music:
-        music_log = randomize_music(fout, Options_, opera=opera, form_music_overrides=form_music)
+        randomize_music(fout, Options_, opera=opera, form_music_overrides=form_music)
         log(get_music_spoiler(), section="music")
     reseed()
 
