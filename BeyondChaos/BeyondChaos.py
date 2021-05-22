@@ -1,5 +1,5 @@
 
-import config
+import Config
 import sys
 from subprocess import call
 from PyQt5 import QtGui, QtCore
@@ -9,10 +9,10 @@ from PyQt5.QtWidgets import QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel
     QTabWidget, QInputDialog, QScrollArea, QMessageBox, QGraphicsDropShadowEffect, QSlider
 from PyQt5.QtGui import QCursor
 
-import options
-import randomizer
-import update
-import constants
+import Options
+import Randomizer
+import Update
+import Constants
 import time
 import traceback
 
@@ -505,7 +505,7 @@ class Window(QWidget):
     # (At startup) Opens reads code flags/descriptions and
     #   puts data into separate dictionaries
     def initCodes(self):
-        for code in options.NORMAL_CODES + options.MAKEOVER_MODIFIER_CODES:
+        for code in Options.NORMAL_CODES + Options.MAKEOVER_MODIFIER_CODES:
             if code.category == "aesthetic":
                 d = self.aesthetic
             elif code.category == "sprite":
@@ -528,7 +528,7 @@ class Window(QWidget):
 
             d[code.name] = {'explanation': code.long_description, 'checked': False}
 
-        for flag in sorted(options.ALL_FLAGS):
+        for flag in sorted(Options.ALL_FLAGS):
             self.flag[flag.name] = {'explanation': flag.description, 'checked': True}
 
 
@@ -553,7 +553,7 @@ class Window(QWidget):
             self.presetBox.setCurrentIndex(index)
 
     def loadSavedFlags(self):
-        flagset = config.readFlags()
+        flagset = Config.readFlags()
         if flagset != None:
             for text, flags in flagset.items():
                 self.GamePresets[text] = flags
@@ -762,7 +762,7 @@ class Window(QWidget):
                 QtCore.pyqtRemoveInputHook()
                 # TODO: put this in a new thread
                 try:
-                    result_file = randomizer.randomize(args=['BeyondChaos.py', self.romText, bundle, "test"])
+                    result_file = Randomizer.randomize(args=['BeyondChaos.py', self.romText, bundle, "test"])
                 #call(["py", "Randomizer.py", self.romText, bundle, "test"])
                 # Running the Randomizer twice in one session doesn't work
                 # because of global state.
@@ -812,7 +812,7 @@ class Window(QWidget):
 if __name__ == "__main__":
     print("Loading GUI, checking for config file, updater file and updates please wait.")
     try:
-        update.configExists()
+        Update.configExists()
         App = QApplication(sys.argv)
         window = Window()
         time.sleep(3)

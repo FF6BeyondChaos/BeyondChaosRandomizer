@@ -1,0 +1,4 @@
+config
+PyQt5
+options
+requests

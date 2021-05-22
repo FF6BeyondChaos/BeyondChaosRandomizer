@@ -2,12 +2,12 @@
 
 from itertools import zip_longest
 
-from chestrandomizer import ChestBlock
-from formationrandomizer import get_fsets, get_formations
-from locationrandomizer import (get_locations, get_location, Location,
+from ChestRandomizer import ChestBlock
+from FormationRandomizer import get_fsets, get_formations
+from LocationRandomizer import (get_locations, get_location, Location,
                                 get_unused_locations, Entrance,
                                 add_location_map, update_locations)
-from utils import (ANCIENT_CHECKPOINTS_TABLE, TOWER_CHECKPOINTS_TABLE,
+from Utils import (ANCIENT_CHECKPOINTS_TABLE, TOWER_CHECKPOINTS_TABLE,
                    TOWER_LOCATIONS_TABLE, TREASURE_ROOMS_TABLE,
                    ENTRANCE_REACHABILITY_TABLE,
                    utilrandom as random)
@@ -47,7 +47,7 @@ clusters = None
 
 
 def get_new_formations(areaname, supplement=True):
-    from randomizer import get_namelocdict
+    from Randomizer import get_namelocdict
     namelocdict = get_namelocdict()
     setids = set([])
     for key in namelocdict:
@@ -304,7 +304,7 @@ def remap_maps(routes):
         if not ANCIENT:
             if loc.locid not in towerlocids:
                 loc.make_tower_flair()
-                from options import Options_
+                from Options import Options_
                 loc.unlock_chests(200, 1000, uncapped_monsters=Options_.is_code_active('bsiab'))
                 fsets = get_new_fsets("kefka's tower", 20)
                 fset = random.choice(fsets)
@@ -1325,7 +1325,7 @@ def randomize_tower(filename, ancient=False, nummaps=None):
 
 
 def make_secret_treasure_room(mapid, beltroom):
-    from itemrandomizer import get_secret_item
+    from ItemRandomizer import get_secret_item
     candidates = []
     for line in open(TREASURE_ROOMS_TABLE):
         locid, entid, chestid = tuple(map(int, line.strip().split(',')))
@@ -1382,7 +1382,7 @@ def make_secret_treasure_room(mapid, beltroom):
 
 
 if __name__ == "__main__":
-    from randomizer import get_monsters
+    from Randomizer import get_monsters
     get_monsters(filename="program.rom")
     get_formations(filename="program.rom")
     get_fsets(filename="program.rom")

@@ -1,4 +1,4 @@
-from utils import Substitution
+from Utils import Substitution
 
 
 def allergic_dog(fout):

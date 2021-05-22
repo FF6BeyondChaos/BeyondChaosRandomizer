@@ -13,24 +13,24 @@ from utils import (ESPER_TABLE,
                    generate_swapfunc, shift_middle, get_palette_transformer,
                    battlebg_palettes,
                    mutate_index, utilrandom as random)
-from skillrandomizer import (SpellBlock, CommandBlock, SpellSub,
+from SkillRandomizer import (SpellBlock, CommandBlock, SpellSub,
                              RandomSpellSub, MultipleSpellSub,
                              get_ranked_spells, get_spell)
-from monsterrandomizer import (MonsterGraphicBlock, get_monsters,
+from MonsterRandomizer import (MonsterGraphicBlock, get_monsters,
                                get_metamorphs, get_ranked_monsters,
                                shuffle_monsters, get_monster, read_ai_table)
-from itemrandomizer import (reset_equippable, get_ranked_items, get_item,
+from ItemRandomizer import (reset_equippable, get_ranked_items, get_item,
                             reset_special_relics, reset_rage_blizzard,
                             reset_cursed_shield)
-from esperrandomizer import EsperBlock
-from shoprandomizer import ShopBlock
-from namerandomizer import generate_name
-from formationrandomizer import (get_formations, get_fsets,
+from EsperRandomizer import EsperBlock
+from ShopRandomizer import ShopBlock
+from NameRandomizer import generate_name
+from FormationRandomizer import (get_formations, get_fsets,
                                  get_formation, get_fset)
-from locationrandomizer import (EntranceSet,
+from LocationRandomizer import (EntranceSet,
                                 get_locations, get_location, get_zones)
-from towerrandomizer import randomize_tower
-from decompress import Decompressor
+from TowerRandomizer import randomize_tower
+from Decompress import Decompressor
 
 
 VERSION = "62"
@@ -335,7 +335,7 @@ class CharacterBlock:
             s += "Looks like: %s\n" % self.new_appearance
             s += "Originally: %s\n" % self.original_appearance
 
-        from utils import make_table
+        from Utils import make_table
         statblurbs = {}
         for name in CHARSTATNAMES:
             blurb = "{0:8} {1}".format(name.upper() + ":", self.stats[name])
@@ -2128,7 +2128,7 @@ def manage_colorize_animations():
 
 
 def manage_items(items, changed_commands=None):
-    from itemrandomizer import set_item_changed_commands
+    from ItemRandomizer import set_item_changed_commands
     always_break = True if "collateraldamage" in activated_codes else False
     set_item_changed_commands(changed_commands)
 
@@ -3000,7 +3000,7 @@ def manage_formations_hidden(formations, freespaces, esper_graphics=None):
 
 
 def assign_unused_enemy_formations():
-    from chestrandomizer import add_orphaned_formation, get_orphaned_formations
+    from ChestRandomizer import add_orphaned_formation, get_orphaned_formations
     get_orphaned_formations()
     siegfried = get_monster(0x37)
     chupon = get_monster(0x40)
@@ -4068,7 +4068,7 @@ def manage_ancient():
     tower_msg_sub.set_location(0xA03A7)
     tower_msg_sub.write(outfile)
 
-    from locationrandomizer import NPCBlock, EventBlock
+    from LocationRandomizer import NPCBlock, EventBlock
     falcon = get_location(0xb)
     save_point = NPCBlock(pointer=None, locid=falcon.locid)
     attributes = {
@@ -4858,7 +4858,7 @@ def manage_ancient():
                 if key > 0:
                     final_cut.bytestring += [0x3F, c, key]
         final_cut.bytestring += [0x99, 0x03, locked & 0xFF, locked >> 8]
-        from chestrandomizer import get_2pack
+        from ChestRandomizer import get_2pack
         event_bosses = {
             1: [0xC18A4, 0xC184B],
             2: [0xC16DD, 0xC171D, 0xC1756],
@@ -5231,7 +5231,7 @@ h   Organize rages by highest level first'''
 
     if 'q' in flags:
         # do this after swapping beserk
-        from itemrandomizer import set_item_changed_commands
+        from ItemRandomizer import set_item_changed_commands
         set_item_changed_commands(changed_commands)
         loglist = reset_special_relics(items, characters, outfile)
         for name, before, after in loglist:

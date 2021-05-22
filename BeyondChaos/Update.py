@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import requests
 import shutil
-import constants
+import Constants
 import time
 import subprocess
-import config
+import Config
 import os
 from pathlib import Path
 from zipfile import ZipFile
@@ -48,7 +48,7 @@ def updateSprites():
 def coreUpdateAvailable():
     x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest').json()   
     latestVersion = x['tag_name']
-    coreVersion = config.getCoreVersion()
+    coreVersion = Config.getCoreVersion()
 
     # We can not have a newer version over an older version if we are
     # checking updater.
@@ -60,7 +60,7 @@ def coreUpdateAvailable():
 def spriteUpdateAvailable():
     x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaosSprites/releases/latest').json()   
     latestVersion = x['tag_name']
-    spriteVersion = config.SpriteVersion
+    spriteVersion = Config.SpriteVersion
 
     # We can not have a newer version over an older version if we are
     # checking updater.
@@ -100,7 +100,7 @@ def updaterExists():
             zipObj.extractall()
 
 def configExists():
-    exists = config.checkINI()
+    exists = Config.checkINI()
     if exists:
         #make sure our updater exists
         updaterExists()

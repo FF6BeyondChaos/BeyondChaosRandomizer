@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "BeyondChaos", "beyondchaos.pyproj", "{77DD98DA-649B-418A-A9A1-6640A418833C}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "BeyondChaos", "BeyondChaos.pyproj", "{77DD98DA-649B-418A-A9A1-6640A418833C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
