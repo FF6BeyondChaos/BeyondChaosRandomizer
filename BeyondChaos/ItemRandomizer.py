@@ -27,7 +27,7 @@ STATPROTECT = {"fieldeffect": 0xdc,
                "statusacquire2": 0x00}
 
 all_spells = None
-effects_used = None
+effects_used = []
 effects_used = []
 itemdict = {}
 customs = {}
@@ -37,12 +37,13 @@ break_unused_dict = {0x09: list(range(0xA3, 0xAB)),
                      0x08: list(range(0xAB, 0xB0)) + list(range(0x41, 0x44))}
 
 def cleanup():
-    changed_commands =[]
+    global changed_commands, all_spells, itemdict, customs, effects_used
+    changed_commands = []
     all_spells = None
-    itemdict ={}
-    customs = {}
-    effects_used = None
     unbanItems()
+    itemdict = {}
+    customs = {}
+    effects_used = []
 
 def set_item_changed_commands(commands):
     global changed_commands
@@ -984,6 +985,7 @@ def get_item(itemid, allow_banned=False):
     return item
 
 def unbanItems():
+    global itemdict
     try:
         for x in range(0, len(itemdict)):
             item = itemdict[x]
