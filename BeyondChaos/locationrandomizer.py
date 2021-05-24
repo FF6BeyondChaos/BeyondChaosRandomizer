@@ -20,6 +20,21 @@ maplocations = {}
 maplocations_reverse = {}
 maplocations_override = {}
 
+def cleanup():
+    global locations, zones, unused_locs, reachdict, mapnames, locdict, chest_id_counts, mapbattlebgs, maplocations, maplocations_reverse, maplocations_override
+    locations = None
+    zones = None
+    unused_locs = None
+    reachdict = None
+    mapnames = {}
+    locdict = {}
+    chest_id_counts = None
+    mapbattlebgs = {}
+    maplocations = {}
+    maplocations_reverse = {}
+    maplocations_override = {}
+    init()
+
 
 def init():
     for line in open(MAP_NAMES_TABLE):
@@ -1171,8 +1186,8 @@ if __name__ == "__main__":
         filename = argv[1]
     else:
         filename = "program.rom"
-    from FormationRandomizer import get_formations, get_fsets
-    from MonsterRandomizer import get_monsters
+    from formationrandomizer import get_formations, get_fsets
+    from monsterrandomizer import get_monsters
     get_monsters(filename)
     get_formations(filename)
     get_fsets(filename)

@@ -9,7 +9,11 @@ from shutil import copyfile
 import os
 from hashlib import md5
 
+import character
+import esperrandomizer
 import formationrandomizer
+import locationrandomizer
+import musicrandomizer
 from ancient import manage_ancient
 from appearance import manage_character_appearance
 from character import get_characters, get_character, equip_offsets
@@ -183,6 +187,10 @@ def Reset():
     cleanup()
     monsterCleanup()
     formationrandomizer.cleanup()
+    character.cleanup()
+    esperrandomizer.cleanup()
+    locationrandomizer.cleanup()
+    musicrandomizer.cleanup()
 
 def reseed():
     global seedcounter
@@ -2928,10 +2936,11 @@ def assign_unused_enemy_formations():
     chupon = get_monster(0x40)
 
     behemoth_formation = get_formation(0xb1)
-
+    replaceformations = REPLACE_FORMATIONS[:]
     for enemy, music in zip([siegfried, chupon], [3, 4]):
-        formid = REPLACE_FORMATIONS.pop()
-        NOREPLACE_FORMATIONS.append(formid)
+        formid = replaceformations.pop()
+        if formid not in NOREPLACE_FORMATIONS:
+            NOREPLACE_FORMATIONS.append(formid)
         uf = get_formation(formid)
         uf.copy_data(behemoth_formation)
         uf.enemy_ids = [enemy.id] + ([0xFF] * 5)

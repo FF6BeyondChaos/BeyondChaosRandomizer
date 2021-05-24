@@ -1,4 +1,4 @@
-
+import character
 import config
 import sys
 from subprocess import call
@@ -9,8 +9,12 @@ from PyQt5.QtWidgets import QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel
     QTabWidget, QInputDialog, QScrollArea, QMessageBox, QGraphicsDropShadowEffect, QSlider
 from PyQt5.QtGui import QCursor
 
+import esperrandomizer
+import formationrandomizer
 import itemrandomizer
+import locationrandomizer
 import monsterrandomizer
+import musicrandomizer
 import options
 import randomizer
 import update
@@ -779,6 +783,11 @@ class Window(QWidget):
                 finally:
                     itemrandomizer.cleanup()
                     monsterrandomizer.monsterCleanup()
+                    formationrandomizer.cleanup()
+                    character.cleanup()
+                    esperrandomizer.cleanup()
+                    locationrandomizer.cleanup()
+                    musicrandomizer.cleanup()
                 #sys.exit() Lets no longer sysexit anymore so we don't have to
                 #reopen each time.  The user can close the gui.
 
