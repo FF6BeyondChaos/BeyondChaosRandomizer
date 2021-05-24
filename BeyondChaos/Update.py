@@ -48,7 +48,7 @@ def updateSprites():
 def coreUpdateAvailable():
     x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest').json()   
     latestVersion = x['tag_name']
-    coreVersion = Config.getCoreVersion()
+    coreVersion = config.getCoreVersion()
 
     # We can not have a newer version over an older version if we are
     # checking updater.
@@ -60,7 +60,7 @@ def coreUpdateAvailable():
 def spriteUpdateAvailable():
     x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaosSprites/releases/latest').json()   
     latestVersion = x['tag_name']
-    spriteVersion = Config.SpriteVersion
+    spriteVersion = config.SpriteVersion
 
     # We can not have a newer version over an older version if we are
     # checking updater.
@@ -100,7 +100,7 @@ def updaterExists():
             zipObj.extractall()
 
 def configExists():
-    exists = Config.checkINI()
+    exists = config.checkINI()
     if exists:
         #make sure our updater exists
         updaterExists()

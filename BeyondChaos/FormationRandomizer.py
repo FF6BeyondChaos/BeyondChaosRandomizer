@@ -1,4 +1,5 @@
 #! /usr/bin/env python3
+import monsterrandomizer
 from options import Options_
 from math import log
 
@@ -14,11 +15,17 @@ fsetdict = None
 formdict = None
 
 
+def cleanup():
+    global fsetdict, formdict
+    fsetdict = None
+    formdict = None
+
+
 class Formation():
     def __init__(self, formid):
         self.formid = formid
-        self.pointer = 0xf6200 + (formid*15)
-        self.auxpointer = 0xf5900 + (formid*4)
+        self.pointer = 0xf6200 + (formid * 15)
+        self.auxpointer = 0xf5900 + (formid * 4)
         self.mouldbyte = None
         self.enemies_present = None
         self.enemy_ids = []
@@ -55,7 +62,7 @@ class Formation():
         if simple:
             return s
         s = "%s (%x)" % (s, self.formid)
-        #s += " " + " ".join(["%x" % e.id for e in self.present_enemies])
+        # s += " " + " ".join(["%x" % e.id for e in self.present_enemies])
         return s
 
     @property
@@ -262,6 +269,7 @@ class Formation():
             enemy_pos = self.enemy_pos[i]
             x, y = enemy_pos >> 4, enemy_pos & 0xF
             self.enemies[i].update_pos(x, y)
+            monsterrandomizer.updatePos(self.enemies[i].id, x, y)
         for e in self.enemies:
             if not e:
                 continue
@@ -280,11 +288,11 @@ class Formation():
     def read_mould(self, filename):
         mouldspecsptrs = 0x2D01A
         f = open(filename, 'r+b')
-        pointer = mouldspecsptrs + (2*self.mould)
+        pointer = mouldspecsptrs + (2 * self.mould)
         f.seek(pointer)
         pointer = read_multi(f, length=2) | 0x20000
         for i in range(6):
-            f.seek(pointer + (i*4))
+            f.seek(pointer + (i * 4))
             _, _ = tuple(f.read(2))
             width = ord(f.read(1))
             height = ord(f.read(1))
@@ -306,7 +314,7 @@ class Formation():
         ranks = [e.stats['level'] for e in self.present_enemies if e]
         if not ranks:
             return 0
-        balance = sum(ranks) / (log(len(ranks))+1)
+        balance = sum(ranks) / (log(len(ranks)) + 1)
         average = sum(ranks) / len(ranks)
         score = (max(ranks) + balance + average) / 3.0
         return score
@@ -315,7 +323,7 @@ class Formation():
         ranks = [e.rank() for e in self.present_enemies if e]
         if not ranks:
             return 0
-        balance = sum(ranks) / (log(len(ranks))+1)
+        balance = sum(ranks) / (log(len(ranks)) + 1)
         average = sum(ranks) / len(ranks)
         score = (max(ranks) + balance + average) / 3.0
         return score
@@ -332,7 +340,7 @@ class Formation():
                 self.ap += random.randint(-1, 1)
                 self.ap = min(100, max(self.ap, 0))
             if Options_.is_code_active("mps"):
-                self.ap = self.ap *3
+                self.ap = self.ap * 3
         if self.ambusher:
             if not (self.pincer_prohibited and self.back_prohibited):
                 self.misc1 |= 0x90
@@ -402,7 +410,6 @@ class FormationSet():
             self.sixteen_pack = False
         f.close()
 
-
     def write_data(self, fout):
         fout.seek(self.pointer)
         for value in self.formids:
@@ -421,7 +428,7 @@ class FormationSet():
             result = True
             if replacement:
                 for i in range(4):
-                    if self.formids[i] in self.formids[i+1:]:
+                    if self.formids[i] in self.formids[i + 1:]:
                         formid = self.formids[i]
                         self.formids.remove(formid)
                         random.shuffle(self.formids)
@@ -474,8 +481,8 @@ class FormationSet():
             candidates.remove(highother)
         random.shuffle(candidates)
         formids = [f.formid for f in candidates]
-        self.formids = formids[:len(formids)//2]
-        other.formids = formids[len(formids)//2:]
+        self.formids = formids[:len(formids) // 2]
+        other.formids = formids[len(formids) // 2:]
         if len(formids) == 6:
             self.formids.append(highself.formid)
             other.formids.append(highother.formid)
@@ -530,6 +537,7 @@ def get_fset(setid):
 
 if __name__ == "__main__":
     from sys import argv
+
     filename = argv[1]
     monsters = get_monsters(filename)
     for m in monsters:
@@ -539,6 +547,6 @@ if __name__ == "__main__":
     for f in formations:
         print(f, f.ap)
 
-    #for f in fsets:
+    # for f in fsets:
     #    print f
     #    print f.formids

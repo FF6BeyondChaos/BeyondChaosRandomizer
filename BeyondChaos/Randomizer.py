@@ -9,6 +9,7 @@ from shutil import copyfile
 import os
 from hashlib import md5
 
+import formationrandomizer
 from ancient import manage_ancient
 from appearance import manage_character_appearance
 from character import get_characters, get_character, equip_offsets
@@ -177,16 +178,16 @@ def rngstate():
     return state
 
 def Reset():
+    global seedcounter
     seedcounter = 0
     cleanup()
-    monsterCleanup(sourcefile)
-
+    monsterCleanup()
+    formationrandomizer.cleanup()
 
 def reseed():
     global seedcounter
     random.seed(seed + seedcounter)
     seedcounter += (seedcounter * 2) + 1
-
 
 def rewrite_title(text):
     while len(text) < 20:
@@ -4487,17 +4488,17 @@ def randomize(args):
     zones = get_zones(sourcefile)
     get_metamorphs(sourcefile)
 
-    aispaces = []
-    aispaces.append(FreeBlock(0xFCF50, 0xFCF50 + 384))
-    aispaces.append(FreeBlock(0xFFF47, 0xFFF47 + 87))
-    aispaces.append(FreeBlock(0xFFFBE, 0xFFFBE + 66))
+    aispaces = [
+        FreeBlock(0xFCF50, 0xFCF50 + 384),
+        FreeBlock(0xFFF47, 0xFFF47 + 87),
+        FreeBlock(0xFFFBE, 0xFFFBE + 66)
+    ]
 
     if Options_.random_final_dungeon or Options_.is_code_active('ancientcave'):
         # do this before treasure
         if Options_.random_enemy_stats and Options_.random_treasure and Options_.random_character_stats:
             dirk = get_item(0)
-            if dirk == None:
-                cleanup()
+            if dirk is None:
                 items = get_ranked_items(sourcefile)
                 dirk = get_item(0)
             dirk.become_another()
@@ -4507,8 +4508,9 @@ def randomize(args):
     if Options_.random_enemy_stats and Options_.random_treasure and Options_.random_character_stats:
         if random.randint(1, 10) != 10:
             rename_card = get_item(231)
-            rename_card.become_another(tier="low")
-            rename_card.write_stats(fout)
+            if rename_card is not None:
+                rename_card.become_another(tier="low")
+                rename_card.write_stats(fout)
 
             weapon_anim_fix = Substitution()
             weapon_anim_fix.set_location(0x19DB8)
@@ -4923,8 +4925,7 @@ def randomize(args):
         manage_bingo()
 
     try:
-       # Reset()
-       a = 123 +1
+        Reset()
     except Exception as e:
         traceback.print_exc()
     return outfile

@@ -110,18 +110,21 @@ specialdict["mp drain"] = 0x31
 reverse_specialdict = {v: k for (k, v) in specialdict.items()}
 ranked = [specialdict[key] for key in ranked]
 
-def monsterCleanup(filename):
+def monsterCleanup():
     try:
+        global globalweights, avgs, metamorphs, all_spells, xps, gps, monsterdict
         globalweights, avgs = None, {}
         metamorphs = None
         all_spells = None
         xps = []
         gps = []
-        monsterdict.clear()
-        get_monsters(filename)
+        monsterdict = {}
     except Exception as e:
         traceback.print_exc()
-        
+
+def updatePos(monsterId, x, y):
+    global monsterdict
+    monsterdict[monsterId].update_pos(x, y)
 
 def change_enemy_name(fout, enemy_id, name):
     pointer = 0xFC050 + (enemy_id * 10)
@@ -1848,7 +1851,6 @@ def get_monsters(filename=None):
 
 
 def get_monster(monster_id):
-    global monsterdict
     return monsterdict[monster_id]
 
 
