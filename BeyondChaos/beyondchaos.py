@@ -17,6 +17,7 @@ import monsterrandomizer
 import musicrandomizer
 import options
 import randomizer
+import towerrandomizer
 import update
 import constants
 import time
@@ -788,6 +789,7 @@ class Window(QWidget):
                     esperrandomizer.cleanup()
                     locationrandomizer.cleanup()
                     musicrandomizer.cleanup()
+                    towerrandomizer.cleanup()
                 #sys.exit() Lets no longer sysexit anymore so we don't have to
                 #reopen each time.  The user can close the gui.
 
