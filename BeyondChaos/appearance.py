@@ -747,7 +747,6 @@ def manage_palettes(fout, change_to, char_ids):
             continue
         fout.seek(0x2CE2B + c)
         before = ord(fout.read(1))
-        new_graphics = change_to[c]
         new_palette = palette_change_to[(c, before)]
         main_palette_changes[c] = (before, new_palette)
         fout.seek(0x2CE2B + c)
