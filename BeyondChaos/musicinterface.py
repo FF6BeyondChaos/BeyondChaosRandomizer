@@ -10,12 +10,15 @@ from dialoguemanager import set_dialogue_var, set_pronoun, patch_dialogue, load_
 from utils import utilrandom as random, open_mei_fallback as open
 
 from music.johnnydmad import add_music_player
-from music.musicrandomizer import process_music, process_formation_music_by_table, process_map_music, get_legacy_import, get_spc_memory_usage, get_music_spoiler as get_spoiler
+from music.musicrandomizer import process_music, process_formation_music_by_table, process_map_music, get_legacy_import, get_spc_memory_usage, get_music_spoiler as get_spoiler, initialize as johnnydmad_initialize
 
 from music.mfvitools.insertmfvi import byte_insert
 
 BC_MUSIC_FREESPACE = ["53C5F-9FDFF", "310000-37FFFF", "410000-5FFFFF"]
 
+def music_init():
+    johnnydmad_initialize(rng=random)
+    
 def randomize_music(fout, options_, opera=None, form_music_overrides={}):
     events = ""
     if options_.is_code_active('christmas'):
@@ -29,7 +32,7 @@ def randomize_music(fout, options_, opera=None, form_music_overrides={}):
     metadata = {}
     ## For anyone who wants to add UI for playlist selection:
     ## If a playlist is selected, pass it as process_music(playlist_filename=...)
-    data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath="music", freespace=BC_MUSIC_FREESPACE)
+    data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath="music", freespace=BC_MUSIC_FREESPACE, ext_rng=random)
     if not options_.is_any_code_active(['ancientcave', 'speedcave', 'racecave']):
         data = process_map_music(data)
     data = process_formation_music_by_table(data, form_music_overrides=form_music_overrides)
