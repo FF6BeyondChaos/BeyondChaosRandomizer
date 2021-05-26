@@ -30,7 +30,7 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
                                change_enemy_name, randomize_enemy_name,
                                get_collapsing_house_help_skill, monsterCleanup)
 #from musicrandomizer import randomize_music, manage_opera, insert_instruments
-from musicinterface import randomize_music, manage_opera, get_music_spoiler
+from musicinterface import randomize_music, manage_opera, get_music_spoiler, music_init
 from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import allergic_dog, banon_life3, vanish_doom, evade_mblock, death_abuse, no_kutan_skip, show_coliseum_rewards
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
@@ -4764,6 +4764,9 @@ def randomize(args):
     reseed()
 
     has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
+    if has_music:
+        music_init()
+        
     if Options_.is_code_active('alasdraco'):
         opera = manage_opera(fout, has_music)
     else:
