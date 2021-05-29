@@ -14,6 +14,7 @@ import esperrandomizer
 import formationrandomizer
 import locationrandomizer
 import musicrandomizer
+import towerrandomizer
 from ancient import manage_ancient
 from appearance import manage_character_appearance
 from character import get_characters, get_character, equip_offsets
@@ -191,6 +192,8 @@ def Reset():
     esperrandomizer.cleanup()
     locationrandomizer.cleanup()
     musicrandomizer.cleanup()
+    towerrandomizer.cleanup()
+
 
 def reseed():
     global seedcounter
