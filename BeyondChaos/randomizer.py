@@ -9,22 +9,28 @@ from shutil import copyfile
 import os
 from hashlib import md5
 
-from Ancient import manage_ancient
-from Appearance import manage_character_appearance
-from Character import get_characters, get_character, equip_offsets
-from ChestRandomizer import mutate_event_items, get_event_items
-from Decompress import Decompressor
-from DialogueManager import manage_dialogue_patches, get_dialogue, set_dialogue, read_dialogue, read_location_names, write_location_names
-from EsperRandomizer import (get_espers, allocate_espers, randomize_magicite)
-from FormationRandomizer import (REPLACE_FORMATIONS, KEFKA_EXTRA_FORMATION, NOREPLACE_FORMATIONS,
+import character
+import esperrandomizer
+import formationrandomizer
+import locationrandomizer
+import musicrandomizer
+import towerrandomizer
+from ancient import manage_ancient
+from appearance import manage_character_appearance
+from character import get_characters, get_character, equip_offsets
+from chestrandomizer import mutate_event_items, get_event_items
+from decompress import Decompressor
+from dialoguemanager import manage_dialogue_patches, get_dialogue, set_dialogue, read_dialogue, read_location_names, write_location_names
+from esperrandomizer import (get_espers, allocate_espers, randomize_magicite)
+from formationrandomizer import (REPLACE_FORMATIONS, KEFKA_EXTRA_FORMATION, NOREPLACE_FORMATIONS,
                                  get_formations, get_fsets, get_formation)
-from ItemRandomizer import (reset_equippable, get_ranked_items, get_item,
+from itemrandomizer import (reset_equippable, get_ranked_items, get_item,
                             reset_special_relics, reset_rage_blizzard,
                             reset_cursed_shield, unhardcode_tintinabar, cleanup)
-from LocationRandomizer import (get_locations, get_location, get_zones, get_npcs, randomize_forest)
-from MenuFeatures import (improve_item_display, improve_gogo_status_menu, improve_rage_menu,
+from locationrandomizer import (get_locations, get_location, get_zones, get_npcs, randomize_forest)
+from menufeatures import (improve_item_display, improve_gogo_status_menu, improve_rage_menu,
                           show_original_names, improve_dance_menu, y_equip_relics, fix_gogo_portrait)
-from MonsterRandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monsters,
+from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monsters,
                                get_metamorphs, get_ranked_monsters,
                                shuffle_monsters, get_monster, read_ai_table,
                                change_enemy_name, randomize_enemy_name,
@@ -38,8 +44,8 @@ from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
                              RandomSpellSub, MultipleSpellSub, ChainSpellSub,
                              get_ranked_spells, get_spell)
-from TowerRandomizer import randomize_tower
-from Utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
+from towerrandomizer import randomize_tower
+from utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    FINAL_BOSS_AI_TABLE, SKIP_EVENTS_TABLE, DANCE_NAMES_TABLE,
                    DIVERGENT_TABLE,
                    get_long_battle_text_pointer,
@@ -49,7 +55,7 @@ from Utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    battlebg_palettes, set_randomness_multiplier,
                    mutate_index, utilrandom as random, open_mei_fallback,
                    AutoLearnRageSub)
-from Wor import manage_wor_recruitment, manage_wor_skip
+from wor import manage_wor_recruitment, manage_wor_skip
 
 
 
@@ -177,16 +183,22 @@ def rngstate():
     return state
 
 def Reset():
+    global seedcounter
     seedcounter = 0
     cleanup()
-    monsterCleanup(sourcefile)
+    monsterCleanup()
+    formationrandomizer.cleanup()
+    character.cleanup()
+    esperrandomizer.cleanup()
+    locationrandomizer.cleanup()
+    musicrandomizer.cleanup()
+    towerrandomizer.cleanup()
 
 
 def reseed():
     global seedcounter
     random.seed(seed + seedcounter)
     seedcounter += (seedcounter * 2) + 1
-
 
 def rewrite_title(text):
     while len(text) < 20:
@@ -473,7 +485,7 @@ def randomize_slots(filename, fout, pointer):
             if spell is None or spell.spellid not in used:
                 break
         if spell:
-            from SkillRandomizer import spellnames
+            from skillrandomizer import spellnames
             slotString = "%s: %s" % (slotNames[i], spellnames[spell.spellid])
             log(slotString, "slots")
             used.append(spell.spellid)
@@ -1997,7 +2009,7 @@ def manage_colorize_animations():
 
 
 def manage_items(items, changed_commands=None):
-    from ItemRandomizer import (set_item_changed_commands, extend_item_breaks)
+    from itemrandomizer import (set_item_changed_commands, extend_item_breaks)
     always_break = Options_.is_code_active('collateraldamage')
     crazy_prices = Options_.is_code_active('madworld')
     extra_effects = Options_.is_code_active('masseffect')
@@ -2921,16 +2933,17 @@ def manage_formations_hidden(formations, freespaces, form_music_overrides=None, 
 
 
 def assign_unused_enemy_formations():
-    from ChestRandomizer import add_orphaned_formation, get_orphaned_formations
+    from chestrandomizer import add_orphaned_formation, get_orphaned_formations
     get_orphaned_formations()
     siegfried = get_monster(0x37)
     chupon = get_monster(0x40)
 
     behemoth_formation = get_formation(0xb1)
-
+    replaceformations = REPLACE_FORMATIONS[:]
     for enemy, music in zip([siegfried, chupon], [3, 4]):
-        formid = REPLACE_FORMATIONS.pop()
-        NOREPLACE_FORMATIONS.append(formid)
+        formid = replaceformations.pop()
+        if formid not in NOREPLACE_FORMATIONS:
+            NOREPLACE_FORMATIONS.append(formid)
         uf = get_formation(formid)
         uf.copy_data(behemoth_formation)
         uf.enemy_ids = [enemy.id] + ([0xFF] * 5)
@@ -4027,7 +4040,7 @@ def manage_dances():
         fout.write(name)
 
     for i, dance in enumerate(dance_names):
-        from SkillRandomizer import spellnames
+        from skillrandomizer import spellnames
         dance_names = [spellnames[dances[i * 4 + j]] for j in range(4)]
         dancestr = "%s:\n  " % dance
         frequencies = [7, 6, 2, 1]
@@ -4487,17 +4500,17 @@ def randomize(args):
     zones = get_zones(sourcefile)
     get_metamorphs(sourcefile)
 
-    aispaces = []
-    aispaces.append(FreeBlock(0xFCF50, 0xFCF50 + 384))
-    aispaces.append(FreeBlock(0xFFF47, 0xFFF47 + 87))
-    aispaces.append(FreeBlock(0xFFFBE, 0xFFFBE + 66))
+    aispaces = [
+        FreeBlock(0xFCF50, 0xFCF50 + 384),
+        FreeBlock(0xFFF47, 0xFFF47 + 87),
+        FreeBlock(0xFFFBE, 0xFFFBE + 66)
+    ]
 
     if Options_.random_final_dungeon or Options_.is_code_active('ancientcave'):
         # do this before treasure
         if Options_.random_enemy_stats and Options_.random_treasure and Options_.random_character_stats:
             dirk = get_item(0)
-            if dirk == None:
-                cleanup()
+            if dirk is None:
                 items = get_ranked_items(sourcefile)
                 dirk = get_item(0)
             dirk.become_another()
@@ -4507,8 +4520,9 @@ def randomize(args):
     if Options_.random_enemy_stats and Options_.random_treasure and Options_.random_character_stats:
         if random.randint(1, 10) != 10:
             rename_card = get_item(231)
-            rename_card.become_another(tier="low")
-            rename_card.write_stats(fout)
+            if rename_card is not None:
+                rename_card.become_another(tier="low")
+                rename_card.write_stats(fout)
 
             weapon_anim_fix = Substitution()
             weapon_anim_fix.set_location(0x19DB8)
@@ -4609,7 +4623,7 @@ def randomize(args):
     start_in_wor = Options_.is_code_active('worringtriad')
     if Options_.random_character_stats:
         # do this after swapping beserk
-        from ItemRandomizer import set_item_changed_commands
+        from itemrandomizer import set_item_changed_commands
         set_item_changed_commands(changed_commands)
         loglist = reset_special_relics(items, characters, fout)
         for name, before, after in loglist:
@@ -4923,8 +4937,7 @@ def randomize(args):
         manage_bingo()
 
     try:
-       # Reset()
-       a = 123 +1
+        Reset()
     except Exception as e:
         traceback.print_exc()
     return outfile

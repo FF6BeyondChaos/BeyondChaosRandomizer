@@ -1,7 +1,6 @@
 from itemrandomizer import get_ranked_items
 from utils import CHAR_TABLE, hex2int, utilrandom as random
 
-
 equip_offsets = {"weapon": 15,
                  "shield": 16,
                  "helm": 17,
@@ -12,8 +11,12 @@ equip_offsets = {"weapon": 15,
 CHARSTATNAMES = ["hp", "mp", "vigor", "speed", "stamina", "m.power",
                  "attack", "defense", "m.def", "evade", "mblock"]
 
-
 character_list = []
+
+
+def cleanup():
+    global character_list
+    character_list = []
 
 
 def get_characters():
@@ -55,7 +58,7 @@ class CharacterBlock:
         self.stats = {}
 
     def __repr__(self):
-        s = "{0:02d}. {1}".format(self.id+1, self.newname) + "\n"
+        s = "{0:02d}. {1}".format(self.id + 1, self.newname) + "\n"
         command_names = []
         for c in self.command_objs:
             if c is not None:
@@ -192,7 +195,7 @@ class CharacterBlock:
             0: [70, 20, 5, 5],  # avg. level + 0
             1: [18, 70, 10, 2],  # avg. level + 2
             2: [9, 20, 70, 1],  # avg. level + 5
-            3: [20, 9, 1, 70]   # avg. level - 3
+            3: [20, 9, 1, 70]  # avg. level - 3
         }
 
         if not read_only:

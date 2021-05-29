@@ -430,6 +430,10 @@ def randomize_magicite(fout, sourcefile):
 
 all_espers = None
 
+def cleanup():
+    global all_espers
+    all_espers = None
+
 def get_espers(sourcefile):
     global all_espers
     if all_espers:

@@ -1,21 +1,25 @@
-
-import config
 import sys
-from subprocess import call
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtCore import pyqtRemoveInputHook
-from PyQt5.QtWidgets import QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel, QGroupBox, \
-    QHBoxLayout, QLineEdit, QRadioButton, QGridLayout, QComboBox, QFileDialog, QApplication, \
-    QTabWidget, QInputDialog, QScrollArea, QMessageBox, QGraphicsDropShadowEffect, QSlider
-from PyQt5.QtGui import QCursor
-
-import options
-import randomizer
-import update
-import constants
 import time
 import traceback
 
+import musicrandomizer
+from PyQt5 import QtGui, QtCore
+from PyQt5.QtGui import QCursor
+from PyQt5.QtWidgets import QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel, QGroupBox, \
+    QHBoxLayout, QLineEdit, QComboBox, QFileDialog, QApplication, \
+    QTabWidget, QInputDialog, QScrollArea, QMessageBox, QGraphicsDropShadowEffect
+
+import character
+import config
+import esperrandomizer
+import formationrandomizer
+import itemrandomizer
+import locationrandomizer
+import monsterrandomizer
+import options
+import randomizer
+import towerrandomizer
+import update
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. Report this to Green Knight")
@@ -161,7 +165,7 @@ class Window(QWidget):
         self.setLayout(vbox)
 
     def update(self):
-        Update.update()
+        update.update()
         QMessageBox.information(self, "Update Process", "Checking for updates, if found this will automatically close", QMessageBox.Ok)
         
 
@@ -505,7 +509,7 @@ class Window(QWidget):
     # (At startup) Opens reads code flags/descriptions and
     #   puts data into separate dictionaries
     def initCodes(self):
-        for code in Options.NORMAL_CODES + Options.MAKEOVER_MODIFIER_CODES:
+        for code in options.NORMAL_CODES + options.MAKEOVER_MODIFIER_CODES:
             if code.category == "aesthetic":
                 d = self.aesthetic
             elif code.category == "sprite":
@@ -528,7 +532,7 @@ class Window(QWidget):
 
             d[code.name] = {'explanation': code.long_description, 'checked': False}
 
-        for flag in sorted(Options.ALL_FLAGS):
+        for flag in sorted(options.ALL_FLAGS):
             self.flag[flag.name] = {'explanation': flag.description, 'checked': True}
 
 
@@ -553,7 +557,7 @@ class Window(QWidget):
             self.presetBox.setCurrentIndex(index)
 
     def loadSavedFlags(self):
-        flagset = Config.readFlags()
+        flagset = config.readFlags()
         if flagset != None:
             for text, flags in flagset.items():
                 self.GamePresets[text] = flags
@@ -665,7 +669,7 @@ class Window(QWidget):
                     flagset = False
                     for flag in self.flags:
                         if flag == d[c.value]:
-                            flagset = true
+                            flagset = True
                     if flagset == False:
                         self.flags.append(c.value)
                 else:
@@ -762,8 +766,8 @@ class Window(QWidget):
                 QtCore.pyqtRemoveInputHook()
                 # TODO: put this in a new thread
                 try:
-                    result_file = Randomizer.randomize(args=['BeyondChaos.py', self.romText, bundle, "test"])
-                #call(["py", "Randomizer.py", self.romText, bundle, "test"])
+                    result_file = randomizer.randomize(args=['BeyondChaos.py', self.romText, bundle, "test"])
+                # call(["py", "Randomizer.py", self.romText, bundle, "test"])
                 # Running the Randomizer twice in one session doesn't work
                 # because of global state.
                 # Exit so people don't try it.
@@ -774,6 +778,15 @@ class Window(QWidget):
                 else:
                     QMessageBox.information(self, "Successfully created ROM", f"Result file: {result_file}", QMessageBox.Ok)
                     return
+                finally:
+                    itemrandomizer.cleanup()
+                    monsterrandomizer.monsterCleanup()
+                    formationrandomizer.cleanup()
+                    character.cleanup()
+                    esperrandomizer.cleanup()
+                    locationrandomizer.cleanup()
+                    musicrandomizer.cleanup()
+                    towerrandomizer.cleanup()
                 #sys.exit() Lets no longer sysexit anymore so we don't have to
                 #reopen each time.  The user can close the gui.
 
@@ -812,7 +825,7 @@ class Window(QWidget):
 if __name__ == "__main__":
     print("Loading GUI, checking for config file, updater file and updates please wait.")
     try:
-        Update.configExists()
+        update.configExists()
         App = QApplication(sys.argv)
         window = Window()
         time.sleep(3)
