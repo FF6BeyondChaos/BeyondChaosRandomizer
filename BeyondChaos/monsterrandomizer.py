@@ -1400,29 +1400,24 @@ class MonsterBlock:
         steals, drops = (new_items[:2], new_items[2:])
         steals = sorted(steals, key=lambda i: i.rank() if i else 0, reverse=True)
         drops = sorted(drops, key=lambda i: i.rank() if i else 0, reverse=True)
-        
-        if katnFlag:
-            if None in drops:
-                 temp = [d for d in drops if d]
-                 if temp:
-                     drops = temp * 2
-            if None in steals:
-                 temp = [s for s in steals if s]
-                 if temp:
-                     steals = temp * 2
-            new_items = [i.itemid if i else 0xFF for i in steals + drops]
 
         if self.boss_death and None in drops:
             temp = [d for d in drops if d]
             if temp:
                 drops = temp * 2
-        new_items = [i.itemid if i else 0xFF for i in steals + drops]
+
         if self.is_boss or self.boss_death:
             pass
         else:
             if random.randint(1, 5) != 5:
                 if (new_items[2] != new_items[3] or random.choice([True, False])):
                     new_items[3] = 0xFF
+
+        if katnFlag:
+            steals = [new_items[0]] * 2 or [new_items[1]] * 2
+            drops = [new_items[2]] * 2 or [new_items[3]] * 2
+
+        new_items = [i.itemid if i else 0xFF for i in steals + drops]
 
         self.items = new_items
         assert len(self.items) == 4
