@@ -2412,7 +2412,7 @@ def manage_treasure(monsters, shops=True, no_charm_drops=False, katnFlag=False):
         m.mutate_items(katnFlag)
         if no_charm_drops:
             charms = [222, 223]
-            while any(x in m.drops for x in charms):
+            while any(x in m.items for x in charms):
                 m.mutate_items()
         m.mutate_metamorph()
         m.write_stats(fout)
