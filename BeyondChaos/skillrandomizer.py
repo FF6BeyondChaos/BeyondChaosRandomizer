@@ -511,6 +511,7 @@ class RandomSpellSub(Substitution):
     def set_spells(self, valid_spells, spellclass=None, spellsets=None ):
         spellsets = spellsets or get_spellsets(spells=valid_spells)
         spellclass = spellclass or random.choice(list(spellsets.keys()))
+
         self.name = spellclass
         desc, spellset = spellsets[spellclass]
         self.spells_description = desc
