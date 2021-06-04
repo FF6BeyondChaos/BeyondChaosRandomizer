@@ -1195,7 +1195,7 @@ def manage_commands_new(commands):
         else:
             s = RandomSpellSub()
             magitek.newname("R-Chaos", fout)
-            s.set_spells([], [], "Chaos")
+            s.set_spells([], "Chaos", [])
         magitek.write_properties(fout)
         magitek.unsetmenu(fout)
         magitek.allow_while_confused(fout)
