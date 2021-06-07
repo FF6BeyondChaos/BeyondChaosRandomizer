@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 import configparser
-from time import time, sleep, gmtime
-import re
-import sys
-import traceback
-from sys import argv
-from shutil import copyfile
-import os
 from hashlib import md5
+import os
+import re
+from shutil import copyfile
+import sys
+from sys import argv
+from time import time, sleep, gmtime
+import traceback
+from typing import BinaryIO, List
 
 import numpy.random
 
@@ -97,7 +98,10 @@ changed_commands = set([])
 randlog = {}
 
 
-def log(text, section):
+def log(text: str, section: str):
+    """
+    Helps build the randlog dict by appending text to the randlog[section] key.
+    """
     global randlog
     if section not in randlog:
         randlog[section] = []
@@ -108,7 +112,7 @@ def log(text, section):
     randlog[section].append(text)
 
 
-def get_logstring(ordering=None):
+def get_logstring(ordering: List = None) -> str:
     global randlog
     s = ""
     if ordering is None:
@@ -141,6 +145,9 @@ def get_logstring(ordering=None):
 
 
 def log_chests():
+    """
+    Appends the Treasure Chests section to the spoiler log.
+    """
     areachests = {}
     event_items = get_event_items()
     for l in get_locations():
@@ -161,6 +168,9 @@ def log_chests():
 
 
 def log_break_learn_items():
+    """
+    Appends the Item Magic section to the spoiler log.
+    """
     items = sorted(get_ranked_items(), key=lambda i: i.itemid)
     breakable = [i for i in items if not i.is_consumable and i.itemtype & 0x20]
     s = "BREAKABLE ITEMS\n"
@@ -181,7 +191,7 @@ def log_break_learn_items():
     log(s, "item magic")
 
 
-def rngstate():
+def rngstate() -> int:
     state = sum(random.getstate()[1])
     print(state)
     return state
@@ -191,7 +201,7 @@ def Reset():
     seedcounter = 0
     cleanup()
     monsterCleanup()
-    formationrandomizer.cleanup()
+    formationrandomizer.cleanup()   
     character.cleanup()
     esperrandomizer.cleanup()
     locationrandomizer.cleanup()
@@ -204,7 +214,10 @@ def reseed():
     random.seed(seed + seedcounter)
     seedcounter += (seedcounter * 2) + 1
 
-def rewrite_title(text):
+def rewrite_title(text: str):
+    """
+    Rewrites text in opening credits.
+    """
     while len(text) < 20:
         text += ' '
     text = text[:20]
@@ -214,7 +227,7 @@ def rewrite_title(text):
     fout.write(bytes([int(VERSION)]))
 
 
-def rewrite_checksum(filename=None):
+def rewrite_checksum(filename: str = None):
     if filename is None:
         filename = outfile
     MEGABIT = 0x20000
@@ -230,10 +243,10 @@ def rewrite_checksum(filename=None):
 
 class AutoRecruitGauSub(Substitution):
     @property
-    def bytestring(self):
+    def bytestring(self) -> bytes:
         return bytes([0x50, 0xBC, 0x59, 0x10, 0x3F, 0x0B, 0x01, 0xD4, 0xFB, 0xFE])
 
-    def write(self, fout, stays_in_wor):
+    def write(self, fout: BinaryIO, stays_in_wor: bool):
         sub_addr = self.location - 0xa0000
         call_recruit_sub = Substitution()
         call_recruit_sub.bytestring = bytes([0xB2]) + int2bytes(sub_addr, length=3)
@@ -252,10 +265,10 @@ class AutoRecruitGauSub(Substitution):
 
 class EnableEsperMagicSub(Substitution):
     @property
-    def bytestring(self):
+    def bytestring(self) -> bytes:
         return bytes([0xA9, 0x20, 0xA6, 0x00, 0x95, 0x79, 0xE8, 0xA9, 0x24, 0x60])
 
-    def write(self, fout):
+    def write(self, fout: BinaryIO):
         jsr_sub = Substitution()
         jsr_sub.bytestring = bytes([0x20]) + int2bytes(self.location, length=2) + bytes([0xEA])
         jsr_sub.set_location(0x34D3D)
@@ -264,15 +277,15 @@ class EnableEsperMagicSub(Substitution):
 
 
 class FreeBlock:
-    def __init__(self, start, end):
+    def __init__(self, start: int, end: int):
         self.start = start
         self.end = end
 
     @property
-    def size(self):
+    def size(self) -> int:
         return self.end - self.start
 
-    def unfree(self, start, length):
+    def unfree(self, start: int, length: int) -> List:
         end = start + length
         if start < self.start:
             raise Exception("Used space out of bounds (left)")
@@ -287,7 +300,7 @@ class FreeBlock:
         return newfree
 
 
-def get_appropriate_freespace(freespaces, size):
+def get_appropriate_freespace(freespaces: List[FreeBlock], size: int) -> FreeBlock:
     candidates = [c for c in freespaces if c.size >= size]
     if not candidates:
         raise Exception("Not enough free space")
@@ -296,7 +309,7 @@ def get_appropriate_freespace(freespaces, size):
     return candidates[0]
 
 
-def determine_new_freespaces(freespaces, myfs, size):
+def determine_new_freespaces(freespaces: List[FreeBlock], myfs: FreeBlock, size: int) -> List:
     freespaces.remove(myfs)
     fss = myfs.unfree(myfs.start, size)
     freespaces.extend(fss)
@@ -304,12 +317,12 @@ def determine_new_freespaces(freespaces, myfs, size):
 
 
 class WindowBlock():
-    def __init__(self, windowid):
+    def __init__(self, windowid: int):
         self.pointer = 0x2d1c00 + (windowid * 0x20)
         self.palette = [(0, 0, 0)] * 8
         self.negabit = 0
 
-    def read_data(self, filename):
+    def read_data(self, filename: str):
         f = open(filename, 'r+b')
         f.seek(self.pointer)
         self.palette = []
@@ -327,7 +340,7 @@ class WindowBlock():
                 self.palette.append((red, green, blue))
         f.close()
 
-    def write_data(self, fout):
+    def write_data(self, fout: BinaryIO):
         fout.seek(self.pointer)
         for (red, green, blue) in self.palette:
             color = (blue << 10) | (green << 5) | red
@@ -336,8 +349,8 @@ class WindowBlock():
     def mutate(self):
         if Options_.is_code_active('halloween'):
             return
-        def cluster_colors(colors):
-            def distance(cluster, value):
+        def cluster_colors(colors: List) -> List:
+            def distance(cluster: List, value: int) -> int:
                 average = sum([sum(c) for (i, c) in cluster]) / len(cluster)
                 return abs(sum(value) - average)
 
@@ -382,7 +395,7 @@ class WindowBlock():
         self.palette = newpalette
 
 
-def commands_from_table(tablefile):
+def commands_from_table(tablefile: str) -> List:
     commands = []
     for i, line in enumerate(open(tablefile)):
         line = line.strip()
@@ -397,7 +410,7 @@ def commands_from_table(tablefile):
     return commands
 
 
-def randomize_colosseum(filename, fout, pointer):
+def randomize_colosseum(filename: str, fout: BinaryIO, pointer: int) -> List:
     item_objs = get_ranked_items(filename)
     monster_objs = get_ranked_monsters(filename, bosses=False)
     items = [i.itemid for i in item_objs]
@@ -450,7 +463,7 @@ def randomize_colosseum(filename, fout, pointer):
     return results
 
 
-def randomize_slots(filename, fout, pointer):
+def randomize_slots(filename: str, fout: BinaryIO, pointer: int):
     spells = get_ranked_spells(filename)
     spells = [s for s in spells if s.spellid >= 0x36]
     attackspells = [s for s in spells if s.target_enemy_default]
@@ -460,7 +473,7 @@ def randomize_slots(filename, fout, pointer):
     jokerdoom += random.randint(0, len(attackspells) - (8 * eighth) - 1)
     jokerdoom = attackspells[jokerdoom]
 
-    def get_slots_spell(i):
+    def get_slots_spell(i: int) -> SpellBlock:
         if i in [0, 1]:
             return jokerdoom
         elif i == 3:
@@ -497,7 +510,7 @@ def randomize_slots(filename, fout, pointer):
             fout.write(bytes([spell.spellid]))
 
 
-def auto_recruit_gau(stays_in_wor):
+def auto_recruit_gau(stays_in_wor: bool):
     args = AutoRecruitGauSub()
     args.set_location(0xcfe1a)
     args.write(fout, stays_in_wor)
@@ -514,7 +527,22 @@ def auto_learn_rage():
     alrs.write(fout)
 
 
-def manage_commands(commands):
+def manage_commands(commands: dict[str, CommandBlock]):
+    """
+    Takes in a dict of commands and randomizes them.
+
+    Parameters
+    ----------
+    commands: a dictionary with the 30 default commands as
+    string keys and CommandBlock values, e.g.:
+    {'fight': <skillrandomizer.CommandBlock object at 0x0000020D06918760>,
+     'item': <skillrandomizer.CommandBlock object at 0x0000020D06918640>,
+     'magic': <skillrandomizer.CommandBlock object at 0x0000020D069188B0>,
+     'morph': <skillrandomizer.CommandBlock object at 0x0000020D069188E0>,
+     ...
+     'possess': <skillrandomizer.CommandBlock object at 0x0000020D06918D60>, 
+     'magitek': <skillrandomizer.CommandBlock object at 0x0000020D06918D90>}
+    """
     characters = get_characters()
 
     learn_lore_sub = Substitution()
@@ -742,7 +770,22 @@ def manage_tempchar_commands():
         c.write_battle_commands(fout)
 
 
-def manage_commands_new(commands):
+def manage_commands_new(commands: dict[str, CommandBlock]):
+    """
+    Takes in a dict of commands and randomizes them.
+
+    Parameters
+    ----------
+    commands: a dictionary with the 30 default commands as
+    string keys and CommandBlock values, e.g.:
+    {'fight': <skillrandomizer.CommandBlock object at 0x0000020D06918760>,
+     'item': <skillrandomizer.CommandBlock object at 0x0000020D06918640>,
+     'magic': <skillrandomizer.CommandBlock object at 0x0000020D069188B0>,
+     'morph': <skillrandomizer.CommandBlock object at 0x0000020D069188E0>,
+     ...
+     'possess': <skillrandomizer.CommandBlock object at 0x0000020D06918D60>, 
+     'magitek': <skillrandomizer.CommandBlock object at 0x0000020D06918D90>}
+    """
     # note: x-magic targets random party member
     # replacing lore screws up enemy skills
     # replacing jump makes the character never come back down
@@ -754,7 +797,7 @@ def manage_commands_new(commands):
 
     multibannedlist = [0x63, 0x58, 0x5B]
 
-    def multibanned(spells):
+    def multibanned(spells: List[SpellBlock]) -> List[SpellBlock]:
         if isinstance(spells, int):
             return spells in multibannedlist
         spells = [s for s in spells if s.spellid not in multibannedlist]
@@ -811,7 +854,7 @@ def manage_commands_new(commands):
         if Options_.is_code_active("endless9"):
             scount = 9
 
-        def get_random_power():
+        def get_random_power() -> int:
             basepower = POWER_LEVEL // 2
             power = basepower + random.randint(0, basepower)
             while True:
@@ -825,7 +868,7 @@ def manage_commands_new(commands):
             if not (random_skill or combo_skill):
                 power = get_random_power()
 
-                def spell_is_valid(s):
+                def spell_is_valid(s) -> bool:
                     if not s.valid:
                         return False
                     if s.spellid in used:
@@ -991,7 +1034,7 @@ def manage_commands_new(commands):
                                WEIGHTED_FIRST, WEIGHTED_LAST]:
                     assert (len([s for s in all_spells if s.name in mylist]) == len(mylist))
 
-                def spell_is_valid(s, p):
+                def spell_is_valid(s, p) -> bool:
                     if not s.valid:
                         return False
                     #if multibanned(s.spellid):
