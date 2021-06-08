@@ -11,8 +11,8 @@ equip_offsets = {"weapon": 15,
                  "relic1": 19,
                  "relic2": 20}
 
-char_stats_names_with_memory_offsets = ["hp", "mp", "vigor", "speed", "stamina", "m.power",
-                                        "attack", "defense", "m.def", "evade", "m.block"]
+char_stats_names = ["hp", "mp", "vigor", "speed", "stamina", "m.power",
+                    "attack", "defense", "m.def", "evade", "m.block"]
 
 
 class Character:
@@ -31,7 +31,7 @@ class Character:
         self.command_objs = []
         self.stats_original = {}
         self.stats_mutated = {}
-        for stat in char_stats_names_with_memory_offsets:
+        for stat in char_stats_names:
             self.stats_original[stat] = None
             self.stats_mutated[stat] = None
 
