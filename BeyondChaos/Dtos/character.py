@@ -21,7 +21,7 @@ class Character:
         self.name = name.lower().capitalize()
         self.newname = self.name.upper()
         self.battle_commands = [0x00, None, None, None]
-        self.id = None
+        self.id = 0
         self.berserk = False
         self.original_appearance = None
         self.new_appearance = None
