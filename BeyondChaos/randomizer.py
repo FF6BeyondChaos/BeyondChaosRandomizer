@@ -8,7 +8,7 @@ import sys
 from sys import argv
 from time import time, sleep, gmtime
 import traceback
-from typing import BinaryIO, List
+from typing import BinaryIO, Dict, List
 
 import numpy.random
 
@@ -527,7 +527,7 @@ def auto_learn_rage():
     alrs.write(fout)
 
 
-def manage_commands(commands: dict[str, CommandBlock]):
+def manage_commands(commands: Dict[str, CommandBlock]):
     """
     Takes in a dict of commands and randomizes them.
 
@@ -770,7 +770,7 @@ def manage_tempchar_commands():
         c.write_battle_commands(fout)
 
 
-def manage_commands_new(commands: dict[str, CommandBlock]):
+def manage_commands_new(commands: Dict[str, CommandBlock]):
     """
     Takes in a dict of commands and randomizes them.
 
