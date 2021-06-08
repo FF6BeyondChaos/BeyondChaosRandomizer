@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from typing import List
 
 from options import Options
 
@@ -14,5 +15,5 @@ class Randomizer(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def randomize(self):
+    def randomize(self, byte_block: List[bytes]):
         raise NotImplementedError

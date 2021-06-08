@@ -4,6 +4,16 @@ from utils import hex2int
 from utils import make_table
 import os
 
+equip_offsets = {"weapon": 15,
+                 "shield": 16,
+                 "helm": 17,
+                 "armor": 18,
+                 "relic1": 19,
+                 "relic2": 20}
+
+char_stats_names_with_memory_offsets = ["hp", "mp", "vigor", "speed", "stamina", "m.power",
+                                        "attack", "defense", "m.def", "evade", "m.block"]
+
 
 class Character:
     def __init__(self, address, name):
@@ -19,7 +29,11 @@ class Character:
         self.palette = None
         self.wor_location = None
         self.command_objs = []
-        self.stats = {}
+        self.stats_original = {}
+        self.stats_mutated = {}
+        for stat in char_stats_names_with_memory_offsets:
+            self.stats_original[stat] = None
+            self.stats_mutated[stat] = None
 
     def __repr__(self):
         s = "{0:02d}. {1}".format(self.id + 1, self.newname) + "\n"
