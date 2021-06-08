@@ -26,13 +26,13 @@ class CharacterStats(Randomizer):
     def randomize(self, byte_block: List[bytes]):
         if not self.is_active:
             return
-        char_id = 0
-        for character in self._characters:
-            character.id = char_id
+        for character_id in range(len(self._characters)):
+            character = self._characters[character_id]
+            character.id = character_id
             for stat in self._stat_offsets:
                 character.stats_original[stat] = byte_block[self._stat_offsets[stat]]
             print(character.stats_original)
-            pass
+        pass
         """
         def mutation(base):
             while True:
