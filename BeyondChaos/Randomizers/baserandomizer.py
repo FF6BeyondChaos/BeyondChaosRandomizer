@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import List
 
 from options import Options
 
@@ -12,8 +11,20 @@ class Randomizer(ABC):
     @property
     @abstractmethod
     def is_active(self):
+        """Determines if the given Randomizer is active or not based on flag configuration"""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def priority(self):
+        """What order this randomizer should come in. If this randomizer requires another to run before it,
+        this should be a larger number (e.g. if stat mutation requires berserker mutation, stat mutation's priority
+        should be a larger number)"""
         raise NotImplementedError
 
     @abstractmethod
     def randomize(self):
+        """The actual randomization for a given flag happens here.
+
+        Note that it should operate on a DTO (or list of DTOs) and have no access to the actual ROM."""
         raise NotImplementedError
