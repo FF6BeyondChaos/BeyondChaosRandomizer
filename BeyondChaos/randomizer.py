@@ -8,7 +8,7 @@ import sys
 from sys import argv
 from time import time, sleep, gmtime
 import traceback
-from typing import BinaryIO, Dict, List
+from typing import BinaryIO, Dict, List, Tuple
 
 import numpy.random
 
@@ -1269,7 +1269,7 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
     return commands, freespaces
 
 
-def manage_suplex(commands, monsters):
+def manage_suplex(commands: Dict[str, CommandBlock], monsters: List): # List[MonsterBlock]
     characters = get_characters()
     freespaces = []
     freespaces.append(FreeBlock(0x2A65A, 0x2A800))
@@ -1352,7 +1352,7 @@ def manage_natural_magic():
     spellids = [s.spellid for s in spells]
     address = 0x2CE3C0
 
-    def mutate_spell(pointer, used):
+    def mutate_spell(pointer: int, used: List) -> Tuple[SpellBlock, int]:
         fout.seek(pointer)
         spell, level = tuple(fout.read(2))
 
@@ -1423,7 +1423,7 @@ def manage_natural_magic():
     write_multi(fout, new_known_lores, length=3)
 
 
-def manage_equip_umaro(freespaces):
+def manage_equip_umaro(freespaces: list):
     # ship unequip - cc3510
     equip_umaro_sub = Substitution()
     equip_umaro_sub.bytestring = [0xC9, 0x0E]
@@ -1440,7 +1440,7 @@ def manage_equip_umaro(freespaces):
     header = old_unequipper[:7]
     footer = old_unequipper[-3:]
 
-    def generate_unequipper(basepointer, not_current_party=False):
+    def generate_unequipper(basepointer: int, not_current_party: bool = False):
         unequipper = bytearray([])
         pointer = basepointer + len(header)
         a, b, c = "LO", "MED", "HI"
@@ -1480,7 +1480,7 @@ def manage_equip_umaro(freespaces):
     return freespaces
 
 
-def manage_umaro(commands):
+def manage_umaro(commands: Dict[str, CommandBlock]):
     characters = get_characters()
     candidates = [c for c in characters if c.id <= 13 and c.id != 12 and 2 not in c.battle_commands and 0xC not in c.battle_commands and 0x17 not in c.battle_commands]
 
@@ -4188,7 +4188,7 @@ def sprint_shoes_hint():
     sprint_sub.write(fout)
 
 
-def sabin_hint(commands):
+def sabin_hint(commands: Dict[str, CommandBlock]):
     sabin = get_character(0x05)
     command_id = sabin.battle_commands[1]
     if not command_id or command_id == 0xFF:
