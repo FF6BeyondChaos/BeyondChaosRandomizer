@@ -1,10 +1,8 @@
+import os
 from typing import List
 
 from constants import char_stat_names
-from itemrandomizer import get_ranked_items
-from utils import hex2int
 from utils import make_table
-import os
 
 equip_offsets = {"weapon": 15,
                  "shield": 16,
@@ -30,6 +28,7 @@ char_stat_names_with_offsets = {
 
 class Character:
     def __init__(self, char_id: int, address: int, name: str, byte_block: List[bytes]):
+        assert len(byte_block) == 22
         self.address = address
         self.name = name.lower().capitalize()
         self.newname = self.name.upper()
@@ -47,6 +46,16 @@ class Character:
         for stat in char_stat_names_with_offsets:
             self.stats_original[stat] = byte_block[char_stat_names_with_offsets[stat]]
             self.stats_mutated[stat] = byte_block[char_stat_names_with_offsets[stat]]
+
+        # Level modifier and run chance are stored in the same byte.
+        # 5 and 6 store the level modifier while bits 7 and 8 store the run chance.
+        level_and_run = byte_block[21]
+        self.level_modifier = level_and_run & 0b00001100
+        self.run_chance = level_and_run & 0b00000011
+
+        self.level_modifier_mutated = level_and_run & 0b00001100
+        self.run_chance_mutated = level_and_run & 0b00000011
+
 
     def __repr__(self):
         s = "{0:02d}. {1}".format(self.id + 1, self.newname) + "\n"

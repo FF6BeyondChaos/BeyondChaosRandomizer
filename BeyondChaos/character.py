@@ -202,7 +202,7 @@ class CharacterBlock:
             run_chance = random.randint(0, 99)
             for i, prob in enumerate(run_map[run]):
                 run_chance -= prob
-                if prob < 0:
+                if run_chance < 0:
                     run = i
                     break
 
