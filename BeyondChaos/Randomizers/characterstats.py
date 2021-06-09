@@ -9,10 +9,19 @@ multiplier_percentages = list(range(50, 151))
 
 
 class CharacterStats(Randomizer):
+
     def __init__(self, options: Options, characters: list[Character]):
         super().__init__(options)
         self._randomize_level = not self._Options.is_code_active('worringtriad')
         self._characters = characters
+
+    @property
+    def priority(self):
+        return 50
+
+    @property
+    def is_active(self):
+        return self._Options.random_character_stats
 
     def randomize(self):
         if not self.is_active:
@@ -67,6 +76,3 @@ class CharacterStats(Randomizer):
                 new_level_modifier += 1
             character.level_modifier_mutated = new_level_modifier - 1
 
-    @property
-    def is_active(self):
-        return self._Options.random_character_stats
