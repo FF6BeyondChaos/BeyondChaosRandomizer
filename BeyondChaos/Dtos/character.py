@@ -1,3 +1,5 @@
+from typing import List
+
 from constants import char_stat_names
 from itemrandomizer import get_ranked_items
 from utils import hex2int
@@ -11,17 +13,28 @@ equip_offsets = {"weapon": 15,
                  "relic1": 19,
                  "relic2": 20}
 
-char_stats_names = ["hp", "mp", "vigor", "speed", "stamina", "m.power",
-                    "attack", "defense", "m.def", "evade", "m.block"]
+char_stat_names_with_offsets = {
+    "hp": 0,
+    "mp": 1,
+    "vigor": 6,
+    "speed": 7,
+    "stamina": 8,
+    "m.power": 9,
+    "attack": 10,
+    "defense": 11,
+    "m.def": 12,
+    "evade": 13,
+    "m.block": 14
+}
 
 
 class Character:
-    def __init__(self, address, name):
-        self.address = hex2int(address)
+    def __init__(self, char_id: int, address: int, name: str, byte_block: List[bytes]):
+        self.address = address
         self.name = name.lower().capitalize()
         self.newname = self.name.upper()
         self.battle_commands = [0x00, None, None, None]
-        self.id = 0
+        self.id = char_id
         self.berserk = False
         self.original_appearance = None
         self.new_appearance = None
@@ -31,9 +44,9 @@ class Character:
         self.command_objs = []
         self.stats_original = {}
         self.stats_mutated = {}
-        for stat in char_stats_names:
-            self.stats_original[stat] = None
-            self.stats_mutated[stat] = None
+        for stat in char_stat_names_with_offsets:
+            self.stats_original[stat] = byte_block[char_stat_names_with_offsets[stat]]
+            self.stats_mutated[stat] = byte_block[char_stat_names_with_offsets[stat]]
 
     def __repr__(self):
         s = "{0:02d}. {1}".format(self.id + 1, self.newname) + "\n"
