@@ -3,36 +3,34 @@ from typing import List
 from Dtos.character import Character
 from Randomizers.baserandomizer import Randomizer
 from options import Options
+import random
+
+multiplier_percentages = list(range(50, 151))
 
 
 class CharacterStats(Randomizer):
     def __init__(self, options: Options, characters: list[Character]):
-        super(options)
+        super().__init__(options)
         self._characters = characters
-        self._stat_offsets = {
-            "hp": 0,
-            "mp": 1,
-            "vigor": 6,
-            "speed": 7,
-            "stamina": 8,
-            "m.power": 9,
-            "attack": 10,
-            "defense": 11,
-            "m.def": 12,
-            "evade": 13,
-            "m.block": 14
-        }
 
-    def randomize(self, byte_block: List[bytes]):
+    def randomize(self):
         if not self.is_active:
             return
-        for character_id in range(len(self._characters)):
-            character = self._characters[character_id]
-            character.id = character_id
-            for stat in self._stat_offsets:
-                character.stats_original[stat] = byte_block[self._stat_offsets[stat]]
-            print(character.stats_original)
-        pass
+        for character in self._characters:
+            for stat in character.stats_mutated:
+                mutation_check = 0
+                if character.berserk:
+                    character.stats_mutated[stat] += 1
+                new_stat = character.stats_mutated[stat]
+                while not mutation_check:
+                    multiplier = random.choice(multiplier_percentages) / 100
+                    new_stat *= multiplier
+                    mutation_check = random.choice(list(range(10)))
+                    # berserker character should not have stats reduced.
+                    mutation_check = mutation_check or (character.berserk and new_stat < character.stats_original[stat])
+                new_stat = max(1, min(int(new_stat), 254))
+                character.stats_mutated[stat] = new_stat
+
         """
         def mutation(base):
             while True:
@@ -112,6 +110,7 @@ class CharacterStats(Randomizer):
             fout.write(bytes([level_run]))
         pass
         """
+
     @property
     def is_active(self):
         return self._Options.random_character_stats

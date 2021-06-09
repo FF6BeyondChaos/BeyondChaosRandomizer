@@ -15,5 +15,5 @@ class Randomizer(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def randomize(self, byte_block: List[bytes]):
+    def randomize(self):
         raise NotImplementedError
