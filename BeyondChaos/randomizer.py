@@ -65,8 +65,8 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "44.abcefghijklmnopqrstuvwxyz-partyparty.42069"
-TEST_FILE = "program.rom"
+TEST_SEED = "4.katn.-u easymodo canttouchthis dearestmolulu.1622773126"
+TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
 sourcefile, outfile = None, None
@@ -1747,6 +1747,33 @@ def activate_airship_mode(freespaces):
 
     return freespaces
 
+def set_lete_river_encounters():
+    #make lete river encounters consistent within a seed for katn racing
+    manage_lete_river_sub = Substitution()
+    manage_lete_river_sub.bytestring = bytes([0xFE]*3)
+    manage_lete_river_sub.set_location(0xB0486)
+    manage_lete_river_sub.write(fout)
+    manage_lete_river_sub.bytestring = bytes([0xFE]*3)
+    manage_lete_river_sub.set_location(0xB048F)
+    manage_lete_river_sub.write(fout)
+    manage_lete_river_sub.bytestring = bytes([0xFD]*4)
+    manage_lete_river_sub.set_location(0xB066B)
+    manage_lete_river_sub.write(fout)
+    manage_lete_river_sub.bytestring = bytes([0xFD]*4)
+    manage_lete_river_sub.set_location(0xB06E1)
+    manage_lete_river_sub.write(fout)
+    manage_lete_river_sub.bytestring = bytes([0xFD]*4)
+    manage_lete_river_sub.set_location(0xB077C)
+    manage_lete_river_sub.write(fout)
+    manage_lete_river_sub.bytestring = bytes([0xFD]*8)
+    manage_lete_river_sub.set_location(0xB09C8)
+    manage_lete_river_sub.write(fout)
+    manage_lete_river_sub.bytestring = bytes([0xFD]*3)
+    manage_lete_river_sub.set_location(0xB0498)
+    manage_lete_river_sub.write(fout)
+    manage_lete_river_sub.bytestring = bytes([0xFD]*3)
+    manage_lete_river_sub.set_location(0xB04A1)
+    manage_lete_river_sub.write(fout)
 
 def manage_rng():
     fout.seek(0xFD00)
@@ -2452,8 +2479,8 @@ def manage_treasure(monsters, shops=True, no_charm_drops=False, katnFlag=False):
     for wager_obj, opponent_obj, win_obj, hidden in results:
         if wager_obj == striker_wager:
             win_obj = get_item(0x29)
-        if hidden:
-            winname = "????????????"
+        ##if hidden:
+        ##    winname = "????????????"
         else:
             winname = win_obj.name
         s = "{0:12} -> {1:12}  :  LV {2:02d} {3}".format(wager_obj.name, winname, opponent_obj.stats['level'],
@@ -4796,6 +4823,7 @@ def randomize(args):
 
     if Options_.mode.name == "katn":
         start_with_random_espers()
+        set_lete_river_encounters()
     reseed()
 
     if Options_.random_enemy_stats or Options_.random_formations:
