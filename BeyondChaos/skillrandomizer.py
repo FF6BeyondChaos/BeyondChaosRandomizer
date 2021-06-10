@@ -170,7 +170,7 @@ class SpellBlock:
                 baseline = baseline * 2
 
             if self.physical:
-                baseline = baseline * 0.6
+                baseline = baseline * 0.3
             if self.unblockable:
                 baseline = baseline * 1.25
             if self.has_status:
@@ -313,6 +313,7 @@ def get_ranked_spells(filename=None, magic_only=False):
         spells = [s for s in spells if s.spellid < 0x36]
 
     spells = sorted(spells, key=lambda i: i.rank())
+
     return spells
 
 

@@ -630,7 +630,7 @@ class ItemBlock:
             if self.imp_only:
                 baseline = 0
             else:
-                baseline = 25000
+                baseline = 25000 + random.randint(-5, 5)
 
             if not self.is_tool and not self.is_relic:
                 power = self.features['power']
