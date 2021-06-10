@@ -1,19 +1,19 @@
-from typing import List
+import random
+
+from numpy.random import Generator
 
 from Dtos.character import Character
 from Randomizers.baserandomizer import Randomizer
 from options import Options
-import random
-
-multiplier_percentages = list(range(50, 151))
 
 
 class CharacterStats(Randomizer):
 
-    def __init__(self, options: Options, characters: list[Character]):
+    def __init__(self, rng: Generator, options: Options, characters: list[Character]):
         super().__init__(options)
         self._randomize_level = not self._Options.is_code_active('worringtriad')
         self._characters = characters
+        self._rng = rng
 
     @property
     def priority(self):
@@ -33,12 +33,12 @@ class CharacterStats(Randomizer):
                     character.stats_mutated[stat] += 1
                 new_stat = character.stats_mutated[stat]
                 while not mutation_check:
-                    multiplier = random.choice(multiplier_percentages) / 100
+                    multiplier = max(.5, min(self._rng.normal(loc=1, scale=0.17), 1.5))
                     new_stat *= multiplier
                     mutation_check = random.choice(list(range(10)))
                     # berserker character should not have stats reduced.
                     mutation_check = mutation_check or (character.berserk and new_stat < character.stats_original[stat])
-                new_stat = max(1, min(int(new_stat), 254))
+                new_stat = max(1, min(round(new_stat), 254))
                 character.stats_mutated[stat] = new_stat
             self.modify_level_and_run_modifiers(character)
 
