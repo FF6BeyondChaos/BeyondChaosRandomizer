@@ -4986,8 +4986,9 @@ def randomize(args):
         log(str(c), section="characters")
 
     if options.Use_new_randomizer:
-        for c in character.character_list:
-            log(str(c), section="stats")
+        for c in sorted(character.character_list, key=lambda c: c.id):
+            if c.id <= 13:
+                log(str(c), section="stats")
 
     for m in sorted(get_monsters(), key=lambda m: m.display_name):
         if m.display_name:
