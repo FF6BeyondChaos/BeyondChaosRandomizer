@@ -1,7 +1,7 @@
 import dataclasses
 
 from chestrandomizer import get_event_items
-from character import get_character, get_characters_deprecated
+from character import get_character, get_characters
 from dialoguemanager import get_dialogue, set_dialogue
 from locationrandomizer import get_location, get_locations, NPCBlock
 from monsterrandomizer import change_enemy_name
@@ -1201,7 +1201,7 @@ def _setup_alternate_zone_eater(fout, include_gau):
 
 
 def manage_wor_skip(fout, wor_free_char=0xB, airship=False, dragon=False, alternate_gogo=False, esper_replacements=None):
-    characters = get_characters_deprecated()
+    characters = get_characters()
 
     espers = [0x0, 0x1, 0x2, 0x3, 0x5, 0x6, 0x7, 0x8, 0x11, 0x13, 0x14, 0x17]
     if esper_replacements:

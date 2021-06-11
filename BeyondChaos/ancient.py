@@ -1,4 +1,4 @@
-from character import get_characters_deprecated, get_character
+from character import get_characters, get_character
 from esperrandomizer import get_espers
 from formationrandomizer import (REPLACE_FORMATIONS, NOREPLACE_FORMATIONS, get_formations, get_fsets,
                                  get_formation, get_fset)
@@ -79,7 +79,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None):
         c.battle_commands = [0x00, 0x1D, 0xFF, 0x01]
         c.write_battle_commands(fout)
 
-    characters = get_characters_deprecated()
+    characters = get_characters()
     gau = [c for c in characters if c.id == 11][0]
     if not Options_.replace_commands and gau.battle_commands[1] in [0x11, None]:
         gau.battle_commands[1] = 0xFF

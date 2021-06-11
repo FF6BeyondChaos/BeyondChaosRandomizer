@@ -1,7 +1,7 @@
 import os
 from typing import List
 
-from GameObjects.GameObject import GameObject
+from GameObjects.gameobject import GameObject
 
 char_stat_names_with_offsets = {
     "hp": 0,
