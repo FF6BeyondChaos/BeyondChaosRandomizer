@@ -25,7 +25,6 @@ class Character(GameObject):
     def __init__(self, char_id: int, address: int, name: str, byte_block: List[bytes]):
         super().__init__(address)
         assert len(byte_block) == 22
-        self.address = address
         self.name = name.lower().capitalize()
         self.newname = self.name.upper()
         self.battle_commands = [0x00, None, None, None]
