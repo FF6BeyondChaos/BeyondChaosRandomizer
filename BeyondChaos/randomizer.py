@@ -1750,30 +1750,50 @@ def activate_airship_mode(freespaces):
 def set_lete_river_encounters():
     #make lete river encounters consistent within a seed for katn racing
     manage_lete_river_sub = Substitution()
-    manage_lete_river_sub.bytestring = bytes([0xFE]*3)
+    # force pseudo random jump to have a battle (4 bytes)
+    manage_lete_river_sub.bytestring = bytes([0xFD] *4)
     manage_lete_river_sub.set_location(0xB0486)
     manage_lete_river_sub.write(fout)
-    manage_lete_river_sub.bytestring = bytes([0xFE]*3)
+    # force pseudo random jump to have a battle (4 bytes)
+    manage_lete_river_sub.bytestring = bytes([0xFD] * 4)
     manage_lete_river_sub.set_location(0xB048F)
     manage_lete_river_sub.write(fout)
-    manage_lete_river_sub.bytestring = bytes([0xFD]*4)
-    manage_lete_river_sub.set_location(0xB066B)
-    manage_lete_river_sub.write(fout)
-    manage_lete_river_sub.bytestring = bytes([0xFD]*4)
-    manage_lete_river_sub.set_location(0xB06E1)
-    manage_lete_river_sub.write(fout)
-    manage_lete_river_sub.bytestring = bytes([0xFD]*4)
-    manage_lete_river_sub.set_location(0xB077C)
-    manage_lete_river_sub.write(fout)
-    manage_lete_river_sub.bytestring = bytes([0xFD]*8)
-    manage_lete_river_sub.set_location(0xB09C8)
-    manage_lete_river_sub.write(fout)
-    manage_lete_river_sub.bytestring = bytes([0xFD]*3)
-    manage_lete_river_sub.set_location(0xB0498)
-    manage_lete_river_sub.write(fout)
-    manage_lete_river_sub.bytestring = bytes([0xFD]*3)
-    manage_lete_river_sub.set_location(0xB04A1)
-    manage_lete_river_sub.write(fout)
+    # call subroutine CB0498 (4 bytes)
+    battle_calls = [0xB066B,
+                    0xB0690,
+                    0xB06A4,
+                    0xB06B4,
+                    0xB06D0,
+                    0xB06E1,
+                    0xB0704,
+                    0xB071B,
+                    0xB0734,
+                    0xB0744,
+                    0xB076A,
+                    0xB077C,
+                    0xB07A0,
+                    0xB07B6,
+                    0xB07DD,
+                    0xB0809,
+                    0xB081E,
+                    0xB082D,
+                    0xB084E,
+                    0xB0873,
+                    0xB08A8,
+                    0xB09E0,
+                    0xB09FC]
+
+    for addr in battle_calls:
+        # call subroutine `addr` (4 bytes)
+        if random.randint(0,1) == 0:
+            manage_lete_river_sub.bytestring = bytes([0xFD] * 4)
+            manage_lete_river_sub.set_location(addr)
+            manage_lete_river_sub.write(fout)
+
+    if random.randint(0,1) == 0:
+        manage_lete_river_sub.bytestring = bytes([0xFD] * 8)
+        manage_lete_river_sub.set_location(0xB09C8)
+        manage_lete_river_sub.write(fout)
 
 def manage_rng():
     fout.seek(0xFD00)
