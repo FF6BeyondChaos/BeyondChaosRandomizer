@@ -1,11 +1,7 @@
+import os
 from typing import List
 
-equip_offsets = {"weapon": 15,
-                 "shield": 16,
-                 "helm": 17,
-                 "armor": 18,
-                 "relic1": 19,
-                 "relic2": 20}
+from GameObjects.GameObject import GameObject
 
 char_stat_names_with_offsets = {
     "hp": 0,
@@ -21,9 +17,13 @@ char_stat_names_with_offsets = {
     "m.block": 14
 }
 
+level_and_run_offset = 21
 
-class Character:
+
+class Character(GameObject):
+
     def __init__(self, char_id: int, address: int, name: str, byte_block: List[bytes]):
+        super().__init__(address)
         assert len(byte_block) == 22
         self.address = address
         self.name = name.lower().capitalize()
@@ -45,12 +45,25 @@ class Character:
 
         # Level modifier and run chance are stored in the same byte.
         # 5 and 6 store the level modifier while bits 7 and 8 store the run chance.
-        level_and_run = byte_block[21]
-        self.level_modifier = level_and_run & 0b00001100
+        level_and_run = byte_block[level_and_run_offset]
+        self.level_modifier = (level_and_run & 0b00001100) >> 2
         self.run_chance = level_and_run & 0b00000011
 
-        self.level_modifier_mutated = level_and_run & 0b00001100
+        self.level_modifier_mutated = (level_and_run & 0b00001100) >> 2
         self.run_chance_mutated = level_and_run & 0b00000011
 
     def __repr__(self):
-        pass
+        s = "{0:02d}. {1}".format(self.id + 1, self.newname) + os.linesep
+        for name in char_stat_names_with_offsets:
+            blurb = "{0:8} {1}".format(name.upper() + ":", self.stats_mutated[name])
+            s += blurb + os.linesep
+        return s.strip()
+
+    def get_bytes(self):
+        substitution = {}
+        for stat in self.stats_mutated:
+            address = self.address + char_stat_names_with_offsets[stat]
+            substitution[address] = self.stats_mutated[stat].to_bytes(1, byteorder="big")
+        level_and_run = (self.level_modifier_mutated << 2) | self.run_chance_mutated
+        substitution[self.address + level_and_run_offset] = level_and_run.to_bytes(1, byteorder="big")
+        return substitution

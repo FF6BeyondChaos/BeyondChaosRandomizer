@@ -1,7 +1,7 @@
 import itertools
 import os
 
-from character import get_characters
+from character import get_characters_deprecated
 from options import Options_
 from locationrandomizer import get_npcs
 from monsterrandomizer import change_enemy_name
@@ -121,7 +121,7 @@ def sanitize_names(names):
 
 
 def manage_character_names(fout, change_to, male):
-    characters = get_characters()
+    characters = get_characters_deprecated()
     wild = Options_.is_code_active('partyparty')
     sabin_mode = Options_.is_code_active('suplexwrecks')
     tina_mode = Options_.is_code_active('bravenudeworld')
@@ -432,7 +432,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
 
 
 def manage_character_appearance(fout, preserve_graphics=False):
-    characters = get_characters()
+    characters = get_characters_deprecated()
     wild = Options_.is_code_active('partyparty')
     sabin_mode = Options_.is_code_active('suplexwrecks')
     tina_mode = Options_.is_code_active('bravenudeworld')
@@ -678,7 +678,7 @@ def manage_palettes(fout, change_to, char_ids):
     christmas_mode = Options_.is_code_active('christmas')
     new_palette_mode = not Options_.is_code_active('sometimeszombies')
 
-    characters = get_characters()
+    characters = get_characters_deprecated()
     npcs = get_npcs()
     charpal_Options = {}
     for line in open(CHARACTER_PALETTE_TABLE):

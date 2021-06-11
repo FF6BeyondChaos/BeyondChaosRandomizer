@@ -2,7 +2,7 @@ import random
 
 from numpy.random import Generator
 
-from Dtos.character import Character
+from GameObjects.character import Character
 from Randomizers.baserandomizer import Randomizer
 from options import Options
 
@@ -67,7 +67,7 @@ class CharacterStats(Randomizer):
         character.run_chance_mutated = new_run_chance - 1
         # Don't randomize Terra's level because it gets added for
         # every loop through the title screen, apparently.
-        if not self._randomize_level and character.id != 0:
+        if self._randomize_level and character.id != 0:
             level_roll = random.randint(0, 99)
             level_chance_array = level_map[character.level_modifier]
             new_level_modifier = 0
@@ -75,4 +75,3 @@ class CharacterStats(Randomizer):
                 level_roll -= level_chance_array[new_level_modifier]
                 new_level_modifier += 1
             character.level_modifier_mutated = new_level_modifier - 1
-

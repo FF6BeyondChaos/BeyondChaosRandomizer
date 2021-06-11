@@ -9,15 +9,18 @@ from shutil import copyfile
 import os
 from hashlib import md5
 
+import numpy.random
+
 import character
 import esperrandomizer
 import formationrandomizer
 import locationrandomizer
 import musicrandomizer
 import towerrandomizer
+from Randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance
-from character import get_characters, get_character, equip_offsets
+from character import get_characters_deprecated, get_character, equip_offsets
 from chestrandomizer import mutate_event_items, get_event_items
 from decompress import Decompressor
 from dialoguemanager import manage_dialogue_patches, get_dialogue, set_dialogue, read_dialogue, read_location_names, write_location_names
@@ -511,7 +514,7 @@ def auto_learn_rage():
 
 
 def manage_commands(commands):
-    characters = get_characters()
+    characters = get_characters_deprecated()
 
     learn_lore_sub = Substitution()
     learn_lore_sub.bytestring = bytes([0xEA, 0xEA, 0xF4, 0x00, 0x00, 0xF4, 0x00, 0x00])
@@ -701,7 +704,7 @@ def manage_commands(commands):
 def manage_tempchar_commands():
     if Options_.is_code_active('metronome'):
         return
-    characters = get_characters()
+    characters = get_characters_deprecated()
     chardict = {c.id:c for c in characters}
     basicpool = set(range(3, 0x1E)) - changed_commands - set([0x4, 0x11, 0x14, 0x15, 0x19])
     mooglepool, banonpool, ghostpool, leopool = list(map(set, [basicpool] * 4))
@@ -743,7 +746,7 @@ def manage_commands_new(commands):
     # replacing lore screws up enemy skills
     # replacing jump makes the character never come back down
     # replacing mimic screws up enemy skills too
-    characters = get_characters()
+    characters = get_characters_deprecated()
     freespaces = []
     freespaces.append(FreeBlock(0x2A65A, 0x2A800))
     freespaces.append(FreeBlock(0x2FAAC, 0x2FC6D))
@@ -1223,7 +1226,7 @@ def manage_commands_new(commands):
 
 
 def manage_suplex(commands, monsters):
-    characters = get_characters()
+    characters = get_characters_deprecated()
     freespaces = []
     freespaces.append(FreeBlock(0x2A65A, 0x2A800))
     freespaces.append(FreeBlock(0x2FAAC, 0x2FC6D))
@@ -1260,7 +1263,7 @@ def manage_suplex(commands, monsters):
 
 def beta_manageDesperation():
     try:
-        characters = get_characters()
+        characters = get_characters_deprecated()
         if random.randint(0, 9) != 9:
                 num_deperate = 2
                 while num_deperate < len(characters) and random.choice([True, False]):
@@ -1271,7 +1274,7 @@ def beta_manageDesperation():
 
 
 def manage_natural_magic():
-    characters = get_characters()
+    characters = get_characters_deprecated()
     candidates = [c for c in characters if c.id < 12 and (0x02 in c.battle_commands or 0x17 in c.battle_commands)]
 
     num_natural_mages = 1
@@ -1434,7 +1437,7 @@ def manage_equip_umaro(freespaces):
 
 
 def manage_umaro(commands):
-    characters = get_characters()
+    characters = get_characters_deprecated()
     candidates = [c for c in characters if c.id <= 13 and c.id != 12 and 2 not in c.battle_commands and 0xC not in c.battle_commands and 0x17 not in c.battle_commands]
 
     if not candidates:
@@ -1512,7 +1515,7 @@ def manage_skips():
     # bytestring:
     # 41 6E 64 53 68 65 61 74 68 57 61 73 54 68 65 72 65 54 6F 6F
     # at 0xCAA9F
-    characters = get_characters()
+    characters = get_characters_deprecated()
 
     def writeToAddress(address, event):
         event_skip_sub = Substitution()
@@ -2128,7 +2131,7 @@ def manage_items(items, changed_commands=None):
 
 
 def manage_equipment(items):
-    characters = get_characters()
+    characters = get_characters_deprecated()
     reset_equippable(items, characters=characters)
     equippable_dict = {"weapon": lambda i: i.is_weapon,
                        "shield": lambda i: i.is_shield,
@@ -4414,6 +4417,8 @@ def randomize(args):
             except OSError:
                 pass
 
+    original_rom_location = sourcefile
+
     if '.' in sourcefile:
         tempname = sourcefile.rsplit('.', 1)
     else:
@@ -4464,7 +4469,7 @@ def randomize(args):
     commands = commands_from_table(COMMAND_TABLE)
     commands = {c.name:c for c in commands}
 
-    characters = get_characters()
+    characters = get_characters_deprecated()
 
     activation_string = Options_.activate_from_string(flags)
 
@@ -4626,7 +4631,7 @@ def randomize(args):
     esperrage_spaces = [FreeBlock(0x26469, 0x26469 + 919)]
     if Options_.random_espers:
         if Options_.is_code_active('dancingmaduin'):
-            allocate_espers(Options_.is_code_active('ancientcave'), get_espers(sourcefile), get_characters(), fout, esper_replacements)
+            allocate_espers(Options_.is_code_active('ancientcave'), get_espers(sourcefile), get_characters_deprecated(), fout, esper_replacements)
             nerf_paladin_shield()
         manage_espers(esperrage_spaces, esper_replacements)
     reseed()
@@ -4670,7 +4675,7 @@ def randomize(args):
 
     start_in_wor = Options_.is_code_active('worringtriad')
     if Options_.random_character_stats:
-        # do this after swapping beserk
+        # do this after swapping berserk
         from itemrandomizer import set_item_changed_commands
         set_item_changed_commands(changed_commands)
         loglist = reset_special_relics(items, characters, fout)
@@ -4681,8 +4686,16 @@ def randomize(args):
             log(logstr, section="command-change relics")
         reset_cursed_shield(fout)
 
+        foo = CharacterStats(numpy.random.default_rng(), Options_, character.get_characters(original_rom_location))
+        foo.randomize()
+        for mutated_character in character.get_characters(original_rom_location, force_reload=False):
+            substitutions = mutated_character.get_bytes()
+            for substitution_address in substitutions:
+                fout.seek(substitution_address)
+                fout.write(substitutions[substitution_address])
         for c in characters:
-            c.mutate_stats(fout, start_in_wor)
+            pass
+            #c.mutate_stats(fout, start_in_wor)
     else:
         for c in characters:
             c.mutate_stats(fout, start_in_wor, read_only=True)
