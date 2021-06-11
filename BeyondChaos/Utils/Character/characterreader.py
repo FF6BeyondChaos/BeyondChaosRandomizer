@@ -1,4 +1,4 @@
-from Dtos.character import Character
+from GameObjects.character import Character
 
 
 def read_characters(file_name):
