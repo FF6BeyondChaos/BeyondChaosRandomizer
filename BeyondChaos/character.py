@@ -1,5 +1,6 @@
 from typing import List
 
+import options
 from GameObjects.character import Character
 from itemrandomizer import get_ranked_items
 from utils import CHAR_TABLE, hex2int, utilrandom as random
@@ -23,9 +24,9 @@ def cleanup():
     character_list_deprecated = []
 
 
-def get_characters(rom_file_name, force_reload=False) -> List[Character]:
+def load_characters(rom_file_name, force_reload=False) -> List[Character]:
     if character_list and not force_reload:
-        return character_list
+        return
 
     rom = open(rom_file_name, "rb")
     character_byte_block_length = 22
@@ -41,10 +42,10 @@ def get_characters(rom_file_name, force_reload=False) -> List[Character]:
         character_data = rom.read(character_byte_block_length)
         character = Character(i, character_address, character_address_and_name[1], character_data)
         character_list.append(character)
-    return character_list
+    return
 
 
-def get_characters_deprecated():
+def get_characters():
     if character_list_deprecated:
         return character_list_deprecated
 
@@ -58,11 +59,11 @@ def get_characters_deprecated():
         c = CharacterBlock(*line.split(','))
         c.set_id(i)
         character_list_deprecated.append(c)
-    return get_characters_deprecated()
+    return get_characters()
 
 
 def get_character(i):
-    characters = get_characters_deprecated()
+    characters = get_characters()
     return [c for c in characters if c.id == i][0]
 
 
@@ -94,6 +95,17 @@ class CharacterBlock:
             s += "Looks like: %s\n" % self.new_appearance
             s += "Originally: %s\n" % self.original_appearance
 
+        if not options.Use_new_randomizer:
+            # Using the refactored randomizer will prevent these fields from ever being populated
+            from utils import make_table
+            statblurbs = {}
+            for name in CHARSTATNAMES:
+                blurb = "{0:8} {1}".format(name.upper() + ":", self.stats[name])
+                statblurbs[name] = blurb
+            column1 = [statblurbs[n] for n in ["hp", "mp", "evade", "mblock"]]
+            column2 = [statblurbs[n] for n in ["vigor", "m.power", "speed", "stamina"]]
+            column3 = [statblurbs[n] for n in ["attack", "defense", "m.def"]]
+            s += make_table([column1, column2, column3]) + "\n"
         if self.id < 14:
             s += "Notable equipment: "
             s += ", ".join([n.name for n in self.get_notable_equips()])
