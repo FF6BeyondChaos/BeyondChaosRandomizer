@@ -26,5 +26,5 @@ class Randomizer(ABC):
     def randomize(self):
         """The actual randomization for a given flag happens here.
 
-        Note that it should operate on a DTO (or list of DTOs) and have no access to the actual ROM."""
+        Note that it should operate on a GameObject (or list of GameObjects) and have no access to the actual ROM."""
         raise NotImplementedError
