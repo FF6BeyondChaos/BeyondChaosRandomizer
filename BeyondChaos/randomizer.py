@@ -9,12 +9,16 @@ from shutil import copyfile
 import os
 from hashlib import md5
 
+import numpy.random
+
 import character
 import esperrandomizer
 import formationrandomizer
 import locationrandomizer
 import musicrandomizer
+import options
 import towerrandomizer
+from Randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance
 from character import get_characters, get_character, equip_offsets
@@ -4414,6 +4418,8 @@ def randomize(args):
             except OSError:
                 pass
 
+    original_rom_location = sourcefile
+
     if '.' in sourcefile:
         tempname = sourcefile.rsplit('.', 1)
     else:
@@ -4464,6 +4470,7 @@ def randomize(args):
     commands = commands_from_table(COMMAND_TABLE)
     commands = {c.name:c for c in commands}
 
+    character.load_characters(original_rom_location, force_reload=True)
     characters = get_characters()
 
     activation_string = Options_.activate_from_string(flags)
@@ -4497,6 +4504,8 @@ def randomize(args):
     print("\nNow beginning randomization.\n"
         "The randomization is very thorough, so it may take some time.\n"
         'Please be patient and wait for "randomization successful" to appear.')
+
+    rng = numpy.random.default_rng(seed)
 
     if Options_.is_code_active("thescenarionottaken"):
         diverge(fout)
@@ -4670,7 +4679,7 @@ def randomize(args):
 
     start_in_wor = Options_.is_code_active('worringtriad')
     if Options_.random_character_stats:
-        # do this after swapping beserk
+        # do this after swapping berserk
         from itemrandomizer import set_item_changed_commands
         set_item_changed_commands(changed_commands)
         loglist = reset_special_relics(items, characters, fout)
@@ -4681,8 +4690,17 @@ def randomize(args):
             log(logstr, section="command-change relics")
         reset_cursed_shield(fout)
 
-        for c in characters:
-            c.mutate_stats(fout, start_in_wor)
+        if options.Use_new_randomizer:
+            stat_randomizer = CharacterStats(rng, Options_, character.character_list)
+            stat_randomizer.randomize()
+            for mutated_character in character.character_list:
+                substitutions = mutated_character.get_bytes()
+                for substitution_address in substitutions:
+                    fout.seek(substitution_address)
+                fout.write(substitutions[substitution_address])
+        else:
+            for c in characters:
+                c.mutate_stats(fout, start_in_wor)
     else:
         for c in characters:
             c.mutate_stats(fout, start_in_wor, read_only=True)
@@ -4966,6 +4984,11 @@ def randomize(args):
         if c.id > 13:
             continue
         log(str(c), section="characters")
+
+    if options.Use_new_randomizer:
+        for c in sorted(character.character_list, key=lambda c: c.id):
+            if c.id <= 13:
+                log(str(c), section="stats")
 
     for m in sorted(get_monsters(), key=lambda m: m.display_name):
         if m.display_name:

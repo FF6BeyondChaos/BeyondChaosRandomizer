@@ -333,3 +333,4 @@ ALL_CODES = NORMAL_CODES + MAKEOVER_MODIFIER_CODES + CAVE_CODES + SPECIAL_CODES
 
 Options_ = Options(ALL_MODES[0])
 
+Use_new_randomizer = True
