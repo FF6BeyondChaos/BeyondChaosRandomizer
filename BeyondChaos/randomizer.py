@@ -8,7 +8,7 @@ import sys
 from sys import argv
 from time import time, sleep, gmtime
 import traceback
-from typing import BinaryIO, Dict, List, Set, Tuple
+from typing import BinaryIO, Callable, Dict, List, Set, Tuple
 
 import numpy.random
 
@@ -3088,7 +3088,7 @@ def manage_shops() -> Set[int]:
     return buyables
 
 
-def get_namelocdict():
+def get_namelocdict():                                                                                                                     
     if namelocdict:
         return namelocdict
 
@@ -3251,7 +3251,7 @@ def manage_colorize_esper_world():
     loc.palette_index = (loc.palette_index & 0xFFFFC0) | chosen
     loc.write_data(fout)
 
-def manage_encounter_rate():
+def manage_encounter_rate() -> None:
     if Options_.is_code_active('dearestmolulu'):
         overworld_rates = bytes([1, 0, 1, 0, 1, 0, 0, 0,
             0xC0, 0, 0x60, 0, 0x80, 1, 0, 0,
@@ -3315,7 +3315,7 @@ def manage_encounter_rate():
                     z.set_formation_rate(s, rate)
         z.write_data(fout)
 
-    def rates_cleaner(rates):
+    def rates_cleaner(rates: List[float]) -> List[int]:
         rates = [max(int(round(o)), 1) for o in rates]
         rates = [int2bytes(o, length=2) for o in rates]
         rates = [i for sublist in rates for i in sublist]
@@ -3435,7 +3435,8 @@ def create_dimensional_vortex():
     entrances = sorted(set(entrances), key=lambda x: (x.location.locid, x.entid if (hasattr(x, "entid") and x.entid is not None) else -1))
 
     # Don't randomize certain entrances
-    def should_be_vanilla(k):
+    def should_be_vanilla(k: locationrandomizer.Entrance) -> bool:
+        """Example input looks like <0 0: 30 6>"""
         if ((k.location.locid == 0x1E and k.entid == 1) # leave Arvis's house
                 or (k.location.locid == 0x14 and (k.entid == 10 or k.entid == 14)) # return to Arvis's house or go to the mines
                 or (k.location.locid == 0x32 and k.entid == 3) # backtrack out of the mines
@@ -3547,7 +3548,7 @@ def randomize_final_party_order():
     fout.write(code)
 
 
-def dummy_item(item):
+def dummy_item(item: ItemBlock) -> bool:
     dummied = False
     for m in get_monsters():
         dummied = m.dummy_item(item) or dummied
@@ -3598,7 +3599,7 @@ def manage_opening():
     d.writeover(0x52F7, [0xEA] * 3)
     d.writeover(0x5306, [0] * 57)
 
-    def mutate_palette_set(addresses, transformer=None):
+    def mutate_palette_set(addresses: List[int], transformer: Callable=None):
         if transformer is None:
             transformer = get_palette_transformer(always=True)
         for address in addresses:
@@ -3628,7 +3629,7 @@ def manage_opening():
     table = ("! " + "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "." + "abcdefghijklmnopqrstuvwxyz")
     table = dict((c, i) for (i, c) in enumerate(table))
 
-    def replace_credits_text(address, text, split=False):
+    def replace_credits_text(address: int, text: str, split=False):
         original = d.get_bytestring(address, 0x40)
         length = original.index(0)
         original = original[:length]
@@ -3855,7 +3856,39 @@ def manage_bingo():
                  'm': "Enemy",
                  's': "Spell"}
 
-    def generate_card(grid):
+    def generate_card(grid: List[list]) -> str:
+        """
+        Creates a matrix for bingo!
+
+        Inputs:
+            square types (abilities, items, monsters, spells)
+            size grid (default: 5)
+            difficulty level (easy, normal, hard)
+            number of cards to generate (default: 1)
+
+        Example card generated:
+        +------------+------------+------------+------------+------------+
+        |   ENEMY    |  ABILITY   |   SPELL    |    ITEM    |  ABILITY   |
+        |  Badmant   |   Plasma   |   X-Zone   | Force Shld | Bio Blast  |
+        | 500 Points | 900 Points |2200 Points |2000 Points |1400 Points |
+        +------------+------------+------------+------------+------------+
+        |   SPELL    |    ITEM    |  ABILITY   |   SPELL    |    ITEM    |
+        |    Bolt    |Czarina Gown|  Dischord  |   Haste    |Green Beret |
+        | 200 Points | 500 Points | 500 Points | 400 Points | 100 Points |
+        +------------+------------+------------+------------+------------+
+        |   ENEMY    |   SPELL    |   ENEMY    |    ITEM    |   ENEMY    |
+        | Fizerneanu |    Doom    | Blaki Carm | Wall Ring  |   Aphae    |
+        | 500 Points |1000 Points |1100 Points | 200 Points | 700 Points |
+        +------------+------------+------------+------------+------------+
+        |  ABILITY   |    ITEM    |   SPELL    |   ENEMY    |  ABILITY   |
+        |   Slide    |  Ragnarok  |   Cure 3   |    Aqui    | Magnitude8 |
+        |1000 Points |1400 Points | 700 Points |1900 Points | 900 Points |
+        +------------+------------+------------+------------+------------+
+        |    ITEM    |   ENEMY    |    ITEM    |  ABILITY   |   SPELL    |
+        |   Tiara    |  Osierry   | Aura Lance |  Sun Bath  |   Ice 2    |
+        | 100 Points | 200 Points | 700 Points | 300 Points | 500 Points |
+        +------------+------------+------------+------------+------------+
+        """
         midborder = "+" + "+".join(["-" * 12] * len(grid)) + "+"
         s = midborder + "\n"
         for row in grid:
@@ -4285,7 +4318,7 @@ def expand_rom():
         expand_sub.write(fout)
 
 
-def diverge(fout):
+def diverge(fout: BinaryIO):
     for line in open(DIVERGENT_TABLE):
         line = line.strip().split('#')[0]  # Ignore everything after '#'
         if not line:
@@ -4298,7 +4331,12 @@ def diverge(fout):
         fout.write(data)
 
 
-def randomize(args):
+def randomize(args: List[str]) -> str:
+    """
+    The main function which takes in user arguments and creates a log
+    and outfile. Returns a path (as str) to the output file.
+    TODO: Document parameters, args, etc.
+    """
     global outfile, sourcefile, flags, seed, fout, ALWAYS_REPLACE, NEVER_REPLACE
 
     if TEST_ON:
@@ -5072,7 +5110,6 @@ def randomize(args):
 
     if Options_.is_code_active('bingoboingo'):
         manage_bingo()
-
     try:
         Reset()
     except Exception as e:
