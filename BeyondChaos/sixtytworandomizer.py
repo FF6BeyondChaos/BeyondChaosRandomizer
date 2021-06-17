@@ -554,12 +554,12 @@ def commands_from_table(tablefile):
     return commands
 
 
-character_list = []
+character_list_deprecated = []
 
 
 def get_characters():
-    if character_list:
-        return character_list
+    if character_list_deprecated:
+        return character_list_deprecated
 
     for i, line in enumerate(open(CHAR_TABLE)):
         line = line.strip()
@@ -570,7 +570,7 @@ def get_characters():
             line = line.replace('  ', ' ')
         c = CharacterBlock(*line.split(','))
         c.set_id(i)
-        character_list.append(c)
+        character_list_deprecated.append(c)
     return get_characters()
 
 

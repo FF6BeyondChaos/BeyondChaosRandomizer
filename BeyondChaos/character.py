@@ -1,3 +1,7 @@
+from typing import List
+
+import options
+from GameObjects.character import Character
 from itemrandomizer import get_ranked_items
 from utils import CHAR_TABLE, hex2int, utilrandom as random
 
@@ -11,17 +15,39 @@ equip_offsets = {"weapon": 15,
 CHARSTATNAMES = ["hp", "mp", "vigor", "speed", "stamina", "m.power",
                  "attack", "defense", "m.def", "evade", "mblock"]
 
+character_list_deprecated = []
 character_list = []
 
 
 def cleanup():
-    global character_list
-    character_list = []
+    global character_list_deprecated
+    character_list_deprecated = []
+
+
+def load_characters(rom_file_name, force_reload=False):
+    if character_list and not force_reload:
+        return
+
+    rom = open(rom_file_name, "rb")
+    character_byte_block_length = 22
+    for i, line in enumerate(open(CHAR_TABLE)):
+        line = line.strip()
+        if line[0] == '#':
+            continue
+        while '  ' in line:
+            line = line.replace('  ', ' ')
+        character_address_and_name = line.split(",")
+        character_address = int(character_address_and_name[0], 16)
+        rom.seek(character_address)
+        character_data = rom.read(character_byte_block_length)
+        character = Character(i, character_address, character_address_and_name[1], character_data)
+        character_list.append(character)
+    return
 
 
 def get_characters():
-    if character_list:
-        return character_list
+    if character_list_deprecated:
+        return character_list_deprecated
 
     for i, line in enumerate(open(CHAR_TABLE)):
         line = line.strip()
@@ -32,7 +58,7 @@ def get_characters():
             line = line.replace('  ', ' ')
         c = CharacterBlock(*line.split(','))
         c.set_id(i)
-        character_list.append(c)
+        character_list_deprecated.append(c)
     return get_characters()
 
 
@@ -69,15 +95,17 @@ class CharacterBlock:
             s += "Looks like: %s\n" % self.new_appearance
             s += "Originally: %s\n" % self.original_appearance
 
-        from utils import make_table
-        statblurbs = {}
-        for name in CHARSTATNAMES:
-            blurb = "{0:8} {1}".format(name.upper() + ":", self.stats[name])
-            statblurbs[name] = blurb
-        column1 = [statblurbs[n] for n in ["hp", "mp", "evade", "mblock"]]
-        column2 = [statblurbs[n] for n in ["vigor", "m.power", "speed", "stamina"]]
-        column3 = [statblurbs[n] for n in ["attack", "defense", "m.def"]]
-        s += make_table([column1, column2, column3]) + "\n"
+        if not options.Use_new_randomizer:
+            # Using the refactored randomizer will prevent these fields from ever being populated
+            from utils import make_table
+            statblurbs = {}
+            for name in CHARSTATNAMES:
+                blurb = "{0:8} {1}".format(name.upper() + ":", self.stats[name])
+                statblurbs[name] = blurb
+            column1 = [statblurbs[n] for n in ["hp", "mp", "evade", "mblock"]]
+            column2 = [statblurbs[n] for n in ["vigor", "m.power", "speed", "stamina"]]
+            column3 = [statblurbs[n] for n in ["attack", "defense", "m.def"]]
+            s += make_table([column1, column2, column3]) + "\n"
         if self.id < 14:
             s += "Notable equipment: "
             s += ", ".join([n.name for n in self.get_notable_equips()])
@@ -202,7 +230,7 @@ class CharacterBlock:
             run_chance = random.randint(0, 99)
             for i, prob in enumerate(run_map[run]):
                 run_chance -= prob
-                if prob < 0:
+                if run_chance < 0:
                     run = i
                     break
 
