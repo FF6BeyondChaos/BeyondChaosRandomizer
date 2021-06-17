@@ -266,7 +266,7 @@ class MonsterBlock:
             areas.remove("Final Dungeon")
             areas.insert(1, "Final Dungeon")
 
-        return ", ".join(areas[:2])
+        return ", ".join(areas[:-1])
 
     @property
     def special_effect_str(self):
