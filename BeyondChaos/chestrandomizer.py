@@ -30,6 +30,15 @@ def add_orphaned_formation(formation):
     global orphaned_formations
     orphaned_formations.append(formation)
 
+def cleanup():
+    global extra_miabs, orphaned_formations, used_formations, done_items, appropriate_formations
+
+    extra_miabs = []
+    orphaned_formations = None
+    used_formations = []
+    done_items = []
+    appropriate_formations = None
+
 
 def get_orphaned_formations(old_version=False):
     global orphaned_formations

@@ -306,7 +306,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None):
     tower_msg_sub.set_location(0xA03A7)
     tower_msg_sub.write(fout)
 
-    from LocationRandomizer import NPCBlock, EventBlock
+    from locationrandomizer import NPCBlock, EventBlock
     falcon = get_location(0xb)
     save_point = NPCBlock(pointer=None, locid=falcon.locid)
     attributes = {
