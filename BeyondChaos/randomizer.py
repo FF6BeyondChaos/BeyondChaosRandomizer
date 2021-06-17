@@ -18,7 +18,7 @@ import locationrandomizer
 import musicrandomizer
 import options
 import towerrandomizer
-from Randomizers.characterstats import CharacterStats
+from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance
 from character import get_characters, get_character, equip_offsets
