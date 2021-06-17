@@ -1,7 +1,8 @@
-from os import path
 from collections import defaultdict
+from os import path
 import random
 import re
+from typing import BinaryIO
 
 try:
     from sys import _MEIPASS
@@ -83,13 +84,13 @@ class Substitution:
     bytestring = None
 
     @property
-    def size(self):
+    def size(self) -> int:
         return len(self.bytestring)
 
-    def set_location(self, location):
+    def set_location(self, location: int):
         self.location = location
 
-    def write(self, fout):
+    def write(self, fout: BinaryIO):
         fout.seek(self.location)
         fout.write(bytes(self.bytestring))
 
