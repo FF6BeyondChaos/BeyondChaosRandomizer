@@ -2,14 +2,15 @@ import random
 
 from numpy.random import Generator
 
-from GameObjects.character import Character
-from Randomizers.baserandomizer import Randomizer
+from gameobjects.character import Character
+from randomizers.baserandomizer import Randomizer
 from options import Options
+from typing import List
 
 
 class CharacterStats(Randomizer):
 
-    def __init__(self, rng: Generator, options: Options, characters: list[Character]):
+    def __init__(self, rng: Generator, options: Options, characters: List[Character]):
         super().__init__(options)
         self._randomize_level = not self._Options.is_code_active('worringtriad')
         self._characters = characters

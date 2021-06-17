@@ -1,28 +1,26 @@
+import sys
+import time
+import traceback
+
+import musicrandomizer
+from PyQt5 import QtGui, QtCore
+from PyQt5.QtGui import QCursor
+from PyQt5.QtWidgets import QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel, QGroupBox, \
+    QHBoxLayout, QLineEdit, QComboBox, QFileDialog, QApplication, \
+    QTabWidget, QInputDialog, QScrollArea, QMessageBox, QGraphicsDropShadowEffect
+
 import character
 import config
-import sys
-from subprocess import call
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtCore import pyqtRemoveInputHook
-from PyQt5.QtWidgets import QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel, QGroupBox, \
-    QHBoxLayout, QLineEdit, QRadioButton, QGridLayout, QComboBox, QFileDialog, QApplication, \
-    QTabWidget, QInputDialog, QScrollArea, QMessageBox, QGraphicsDropShadowEffect, QSlider
-from PyQt5.QtGui import QCursor
-
 import esperrandomizer
 import formationrandomizer
 import itemrandomizer
 import locationrandomizer
 import monsterrandomizer
-import musicrandomizer
+import chestrandomizer
 import options
 import randomizer
 import towerrandomizer
 import update
-import constants
-import time
-import traceback
-
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. Report this to Green Knight")
@@ -88,7 +86,7 @@ class Window(QWidget):
         self.GamePresets = {}
 
         #tabs names for the tabs in flags box
-        self.tabNames = ["Flags", "Sprites", "SpriteCategories", "Battle", "Aesthetic", "Major", "Experimental", "Gamebreaking"]
+        self.tabNames = ["Flags", "Sprites", "SpriteCategories", "Battle", "Aesthetic", "Major", "Experimental", "Gamebreaking", "Beta"]
 
         # ui elements
         self.flagString = QLineEdit() #flag text box for displaying the flags
@@ -106,9 +104,10 @@ class Window(QWidget):
         self.tab6 = QWidget()
         self.tab7 = QWidget()
         self.tab8 = QWidget()
+        self.tab9 = QWidget()
 
         #self.middleLeftGroupBox = QGroupBox() #obsolted
-        self.tablist = [self.tab1, self.tab2, self.tab3, self.tab4, self.tab5, self.tab6, self.tab7, self.tab8]
+        self.tablist = [self.tab1, self.tab2, self.tab3, self.tab4, self.tab5, self.tab6, self.tab7, self.tab8, self.tab9]
 
         #global busy notifications
         flagsChanging = False
@@ -734,6 +733,9 @@ class Window(QWidget):
             self.seed = self.seedInput.text()
 
             displaySeed = self.seed
+
+            flagMsg = ""
+
             if self.seed == "":
                 displaySeed = "(none)" # pretty-printing :)
 
@@ -746,7 +748,9 @@ class Window(QWidget):
                 if flagMsg != "":
                     flagMsg += "\n----"
                 flagMsg += flag
-                
+            if flagMsg == "":
+                QMessageBox.about(self, "Error", "You need to select a flag and/or code!")
+                return
 
             # This makes the flag string more readable in the confirm dialog
             message = ((f"Rom: {self.romText}\n"
@@ -790,6 +794,7 @@ class Window(QWidget):
                     locationrandomizer.cleanup()
                     musicrandomizer.cleanup()
                     towerrandomizer.cleanup()
+                    chestrandomizer.cleanup()
                 #sys.exit() Lets no longer sysexit anymore so we don't have to
                 #reopen each time.  The user can close the gui.
 

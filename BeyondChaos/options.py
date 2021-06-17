@@ -256,7 +256,7 @@ NORMAL_CODES = [
     Code('bsiab', "UNBALANCED MONSTER CHESTS MODE", "Reverts the monster-in-a-box selection algorithm to be (mostly) the same as versions prior to EX v3.", "major"),
     Code('llg', "LOW LEVEL GAME MODE", "Stands for Low Level Game. No encounters will yield any Experience Points.", "major"),
     Code('mimetime', 'ALTERNATE GOGO MODE', "Gogo will be hidden somewhere in the world of ruin disguised as another character. Bring that character to him to recruit him.", "major"),
-    Code('nomiabs', 'NO MIAB MODE', "Chests will never have monster encounters in them", "beta"),
+    Code('nomiabs', 'NO MIAB MODE', "Chests will never have monster encounters in them", "major"),
 
     Code('dancingmaduin', "RESTRICTED ESPERS MODE", "Restricts Esper usage such that most Espers can only be equipped by one character. Also usually changes what spell the Paladin Shld teaches.", "major"),
     Code('darkworld', "SLASHER'S DELIGHT MODE", "Drastically increases the difficulty of the seed, akin to a hard mode. Mostly meant to be used in conjunction with the madworld code.", "major"),
@@ -290,7 +290,6 @@ NORMAL_CODES = [
     Code('worringtriad', "START IN WOR", "The player will start in the World of Ruin, with all of the World of Balance treasure chests, along with a guaranteed set of items, and more Lores.", "major"),
     
     Code('desperation', "When all options fail", "When the adventurer back is up against the wall. Break the wall.", "major"),
-    Code('nomiabs', "NO MIAB MODE", "Chest will never have monster encounters", "beta"),
     #Code('sixtytwoqd', "version 62 randomizer", "For quickdraw only, run version 62 of the randomizer", "beta"),
 ]
 
