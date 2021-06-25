@@ -55,13 +55,6 @@ f_tellmewhy = False
 DEBUG = False
 FLAGS = set()
 
-def cleanup():
-    global freespace, spoiler, f_tellmewhy, FLAGS, DEBUG
-    freespace = None
-    spoiler = {}
-    f_tellmewhy = False
-    DEBUG = False
-    FLAGS = set()
 
 def safepath(vpath):
     # NEW

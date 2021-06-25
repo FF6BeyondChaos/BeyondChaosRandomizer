@@ -13,9 +13,12 @@ from typing import BinaryIO, Callable, Dict, List, Set, Tuple
 import numpy.random
 
 import character
+import chestrandomizer
 import esperrandomizer
 import formationrandomizer
+import itemrandomizer
 import locationrandomizer
+import monsterrandomizer
 import musicrandomizer
 import options
 import towerrandomizer
@@ -36,7 +39,7 @@ from formationrandomizer import (REPLACE_FORMATIONS, KEFKA_EXTRA_FORMATION,
 from itemrandomizer import (reset_equippable, get_ranked_items, get_item,
                             reset_special_relics, reset_rage_blizzard,
                             reset_cursed_shield, unhardcode_tintinabar,
-                            cleanup, ItemBlock)
+                            ItemBlock)
 from locationrandomizer import (get_locations, get_location, get_zones,
                                 get_npcs, randomize_forest)
 from menufeatures import (improve_item_display, improve_gogo_status_menu,
@@ -47,7 +50,7 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
                                shuffle_monsters, get_monster, read_ai_table,
                                change_enemy_name, randomize_enemy_name,
                                get_collapsing_house_help_skill,
-                               monsterCleanup, MonsterBlock)
+                               MonsterBlock)
 from musicrandomizer import randomize_music, manage_opera, insert_instruments
 from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
@@ -70,6 +73,7 @@ from utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    mutate_index, utilrandom as random, open_mei_fallback,
                    AutoLearnRageSub)
 from wor import manage_wor_recruitment, manage_wor_skip
+from importlib import reload
 
 
 VERSION = "4"
@@ -212,14 +216,15 @@ def rngstate() -> int:
 def Reset():
     global seedcounter
     seedcounter = 0
-    cleanup()
-    monsterCleanup()
-    formationrandomizer.cleanup()
-    character.cleanup()
-    esperrandomizer.cleanup()
-    locationrandomizer.cleanup()
-    musicrandomizer.cleanup()
-    towerrandomizer.cleanup()
+    reload(itemrandomizer)
+    reload(monsterrandomizer)
+    reload(formationrandomizer)
+    reload(character)
+    reload(esperrandomizer)
+    reload(locationrandomizer)
+    reload(musicrandomizer)
+    reload(towerrandomizer)
+    reload(chestrandomizer)
 
 
 def reseed():

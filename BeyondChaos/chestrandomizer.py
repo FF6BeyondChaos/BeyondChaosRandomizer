@@ -5,7 +5,6 @@ from formationrandomizer import get_formations, get_fsets
 from itemrandomizer import get_ranked_items, get_item
 from utils import read_multi, write_multi, mutate_index, utilrandom as random, Substitution
 
-
 valid_ids = list(range(1, 0x200))
 banned_formids = [0, 0x1d7]
 extra_miabs = []
@@ -26,18 +25,10 @@ OLD_EVENT_ENEMIES = [0x00, 0x01, 0x02, 0x09, 0x19, 0x1b, 0x22, 0x24, 0x33, 0x38,
                      0x39, 0x3a, 0x42, 0x43, 0x50, 0x59, 0x5e, 0x64, 0x73, 0x7f,
                      0xd1, 0xe3]
 
+
 def add_orphaned_formation(formation):
     global orphaned_formations
     orphaned_formations.append(formation)
-
-def cleanup():
-    global extra_miabs, orphaned_formations, used_formations, done_items, appropriate_formations
-
-    extra_miabs = []
-    orphaned_formations = None
-    used_formations = []
-    done_items = []
-    appropriate_formations = None
 
 
 def get_orphaned_formations(old_version=False):
@@ -160,8 +151,8 @@ def select_monster_in_a_box(rank, value, clock, guarantee_miab_treasure, enemy_l
                            if f not in used_formations]
     extra_miabs = get_extra_miabs(0)
 
-    normal_rank_limit = lambda rank: 9/5 * rank - 150
-    special_rank_limit = lambda rank: 5/4000 * rank * rank + 7/4*rank - 300
+    normal_rank_limit = lambda rank: 9 / 5 * rank - 150
+    special_rank_limit = lambda rank: 5 / 4000 * rank * rank + 7 / 4 * rank - 300
 
     if guarantee_miab_treasure:
         extra_miabs = []
@@ -182,7 +173,8 @@ def select_monster_in_a_box(rank, value, clock, guarantee_miab_treasure, enemy_l
                 formations = formations[:random.randint(2, 6)]
             if not (clock or old_version):
                 orphaned_formations = [f for f in orphaned_formations
-                                       if f.rank() < normal_rank_limit(rank) and f.get_guaranteed_drop_value() >= value * 20 - 1000]
+                                       if f.rank() < normal_rank_limit(
+                        rank) and f.get_guaranteed_drop_value() >= value * 20 - 1000]
                 max_extra_miab_rank = special_rank_limit(rank)
                 extra_miabs = [f for f in extra_miabs if f.rank() <= max_extra_miab_rank]
         candidates = (orphaned_formations + extra_miabs)
@@ -204,7 +196,7 @@ def select_monster_in_a_box(rank, value, clock, guarantee_miab_treasure, enemy_l
     value_divisor = 8
     while not candidates:
         max_rank = max(rank, rank_multiplier * normal_rank_limit(rank))
-        min_value = value * 100/value_divisor - 1500
+        min_value = value * 100 / value_divisor - 1500
         orphaned_formations = get_orphaned_formations(old_version)
         orphaned_formations = [f for f in orphaned_formations
                                if f.rank() <= max_rank and f.get_guaranteed_drop_value() >= min_value / 3 - 1200]
@@ -234,13 +226,13 @@ def select_monster_in_a_box(rank, value, clock, guarantee_miab_treasure, enemy_l
             half = len(candidates) // 2
             candidates = candidates[half:]
             index = random.randint(0, half) + random.randint(0, half)
-            index = min(index, len(candidates)-1)
+            index = min(index, len(candidates) - 1)
             candidates = candidates[index:]
 
     candidates = sorted(candidates, key=lambda f: f.rank())
     if orphaned_formations:
         index = max(
-            0, len([c for c in candidates if c.rank() <= rank])-1)
+            0, len([c for c in candidates if c.rank() <= rank]) - 1)
         index = mutate_index(index, len(candidates), [False, True],
                              (-3, 2), (-1, 1))
     else:
@@ -438,10 +430,10 @@ class ChestBlock:
                 index = 0
             indexed_item = items[index]
         else:
-            lowpriced = [i for i in items if i.rank() <= value*100]
+            lowpriced = [i for i in items if i.rank() <= value * 100]
             if not lowpriced:
                 lowpriced = items[:random.randint(1, 16)]
-            index = max(0, len(lowpriced)-1)
+            index = max(0, len(lowpriced) - 1)
             indexed_item = lowpriced[index]
 
         chance = random.randint(1, 50)
@@ -474,7 +466,9 @@ class ChestBlock:
             if self.is_clock or not rank:
                 rank = min(formations, key=lambda f: f.rank()).rank() if formations else 0
 
-            chosen = select_monster_in_a_box(rank=rank, value=value, clock=self.is_clock or monster is True, old_version=uncapped_monsters, guarantee_miab_treasure=guarantee_miab_treasure, enemy_limit=enemy_limit)
+            chosen = select_monster_in_a_box(rank=rank, value=value, clock=self.is_clock or monster is True,
+                                             old_version=uncapped_monsters,
+                                             guarantee_miab_treasure=guarantee_miab_treasure, enemy_limit=enemy_limit)
             chosen = get_2pack(chosen)
 
             # only 2-packs are allowed
@@ -511,10 +505,14 @@ class ChestBlock:
         assert self.contents <= 0xFF
         self.value = value
 
+
 event_mem_id = 281
 multiple_event_items = []
+
+
 class EventItem:
-    def __init__(self, content_type, contents, pointer, cutscene_skip_pointer=None, postfix_bytes=[], monster=None, text=True, multiple=False):
+    def __init__(self, content_type, contents, pointer, cutscene_skip_pointer=None, postfix_bytes=[], monster=None,
+                 text=True, multiple=False):
         global event_mem_id
         self.content_type = content_type
         self.contents = contents
@@ -552,7 +550,8 @@ class EventItem:
         if no_monsters or cannot_show_text:
             monster = False
 
-        c.mutate_contents(monster=monster, crazy_prices=crazy_prices, uncapped_monsters=uncapped_monsters, no_monsters=no_monsters)
+        c.mutate_contents(monster=monster, crazy_prices=crazy_prices, uncapped_monsters=uncapped_monsters,
+                          no_monsters=no_monsters)
         # If we can't show text, we don't want it to be GP,
         # because that event takes 3 bytes instead of 2,
         # and I'd have to rearrange or remove stuff to fit it.
@@ -579,7 +578,7 @@ class EventItem:
                 event_item_sub.bytestring.append(content_command_dict[self.content_type])
             event_item_sub.bytestring.append(self.contents)
         else:
-            event_item_sub.bytestring.extend([0xFD, 0xFD]) # Do nothing
+            event_item_sub.bytestring.extend([0xFD, 0xFD])  # Do nothing
         if not cutscene_skip or not self.cutscene_skip_pointer:
             event_item_sub.bytestring.extend(self.postfix_bytes)
         event_item_sub.write(fout)
@@ -592,9 +591,10 @@ class EventItem:
             self.pointer = prev_pointer
         elif self.pointer == 0xCD59E:
             event_item_sub.bytestring = bytes([
-                0x94, # Pause 60 frames
-                0x66 if self.content_type == 0x40 else 0x67, 0xE5, 0xC6, self.contents,  # Show text 0x06E5 at bottom, no text box, with item self.contents
-                0xFE]) # return
+                0x94,  # Pause 60 frames
+                0x66 if self.content_type == 0x40 else 0x67, 0xE5, 0xC6, self.contents,
+                # Show text 0x06E5 at bottom, no text box, with item self.contents
+                0xFE])  # return
             event_item_sub.set_location(0x10CF4A)
             event_item_sub.write(fout)
 
@@ -610,101 +610,116 @@ class EventItem:
             event_item_sub.set_location(0xCD581)
             event_item_sub.write(fout)
 
+
 # TODO: Maybe this should be in a text file
 event_items_dict = {
-    "Narshe (WoB)" : [
+    "Narshe (WoB)": [
         EventItem(0x40, 0xF6, 0xCA00A, cutscene_skip_pointer=0xC9F87, monster=False, text=False),
         EventItem(0x40, 0xF6, 0xCA00C, cutscene_skip_pointer=0xC9F89, monster=False, text=False),
         EventItem(0x40, 0xCD, 0xCD59E, monster=False),
     ],
 
-    "Figaro Castle":[
+    "Figaro Castle": [
         EventItem(0x40, 0xAA, 0xA66B4, cutscene_skip_pointer=0xA6633, monster=False, text=False),
     ],
 
-    "Returner's Hideout" : [
+    "Returner's Hideout": [
         EventItem(0x40, 0xD0, 0xAFB0B, cutscene_skip_pointer=0xAFAC9, monster=False, multiple=True),
         EventItem(0x40, 0xD1, 0xAFFD2, cutscene_skip_pointer=0xAFDE7, monster=False),
     ],
 
-    "Mobliz (WoB)" : [
+    "Mobliz (WoB)": [
         EventItem(0x40, 0xE5, 0xC6883, monster=False),
     ],
 
-    "Crescent Mountain" : [
+    "Crescent Mountain": [
         EventItem(0x40, 0xE8, 0xBC432, postfix_bytes=[0x45, 0x45, 0x45], monster=False),
     ],
 
-    "Sealed Gate" : [
+    "Sealed Gate": [
         EventItem(0x40, 0xAE, 0xB30E5, postfix_bytes=[0xD4, 0x4D, 0xFE]),
         EventItem(0x40, 0xAC, 0xB3103, postfix_bytes=[0xD4, 0x4E, 0xFE]),
-        EventItem(0x40, 0xF5, 0xB3121, postfix_bytes=[0xD4, 0x4F, 0xFE]), # in vanilla: says Remedy, gives Soft. Changed to give Remedy.
-        EventItem(0x80, 0x14, 0xB313F, postfix_bytes=[0xD4, 0x50, 0xFE]), # in vanilla: says 2000 GP, gives 293 GP. Changed to give 2000 GP.
+        EventItem(0x40, 0xF5, 0xB3121, postfix_bytes=[0xD4, 0x4F, 0xFE]),
+        # in vanilla: says Remedy, gives Soft. Changed to give Remedy.
+        EventItem(0x80, 0x14, 0xB313F, postfix_bytes=[0xD4, 0x50, 0xFE]),
+        # in vanilla: says 2000 GP, gives 293 GP. Changed to give 2000 GP.
     ],
 
-    "Vector" : [
+    "Vector": [
         EventItem(0x40, 0xE5, 0xC9257, monster=False),
         EventItem(0x40, 0xDF, 0xC926C, monster=False),
     ],
 
-    "Owzer's Mansion" : [
-        EventItem(0x80, 0x14, 0xB4A84, postfix_bytes=[0xD4, 0x59, 0x3A, 0xFE]), # in vanilla: says 2000 GP, gives 293 GP. Changed to give 2000 GP.
-        EventItem(0x40, 0xE9, 0xB4AC4, postfix_bytes=[0xD4, 0x5A, 0x3A, 0xFE]), # in vanilla: says Potion, gives Tonic. Changed to give Potion.
-        EventItem(0x40, 0xEC, 0xB4B03, postfix_bytes=[0xD4, 0x5B, 0x3A, 0xFE]), # in vanilla: says Ether, gives Tincture. Changed to give Ether.
-        EventItem(0x40, 0xF4, 0xB4B42, postfix_bytes=[0xD4, 0x5C, 0x3A, 0xFE]), # in vanilla: says Remedy, gives Soft. Changed to give Remedy.
+    "Owzer's Mansion": [
+        EventItem(0x80, 0x14, 0xB4A84, postfix_bytes=[0xD4, 0x59, 0x3A, 0xFE]),
+        # in vanilla: says 2000 GP, gives 293 GP. Changed to give 2000 GP.
+        EventItem(0x40, 0xE9, 0xB4AC4, postfix_bytes=[0xD4, 0x5A, 0x3A, 0xFE]),
+        # in vanilla: says Potion, gives Tonic. Changed to give Potion.
+        EventItem(0x40, 0xEC, 0xB4B03, postfix_bytes=[0xD4, 0x5B, 0x3A, 0xFE]),
+        # in vanilla: says Ether, gives Tincture. Changed to give Ether.
+        EventItem(0x40, 0xF4, 0xB4B42, postfix_bytes=[0xD4, 0x5C, 0x3A, 0xFE]),
+        # in vanilla: says Remedy, gives Soft. Changed to give Remedy.
     ],
 
-    "Doma Castle" : [
+    "Doma Castle": [
         EventItem(0x40, 0x30, 0xB99F4, monster=False, text=False),
     ],
 
-    "Kohlingen" : [
+    "Kohlingen": [
         EventItem(0x40, 0xEA, 0xC3240, monster=False),
         EventItem(0x40, 0xF0, 0xC3242, monster=False),
         EventItem(0x40, 0xED, 0xC3244, monster=False),
         EventItem(0x40, 0xEE, 0xC3246, monster=False),
         EventItem(0x40, 0x60, 0xC3248, monster=False),
         EventItem(0x40, 0x09, 0xC324A, postfix_bytes=[0xFD, 0xFD, 0xFD], monster=False),
-        ],
+    ],
 
-    "Narshe (WoR)" : [
+    "Narshe (WoR)": [
         EventItem(0x40, 0x1B, 0xC0B67, monster=False),
         EventItem(0x40, 0x66, 0xC0B80, postfix_bytes=[0xFD, 0xD0, 0xB8, 0xFD, 0xFD], monster=False),
     ],
 
-    "Fanatics Tower" : [
+    "Fanatics Tower": [
         EventItem(0x40, 0x21, 0xC5598, postfix_bytes=[0xFD, 0xFD, 0xFD], monster=False),
     ]
-    }
+}
 
 duplicate_event_item_dict = {
-    0xAFB0B : 0xAFB73,  # Gauntlet from Banon
-    0xAFFD2 : 0xAF975   # Genji Glove from returner
-    }
+    0xAFB0B: 0xAFB73,  # Gauntlet from Banon
+    0xAFFD2: 0xAF975  # Genji Glove from returner
+}
 
 duplicate_event_item_skip_dict = {
-    0xAFFD2 : 0xAF975   # Genji Glove from returner
-    }
+    0xAFFD2: 0xAF975  # Genji Glove from returner
+}
+
 
 def get_event_items():
     return event_items_dict
 
+
 def mutate_event_items(fout, cutscene_skip=False, crazy_prices=False, no_monsters=False, uncapped_monsters=False):
     event_item_sub = Substitution()
     event_item_sub.set_location(0x9926)
-    event_item_sub.bytestring = bytes([0x8A, 0xD6, 0x99, 0xd6]) # pointer to new event commands 66 and 67
+    event_item_sub.bytestring = bytes([0x8A, 0xD6, 0x99, 0xd6])  # pointer to new event commands 66 and 67
     event_item_sub.write(fout)
     event_item_sub.set_location(0x9934)
-    event_item_sub.bytestring = bytes([0x13, 0xD6, 0x26, 0xD6, 0x71, 0xD6]) # pointers to new event commands 6D, 6E, and 6F
+    event_item_sub.bytestring = bytes(
+        [0x13, 0xD6, 0x26, 0xD6, 0x71, 0xD6])  # pointers to new event commands 6D, 6E, and 6F
     event_item_sub.write(fout)
 
     event_item_sub.set_location(0xD613)
     event_item_sub.bytestring = bytes([
         # 6D : (2 bytes) Give item to party and show message "Received <Item>!"
-        0xA5, 0xEB, 0x85, 0x1A, 0x8D, 0x83, 0x05, 0x20, 0xFC, 0xAC, 0x20, 0x06, 0x4D, 0xA9, 0x08, 0x85, 0xEB, 0x80, 0x59,
+        0xA5, 0xEB, 0x85, 0x1A, 0x8D, 0x83, 0x05, 0x20, 0xFC, 0xAC, 0x20, 0x06, 0x4D, 0xA9, 0x08, 0x85, 0xEB, 0x80,
+        0x59,
 
         # 6E (2 bytes) Give 100 * param GP to party and show message "Found <N> GP!" (It's 100 * param GP because that's what treasure chests do, but it doesn't need to be.)
-        0xA5, 0xEB, 0x85, 0x1A, 0x8D, 0x02, 0x42, 0xA9, 0x64, 0x8D, 0x03, 0x42, 0xEA, 0xEA, 0xEA, 0xAC, 0x16, 0x42, 0x84, 0x22, 0x64, 0x24, 0xC2, 0x21, 0x98, 0x6D, 0x60, 0x18, 0x8D, 0x60, 0x18, 0x7B, 0xE2, 0x20, 0x6D, 0x62, 0x18, 0x8D, 0x62, 0x18, 0xC9, 0x98, 0x90, 0x13, 0xAE, 0x60, 0x18, 0xE0, 0x7F, 0x96, 0x90, 0x0B, 0xA2, 0x7F, 0x96, 0x8E, 0x60, 0x18, 0xA9, 0x98, 0x8D, 0x62, 0x18, 0x20, 0x06, 0x4D, 0x20, 0xE5, 0x02, 0xA9, 0x10, 0x85, 0xEB, 0x80, 0x0E,
+        0xA5, 0xEB, 0x85, 0x1A, 0x8D, 0x02, 0x42, 0xA9, 0x64, 0x8D, 0x03, 0x42, 0xEA, 0xEA, 0xEA, 0xAC, 0x16, 0x42,
+        0x84, 0x22, 0x64, 0x24, 0xC2, 0x21, 0x98, 0x6D, 0x60, 0x18, 0x8D, 0x60, 0x18, 0x7B, 0xE2, 0x20, 0x6D, 0x62,
+        0x18, 0x8D, 0x62, 0x18, 0xC9, 0x98, 0x90, 0x13, 0xAE, 0x60, 0x18, 0xE0, 0x7F, 0x96, 0x90, 0x0B, 0xA2, 0x7F,
+        0x96, 0x8E, 0x60, 0x18, 0xA9, 0x98, 0x8D, 0x62, 0x18, 0x20, 0x06, 0x4D, 0x20, 0xE5, 0x02, 0xA9, 0x10, 0x85,
+        0xEB, 0x80, 0x0E,
 
         # 6F : (2 bytes) Show "Monster-in-a-box!" and start battle with formation from param
         0xA5, 0xEB, 0x85, 0x1A, 0x8D, 0x89, 0x07, 0x20, 0x06, 0x4D, 0xA9, 0x40, 0x85, 0xEB,
@@ -716,7 +731,8 @@ def mutate_event_items(fout, cutscene_skip=False, crazy_prices=False, no_monster
         0xA5, 0xED, 0x85, 0x1A, 0x8D, 0x83, 0x05, 0xA9, 0x01, 0x20, 0x70, 0x9B, 0x4C, 0xBC, 0xA4,
 
         # 67 : (4 bytes) Show text $AAAA with number $BB and wait for button press
-        0xA5, 0xED, 0x85, 0x1A, 0x85, 0x22, 0x64, 0x24, 0x20, 0xE5, 0x02, 0xA9, 0x01, 0x20, 0x70, 0x9B, 0x4C, 0xBC, 0xA4,
+        0xA5, 0xED, 0x85, 0x1A, 0x85, 0x22, 0x64, 0x24, 0x20, 0xE5, 0x02, 0xA9, 0x01, 0x20, 0x70, 0x9B, 0x4C, 0xBC,
+        0xA4,
     ])
     event_item_sub.write(fout)
 
@@ -745,5 +761,6 @@ def mutate_event_items(fout, cutscene_skip=False, crazy_prices=False, no_monster
 
     for location in event_items_dict:
         for e in event_items_dict[location]:
-            e.mutate_contents(cutscene_skip=cutscene_skip, no_monsters=no_monsters, uncapped_monsters=uncapped_monsters, crazy_prices=crazy_prices)
+            e.mutate_contents(cutscene_skip=cutscene_skip, no_monsters=no_monsters, uncapped_monsters=uncapped_monsters,
+                              crazy_prices=crazy_prices)
             e.write_data(fout, cutscene_skip=cutscene_skip)
