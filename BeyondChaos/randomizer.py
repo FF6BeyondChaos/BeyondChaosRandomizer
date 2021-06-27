@@ -4805,7 +4805,7 @@ def randomize(args: List[str]) -> str:
                 substitutions = mutated_character.get_bytes()
                 for substitution_address in substitutions:
                     fout.seek(substitution_address)
-                fout.write(substitutions[substitution_address])
+                    fout.write(substitutions[substitution_address])
         else:
             for c in characters:
                 c.mutate_stats(fout, start_in_wor)
