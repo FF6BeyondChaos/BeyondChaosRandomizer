@@ -110,17 +110,6 @@ specialdict["mp drain"] = 0x31
 reverse_specialdict = {v: k for (k, v) in specialdict.items()}
 ranked = [specialdict[key] for key in ranked]
 
-def monsterCleanup():
-    try:
-        global globalweights, avgs, metamorphs, all_spells, xps, gps, monsterdict
-        globalweights, avgs = None, {}
-        metamorphs = None
-        all_spells = None
-        xps = []
-        gps = []
-        monsterdict = {}
-    except Exception as e:
-        traceback.print_exc()
 
 def updatePos(monsterId, x, y):
     global monsterdict

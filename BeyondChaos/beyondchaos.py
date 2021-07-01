@@ -21,6 +21,7 @@ import options
 import randomizer
 import towerrandomizer
 import update
+from importlib import reload
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. Report this to Green Knight")
@@ -773,7 +774,7 @@ class Window(QWidget):
                 QtCore.pyqtRemoveInputHook()
                 # TODO: put this in a new thread
                 try:
-                    result_file = randomizer.randomize(args=['BeyondChaos.py', self.romText, bundle, "test"])
+                    result_file = randomizer.randomize(args=['beyondchaos.py', self.romText, bundle, "test"])
                 # call(["py", "Randomizer.py", self.romText, bundle, "test"])
                 # Running the Randomizer twice in one session doesn't work
                 # because of global state.
@@ -786,15 +787,15 @@ class Window(QWidget):
                     QMessageBox.information(self, "Successfully created ROM", f"Result file: {result_file}", QMessageBox.Ok)
                     return
                 finally:
-                    itemrandomizer.cleanup()
-                    monsterrandomizer.monsterCleanup()
-                    formationrandomizer.cleanup()
-                    character.cleanup()
-                    esperrandomizer.cleanup()
-                    locationrandomizer.cleanup()
-                    musicrandomizer.cleanup()
-                    towerrandomizer.cleanup()
-                    chestrandomizer.cleanup()
+                    reload(itemrandomizer)
+                    reload(monsterrandomizer)
+                    reload(formationrandomizer)
+                    reload(character)
+                    reload(esperrandomizer)
+                    reload(locationrandomizer)
+                    reload(musicrandomizer)
+                    reload(towerrandomizer)
+                    reload(chestrandomizer)
                 #sys.exit() Lets no longer sysexit anymore so we don't have to
                 #reopen each time.  The user can close the gui.
 

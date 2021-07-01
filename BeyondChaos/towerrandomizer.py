@@ -45,14 +45,6 @@ map_bans = []
 newfsets = {}
 clusters = None
 
-def cleanup():
-    global locexchange, old_entrances, towerlocids, map_bans, newfsets, clusters
-    locexchange = {}
-    old_entrances = {}
-    towerlocids = [int(line.strip(), 0x10) for line in open(TOWER_LOCATIONS_TABLE)]
-    map_bans = []
-    newfsets = {}
-    clusters = None
 
 def get_new_formations(areaname, supplement=True):
     from randomizer import get_namelocdict

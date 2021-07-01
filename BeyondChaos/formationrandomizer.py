@@ -15,13 +15,7 @@ fsetdict = None
 formdict = None
 
 
-def cleanup():
-    global fsetdict, formdict
-    fsetdict = None
-    formdict = None
-
-
-class Formation():
+class Formation:
     def __init__(self, formid):
         self.formid = formid
         self.pointer = 0xf6200 + (formid * 15)

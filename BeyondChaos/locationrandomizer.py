@@ -20,21 +20,6 @@ maplocations = {}
 maplocations_reverse = {}
 maplocations_override = {}
 
-def cleanup():
-    global locations, zones, unused_locs, reachdict, mapnames, locdict, chest_id_counts, mapbattlebgs, maplocations, maplocations_reverse, maplocations_override
-    locations = None
-    zones = None
-    unused_locs = None
-    reachdict = None
-    mapnames = {}
-    locdict = {}
-    chest_id_counts = None
-    mapbattlebgs = {}
-    maplocations = {}
-    maplocations_reverse = {}
-    maplocations_override = {}
-    init()
-
 
 def init():
     for line in open(MAP_NAMES_TABLE):
