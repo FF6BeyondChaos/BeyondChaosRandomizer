@@ -125,9 +125,10 @@ def manage_opera(fout, affect_music):
         test_mml = read_opera_mml('duel')
         for i, c in enumerate(vchoices):
             test_mml += c[0].get_sample_text(i + 0x2A)
-        memusage = get_spc_memory_usage(test_mml, subpath="music")
-        if memusage <= SAMPLE_MAX_SIZE:
-            break
+        if affect_music:
+            memusage = get_spc_memory_usage(test_mml, subpath="music")
+            if memusage <= SAMPLE_MAX_SIZE:
+                break
 
     #select characters
     charpool = []
@@ -411,9 +412,12 @@ def find_sample_size(data, sidx):
     loc = 0
     
     #scan BRR block headers until one has END bit set
-    while not (data[offset+loc*9] & 1):
-        loc += 1
-    
+    try:
+        while not (data[offset+loc*9] & 1):
+            loc += 1
+    except:
+        print(f"alasdraco: unexpected EOF attempting to load sample ${sidx:02X} at address ${offset:06X}")
+        return 4000 #large enough to cause overflow & force rejection
     return (loc+1)*9
     
 def replace_npc(locations, old, new):
