@@ -48,7 +48,8 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
 from musicinterface import randomize_music, manage_opera, get_music_spoiler, music_init
 from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
-                     death_abuse, no_kutan_skip, show_coliseum_rewards)
+                     death_abuse, no_kutan_skip, show_coliseum_rewards,
+                     cycle_statuses)
 from randomizers.characterstats import CharacterStats
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
