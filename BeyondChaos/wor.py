@@ -384,13 +384,21 @@ class WoRRecruitInfo:
 
 def falcon_recruit(fout, char_id):
     falcon_recruit_sub = Substitution()
-    falcon_recruit_sub.set_location(0xA5324)
-    falcon_recruit_sub.bytestring = bytes([0xD5, 0xFB])
-    falcon_recruit_sub.write(fout)
-
-    falcon_recruit_sub.set_location(0xA5310 + 2 * char_id - (2 if char_id > 6 else 0))
+    falcon_recruit_sub.set_location(0xA4871)
     falcon_recruit_sub.bytestring = bytes([0xD4, 0xF0 + char_id])
     falcon_recruit_sub.write(fout)
+
+    falcon_recruit_sub.set_location(0xA483F)
+    falcon_recruit_sub.bytestring = bytes([0x97, 0x5C, 0x77, 0x00 + char_id])
+    falcon_recruit_sub.write(fout)
+
+    #falcon_recruit_sub.set_location(0xA5324)
+    #falcon_recruit_sub.bytestring = bytes([0xD5, 0xFB])
+    #falcon_recruit_sub.write(fout)
+
+    #falcon_recruit_sub.set_location(0xA5310 + 2 * char_id - (2 if char_id > 6 else 0))
+    #falcon_recruit_sub.bytestring = bytes([0xD4, 0xF0 + char_id])
+    #falcon_recruit_sub.write(fout)
 
 
 def moogle_cave_recruit(fout, char_id):

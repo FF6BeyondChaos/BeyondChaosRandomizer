@@ -52,7 +52,7 @@ from musicrandomizer import randomize_music, manage_opera, insert_instruments
 from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
-                     cycle_statuses)
+                     cycle_statuses, add_esper_bonuses)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -77,8 +77,8 @@ BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
-TEST_SEED = "4.katn.-u easymodo canttouchthis dearestmolulu.1622773126"
+TEST_ON = True
+TEST_SEED = "4.normal.bcdefgijklmnopqrstuwyzmakeoverpartypartycanttouchthisdearestmolulueasymodo.1111111111"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -1723,7 +1723,7 @@ def manage_skips():
         0xFA, # show airship emerging from the ocean
         0xD2, 0x11, 0x34, 0x10, 0x08, 0x40, # load map Falcon upper deck
         0xD7, 0xF3,  # hide Daryl on the Falcon
-        0xB2, 0x43, 0x48, 0x00,  # jump to part where it sets a bunch of bits then flys to Maranda
+        0xB2, 0x3F, 0x48, 0x00,  # jump to part where it sets a bunch of bits then flys to Maranda
         0xFE])
     daryl_cutscene_sub.write(fout)
 
@@ -1898,8 +1898,9 @@ def manage_balance(newslots: bool = True):
 
 def manage_magitek():
     spells = get_ranked_spells()
-    exploder = [s for s in spells if s.spellid == 0xA2][0]
-    tek_skills = [s for s in spells if s.spellid in TEK_SKILLS]
+    #exploder = [s for s in spells if s.spellid == 0xA2][0]
+    shockwave = [s for s in spells if s.spellid == 0xE3][0]
+    tek_skills = [s for s in spells if s.spellid in TEK_SKILLS and s.spellid != 0xE3]
     targets = sorted({s.targeting for s in spells})
     terra_used, others_used = [], []
     target_pointer = 0x19104
@@ -1919,7 +1920,7 @@ def manage_magitek():
             if i > 5:
                 others_cand = None
             elif i == 5:
-                others_cand = exploder
+                others_cand = shockwave
             else:
                 others_cand = random.choice(candidates)
             if terra_cand not in terra_used:
@@ -2195,6 +2196,7 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int]=None) -> Lis
 
 
 def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
+
     characters = get_characters()
     reset_equippable(items, characters=characters)
     equippable_dict = {"weapon": lambda i: i.is_weapon,
@@ -2251,10 +2253,8 @@ def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
             if equippable:
                 weakest = min(equippable, key=lambda i: i.rank()).itemid
             c.write_default_equipment(fout, weakest, equiptype)
-
     for i in items:
         i.write_stats(fout)
-
     return items
 
 
@@ -4993,7 +4993,7 @@ def randomize(args: List[str]) -> str:
     if Options_.random_zerker or Options_.random_character_stats:
         manage_equip_umaro(event_freespaces)
 
-    if Options_.is_code_active('easymodo') or Options_.is_code_active('llg') or Options_.is_code_active('dearestmolulu') or Options_.is_code_active('exp'):
+    if Options_.is_code_active('easymodo') or Options_.is_code_active('llg') or Options_.is_code_active('exp'):
         for m in monsters:
             if Options_.is_code_active('easymodo'):
                 m.stats['hp'] = 1
@@ -5001,13 +5001,11 @@ def randomize(args: List[str]) -> str:
                 m.stats['xp'] = 0
             if Options_.is_code_active('exp'):
                 m.stats['xp'] = min(0xFFFF, 3 * m.stats['xp'])
-            elif Options_.is_code_active('dearestmolulu'):
-                m.stats['xp'] = min(0xFFFF, 3 * m.stats['xp'])
             m.write_stats(fout)
 
     if Options_.is_code_active('gp'):
         for m in monsters:
-                m.stats['gp'] = min(0xFFFF, 3 * m.stats['xp'])
+                m.stats['gp'] = min(0xFFFF, 3 * m.stats['gp'])
 
     if Options_.is_code_active('naturalmagic') or Options_.is_code_active('naturalstats'):
         espers = get_espers(sourcefile)
@@ -5059,6 +5057,9 @@ def randomize(args: List[str]) -> str:
     y_equip_relics(fout)
     fix_gogo_portrait(fout)
     cycle_statuses(fout)
+    #add_esper_bonuses(fout) #Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
+    for m in get_monsters():
+        print(m.attackanimation)
 
     if not Options_.is_code_active('fightclub'):
         show_coliseum_rewards(fout)

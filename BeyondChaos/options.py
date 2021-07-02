@@ -260,9 +260,9 @@ NORMAL_CODES = [
 
     Code('dancingmaduin', "RESTRICTED ESPERS MODE", "Restricts Esper usage such that most Espers can only be equipped by one character. Also usually changes what spell the Paladin Shld teaches.", "major"),
     Code('darkworld', "SLASHER'S DELIGHT MODE", "Drastically increases the difficulty of the seed, akin to a hard mode. Mostly meant to be used in conjunction with the madworld code.", "major"),
-    Code('dearestmolulu', "ENCOUNTERLESS MODE", "No random encounters occur. All encounters yield 3x EXP. Wearing a Moogle Charm or a piece of equipment with the Moogle Charm effect will cause a battle to occur on every step when encounters can be occur.", "major"),
+    Code('dearestmolulu', "ENCOUNTERLESS MODE", "No random encounters occur. Recommend using with exp code. Wearing a Moogle Charm or a piece of equipment with the Moogle Charm effect will cause a battle to occur on every step when encounters can be occur.", "major"),
     Code('easymodo', "EASY MODE", "All enemies have 1 HP.", "major"),
-    
+    Code('sketch', "ENABLE SKETCH GLITCH", "Enables sketch glitch. Not recommended unless you know what you are doing.", "gamebreaking"),
     
     Code('equipanything', "EQUIP ANYTHING MODE", "Items that are not equippable normally can now be equipped as weapons or shields. These often give strange defensive stats or weapon animations.", "gamebreaking"),
     
