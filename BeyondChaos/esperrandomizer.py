@@ -53,7 +53,7 @@ used_bonuses = set([])
 def get_candidates(myrank, set_lower=True):
     global used
     upper_bound = rankbounds.get(myrank, 999) or 999
-    lower_bound = rankbounds.get(myrank-1, 0) if set_lower else 0
+    lower_bound = rankbounds.get(myrank - 1, 0) if set_lower else 0
 
     candidates = [s for s in spells
                   if s.rank() in range(lower_bound, upper_bound)]
@@ -65,8 +65,9 @@ def get_candidates(myrank, set_lower=True):
 
     return fresh
 
+
 def allocate_espers(ancient_cave, espers, characters, fout, replacements=None):
-    char_ids = list(range(12)) + [13] # everyone but Gogo
+    char_ids = list(range(12)) + [13]  # everyone but Gogo
 
     characters = [c for c in characters if c.id in char_ids]
 
@@ -94,7 +95,8 @@ def allocate_espers(ancient_cave, espers, characters, fout, replacements=None):
             odin_id = replacements[odin_id].id
             raiden_id = replacements[raiden_id].id
 
-        chars_for_esper[raiden_id] = chars_for_esper[odin_id]   # make Odin and Raiden equippable by the same person/people
+        chars_for_esper[raiden_id] = chars_for_esper[
+            odin_id]  # make Odin and Raiden equippable by the same person/people
 
     char_mask_for_esper = [
         reduce(lambda x, y: x | y,
@@ -136,12 +138,17 @@ def allocate_espers(ancient_cave, espers, characters, fout, replacements=None):
     esper_allocator_sub.set_location(0x3F800)
 
     esper_allocator_sub.bytestring = [
-        0xAA, 0xB5, 0x69, 0x8D, 0xF8, 0x1C, 0x60, 0xDA, 0x08, 0x85, 0xE0, 0x0A, 0xAA, 0xE2, 0x10, 0xDA, 0xAD, 0xF8, 0x1C, 0x0A, 0xAA, 0xC2,
-        0x20, 0xBF, 0x67, 0x9C, 0xC3, 0xFA, 0x3F, 0x58, 0xF8, 0xC3, 0xF0, 0x05, 0x28, 0xFA, 0x4C, 0x76, 0x55, 0x28, 0xFA, 0xA9, 0x28, 0x4C,
-        0x95, 0x55, 0xBD, 0x02, 0x16, 0xC9, 0x80, 0xB0, 0x0F, 0xFA, 0xA6, 0x00, 0xBF, 0x4B, 0xF8, 0xC3, 0xF0, 0x07, 0x8D, 0x80, 0x21, 0xE8,
-        0x80, 0xF4, 0x60, 0x9C, 0x80, 0x21, 0x4C, 0xD9, 0x7F, 0x82, 0x9A, 0xA7, 0xC3, 0xAD, 0xFF, 0x9E, 0xAA, 0xAE, 0xA2, 0xA9, 0xBE, 0x00] + [
-            i for sublist in map(int2bytes, char_mask_for_esper) for i in sublist]
+                                         0xAA, 0xB5, 0x69, 0x8D, 0xF8, 0x1C, 0x60, 0xDA, 0x08, 0x85, 0xE0, 0x0A, 0xAA,
+                                         0xE2, 0x10, 0xDA, 0xAD, 0xF8, 0x1C, 0x0A, 0xAA, 0xC2,
+                                         0x20, 0xBF, 0x67, 0x9C, 0xC3, 0xFA, 0x3F, 0x58, 0xF8, 0xC3, 0xF0, 0x05, 0x28,
+                                         0xFA, 0x4C, 0x76, 0x55, 0x28, 0xFA, 0xA9, 0x28, 0x4C,
+                                         0x95, 0x55, 0xBD, 0x02, 0x16, 0xC9, 0x80, 0xB0, 0x0F, 0xFA, 0xA6, 0x00, 0xBF,
+                                         0x4B, 0xF8, 0xC3, 0xF0, 0x07, 0x8D, 0x80, 0x21, 0xE8,
+                                         0x80, 0xF4, 0x60, 0x9C, 0x80, 0x21, 0x4C, 0xD9, 0x7F, 0x82, 0x9A, 0xA7, 0xC3,
+                                         0xAD, 0xFF, 0x9E, 0xAA, 0xAE, 0xA2, 0xA9, 0xBE, 0x00] + [
+                                         i for sublist in map(int2bytes, char_mask_for_esper) for i in sublist]
     esper_allocator_sub.write(fout)
+
 
 class EsperBlock:
     def __init__(self, pointer, name, rank, location):
@@ -238,7 +245,7 @@ class EsperBlock:
         self.learnrates = []
         esperrank = rankbounds[self.rank]
         if esperrank is None:
-            esperrank = rankbounds[self.rank-1]
+            esperrank = rankbounds[self.rank - 1]
         esperrank = esperrank * 3
         for s in self.spells:
             spellrank = s.rank()
@@ -265,7 +272,7 @@ class EsperBlock:
             rank += 1
         rank = min(rank, 4)
         candidates = []
-        for i in range(rank+1):
+        for i in range(rank + 1):
             candidates.extend(bonus_ranks[i])
         if candidates:
             self.bonus = random.choice(candidates)
@@ -307,7 +314,7 @@ def randomize_magicite(fout, sourcefile):
     espers = get_espers(sourcefile)
     shuffled_espers = {}
     espers_by_name = {e.name: e for e in espers}
-    esper_graphics = [MonsterGraphicBlock(pointer=0x127780 + (5*i), name="") for i in range(len(espers))]
+    esper_graphics = [MonsterGraphicBlock(pointer=0x127780 + (5 * i), name="") for i in range(len(espers))]
     for eg in esper_graphics:
         eg.read_data(sourcefile)
 
@@ -337,8 +344,8 @@ def randomize_magicite(fout, sourcefile):
     shuffled_espers.update(enemy_espers)
 
     # TODO: maybe allow tritoch to be big if we skip cutscenes
-    #tritoch_id = [e.id for e in espers if e.name == "Tritoch"][0]
-    #if esper_graphics[tritoch_id].large:
+    # tritoch_id = [e.id for e in espers if e.name == "Tritoch"][0]
+    # if esper_graphics[tritoch_id].large:
     #    tritoch_formations = [0x1BF, 0x1C0, 0x1E7, 0x1E8]
     #    for g in tritoch_formations:
     #        f = get_formation(g)
@@ -369,8 +376,8 @@ def randomize_magicite(fout, sourcefile):
         random.shuffle(remaining_values)
         shuffled_espers.update(zip(remaining_keys, remaining_values))
 
-    assert(sorted([e.id for e in espers], key=id) == sorted(shuffled_espers.keys()))
-    assert(sorted(espers, key=id) == sorted(shuffled_espers.values(), key=id))
+    assert (sorted([e.id for e in espers], key=id) == sorted(shuffled_espers.keys()))
+    assert (sorted(espers, key=id) == sorted(shuffled_espers.values(), key=id))
 
     locations = [e.location for e in espers]
     for i, e in shuffled_espers.items():
@@ -397,8 +404,8 @@ def randomize_magicite(fout, sourcefile):
         new_name = shuffled_espers[m.original_esper_index].name
 
         for d in m.dialogue:
-            patch_dialogue(d, original_name, "{"+ original_name + "}")
-            patch_dialogue(d, original_name + "'s", "{"+ original_name + "Possessive}")
+            patch_dialogue(d, original_name, "{" + original_name + "}")
+            patch_dialogue(d, original_name + "'s", "{" + original_name + "Possessive}")
             dotted_name = "".join(chain(*zip(original_name, repeat('.'))))[:-1]
             patch_dialogue(d, dotted_name, "{" + original_name + "Dotted}")
         set_dialogue_var(original_name, new_name)
@@ -428,11 +435,9 @@ def randomize_magicite(fout, sourcefile):
 
     return shuffled_espers
 
+
 all_espers = None
 
-def cleanup():
-    global all_espers
-    all_espers = None
 
 def get_espers(sourcefile):
     global all_espers

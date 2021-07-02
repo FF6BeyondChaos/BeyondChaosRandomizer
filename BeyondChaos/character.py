@@ -19,11 +19,6 @@ character_list_deprecated = []
 character_list = []
 
 
-def cleanup():
-    global character_list_deprecated
-    character_list_deprecated = []
-
-
 def load_characters(rom_file_name, force_reload=False):
     if character_list and not force_reload:
         return

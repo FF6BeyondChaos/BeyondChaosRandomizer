@@ -36,14 +36,6 @@ changed_commands = []
 break_unused_dict = {0x09: list(range(0xA3, 0xAB)),
                      0x08: list(range(0xAB, 0xB0)) + list(range(0x41, 0x44))}
 
-def cleanup():
-    global changed_commands, all_spells, itemdict, customs, effects_used
-    changed_commands = []
-    all_spells = None
-    unbanItems()
-    itemdict = {}
-    customs = {}
-    effects_used = []
 
 def set_item_changed_commands(commands):
     global changed_commands
