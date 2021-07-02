@@ -231,4 +231,3 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
 ## SPECIAL NO THANKS
 	* Mitch McConnell
 
->>>>>>> 028edbc (fix issue with subdir. execution + pyinstaller)
