@@ -49,9 +49,8 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
                                get_metamorphs, get_ranked_monsters,
                                shuffle_monsters, get_monster, read_ai_table,
                                change_enemy_name, randomize_enemy_name,
-                               get_collapsing_house_help_skill,
-                               MonsterBlock)
-from musicrandomizer import randomize_music, manage_opera, insert_instruments
+                               get_collapsing_house_help_skill)
+from musicinterface import randomize_music, manage_opera, get_music_spoiler, music_init
 from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
@@ -4954,17 +4953,18 @@ def randomize(args: List[str]) -> str:
     reseed()
 
     has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
-    if has_music or Options_.is_code_active('alasdraco'):
-        insert_instruments(fout, 0x310000)
-        opera = None
-
+    if has_music:
+        music_init()
+        
     if Options_.is_code_active('alasdraco'):
         opera = manage_opera(fout, has_music)
+    else:
+        opera = None
     reseed()
 
     if has_music:
-        music_log = randomize_music(fout, Options_=Options_, opera=opera, form_music_overrides=form_music)
-        log(music_log, section="music")
+        randomize_music(fout, Options_, opera=opera, form_music_overrides=form_music)
+        log(get_music_spoiler(), section="music")
     reseed()
 
     if Options_.mode.name == "katn":
