@@ -1,0 +1,133 @@
+#TITLE What?
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x23 marimba
+#WAVE 0x21 0x9B guiro
+#WAVE 0x22 0x8C wood block
+#WAVE 0x23 0xAB cuica
+#WAVE 0x24 0x6C tambourine  
+#WAVE 0x25 0x6B shaker
+#WAVE 0x26 0x3C open hihat
+#WAVE 0x27 0x4B tom
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v69
+#def 0f= v1,69
+
+#def 1i=   |1
+#def 1v=   v211
+#def 1f= v1,211
+
+#def 2i=   |2
+#def 2v=   v69
+#def 2f= v1,69
+
+#def 3i=   |3
+#def 3v=   v69
+#def 3f= v1,69
+
+#def 4i=   |4
+#def 4v=   v69
+#def 4f= v1,69
+
+#def 5i=   |5
+#def 5v=   v69
+#def 5f= v1,69
+
+#def 6i=   |6
+#def 6v=   v69
+#def 6f= v1,69
+
+#def 7i=   |7
+#def 7v=   v69
+#def 7f= v1,69
+
+#def 8i=   |8
+#def 8v=   v69
+#def 8f= v1,69
+
+#def 9i=   |9
+#def 9v=   v69
+#def 9f= v1,69
+
+## auto percussion  0x21 guiro
+#drum "h"= 4d |1  %e1 '1v*v.6' p30
+## auto percussion  0x22 woodblock
+#drum "i"= 6g |2  %e0 '2v*v.6' p40
+#drum "j"= 7c |2  %e0 '2v*v.6' p40
+## auto percussion  0x23 cuica
+#drum "k"= 4b |3  %e0 '3v*v.6' p50
+#drum "l"= 5e |3  %e0 '3v*v.6' p50
+## auto percussion  0x24 tambourine 
+#drum "m"= 5a |4  %e1 '4v*v.6' p100
+## auto percussion  0x25 shaker
+#drum "n"= 5a |5  %e1 '5v*v.6' p90
+## auto percussion  0x26 hihat
+#drum "o"= 5g+ |6  %e1 '6v*v.6' p70
+## auto percussion  0x27 toms
+#drum "p"= 3g+ |7 %e1 p90
+#drum "q"= 3a  |7 %e1 p20
+#drum "r"= 3a+ |7 %e1 p90
+#drum "s"= 3b  |7 %e1 p50
+#drum "t"= 4c  |7 %e1 p20
+#drum "u"= 4c+ |7 %e1 p90
+#drum "v"= 4d  |7 %e1 p50
+#drum "w"= 4d+ |7 %e1 p20
+#drum "x"= 4e  |7 %e1 p90
+#drum "y"= 4f  |7 %e1 p50 '7v*v1'
+## auto percussion  0x28 kick
+#drum "z"= 5a |8  %e0 '8v*v1.2' p64
+## auto percussion  0x29 snare
+#drum "h+"= 5a |9  %e1 '9v*v1.2' p64
+
+
+{1}
+t85%x255%b0,25%f0,0%v25
+$101'0i' p64%e1%r21
+'0v*v.60''0o+o1'f16f16f16f16>a+8<f8>a+8<f8>a+8<f16>a+16['0v*v.60'a8
+<d+8d+8>g8<'0f*v48,.10'[13c+48]r8.r24>]<'0v*v.60'd+16d+16d+16d+16>g+8<
+d+8>g+8<d+8>g+8<d+16>g+16['0v*v.60'g8<c+8c+8>f8'0f*v48,.10'[13b48]r8.r24
+]'0v*v.60'r8.a+16a16r16g+16r16g16r16g16g+16g16r16f+16r16f8e8<f8e8>f8e8
+r4e8d+8<e8d+8>e8d+8r4d+8d+16e16f+8a8g8g16a16b8<c+8'0f*v192,.20'd+8c+8d+8
+c+8d+8c+8d+8c+8
+"!!!o" r2r8 "l8k4"
+;101
+
+
+{2}
+$201'0v*v.60'
+'0i' p64%e1%r21
+'0o+o1'c16c16c16c16>f+8<c8>f+8<c8>f+8<c16>f+16['0v*v.60'f8b8b8d+8'0f*v48,.10'
+[13a48]r8.r24]'0v*v.60'a+16a+16a+16a+16e8a+8e8a+8e8a+16e16['0v*v.60'd+8
+a8a8c+8'0f*v48,.10'[13g48]r8.r24]'0v*v.60'r8g16f+16f16r16e16r16d+16r16
+d+16e16d+16r16d16r16c+8c8<c+8c8>c+8c8r4c8>b8<<c8>b8c8>b8r4b8b16<c+16d+8
+f+8e8e16f+16g8a8'0f*v192,.20'b8a8b8a8b8a8b8a8
+"!!!o" r12 '7v*v.83''7f*v160,.1' "w3t3q4"
+;201
+
+
+{3}
+$301'0v*v.60'
+'0i' p64%e1%r21
+r1r1r1r1r1r1r8'0o'b16b16b16r16b16r16b16r16b16b16b16r16b16r16r1r1r1
+"!!!o" r2. '7v*v1''7f*v192,.1'r6 "x3u3r3p12"
+;301
+
+{4} $ l16
+[ "y4y4y4"r4   "h"r"hhh2."
+  "jjjji"r"ii m8l8k4" ]
+"z4h+4z4h+4"   "y4y4y4"r4
+"n4n4n4m4"     "z4h+4z4h+4"
+"y4y4y4" '7f*v192,.10'"y4y4v4s4"r4
+;
+
+{5} $
+[r1    r2"n8n8n4"    r1]
+[[4r8"!!!o o8"] r1r1]
+;

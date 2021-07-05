@@ -1,0 +1,162 @@
+[Samples]
+# id: filename, loop point, pitch multiplier data, attack decay sustain release
+01: legacy/01_acoustic_guitar  , 880B, FDA0, FFF1
+02: legacy/02_bass_guitar      , B103, A940, FFEE
+03: legacy/03_pan_flute        , 5907, B080, FFE0
+04: legacy/04_sitar            , 390F, 8400, FFF3
+05: legacy/05_cello_1          , 4710, B020, FFE0
+06: legacy/06_choir            , 3906, AF80, FFE0
+07: legacy/07_flute_1          , 4104, E158, FFE0
+08: legacy/08_flute_2          , 0408, FDA0, FFE0
+09: legacy/09_unknown          , 8D03, 9000, FFE0
+0A: legacy/0A_oboe             , D605, A916, FFE0
+0B: legacy/0B_rock_organ       , 3B01, BE90, FFE0
+0C: legacy/0C_piano            , 9114, B060, FFEF
+0D: legacy/0D_strings_1        , 2103, AFA0, FFE0
+0E: legacy/0E_trumpet          , 0204, A900, FFE0
+0F: legacy/0F_hi_hat_closed    , 0000, 0000, FFE0
+10: legacy/10_picked_string_1  , 0000, 9C00, FFE0
+11: legacy/11_hi_hat_open      , 0000, 0000, FFE0
+12: legacy/12_cymbal           , 8C0A, 0000, FFEE
+13: legacy/13_wind_sound       , 0000, 0000, FFE0
+14: legacy/14_snare_1          , 0000, 0000, FFE0
+15: legacy/15_snapping_fingers , 0000, 0000, FFE0
+16: legacy/16_timpani          , 0000, F900, FFE0
+17: legacy/17_conga_drum       , 0000, 0000, FFE0
+18: legacy/18_bass             , 7806, B750, FFEC
+19: legacy/19_picked_string_2  , CD05, 7000, FFF5
+1A: legacy/1A_trombone         , 9408, FDA0, FFE0
+1B: legacy/1B_harp             , 9F03, A940, FFF0
+1C: legacy/1C_bass_guitar      , 8004, FDA0, FFE0
+1D: legacy/1D_picked_string    , 7B03, FDA0, FFF0
+1E: legacy/1E_distortion_guitar, FA05, 29C0, FFE0
+1F: legacy/1F_flute_3          , E703, B9FF, FFE0   
+20: legacy/20_banjo            , 180C, A900, FFEA   
+21: legacy/21_snare_2          , 0000, 0000, FFE0   
+22: legacy/22_kick             , 6504, 0000, FFE0   
+23: legacy/23_cow_bell         , 0000, 0000, FFE0   
+24: legacy/24_tubular_bell     , 410D, 8800, FFEA   
+25: legacy/25_pipe_organ       , D902, A7A8, FFE0   
+26: legacy/26_woo!_            , C006, 0000, FFE0   
+27: legacy/27_synth_1          , 0000, 43D0, FFE0   
+28: legacy/28_synth_2          , 0000, 4300, FFE0   
+29: legacy/29_synth_3          , 0000, 4300, FFE0   
+2A: legacy/2A_snapping_fingers , 0000, 7FFF, FFE0   
+2B: legacy/2B_synth_4          , 0000, 0000, FFE0   
+2C: legacy/2C_synth_5          , 7704, C500, FFE0   
+2D: legacy/2D_maracas          , 0000, 0000, FFE0   
+2E: legacy/2E_conga_drum       , DC08, 0000, FFF3   
+2F: legacy/2F_shaker           , 0000, 0000, FFE0   
+30: legacy/30_wood_block       , 0000, 0000, FFE0   
+31: legacy/31_strings_2        , 4206, 0000, FFED   
+32: legacy/32_acoustic_guitar  , FD0B, 68FC, FFF0   
+33: legacy/33_bagpipe          , E20B, 6EE0, FFE0   
+34: legacy/34_pan_flute        , 7704, FF00, FFE0   
+35: legacy/35_cello_2          , 170A, 8D00, FFE0   
+36: legacy/36_bottle_blow      , EC04, A960, FFE0   
+37: legacy/37_tambourine       , F915, 0000, FFE0   
+38: legacy/38_male_voice_1     , 1B00, 8000, FFE0   
+39: legacy/39_male_voice_2     , 7704, 8800, FFE0   
+3A: legacy/3A_female_voice     , 1302, 29E4, FFE0   
+3B: legacy/3B_pipe_organ       , 1B00, 9500, FFE0   
+3C: legacy/3C_metal_bang       , 2C10, 0000, FFE0   
+3D: legacy/3D_metal_clank      , D20F, 0000, FFE0   
+3E: legacy/3E_xylophone        , 5406, A960, FFEC   
+3F: legacy/3F_crowd            , 1200, 0000, FFE0
+40: legacy/f50f_oboe,      5202, E090, F 7 7  1
+41: legacy/fm23_halo,      7704, FFF0, F 7 7  0
+42: legacy/ts42_celesta,   4605, E100, F 7 7  C
+43: legacy/ts43_synstr,    C804, 1E00, F 7 7  0
+44: legacy/s201_x20_dulci, 2A03, FC60, F 7 7  F
+45: legacy/ct2c_synstr,    1B00, E9F0, F 7 7  0
+46: legacy/tr37_strings,   1B00, E099, D 2 5  0
+47: legacy/rs0a_bell,      D104, E300, F 7 7 12
+48: legacy/ts48_sitar,     0216, D600, F 7 7  E
+49: legacy/ts49_strings,   A506, 1800, F 7 7  0
+4A: legacy/ts4a_sbass,     3108, D380, F 7 7  E
+4B: legacy/ct23_synth,     1B00, 5400, F 7 7  0
+4C: legacy/ts4c_gong,      320A, E100, F 7 7 10
+4D: legacy/ts4d_fbass,     DF05, D3A0, F 7 7  E
+4E: legacy/ts4e_violin,    E20B, 1BF0, F 7 7  0
+4F: legacy/ct12_sax,       F50D, D300, E 7 7  0
+50: legacy/ts50_cymbal,    4809, 0000, F 7 7 10
+51: legacy/tr0e_clap,      BF04, 0000, F 7 7  0 
+52: legacy/ct1e_eguitar,   4605, 9FCC, F 7 7  0
+53: legacy/ts53_piano,     C108, E000, C 6 7  E
+54: legacy/s31c_aguitar,   C213, FF4F, F 1 7  E 
+55: legacy/s321_tambo,     CA01, 0000, F 7 7  E 
+56: legacy/ts56_snare,     0000, 0000, F 7 7  0
+57: legacy/ts57_conga,     0000, 0000, F 7 7  0
+58: legacy/ts58_cembalo,   4F05, 0000, F 7 6  0
+59: legacy/ts59_tkick,     0900, 0000, F 7 7  0
+5A: legacy/ts5a_pedalhat,  0000, 0000, F 7 7  0
+5B: legacy/ct0c_conga,     0000, 0000, F 7 7  0
+5C: legacy/ct_prg10,       0900, E100, F 7 7  0
+5D: legacy/gh1b_odguitar,  7E09, CC00, F 7 7  0
+5E: legacy/ts5e_agogo,     0000, 0000, F 7 7 10
+5F: legacy/ts5f_maraca,    0000, 0000, F 7 7  0
+60: legacy/ct14_gpiano,    7B03, 5200, F 7 7  A
+61: legacy/ts61_violin,    B409, 4700, F 7 7  0
+62: legacy/ts62_synbell,   7602, E100, F 7 7  D
+63: legacy/ts63_whistle,   3405, 1980, F 7 7  0
+64: legacy/ts64_vox,       6105, 2300, F 7 7  0
+65: legacy/ts65_kick,      0000, 0000, F 7 7  0
+66: legacy/ts66_tom,       0000, 0000, F 7 7  0
+67: legacy/gh44_epiano,    DA04, F400, F 7 7  E
+68: legacy/ct08_openhat,   0000, 0000, F 7 7  0
+69: legacy/sm42_violin,    9306, E077, F 7 7  0
+6A: legacy/tr0a_brass,     800D, D38A, F 0 6  0 
+6B: legacy/ts6b_bass,      4A04, FCA0, F 7 7  C
+6C: legacy/tr17_dguitar,   7B0C, D7C0, F 3 3  0 
+6D: legacy/ts6d_cymbal,    FA05, 0000, F 7 7 10
+6E: legacy/gi35_tom,       0000, 0000, F 7 7 11
+6F: legacy/tr19_eguitar,   1E06, D28A, F 3 3  0
+70: legacy/tr3a_synbass,   E30D, E05A, F 7 7  0
+71: legacy/f503_x20_snare, 0000, 8000, F 7 7  0
+72: legacy/actr_trumpet,   2F04, D6B0, F 7 7  8
+73: legacy/tr21_ehorn,     721E, E05A, F 0 2  0
+74: legacy/tr0f_clarinet,  EB02, E05A, F 1 5  0
+75: legacy/f508_timpani,   9411, FB00, F 7 7  0
+76: legacy/ts76_bells,     F504, FE48, F 7 7 10
+77: legacy/tr29_orchhit,   E30D, D5C0, E 0 0  0
+78: legacy/tr0c_bassoon,   EA09, D25A, F 7 7  0
+79: legacy/s210_piano,     760B, A9E0, F 7 7  C
+7A: legacy/ts7a_horn,      330C, FE00, F 7 7  0
+7B: legacy/ct1c_bpiano,    D413, BB74, F 7 7  E
+7C: legacy/tr27_synth,     5304, DEC8, F 7 7  0
+7D: legacy/s319_overdrive, 9114, 0226, E 7 7  9
+7E: legacy/ts7e_snare,     0000, 0000, F 7 7  0
+7F: legacy/ts7f_trumpet,   8C01, E300, F 7 7  0
+80: legacy/ts80_fbass,     4605, FF00, F 7 7  0
+81: legacy/s32a_msnare,    CA08, 0000, F 7 7  0
+82: legacy/s329_brass,     1B09, D280, F 7 7  A
+83: legacy/sm32_future,    7704, FFE1, F 7 7  0
+84: legacy/sm2f_x20_tom,   0000, 8000, F 7 7  0
+85: legacy/ts85_percslap,  0000, 0000, F 7 7  0
+86: legacy/ts86_xylophone, 8F07, 19B0, F 7 7 18
+87: legacy/ts87_accordion, BA0C, 1900, F 7 7  0
+88: legacy/gh3c_x15_ride,  8004, C000, F 7 7 12
+89: legacy/cs16_synth,     9F0C, F270, F 7 7  0
+8A: legacy/s32e_pianofp5,  6426, 2FFF, F 7 7  B
+8B: legacy/s32d_pianocp6,  651F, CE20, F 7 7  A
+8C: legacy/s315_pianoa6,   0810, 8000, F 7 7  F
+8D: legacy/ct28_tube,      7806, C900, F 7 7  E
+8E: legacy/f504_x15_crash, 8004, C000, F 7 7 10
+8F: legacy/ct08_x20_ohh,   0000, 8000, F 7 7  0
+90: legacy/ct15_pizza,     0000, 0000, F 7 7  0
+91: legacy/s207_bell,      3B01, F200, F 7 4  D
+92: legacy/s205_chorus,    1B00, E200, E 7 7  0
+93: legacy/gh18_ahhs,      5508, 2FF0, F 7 7  0
+94: legacy/c404_strings,   C906, A080, F 7 7  0
+95: legacy/ffx_dulcimer,   640B, A900, F 7 7  D
+96: legacy/s31f_pizza,     5D0F, 0F60, F 7 7  A
+97: legacy/tr25_cguitar,   8208, E070, F 7 7  D 
+98: legacy/rd08_lawl,      0000, D700, F 7 7  F
+99: legacy/so2rena3,       1815, F900, F 0 2  0
+9A: legacy/ct24_trumpet,   9C06, E1C6, F 7 7  0
+9B: legacy/ll2A_organ,     E601, 2700, F 7 7  0
+9C: legacy/tr10_clavinet,  4F05, D260, F 7 7  F
+9D: legacy/r340_timbale,   0000, 0000, F 7 7  0
+9E: legacy/sm61_steel,     F207, A8A6, F 7 6 13
+9F: legacy/sm14_bassoon,   A404, FC68, F 7 7  0
+A0: legacy/eb_synthlead,   5202, A869, F 7 7  0

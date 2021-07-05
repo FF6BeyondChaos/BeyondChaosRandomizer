@@ -1,0 +1,617 @@
+#TITLE Dungeon — Type 2
+#ALBUM Wild Arms 2
+#COMPOSER Michiko Naruke
+#ARRANGED Rushlight
+
+#SHORTNAME WA2 Dungeon 2
+
+#VARIANT !
+#VARIANT ~ tr
+
+#WAVE 0x20 0x25 ## Xylophone
+#WAVE 0x21 !0x86!~0x7F~ ## Horn
+#WAVE 0x22 0x82 ## Trumpet
+#WAVE 0x23 0xB5 ## Hammond Organ
+#WAVE 0x24 0x67 ## Strings
+#WAVE 0x25 0x75 ## Choir
+#WAVE 0x26 0x52 ## Bass
+#WAVE 0x27 0x88 ## Brass
+
+#WAVE 0x28 0x0A ## Kick
+#WAVE 0x29 0x1D ## Snare
+#WAVE 0x2A 0x3D ## Open/Closed Hihat
+#WAVE 0x2B 0x69 ## Orchestra Hit
+#WAVE 0x2C 0x2D ## Crash
+##WAVE 0x2D 0x4D ## Toms
+#BRR 0x2D; ../samples/legacy/sm2f_x20_tom,   0000, 8000, F 7 7  0
+#WAVE 0x2E 0xC4 ## Backup Strings
+
+#def init= t130 %x255 %v40 %b0,70 %f0,0
+
+#def rhythmXyloVol=          v64
+#def rhythmXylo2Vol=         'rhythmXyloVol*v.5'
+#def rhythmXylo2QuietVol=    'rhythmXyloVol*v.3'
+#def xyloEchoVol=            'rhythmXyloVol*v.4'
+#def accentLeftVol=          'rhythmXyloVol*v1.2'
+## The higher notes don't sound as much, and need to contend with the accent trumpets, so increase volume
+#def highAccentLeftVol=      'rhythmXyloBackupVol*v1.8'
+## Adding a second sample here for high notes, needs much lower volume
+#def rhythmXyloBackupVol=    v64
+
+#def leadHornVol=            !v119!~v80~
+
+#def bassVol=                v28
+
+## Accent trumpet needs to really pop against the rest of the song
+##        this is better accomplished by making room for the octave brass sample,
+##        rather than by blowing out anyone's eardrums  -emberling
+#def soloAccentTrumpetVol=   v88
+#def highAccentTrumpetHiVol= 'soloAccentTrumpetVol*v.99'
+#def lowAccentTrumpetHiVol=  'soloAccentTrumpetVol*v.6'
+#def highAccentTrumpetLoVol= 'soloAccentTrumpetVol*v.67'
+#def lowAccentTrumpetLoVol=  'soloAccentTrumpetVol*v.4'
+#def leadTrumpetVol=         v64
+
+#def leadStringsVol=         v50
+#def accentStringsHiVol=     v77
+#def accentStringsLowVol=    v8 ## accentStringsHiVol * .1
+#def accentStringsFadeUp=    v120,77 ## Over 120 ticks, move to accentStringsHiVol
+#def accentStringsFadeDown=  v120,8  ## Over 120 ticks, move to accentStringsLowVol
+#def supportStringsPairVol=  'leadStringsVol*v.4'
+#def supportStringsTrioVol=  'leadStringsVol*v.33'
+
+#def leadStrings2Vol=         v75
+
+#def baseOrganVol=           v47
+#def highOrganSoloVol=      'baseOrganVol*v1.3'
+#def organDuoVol=           'baseOrganVol*v.95'
+#def highAccentOrganVol=    'baseOrganVol*v2'
+#def lowAccentOrganVol=     'baseOrganVol*v1'
+
+#def highChoirVol=          v47
+
+#def orchestraLeftVol=      v88
+#def orchestraCenterVol=    v94
+
+#def leadSustain= %r9
+#def leadDecay= %r24
+#cdef ( %r24
+#cdef ) %r9
+
+
+#def rhythmXylophone=           |0 o5 'rhythmXyloVol'           p43  %r12%s5        %e1 m
+#def rhythmXylophone2=          |0 o5 'rhythmXylo2Vol'          p43  %r12%s5        %e1 m
+#def xylophoneEcho=             |0 o5 'xyloEchoVol'             p85  %r12%s5        %e1 m
+#def accentLeftXylo=            |0 o5 'accentLeftVol'           p21  %r12%s5        %e1 m
+#def highAccentLeftXylo=        |0 o5 'highAccentLeftVol'       p21  %r12%s5        %e1 m
+#def rhythmXylophoneLayerHigh=  |0 o6 'rhythmXyloBackupVol*v.3' p43  %y5%s1%r22%a15 %e1 m
+#def rhythmXylophone2LayerHigh= |0 o6 'rhythmXyloBackupVol*v.15'p43  %y5%s1%r22%a15 %e1 m
+
+#def leadHorn=               |1 o5 'leadHornVol'            p64  'leadSustain' %e1 m0,9,205 %s5
+
+#def bass=                   |6 o3 'bassVol'                p64  %r20          %e0 m
+
+#def soloAccentTrumpet=      |7 o6 'soloAccentTrumpetVol'   p43  %r0           %e1 m
+#def highAccentTrumpet=      |7 o6 'highAccentTrumpetHiVol' p43  %r0           %e1 m
+#def lowAccentTrumpet=       |7 o6 'lowAccentTrumpetHiVol'  p43  %r0           %e1 m
+#def highAccentTrumpetQuiet= |7 o6 'highAccentTrumpetLoVol' p43  %r0           %e1 m
+#def lowAccentTrumpetQuiet=  |7 o6 'lowAccentTrumpetLoVol'  p43  %r0           %e1 m
+#def leadTrumpet=            |2 o5 'leadTrumpetVol'         p64  'leadSustain' %e1 m
+
+#def accentStrings=          |4 o6 'accentStringsHiVol'     p114 %r0%s7        %e1 m24,18,192
+#def leadStrings=            |E o6 'leadStrings2Vol'        p64  %r6           %e1 m24,18,199v0,12,180
+#def supportStringsPair=     |4 o5 'supportStringsPairVol'  p100 %r0%a9%s7     %e1 m24,18,192
+#def supportStringsTrio=     |4 o5 'supportStringsTrioVol'  p100 %r0%a9%s7     %e1 m24,18,192
+
+#def highOrgan=              |3 o6 'organDuoVol'            p93  %r0           %e1 m
+#def lowOrgan=               |3 o6 'organDuoVol'            p93  %r0           %e1 m
+#def highAccentOrgan=        |3 o5 'highAccentOrganVol'     p107 %r22          %e1 m
+#def lowAccentOrgan=         |3 o5 'lowAccentOrganVol'      p107 %r22          %e1 m
+
+#def highChoir=              |5 o4 'highChoirVol'           p21  %r0           %e1 m
+
+#def orchestraLeft=          |B o5 'orchestraLeftVol'       p21                %e1 m   
+#def orchestraCenter=        |B o5 'orchestraCenterVol'     p64                %e1 m   
+
+#### toms - pitched for EX5
+##drum "t"=5e  |D v100 p64       %e0 m
+##drum "u"=5f+ |D v100 p64       %e0 m
+##drum "v"=5g+ |D v100 p64       %e0 m
+
+#### toms - pitched for external legacy
+#drum "t"=5g+ |D v100 p64       %e0 m
+#drum "u"=5b- |D v100 p64       %e0 m
+#drum "v"=6c  |D v100 p64       %e0 m
+
+#drum "k"=5a  |8 v92  p75       %e0 m
+#drum "s"=6c+ |9 v108 p72       %e0 m
+
+#drum "h"=6c+ |A v40  p75       %e0 m %y5
+#drum "o"=6c+ |A v40  p75       %e0 m %y2
+#drum "b"=6c+ |C v70  p21  %r16 %e0 m
+#drum "c"=6c+ |C v70  p64  %r16 %e0 m
+#drum "d"=6e  |C v70  p107 %r16 %e0 m
+
+{1}
+'init'
+## Rhythm Xylophone
+'rhythmXylophone'
+l8
+ff16e-fe-e-16fg+b- ff16e-b-g+b-16g+e-c+
+## 3
+$
+## Lead Horn
+'leadHorn-o1'
+l8
+[2
+  r4
+  b-4<c+8.f8.<c> g+2.(^8)b- j2 f+2.(^8)g+f2..(^8)>
+]
+## 9
+<c8.c+8.e-c8.>g+8.fb-2..(^8)
+## 11
+## Lead Trumpet
+'leadTrumpet'
+l16
+[2
+  g8.(^16) a8.(^16)b-8(^16)<d8(^16)a8
+  f4. (^8) de-8f8g8a
+  b-8^16a8^16g8 j2 <d4.(^8)>
+  a8^16g8^16f2(^8)>
+] <d1^8^16(^4^16)
+## 19
+## Lead Strings
+'leadStrings+o1'
+l16
+f+4.
+f1^4>g+b-<c+e-fc+
+## 21
+g+4.f+1^4^8e-4
+## 23
+f+4.f4.e-4.d4.>b-8^32 m18,4 ^16. <b-4
+## 25
+g+4.f+2^8 f4.e-2^8 v
+;
+
+
+{2}
+r1
+r2^8
+## Drums
+l8
+"u32u32t16s16k8."
+## 3
+$
+## Rhythm Xylophone
+'rhythmXylophone'
+l8
+[4 ff16e-fe-e-16fg+b- ff16e-b- j4 g+b-16g+e-c+]
+## Jumped out of the loop during measure 10 because we have a hihat note to squeeze on this track in-between two xylophone notes
+g+16 "!!!oh16"
+## Rhythm Xylophone
+'rhythmXylophone'
+b-16g+e-c+
+## 11
+## Drums
+l4
+"!!!o"
+[4 "kkk8.k16s" j4 "kk4^16k8k16s"]
+## 18
+"kk8s32s32s16s16s8v16u16s8."
+## 19
+[4 "kkk8.k16s8k8" j4 "kk4^16k8k16s"]
+## 26
+"!!!o kk"
+## Squeeze one accent trumpet note here
+'soloAccentTrumpet+o1' e-16
+## Back to drums
+"!!!ok16s8s16u16u16t16"
+;
+
+
+{3}
+## Rhythm Xylophone, low note
+'rhythmXylophone2-o1'
+l8
+b-b-16g+b-g+g+16b-<c+e- >b-b-16g+<e-c+e-16c+>g+f+
+## 3
+$
+## Drums
+"!!!o"
+l8
+[2 "!!!ok8.kkk16k8.k4^16" j2 "k8.kk8.kk4."]
+"k8.k16"
+## Squeeze an accent trumpet note
+'soloAccentTrumpet+o1'
+c+16
+## Back to drums
+l8
+"!!!ok8.k16v16v16v16ts"
+## 7
+[2 "!!!ok8.kkk16k8.k4^16" j2 "k8.kk8.kk4."]
+l16
+## Squeezing some hihat notes in between kicks to free up a track
+"k8hkhkhhkhkssst8"
+## 11
+# Bass
+'bass'
+l8
+[32 g+] [8 e-] [8 f] [16 g+]
+## 19
+<[16 e-]>[16 b]<[8 c+]>[8 b-]<[8 d+]>[4 f]
+## Squeeze 3 accent trumpet notes in-between bass notes
+[3
+  'bass'
+  f16
+  'soloAccentTrumpet+o1'
+  e-16
+]
+## Back to Bass
+'bass'
+f
+;
+
+
+{4}
+## Echo Xylophone
+'xylophoneEcho'
+l8
+r16
+ff16e-fe-e-16fg+b- ff16e-b-g+b-16g+e-c+16
+## 3
+$
+## Bass
+'bass'
+l8
+[31 b-]
+## Orchestra Hit
+'orchestraLeft' b-8
+## 7 
+## Bass
+'bass'
+[8 f+] [8 g+] 
+## 9
+e-e-e-e-ffff f+f+f+f+g+g+g+g+
+[2 
+  ## 11 / 15
+  ## Accent Organ, high note
+  'highAccentOrgan+o1'
+  l8
+  r8.dc16d
+  ## Accent Trumpet
+  'highAccentTrumpet+o1'
+  l16
+  r8ggr4
+  ## 12 / 16
+  ## Accent Organ, high note
+  'highAccentOrgan'
+  l8
+  r8.ab-16a
+  ## Accent Trumpet
+  'highAccentTrumpet+o1'
+  l16
+  r8ggr4
+  ## 13 / 17
+  ## Accent Organ, high note
+  'highAccentOrgan'
+  l8
+  r8.b-a16b-
+  ## Accent Xylophone Left
+  'accentLeftXylo+o1'
+  l8
+  b-16<c>ab-r16
+  j2
+  ## 14
+  ## Accent Organ, high note
+  'highAccentOrgan'
+  l8
+  r8.ab-16a
+  ## Accent Trumpet
+  'highAccentTrumpetQuiet+o1'
+  l16
+  crce-rf8r
+]
+## 18
+## Accent Organ, high note
+'highAccentOrgan'
+l8
+r8.ab-16a
+## Accent Trumpet
+'soloAccentTrumpet'
+l16
+## So this lasts 8?
+garb-r a16 m24,-4 ^16.r32
+## 19
+## Support Strings, high note
+'supportStringsPair-o1'
+l4
+rb-<e-b- g+fe-c+
+## 21
+e-2f+ b-8 m12,1 ^16 m12,-1 ^16 <f+fc+e->
+## 23
+## Support Strings, high note
+'supportStringsTrio'
+l1
+fg+f+e-
+;
+
+
+{5}
+'rhythmXylophoneLayerHigh'
+l8
+ff16e-fe-e-16fg+b- ff16e-b-g+b-16g+e-c+
+## 3
+$
+## Cymbals
+"!!!o"
+l8
+"chhhhhh16h16o hhhh16h16h16hh16h16h16o"
+## 5
+"hhhhhhh16h16o" 
+## 6
+## Accent Trumpet
+'soloAccentTrumpet+o1'
+## Play one note here, the other two notes will get squeezed on the drums and cymbal tracks
+r c16 r16
+## Accent Strings
+## We want this series of accent string notes all on the same track so we can do a crescendo
+'accentStrings-o2'
+'accentStringsLowVol'
+l16
+'accentStringsFadeUp'
+b-<c+e-efg+b-<c+d+rb-8
+## 7
+## Cymbals
+l8
+"!!!o"
+[2 "hhhhhhh16h16o" j2 "hhhh16h16h16hh16h16h16o"]
+## 10
+## We can squeeze one hihat note before accents need this channel.
+## The rest of the closed hihat notes in this measure will be squeezed in-between kicks,
+## except one that will be squeezed on the xylophone track and one that doesn't fit anywhere and will be dropped.
+"h"
+## Accent Trumpet
+'soloAccentTrumpet+o1'
+c16r16c+16c16
+## Accent Strings
+'accentStrings'
+l16
+'accentStringsFadeDown'
+fe-c>b-g+fe-c
+## We are going to drop the final two accent notes to instead play an open hihat note
+## Cymbals
+l8
+"!!!oo"
+## 11
+## Support Strings, high note
+'supportStringsPair'
+l1
+b-ag2b-16<c8>a8b-8.
+## 14
+f4<c4
+## Accent Xylophone Left
+'highAccentLeftXylo+o2'
+l8
+fg16e-fr16
+## 15
+## Support Strings, high note
+'supportStringsPair'
+l1
+b-a
+## 17
+b-2<c16d8>a8b-8.
+## 18
+a4b-4<c16d8e-8f8.
+## 19
+## Orchestra Hit
+'orchestraCenter' e-4
+## Accent Trumpet
+'soloAccentTrumpet+o1'
+l16
+r4c+8r8e-8r8 f+rg+frf+re-
+## Orchestra Hit
+'orchestraCenter' r4e-4
+## 21
+## Accent Trumpet
+'soloAccentTrumpet+o1'
+r2c+8r8e-8r8 r8f+rg+frf+re-rc+e-rr8
+## 23
+## Support Strings, low note
+'supportStringsTrio-o1'
+l1
+c+de-f
+;
+
+
+{6}
+'rhythmXylophone2LayerHigh-o1'
+l8
+b-b-16g+b-g+g+16b-<c+e- >b-b-16g+<e-c+e-16c+>g+f+
+## 3
+$
+## Hammond Organ, High Note
+'highOrgan'
+l1
+c+c>b-
+## 6
+##Cymbals
+l8
+"!!!o"
+"hhh16"
+## Squeeze an accent trumpet note
+'soloAccentTrumpet+o1'
+c16
+## Back to Cymbals
+l8
+"!!!oh16h16h4^16h16d"
+## 7
+## Hammond Organ, High Note
+'highOrgan-o1'
+l1
+g+16b-2...<c>
+## Support Strings, high note
+'supportStringsPair'
+l2
+e-ff+
+## Organ, low note
+'lowOrgan-o1' e-2
+## 11
+## Cymbals
+l8
+"!!!o"
+"chhhhhho hhhhh16h16hho"
+## 13
+[3
+  [7 "h"]"o"
+  j3
+  "hhhhh16h16hho"
+]
+## 18
+"hhhhh16h16h8.d8."
+## 19
+"bohhhhho hhhhh16h16hho"
+## 21
+[3 "hhhhhhho hhhhh16h16hho" ]
+;
+
+
+{7}
+r1r1
+## 3
+$
+## Hammond Organ, Low Note
+'lowOrgan-o1'
+l1
+b-g+f+
+## 6
+## Hammond Organ, High Note
+'highOrgan'
+'highOrganSoloVol'
+c1
+## 7
+## Hammond Organ, Low Note
+'lowOrgan-o1'
+l1
+f+g+
+## 9
+## Support Strings, low note
+'supportStringsPair-o1'
+l2
+f+g+b-
+r2
+## 11
+## Support Strings, low note
+'supportStringsPair'
+l1
+dc
+## 13
+e-2d16e-8c8d8.
+## 14
+c4f4
+a8b-16g8a8.
+## 15
+dc
+## 17
+d2e-16f8c8d8.
+## 18
+c4d4c16d8e-8f8.
+## 19
+## High Choir
+'highChoir+o1'
+l4
+f+4.f1^4
+l16
+>g+b-<c+e-fc+
+## 21
+g+4.f+1^4^8
+## Orchestra Hit
+'orchestraCenter' e-4
+## 23
+## High Choir
+'highChoir+o1'
+l4
+f+4.f4.e-4.d4.>b-<b-
+## 25
+g+4.f+2^8 f4.e-2^8
+;
+
+
+{8}
+r1r1
+## 3
+$
+## Rhythm Xylophone, low note
+'rhythmXylophone2-o1'
+'rhythmXylo2QuietVol'
+l8
+[2
+  ## 3 / 5
+  b-b-16g+b-g+g+16b-<c+e-
+  ##j2
+  ## 4 / 6
+  >b-b-16g+<e-c+e-16c+>g+f+
+]
+## 7
+b-b-16g+b-g+g+16b-<c+e-
+>b-b-16g+<e-c+e-16c+>g+f+
+## 9
+## Hammond Organ, High Note
+'highOrgan-o1'
+'highOrganSoloVol'
+l2
+f+g+b- 'organDuoVol' <c
+[2
+  ## 11 / 15
+  ## Accent Organ, low note
+  'lowAccentOrgan'
+  l8
+  r8.fe-16f
+  ## Accent Trumpet, low note
+  'lowAccentTrumpet'
+  l16
+  r8b-b-r4
+  ## 12 / 16
+  ## Accent Organ, low note
+  'lowAccentOrgan'
+  l8
+  r8.cd16c
+  ## Accent Trumpet, low note
+  'lowAccentTrumpet'
+  l16
+  r8b-b-r4
+  ## 13 / 17
+  ## Accent Organ, low note
+  'lowAccentOrgan'
+  l8
+  r8.dc16d
+  r2
+  j2
+  ## 14
+  ## Accent Organ, low note
+  'lowAccentOrgan'
+  l8
+  r8.cd16c
+  ## Support Strings, high note. This would normally be above Support Strings 2 but that's already in channel 7. 7 and 8 are functionally the same anyway.
+  'supportStringsPair+o1'
+  l8
+  fg16e-f8.
+]
+## 18
+## Accent Organ, low note
+l8
+r8.cd16c
+## Orchestra Hit
+'orchestraLeft' r4r16f8.
+## 19
+## Support Strings, low note
+'supportStringsPair-o2'
+l4
+rb-<e-b- g+fe-c+
+## 21
+e-2f+ b-8 m12,1 ^16 m12,-1 ^16 <f+fc+e->
+## 23
+## Support Strings, middle note
+'supportStringsTrio'
+l1
+c+>b-b-a
+;

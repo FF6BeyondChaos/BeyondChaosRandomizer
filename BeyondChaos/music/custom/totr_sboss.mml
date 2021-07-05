@@ -1,0 +1,254 @@
+#TITLE Strange Encounter
+#ALBUM Treasure of the Rudras
+#COMPOSER Ryuji Sasai
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x0A kick
+#WAVE 0x21 0x1C snare
+#WAVE 0x22 0x9C cowbell
+#WAVE 0x23 0x2D crash
+#WAVE 0x24 0x4A tom
+#WAVE 0x25 0x75 choir
+#WAVE 0x26 0x16 bass
+#WAVE 0x27 0xB6 organ
+#WAVE 0x28 0x83 tuba
+#WAVE 0x29 0x67 strings
+#WAVE 0x2A 0x43 tone.dist
+#WAVE 0x2B 0x45 fuzz.dist
+
+#def 0i=   |0
+#def 0o=   o6
+#def 0v=   v120
+#def 0f= v1,120
+
+#def 1i=   |1
+#def 1o=   o6
+#def 1v=   v80
+#def 1f= v1,80
+
+#def 2i=   |2
+#def 2o=   o6
+#def 2v=   v80
+#def 2f= v1,80
+
+#def 3i=   |3
+#def 3o=   o6
+#def 3v=   v120
+#def 3f= v1,120
+
+#def 4i=   |4
+#def 4o=   o6
+#def 4v=   v50
+#def 4f= v1,50
+
+#def 5i=   |5
+#def 5o=   o5
+#def 5v=   v90
+#def 5f= v1,90
+
+#def 6i=   |6
+#def 6o=   o8
+#def 6v=   v150
+#def 6f= v1,150
+
+#def 7i=   |7
+#def 7o=   o6
+#def 7v=   v100
+#def 7f= v1,100
+
+#def 8i=   |8
+#def 8o=   o7
+#def 8v=   v120
+#def 8f= v1,120
+
+#def 9i=   |9
+#def 9o=   o6
+#def 9v=   v75
+#def 9f= v1,75
+
+#def Ai=   |A
+#def Ao=   o8
+#def Av=   v67
+#def Af= v1,67
+
+#def Bi=   |B
+#def Bo=   o8
+#def Bv=   v120
+#def Bf= v1,120
+
+## auto percussion  0x20 (kick)
+#drum "h"= 4a
+#drum "i"= 4a+
+#drum "j"= 5d
+## auto percussion  0x21 (snare)
+#drum "k"= 4a
+#drum "l"= 4a+
+#drum "m"= 5d
+## auto percussion  0x22 (cowbell)
+#drum "n"= 3a+
+## auto percussion  0x23 (crash/splash)
+#drum "o"= 5c
+#drum "p"= 5f
+#drum "q"= 5a
+## auto percussion  0x24 (tom)
+#drum "r"= 3a+
+#drum "s"= 4c+
+#drum "t"= 4d
+#drum "u"= 4a
+
+
+{1}
+{'Note table: 96 48 36 24 12 6'}
+%k7%x232{'27 131'}t149%b0,70%f0,0%v50{'05'}
+'4i' '4v*v1.05'%e1{'AltTuning 0'}p114" !!!o u32u32u16u16u16"p74"t32t32
+t16t16t16"p34"r32r32r16r16r16"
+'1i' '1v*v1.00'p64%e1" !!!o m32m32m16m16m16"$[7%k12
+'0i' '0v*v.64'p64%e0" !!!o h8h16h16"
+'1i' '1v*v1.00'p64%e1" !!!o k16"
+'0i' '0v*v.64'p64%e0" !!!o h8h16"]
+'1i' '1v*v1.00'p64%e1" !!!o k16k16"
+'0i' '0v*v.64'p64%e0" !!!o h8"
+'1i' '1v*v1.00'p64%e1" !!!o k16k16"
+'0i' '0v*v.64'p64%e0" !!!o h16"
+'0i' '0v*v.64'p64%e0"h16"[6%k7
+'0i' '0v*v.64'p64%e0" !!!o j8j16j16"
+'1i' '1v*v1.00'p64%e1" !!!o m16"
+'0i' '0v*v.64'p64%e0" !!!o j8j16"]
+'0i' '0v*v.64'p64%e0"j8"
+'1i' '1v*v1.00'p64%e1" !!!o m16"
+'0i' '0v*v.64'p64%e0" !!!o j16"
+'1i' '1v*v1.00'p64%e1" !!!o m16m16"
+'4i' '4v*v1.05'%e1p34" !!!o r16"
+'0i' '0v*v.64'p64%e0" !!!o j16"
+'4i' '4v*v1.05'%e1p114" !!!o u32u32u16"p74"t16t16t16t16"p34"r16r16"[6
+%k7
+'0i' '0v*v.64'p64%e0" !!!o j8j16j16"
+'1i' '1v*v1.00'p64%e1" !!!o m16"
+'0i' '0v*v.64'p64%e0" !!!o j8j16"]
+'1i' '1v*v1.00'p64%e1" !!!o m8"
+'4i' '4v*v1.05'%e1p114" !!!o u16"p74"t16"
+'1i' '1v*v1.00'p64%e1" !!!o m16"
+'0i' '0v*v.64'p64%e0" !!!o j16j16j16"
+'4i' '4v*v1.05'%e1p74" !!!o t8"p34"r8"
+'1i' '1v*v1.00'p64%e1" !!!o m16m16m16m16"[3%k7
+'0i' '0v*v.64'p64%e0" !!!o j8j16j16"
+'1i' '1v*v1.00'p64%e1" !!!o m16"
+'0i' '0v*v.64'p64%e0" !!!o j8j16"]
+'0i' '0v*v.64'p64%e0"j16"
+'1i' '1v*v1.00'p64%e1" !!!o m16"
+'4i' '4v*v1.05'%e1" !!!o t16t16"
+'1i' '1v*v1.00'p64%e1" !!!o m16m16"
+'4i' '4v*v1.05'%e1p34" !!!o r16r16"
+'1i' '1v*v1.00'p64%e1" !!!o m8.m16"r4
+'4i' '4v*v1.05'%e1p114" !!!o u8."p74"t8"
+'0i' '0v*v.64'p64%e0" !!!o j16"
+'1i' '1v*v1.00'p64%e1" !!!o m8"
+'4i' '4v*v1.05'%e1p114" !!!o u32u32u16u8"p74"t16t16t8"p34"r16"
+'1i' '1v*v1.00'p64%e1[7%k11" !!!o l16"]
+'0i' '0v*v.64'p64%e0" !!!o i8"r1^4^2"i8i2i2i4i4i4i4i4"r1^8^2"i8i4
+"r4"i4"r4
+'1i' '1v*v1.00'p64%e1'1v*v.40''1f*v96,.48'" !!!o l8l8l8l8"
+'4i' '4v*v1.05'%e1p114" !!!o s32s32s16s16s16"p74"r16r16r16r16";
+
+{2}
+{'Note table: 168 96 72 48 36 24 12'}
+%k-5{'05'}%e1m48,4,192r2
+'7i' p64'7v*v1.14'p0,12,127%a15%y3%s5%r27'7o'>c16d+16g+16<c16>d16f16a+16
+<d16$%k-5
+'9i' p64'9v*v1.14''9v*v.67'p%a15%y0%s4%r0%a14%y0%s4%r0'9o'g2^8c8d+8g8a+16
+a16a+2c8d+8a+8a8>a8<c8d+8g8c8d+8g8g+16g16g+4.
+'7i' p64'7v*v.67''7v*v1.14'p0,12,127%a15%y3%s5%r27'7o'>c16d+16g+16<c16
+>d16f16a+16<d16
+'9i' p64'9v*v1.14''9v*v.67'p%a15%y0%s4%r0'9o'c4d8d+4c8>g8d+8<d+8>a+16<f8
+>a+16<g8>a+16<d+8>a+16<f16>a+16<g16>g16<f2^4.d+16d16c2
+'7i' p64'7v*v.67''7v*v1.14'p0,12,127%a15%y3%s5%r27'7o'>c16d+16g+16<c16
+>d16f16a+16<d16
+'9i' p64'9v*v1.14''9v*v.67'p%a15%y0%s4%r0p64'9v*v.62'%a10%y0%s7%r0m20,4,192
+p'9o'>g2c8d+8g8a+8a2c4.c16d16d+4f8g4c8d+8a+8a16g+16a2^4.g+8a+4<c4c8d8d+8
+d16c16>a+2d8d+8f8%a14%y0%s4%r0g16d16%k-10d+16c16<d+16c16>g16d+16<g16d+16
+c16>g16<g16c16d+16g16f8.c+8.g+8g2
+'8i' %a15%y1%s3%r0'8v*v.78'p64'8o'[%k-22c2>a+4<c+4c2>f16<r16>g16<r16>g+16
+<r16>a+16<r16j2,201c4>f4a+4g4g+4a+4g4c4
+%k0<]$201%k0<
+'7i' '7v*v.62''7o'>d4c8d8d+8c8d8d+8d2f+2<;
+
+{3}
+{'Note table: 192 168 96 32 24 12 255'}
+%k-26r2
+'6i' p64{'AltTuning 24'}%a15%y1%s5%r0'6v*v.78''6o'>f16c16f8g16d16g8<$[
+[%k-29>c8c16c16c16c8c16<][%k-26>c8c16c16c16c8c16<][%k-32>c8c16c16c16c8
+c16<]>b8b16b16b16b8b16b8b16b16c+16c+8c+16<][4%k-29>c8c16c16<c16>c8c16<]
+[%k-31>f8f16f16<f16>f8f16<]>g8g16g16g16g8g16g8g16g16g8a8a+8a+16a+16a+16
+a+8a+16a+8a+16a+16<a+16>a+8a+16c8c16c16<c16>c8c16c8c16c16<c16>e16g16<c16
+>a8a8e8e8c8c8a8a8a+6f6d6c16e16g16<c16>e16g16<c16e16>d1<^2^4.%k-34>c8f2
+<c2>g+8<r8>g+8<r8>g8<r8c8r8>f1<^2^4.>c8f2f+2e8e8e8e8e8e8e8e8<;
+
+{4}
+{'Note table: 192 168 96 32 24 12 255'}
+%k-33r2
+'Bi' 'Bv*v.71'{'AltTuning 36'}p%a15%y7%s4%r8'Bo'c8
+'Ai' 'Av*v.61'p%a15%y7%s6%r8'Ao'>c16c16
+'Bi' 'Bv*v.71'{'AltTuning 36'}p%a15%y7%s4%r8'Bo'd8
+'Ai' 'Av*v.61'p%a15%y7%s6%r8'Ao'>d16d16<$[
+'Ai' 'Av*v.61'p%a15%y7%s6%r8'Ao'[%k-29>c8c16c16<c16>c8c16<][%k-26>c8c16
+c16<c16>c8c16<][%k-33>c+8c+16c+16<c+16>c+8c+16<]>c8c16c16c16c8c16c8c16
+c16d16
+'Bi' 'Bv*v.71'{'AltTuning 36'}p%a15%y7%s4%r8%r0'Bo'd8.]
+'Bi' 'Bv*v.71'{'AltTuning 36'}p%a15%y7%s4%r8%r20[4%k-29>c8c16c16c8c16c16
+<][%k-34>g+8g+16g+16g+8g+16g+16<]>a+8a+16a+16a+8a+16a+16a+8a+16a+16a+8
+<c8c+8c+16c+16c+8c+16c+16c+8c+16c+16c+8c+16c+16>d+8d+16d+16d+8d+16d+16
+d+8d+16d+16d+16g16a+16<d+16c8c8>g8g8d+8d+8<c8c8
+'Ai' 'Av*v.61'p%a15%y7%s6%r8'Ao'c+6>g+6f6d+16g16a+16<d+16>g16a+16<d+16
+g16
+'Bi' 'Bv*v.71'{'AltTuning 36'}p%a15%y7%s4%r8%r10'Bv*v.56''Bo'>f1<^2^4.
+>c8f2<c2>g+8<r8>g+8<r8>g8<r8c8r8>f1<^2^4.>c8f2f+2e8e8e8e8e8e8e8e8<;
+
+{5}
+%e1r1$
+'5i' p34%a9%y0%s7%r0'5v*v.40''5o'[%k3>e1d1c+1c2^4d4<]p34
+'7i' '7v*v.32''7o'>e1e1d1e1g1a1p14
+'9i' '9v*v.26''9o'[8%k14>c16<r16]>c+2d+2c16<r16>c16<r16>c16<r16>c16<r16
+>c+16<r16>c+16<r16>c+16<r16>c+16<r16>d+16<r16>d+16<r16>d+16<r16>d+16<r16
+>c+16<r16>c+16<r16>c+16<r16>c+16<r16[8%k9>f16<r16]>f16<r8.>f+16<r8.>d+16
+<r8.>c16<r8.>f16<r16>f16<r16>f16<r16>f16<r16>f+16<r16>f+16<r16>f+16<r16
+>f+16<r16>g+16<r16>g+16<r16>g+16<r16>g+16<r16>f+16<r16>f+16<r16>f+16<r16
+>f+16<r16[4%k14>c16<r16][4%k14>c+16<r16]>c2c2<;
+
+{6}
+%e1r1$
+'5i' p94'5v*v.40'%a9%y0%s7%r0'5o'[%k-5>g1d+1c1c2^4f4<]p94
+'7i' '7v*v.32''7o'>g1a1g1a1<c1d1p114
+'9i' '9v*v.26''9o'[8%k9>c16<r16]>c+2d+2<[4%k10>c16<r16][4%k12>c16<r16]
+[4%k14>c16<r16][4%k12>c16<r16][4%k10>c16<r16][4%k6>d+16<r16]>e16<r8.>e16
+<r8.>d+16<r8.>c16<r8.[4%k10>c16<r16][4%k12>c16<r16][4%k14>c16<r16][4%k12
+>c16<r16][4%k10>c16<r16][4%k9>d+16<r16]>c2c2<;
+
+{7}
+%e1r1$%k-2r1^1^1^1^1^1^1^1p64
+'7i' '7v*v.32''7o'>c1d1c1d1f1g1
+'9i' '9v*v.26''9o'[8%k5>c16<r16]>d2e2<[20%k2>f16<r16]>e16<r16>e16<r16>e16
+<r16>e16<r16>f16<r8.>f16<r8.>d+16<r8.>c16<r8.[20%k6>c+16<r16]>d16<r16>d16
+<r16>d16<r16>d16<r16>c2c2<;
+
+{8}
+{'Note table: 192 168 96 48 24 12 255'}
+%e1r1$%k12
+'3i' '3v*v.63'p64%a15%y6%s7%r20" !!!o o4"
+'2i' '2v*v.40'p34%a15%y3%s0%r31" !!!o n16n16n8"[6%k12"n8n16n16n16n16
+n8"]
+'3i' '3v*v.63'p64%a15%y6%s7%r20" !!!o q4"
+'2i' '2v*v.40'p34%a15%y3%s0%r31" !!!o n16n16n8"
+'3i' '3v*v.63'p64%a15%y6%s7%r20" !!!o o4"
+'2i' '2v*v.40'p34%a15%y3%s0%r31" !!!o n16n16n8"[5%k12"n8n16n16n16n16
+n8"]r1
+'3i' '3v*v.63'p64%a15%y6%s7%r20" !!!o o4"
+'3i' '3v*v.63'p114%a15%y5%s7%r23[11%k7e4]
+'3i' '3v*v.63'p64%a15%y6%s7%r20"p1"
+'3i' '3v*v.63'p114%a15%y5%s7%r23e4e4e4e4e4e2^4
+'3i' '3v*v.63'p64%a15%y6%s7%r20c8.c4r1^2^16"p1"^2^4."p8p2q2p4q4p4p4
+p1"^2^4."p8p2q2"
+'4i' '4v*v1.05'%e1'4v*v.40''4f*v96,.48'" !!!o r8r8r8r8"
+'3i' '3v*v.63'p64%a15%y6%s7%r20" !!!o p2";
+;

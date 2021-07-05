@@ -1,0 +1,295 @@
+#TITLE Watchtowers of the Seal // The Turret Forgotten
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED Rushlight
+
+#SHORTNAME LU2 Towers of Seal
+
+#WAVE 0x20 0x66 ## Strings
+#WAVE 0x21 0x51 ## Bass
+#WAVE 0x22 0x5A ## Timpani
+
+#WAVE 0x2A 0x1B ## Snare
+#WAVE 0x2B 0x2D ## Cymbal
+
+#def init= t140 %x240 %v40 %b0,85 %f0,0
+
+#def strings= |0 o5 %r0 %e1
+
+#def leadStringsVol=            v105
+#def supportStringsVol=         'leadStringsVol*v.65'
+## Volume doesn't change in the original for the lower notes, but low notes don't necessarily come out noticeable enough depending on sample
+#def supportStringsLowNotesVol= 'supportStringsVol*v1.3'
+#def bassVol=           v36
+#def timpaniVol=        v120
+#def timpaniRoll1=      'timpaniVol*v.54'
+#def timpaniRoll2=      'timpaniVol*v.68'
+#def timpaniRoll3=      'timpaniVol*v.81'
+#def timpaniRoll4=      'timpaniVol*v.91'
+#def snareVol=          v100
+
+#def leadStrings=    |0 o5 'leadStringsVol'    p64      %r0       %e1
+#def supportStrings= |0 o5 'supportStringsVol' p84      %r0  %a10 %e1
+#def bass=           |1 o7 'bassVol'           p64 %a10 %r11      %e0
+#def timpani=        |2 o7 'timpaniVol'        p64      %r20      %e1
+
+## Vanilla volume multipliers are .73 and .89
+#DRUM "q"=5f         |a 'snareVol*v.42'    p64 %y0 %s6 %r25 %e0
+#DRUM "r"=5f         |a 'snareVol*v.63'    p64 %y0 %s6 %r25 %e0
+#DRUM "s"=5f         |a 'snareVol'         p64 %y0 %s6 %r25 %e0
+#DRUM "c"=5g+        |b  v95               p80         %r17 %e0
+
+
+
+{1}
+'init'
+## Snare, originally track 6
+l16
+[4 "s8ssr8qss8qr" j4 "qrss"]
+## Lead Strings, originally track 1
+'leadStrings-o1'
+l8
+## Measure 4 beat 4
+e4
+$
+## Lead Strings, originally track 1
+'leadStrings-o1'
+l8
+p35
+[2
+  ## 5 / 9
+  a2.<e4> b2.ag
+  ## 7 / 11
+  a4 j2 e1. e4
+]
+## Measure 11 beat 2
+< e1.eg
+[2
+  ## 13 / 17
+  a2^8eeg a2<c2>
+  ## 15 / 19
+  bga1. j2 eg
+]
+## End of 20
+^4
+p64
+l16
+[2
+  ## 21 / 25
+  <g4.fed1e4f4
+  j2
+  ## 23
+  e4.dc>b4.<cdc2.>a4
+]
+## 27
+e2>b2g+2.> 'leadStringsVol*v.75' e4
+
+;
+
+
+{2}
+## Timpani, originally Track 5
+'timpani-o3'
+l4
+[8 a j8 e]
+## Snare, originally track 6
+l16
+"!!!o"
+## Measure 4 beat 4
+"qrss"
+$
+## 5
+l16
+"!!!o"
+[16 "s8ssr8qss8qrqrss"]
+[2
+  ## 21 / 25
+  "s2.srsq s2s4s8ss"
+  ## 23 / 27
+  [2 "s8ssr8qss8qrqrss"]
+]
+;
+
+
+{3}
+## Support Strings 1, originally track 4
+'supportStrings'
+l16
+[2
+  ## 1 / 3
+  erer8. [2 ererer8.] ere8d8 j2 g8f8
+]
+## Timpani, originally Track 5
+'timpani-o3'
+l4
+## Measure 4 beat 4
+e
+$
+## Timpani, originally Track 5
+'timpani-o3'
+l4
+## 5
+[16 ae]
+[2
+  ## 13 / 17
+  fcfcgdgd
+  ## 15 / 19
+  [3 ae] a j2 e
+]
+## Measure 20 beat 4
+l32 %g1'timpaniRoll1' ee 'timpaniRoll2' ee 'timpaniRoll3' ee 'timpaniRoll4' e 'timpaniVol' e %g0 l4
+[2
+  ## 21 / 25
+  b-2.b-8b-16b-16 b-2<c>b-
+  j2,327
+  ## 23
+  [4 ae]
+]
+## 27
+$327
+[7 e] e16f16f+16g16
+;
+
+
+{4}
+## Support Strings 2, originally track 3
+'supportStrings'
+l16
+[2
+  ## 1 / 3
+  crcr8. [2 crcrcr8.] cr j2 c16.r32>b16.r32<e16.r32d16.r32
+]
+## Measure 4 beat 3
+c8>b8
+## Support Strings 1, originally track 4
+'supportStrings'
+## Measure 4 beat 4
+g8f8
+$
+## Support Strings 1, originally track 4
+'supportStrings'
+l16
+## 5
+## We have three nearly identical loops, but one note plays shorter in loop 2.
+## We'll jump out of the loop, play the different note, then jump back in.
+## Then we'll make sure to go after the line that has that note when exiting the loop.
+[3 erer8. [2 ererer8.] er j2,405 e8 $406 d8g8f8 j3,411]
+## The one different note in the loop
+$405 er %j406
+## 11 - The actual exit point once the loop is complete
+$411
+erer8. ererer8. ere4d4c4>b4
+'supportStringsLowNotesVol'
+[2
+  ## 13 / 17
+  frfr8. frfrfr8. fr
+  grgr8. grgrgr8. gr
+  ## 15 / 19
+  arar8. [2 ararar8.] ara8g8<c8>b8
+]
+'supportStringsVol'
+l4 < p16
+[2
+  ## 21 / 25
+  f1f2gf
+  ## 23 / 27
+  e1 j2 c1
+]
+## 28
+>b1
+
+;
+
+
+{5}
+## Bass, originally track 2
+'bass-o2'
+l16
+[4 [3 a8aa] j4 aaaa ]
+## Support Strings 2, originally track 3
+'supportStrings'
+## Measure 4 beat 4
+e8d8
+$
+## Support Strings 2, originally track 3
+'supportStrings'
+l16
+## 5
+[3 crcr8. [2 crcrcr8.] crc8>b8<e8d8 ]
+crcr8. crcrcr8. crc4>b4a4g4
+'supportStringsLowNotesVol'
+[2
+  ## 13 / 17
+  crcr8. crcrcr8. cr
+  drdr8. drdrdr8. dr
+  ## 15 / 19
+  erer8. [2 ererer8.] ere8d8g8f8
+]
+'supportStringsVol'
+l4
+<
+[2
+  ## 21 / 25
+  d1d2ed
+  j2
+  ## 23
+  c1>a1<
+]
+## 27
+>b1g+1
+;
+
+
+{6}
+r1r1r1r2.
+## Bass, originally track 2
+'bass-o2'
+l16
+aaaa
+$
+## Bass, originally track 2
+'bass-o2'
+l16
+## 5
+[8 [3 a8aa] aaaa ]
+[2
+  ## 13 / 17
+  [3 f8ff] ffff
+  [3 g8gg] gggg
+  ## 15 / 19
+  [2 [3 a8aa] aaaa]
+]
+[2
+  ## 21 / 25
+  b-1b-2<c4>b-4
+  j2,627
+  ## 23
+  [2 [3 a8aa] aaaa]
+]
+$627
+## 27
+[2 [3 e8ee] j2 eeee]
+## Measure 28 beat 4
+ef+gg+
+;
+
+
+{7}
+r1r1r1r1
+$
+## Cymbals, originally track 7
+"!!!o"
+## 5
+l1
+"c"
+[15 r1]
+[2
+  ## 21 / 25
+  "cc2c4c4"
+  j2
+  ## 23
+  "c1^1"
+]
+## 27
+"c2c2c2c2"
+;

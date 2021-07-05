@@ -1,0 +1,242 @@
+#TITLE One Winged Angel pt.1
+#ALBUM Final Fantasy VII
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#VARIANT ~_
+#VARIANT ~` tier1
+#VARIANT ?` tier2
+#VARIANT ?_ tier3
+
+#WAVE 0x20 0xD5
+#WAVE 0x21 0xB0
+#WAVE 0x22 0x06
+#WAVE 0x23 0xA4
+#WAVE 0x24 0x82
+#WAVE 0x25 0x75
+#WAVE 0x26 0xF2
+#WAVE 0x28 0x1B
+#WAVE 0x2A 0x5A
+#WAVE 0x2C 0x2D
+
+#def init= t120 %x255 %v50 %b0,70 %f0,0
+
+#def org1= |0 o3
+#def org2= |1 o6
+#def pian= |2 o3
+#def flute=|3 o4
+#def euph= |4 o5
+#def vox=  |5 o4
+#def voxm= |6 o4
+#def timp= |A o6
+
+#def o= v44
+#def z= v52
+#def p= v64
+#def f= v64
+#def e= v56
+#def v= v56
+#def m= v56
+#def t= v104
+
+#def of= v1,44
+#def zf= v1,52
+#def vf= v1,56
+#def tf= v1,104
+
+#def s= v64
+#def sf= v1,64
+
+#drum "s"= 5a |8 p30
+
+#drum "x"= 5c+ |C p40 v64 %a11%r20
+#drum "y"= 5a |C p40 v80
+
+########################################
+{1} $4441 'init'
+$%e1
+[5'org1+o1' p45 l16
+[8'o*v.75'er'o*v.25'er] j1,103 j2,107 ]
+
+'euph''e' p114 l16 m48,18,207
+f+4[3gr48] a4[3br48] <c4>[3br48] a+4[3br48] <c+4>[3br48] <d4>[3br48] <e4>[3br48] a+4[3br48]
+p24 >
+f+ga+<f+e2^8c+d+ e8f+re8d+r l8c+c>a+g+
+
+## 21 - transition
+l8 p114 <d>aa+<ag+d+<c+ p24 c>gg+<d+d>a<g p114 f+c+da+aef <c+1^1 m
+
+## 26 - part 1b
+r1r1
+[j1,1028] %k-2 [j1,1028] %k0 [j1,1028] %k3 [j1,1028] %k5
+[j1,1028] %k1 [j1,1028] %k0 [j1,1028] %k6 [j1,1028] %k0
+:4441
+;####
+
+$103 l16
+'o'[d+8er fed+r e8d+r f+8er] ]
+
+$107 'pian+o1''p' l16
+[4 ebg<d>a<e>a+<g>] ]
+
+$1028 'org1''o*v.67''of*v96,1'p45 a2  'voxm+o1''m*v1.3'p54 m24,18,223 a2 m ]
+
+########################################
+{2} $4442
+$%e1
+[5'org1'p65  l16
+[8'o*v.80'a+r'o*v.25'a+r] p5 j1,203 j2,207 ]
+
+'o' < p45 l24
+f+4[3gr] a4[3br] <c4>[3br] a+4[3br] <c+4>[3br] <d4>[3br] <e4>[3br] a+4[3br]
+> p85 l16
+f+ga+<f+e2^8c+d+ e8f+re8d+r l8c+c>a+g+
+
+## 21 - transition
+> p125 l8
+d2c4>a+ a4<f+4f4d+ d4>g4a4a+ b1^1
+
+## 26 - part 1b
+r1r1
+[j1,2028] %k-2 [j1,2028] %k-1 [j1,2028] %k1 [j1,2028] %k3
+[j1,2028] %k1 [j1,2028] %k-2 [j1,2028] %k4 [j1,2028] %k0
+:4442
+;####
+
+$203 l16
+'o' << [8 %l1 d+64e8&21r] ]
+
+$207 l24 %l1 'o' < [3 b<c>ba+ba+aa+agag] f+gf+ef+ed+ed+>b<c>b ]
+
+$2028 'org1''o*v.67''of*v96,1'p85 d2  'org2''z*v.75'p24 d2 ]
+
+########################################
+{3} $4443
+$%e1
+[5'org1'p85 l16
+[8'o*v.85'ar'o*v.25'ar]
+'flute' p54 j1,303 j2,307 ]
+
+'org1'p105 [24 'o*v.85'dr'o*v.25'dr ]
+
+## 21 - transition
+%g1 [3 's''sf*v96,.5' [12"s24"] 'sf*v72,1' [9"s24"] ]
+'sf*v192,.5'[[24"s24"]'sf*v192,1'] %g0
+
+## 26 - part 1b
+'vox+o1'p5 %l1 l24'v*v.33' [10'vf*v96,.5'[aa+b<cc+dd+dc+c>ba+'vf*v96,.33']]
+:4443
+;####
+
+$303 < 'f*v1.31' %r20 l16
+[8 %l1 d48d+48e48^16r8 ] ]
+
+$307 'f' l24
+[3 %l0%l1 b<c>ba+ba+aa+agag] f+gf+ef+ed+ed+>b<c>b ]
+
+########################################
+{4} $4444
+$%e1
+[6 'org2-o1' p114 l16
+[8'z'er'z*v.25'er] j1,403 j3,409]
+
+## 21 - transition
+'org1''o' p105 l8
+<d>aa+<ag+d+<c+ c>gg+<d+d>a<g f+c+da+aef
+'org2-o2' p114 l16
+[8'z'br'z*v.25'br]
+
+## 26 - part 1b
+<[40'z'dr'z*v.25'dr]
+:4444
+;####
+
+$403 'org1+o1''o'p25 l16
+[8 a+8ar ] ]
+
+$409
+r2..
+[3 'euph-o1''e' p24 d24d+24e24a+16r16 j1,410 ]
+r1... ]
+
+$410
+< p118 l8 gre2e d+ef+4c1r8 ]
+
+########################################
+{5} $4445
+$%e1
+[6 'org2-o2' p114 l16
+[8'z'er'z*v.25'er] j1,503 j3,509 ]
+
+## 21 - transition
+'org2-o2''z' p114 l8
+d2c4>a+ a4<f+4f4d+ d4>g4a4a+
+l16 [8'z'br'z*v.25'br]
+
+## 26 - part 1b
+<[40'z'dr'z*v.25'dr]
+:4445
+;####
+
+$503 r1r1 ]
+
+$509
+r2..
+[3 's*v.5''sf*v24,1'"s24s24s24s8" j1,510 ]
+'org1+o1''o*v.75' p5 l16
+r2 [<e>a+ar] r2 <e>a+ar8. ]
+
+$510
+'org2''z' p114 l8
+gre2e d+ef+4 c4v96,0^4.
+'org1''o*v.75'p5 < l16 [<e>a+ar] ]
+
+########################################
+{6} $4446
+$%e1
+'timp-o1''t'
+[4 >p10e4<p70e4] r1r1 [32 >p10e4<p70e4]
+
+## 21 - transition
+l8 d2c4>a+ a2<f4d+ d2>a4a+ b2 p10e2e2e2
+
+## 26 - part 1b
+e2e2e2e2
+[8 p10 e4 p70 't*v.5''tf*v48,1'<[6d24]j8d2>] d4>'tf*v48,.5'[6a24]
+:4446
+;####
+
+########################################
+{7} $4447
+$%e1
+[8"x4"] r1r1 [64"x4"]
+
+## 21 - transition
+'timp-o2''t' p10
+[3e2e4.]e1r1
+
+## 26 - part 1b
+"!!!o" [40"x4"]
+:4447
+;####
+
+########################################
+{8} $4448
+$%e1
+[71r8]
+
+[3 'flute+o1' p54'f'd24d+24e24a+16r16 j1,810 ]
+r2 'f*v.67' l16 > ged+r ged+r r2 ged+r8.
+
+"!!!o y1^1^1^1^1^1"
+
+## 21 - transition
+"y2..y2..y2..y1^1"
+
+## 26 - part 1b
+"y1^1" [8"^2y2"]
+:4448
+;####
+
+$810 r1r1
+'f*v.67' l16 > ged+r ged+r ]

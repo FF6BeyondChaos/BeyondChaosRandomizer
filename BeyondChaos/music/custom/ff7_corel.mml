@@ -1,0 +1,140 @@
+#TITLE Mining Town
+#ALBUM Final Fantasy VII
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#WAVE 0x20 0x94 bassoon
+#WAVE 0x21 0x96 clarinet
+#WAVE 0x22 0x65 strings
+#WAVE 0x23 0xD1 whistle
+#WAVE 0x24 0x08 synth
+#WAVE 0x25 0x36 guitar
+#WAVE 0x26 0x59 pizza
+#WAVE 0x27 0x28 bell
+#WAVE 0x28 0xD0 sine
+
+#def global= t120 %x240 %v50 %b0,70 %f0,0
+
+#def soon= |0 p20 v52 o4 %e1 m
+#def net= |1 p100 v80 o4 %e1 m
+#def str= |2 v64 o5 %e1 %a4 %r8 m
+#def st1= 'str' p30
+#def st2= 'str' p64
+#def st3= 'str' p110
+#def whis= |3 v44 p95 o6 %e0 m %a13
+#def syn= |4 v80 o6 %a9 %r10 p56 m32,18,237 %e1
+#def tar= |5 p64 v127 o5 %e1 m48,18,193
+#def za= |6 p64 v104 o4 %e1 m
+#def tube= |7 p64 v112 o4 %e1 %r14 m
+#def syn2= |8 v64 o5 %a10 %r7 p88 m32,18,237 %e1
+
+{1}
+'global'
+$
+'net' l4
+[40abr]
+##41
+[a<c>r] [abr] [b<d>r] [a<c+>r]
+[a<c>r] [g<c>r] [4abr]
+;
+
+{5}
+$
+'soon' l4
+[20d e>b<  d e r]
+##41
+   e f  c   e f r
+   d e> b<  d e r
+   d f+ >b< d f+r
+   c+f+ >a< c+f+r
+   e f  c   e f r
+   d e  c   d e r
+  [d e> b<  d e r]
+;
+
+{3}
+$
+'za' l8
+[37r4]
+gbae gba r2 egbaegba r
+[14r4]
+gbae gba r2 egbaegba r
+[13r4]
+##29
+'st1' l2
+g.f+.e4^1^1 r4^1^1
+g.a.b2^1
+##41
+l1
+a. g. b. a.
+a. g. a^^
+;
+
+{4}
+$
+'tar*v.6' l8 %a7
+&49[23r4]
+ga b2. ^2ag f+2.
+^2ef+ g2.
+^1r1
+ga b2. ^2ag f+2.
+^2ed e2.
+&23[42^]
+##29
+'st2' l2
+e.d.c+4^1^1 r4^1^1
+e.f+.g2^1
+##41
+l1
+c. d. d. c+.
+c. c. d^^
+;
+
+{2}
+$
+'tar' l8
+[23r4]
+ga b2. ^2ag f+2.
+^2ef+ g2.
+^1r1
+ga b2. ^2ag f+2.
+^2ef+ g2.
+[19^]
+'whis' l8
+egb<d c+>b4a<c+>b4 g4a4.f+ g l24 ^f+fe2 l8
+##29
+[25r]
+egb<d c+>b4a<c+>b4 g4a4.f+ g l24 ^f+fe2 l8
+[18r]
+##40
+'syn' l8
+rrrr ab<c1^4> bag1^4 b<c+d1^4 c+>ba1^4 ab<c1^4> bag1^4 egf+1^1^1
+;
+
+{6}
+$
+'za*v.33' l4 < 
+[37r4]
+##gbae gba r2 egbaegba r
+  e>b< d e r2 e>b<d e
+[14r4]
+  e>b< d e r2 e>b<d e
+[13r4]
+##29
+'st3' l2
+d.c+.>b4^1^1< r4^1^1
+d.e.f+2^1
+##41
+> l1
+f. e. f+. f+.
+f. e. f+^^
+;
+
+{7}
+$
+'tube' l1
+r2[9brr]br2.
+##40
+'syn2' l8
+r2 ab<c1^4> bag1^4 b<c+d1^4 c+>ba1^4 ab<c1^4> bag1^4 egf+1^1^1
+;

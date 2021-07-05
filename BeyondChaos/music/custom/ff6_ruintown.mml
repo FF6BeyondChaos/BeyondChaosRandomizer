@@ -1,0 +1,172 @@
+#TITLE From That Day On...
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+########## ------------------
+#SHORTNAME FF6 The Day After
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x00
+#WAVE 0x21 0x95
+#WAVE 0x22 0x60
+#WAVE 0x23 0x36
+#WAVE 0x24 0x32
+#WAVE 0x25 0x51
+#WAVE 0x26 0x6B
+#WAVE 0x27 0x0A
+
+#WAVE 0x2A 0x91 oboe B6 (D+6 +)
+#WAVE 0x2B 0x92 oboe F6 (A+5 - D6)
+#WAVE 0x2C 0x93 oboe C+6 (F5 - A5)
+#WAVE 0x2D 0x94 oboe A5 (E5 -)
+
+#def o1= |D
+#def o2= |C
+#def o3= |B
+#def o4= |A
+#def o2u= |C
+#def o3u= |B>
+#def o4u= |A
+#def o1d= |D
+#def o2d= |C<
+#def o3d= |B
+
+#def 0i=   |C
+#def 0o=   o5
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o6
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v100
+#def 2f= v1,100
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |4
+#def 4o=   o5
+#def 4v=   v100
+#def 4f= v1,100
+
+#def 5i=   |5
+#def 5o=   o4
+#def 5v=   v100
+#def 5f= v1,100
+
+#def 6i=   |6
+#def 6o=   o5
+#def 6v=   v100
+#def 6f= v1,100
+
+#def 7i=   |7
+#def 7o=   o5
+#def 7v=   v100
+#def 7f= v1,100
+
+## auto percussion  0x26
+#drum "h"= 5f+
+## auto percussion  0x27
+#drum "i"= 5a
+
+#drum "k"= 5a '7i''7v*v1.2' p64 %e0
+#drum "s"= 5f+ '6i''6v*v.5' p50 %e0
+#drum "t"= 5f+ '6i''6v*v.1' p50 %e0
+#drum "q"= 5f+ '6i' %e0
+
+{1}
+t115%b0,70%f0,0%v50
+'0i' p84%e1m48,18,239
+$101'0v*v.60'r8'0o+o1''o3u'c8>b8<c8>'o2d'a4'o1d'e4d+8'o2u'f+8'o3u'b2^4r8a+8'o2d'a8'o3u'a+8'o2d'f4'o1d'd4c+8e8'o2u'a2^8r8
+r8'o3u'<c8>b8<c8>'o2d'a4'o1d'e4d+8'o2u'f+8'o3u'b2^4r8a+8'o2d'a8'o3u'a+8'o2d'f4'o1d'd4c+8e8'o2u'a2^8r8r1r1r1r1'0v*v.40'[a2
+^4.g8a4'o1d'e4.r8e8'o2u'g8a4'o3u'b4'o2d'a8'o3u'b8'o2d'a8g8a8'o1d'e2^4r8'o2u']'o3u'<c2^4.>b8<c4>'o2d'g4.r8g8'o3u'b8<c4'o4u'e4'o3d'd8'o4u'e8'o3d'd8
+>'o2d'a8a4.'o3u'b16'o2d'a16g+4r4a2^4.g8a4'o1d'e4.r8e8'o2u'g8a4'o3u'b4'o2d'a8'o3u'b8'o2d'a8g8a8'o1d'e2^4r8
+;101
+
+
+{2}
+
+'1i' p44%e1m48,18,239
+$201'1v*v.50'r1r2r8'1o-o1'd+8f+8b8<d2f2e1r1r2r8>d+8f+8b8<d2f2e2r8d8c8>
+b8r1r1r1r1'1v*v.70'[<%l1d48c2^4^16^24%l0>b8<%l1c48e48c8.^48%l0>a4.r8a8
+b8<%l1c48d48c8.^48%l0d4c8d8c8>b8<%l1c48d48c12>%l0a2^4r8]<%l1d48e2^4^16
+^24%l0d8%l1e48g48e8.^48%l0c4.r8c8d8%l1e48f48e8.^48%l0g4f+8g8f+8d8%l1e48
+f+48e2^4r8.r48%l1d48c2^4^16^24%l0>b8%l1<c48e48c8.^48%l0>a4.r8a8b8%l1<c48
+d48c8.^48%l0d4c8d8c8>b8<%l1c48d48c12%l0>a2^4r8
+;201
+
+
+{3}
+
+$301'2v*v.60'
+'2i' p54%e1m48,18,239['2o-o1'a8<e8a8<c8e8c8>a8e8>a8<f+8b8<d+8f+8d+8>b8
+f+8>a+8<f8a+8<d8f8d8>a+8f8>a8<e8a8<c+8e8c+8>a8e8]'3v*v.80'
+'3i' p54%e1[4'3o-o2'a8<b4b8a8b8a8e8][8>a8<b4b8a8b8a8e8][c8<c4c8>b8<c8>
+g8e8]c8<c4c8>b8<c8>a8f+8e8<d4d8>b8<d8>b8g+8[4>a8<b4b8a8b8a8e8]
+;301
+
+
+{5}
+
+'4i' p74%e1
+$401'4o+o1'['4v*v.40'[12c24][12e24]'4f*v192,.10'[24d+24]'4v*v.40'[12d24
+][12f24]'4f*v192,.10'[24e24]]r1r1r1r1['4v*v.40'[21c24]>b24b24b24<[6c24
+]>'4f*v96,.20'[12a24]'4v*v.40'a24a24a24b24b24b24<[6c24][6d24]c24c24c24
+d24d24d24c24c24c24>b24b24b24<c24c24c24>'4f*v168,.10'[21a24]<]'4v*v.40'
+[21e24]d24d24d24[6e24]'4f*v96,.20'[12c24]'4v*v.40'c24c24c24d24d24d24[6
+e24][6g24]f+24f+24f+24g24g24g24f+24f+24f+24d24d24d24'4f*v192,.10'[24e24
+]'4v*v.40'[21c24]>b24b24b24<[6c24]>'4f*v96,.20'[12a24]'4v*v.40'a24a24
+a24b24b24b24<[6c24][6d24]c24c24c24d24d24d24c24c24c24>b24b24b24<c24c24c24
+>'4f*v168,.10'[21a24]
+;401
+
+
+{7}
+
+'4i' p74%e1&1r1
+$501['4v*v.40''4o'[12a24]<[12c24]>'4f*v192,.10'[24b24]'4v*v.40'[12a+24
+]<[12d24]'4f*v192,.10'[24c+24]]r1r1r1r1>['4v*v.40'[21a24]g24g24g24[6a24
+]'4f*v96,.20'[12e24]'4v*v.40'e24e24e24g24g24g24[6a24][6b24]a24a24a24b24
+b24b24a24a24a24g24g24g24a24a24a24'4f*v168,.10'[21e24]]<'4v*v.40'[21c24
+]>b24b24b24<c24c24c24c24c24c24>'4f*v96,.20'[12g24]'4v*v.40'g24g24g24b24
+b24b24<[6c24][6e24]d24d24d24e24e24e24d24d24d24>a24a24a24'4f*v192,.10'[24
+b24]'4v*v.40'[21a24]g24g24g24[6a24]'4f*v96,.20'[12e24]'4v*v.40'e24e24e24
+g24g24g24[6a24][6b24]a24a24a24b24b24b24a24a24a24g24g24g24a24a24a24'4f*v168,.10'
+[21e24]
+;501
+
+
+{6}
+'5v*v.70'
+'5i' p64%e0
+$601'5o'[6a4r2r8a8a4r2r4][4a4r2r8a8a4r2r4]<c4r2r8c8c4r2r4c4r4d4r4e1[a4
+r2r8a8a4r2r4]
+;601
+
+
+{4}
+$r1r1r1r1r1r1r1r1 l8
+[5"k2s4.k k2stst" j4,490 "k2s4.k" $491 "k2"'6v*v.5''6f*v96,.1'p96,80"qqqq"]
+;
+
+$490 ":t" "k4.kk2" ;491
+
+{8}
+$r1r1r1r1r1r1r1r1
+'3v*v.40''3i' p54%e1 %y4%s0%r17
+[4'3o-o1''a'a8'b'<b4b8a8b8a8e8][8'a'>a8<'b'b4b8a8b8a8e8]['a'c8'b'<c4c8>b8<c8>
+g8e8]'a'c8'b'<c4c8 "!!!o s8" '3v*v.4''3i''3o+o1' p54%e1 %y4%s0%r17 'b'
+c8>a8f+8e8<d4d8>b8<d8>b8g+8[4'a'>a8<'b'b4b8a8b8a8e8]
+;
+
+#def a= '3v*v.8'
+#def b= '3v*v.15'

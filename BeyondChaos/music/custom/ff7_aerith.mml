@@ -1,0 +1,279 @@
+#TITLE Aerith's Theme
+#ALBUM Final Fantasy VII
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#VARIANT !
+#VARIANT _ tr
+
+#WAVE 0x20 !0x65! _0x66_ strings
+#WAVE 0x21 0x63 ostrings
+#WAVE 0x22 0xA7 flute
+#WAVE 0x24 0x96 clari
+#WAVE 0x25 0x94 bassoon
+#WAVE 0x26 0x84 horn
+#WAVE 0x28 0x83 trombone
+#WAVE 0x29 0x61 harp
+#WAVE 0x2A 0x09 piano6-LQ
+#WAVE 0x2B 0x07 piano4-LQ
+
+#BRR  0x23; brr/ff7-f-1f, @0605bl, *0.880, FFE0, {609}  oboe
+
+#def init= t71 %x255 %v40 %b0,85 %f0,0
+
+#def strings= |0 o6 's' m
+#def ostring= |1 o6 's' m
+#def flute=   |2 o5 'f' m96,18,202
+#def oboe=    |3 o5 'o' m96,18,207
+#def clari=   |4 o5 'c' m96,18,202
+#def bassoon= |5 o6 'b' m96,18,202
+#def horn=    |6 o5 'h' m96,18,202
+#def tbone=   |8 o6 't' m96,18,202
+#def harp=    |9 o5 'r' m %r14
+#def piano=   |A o5 'p' m %r12
+#def piano2=  |B o6 'p' m %y1%s0%r8
+
+#def s= v60
+#def f= v75
+#def o= v85
+#def c= v70
+#def b= v90
+#def h= v75
+#def t= v67
+#def r= v100
+#def p= v100
+
+#def sf= v1,60
+#def ff= v1,75
+#def of= v1,85
+#def cf= v1,70
+#def bf= v1,90
+#def hf= v1,75
+#def tf= v1,67
+#def pf= v1,100
+#def rf= v1,100
+
+#def one= |0
+#def two= |1
+
+#def stt= v75
+#def sttf= v1,75
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init' %e1 $
+'piano*v.7' p64 l8
+f+a<d2t66^4 t71c>ae2t66^4
+t70f+t71at72<dt73c+t74et75d>t74bt71<c+
+t66>a2'p*v.6't61e2t71
+## 5 - flute
+'flute*v.78' p52
+f+a<d2. c>ae2^(d16e16    d2)fede d1^1^2 v96,0 ^2
+## 11 - oboe
+'oboe*v.8' p75 l8
+f+2^'of*v12,.55'^16r16'of*v12,.8'f+g
+a2 ^'of*v12,.55'^16r16'of*v12,.8'b<c+
+d4>b2g4 (a16b16)a2'of*v12,.55'^16r16'of*v12,.8'af+
+c+1 'of*v48,.55'^4 r2 'of*v12,.8'ba
+## 17 - oboe, harp in 18, harp in 20, flute1 in 22
+d2.'of*v48,.55'^4
+'harp*v.7' p30   dgb<d4.
+'oboe*v.55' p75  'of*v12,.8'af+   c+2.'of*v48,.55'^4
+'harp*v.7' p30   c+f+a<c+4.
+'oboe*v.55' p75  'of*v12,.8'b<c+  'of*v192,.94'd1 ^8 'of*v24,.61'^8
+'flute*v.62+o1' p52 'ff*v24,.78'd4c+4>b4
+## 23 - flute1
+a2f+2 ^r<d4c+4>b4  <c+4.f+f+2 ^rd4c+4>b4  a2e2 ^2r4ef+
+## 29 - flute1
+gf+ed1r gf+de d2.'ff*v72,.55' ^4 t51 ^8r8 t71
+## oboe solo
+'oboe*v.55+o1' p75
+'of*v24,.8' d4'o*v.78'c+4'o*v.75'>b4  'o*v.73'a2'o*v.75''of*v72,.7'e4.'o*v.75'(e16f+16)
+'o*v.78'g'o*v.75'f+'o*v.73'e'o*v.72'd^2  'o*v.70'g2'o*v.68'b2
+;
+
+{2}
+%e1 $ 'piano*v.7' p64 
+e1 r1 e1 'p*v.6'r2c2
+## 5 - horn1
+'horn*v.6' p35
+l4 rf+ed c1    l8 d2^cdc >a+1 a1. v96,0 ^2
+## 11 - harp -> clari
+'harp*v.7-o1' p30 l8
+b<f+b<d^2>   c+f+a<c+^2>    dgb<d^2>    df+a<d^2>
+'clari*v.42+o1' p45
+r2 'cf*v48,.6' c+2>b2a2
+## 17 - clari, harp in 19, flute2 in 22
+b1 v192,0 ^1
+'harp*v.7' p30 c+f+a<c+
+'clari*v.42+o1' p45
+'cf*v48,.6' c+2>b2a2 b2.'cf*v72,.7'^4.'cf*v24,.55'^8
+'flute*v.5' p62 'ff*v24,.7' b4a4g4
+## 23 - flute2
+f+2d2 ^rb4a4g4  a4.<c+c+2 ^r>b4a4g4  e2c+2 ^2r4ga
+## 29 - flute2
+bag<d1r> baf+g f+2.'ff*v72,.5' ^4.
+r2..r1r1r1
+;
+
+{3}
+%e1 $ 'piano2*v.7-o1' p64
+a1a1a1a1
+## 5 - tb1
+'horn*v.6-o1' p35
+l4 raaa
+'tbone*v.42+o1' p95
+r'tf*v12,.62'c>ba 't*v.42'
+'tf*v12,.62' f.  'tf*v24,.42' ^8
+'tf*v12,.62' a+. 'tf*v24,.42' ^8
+'tf*v12,.62' g.  'tf*v24,.42' ^8
+'tf*v12,.62' a+. 'tf*v24,.42' ^8
+'tf*v12,.62' a1. v96,0 ^2
+## 11 - str3
+'strings*v.34-o1' p65
+'sf*v72,.6' f+2.f+8e8 f+2..'sf*v24,.42'^8
+'sf*v72,.6' g1f+2..'sf*v24,.42'^8
+'sf*v72,.6' f+1^2..'sf*v24,.42'^8
+## 17 - harp in 17, horn1, str3+5
+'harp*v.7' p30 l8 dgb<d
+'horn*v.42' p35 g2d2>b2<c+1..'hf*v48,.23'^4
+'ostring*v.42-o1' p90 'sf*v72,.6' g1 'sf*v192,.8' ^1
+## 23 - horn1
+'horn*v.6' p35
+r2f+4d4 >b2<d4e4  f+4.aa2 ^'hf*v24,.42'^
+r4r1 'h*v.6'<c+2>b2a4.'hf*v24,.24'^
+## 29 - clari
+'clari*v.7-o1' p45 l8
+b1.<ed>b<c+ d2.'cf*v72,.34' ^4.
+r2..r1r1r1
+;
+
+{4}
+%e1 $ 'piano2*v.7-o1' p64
+d1e1d1e1
+## 5 - str5
+'strings*v.42-o2' p115 l1
+'sf*v12,.7' d 'two'p102 a 'one'p115 >a+< 'two'p102 g 'one'p115 d1. 'sf*v96,.34' ^2
+## 11 - str5
+'sf*v72,.6' b1a2..'sf*v24,.42'^8
+'sf*v72,.6' g1a2..'sf*v24,.42'^8
+'sf*v72,.6' a1...'sf*v24,.42'^8
+## 17 - str3+5, str1
+'two'p90 <   'sf*v72,.6' g1... 'sf*v24,.42'^8
+'one' p15 <
+'sf*v72,.6' c+2.. 'sf*v24,.42' ^8
+'sf*v24,.6' f+4. 'sf*v24,.42' ^8 'sf*v24,.6' a4. 'sf*v24,.42' ^8
+'sf*v72,.6' g2 'sf*v120,.78' ^2^8 'sf*v24,.6' ^8
+'sf*v24,.78' <d4c+4>b4
+## 23 - str5+tbone+tuba
+'s*v.6''sf*v48,.78' p115 >>d1
+'stt*v.78''two' p105 g2b4g4 f+2g+4a4 b2<c+4d4 'sttf*v192,.7' e1>a1
+## 29 - str5
+'s*v.7''one' p115 > g1e1d2.'sf*v72,.34'^4.
+r2..r1r1r1
+;
+
+{5}
+%e1
+r1$r1r1r1
+## 5 - str1+2
+'ostring*v.42' p28 l8
+'sf*v12,.7' f+a<d2.  c>ae2^(d16e16    d2)fede d1^1^2 v96,0 ^2
+## 11 - str4
+'strings*v.34-o1' p90
+'sf*v72,.6' d1c+2..'sf*v24,.42'^8
+'sf*v72,.6' >b2<c+4d1^8'sf*v24,.42'^8
+'sf*v72,.6' c+1...'sf*v24,.42'^8
+## 17 - str4, str5, str2
+'sf*v72,.6' >b1...'sf*v24,.42'^8
+p115 'sf*v72,.6' a1...'sf*v24,.42'^8
+p40 'sf*v120,.78' <b1^8'sf*v24,.6'^8 'sf*v24,.78' <d4c+4>b4
+## 23 - str1+2
+'two' p28 < l8
+a2f+2 'sf*v48,.6'^4'sf*v24,.78'<d4c+4>b8.'sf*v12,.6'^16
+'sf*v48,.78'<c+4'sf*v24,.5'^'sf*v12,.6'f+16'sf*v12,.5'^16'sf*v96,.78'f+2
+^'sf*v24,.6'^'sf*v24,.78'd4c+4>b4
+'s*v.75'a2's*v.7'e2'sf*v144,.5'^2.'s*v.7'ef+
+## 29 - str1+2
+gf+ed^2 'sf*v96,.5'^2's*v.7'gf+de d2.'sf*v72,.34'^4.
+r2..r1r1r1
+##
+'oboe*v.66' p75 'of*v48,.56' a4 v144,0 ^2.
+;
+
+{6}
+%e1 $
+r1r1r1r1
+## 5 - harp etc
+'harp*v.7' p30 l8
+r4f+a<df+> r2 ea<ce> r4. >a+<fa+<d>a+fd
+>a+4.. l48 a+<dga+8. dga+<d4>
+l8 r4 df+a<d> r2 df+a<d>
+'oboe*v.55' p75 l8
+'of*v12,.8' de
+## 11 - harp
+'harp*v.7' p30 l8
+r1r1r1r1 [c+f+a<c+^2>]
+## 17 - horn2, harp
+'horn*v.42-o1' p35
+r2b2a2g2 f+1..'hf*v48,.23' ^4
+'harp*v.7' p30 l8
+[dgb<d^2>]
+## 23 - horn2
+'horn*v.6-o1' p35
+r2a2.g4f+4g4   a4.<c+c+2^'hf*v24,.42'^ r4r1
+'h*v.6'e2d2c+4.'hf*v24,.42'^
+## 29 - bassoon
+'bassoon*v.78-o2' p85
+d2e4f+4 g2b2 a2.'bf*v72,.34'^4.
+r2..r1r1r1
+;
+
+{7}
+%e1 $
+r1r1r1r1
+## 5 - horn2
+'strings*v.42-o2' p90 l1
+'sf*v12,.7' a1
+'horn*v.6-o1' p35
+a1a+1g1f+1. v96,0 ^2
+## 11 - bassoon
+'bassoon*v.49-o1' p85
+r1r1r1r1
+r2 'bf*v48,.7' c+2f+2c+2
+## 17 - bassoon
+d1 v192,0 ^1
+'b*v.49'r2'bf*v48,.7' c+2f+2c+2   d2.'bf*v72,.8'^4.'bf*v24,.6'^8 r2.
+## 23 - str3
+'strings*v.6-o1' p65 l8
+'sf*v48,.78'f+4.'sf*v24,.6'^ 'sf*v48,.78'd4.'sf*v24,.6'^ 
+'sf*v48,.78'>b4.'sf*v24,.5'^< 'sf*v24,.7'd.'sf*v12,.55'^16 'sf*v24,.75'e.'sf*v12,.6'^16
+'sf*v24,.78'f+4.'sf*v24,.6'^ 'sf*v24,.78'a.'sf*v12,.6'^16 'sf*v24,.75'<c+.'sf*v12,.6'^16>
+'sf*v24,.78'b4.'sf*v24,.6'^ 'sf*v24,.78'a.'sf*v12,.6'^16 'sf*v24,.75'g.'sf*v12,.6'^16
+'s*v.75'e2's*v.7'c+2>b2a2
+## 29 - str3
+b1^1 a2.'sf*v72,.34'^4.
+r2..r1r1r1
+;
+
+{8}
+%e1 $
+r1r1r1r1
+## 5 - str3
+'strings*v.42-o1' p65 l8
+'sf*v12,.7' ec+d2. edc2. >a+2<dc>a+4 ^1 a1. 'sf*v96,.34' ^2
+## 11 - 
+[6r1]
+## 17 - str2, str4
+r1r1 p40 's*v.42'
+'sf*v72,.6' <a1<c+2..'sf*v24,.42'^8>>
+p90 'sf*v72,.6' b1 'sf*v192,.78' ^1
+## 23 - str4
+'s*v.6''sf*v48,.78' a1 a4g4f+4g4   a2<c+4e4 d2c+4>b4
+'s*v.75'<c+2> 's*v.7'a2g2e2
+## 29 - str4
+d2e4f+4 g2e2 f+2.'sf*v72,.34'^4.
+r2..r1r1r1
+;

@@ -1,0 +1,517 @@
+#TITLE Boss Battle
+#ALBUM Secret of the Stars
+#COMPOSER Tukushi Sasaki
+#ARRANGED Rushlight
+
+#VARIANT `
+#VARIANT ~ nointro
+
+#WAVE 0x20 0x62 ## Strings
+#WAVE 0x21 0xD6 ## Moog Waveform
+#WAVE 0x22 0x99 Trumpet ## Bagpipe?
+#WAVE 0x23 0xA3 Flute
+#WAVE 0x24 0x91 Oboe
+
+## Take note that master volume varies frequently during this song. This base gets multiplied by factors between 0.9 and 1.28.
+#def masterVol= %x200
+#def init= t78 'masterVol' %v0 %b0,0 %f0,0
+
+#def strings= |0 o6 %r0  %s7 m
+#def lowBase= |1 o6 %r0  %s7 m
+#def bagpipe= |2 o5 %r12 %s5 m
+#def flute=   |3 o5 %r8  %s7 m48,9,239
+#def oboe=    |4 o4 %r0  %s7 m
+
+
+## Instrument volumes for introduction
+#def introStrings1Vol= v125  ## Original value 115          This is never multiplied by more than .92
+#def introStrings2Vol= v100   ## Original value 90           This is never multiplied by more than .73
+#def introStrings3Vol= v110  ## Original value 100          This is never multiplied by more than .92
+
+#def introLowBaseVol=  v160  ## Original value 75           This is never multiplied by more than .82
+
+#def introBagpipe1Vol= v135  ## Original value 105          This is never multiplied by more than 1
+#def introBagpipe2Vol= v105   ## Original value 75           This is never multiplied by more than .64
+#def introBagpipe3Vol= v120  ## Original value 90           This is never multiplied by more than 1
+#def introBagpipe4Vol= v135  ## Original value 105          This is never multiplied by more than 1
+
+#def introFlute1Vol=   v125  ## Original value 115          This is never multiplied by more than .82
+
+
+## Instrument volumes for early portion of main song
+#def earlyStrings1Vol= v115  ## Original value 105          This is never multiplied by more than .82
+#def earlyStrings2Vol= v115  ## Original value 105          This is never multiplied by more than .82
+
+#def earlyFlute1Vol=   v135  ## Original value 105          This is never multiplied by more than .92
+#def earlyFlute2Vol=   v75   ## Original value 70           This is never multiplied by more than .92
+
+
+## Instrument volumes for all of main song
+#def mainStrings3Vol=  v60   ## Original value 65           This is never multiplied by more than .92
+
+#def mainLowBaseVol=   v160  ## Original value 75           This is never multiplied by more than .82
+
+#def mainOboe1Vol=     v105  ## Original value 115          This is never multiplied by more than .92
+#def mainOboe2Vol=     v105  ## Original value 115          This is never multiplied by more than .92
+
+
+## Instrument volumes for late portion of main song
+#def lateStrings1Vol=  v115  ## Original value 105          This is never multiplied by more than .92
+#def lateStrings2Vol=  v135  ## Original value 115          This is never multiplied by more than .82
+
+#def lateFlute1Vol=    v110  ## Original value 80           This is never multiplied by more than .92
+
+#def lateOboe3Vol=     v50   ## Original value 65           This is never multiplied by more than .82
+
+
+## Instrument configurations (sans volume) for introduction
+#def introStrings1= 'strings' p43
+#def introStrings2= 'strings' p89
+#def introStrings3= 'strings' p89
+#def introLowBase=  'lowBase' p64
+#def introBagpipe1= 'bagpipe' p114
+#def introBagpipe2= 'bagpipe' p39
+#def introBagpipe3= 'bagpipe' p89
+#def introBagpipe4= 'bagpipe' p114
+#def introFlute1=   'flute'   p39
+
+## Instrument configurations (sans volume) for early portion of main song
+#def earlyStrings1= 'strings' p107
+#def earlyStrings2= 'strings' p89
+#def earlyFlute1=   'flute'   p39
+#def earlyFlute2=   'flute'   p89
+
+## Instrument configurations (sans volume) for all of main song
+#def mainStrings3=  'strings' p15
+#def mainLowBase=   'lowBase' p78
+#def mainOboe1=     'oboe'    p21
+#def mainOboe2=     'oboe'    p98
+
+## Instrument configurations (sans volume) for late portion of main song
+#def lateStrings1=  'strings' p89
+#def lateStrings2=  'strings' p39
+#def lateFlute1=    'flute'   p64
+#def lateOboe3=     'oboe' p113
+
+## The original song has an individual velocity per note. FF6 doesn't have that.
+## Velocity runs from 0 to 126, and can be seen to multiply note volume by (velocity/126)^2
+
+{1}
+'init' %e0`
+## Strings 1, originally channel 1
+'introStrings1-o1' l32
+'introStrings1Vol*v.36' [8gg+]
+'masterVol*%x1.1'
+'introStrings1Vol*v.5' gg+gg+
+'introStrings1Vol*v.64' gg+gg+
+'masterVol*%x1.28'
+'introStrings1Vol*v.82' gg+ab<c
+'introStrings1Vol*v1' de-f
+`
+$
+## 2
+'masterVol*%x1.05'
+## Strings 1, originally channel 1
+'earlyStrings1' l32
+'earlyStrings1Vol*v.64' g4.. 'earlyStrings1Vol*v.82' g+ 'earlyStrings1Vol*v.5' g 'earlyStrings1Vol*v.64' f8. 'earlyStrings1Vol*v.82' g 'earlyStrings1Vol*v.5' f  'earlyStrings1Vol*v.64' e-8. 'earlyStrings1Vol*v.82' f 'earlyStrings1Vol*v.5' e- 
+## 3
+'earlyStrings1Vol*v.64' d8. 'earlyStrings1Vol*v.82' e- 'earlyStrings1Vol*v.5' d
+'earlyStrings1Vol*v.82' c24 'earlyStrings1Vol*v.64' d24 'earlyStrings1Vol*v.5' e-24 'earlyStrings1Vol*v.82' f24 'earlyStrings1Vol*v.64' g24 'earlyStrings1Vol*v.5' g+24 
+'earlyStrings1Vol*v.82' g8 'earlyStrings1Vol*v.64' <c8> 'earlyStrings1Vol*v.5' b8
+'earlyStrings1Vol*v.82' c 'earlyStrings1Vol*v.64' d 'earlyStrings1Vol*v.57' e- 'earlyStrings1Vol*v.5' f
+## 4
+'earlyStrings1'
+'earlyStrings1Vol*v.64' g4.. 'earlyStrings1Vol*v.82' g+ 'earlyStrings1Vol*v.5' g 'earlyStrings1Vol*v.64' f8. 'earlyStrings1Vol*v.82' g 'earlyStrings1Vol*v.5' f  'earlyStrings1Vol*v.64' e-8. 'earlyStrings1Vol*v.82' f 'earlyStrings1Vol*v.5' e- 
+## 5
+'earlyStrings1Vol*v.64' d8. 'earlyStrings1Vol*v.82' e- 'earlyStrings1Vol*v.5' d
+'earlyStrings1Vol*v.73' c8 'earlyStrings1Vol*v.5' >b8< c4
+## Strings 1, originally channel 1
+'lateStrings1'
+'masterVol*%x1.15'
+'lateStrings1Vol*v.82' c8 'lateStrings1Vol*v.64' d8
+## 6
+l16
+e-2^8 'lateStrings1Vol*v.82' d 'lateStrings1Vol*v.57' e- 'lateStrings1Vol*v.92' f 'lateStrings1Vol*v.82' e- d 'lateStrings1Vol*v.5' e-
+## 7
+'lateStrings1Vol*v.82' d8. 'lateStrings1Vol*v.64' >b- 'lateStrings1Vol*v.5' g2< 'lateStrings1Vol*v.82' c8 'lateStrings1Vol*v.64' d8
+## 8
+e-2^8 'lateStrings1Vol*v.82' d 'lateStrings1Vol*v.57' e- 'lateStrings1Vol*v.92' f 'lateStrings1Vol*v.82' e- d 'lateStrings1Vol*v.5' e-
+## 9
+g2. c8 'lateStrings1Vol*v.64' d8
+## 10
+e-2^8 'lateStrings1Vol*v.82' d 'lateStrings1Vol*v.57' e- 'lateStrings1Vol*v.92' f 'lateStrings1Vol*v.82' e- d 'lateStrings1Vol*v.5' e-
+## 11
+'lateStrings1Vol*v.82' d8. 'lateStrings1Vol*v.64' >b- 'lateStrings1Vol*v.5' g2< 'lateStrings1Vol*v.82' c8 'lateStrings1Vol*v.64' d8
+## 12
+'masterVol*%x.9'
+l32
+'lateStrings1Vol*v.82' e-8. d 'lateStrings1Vol*v.64' e- 
+'masterVol'
+'lateStrings1Vol*v.82' f8. 'lateStrings1Vol*v.5' d 'lateStrings1Vol*v.64' f
+'masterVol*%x1.1'
+'lateStrings1Vol*v.82' g8. 'lateStrings1Vol*v.5' f 'lateStrings1Vol*v.64' g 'lateStrings1Vol*v.82' a8. 'lateStrings1Vol*v.5' g 'lateStrings1Vol*v.64' a
+## 13
+b2.. 'lateStrings1Vol*v.82' c 'lateStrings1Vol*v.73' d 'lateStrings1Vol*v.64' e- 'lateStrings1Vol*v.5' f
+;
+
+{2}
+## Bagpipe 1, originally channel 2
+%e0` 'introBagpipe1' l8
+r 'introBagpipe1Vol*v.36' f 'introBagpipe1Vol*v.5' e 'introBagpipe1Vol*v.64' e- d d- 'introBagpipe1Vol*v.82' c 'introBagpipe1Vol*v1' d 
+`
+$
+## 2
+## Oboe 1, originally channel 2
+'mainOboe1' l16
+'mainOboe1Vol*v.73' e- 'mainOboe1Vol*v.5' e-8 'mainOboe1Vol*v.57' e-
+'mainOboe1Vol*v.73' e- 'mainOboe1Vol*v.5' e-8 'mainOboe1Vol*v.57' e-
+'mainOboe1Vol*v.73' f  'mainOboe1Vol*v.5' f8  'mainOboe1Vol*v.57' f
+'mainOboe1Vol*v.73' g  'mainOboe1Vol*v.5' g8  'mainOboe1Vol*v.57' g
+## 3
+'mainOboe1Vol*v.73' g+ 'mainOboe1Vol*v.5' g+8 'mainOboe1Vol*v.57' g+
+'mainOboe1Vol*v.73' b- 'mainOboe1Vol*v.5' b-8 'mainOboe1Vol*v.57' b-
+'mainOboe1Vol*v.73' g  'mainOboe1Vol*v.5' g8  'mainOboe1Vol*v.57' g
+'mainOboe1Vol*v.73' g  'mainOboe1Vol*v.5' g8  'mainOboe1Vol*v.57' f
+## 4
+'mainOboe1Vol*v.73' e- 'mainOboe1Vol*v.5' e-8 'mainOboe1Vol*v.57' e-
+'mainOboe1Vol*v.73' e- 'mainOboe1Vol*v.5' e-8 'mainOboe1Vol*v.57' e-
+'mainOboe1Vol*v.73' f  'mainOboe1Vol*v.5' f8  'mainOboe1Vol*v.57' f
+'mainOboe1Vol*v.73' g  'mainOboe1Vol*v.5' g8  'mainOboe1Vol*v.57' g
+## 5
+'mainOboe1Vol*v.73' g+ 'mainOboe1Vol*v.5' g+8 'mainOboe1Vol*v.57' g+
+'mainOboe1Vol*v.73' g8 'mainOboe1Vol*v.57' f8 'mainOboe1Vol*v.73' e- 'mainOboe1Vol*v.5' e-8 'mainOboe1Vol*v.57' e-
+'mainOboe1Vol*v.92' e-12 'mainOboe1Vol*v.73' f12 'mainOboe1Vol*v.57' g12
+## 6
+[3
+  'mainOboe1Vol*v.09' g 'mainOboe1Vol*v.64' c   'mainOboe1Vol*v.5'  c   'mainOboe1Vol*v.64' d  'mainOboe1Vol*v.5'  d  'mainOboe1Vol*v.64' e- 'mainOboe1Vol*v.57' e- 'mainOboe1Vol*v.5'  f
+  'mainOboe1Vol*v.73' g 'mainOboe1Vol*v.64' f   'mainOboe1Vol*v.57' f   'mainOboe1Vol*v.64' e- 'mainOboe1Vol*v.57' e- 'mainOboe1Vol*v.64' d  'mainOboe1Vol*v.5'  d 'mainOboe1Vol*v.42'  c
+
+  'mainOboe1Vol*v.09' g 'mainOboe1Vol*v.64' >b- 'mainOboe1Vol*v.5'  b-< 'mainOboe1Vol*v.64' c  'mainOboe1Vol*v.5'  c  'mainOboe1Vol*v.64' d  'mainOboe1Vol*v.57' d  'mainOboe1Vol*v.5'  e-
+  'mainOboe1Vol*v.73' g 'mainOboe1Vol*v.64' f   'mainOboe1Vol*v.57' f   'mainOboe1Vol*v.64' e- 'mainOboe1Vol*v.57' e- 'mainOboe1Vol*v.64' d  'mainOboe1Vol*v.5'  d  'mainOboe1Vol*v.42' f
+]
+## 12
+'mainOboe1Vol*v.64' c  'mainOboe1Vol*v.73' c8  'mainOboe1Vol*v.57' c
+'mainOboe1Vol*v.64' d  'mainOboe1Vol*v.73' d8  'mainOboe1Vol*v.57' d
+'mainOboe1Vol*v.64' e- 'mainOboe1Vol*v.73' e-8 'mainOboe1Vol*v.57' e-
+'mainOboe1Vol*v.64' f  'mainOboe1Vol*v.73' f8  'mainOboe1Vol*v.57' f
+## 13
+'mainOboe1Vol*v.82' b8. 'mainOboe1Vol*v.73' g32 'mainOboe1Vol*v.57' g32 'mainOboe1Vol*v.64' g g+ 'mainOboe1Vol*v.57' g 'mainOboe1Vol*v.5' f 
+'mainOboe1Vol*v.64' e- 'mainOboe1Vol*v.82' f 'mainOboe1Vol*v.64' e- 'mainOboe1Vol*v.5' d 'mainOboe1Vol*v.64' c 'mainOboe1Vol*v.82' d 'mainOboe1Vol*v.64' c 'mainOboe1Vol*v.5' >b<
+;
+
+{3}
+## Low base, originally channel 5
+%e0` 'introLowBase-o3' l8
+'introLowBaseVol*v.64' g16 'introLowBaseVol*v.09' g16<
+'introLowBaseVol*v.64' g f+ 'introLowBaseVol*v.5' f 'introLowBaseVol*v.36' e e-
+'introLowBaseVol*v.64' d> 'introLowBaseVol*v.82' b
+`
+$
+## 2
+## Flute 1, originally channel 6
+'earlyFlute1' l32
+'earlyFlute1Vol*v.64' g4..
+'earlyFlute1Vol*v.82' g+ 'earlyFlute1Vol*v.5' g 'earlyFlute1Vol*v.64' f8.
+'earlyFlute1Vol*v.82' g  'earlyFlute1Vol*v.5' f 'earlyFlute1Vol*v.64' e-8.
+'earlyFlute1Vol*v.82' f  'earlyFlute1Vol*v.5' e-
+## 3
+'earlyFlute1Vol*v.64' d8. 'earlyFlute1Vol*v.82' e- 'earlyFlute1Vol*v.5' d
+'earlyFlute1Vol*v.82' c24 'earlyFlute1Vol*v.64' d24 'earlyFlute1Vol*v.5' e-24
+'earlyFlute1Vol*v.82' f24 'earlyFlute1Vol*v.64' g24 'earlyFlute1Vol*v.5' g+24
+'earlyFlute1Vol*v.82' g4. c 'earlyFlute1Vol*v.64' d 'earlyFlute1Vol*v.57' e- 'earlyFlute1Vol*v.5' f 
+## 4
+'earlyFlute1Vol*v.64' g4..
+'earlyFlute1Vol*v.82' g+ 'earlyFlute1Vol*v.5' g 'earlyFlute1Vol*v.64' f8.
+'earlyFlute1Vol*v.82' g  'earlyFlute1Vol*v.5' f 'earlyFlute1Vol*v.64' e-8.
+'earlyFlute1Vol*v.82' f  'earlyFlute1Vol*v.5' e-
+## 5
+'earlyFlute1Vol*v.64' d8. 'earlyFlute1Vol*v.82' e- 'earlyFlute1Vol*v.5' d
+'earlyFlute1Vol*v.73' c8 'earlyFlute1Vol*v.5' >b8< c4
+'earlyFlute1Vol*v.57' >g 'earlyFlute1Vol*v.64' a b< 'earlyFlute1Vol*v.73' c d 'earlyFlute1Vol*v.82' e- f 'earlyFlute1Vol*v.92' g
+## 6
+## Flute 1, originally channel 6
+'lateFlute1'
+[7 'lateFlute1Vol*v.82' g+ 'lateFlute1Vol*v.16' g+ 'lateFlute1Vol*v.73' g+ 'lateFlute1Vol*v.57' b-] 'lateFlute1Vol*v.92' g+ <c> 'lateFlute1Vol*v.64' b- 'earlyFlute1Vol*v.5' g+
+## 7
+[4 'lateFlute1Vol*v.82' g  'lateFlute1Vol*v.16' g  'lateFlute1Vol*v.73' g  'lateFlute1Vol*v.57' g+]
+'lateFlute1Vol*v.16' g+16 'lateFlute1Vol*v.82' e-16 'lateFlute1Vol*v.64' g16 'lateFlute1Vol*v.5' b-16
+'lateFlute1Vol*v.82' <e- 'lateFlute1Vol*v.64' f 'lateFlute1Vol*v.73' e- 'lateFlute1Vol*v.57' d
+'lateFlute1Vol*v.82'  c  'lateFlute1Vol*v.64' d 'lateFlute1Vol*v.73' c> 'lateFlute1Vol*v.57' b-
+## 8
+[7 'lateFlute1Vol*v.82' g+ 'lateFlute1Vol*v.16' g+ 'lateFlute1Vol*v.73' g+ 'lateFlute1Vol*v.57' b-] 'lateFlute1Vol*v.92' g+ <c> 'lateFlute1Vol*v.64' b- 'earlyFlute1Vol*v.57' g+
+## 9
+[4 'lateFlute1Vol*v.82' g  'lateFlute1Vol*v.16' g  'lateFlute1Vol*v.73' g  'lateFlute1Vol*v.57' g+]
+'lateFlute1Vol*v.82'  d12  'lateFlute1Vol*v.64' g12  'lateFlute1Vol*v.5' b-12
+'lateFlute1Vol*v.82' <e-12 'lateFlute1Vol*v.64' d12> 'lateFlute1Vol*v.5' b-12
+## 10
+[7 'lateFlute1Vol*v.82' g+ 'lateFlute1Vol*v.16' g+ 'lateFlute1Vol*v.73' g+ 'lateFlute1Vol*v.57' b-] 'lateFlute1Vol*v.92' g+ <c> 'lateFlute1Vol*v.64' b- 'earlyFlute1Vol*v.5' g+
+## 11
+[4 'lateFlute1Vol*v.82' g  'lateFlute1Vol*v.16' g  'lateFlute1Vol*v.73' g  'lateFlute1Vol*v.57' g+]
+'lateFlute1Vol*v.16' g+16 'lateFlute1Vol*v.82' e-16 'lateFlute1Vol*v.64' g16 'lateFlute1Vol*v.5' b-16
+'lateFlute1Vol*v.82' <e- 'lateFlute1Vol*v.64' d 'lateFlute1Vol*v.73' c> 'lateFlute1Vol*v.57' b-
+'lateFlute1Vol*v.82' g+  'lateFlute1Vol*v.64' g 'lateFlute1Vol*v.73' f  'lateFlute1Vol*v.57' d
+## 12
+'lateFlute1Vol*v.16' d12   'lateFlute1Vol*v.82' c12  'lateFlute1Vol*v.64' >g+12
+'lateFlute1Vol*v.16' g+12< 'lateFlute1Vol*v.82' d12  'lateFlute1Vol*v.64' >b12-
+'lateFlute1Vol*v.16' b12<  'lateFlute1Vol*v.82' e-12 'lateFlute1Vol*v.64' c12
+'lateFlute1Vol*v.16' c12   'lateFlute1Vol*v.82' f12  'lateFlute1Vol*v.64' f12
+## 13
+[4 'lateFlute1Vol*v.82' g 'lateFlute1Vol*v.5' g+ 'lateFlute1Vol*v.73' g 'lateFlute1Vol*v.57' f ]
+'lateFlute1Vol*v.82' g8 'lateFlute1Vol*v.64' f8 'lateFlute1Vol*v.5' e-8
+c 'lateFlute1Vol*v.57' d 'lateFlute1Vol*v.73' e- 'lateFlute1Vol*v.82' f
+;
+
+{4}
+## Bagpipe 2, originally channel 6
+%e0` 'introBagpipe2-o1' l32
+r16. 'introBagpipe2Vol*v.36' [8gg+] [2 'introBagpipe2Vol*v.5' g 'introBagpipe2Vol*v.25' g+] 'introBagpipe2Vol*v.64' g
+## Flute 1, originally channel 6
+'introFlute1-o1' l32
+'introFlute1Vol*v.64' g 'introFlute1Vol*v.36' g+ 'introFlute1Vol*v.5' a 'introFlute1Vol*v.57' b<
+'introFlute1Vol*v.64' c d 'introFlute1Vol*v.73' e- 'introFlute1Vol*v.82' f
+`
+$
+## 2
+## Low base, originally channel 5
+'mainLowBase-o2' l16
+'mainLowBaseVol*v.5' [2 c 'mainLowBaseVol*v.64' c8 'mainLowBaseVol*v.5' c]
+d  'mainLowBaseVol*v.64' d8  'mainLowBaseVol*v.5' d
+e- 'mainLowBaseVol*v.64' e-8 'mainLowBaseVol*v.5' e-
+## 3
+  f  'mainLowBaseVol*v.64' f8  'mainLowBaseVol*v.5' f
+  g+ 'mainLowBaseVol*v.64' g+8 'mainLowBaseVol*v.5' g+
+[2 g 'mainLowBaseVol*v.64' g8  'mainLowBaseVol*v.5' g]
+## 4
+[2 c 'mainLowBaseVol*v.64' c8  'mainLowBaseVol*v.5' c]
+  d  'mainLowBaseVol*v.64' d8  'mainLowBaseVol*v.5' d
+  e- 'mainLowBaseVol*v.64' e-8 'mainLowBaseVol*v.5' e-
+## 5
+f 'mainLowBaseVol*v.64' f8 'mainLowBaseVol*v.5' f
+'mainLowBaseVol*v.64' g8 'mainLowBaseVol*v.5' g8
+c 'mainLowBaseVol*v.64' c8 'mainLowBaseVol*v.5' c
+'mainLowBaseVol*v.82' c8 'mainLowBaseVol*v.64' >b-8<
+## 6
+l8
+[3
+  'mainLowBaseVol*v.64' g+2^8 g 'mainLowBaseVol*v.57' f  'mainLowBaseVol*v.5'  g+
+  'mainLowBaseVol*v.64' g2^8  f 'mainLowBaseVol*v.57' e- 'mainLowBaseVol*v.5' g
+]
+## 12
+'mainLowBaseVol*v.36' g+4 'mainLowBaseVol*v.5' b-4 'mainLowBaseVol*v.64' <c4 'mainLowBaseVol*v.73' d4>
+## 13
+'mainLowBaseVol*v.64' g2 g 'mainLowBaseVol*v.57' f 'mainLowBaseVol*v.5' e- 'mainLowBaseVol*v.36' d
+;
+
+{5}
+## Bagpipe 3, originally channel 7
+%e0` 'introBagpipe3' l32
+'introBagpipe3Vol*v.36' [8 gg+]
+'introBagpipe3Vol*v.5'  gg+gg+
+'introBagpipe3Vol*v.64' gg+gg+
+'introBagpipe3Vol*v.82' gg+gg+
+'introBagpipe3Vol*v.64' g 'introBagpipe3Vol*v1' g+ab
+`
+$
+## 2
+## Strings 2, originally channel 4
+'earlyStrings2' l32
+'earlyStrings2Vol*v.64'  e-4.. 'earlyStrings2Vol*v.82' f  'earlyStrings2Vol*v.5' d
+'earlyStrings2Vol*v.64'  d8.   'earlyStrings2Vol*v.82' e- 'earlyStrings2Vol*v.5' d
+'earlyStrings2Vol*v.64'  c8.   'earlyStrings2Vol*v.82' d  'earlyStrings2Vol*v.5' c
+## 3
+'earlyStrings2Vol*v.64' >b8.<  'earlyStrings2Vol*v.82' c  'earlyStrings2Vol*v.5' >b<
+'earlyStrings2Vol*v.82' c8 'earlyStrings2Vol*v.57' d8 'earlyStrings2Vol*v.82' e-4 'earlyStrings2Vol*v.57' d4
+## 4
+'earlyStrings2Vol*v.64' e-4.. 'earlyStrings2Vol*v.82' f  'earlyStrings2Vol*v.5' d
+'earlyStrings2Vol*v.64' d8.   'earlyStrings2Vol*v.82' e- 'earlyStrings2Vol*v.5' d
+'earlyStrings2Vol*v.64' c8.   'earlyStrings2Vol*v.82' d  'earlyStrings2Vol*v.5' c
+## 5
+'earlyStrings2Vol*v.64' >b8.< 'earlyStrings2Vol*v.82' c  'earlyStrings2Vol*v.5' >b
+'earlyStrings2Vol*v.64' g8    'earlyStrings2Vol*v.5'  f8 'earlyStrings2Vol*v.64' e-4 r4
+## 6
+## Strings 2, originally channel 4
+'lateStrings2-o1' l4
+[3
+  'lateStrings2Vol*v.73' c    'lateStrings2Vol*v.57' d 'lateStrings2Vol*v.64' e- 'lateStrings2Vol*v.5' d
+  'lateStrings2Vol*v.73' >b-< 'lateStrings2Vol*v.57' c 'lateStrings2Vol*v.64' d  'lateStrings2Vol*v.5' c
+]
+## 12
+l12
+'lateStrings2Vol*v.82' c  'lateStrings2Vol*v.64' >g+ 'lateStrings2Vol*v.5' e-<
+'lateStrings2Vol*v.82' d  'lateStrings2Vol*v.64' >b- 'lateStrings2Vol*v.5' g<
+'lateStrings2Vol*v.82' e- 'lateStrings2Vol*v.64'  c  'lateStrings2Vol*v.5' >g+<
+'lateStrings2Vol*v.82' f  'lateStrings2Vol*v.64'  g  'lateStrings2Vol*v.5' f
+## 13
+'lateStrings2Vol*v.82' d2 'lateStrings2Vol*v.64' >b2<
+;
+
+{6}
+## Strings 2, originally channel 3
+%e0` 'introStrings2-o1' l32
+r16 [10 'introStrings2Vol*v.5' g 'introStrings2Vol*v.25' g+] [3 'introStrings2Vol*v.64' g 'introStrings2Vol*v.36' g+]
+'introStrings2Vol*v.5' a 'introStrings2Vol*v.57' b 'introStrings2Vol*v.64' c 'introStrings2Vol*v.73' d
+`
+$
+## 2
+## Oboe 2, originally channel 3
+'mainOboe2' l16
+[2 'mainOboe2Vol*v.73' c  'mainOboe2Vol*v.5' c8  'mainOboe2Vol*v.57' c]
+   'mainOboe2Vol*v.73' d  'mainOboe2Vol*v.5' d8  'mainOboe2Vol*v.57' d
+   'mainOboe2Vol*v.73' e- 'mainOboe2Vol*v.5' e-8 'mainOboe2Vol*v.57' e-
+## 3
+   'mainOboe2Vol*v.73' f  'mainOboe2Vol*v.5' f8  'mainOboe2Vol*v.57' f
+   'mainOboe2Vol*v.73' g  'mainOboe2Vol*v.5' g8  'mainOboe2Vol*v.57' g
+   'mainOboe2Vol*v.73' e- 'mainOboe2Vol*v.5' e-8 'mainOboe2Vol*v.57' e-
+   'mainOboe2Vol*v.73' e- 'mainOboe2Vol*v.5' e-8 'mainOboe2Vol*v.57' d
+## 4
+[2 'mainOboe2Vol*v.73' c  'mainOboe2Vol*v.5' c8  'mainOboe2Vol*v.57' c]
+   'mainOboe2Vol*v.73' d  'mainOboe2Vol*v.5' d8  'mainOboe2Vol*v.57' d
+   'mainOboe2Vol*v.73' e- 'mainOboe2Vol*v.5' e-8 'mainOboe2Vol*v.57' e-
+## 5
+   'mainOboe2Vol*v.73' f  'mainOboe2Vol*v.5' f8  'mainOboe2Vol*v.57' f
+'mainOboe2Vol*v.73' e-8 'mainOboe2Vol*v.57' d8
+   'mainOboe2Vol*v.73' c  'mainOboe2Vol*v.5' c8  'mainOboe2Vol*v.57' c
+'mainOboe2Vol*v.92' c12 'mainOboe2Vol*v.73' d12 'mainOboe2Vol*v.57' e-12
+## 6
+l16
+[3
+  'mainOboe2Vol*v.09' e- 'mainOboe2Vol*v.64' >g+ 'mainOboe2Vol*v.5' g+ 'mainOboe2Vol*v.64' b- 'mainOboe2Vol*v.5' b-< 'mainOboe2Vol*v.64' c  'mainOboe2Vol*v.57' c   'mainOboe2Vol*v.5' d
+  'mainOboe2Vol*v.73' e- 'mainOboe2Vol*v.64' d 'mainOboe2Vol*v.57' d 'mainOboe2Vol*v.64' c 'mainOboe2Vol*v.57' c 'mainOboe2Vol*v.64' >b-  'mainOboe2Vol*v.5' b- 'mainOboe2Vol*v.42' g+
+  
+  'mainOboe2Vol*v.09' g+ 'mainOboe2Vol*v.64'  g  'mainOboe2Vol*v.5' g  'mainOboe2Vol*v.64' a  'mainOboe2Vol*v.5' a   'mainOboe2Vol*v.64' b- 'mainOboe2Vol*v.57' b-< 'mainOboe2Vol*v.5' c
+  'mainOboe2Vol*v.73' e- 'mainOboe2Vol*v.64' d 'mainOboe2Vol*v.57' d 'mainOboe2Vol*v.64' c 'mainOboe2Vol*v.57' c 'mainOboe2Vol*v.64' >b-< 'mainOboe2Vol*v.5' c  'mainOboe2Vol*v.42' d
+]
+## 12
+'mainOboe2Vol*v.64' >g+ 'mainOboe2Vol*v.73' g+8 'mainOboe2Vol*v.57' g+ 
+'mainOboe2Vol*v.64'  b- 'mainOboe2Vol*v.73' b-8 'mainOboe2Vol*v.57' b-<
+'mainOboe2Vol*v.64'  c  'mainOboe2Vol*v.73' c8  'mainOboe2Vol*v.57' c
+'mainOboe2Vol*v.64'  d  'mainOboe2Vol*v.73' d8  'mainOboe2Vol*v.57' d
+## 13
+'mainOboe2Vol*v.82' g8. 'mainOboe2Vol*v.73' e-32 'mainOboe2Vol*v.57' e-32
+'mainOboe2Vol*v.64' e- f 'mainOboe2Vol*v.57' e- 'mainOboe2Vol*v.5' d 'mainOboe2Vol*v.64' c 'mainOboe2Vol*v.82' d
+'mainOboe2Vol*v.64' c> 'mainOboe2Vol*v.5' b 'mainOboe2Vol*v.64' g+ 'mainOboe2Vol*v.82' b 'mainOboe2Vol*v.64' g+ 'mainOboe2Vol*v.5' g
+;
+
+{7}
+## Bagpipe 4, originally channel 8
+%e0` 'introBagpipe4' l8
+'introBagpipe4Vol*v.42' r d d- 'introBagpipe4Vol*v.64' c> b b- 'introBagpipe4Vol*v.82' a 'introBagpipe4Vol*v1' b
+`
+$
+## 2
+## Flute 2, originally channel 7
+'earlyFlute2' l32
+'earlyFlute2Vol*v.64' r16. g4.. 'earlyFlute2Vol*v.82' g+ 'earlyFlute2Vol*v.5' g
+'earlyFlute2Vol*v.64' f8. 'earlyFlute2Vol*v.82' g 'earlyFlute2Vol*v.5' f
+'earlyFlute2Vol*v.64' e-8^32
+## 3
+                  ^32  'earlyFlute2Vol*v.82' f  'earlyFlute2Vol*v.5' e-
+'earlyFlute2Vol*v.64' d8. 'earlyFlute2Vol*v.82' e- 'earlyFlute2Vol*v.5' d
+'earlyFlute2Vol*v.82' c24 'earlyFlute2Vol*v.64' d24 'earlyFlute2Vol*v.5' e-24 'earlyFlute2Vol*v.82' f24 'earlyFlute2Vol*v.64' g24 'earlyFlute2Vol*v.5' g+24
+'earlyFlute2Vol*v.82' g4. c
+## 4
+'earlyFlute2Vol*v.64' d 'earlyFlute2Vol*v.57' e- 'earlyFlute2Vol*v.5' f
+'earlyFlute2Vol*v.64' g4.. 'earlyFlute2Vol*v.82' g+ 'earlyFlute2Vol*v.5' g
+'earlyFlute2Vol*v.64' f8.  'earlyFlute2Vol*v.82' g  'earlyFlute2Vol*v.5' f
+'earlyFlute2Vol*v.64' e-8^32
+## 5
+                  ^32  'earlyFlute2Vol*v.82' f  'earlyFlute2Vol*v.5' e-
+'earlyFlute2Vol*v.64' d8. 'earlyFlute2Vol*v.82' e- 'earlyFlute2Vol*v.5' d
+'earlyFlute2Vol*v.73' c8 'earlyFlute2Vol*v.5' >b8<                   c4
+'earlyFlute2Vol*v.57' >g 'earlyFlute2Vol*v.64' a b< 'earlyFlute2Vol*v.73' c d
+## 6
+'earlyFlute2Vol*v.82' e- f 'earlyFlute2Vol*v.92' g
+## Oboe 3, originally channel 7
+'lateOboe3' l16
+[3
+  'lateOboe3Vol*v.09' g  'lateOboe3Vol*v.64' c   'lateOboe3Vol*v.5'  c    'lateOboe3Vol*v.64' d
+  'lateOboe3Vol*v.5'  d  'lateOboe3Vol*v.64' e-  'lateOboe3Vol*v.57' e-   'lateOboe3Vol*v.5'  f
+  'lateOboe3Vol*v.73' g  'lateOboe3Vol*v.64' f   'lateOboe3Vol*v.57' f    'lateOboe3Vol*v.64' e-
+  'lateOboe3Vol*v.57' e- 'lateOboe3Vol*v.64' d   'lateOboe3Vol*v.5'  d    'lateOboe3Vol*v.42' c
+  
+  'lateOboe3Vol*v.09' g  'lateOboe3Vol*v.64' >b- 'lateOboe3Vol*v.5'  b-<  'lateOboe3Vol*v.64' c
+  'lateOboe3Vol*v.5'  c  'lateOboe3Vol*v.64' d   'lateOboe3Vol*v.57' d    'lateOboe3Vol*v.5'  e-
+  'lateOboe3Vol*v.73' g  'lateOboe3Vol*v.64' f  'lateOboe3Vol*v.57' f  'lateOboe3Vol*v.64' e-
+  'lateOboe3Vol*v.57' e- 'lateOboe3Vol*v.64' d  'lateOboe3Vol*v.5'  e-  'lateOboe3Vol*v.42' f
+]
+## 3/32 into measure 12
+'lateOboe3Vol*v.64' c  'lateOboe3Vol*v.73' c8  'lateOboe3Vol*v.57' c
+'lateOboe3Vol*v.64' d  'lateOboe3Vol*v.73' d8  'lateOboe3Vol*v.57' d
+'lateOboe3Vol*v.64' e- 'lateOboe3Vol*v.73' e-8 'lateOboe3Vol*v.57' e-
+'lateOboe3Vol*v.64' f  'lateOboe3Vol*v.73' f16.
+## 13
+^32 'lateOboe3Vol*v.57' f
+'lateOboe3Vol*v.82' b8. 'lateOboe3Vol*v.73' g32 'lateOboe3Vol*v.57' g32
+'lateOboe3Vol*v.64' g g+ 'lateOboe3Vol*v.57' g 'lateOboe3Vol*v.5' f
+'lateOboe3Vol*v.64' e- 'lateOboe3Vol*v.82' f 'lateOboe3Vol*v.64' e- 'lateOboe3Vol*v.5' d
+'lateOboe3Vol*v.64' c 'lateOboe3Vol*v.82' d c32
+;
+
+{8}
+## Strings 3, originally channel 4
+%e0` 'introStrings3-o1' l32
+[13 'introStrings3Vol*v.64' g 'introStrings3Vol*v.36' g+]
+'introStrings3Vol*v.64' g 'introStrings3Vol*v.57' g+ 'introStrings3Vol*v.64' g 'introStrings3Vol*v.73' g+ 'introStrings3Vol*v.82' a 'introStrings3Vol*v.92' b
+`
+$
+## 2
+## Strings 3, originally channel 8
+'mainStrings3' l32
+'mainStrings3Vol*v.64' r16. g4.. 'mainStrings3Vol*v.82' g+ 'mainStrings3Vol*v.5' g
+'mainStrings3Vol*v.64'      f8.  'mainStrings3Vol*v.82' g  'mainStrings3Vol*v.5' f
+'mainStrings3Vol*v.64'      e-8^32
+## 3
+                      ^32   'mainStrings3Vol*v.82' f  'mainStrings3Vol*v.5' e-
+'mainStrings3Vol*v.64'      d8.  'mainStrings3Vol*v.82' e- 'mainStrings3Vol*v.5' d
+'mainStrings3Vol*v.82' c24 'mainStrings3Vol*v.64' d24 'mainStrings3Vol*v.5' e-24
+'mainStrings3Vol*v.82' f24 'mainStrings3Vol*v.64' g24 'mainStrings3Vol*v.5' g+24
+'mainStrings3Vol*v.82' g8 'mainStrings3Vol*v.64' <c8> 'mainStrings3Vol*v.5' b8
+'mainStrings3Vol*v.82' c
+## 4
+'mainStrings3Vol*v.64' d 'mainStrings3Vol*v.57' e- 'mainStrings3Vol*v.5' f
+                       g4.. 'mainStrings3Vol*v.82' g+ 'mainStrings3Vol*v.5' g
+'mainStrings3Vol*v.64'      f8.  'mainStrings3Vol*v.82' g  'mainStrings3Vol*v.5' f
+'mainStrings3Vol*v.64'      e-8^32
+## 5
+                      ^32   'mainStrings3Vol*v.82' f  'mainStrings3Vol*v.5' e-
+'mainStrings3Vol*v.64'      d8.  'mainStrings3Vol*v.82' e- 'mainStrings3Vol*v.5' d
+'mainStrings3Vol*v.73' c8 'mainStrings3Vol*v.5' >b8< c4
+'mainStrings3Vol*v.82' c8 'mainStrings3Vol*v.64' d32
+## 6
+^16.
+l16
+e-2^8 'mainStrings3Vol*v.82' d 'mainStrings3Vol*v.57' e- 'mainStrings3Vol*v.92' f
+'mainStrings3Vol*v.82' e- d32
+## 7
+^32 'mainStrings3Vol*v.5' e-
+'mainStrings3Vol*v.82' d8. 'mainStrings3Vol*v.64' >b-
+'mainStrings3Vol*v.5' g2<
+'mainStrings3Vol*v.82' c8 'mainStrings3Vol*v.64' d32
+## 8
+^16.
+e-2^8 'mainStrings3Vol*v.82' d 'mainStrings3Vol*v.57' e- 'mainStrings3Vol*v.92' f
+'mainStrings3Vol*v.82' e- d32
+## 9
+^32 'mainStrings3Vol*v.5' e-
+'mainStrings3Vol*v.64' g2.
+'mainStrings3Vol*v.82' c8 'mainStrings3Vol*v.64' d32
+## 10
+^16.
+l16
+e-2^8 'mainStrings3Vol*v.82' d 'mainStrings3Vol*v.57' e- 'mainStrings3Vol*v.92' f
+'mainStrings3Vol*v.82' e- d32
+## 11
+^32 'mainStrings3Vol*v.5' e-
+'mainStrings3Vol*v.82' d8. 'mainStrings3Vol*v.64' >b-
+'mainStrings3Vol*v.5' g2<
+'mainStrings3Vol*v.82' c8 'mainStrings3Vol*v.64' d32
+## 12
+^16.
+'mainStrings3Vol*v.82' e-8. d32 'mainStrings3Vol*v.64' e-32
+'mainStrings3Vol*v.82' f8. 'mainStrings3Vol*v.5' d32 'mainStrings3Vol*v.64' f32
+'mainStrings3Vol*v.82' g8. 'mainStrings3Vol*v.5' f32 'mainStrings3Vol*v.64' g32
+'mainStrings3Vol*v.82' a8^32
+## 13
+^32
+'mainStrings3Vol*v.5' g32 'mainStrings3Vol*v.64' a32 b2.. 'mainStrings3Vol*v.82' c32
+;

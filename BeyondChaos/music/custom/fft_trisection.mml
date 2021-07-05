@@ -1,0 +1,931 @@
+#TITLE Trisection
+#ALBUM Final Fantasy Tactics
+#COMPOSER Hitoshi Sakimoto
+#ARRANGED Rushlight
+
+#WAVE 0x20 0x64 ## Contrabass
+#WAVE 0x21 0x87 ## Brass
+#WAVE 0x22 0x65 ## Violin/Strings
+#WAVE 0x23 0x85 ## Horn
+#WAVE 0x24 0x83 ## Deep Brass
+
+#WAVE 0x28 0x1A ## Snare
+#WAVE 0x29 0x5C ## Timpani
+#WAVE 0x2A 0x28 ## Tubular Bell
+
+#def init= t130 %x255 %v40 %b0,70 %f0,0
+
+#def leadViolinVol=    v127
+#def supportViolinVol= v94
+#def timpaniVol=       v127
+#def contrabassVol=    v109
+#def bellVol=          v70
+#def snareVol=         v80
+#def brassMelodyVol=   v65
+#def backBrassVol=     v90
+#def leadHornVol=      v80
+#def hornAccentVol=    v127
+#def deepBrassVol=     v90
+#def deepBrassLateVol= v120
+#def leadBrassVol=     v64 ## 67 with a velocity of 123
+#def leadDeepBrassVol= v80
+
+## Define macros for different velocities
+## The volume adjustment of velocity tends to be max_volume * (velocity/max_velocity)^2
+## We're assuming max velocity is 127
+#def leadViolin_127= 'leadViolinVol*v1'
+#def leadViolin_109= 'leadViolinVol*v.75'
+#def leadViolin_96=  'leadViolinVol*v.58'
+#def leadViolin_81=  'leadViolinVol*v.41'
+#def leadViolin_73=  'leadViolinVol*v.34'
+
+#def supportViolin_127= 'supportViolinVol*v1'
+#def supportViolin_123= 'supportViolinVol*v.95'
+#def supportViolin_109= 'supportViolinVol*v.75'
+#def supportViolin_101= 'supportViolinVol*v.64'
+#def supportViolin_96=  'supportViolinVol*v.58'
+#def supportViolin_83=  'supportViolinVol*v.43'
+
+#def supportViolinLate_123= 'supportViolinVol*v.95'
+#def supportViolinLate_118= 'supportViolinVol*v.88'
+#def supportViolinLate_101= 'supportViolinVol*v.64'
+
+#def brassMelody_110= 'brassMelodyVol*v.76'
+#def brassMelody_98=  'brassMelodyVol*v.6'
+
+#def backBrass_87=  'backBrassVol*v.48'
+#def backBrass_69=  'backBrassVol*v.3'
+#def backBrass_68=  'backBrassVol*v.29'
+#def backBrass_66=  'backBrassVol*v.27'
+#def backBrass_64=  'backBrassVol*v.26'
+
+#def deepBrass_120= 'deepBrassVol*v.91'
+#def deepBrass_109= 'deepBrassVol*v.75'
+#def deepBrass_87=  'deepBrassVol*v.48'
+#def deepBrass_71=  'deepBrassVol*v.32'
+#def deepBrass_69=  'deepBrassVol*v.3'
+#def deepBrass_68=  'deepBrassVol*v.29'
+#def deepBrass_66=  'deepBrassVol*v.27'
+#def deepBrass_64=  'deepBrassVol*v.26'
+
+#def deepBrassLate_127= 'deepBrassLateVol*v1'
+#def deepBrassLate_125= 'deepBrassLateVol*v.98'
+#def deepBrassLate_120= 'deepBrassLateVol*v.91'
+#def deepBrassLate_115= 'deepBrassLateVol*v.83'
+#def deepBrassLate_109= 'deepBrassLateVol*v.75'
+
+#def timpani_127= 'timpaniVol*v1'
+#def timpani_123= 'timpaniVol*v.95'
+#def timpani_121= 'timpaniVol*v.92'
+#def timpani_118= 'timpaniVol*v.88'
+#def timpani_115= 'timpaniVol*v.83'
+#def timpani_113= 'timpaniVol*v.8'
+#def timpani_110= 'timpaniVol*v.76'
+#def timpani_109= 'timpaniVol*v.75'
+#def timpani_108= 'timpaniVol*v.73'
+#def timpani_105= 'timpaniVol*v.69'
+#def timpani_104= 'timpaniVol*v.68'
+#def timpani_102= 'timpaniVol*v.66'
+#def timpani_101= 'timpaniVol*v.64'
+#def timpani_99=  'timpaniVol*v.62'
+#def timpani_96=  'timpaniVol*v.58'
+#def timpani_94=  'timpaniVol*v.56'
+#def timpani_93=  'timpaniVol*v.54'
+#def timpani_89=  'timpaniVol*v.5'
+#def timpani_87=  'timpaniVol*v.48'
+#def timpani_83=  'timpaniVol*v.43'
+#def timpani_80=  'timpaniVol*v.4'
+
+#def contrabass_127= 'contrabassVol*v1'
+#def contrabass_125= 'contrabassVol*v.98'
+#def contrabass_123= 'contrabassVol*v.95'
+#def contrabass_109= 'contrabassVol*v.75'
+#def contrabass_97=  'contrabassVol*v.59'
+#def contrabass_94=  'contrabassVol*v.56'
+
+#def bell_113= 'bellVol*v.8'
+#def bell_94=  'bellVol*v.56'
+
+#def hornAccent_127= 'hornAccentVol*v1'
+#def hornAccent_123= 'hornAccentVol*v.95'
+
+#def leadHorn_96= 'leadHornVol*v.58'
+#def leadHorn_84= 'leadHornVol*v.44'
+
+#def leadViolin=    |2 o6 'leadViolinVol'    p44 %r0   %e1 %s7 m
+#def supportViolin= |2 o6 'supportViolinVol' p84 %r0   %e1 %s7 m
+#def contrabass=    |0 o7 'contrabassVol'    p64 %r0   %e1 %s7 m
+#def timpani=       |9 o5 'timpaniVol'       p64 %r0   %e0 %s7 m
+#def bell=          |A o5 'bell_113'         p74 %r12  %e1 %s7 m
+#def brassMelody=   |1 o5 'brassMelody_110' p74 %r8   %e1 %s7 m
+#def backBrass=     |1 o5 'backBrass_87'     p64 %r8   %e1 %s7 m
+#def deepBrass=     |4 o5 'deepBrassVol'     p64 %r8   %e1 %s7 m
+#def leadBrass=     |1 o5 'leadBrassVol'     p44 %r8   %e1 %s7 m
+#def leadDeepBrass= |4 o6 'leadDeepBrassVol' p44 %r8   %e1 %s7 m
+#def hornAccent=    |3 o6 'hornAccent_127'   p84 %r10  %e1 %s7 m
+#def leadHorn=      |3 o6 'leadHornVol'      p44 %r8  %e1 %s7 m
+
+## For most of the song, the snare uses 6 velocities
+#DRUM "s"= 5f |8 'snareVol*v.12' p64 %r0 %e0 m ## Velocity 44
+#DRUM "t"= 5f |8 'snareVol*v.19' p64 %r0 %e0 m ## Velocity 55
+#DRUM "u"= 5f |8 'snareVol*v.27' p64 %r0 %e0 m ## Velocity 65
+#DRUM "v"= 5f |8 'snareVol*v.34' p64 %r0 %e0 m ## Velocity 74
+#DRUM "w"= 5f |8 'snareVol*v.5'  p64 %r0 %e0 m ## Velocity 89
+#DRUM "x"= 5f |8 'snareVol*v.64' p64 %r0 %e0 m ## Velocity 101
+
+## Snare rolls use a lot of velocities (16 of them)
+#DRUM "a"= 5f |8 'snareVol*v.12' p64 %r0 %e0 m ## Velocity 44
+#DRUM "b"= 5f |8 'snareVol*v.13' p64 %r0 %e0 m ## Velocity 46
+#DRUM "c"= 5f |8 'snareVol*v.18' p64 %r0 %e0 m ## Velocity 54
+#DRUM "d"= 5f |8 'snareVol*v.2'  p64 %r0 %e0 m ## Velocity 57
+#DRUM "e"= 5f |8 'snareVol*v.26' p64 %r0 %e0 m ## Velocity 64
+#DRUM "f"= 5f |8 'snareVol*v.3'  p64 %r0 %e0 m ## Velocity 69
+#DRUM "g"= 5f |8 'snareVol*v.31' p64 %r0 %e0 m ## Velocity 70
+#DRUM "h"= 5f |8 'snareVol*v.35' p64 %r0 %e0 m ## Velocity 75
+#DRUM "i"= 5f |8 'snareVol*v.39' p64 %r0 %e0 m ## Velocity 79
+#DRUM "j"= 5f |8 'snareVol*v.42' p64 %r0 %e0 m ## Velocity 82
+#DRUM "k"= 5f |8 'snareVol*v.47' p64 %r0 %e0 m ## Velocity 86
+#DRUM "l"= 5f |8 'snareVol*v.5'  p64 %r0 %e0 m ## Velocity 89
+#DRUM "m"= 5f |8 'snareVol*v.53' p64 %r0 %e0 m ## Velocity 92
+#DRUM "n"= 5f |8 'snareVol*v.57' p64 %r0 %e0 m ## Velocity 95
+#DRUM "o"= 5f |8 'snareVol*v.6'  p64 %r0 %e0 m ## Velocity 98
+#DRUM "p"= 5f |8 'snareVol*v.64' p64 %r0 %e0 m ## Velocity 101
+## There's also a random note at velocity 77
+#DRUM "z"= 5f |8 'snareVol*v.37' p64 %r0 %e0 m ## Velocity 77
+
+#cdef ( %r29
+#cdef ) %r0
+
+{1}
+'init'
+$
+## Time signature starts at 3/4
+## Lead Violin 1, originally a mishmash of stray notes in tracks 4 through 9
+'leadViolin-o2'
+'leadViolin_109'
+l16
+[2
+  [2
+    ## 1 / 3 / 5 / 7
+    b<c+d16(^16)d16(^16)e8c+16(^16)f+16(^16)
+    j2,104
+    ## 2 / 6
+    d8g16(^16)e16(^16)a16(^16)f+16(^16)b16(^16)>
+  ]
+  $104
+  j2,108
+  ## 4
+  d8g16(^16)e16(^16)c+dc+>ba8
+]
+$108
+## In the original arrangement, time signature switches to 12/8 here. We'll ignore that, it doesn't make much sense and just compresses two measures into one.
+## 8
+'leadViolin_127'
+e8r8e8.rc+8c+8>
+'leadViolin_109'
+[3
+  ## 9 / 10 / 11
+  b<c+d16(^16)d16(^16)e8c+16(^16)f+16(^16)>
+]
+## 12 
+<d8g16(^16)e16(^16)c+dc+>ba8
+[2
+  ## 13 / 15
+  b<c+d16(^16)d16(^16)e8c+16(^16)f+16(^16)
+  j2
+  ## 14
+  d8g16(^16)e16(^16)c+dc+>ba8
+]
+## 16
+'leadViolin_127'
+e8r8e8.r16c+8c+8
+## Time signature switches to 5/8 here. Tempo stays the same, but measure numbering will be impacted.
+l16
+<
+## 17 / 18 / 19 / 20 / 21 / 22
+[6 'leadViolin_96'd16.r32'leadViolin_81'drdrd8'leadViolin_109'er]
+## 23 / 24 / 25 / 26
+[4 'leadViolin_96'e16.r32'leadViolin_81'erere8'leadViolin_109'f+r]
+## 27 / 28
+[2 'leadViolin_96'g16.r32'leadViolin_81'grgrg8'leadViolin_109'ar]
+## 29 / 30
+[2 'leadViolin_96'e16.r32'leadViolin_81'erere8'leadViolin_109'f+r]
+## 31 / 32
+[2 'leadViolin_96'a16.r32'leadViolin_81'arara8'leadViolin_109'br]
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## Lead Brass 1, originally a mishmash of stray notes in tracks 4 through 9
+'leadBrass'
+l16
+## 33
+er8.er8.er8.
+## 34
+erer8.er8.er
+## 35
+ar8.ar8.ar8.
+## 36
+arar8.ar8.ar
+## Snare, originally tracks 16 and 17
+"!!!o"
+l32
+## 37
+"x8u24z24w24x8n16x16x8x8"
+## 38
+"pbcdefghabcdefghijklmnop"
+## Time signature switches to 5/8 here. Measure numbering will be impacted.
+## Lead Horn 1, originally a mishmash of stray notes in tracks 4 through 9
+'leadHorn-o1'
+l2
+## 39
+b^8<c^8
+## 41
+c^8d^8
+## 43
+e^8>e4^8<e4
+## 45
+f1r4>
+## 47
+e^8f^8
+## 49
+f^8g^8
+## 51
+a^8>a4.<a4
+## 53
+b-^8<c^8
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## Snare, originally tracks 16 and 17
+"!!!o"
+l32
+## 55
+"x8u24z24w24x8n16x16x8x8"
+## 56
+"pbcdefghabcdefghijklmnop"
+;
+
+
+{2}
+$
+## Low Bell, originally track 12
+'bell-o2'
+## In the original arrangement, time signature switches to 12/8 at measure 8. We'll ignore that, it doesn't make much sense and just compresses two measures into one.
+b2.r2.r2.r2.b2.r2.r2.r2.
+## 9
+b2.r2.r2.r2.
+## 13
+## We can squeeze one shortened bell note before we need the track for something else
+b8
+## Horn Accents, originally track 20
+'hornAccent-o2'
+'hornAccent_123'
+l8
+ b<'hornAccent_127'd16r16'hornAccent_123'ge16.r32r>
+## 14
+rb<'hornAccent_127'f+16r16'hornAccent_123'ae16.r32r>
+## 15
+rb<'hornAccent_127'f+16r16'hornAccent_123'e'hornAccent_127'a16r16'hornAccent_123'b16.r32
+## 16
+e16.r32g16.r32b16.r32<c+4.
+## Time signature switches to 5/8 here. Tempo stays the same, but measure numbering will be impacted.
+## Lead Violin 2, originally a mishmash of stray notes in tracks 4 through 9
+'leadViolin-o1'
+l16
+## 17 / 18 / 19 / 20 / 21 / 22
+[6 'leadViolin_96'b16.r32'leadViolin_81'brbrb8.r]
+## 23 / 24 / 25 / 26
+< [4 'leadViolin_96'c16.r32'leadViolin_81'crcrc8.r]
+## 27 / 28
+[2 'leadViolin_96'e16.r32'leadViolin_81'erere8.r]
+## 29 / 30
+[2 'leadViolin_96'c16.r32'leadViolin_81'crcrc8.r]
+## 31 / 32
+[2 'leadViolin_96'f16.r32'leadViolin_81'frfrf8.r]
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## Lead Brass 2, originally a mishmash of stray notes in tracks 4 through 9. This is the middle note and we'll use deep brass.
+'leadDeepBrass-o1'
+l16
+## 33
+br8.br8.br8.
+## 34
+brbr8.br8.br<
+## 35
+er8.er8.er8.
+## 36
+erer8.gr8.gr
+## Timpani, originally tracks 14 and 15.
+## This will play half the notes, alternating with another channel to allow each individual note to last longer
+'timpani-o3'
+## 37
+'timpani_127'e6
+##'timpani_94'<e24 ## Skip
+'timpani_104'<e12
+##'timpani_113'e24 ## Skip
+'timpani_127'>b8.
+##'timpani_118'<e16 ## Skip
+'timpani_123'<e8.
+##'timpani_127'>b8 ## Skip
+'timpani_127'>e8
+## 38
+l16
+b
+'timpani_87'b
+'timpani_93'b
+'timpani_99'b
+'timpani_80'b
+'timpani_87'b
+'timpani_93'b
+'timpani_99'b
+'timpani_105'b
+'timpani_110'b
+'timpani_115'b
+'timpani_121'b
+## Time signature switches to 5/8 here. Measure numbering will be impacted.
+## Low Bell, originally track 12
+'bell-o1'
+'bell_113'
+## 39
+c2.r2
+## 41
+d2.r2
+## 43
+e2.r2
+## 45
+f2.r2
+## 47
+>f2.r2
+## 49
+g2.r2
+## 51
+a2.r2
+## 53
+b-2^8<c2^8
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## Timpani, originally tracks 14 and 15.
+## This will play half the notes, alternating with another channel to allow each individual note to last longer
+'timpani-o3'
+## 55
+'timpani_127'd6
+##'timpani_94'<d24 ## Skip
+'timpani_104'<d12
+##'timpani_113'd24 ## Skip
+'timpani_127'>a8.
+##'timpani_118'<d16 ## Skip
+'timpani_123'<d8.
+##'timpani_127'>a8 ## Skip
+'timpani_127'>d8
+## 56
+l16
+a
+'timpani_87'a
+'timpani_93'a
+'timpani_99'a
+'timpani_80'a
+'timpani_87'a
+'timpani_93'a
+'timpani_99'a
+'timpani_105'a
+'timpani_110'a
+'timpani_115'a
+'timpani_121'a
+;
+
+
+{3}
+$
+## Timpani, originally tracks 14 and 15
+'timpani-o3'
+'timpani_127'
+l32
+[4
+  ## 1 / 5 / 9 / 13
+  b4.'timpani_113'b4.b4r'timpani_80'b'timpani_87'b'timpani_94'b'timpani_113'b8'timpani_101'b4
+  ## In the original arrangement, time signature switches to 12/8 at measure 8. We'll ignore that, it doesn't make much sense and just compresses two measures into one.
+  ## 3 / 7 / 11 / 15
+  b4'timpani_101'b8'timpani_113'b4.b4'timpani_127'f+16f+16<f+8>f+8<f+8>
+]
+## Time signature switches to 5/8 here. Tempo stays the same, but measure numbering will be impacted.
+## Support Violin, originally tracks 10 and 11
+'supportViolin-o1'
+## Originally velocity here is 109, but that comes out too assertive
+'supportViolin_96'
+l8
+## 17
+e2..r8ef+
+## 19
+g2..r8ga
+## 21
+e2..r8ed
+## 23
+c<c4>ba 
+## 24
+gagf+e>
+## 25
+## The low notes don't come out as much, so the original velocity will work here
+'supportViolin_109' a2..r8ab<
+## 27
+c2..r8cd>
+## 29
+a2..r8ag
+## 31
+## We're going back up an octave, but the higher velocity is welcome here, to compete with the back brass
+f<f4ed
+## 32
+cdc>ba
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+'supportViolinLate_123'
+l16
+<<
+[2
+  ## 33 / 35
+  e16.r32>er<d16.r32'supportViolinLate_101'>f+8a8'supportViolinLate_118'<dr
+  ## 34 / 36
+  'supportViolinLate_101' >g8 'supportViolinLate_123' <e16.r32 'supportViolinLate_101' >er 'supportViolinLate_123' <dr j2 'supportViolinLate_101' >f+8 'supportViolinLate_123' ar<
+] 'supportViolinLate_101' >d8 'supportViolinLate_123' ar
+## Timpani, originally tracks 14 and 15.
+## This will play half the notes, alternating with another channel to allow each individual note to last longer
+'timpani-o3'
+## 37
+r8
+'timpani_94'<e12
+'timpani_113'e6
+'timpani_118'e8
+'timpani_127'>b4
+## 38
+l16
+r32
+'timpani_83'b
+'timpani_89'b
+'timpani_96'b
+'timpani_102'b
+'timpani_83'b
+'timpani_89'b
+'timpani_96'b
+'timpani_102'b
+'timpani_108'b
+'timpani_113'b
+'timpani_118'b
+'timpani_123'b32
+## Time signature switches to 5/8 here. Measure numbering will be impacted.
+## Lead Horn 2, originally a mishmash of stray notes in tracks  through 9
+'leadHorn-o1'
+l1
+## 39
+ar4
+## 41
+b-r4
+## 43
+<cr4
+## 45
+c+r4
+## 47
+>dr4
+## 49
+e-r4
+## 51
+fr4
+## 53
+f+2^8g+2^8
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## Timpani, originally tracks 14 and 15.
+## This will play half the notes, alternating with another channel to allow each individual note to last longer
+'timpani-o3'
+## 55
+r8
+'timpani_94'<d12
+'timpani_113'd6
+'timpani_118'd8
+'timpani_127'>a4
+## 56
+l16
+r32
+'timpani_83'a
+'timpani_89'a
+'timpani_96'a
+'timpani_102'a
+'timpani_83'a
+'timpani_89'a
+'timpani_96'a
+'timpani_102'a
+'timpani_108'a
+'timpani_113'a
+'timpani_118'a
+'timpani_123'a32
+;
+
+
+{4}
+$
+## Time signature starts at 3/4
+## Lead Violin 2, originally a mishmash of stray notes in tracks 4 through 9
+'leadViolin-o1'
+'leadViolin_109'
+l16
+[12 r4]
+[2
+  ## 5 / 7
+  def+16(^16)f+16(^16)g8e16(^16)a16(^16)
+  j2,208
+  ## 6
+  f+8b16(^16)g16(^16)<c+16(^16)>a16(^16)<d16(^16)>
+]
+$208
+## In the original arrangement, time signature switches to 12/8 here. We'll ignore that, it doesn't make much sense and just compresses two measures into one.
+## 8
+## Switch to Lead Violin 3, originally a mishmash of stray notes in tracks 4 through 9
+'leadViolin_127'
+<c8r8>b8.r16b-8>b-8
+## 9
+## High Bell, originally track 13
+'bell-o1'
+'bell_94'
+r64b2. r2r8...
+## Lead Violin 2, originally a mishmash of stray notes in tracks 4 through 9
+'leadViolin-o1'
+'leadViolin_109'
+[3
+  ## 11 / 13 / 15
+  def+16(^16)f+16(^16)g8e16(^16)a16(^16)
+  j2,214
+  j3,216
+  ## 12
+  f+8b16(^16)g16(^16)ef+edc+8
+]
+$214
+## 14 - Plays measure 14 and then goes back to the previous loop for iteration 3.
+## Don't go back down an octave at the end because measure 15 plays one octave higher
+f+8brgr<c+>rar<dr ]
+$216
+## 16
+## Switch to Lead Violin 3, originally a mishmash of stray notes in tracks 4 through 9
+'leadViolin_127'
+c8r8>b8.r16b-8>b-8<
+## Time signature switches to 5/8 here. Tempo stays the same, but measure numbering will be impacted.
+## Snare, originally tracks 16 and 17
+"!!!o"
+l32
+[4
+  ## 17 / 21 / 25 / 29
+  "x4w8w4"
+  ## 18 / 22 / 26 / 30
+  "w8^32stuw8v8v8"
+  ## 19 / 23 / 27 / 31
+  "w4v8w4"
+  ## 20 / 24 / 28 / 32, then go to measure 33
+  "w8w24u24u24" j2,424 "x8x8x8" j4,433
+]
+$424
+## End of 24, then go back for two more iterations of the loop
+"x16v16w16n16x16x16"]
+$433
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## Timpani, originally tracks 14 and 15
+'timpani-o2'
+'timpani_127'
+l24
+[2
+  ## 33 / 35
+  e4>e8<e8'timpani_94'e'timpani_104'e'timpani_113'e'timpani_127'e8
+  ## 34 / 36
+  >e8<'timpani_94'e'timpani_104'e'timpani_113'e'timpani_127'e8>e8b8e8<
+]
+## 37
+r1.
+## Time signature switches to 5/8 here. Measure numbering will be impacted.
+## Snare, originally tracks 16 and 17
+"!!!o"
+l32
+[4
+  ## 39 / 43 / 47 / 51
+  "x4w8w4 w8^32stuw8v8v8"
+  ## 41 / 45 / 49 / 53
+  "w4v8w4 w8w24u24u24x8x8x8"
+]
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## 55
+r1.
+;
+
+
+{5}
+$
+## High Bell, originally track 13
+'bell-o1'
+'bell_94'
+r64
+[2
+  ## In the original arrangement, time signature switches to 12/8 at measure 8. We'll ignore that, it doesn't make much sense and just compresses two measures into one.
+  ## 1 / 5
+  b2.r2.r2.j2r2.
+] r2r8...
+## Brass Melody, originally tracks 18 and 19
+'brassMelody'
+l16
+[2
+  [2
+    ## 9 / 11 / 13 / 15
+    'brassMelody_98'b<c+'brassMelody_110'drdr'brassMelody_98'e8'brassMelody_110'c+rf+r
+    j2,812
+    ## 10 / 14
+    'brassMelody_98'd8'brassMelody_110'grerarf+rbr>
+  ]
+  $812
+  j2,816
+  ## 12
+  'brassMelody_98'd8'brassMelody_110'grer'brassMelody_98'c+dc+>ba8
+]
+$816
+## 16
+'brassMelody_98'
+<c12>r6b4b-8'brassMelody_110'f+r
+## Contrabass, originally tracks 2 and 3
+'contrabass-o2'
+l8
+## Time signature switches to 5/8 here. Tempo stays the same, but measure numbering will be impacted.
+## 17
+'contrabass_97'e2..r8'contrabass_109'ef+
+## 19
+'contrabass_97'g2..r8'contrabass_109'ga
+## 21
+'contrabass_94'e2..r8'contrabass_109'e<d
+## 23
+cc4>ba
+## 24
+gagf+e
+## 25
+a2..r8ab<
+## 27
+c2..r8cd>
+## 29
+a2..r8ag
+## 31
+f<f4ed
+## 32
+cdc>ba
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## Snare, originally tracks 16 and 17
+"!!!o"
+l32
+## 33
+"x4w8w4w8"
+## 34
+r"stuw8v8v8w4"
+## 35
+"v8w4w8w24u24u24x8"
+## 36
+"x8x8w8^32stuw8v8"
+
+## Time signature switches to 5/8 here. Measure numbering will be impacted.
+## 37
+r1.
+## High Bell, originally track 13
+'bell'
+'bell_113'
+l2
+## 39
+r64c2.r
+## 1/64 into 41
+d2.r
+## 1/64 into 43
+e2.r
+## 1/64 into 45
+f2.r
+## 1/64 into 47
+>f2.r
+## 1/64 into 49
+g2.r
+## 1/64 into 51
+a2.r
+## 1/64 into 53
+b-2^8<c2^16..
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## 55
+r1.
+;
+
+
+{6}
+$
+## Snare, originally tracks 16 and 17
+"!!!o"
+l32
+[4
+  ## 1 / 5 / 9 / 13
+  "x4.w4. w4^32stuw8v4"
+  ## In the original arrangement, time signature switches to 12/8 at measure 8. We'll ignore that, it doesn't make much sense and just compresses two measures into one.
+  ## 3 / 7 / 11 / 15
+  "w4v8w4. w4x16x16x8x8x8"
+]
+## Time signature switches to 5/8 here. Tempo stays the same, but measure numbering will be impacted.
+## Although this is the deep brass instrument and original track (1), the notes are high enough that we'll use a different, "back brass" configuration
+'backBrass'
+l8
+## 17
+'backBrass_69'e2..r'backBrass_87'ef+
+## 19
+'backBrass_66'g2..r'backBrass_87'ga
+## 21
+'backBrass_66'e2..r'backBrass_87'ed
+## 23
+c<c4>ba
+## 24
+gagf+e
+## 25
+'backBrass_64'a2..r'backBrass_87'ab<
+## 27
+'backBrass_68'c2..r'backBrass_87'cd>
+## 29
+'backBrass_69'a2..r'backBrass_87'ag
+## 31
+f<f4ed
+## 32
+cdc>ba
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## Deep Brass, originally track 1
+'deepBrass-o1'
+l8
+[2
+  ## 33 / 35
+  'deepBrassLate_109' erer4 'deepBrassLate_120' >b
+  ## 34 / 36
+  e 'deepBrassLate_109' <erer 'deepBrassLate_120' >b<
+]
+## Time signature switches to 5/8 here. Measure numbering will be impacted.
+## 37
+r1.
+## Time signature switches to 5/8 here. Measure numbering will be impacted.
+## Deep Brass, originally track 1
+'deepBrass-o1'
+l16
+## 39 / 40 / 41 / 42 / 43 / 44 / 45 / 46
+[8 'deepBrassLate_125'ar'deepBrassLate_115'ar'deepBrassLate_109'ar'deepBrassLate_125'a8'deepBrassLate_127'b-r]
+<
+## 47 / 48 / 49 / 50 / 51 / 52 / 53 / 54
+[8 'deepBrassLate_125'dr'deepBrassLate_115'dr'deepBrassLate_109'dr'deepBrassLate_125'd8'deepBrassLate_127'e-r]
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## 55
+r1.
+;
+
+
+{7}
+$
+l16
+[2
+  ## Support Violin, originally tracks 10 and 11
+  'supportViolin-o3'
+  'supportViolin_123'
+  [2
+    [2
+      ## 1 / 3 / 5 / 7 / 9 / 11 / 13 / 15
+      b<c+d16(^16)d16(^16)e8c+16(^16)f+16(^16)
+      j2,604
+      ## 2 / 6 / 10 / 14
+      d8g16(^16)e16(^16)a16(^16)f+16(^16)b16(^16)>
+    ]
+    $604
+    j2,608
+    ## 4 / 10
+    d8g16(^16)e16(^16)c+dc+>ba8
+  ]
+  $608
+  j2,616
+  ## In the original arrangement, time signature switches to 12/8 here. We'll ignore that, it doesn't make much sense and just compresses two measures into one.
+  ## 8
+  ## Lead Violin 2, originally a mishmash of stray notes in tracks 4 through 9
+  'leadViolin-o1'
+  'leadViolin_127'
+  g8r8g8.r16f+8f+8
+]
+$616
+## 16
+## Lead Violin 2, originally a mishmash of stray notes in tracks 4 through 9
+'leadViolin-o1'
+'leadViolin_127'
+g8r8g8.r16f+8f+8
+## Time signature switches to 5/8 here. Tempo stays the same, but measure numbering will be impacted.
+## Lead Violin 2, originally a mishmash of stray notes in tracks 4 through 9
+'leadViolin-o1'
+l16
+## 17 / 18 / 19 / 20 / 21 / 22 / 23 / 24
+[8 'leadViolin_96'g16.r32'leadViolin_81'grgrg8.r]
+## 25 / 26
+[2 'leadViolin_96'a16.r32'leadViolin_81'arara8.r]
+<
+## 27 / 28
+[2 'leadViolin_96'c16.r32'leadViolin_81'crcrc8.r]
+>
+## 29 / 30
+[2 'leadViolin_96'a16.r32'leadViolin_81'arara8.r]
+<
+## 31 / 32
+[2 'leadViolin_96'c16.r32'leadViolin_81'crcrc8.r]
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## Contrabass, originally tracks 2 and 3
+'contrabass-o2'
+'contrabass_109'
+l8
+[2
+  ## 33 / 35
+  erer4b
+  ## 34 / 36
+  eererb
+]
+## 37
+r1.
+## Time signature switches to 5/8 here. Measure numbering will be impacted.
+## Timpani, originally tracks 14 and 15
+'timpani-o3'
+'timpani_127'
+l8
+## 39
+a2^8
+## 40
+[4 r1]r4.
+[4
+  ## 47 / 49 / 51 / 53
+  <d4>d<'timpani_94'd24'timpani_104'd24'timpani_113'd24'timpani_127'd
+  ## 48 / 50 / 52 / 54
+  >d<'timpani_94'd24'timpani_104'd24'timpani_113'd24'timpani_127'd>ad
+]
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## 55
+r1.
+;
+
+
+{8}
+$
+## Deep Brass, originally track 1
+'deepBrass-o1'
+'deepBrass_87'
+l8
+[2
+  ## 1 through 4 and 9 through 12
+  [8 brr]
+  j2,415
+  ## 5
+  [6 brr]
+  ## In the original arrangement, time signature switches to 12/8 here. We'll ignore that, it doesn't make much sense and just compresses two measures into one.
+  ## 8
+  <c4^16>r16f+4.
+]
+$415
+## 13
+## Substitute normal note for a more important bell note that won't fit anywhere else
+## High Bell, originally track 13
+'bell-o1'
+'bell_94'
+r64
+b4^16..
+## Deep Brass, originally track 1
+'deepBrass-o1'
+'deepBrass_87'
+[3 brr]
+## 15
+'deepBrass_71'g2.'deepBrass_87'<e4^16r16>f+4.
+## Time signature switches to 5/8 here. Tempo stays the same, but measure numbering will be impacted.
+## 17
+[8 r1]r2.
+## Timpani, originally tracks 14 and 15
+'timpani-o2'
+'timpani_127'
+l32
+## 31
+f2^8r8
+'timpani_80'f'timpani_83'f'timpani_87'f'timpani_89'f'timpani_93'f'timpani_96'f'timpani_99'f'timpani_102'f
+'timpani_105'f'timpani_108'f'timpani_110'f'timpani_113'f'timpani_115'f'timpani_118'f'timpani_121'f'timpani_123'f
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## Lead Brass 3, originally a mishmash of stray notes in tracks 4 through 9. This is the lowest note and we'll use the deep brass for it.
+'leadDeepBrass-o1'
+l16
+## 33
+ar8.ar8.ar8.
+## 34
+arar8.ar8.ar
+## 35
+br8.br8.br8.<
+## 36
+drdr8.dr8.dr
+## 37
+r1.
+## Lead Horn 3, originally a mishmash of stray notes in tracks 4 through 9
+'leadHorn-o1'
+l1
+## 39
+er4
+## 41
+fr4
+## 43
+gr4
+## 45
+g+r4
+## 47
+>ar4
+## 49
+b-r4
+## 51
+<cr4
+## 53
+c+2^8e-2^8
+## Time signature switches back to 3/4 here. Measure numbering will be impacted.
+## 55
+r1.
+;

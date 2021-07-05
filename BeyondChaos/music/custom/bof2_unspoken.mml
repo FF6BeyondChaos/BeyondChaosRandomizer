@@ -1,0 +1,459 @@
+#TITLE Left Unspoken
+#ALBUM Breath of Fire II
+#COMPOSER Yuko Takehara
+#ARRANGED Rushlight
+
+#WAVE 0x20 0x03 ## Bright Piano, originally sample 42
+#WAVE 0x21 0x02 ## Piano, originally sample 46
+#WAVE 0x22 0x07 ## Muted Piano, originally sample 0
+
+## The original song has 128th notes (or rests), which FF6 doesn't support.
+## So in order to get the same result, we will multiply all tempos by 2 and double the tick duration of all notes.
+## We'll still keep the orignal measure numbers - think of it as using a time signature of 8/4
+#def mainTempo= t124
+#def lateTempo= t136
+#def maxTempo=  t144
+
+#def init= 'mainTempo' %x180 %v30 %b0,100 %f0,0
+
+## It seems like all tracks and all instruments have the same echo and vibrato, so we'll just do it once to start off each track.
+## Keeping vibrato depth low both because it sounds low in the original and because we need to fend off vibrato-induced lag.
+#def trackSetup= %e1 m0,17,199
+
+## The original seems to use the same volume base for all instruments, but we'll separate it in case we have samples with varying relative volumes
+## The base macros will correspond to what is volume 100 in the original
+#def bright100=  v120
+#def piano100=   v95
+#def muted100=   v87
+
+## All other volume macros will use multipliers on top of the 100-volume macro
+#def bright95=  'bright100*v.95'
+#def bright103= 'bright100*v1.03'
+#def bright105= 'bright100*v1.05'
+#def bright108= 'bright100*v1.08'
+#def bright110= 'bright100*v1.1'
+#def brightEcho='bright100*v.4'
+
+#def piano95=  'piano100*v.95'
+#def piano103= 'piano100*v1.03'
+#def piano105= 'piano100*v1.05'
+#def piano108= 'piano100*v1.08'
+#def piano110= 'piano100*v1.1'
+#def pianoEcho='piano100*v.4'
+
+#def muted95=  'muted100*v.95'
+#def muted103= 'muted100*v1.03'
+#def muted105= 'muted100*v1.05'
+#def muted108= 'muted100*v1.08'
+#def muted110= 'muted100*v1.1'
+#def mutedEcho='muted100*v.4'
+
+
+## Use macros to define release rates per instrument
+## In the original song, all 3 samples have comparable release rates, but things may vary between samples
+#def brightLowRelease=  %r4
+#def brightMedRelease=  %r6
+#def brightHighRelease= %r8
+
+#def pianoLowRelease=  %r4
+#def pianoMedRelease=  %r6
+#def pianoHighRelease= %r8
+
+#def mutedLowRelease=  %r12
+#def mutedMedRelease=  %r14
+#def mutedHighRelease= %r16
+
+## Use macros to translate the weird pan values VGMTrans gives for Capcom songs, into real pan values
+#def pan3=   p0
+#def pan9=   p10
+#def pan13=  p15
+#def pan18=  p19
+#def pan26=  p27
+#def pan34=  p32
+#def pan44=  p40
+#def pan57=  p47
+#def pan63=  p49
+#def pan70=  p55
+#def pan85=  p64
+#def pan96=  p73
+#def pan100= p76
+#def pan104= p80
+#def pan110= p87
+#def pan114= p95
+#def pan117= p100
+#def pan119= p107
+#def pan123= p117
+#def pan124= p127
+
+
+## Pan and volume go all over the place on each track, so there's no point tying them to an instrument macro
+#def brightPiano= |0 o5 'brightHighRelease' %s6 %y5
+#def piano=       |1 o5 'pianoHighRelease'
+#def mutedPiano=  |2 o5 'mutedHighRelease' %s6 %y4
+
+
+## Melody 1, originally track 6
+{1}
+'init'
+'trackSetup'
+$
+'brightPiano-o1'
+l2
+[2
+  ## 1 / 3
+  'pan44' 'bright100' f+
+  'piano' 'piano105' 'pan85' f+
+  'pan110' <f+4
+  j2
+  ^4
+  'brightPiano' 'bright100' 'pan85' e-
+  ## 2
+  'pan44' >g+4<c1^4>f4g+4
+]
+## end of 3
+'brightPiano' 'bright100' 'pan85'
+ff+4
+## 4
+'pan44' >g+8<f>g+1f4.
+## 5
+'pan26' c+2^8<c4.>e-1
+## 6
+d1 d4 'pan44' b-4<d4d4
+## 7
+'pan85' c+2^8 'piano+o1' 'piano105' c4. 'brightPiano' 'bright100' e-1
+## 8
+d1. 'piano' 'piano100' b-4<c+4
+## 9
+'lateTempo'
+'piano95' 'pan110' c+4<c4>e-2.g+2.
+## 10
+c+4<c4>g+2. 'mutedPiano+o2' 'muted95' e-2.
+## 11
+'piano' 'piano95' g+1 <c+4<c4>e-2
+## 12
+^4g+2.c+4<c4>g+2
+## 13
+^4 'mutedPiano+o2' 'muted95' e-2. 'piano+o1' 'piano103' f2^8 'piano105' <c4.>
+## 14
+'maxTempo'
+'piano103' e-2^8 'piano105' <c4.> 'piano103' f+4 'piano105' <c2.>
+## 15
+'lateTempo'
+'piano103' e-2c2
+'tempo'
+'piano108' f2^8 'piano110' <c4.> 
+## 16
+'lateTempo'
+'piano108' e-2^8 'piano110' <c4.> 'piano108' 'pan117' b-4 'mutedPiano+o2' 'muted110' e-2.
+## 17
+'piano+o1' 'piano105' 'pan110' e-2 'piano100' c2 'piano95'
+'lateTempo'
+c1
+## 18 (Lasts half a measure)
+'mainTempo'
+'mutedPiano+o2' 'muted95' 'pan123'
+b-16. 'pan119' f16. 'pan114' c16.> 'pan104' f+16. 'pan85' c+16.
+'piano' 'piano95' 'pan70' g+16. 'pan57' e-16.> 'pan44' b-16. 'pan26' f16. 'pan13' c16.>f+16
+;
+
+
+## Melody 2, originally track 5
+{2}
+'trackSetup'
+$
+'brightPiano-o1'
+l2
+[2
+  ## 1 / 3
+  r64
+  'pan44' 'bright100' b-
+  'piano' 'piano105' 'pan85' b-
+  'pan110' <b-
+  j2
+  'brightPiano' 'bright100' 'pan85' f8...c+4
+  ## 2
+  r64 c4^16..
+  'pan44' >g+1^4 f+4b-8
+]
+## End of 3
+'pan85'
+>g+4^16..
+'brightPiano' 'bright100' f8
+## 4
+r64 'pan63' c8... e-1.>f+4
+## 5
+r64 f+2^8...<c+4> r32 g+1
+## 6 (one 64th note in)
+f1^16. f4<c4>b-4.
+## 7
+r64 f+2^8... 'piano+o1' 'piano105' 'pan85' c+4>r64g+1
+## 8 (one 64th note in)
+'brightPiano' 'bright100' f1.^16.. 'piano+o1' 'piano100' c4.
+## 9
+'bright95' 'pan110' r64 f+2 g+2.....f2
+## 10
+r64 f+2 e-2.....<c2>
+## 11
+r64 c+1f+2g+4....
+## 12
+^2f2 r64 f+2e-4....
+## 13
+^2 'mutedPiano+o2' 'muted95' 'pan117' f2 'piano+o1' 'piano103' 'pan114' b-2. 'mutedPiano+o2' 'muted105' c+4
+## 14
+'piano+o1' 'piano103' g+2. 'mutedPiano+o2' 'muted105' c+4 'piano+o1' 'piano103' b-4.b-2^8
+## 15
+g+2e-2 'piano108' b-2. 'mutedPiano+o2' 'muted110' c+4
+## 16
+'piano+o1' 'piano108' g+2. 'mutedPiano+o2' 'muted110' c+4 'muted108' c+4.c+2^8
+## 17
+'piano+o1' 'piano105' g+2 'piano100' e-2 'piano95' 'pianoMedRelease' r64 d4. 'pianoHighRelease' ^2^16..
+## 18 (Lasts half a measure)
+'mutedPiano+o2' 'muted95' 'pan123' r32 g+16. 'pan119' e-16.> 'pan114' b-16. 'pan104' f16. 'pan85' c16.
+'piano' 'piano95' 'pan70' f+16. 'pan57' c+16.> 'pan44' g+16. 'pan26' e-16.> 'pan18' b-16. 'pan13' f32
+;
+
+
+## Melody 3, originally track 4
+{3}
+'trackSetup'
+$
+l2
+[2
+  ## 1 / 3
+  'brightPiano'
+  'bright100'
+  'pan70'
+  ## At the current tempo, the delay should probably be one 32nd note + one 128th note, but we can't do that.
+  ## We can't do shorter than 64th notes, and we can't double up the tempo (again) without exceeding 255.
+  ## We'll do 32nd + 64th instead.
+  r32. f
+  'piano+o1' 'piano105' 'pan110' f
+  'mutedPiano+o2' 'muted105' 'pan119' f4..^64
+  j2
+  ^8 'brightPiano' 'bright100' 'pan70' e-4 f8
+  ## 2
+  r32.e-2^16^64 'brightLowRelease' >f2. 'brightHighRelease'^2^8
+]
+## End of 3
+'brightPiano' 'bright100' 'pan70' f
+## 4
+r32.e-4^16^64c1.>g+8
+## 5
+r32. b-2.^16^64<e-8 r32. c+8.^64c2>g+4
+## 6
+r32. b-1..^16^64<f8
+## 7
+'piano' 'piano105' 'pan96' r32. b-2.^16^64<e-8 r32. c+8.^64c2>g+4
+## 8
+r32. b-1..^16^64 'piano95' <f8
+## 9
+'pan114' r32. b-4^16^64 'mutedPiano+o2' 'muted95' c+8 'piano+o2' 'piano95' r32. c1^8.^64>g+4
+## 10
+r32. b-4^16^64 'mutedPiano+o2' 'muted95' c+8 'piano+o2' 'piano95' r32. c1^8.^64>g+4
+## 11
+r32. f1b-4^16^64 'mutedPiano+o2' 'muted95' c+8 'piano+o2' 'piano95' r32. c4..^64
+## 12
+^2.>g+4 r32. b-4^16^64 'mutedPiano+o2' 'muted95' c+8 'piano+o2' 'piano95' r32. c4..^64
+## 13
+^2.c4 'mutedPiano+o2' 'muted105' c+2..e-8
+## 14
+c+2..e-8c+2.c+4
+## 15
+'piano+o2' 'piano105' c2>g+2 'mutedPiano+o2' 'muted110' c+2..e-8
+## 16
+c+2..e-8 'pan119' f2. 'piano+o1' 'piano110' b-4
+## 17
+'piano105' <c4 'mutedPiano+o2' 'muted105' e-4 'piano+o2' 'piano100' c4>g+4 'piano95' r32. b-2...^64
+## 18 (Lasts half a measure)
+r16 'mutedPiano+o2' 'muted95' 'pan123' f+16. 'pan119' c+16.> 'pan114' g+16. 'pan104' e-16.
+'piano' 'piano95' 'pan70' b-16. 'pan57' f16. 'pan44' c16.> 'pan34' f+16. 'pan18' c+16.> 'pan9' g+16.
+;
+
+
+## Support 1, originally track 8
+{4}
+'trackSetup'
+$
+'brightPiano-o2' 'bright100' 'pan9' 'brightLowRelease'
+e-1^1
+## 2
+f1^1
+## 3
+e-1^1
+## 4
+f1^1
+## 5
+'brightMedRelease' f+1^1
+l4
+[2
+  ## 6 / 8
+  'brightHighRelease' >b-<f<d>fb-1
+  j2
+  ## 7
+  'brightMedRelease'
+  f+1^1
+]
+## 9
+'piano' 'piano95' 'pan85' f+1.f2
+## 10
+^2g+1.
+## 11
+c+g+ 'pan110' <f>g+ 'pan85' f+1
+## 12
+^2f1g+2
+## 13
+^1> 'piano100' b-<f< 'pan104' c+2
+## 14
+^8> 'pan85' cg+2^8 'pan63' >f+< 'pan85' c+ 'pan100' b-2
+## 15
+^8 'pan57' >g+< 'pan100' f2^8 'piano105' >b-<f 'pan104' <c+2
+## 16
+^8 'pan85' >cg+2^8 'pan63' >f+< 'pan85' c+ 'pan100' b-2
+## 17
+^8> 'pan57' g+< 'pan100' f2^8>> 'piano95' 'pan26' b-< 'pan44' f< 'pan85' d> 'pan44' f
+## 18 (Lasts half a measure)
+'brightPiano-o2' 'bright95' 'pan26' b-2 'pan9' f+2
+;
+
+
+## Support 2, originally track 7
+{5}
+'trackSetup'
+$
+'brightPiano-o1' 'bright100' 'pan13' 'brightLowRelease'
+c+1^1
+## 2
+e-1^1
+## 3
+c+1^1
+## 4
+e-1^1
+## 5
+^1 'brightMedRelease' >g+1
+## 6
+^8
+l4
+'brightHighRelease' db-b-d2^8g+2
+## 7
+^1 'brightMedRelease' g+1
+## 8
+^8 'brightHighRelease' db-b-d2^8g+2
+## 9
+^2 'piano' 'piano95' 'pan100' g+1.
+## 10
+f+1.e-2
+## 11
+^8 f 'pan110' <c+c+> 'pan100' f2^8g+2
+## 12
+^1f+1
+## 13
+^2f2^8 'piano100' 'pan85' c+b-2^8>
+## 14
+'pan63' g+<e-< 'pan100' c2^8>> 'pan85' b-<f+2^8>
+## 15
+'pan63' f<c 'pan100' g+2^8 'piano105' 'pan85' c+b-2^8>
+## 16
+'pan63' g+<e-< 'pan100' c2^8>> 'pan85' b-<f+2^8>
+## 17
+'pan63' f<c 'pan100' g+2^8> 'piano95' 'pan44'db-b-d8
+## 18 (Lasts half a measure)
+^4 'brightPiano-o2' 'bright95' 'pan26' g+2 'pan13' f
+;
+
+
+## Melody echo, originally track 3
+{6}
+'trackSetup'
+## Put the delay before the infinite loop point, because echo for the last notes before the loop also have to play
+r16^64
+$
+l8
+'brightPiano' 'brightEcho' 'pan124' f2 'piano+o1' 'pianoEcho' f2 'mutedPiano+o2' 'mutedEcho' f2 'brightPiano' 'brightEcho' fe-c+
+## 2 (But a 64th note early)
+fe-4c>g+4f2..ff+g+
+## 3 (But a 64th note early)
+b-<f2 'piano+o1' 'pianoEcho' f2 'mutedPiano+o2' 'mutedEcho' f4 'brightPiano' 'brightEcho' f4 'piano' 'pianoEcho' g+4f+
+## 4 (But a 64th note early)
+f 'brightPiano' 'brightEcho' e-fe-c4>g+1ff+
+## 5 (But a 64th note early)
+g+b-2^8<cc+e-c+4c2>g+8
+## 6 (But a 64th note early)
+^8b-1dfb-<cd>b-<d
+## 7 (But a 64th note early)
+f 'piano' 'pianoEcho' b-2^8<cc+e-c+4c2>g+8
+## 8 (But a 64th note early)
+^8b-1.b-<cc+
+## 9 (But a 64th note early)
+f 'mutedPiano+o1' 'mutedEcho' b-4<cc+c2.>g+4f4g+8
+## 10 (But a 64th note early)
+^8b-4<cc+c2.e-4c4>g+8
+## 11 (But a 64th note early)
+^8f1b-4<cc+c4.
+## 12 (But a 64th note early)
+^4.>g+4f4g+4b-4<cc+c4.
+## 13 (But a 64th note early)
+^4.e-4f4c4c+2^8cc+
+## 14 (But a 64th note early)
+e-c+2^8cc+e-c+4c>b-4.<c+8
+## 15 (But a 64th note early)
+^8c2>g+2<c+2^8cc+
+## 16 (But a 64th note early)
+e-c+2^8cc+e-f4e-c+4.>b-8
+## 17 (But a 64th note early)
+^8<c4e-4c4>g+4b-1<
+## 18 (one 16th note + one 64th note in, and the measure lasts half a measure + the channel's echo delay – one 16th + one 64th)
+l32
+[4 b-g+f+fe-c+c> j2,618 j4,619]
+$618
+## Change instrument after the second loop out of 4
+'piano' 'pianoEcho']
+$619
+>>b-g+f+f 
+;
+
+
+## Support echo, originally track 2
+{7}
+'trackSetup'
+$
+'brightPiano-o2' 'brightEcho' 'pan3' 'brightLowRelease'
+## This has the same delay as melody 3, so it's probably slightly off too.
+r32.
+e-1^1
+## 2 (one 16th note in)
+f1^1
+## 3 (one 16th note in)
+e-1^1
+## 4 (one 16th note in)
+f1^1
+l8
+[2
+  ## 5 / 7 (one 16th note in)
+  f+1g+1
+  ## 6 / 8 (one 16th note in)
+  >b-<dfb-<d>b-fdb-2g+2
+]
+## 9 (one 16th note in)
+'piano' 'pianoEcho' 'pianoMedRelease' f+2g+1f2
+## 10 (one 16th note in)
+f+2g+1e-2
+## 11 (one 16th note in)
+c+fg+<c+fc+>g+ff+2g+2
+## 12 (one 16th note in)
+^2f2f+2g+2
+## 13 (one 16th note in)
+^2f2>
+[2
+  b-<c+fb-<c+2>>
+  ## 14 / 16 (one 16th note in)
+  g+<ce-g+<c2>>f+b-<c+f+b-2>
+  ## 15 /17 (one 16th note in)
+  fg+<cfg+2>
+]
+## Second half of 17 (one 16th note in)
+>b-<dfb-<d>b-fd
+## 18 (one 16th note in, and lasts half a measure)
+'bright-o2' ' brightEcho' 'brightLowRelease'
+l4
+b-g+f+f8.^64
+;

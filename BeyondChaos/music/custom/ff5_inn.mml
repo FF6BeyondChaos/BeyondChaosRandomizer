@@ -1,0 +1,35 @@
+#TITLE Good Night
+#ALBUM Final Fantasy V
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x23 0x07
+
+#def 3@i=   |3
+#def 3@o=   o5
+#def 3@v=   v100
+#def 3@f= v1,100
+
+
+{1}
+t75%b0,100%f0,0%v50%x160'3@v*v1.25'p60
+'3@i' %e1%r16'3@o'a+16<c16c+16d+16t75f8t73c+8t71e8t69c8t67d+2;
+
+{2}
+'3@v*v1.25'p60
+'3@i' %e1%r16r4'3@o'a+4a8.^24<c2^48;
+
+{3}
+'3@v*v1.25'p60
+'3@i' %e1%r16r4'3@o'g+4g8.^48g+2^24;
+
+{4}
+'3@v*v1.25'p60
+'3@i' %e1%r16r4r4.r16'3@o'f2^16;
+
+{5}
+'3@v*v1.25'p60
+'3@i' %e1%r16r4'3@o-o1'f+4f4c+2;
+;

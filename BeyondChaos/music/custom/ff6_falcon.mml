@@ -1,0 +1,192 @@
+#TITLE Searching for Friends
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+########## ------------------
+#SHORTNAME FF6 Searching for_
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x76 flute (doooh)
+#WAVE 0x21 0x65 strings (viola)
+#WAVE 0x22 0x51 bass (picked)
+#WAVE 0x24 0x3B hihat (medium, unified)
+#WAVE 0x25 0x75 choir (soprano)
+
+#def 0@i=   @0
+#def 0@o=   o5
+#def 0@v=   v100
+#def 0@f= v1,100
+
+#def 1@i=   @1
+#def 1@o=   o5
+#def 1@v=   v100
+#def 1@f= v1,100
+
+#def 2@i=   @2
+#def 2@o=   o5
+#def 2@v=   v100
+#def 2@f= v1,100
+
+#def 5@i=   @5
+#def 5@o=   o5
+#def 5@v=   v100
+#def 5@f= v1,100
+
+#def 6@i=   @6
+#def 6@o=   o5
+#def 6@v=   v100
+#def 6@f= v1,100
+
+#def 7@i=   @7
+#def 7@o=   o5
+#def 7@v=   v100
+#def 7@f= v1,100
+
+#def 0i=   |0
+#def 0o=   o6
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v175
+#def 2f= v1,175
+
+#def 3i=   |4 
+#def 3o=   o5
+#def 3v=   v200
+#def 3f= v1,200
+
+#def 4i=   |4 %y5%s0
+#def 4o=   o5
+#def 4v=   v175
+#def 4f= v1,175
+
+#def 5i=   |5
+#def 5o=   o4
+#def 5v=   v100
+#def 5f= v1,100
+
+## auto percussion  0x23
+#drum "h"= 5f
+## auto percussion  0x24
+#drum "i"= 5f
+
+
+{1}
+%x192%b0,100%f0,0%v50'5v*v.60'
+'5i' p84%e1m48,18,239t125'5o'a1b1<c1d1'0v*v.80'
+'0i' p84%e1m48,18,239
+$102['0o'a2<c2>b4a4g4c8d8e4.e8d4c8d8e2e4^8r8a2<c2d4c4>b4g4a4<c4>b4g+4j2,101
+a2^4r4]
+$101a1^2^4r4'5v*v1.00'
+'5i' p84%e1m48,18,239r4'5o'a4<c4>a4b4a4g4a4b2^4<d4c1'0v*v.80'
+'0i' p84%e1m48,18,239r4'0o+o1'f4a4f4g4f4e4f4g1r1'5v*v1.00'
+'5i' p84%e1m48,18,239r4>'5o'a4<c4>a4b4a4g4a4b2^4<d4c+1'0v*v.80'
+'0i' p84%e1m48,18,239'0o+o1'e2^8e8d8c8>a1r4g4a4a+4<d+4d4c4>a+4a1^1r1r1
+
+;102
+
+
+{3}
+'1v*v.60'
+'1i' p44%e1%a8'1o'a1b1<c1d1
+$202['1o+o1'e1^2^4d4c1d1e1^2d2c2d2j2,201c1]
+$201^1c+1'1o+o1'e1d1^1c1c1^2>b2b1<c1e1d1^1c+1c1d1d+1d1d1^1^1^1
+;202
+
+
+{4}
+'1v*v.60'
+'1i' p54%e1%a8'1o'e1f+1g1a1
+$302['1o'a1^2g2e2f2f+2g+2a1g1f+2e2j2,301e1]
+$301e1^1'1o+o1'c1>b1^1a1a1g1^1a1<c1>b1^1a1a1^1g1^1f+1^1g+1^1
+;302
+
+
+{7}
+'1v*v.60'
+'1i' p64%e1%a8'1o'c1d1e1f+1
+$402['1o'c1>b1a1b1<c1>b1a2g+2j2,401a1]
+$401a1^1'1o'a1g1^1e1f1^1e1^1a1g1^1e1f1^1f1d+1d1^1e1^1
+;402
+
+
+{2}
+'2v*v.60'
+'2i' p74%e0%a11%r10m120,18,239'2o'a2^4.%l1d+16e16%l0a1a2^4.%l1d+16e16%l0
+>a2^4<e16m36,-6^8.
+$502['2o'a4.g8f4.%l1d16d+16%l0e4d8m24,-2^8^2f4.f8d8.<d8.>d+8e2^8f+4g+8
+a4.g8f4.%l1e16f16%l0g4%l1d8d+8%l0e8.<e8.d+8d4>%l1d8d+8%l0e8.b8.g+8j2,501
+a2^4<e16m36,-6^8.]
+$501a2^4e4>a1'2o'f8f8r8<c8r8f4c8>f8f8r4f8f8r4e8e8r8b8r8<e4>b8a8a8r4.<e8
+>a8e8d8d8r8a8r8<d4>a8g8g8r4g8g8r4<c8c8r8>g8r8<c4>g8a8a8r4g8g8r4f8f8r8<
+c8r8f4c8>f8f8r4f8f8r4e8e8r8b8r8<e4>b8a8a8r4.<e8>a8e8d8d8r8a8r8<d4>a8a+8
+a+8r4a+8a+8r4d+8d+8r8a+8r8<d+4d8c8c8r4>g8g8r4e8e8r8b8r8<e4>b8e8e8r4e8e8
+r4e8e8r8b8r8<e4>b8d16m12,2^16%l1^8<e8>f4f+8<e8>g+8%l0
+;502
+
+
+{6}
+r1r1r1r1
+$601[17'6@v*v.40'm4,4,255%e1
+'6@i' '6@o+o1'%a7m6,1p65g+8
+'0@i' '0@o'm%a15%r28p85'0@v*v.40'a16
+'1@i' %a15%r21p65'1@v*v.40''1@o'a8
+'2@i' %a15%r21p85'2@v*v.40''2@o'a8
+'5@i' %a15%r21m6,1p65'5@v*v.40''5@o'g+8
+'6@i' %a15%r21p85'6@v*v.40''6@o'a8
+'2@i' %a15%r21p65'2@v*v.40''2@o'a16
+'1@i' %a15%r21p85'1@v*v.40''1@o'a8
+'0@i' %a15%r21p65'0@v*v.40''0@o'a8]'5v*v.50'
+'5i' p84%e1m48,18,239r4'5o'f4a4f4g4f4e4f4g2^4b4a1<'0v*v.35'
+'0i' p84%e1m48,18,239r4'0o+o1'd4f4d4e4d4c4d4e1r1'5v*v.50'
+'5i' p84%e1m48,18,239r4>'5o'f4a4f4g4f4e4f4g2^4b4a1<'0v*v.35'
+'0i' p84%e1m48,18,239'0o+o1'c2^8c8>b8a8f1r4d+4f4g4<c4>a+4a4g4f+1^1r1r1
+
+;601
+
+
+{8}
+r1r1r1r1'7@v*v.50'
+'7@i' %e1
+$701'7@f*v192,.10'p110'7@o-o1'%r30b16%r29a+16%r28a16%r27g+16%r26g16%r25
+f+16%r24f16%r23e16%r23d+16%r24e16%r25f16%r26f+16%r27g16%r28g+16%r29a16
+%r30a+16'7@f*v192,.50'p20%r30b16%r29a+16%r28a16%r27g+16%r26g16%r25f+16
+%r24f16%r23e16%r23d+16%r24e16%r25f16%r26f+16%r27g16%r28g+16%r29a16%r30
+a+16
+;701
+
+
+{5}
+'3v*v.50''3o'p50%e0'3v*v.10''3f*v192,.20'[4
+'3i' '3v*v.20'" !!!o h8"
+'4i' '4v*v.20'" !!!o i16i16"]'3f*v192,.30'[4
+'3i' '3v*v.30'" !!!o h8"
+'4i' '4v*v.30'" !!!o i16i16"]'3f*v192,.40'[4
+'3i' '3v*v.40'" !!!o h8"
+'4i' '4v*v.40'" !!!o i16i16"]'3f*v192,.50'[3
+'3i' '3v*v.50'" !!!o h8"
+'4i' '4v*v.50'" !!!o i16i16"]
+'4i' "i24i24i24"
+'3i' '3v*v.50'" !!!o h8
+"
+$801'3v*v.60'
+'3i' " !!!o h8"'4v*v.40'
+'4i' " !!!o i16i16"
+'3i' '3v*v.40'" !!!o h8"
+'4i' '4v*v.40'" !!!o i16i16"
+'4i' '4v*v.60''4f*v24,.10'%g1"i24i24i24"'3v*v.40'
+'3i' " !!!o h16"
+'4i' '4v*v.40'" !!!o i16"'3v*v.60'
+'3i' " !!!o h8"'4v*v.40'
+'4i' " !!!o i16i16
+";801
+

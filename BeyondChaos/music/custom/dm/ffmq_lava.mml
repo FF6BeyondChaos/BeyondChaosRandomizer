@@ -1,0 +1,180 @@
+#TITLE Lava Dome (Dancing Mad Remix)
+#ALBUM Final Fantasy Mystic Quest
+#COMPOSER Ryuji Sasai
+#ARRANGED emberling
+# via ff5ff6mcs2
+# Converted from binary by mfvitools
+
+#VARIANT ~_ 
+#VARIANT ~` tier1
+#VARIANT ?` tier2
+#VARIANT ?_ tier3
+
+#WAVE 0x20 -- 0xB0  #Organ
+#WAVE 0x21 -- 0xB7
+#WAVE 0x22 -- 0xF2  #Maria
+#WAVE 0x23 -- 0xF1  #Draco
+#WAVE 0x24 -- 0x1B  #Snare
+#WAVE 0x25 -- 0x5A  #Timpani
+#WAVE 0x26 -- 0x2D  #Cymbal
+#WAVE 0x28 -- 0x55  #Bass
+#WAVE 0x2A -- 0x06  #Harp
+
+#def 0o= o5
+#def 1o= o4 %a12
+#def 2o= o5
+#def 3o= o5
+#def 4o= o5
+#def 5o= o6
+#def 6o= o5
+#def 8o= o5
+#def Ao= o2
+
+#drum "a"=5e
+
+{1}
+$4441 
+%b0,70%v70%x232%f0,0
+v70p64%e1m24,30,211 |0 '0o' l12
+? 
+c2 t255,120
+^>gc <gc>g <fc>g <e-c>a-
+b2. fed g-fg- ba+b
+? %k7 l16
+~t120r2~ $ |0v75%a15 '0o-o1'[2e2  b3^24a+ba+2  <c12>b12<c12d12c12d12j2e4>b12<e12>b12  
+<a+6a6g6>b12a+12b12<e12d+12e12  c12>b12<c12g12f+12g12>]e12d+12e12g12f+12g12  
+a+6a6g6b6a+24b24a+a8.  g6f+24g24f+f^24 |1'1o' v56m12,11,255 >b12<g4f+12e12d12  e2a+12a12g12e12d12e12  
+>b6e6g12a12b4<f+4  d+4b4<c6>b12a12b12d+12  >b12a+12b12<f+6>b12<g4e12d+12e12  
+b6e6<e6>a+6a12g12e12d12  e2d+12>b12f+12<d+12>b12<e12  d+6b3<e12d+12>b12f+12d+12f+12  
+b2r1  |2'2o-o1' m0,7,255v0,4,255v80 >>b4<f+4b4<b4  r1  d12c12>a+12r12g+12a+12f+6<f+3  v72
+r1  >b6<f+6e12f+12b2  r1  d12>a+12<d12f+12d12>a+12<a+12f+12a+12<c+4  vm
+` :11 ; $11 `
+|0'0o-o2'v65%a15e2<e2  >b6a+6a6a+12a12a+12b12a+12a12  a+12r12<e12r12a+12r12 _r2;_
+
+` >a+12r12<e12r12a+12r12
+%k0t255,95 [2g12r12<c12r12g12r12>] g+12g12f12e-4 ^2
+;4441`
+
+{3}
+$4443
+l16v40p64|8%e0
+?
+r1r1r1
+? 
+~r2~
+%k7 $ '8o-o1' [2e12r12e12g12e12e12  b12e12g12e12b12a+12<c+12>f+12f+12a+12f+12<f+12  
+c12>f12f12<f12>f12f12e12e12e12g12e12e12  j2a+12e12a12e12g12e12b12e12e12g12e12e12  
+<c12>e12g12e12<d12>e12]a+6a6g6  b6a+6a6g6f+6f6  [2e12e12e12g12e12e12b12e12e12g12e12e12  
+a+12e12a12e12g12e12g12e12a12e12g12a12  b12a+12b12f+4b6<d+12e12f12f+12  
+c12>e12b12a12a+12b12a+12e12b12a12g12f+12  ][2e12r12e12<e12>e12r12e12r12e12a+12e6  
+a+12b12b12b12b12b12a+12b12b12b12b12b12  e12r12e12<e12>e12r12e12r12e12b12e12r12  
+a12a+12a+12a+12a+12a+12f12f+12f+12f+12f+12f+12  ]
+` :13 ; $13 `
+<e6>e12r12e12r12 a+6e12r12e12r12  
+g6f+6f6 <a+12a+12r3  >a+12a+12r3<  e12a+12f12b12f+12<c12  
+_;_
+` %k0 [c12g12c12c12r6] r1
+;4443`
+
+{5}
+$4445 ?[3r1]? ~r2~
+l16v70p64%e1 $ |2
+%k7 [
+'2o-o1'e6e12|3'3o+o1'[3e24r24] |2'2o-o1'g6|3'3o+o1'[4e24r24]
+|2'2o-o1'f+6|3'3o+o1'[4f+24r24] |2'2o-o1'f6|3'3o+o1'[4f24r24]
+|2'2o-o1'e6e12|3'3o+o1'[3e24r24]> a+6a6g6 j2,1
+|2'2o-o2'b6|3'3o+o1'[4e24r24] |2'2o-o1'c6|3'3o'e24r24e24r24|2'2o-o1'd12e24r24
+] $1
+b6a+6a6g6f+6f6
+[2r4<v0,12,255m0,12,255e2^4>  a+6a12r4  g6a12r4
+  r4b2^4    <c6>b12r4 a+6b12r4]vm
+e4g4 e4a+4 b12[5b24r24] <d+12>[5b24r24]
+e4g4 e4b4 a+12[5a+24r24] f+12[5f+24r24]
+e4g4 e4a+4 b12[5b24r24] <d+12>[5b24r24]
+e4g4 e4b4 a+12[5a+24r24] f+12[5f+24r24]
+` :15 ; $15 `
+<e6>e12r12e12r12 a+6e12r12e12r12 g6f+6f6 a+12a+12r3 a+12a+12r3 a+6b6<c6
+_;_
+` %k0 [g16r48g16r48r3] r1
+;4445`
+
+{6}
+$4446 ?[3r1]? ~r2~
+%k7
+l16v40p32 |A %e1%y1%s0 $
+[16r1  ]'Ao'[2b12e12a+12e12g12e12<c12>e12b12e12a+12e12  b6b6b12b12b6b6b12b12  
+b12e12g12e12a+12e12b12e12<c12>e12a+12e12  f+6f+6f+12f+12c+6c+6c+12c+12 ]
+` :16 ; $16 `
+r1  r2r6>>e12a+12<e12a+12  <e1  
+_;_
+` %k0 r1r1
+;4446`
+
+{8}
+$4448 
+%e1v48p96'0o-o1' |0
+? r2r1 r4d2. ^2 ?
+~r2~
+%k7
+l16 $ '0o-o1' [2b6b12r4  
+<d4r4c+4r4  c4r4>b6b12r4  f6e6d6j2f+12r4.r24  g12r4a12r12]f+6f6e6  
+d6c+6c6[12b24r24]<f6e12r4  d6e12r4>[12f+24r24]<g6f+12r4  f6f+12r4>[12b24r24]<f6e12r4  
+d6e12r4>[12f+24r24]<g6f+12r4  f6f+12r4>
+[r1  e1r1 >a+2<f+2]
+` :18 ; $18 `
+[6e12>e12<]e12>e12b12c12b12c12<e12e12r3  
+e12e12r3>e6f6f+6  
+_;_
+` %k0 <c1 e-12d12f12g4 g2
+;4448`
+
+{2}
+$4442 
+%e1v48'0o'p32 |0
+? r2r1 r2f+2 ^2 ?
+~r2~
+%k7
+l16 $ '0o'[2e6e12>e12g12b12  
+<g4>e12g12b12<f+4>e12b12e12  <f4>f12<c12>f12<e6e12>e12g12b12  a+6a6g6j2b12e12b12g12e12b12  
+<c12<c12>g12e12d6]b6a+6a6  g6f+6f6<[12e24r24]a+6a12r4  g6a12r4>[12b24r24]<<c6>b12r4  
+a+6b12r4[12e24r24]a+6a12r4  g6a12r4>[12b24r24]<<c6>b12r4  a+6b12r4r1  
+p96 [2[2f+6f+12r12f+12f+12]r1  d6d12r12d12d12a+6a+12r12a+12a+12  
+r1  [2f+6f+12r12f+12f+12]r1  d6d12r12d12d12a+6a+12r12a+12a+12>
+` :12 ; $12 `
+p32[3e12>b12<] [3e12>a+12<] e12>g12b12f+12b12f12 <a+12a+12r3 a+12a+12r3> a+6b6<c6
+_;_
+` %k0 g1^1
+;4442`
+
+{7} $4447 ?[3r1]? ~r2~
+l16v80p64%e1 $
+   |6 "a2" '5o-o1'|5 f+2e2d2 [c2c6c6c6]
+            c2f+2e2d2 [c2c6c6c6]
+     |6 "!o a1" |5'5o-o1' [g12e12c16g48g4]
+     [3 r1    [g12e12c16g48g4] ]
+     |6 "!o a1" |5'5o-o1' [e6c12r12c12c12]
+     [3 r1    [e6c12r12c12c12] ]
+` :17 ; $17 `
+     |6 "!o a1" r1r1
+_;_
+` "a1^1"
+;4447`
+
+{4} $4444 ?r1r1r2?
+l16v48p64|4%e0'4o'g48gg12g12g12g12g12 $
+[3 g4f4 g4f12g12g12]
+f12f12f12g12r6
+f12f12f12g12g12%g1f24f24
+[2g4%g0f4 g4f12g12g12]
+f12f12f12g12f12f12
+[3f12%g0r16%g1g48]f6%g0f6f6%g1g32g^32%g0 |5'5o'f24e24d24c12
+|4'4o'g6 [4
+[3 f12%g0f12f12g12f12f12 f12f12f12g12f12%g1g48g48g48g48]
+[2 f12%g0f12f12v30,24[12%g1g48]v48] ]
+` %g0:14 ; $14 `
+f6_%g0_f6f6 f6f6f6 |5'5o'f24f8e6e6 d12d12e6e6
+|4'4o'[7g12]|5'5o-o1'%g1e24d24%g0|4'4o'g12g12|5'5o'%g1e24d24%g0|4'4o'g12
+_;_
+` r1r1
+;4444`
+

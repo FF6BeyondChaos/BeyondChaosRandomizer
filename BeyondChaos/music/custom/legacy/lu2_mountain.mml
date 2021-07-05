@@ -1,0 +1,84 @@
+#TITLE Towering Mountain
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED Gi Nattak
+# Converted from binary by mfvitools
+
+#WAVE 0x20 -- 0x0E
+#WAVE 0x21 -- 0x0D
+#WAVE 0x22 -- 0x12
+#WAVE 0x23 -- 0x14
+#WAVE 0x24 -- 0x02
+#WAVE 0x25 -- 0x16
+#WAVE 0x26 -- 0x24
+
+#def tr= v104@32o5 %e1m96,28,223%r6
+#def st= v80@33o5 %e1m96,28,207%r5
+#def cy= v120@34o5 %e0m
+#def sn= v104@35o5 %e0m
+#def bs= v104@36o5 %e0m
+#def ti= v127@37o3 %e1m
+#def tb= v104@38o6 %e1m %r15
+
+{1}
+l16t250%v50%x224%b0,70%f0,0
+p84 'tr' r2r6f6d+6 r2a+6<f6d+6 a+1.a+3<c6 c+1 d+1> a+6r3r2r1 r1r1
+$
+[p84 'st' [>a+6<r3f1d+12r6.g6 f2>a+1a+6<f6>a+6< g+1a+1 f6r3r2 r1r1j2r1]'tr'<r2f3g6
+g+2f2 c+2g+2 g1 d+1  f1^1^1^2f3g6    g+2f2 c+2g+2 g1 a+1 <c1^1^1j2^1]^2'st'<[3f12r12]
+f1d+1 >a+1<c+2c6c+6d+6  c1>g+1 d+1.<[3f12r12]  f1d+1 >a+1<c+2c6c+6d+6  c1c+1 d+1^1
+c+1>a+1 f+1<c+2c6c+6d+6  c1>g+1 d+1^1  <c+1>a+1 f+1<c+2c6c+6d+6 c1d+1 >f6g6a6 g6a6a+6 a6a+6<c6 d6d+6f6
+;
+
+{2}
+p44 'st' r2>a+6<f6d+6 a+2a+6<f6d+6 a+1.a+3<c6 c+1 d+1> a+6r3r2r1 r1r1
+$
+[p44 'st' [r1r1r1r1 f1 g1 d6r3r2 r1r1j2r1]r2c+3d+6
+f1.f6c+6f6 d+1>a+1< d1.d+2 f1a+1    f1.f6c+6f6 d+1j2>a+1 f1g1 a1a+2<c2]g1f1d+1d1c1
+[4c+1.>a+6<c6c+6 c+1>a+2j4<c+2  c1>g+1 d+2g+2<c2>g+2<]^2<f1^1f1>f1
+;
+
+{3}
+p74 'ti' a+1 ^1^1 ^2a+3a+6f+1g+1 a+1. a+6a+6a+6a+1. a+6a+6a+6
+$
+[p74 'ti' [[a+1.a+6a+6a+6] <c+1 d+1> [a+1.a+6a+6j2a+6]j2a+6]<c6
+c+1^1d+1d+1> a+1.a+6a+6a+6 a+1.a+6a+6<c6 c+1^1d+1d+1> f1<c1>j2f1<c1]f2<c2>f2<c2
+[4f+1f+1 f+2c+2f+2c+2  f1f1 j4 f2c2f2c2] [>f2<c6c6c6]
+;
+
+{4}
+p104 'tr' r1 a+1^1^1 <a+1 <c1 a+6r3 p74'sn' g2g2g6g6g6 g2g2g2g6g6g6
+$
+p74 'sn' [35g2g2g2g6g6g6][g2g6g6g6]
+[15g2g2g2g6g6g6][g2g6g6g6]
+;
+
+{5}
+p44 'tr' r2 >a+2^1^1^1 <f+1 g+1 'bs'p64 [8a+4r4]
+$
+[p64 'bs' [[8a+4r4] <c+4r4c+4r4 d+4r4d+4r4> [8a+4r4]]
+<[4c+4r4] [4d+4r4]> [8a+4r4] <[4c+4r4] [4d+4r4] [8f4r4]]
+[4[8f+4r4][8f4r4]]
+;
+
+{6}
+p74 'sn' [g2g6g6g6]g1.g3g6 g1 g2..g24g24g24 g2 r2r1r1r1
+$
+[20r1]
+p44 'cy' c+1^1 c+1c+1 [3c+1^1] [6c+1]
+[20r1]
+c+1^1 c+1c+1 [3c+1^1] [4c+1][4c+2]
+p44 'tb' f1^1>a+1<c+1 c1^1>g+2d+2g+2<c2 c+1c1>a+1<c+1 c1^1>g+1^1
+<c+1^1> a+1<c+1 c1^1> g+2d+2g+2<c2  c+1c1> a+1<c+1 c1d+1 f1^1
+;
+
+{7}
+p64 'st' v127o2 %l1[16a+4]%l0 < %l1[4f+4]%l0 %l1[4g+4]%l0 'cy'p44c+1^1^1^1
+$
+[72r1]
+p44 'cy' [3c+1 [7^1]] c+1^1^1^1 a1 a1 a2a2a2a2
+;
+
+{8}
+'cy'p44 c+1^1^1^1 c+1 c+1 r1r1r1r1
+;

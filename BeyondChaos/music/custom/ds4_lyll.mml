@@ -1,0 +1,207 @@
+#TITLE Theme of Lyll
+#ALBUM Legacy of the Wizard
+#COMPOSER Yuzo Koshiro
+#ARRANGED emberling
+
+{--------------- Instruments ---------------}
+#WAVE 0x20,  0xA5         {Flute}
+#WAVE 0x21,  0x70         {Violin}
+#WAVE 0x22,  0xc3         {Choir}
+#WAVE 0x23,  0x23         {Xylophone}
+#WAVE 0x24,  0x56         {Bass}
+#WAVE 0x25,  0x0B         {Kick}
+#WAVE 0x26,  0x1C         {Snare}
+#WAVE 0x27,  0x3A         {Hihat}
+#WAVE 0x28,  0x2D         {Cymbal}
+
+#def flute=  |0 o4 %e1 v16,16,255 m16,18,239
+#def violin= |1 o5 %e1 v16,16,31 m48,18,223
+#def choir=  |2 o4 %e1 v16,16,15 m48,18,199
+#def xylo=   |3 o5 %e1 mv
+#def bass=   |4 o6 %e0 mv
+
+#def i5= |5 %e0
+#def i6= |6 %e1
+
+{--------------- Track 1 ---------------}
+t136%v50%x180%b0,70%f0,0
+p48'flute+o1'v64l8
+[2ddgd16f16^^^r]
+$g.d.gf.c.f
+d+.>b-.<d+f.c.r
+g.d.gf.c.f
+d+.>b-.<d+d.>a.f
+'violin'
+g2.dg
+a2f4c4
+d2.^d^2<d2
+g2.ab-
+<c2>b-4<c4
+d1
+d2>d2 
+'flute+o1'v96
+d32e-32^8.c>g4<e-e-32f32^16e-
+d4>b-g^2
+a4g-d4g32a32^16ga
+b-r16<cr16d^2
+d32e-32^8.c>g4<e-e-32f32^16e-
+d4>b-g^2
+a4g-d4g32a32^16b-<c>
+a.g16^2.
+v64'flute+o1'
+;
+
+{--------------- Track 2 ---------------}
+v24p80'flute'l8
+[2aa<d>f16<c16^^^r>]
+$'violin+o1'v64 
+d.>g.<dc.>f.<c
+>b-.e-.b-<c.>f.r<
+d.>g.<dc.>f.<c
+>b-.e-.b-a.d.>a
+b-2.b-b-
+<c2>a4f4
+g2.^f+^2<f+2
+v56b-2.fg
+a2f4a4
+b-1
+l16v40>b<dgbdgb<d>gb<dg>b<dgb>
+l8 v56'violin'
+c2e-2
+d2>b-2<
+d2f+2
+g.r16e-d4.>g4
+<c4e-4c4>a4
+b-2gd4.
+<d4>a4f+4^16d.
+g1
+;
+
+{--------------- Track 7 ---------------}
+v24p96'choir-o1'l16
+[2grgrarb-argfrfrga]
+$g2f2d+2f2
+g2f2d+2a2
+l8'choir'v64g2.dg
+a2f4c4
+d2.^d^2<d2
+g2.ab-
+<c2>b-4<c4
+d1
+d2>d2
+v48l16[4g.r32e-.r32]
+>r[7b-.r32]b-<
+[4f+.r32d.r32]
+>r[4b-.r32][3b.r32]b<
+[4g.r32e-.r32]
+>r[7b-.r32]b-<
+[4f+.r32d.r32]
+g2r2
+'choir-o1'v24
+;
+
+{--------------- Track 5 ---------------}
+l16v96p64'xylo-o1'
+[2g8g8<g8>gg8<cc+d8ff+g>]
+$p80<gdadb-d<d>dfcgcac<c>c
+p48e->b-<f>b-<g>b-<b->b-<a>a<g>a<f>a<a>a
+p80<gdadb-d<d>dfcgcac<c>c
+p48e->b-<f>b-<g>b-<b->b-<a>a<g>a<f>a<d>a
+'bass-o1'p64 
+[4grgg]
+[4frff]
+[4e-re-e-]
+[4drdd] 
+'xylo'[2p80g>g<ggp48g>g<gg]
+[2p80f>f<ffp48f>f<ff]
+[2p80a+>a+<a+a+p48a+>a+<a+a+]
+p96,80>b<dgdgb<d>b<dgbgb<dgb>>
+p80[2g<ce-c>]p48[2g<ce-c>]
+p80[2gb-<d>b-]p48[2gb-<d>b-]
+p80[2f+a<d>a]p48[2f+a<d>a]
+p80[2gb-<d>b-]p48[2gb<d>b]
+p80[2g<ce-c>]p48[2g<ce-c>]
+p80[2gb-<d>b-]p48[2gb-<d>b-]
+p80[2f+a<d>a]p48[2f+a<d>a]
+p64gd>b-g4.<dfga<cfa
+'xylo-o1'
+;
+
+{--------------- Track 3 ---------------}
+l16p64'bass-o2' v88 
+[2grgr<gr>ggr<cc+drff+g>]
+$grgr<g>grrfrfr<f>frr
+e-re-r<e->e-rrfrfr<f>frr
+grgr<g>grrfrfr<f>frr
+e-re-r<e->e-rrfrfr<f>ff<f>
+[4grgg]
+[4frff]
+[4e-re-e-]
+[4drdd]
+<[4grgg]
+[4frff]
+[4a+ra+a+]
+[4brbb] <
+[4crcc]>
+[4b-rb-b-]
+[4araa]
+[2b-rb-b-][2brbb]
+<[4crcc]>
+[4b-rb-b-]
+[4araa]
+ggggrgggr>dfga<cfa
+'bass-o2'
+;
+
+{--------------- Track 4 ---------------}
+v127p72$'i6'o5l16
+r1r2.rfff
+$l8[3'i5'ee'i6'fr]
+'i5'ee'i6'f16ff16
+[3'i5'ee'i6'fr]
+l32ffffl16ffffffl8
+[7'i5'er'i6'fr]
+'i5'ee'i6'f16ff16
+[7'i5'er'i6'fr]
+'i5'ee'i6'f16ff16
+[7'i5'ee'i6'f16'i5'ee16]
+ee'i6'f16f16'i5'e16'i6'f16
+[6'i5'ee'i6'f16'i5'ee16]
+l16'i6'ffff'i5'e'i6'fff
+'i5'e8e8'i6'f32f.r8
+;
+
+{--------------- Track 6 ---------------}
+l16%e1%k0p56@0x27o5
+@0x27[14v64cv32c]@0x28v127g4
+$@0x27[8v64cv32c]
+[6v64cv32c]@0x28v127g4
+@0x27[8v64cv32c]
+[6v64cv32c]@0x28v127g4
+@0x27[32v64cv32cv127cv48c]
+[62v64cv32c]@0x28v127g4
+;
+
+{--------------- Track 8 ---------------}
+v48p32'flute+o3'l32
+r1r4r4r4dededede
+$r1r4r4r4dededede
+r1r1
+l8'choir'a+2.a+a+
+<c2>a4f4
+g2.^f+^2<f+2
+'bass-o2'l16
+[4grgg]
+[4frff]
+[4a+ra+a+]
+[4brbb]
+'choir+o1'l16
+r[7c.r32]c
+[4g.r32d.r32]
+>r[7a.r32]a<
+[4g.r32d.r32]
+r[7c.r32]c
+[4g.r32d.r32]
+>r[7a.r32]a<
+d2r4'flute+o3'l32v48dededede
+;

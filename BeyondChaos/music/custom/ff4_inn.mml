@@ -1,0 +1,44 @@
+#TITLE Inn
+#ALBUM Final Fantasy IV
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x19
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v100
+#def 0f= v1,100
+
+
+{1}
+t75%v70%b0,70%f0,0'0v*v.75'p95
+'0i' {'VolEnvMode 11'}%r15{'Duration 90%'}%e1'0o'f8c+8d+8g+8f4f8f8a+1r1
+;
+
+{2}
+'0v*v.60'p85
+'0i' {'VolEnvMode 11'}%r15{'Duration 90%'}%e1'0o-o1'g+4f+4g+4a4r2<d2r1
+;
+
+{3}
+'0v*v.60'p75
+'0i' {'VolEnvMode 11'}%r15{'Duration 90%'}%e1'0o-o1'f4f4f4d+4r4.a+2^8r1
+;
+
+{4}
+'0v*v.60'p65
+'0i' {'VolEnvMode 11'}%r15{'Duration 90%'}%e1'0o-o1'c+4c+4c4d+4r4f2.r1
+;
+
+{5}
+'0v*v.60'p55
+'0i' {'VolEnvMode 11'}%r15{'Duration 90%'}%e1'0o-o2'a+4a+4a+4b4r8<d2.^8
+r1;
+
+{6}
+'0v*v.75'p45
+'0i' {'VolEnvMode 11'}%r15{'Duration 90%'}%e1'0o-o2'f+4d+4g+4f4a+1r1;
+;

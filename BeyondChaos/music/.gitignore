@@ -1,0 +1,14 @@
+*.pyc
+*.smc
+ff6*.txt
+build/*
+dist/*
+*.spec
+savedflags.txt
+.pylintrc
+custom.zip
+.vscode/*
+.vs/*
+brr2sf2.py
+spoiler.txt
+tierboss.mml

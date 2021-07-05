@@ -1,0 +1,142 @@
+#TITLE Under Martial Law
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#SFXV ` *
+
+#WAVE 0x20 0x60 harp
+#WAVE 0x21 0x65 strings
+#WAVE 0x22 0x7F horn
+#WAVE 0x23 0x92 oboe
+#WAVE 0x24 0x51 bass
+#WAVE 0x25 0x3A hihat-closed
+#WAVE 0x26 0x3C hihat-open
+#WAVE 0x27 0x0A kick
+#WAVE 0x28 0x86 horn2
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v80
+#def 0f= v1,80
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v80
+#def 1f= v1,80
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=  *v50* `v80`
+#def 2f=*v1,50* `v80`
+
+#def 3i=   |3
+#def 3o=   o4
+#def 3v=   v80
+#def 3f= v1,80
+
+#def 4i=   |4
+#def 4o=   o4
+#def 4v=   v80
+#def 4f= v1,80
+
+#def 5i=   |5
+#def 5o=   o5
+#def 5v=   v80
+#def 5f= v1,80
+
+#def 6i=   |6
+#def 6o=   o5
+#def 6v=   v80
+#def 6f= v1,80
+
+#def 7i=   |7
+#def 7o=   o5
+#def 7v=   v80
+#def 7f= v1,80
+
+#def 8i=   |8
+#def 8o=   o5
+#def 8v=   v38
+#def 8f= v1,38
+
+## auto percussion  0x25
+#drum "h"= 5a %e1
+## auto percussion  0x26
+#drum "i"= 5a %e1
+## auto percussion  0x27
+#drum "j"= 5a
+
+#cdef ( %l1
+#cdef ) %l0
+
+{4}
+t65%x255%b0,80%f0,0%v70'0v*v.40'
+'0i' p94%e1&3r1[4'0o-o1'g8<d8g2^4]
+$101[8>e8b8<e2^4][8>c8g8<c2^4]
+;101
+
+
+{3}
+'1v*v.50'
+'1i' p54%e1%a4%r6'1o'd4e8g8f4.e8g1d4e8g8f4.e8f4d2^4
+$201[4e4f+8a8g4.f8e1][4c4d8f8d+4.c+8c1]
+;201
+
+
+{2}
+'1v*v.50'
+'1i' p74%e1%a4%r6'1o'g4a8<c8>a+4.a8<d1>g4a8<c8>a+4.a8a+4g2^4>
+$301[4b4<c+8e8d4.c8>b1][4g4a8<c8>a+4.g+8g1]
+;301
+
+
+{1}
+r1r1r1r1%e1m48,18,239&3r1
+$401
+'2v*v.80''2i'p44
+['2o'(e16f+16)(g16a16)b4^16r16(a16b16)(a16g16)(f16
+g16)e4>b4^16r16(b16<c16)(d8c16>b16)<e4>b4^16r16<(f16g16)
+(a16g16)(f16g16)e2^4r4]
+'3v*v.70''3i'p84
+['3o'(c16d16)(d+16f16)g4^16r16(f16g16)(f16
+d+16)(c+16d+16)c4>g4^16r16(g16g+16)(a+8g+16g16)<c4>g4^16
+r16<(c+16d+16)(f16d+16)(c+16d+16)c2^4r4]
+;401
+
+
+{8}
+r1r1r1r1%e1m48,18,239&3r1
+$501
+'8v*v.80''8i'p44
+['8o'(e16f+16)(g16a16)b4^16r16(a16b16)(a16g16)(f16
+g16)e4>b4^16r16(b16<c16)(d8c16>b16)<e4>b4^16r16<(f16g16)
+(a16g16)(f16g16)e2^4r4][r1r1r1r1]
+;501
+
+
+{5}
+r1r1r1r1'4v*v.90'
+'4i' p64%e0&3r1
+$601[8'4o+o1'e8e8r2r4][8c8c8r2r4]
+;601
+
+
+{6}
+r1r1r1r1'5v*v.30'p74%e0&3r1
+$701'5o'
+'5i' '5v*v.30'" !!!o h16"'5v*v.10'"h16"'5v*v.20'"h16"'5v*v.10'"h16"[3
+'6i' '6v*v.20'" !!!o i8"
+'5i' '5v*v.10'" !!!o h16h16"]
+;701
+
+
+{7}
+'7v*v1.00'
+'7i' p64%e0r1r1r1r1'7v*v1.00'
+'7i' p64%e0&3r1
+$801'7o'" !!!o j8j8"r2r4
+;801
+

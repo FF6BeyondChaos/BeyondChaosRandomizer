@@ -1,0 +1,114 @@
+#TITLE In Search of Light
+#ALBUM Final Fantasy V
+#COMPOSER Nobuo Uematsu
+#ARRANGED Gi Nattak
+
+# Converted from binary by mfvitools
+
+#WAVE 0x20 0x0E
+#WAVE 0x21 0x0D
+#WAVE 0x22 0x02
+#WAVE 0x23 0x14
+#WAVE 0x24 0x12
+#WAVE 0x25 0x16
+
+
+{1}
+l16t140%b0,70%f0,0%v32%x224p40|0m12,20,201%e1o7g+r8.a+r4r48a24r24a24r24a24r24a24r24a24r24  
+ $1 v115r2r6>d24r24f24r24d24r24f24r24  a2^6f24r24a24r24f24r24a24r24  
+<c4>a6f12c4.^24>a12  a+4<a2^4  ^2^4r4  r2r6d24r24f24r24d24r24f24r24  
+a2^6f24r24a24r24f24r24a24r24  <c4>a6f12d4.^24d12  d+4a+2^4  ^2^4r4  
+v85r1  r1  r2f2  g2a2  
+a+1  ^1  f+1  ^1  
+v100g12f12g12g+12g12f12a+12g+12a+12<c12>a+12g+12  <d8c24d12d+12d12c12f12d+12d12g12f12d+12  
+v115d2c+4>b4  f+2b2  a+1  ^1  
+<
+;1
+
+l16
+{2}
+l16v115p50|0m12,20,195%e1o7d+r8.fr4r48e24r24e24r24e24r24e24r24e24r24  
+ $2 v100p50|0m12,20,195%e1o4r2r6a24r24a24r24a24r24a24r24  <d2^6d24r24d24r24d24r24d24r24  
+f4c6>a12f4.^24f12  f4<c2^4  ^2^4r4  r2r6>a24r24a24r24a24r24a24r24  
+<d2^6d24r24d24r24d24r24d24r24  f4c6>a12f4.^24f12  a+4<d+2^4  ^2^4r4  
+v90p50|1m24,20,199%e1o6d1  c+2d4e4  >a1  ^1  
+<d+1  d2d+4f4  v75d1  ^1  
+>d+12d12d+12f12d+12d12g12f12g12g+12g12f12  a+8g+24a+12<c12>a+12g+12<d12c12>a+12a+12g+12g12  
+f+1  ^2b2  a+1  v90d12d+12f12g12f12d+12e12f12g12a+12a12g12  
+
+;2
+
+l16
+{3}
+l16v115p60|0m12,20,195%e1o5c+r8.d+r4r48d24r24d24r24d24r24d24r24d24r24  
+ $3 v75p60|1m12,20,195%e1d12e12f12a12g12f12d12e12f12a12g12f12  d12e12f12a12g12f12d12e12f12a12g12f12  
+c12e12f12a12g12f12c12e12f12a12g12f12  d12c12d12e12d12e12f12e12f12g12f12g12  
+f12e12f12g12f12g12a12g12f12g12f12e12  d12e12f12a12g12f12d12e12f12a12g12f12  
+d12e12f12a12g12f12d12e12f12a12g12f12  c12e12f12a12g12f12c12e12f12a12g12f12  
+d+12c+12d+12f12d+12f12f+12f12f+12g+12f+12g+12  f+12f12f+12g+12f+12g+12a+12g+12f+12g+12f+12f12  
+f1  e2d2  c1  ^1  
+d+1  d2c2  >b1  ^1  
+a+2<d+2  >a+2<d+2  d2e2  d2c+2  
+d1  v90>a+12<c12d12d+12d12c12c12d12e12g12f12e12  
+;3
+
+l16
+{4}
+l16v75p70|1m24,20,199%e1o5d+r8.fr4r48e24r24e24r24e24r24e24r24e24r24  
+ $4 >f12g12a12<c12>b12a12f12g12a12<c12>b12a12  f12g12a12<c12>b12a12f12g12a12<c12>b12a12  
+f12g12a12<c12>a+12a12f12g12a12<c12>a+12a12  f12e12f12g12f12g12a12g12a12a+12a12a+12  
+a12g12a12a+12a12a+12<c12>a+12a12a+12a12g12  f12g12a12<c12>b12a12f12g12a12<c12>b12a12  
+f12g12a12<c12>b12a12f12g12a12<c12>b12a12  f12g12a12<c12>a+12a12f12g12a12<c12>a+12a12  
+f+12f12f+12g+12f+12g+12a+12g+12a+12<c12>a+12<c12  >a+12g+12a+12<c12>a+12<c12c+12c12>a+12<c12>a+12g+12  
+<a1  ^2^4g4  f1  ^1  
+g1  ^1  v90<<d2c+4>b4  f+2b2  
+a+1  ^1  <d2c+4>b4  f+2b2  
+a+1  ^1  >
+;4
+
+l16
+{5}
+l16v75p80|1m12,20,195%e1o4g+r8.a+r4r48a24r24a24r24a24r24a24r24a24r24  
+v125p80|2m12,20,195%e0 $5 o6d6r12>a6r12<d6r3  d6r12>a6r12<d6r3  
+f6r12c6r12f6r12c6r12  >a+6r12<f6r12>a+6r12<f6r12  >a+6r12<f6r12c6r12g6r12  
+d6r12>a6r12<d6r3  d6r12>a6r12<d6r3  f6r12c6r12f6r12c6r12  d+6r12>a+6r12<d+6r12>a+6r12  
+<d+6r12>a+6r12<d+6r12>a+6r12  <d6r12>a6r12<d6r12>a6r12  <d6r12>a6r12<d6r12>a6r12  
+<f6r12c6r12f6r12c6r12  f6r12c6r12f6r12c6r12  d+6r12>a+6r12<d+6r12>a+6r12  
+<d+6r12>a+6r12<d+6r12>a+6r12  b6r12<f+6r12>b6r12<f+6r12  >b6r12<f+6r12>b6r12<f+6r12  
+d+6r12>a+6r12<d+6r12>a+6r12  <d+6r12>a+6r12<d+6r12>a+6r12  b6r12<f+6r12>b6r12<f+6r12  
+>b6r12<f+6r12>b6r12<f+6r12  >a+6r12<f6r12>a+6r12<f6r12  >a+6r12<f6r12c6r12g6r12  
+
+;5
+
+l16
+{6}
+l16p65|3r1   $6 o5[2[2v100a4a12a12a12a2  ]v100a4a12a12a12a6a12v48,25a24a24a24a24a24a24  
+v100a4a12a12a12a2  a4a12a12a12a6a12v48,25a24a24a24a24a24a24  ][6v100a4a12a12a12a4v48,25a24a24a24a24a24a24  
+v100a4a12a12a12a2  ]v100a4a12a12a12a4v48,25a24a24a24a24a24a24  v100a4a12a12a12a12a12a12a12a12a12  
+
+;6
+
+l16
+{7}
+l16v100p85|4r2o5a2   $7 ^2^4a4  ^2^4a4  ^1  
+r1  r4a2a4  ^2^4a4  ^2^4a4  
+^1  r1  r4a2a4  ^1  
+^2^4a4  ^1  ^2^4a4  ^1  
+^2^4a4  ^1  ^2^4a4  ^1  
+^2^4a4  ^1  ^2^4a4  ^1  
+^4a4^4a4  
+;7
+
+l16
+{8}
+l16v125p50|5%e1o3g+4a+4^12a12a12a12a12a12  
+ $8 <d4>a4<d2  d4>a4<d2  f4c4f4c4  >a+4<f4>a+4<f4  
+>a+4<f4c4g4  d4>a4<d2  d4>a4<d2  f4c4f4c4  
+d+4>a+4<d+4>a+4  <d+4>a+4<d+4>a+4  <d4>a4<d4>a4  <d4>a4<d4>a4  
+<f4c4f4c4  f4c4f4c4  d+4>a+4<d+4>a+4  <d+4>a+4<d+4>a+4  
+b4f+4b4f+4  b4f+4b4f+4  <d+4>a+4<d+4>a+4  <d+4>a+4<d+4>a+4  
+b4f+4b4f+4  b4f+4b4f+4  a+4f4a+4f4  a+4f4<c4>g4  
+
+;8
+
+l16

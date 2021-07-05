@@ -1,0 +1,117 @@
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x21 0x60 harp
+#WAVE 0x22 0x64 contrabass
+#WAVE 0x23 0x1B snare
+#WAVE 0x24 0x2C clash cymbal
+#WAVE 0x25 0x5B timpani
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v100
+#def 2f= v1,100
+
+#def 3i=   |3
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |4
+#def 4v=   v100
+#def 4f= v1,100
+
+#def 5i=   |5
+#def 5o=   o5
+#def 5v=   v100
+#def 5f= v1,100
+
+## auto percussion  0x23
+#drum "h"= 5a
+## auto percussion  0x24
+#drum "i"= 5a
+
+
+{1}
+%b0,80%f0,0%v50'0v*v.60'
+'0i' p40%e1t85'0o'b4b12b12b12t75b8t65b8t55b8t75<c+2^4.r8t85d4d12d12d12
+t75d8t65d8t55d8t75e2t50^4.r8t70f+8d8a8g16f+16e8c+8g8f+16e16d16c+16d16e16
+f+16e16d16c+16>b2b16a16b16<c+16d16c+16>b16a16t96,30g2'0v*v.40't75f+24r48
+r16a+24r48r16<c+24r48r16r4t80>f+8a+8<c+8'0v*v.45't75>f+24r48r16b24r48r16
+<d24r48r16r4t80>f+8b8<d8'0v*v.50't75>a24r48r16<c+24r48r16e24r48r16r4t80
+>a8<c+8e8'0v*v.55't75>a24r48r16<d24r48r16f+24r48r16r4t80>a8t70<d8t60f+8
+'0v*v.60't70g2f+2^1t115'1v*v.60'
+'1i' p64%e1'1o+o1'd2>g2<d2>g2<d2>g2<d2>g2b2g2b2g2b2g2b2g2<d2>g2<d2>g2<
+d2>g2<d2>g2b2g2b2g2b2g2t144,75b2g2t85'0v*v.60'
+'0i' p40%e1'0o'b16r8.b16r8.b16r8.<c4>b16r8.b16r8.b16r8.a4a+4b4<d4.c+8c1
+>a+4b4<d4.c+8c1t95>b16r16<b16r2r4r16d16d16d16d2^8.r8e16e16e16e2^16t75^8
+r8;
+
+{2}
+'0v*v.60'
+'0i' p50%e1'0o'f+4f+12f+12f+12f+8f+8f+8g2^4.r8a4a12a12a12a8a8a8<c+2^4.
+r8>a4f+8g16a16<c+8>a8e8f+16g16f+1g4f+4e2'0v*v.40'>a+24r48r16<c+24r48r16
+f+24r48r16r4>a+8<c+8f+8'0v*v.45'>b24r48r16<d24r48r16f+24r48r16r4>b8<d8
+f+8'0v*v.50'c+24r48r16e24r48r16a24r48r16r4c+8e8a8'0v*v.55'd24r48r16f+24
+r48r16a24r48r16r4d8f+8a8'0v*v.60'a+1^1'1v*v.60'
+'1i' p64%e1'1o'r8>b2<e4.^8>b2<e4.^8>b2<e4.^8>b2<e4.r8>g2<c+4.^8>g2<c+4.
+^8>g2<c+4.^8>g2<c+4.r8>b2<e4.^8>b2<e4.^8>b2<e4.^8>b2<e4.r8>g2<c+4.^8>g2
+<c+4.^8>g2<c+4.^8>g2<c+4.'0v*v.60'
+'0i' p50%e1'0o'g16r8.g16r8.g16r8.a4f+16r8.f+16r8.f+16r8.f+4e1^1e1^1f+16
+r16<f+16r2r4r16>g+16g+16g+16g+2^8.r8<c+16c+16c+16c+2^8.r8;
+
+{3}
+'0v*v.60'
+'0i' p60%e1'0o'd4d12d12d12d8d8d8e2^4.r8f+4f+12f+12f+12f+8f+8f+8a2^4.r8
+d2c+4>a+4b2b16a+16b16<c+16d16c+16>b16a16g2e16d+16e16f+16g16f+16e16d16'0v*v.40'
+c+24r48r16f+24r48r16a+24r48r16r4c+8f+8a+8'0v*v.45'd24r48r16f+24r48r16b24
+r48r16r4d8f+8b8'0v*v.50'e24r48r16a24r48r16<c+24r48r16r4>e8a8<c+8'0v*v.55'
+>f+24r48r16a24r48r16<d24r48r16r4>f+8a8<d8'0v*v.60'e1^1'1v*v.60'
+'1i' p64%e1'1o'r4f+2<c+4^4>f+2<c+4^4>f+2<c+4^4>f+2<c+4r4>f+2a4^4f+2<c+4
+^4>f+2a4^4f+2<e4r4>f+2<c+4^4>f+2<c+4^4>f+2<c+4^4>f+2<c+4r4>f+2a4^4f+2<
+c+4^4>f+2a4^4f+2<e4'0v*v.60'
+'0i' p60%e1'0o'e16r8.e16r8.e16r8.e4d+16r8.d+16r8.d+16r8.d+4>g1^1g1^1<c16
+r16<c16r2r4r16>f16f16f16f2^8.r8g16g16g16g2^8.r8;
+
+{4}
+'2v*v.70'
+'2i' p90%e1'2o'b4b12b12b12b8b8b8a+2^4.r8a4a12a12a12a8a8a8g2^4.r8f+4d4g4
+f+4b2^4a4g1r1r1r1r1f+1^1'1v*v.60'
+'1i' p64%e1r4.'1o'd2c+8^4.d2c+8^4.d2c+8^4.d2c+8r4.>b2<e8^4.>b2<e8^4.>b2
+<e8^4.>b2<e8r4.d2c+8^4.d2c+8^4.d2c+8^4.d2c+8r4.>b2<e8^4.>b2<e8^4.>b2<e8
+^4.>b2r8'2v*v.70'
+'2i' p90%e1'2o'e16r8.e16r16f+8g16r8.a4b16r8.b16r16<c+8d+16r8.f+4e2d2c2
+>a+4g4e2g2a2a+2b16r16>b16r2r4r16<b16b16b16b2^8.r8a+16a+16a+16a+2^8.r8;
+
+
+{5}
+r2r4.r1r2r4.r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1
+r1r1r1r1r1r1;
+
+{6}
+
+'3i' p70%e1'3o'[%g0'3v*v.40'" !!!o h4h12h12h12h8h8h8h4"'3f*v48,.10'%g1
+[12"h48"]r2]r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1
+r1r1'3v*v.40'"h8h8"r2r4"h16h16h16h16"r2r4"h16h16h16h16"r2r4;
+
+{7}
+'4v*v.80'
+'4i' p40%e1r2r4.r2'4o-o1'" !!!o i2"^2^4.^2"i2"^1r1r1r1r1r1r1r1"i1"^1r1
+r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r8"i2"^4^8^8."i16"^2^4^8."i16"^2
+^4;
+
+{8}
+'5v*v1.20'
+'5i' p64%e1'5o-o2'b4b12b12b12b8b8b8a+1a4a12a12a12a8a8a8g1r1r1r1r1r1r1r1
+'5f*v144,.10'[36f+48]r4r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1r1'5v*v1.20'
+b8b8'5f*v144,.10'[24b32]r1r1;
+;

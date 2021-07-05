@@ -1,0 +1,266 @@
+#TITLE Take Up the Cross
+#ALBUM Tales of Phantasia
+#COMPOSER Motoi Sakuraba, Shinji Tamura
+#ARRANGED emberling
+
+########## ------------------
+#SHORTNAME ToP Take Up the &
+
+#WAVE 0x20 0x96 clari
+#WAVE 0x21 0x81 trumpet
+#WAVE 0x22 0xC2 sawtooth
+#WAVE 0x23 0x75 vox
+#WAVE 0x24 0xC3 warm pad
+#WAVE 0x25 0x60 harp
+#WAVE 0x26 0x56 sbass
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x4A toms
+#WAVE 0x2B 0x3B hihat
+#WAVE 0x2C 0x2D crash
+
+#def init= t158 %x255 %v40 %b0,100 %f0,0
+
+#def clari= |0 o5 'c' %e1 m48,18,215 %r4
+#def tpet=  |1 o5 't' %e1 m %y3%s5%r5
+#def saw=   |2 o5 's' %e1 m48,18,199 %r3
+#def vox=   |3 o4 'v' %e1 m %a8
+#def warm=  |4 o4 'w' %e1 m %a7%r4
+#def harp=  |5 o5 'h' %e1 m %y5%s1
+#def bass=  |6 o7 'b' %e0 m
+
+#def c= v64
+#def t= v85
+#def s= v64
+#def v= v48
+#def w= v56
+#def h= v64
+#def b= v80
+
+#def vf= v1,48
+#def hf= v1,64
+
+#def vtom= v56
+#def vkick= v88
+#def fkick= v1,88
+#def vsnare= v88
+#def vhat= v88
+
+#drum "j"= 5a |8 p64 %e0
+#drum "k"= 5a |8 p64 %e0 'vkick*v1.2'
+#drum "l"= 5a |8 p64 %e0 'vkick*v1.27'
+
+#drum "r"= 6c |9 p64 %e1 'vsnare*v1.13'
+#drum "s"= 6c |9 p64 %e1 'vsnare*v1.27'
+
+#drum "t"= 5g+ |A p88 'vtom*v1.27'  %e0
+#drum "u"= 5e  |A p64 'vtom*v1.27'  %e0
+#drum "v"= 4b  |A p48 'vtom*v1.27'  %e0
+#drum "t-"= 5g+ |A p88 'vtom*v1.13' %e0
+#drum "u-"= 5e  |A p64 'vtom*v1.13' %e0
+#drum "v-"= 4b  |A p48 'vtom*v1.13' %e0
+
+#drum "h"= 6d+ |B p88 'vhat*v1.07' %e0 %r21
+#drum "i"= 6d+ |B p88 'vhat*v1.27' %e0 %r21
+
+#drum "y"= 5a |C p64 %y4%s3%r11 v96 %e1
+#drum "z"= 5a |C p64 %r25 %e1 v127
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} 'init'
+'vox*v.8' p64 l4
+'vf*v192,1.06' ag+<c>b
+'vf*v192,1.25' <ed+gf+
+$## 3
+'clari*v1.04' p58 l8
+ef+g4.ef+g  a4.f+4d4f+   e1....r16
+ef+g4.ef+g  a4.f+4d4<c>  b1....r16
+## 11
+'tpet*v1.27' p64 l16
+[arbr<crer d8c8>b8a8    grarbr<dr c8>b8a8g8
+ (fg)a4.(ga)b4. j2 (ab)<c4.> (b<c)d4.>] l8 g+.a.b <e.>b.g+
+## 19
+['clari*v1.17' p58 l2
+a1 gb  <c1 d>b    a1 gb  <j2c1
+'saw*v1.01' p64 a2b2]
+c+1^1
+##35
+'saw*v1.23' p64 l8
+[g4.a4.b4.a4.gf+ga  f+1g2f+2]
+## 43
+e4.b16.r32b.a.g  f+4.<d16.r32d.c.>b
+g.b.<d c+.e.a  f.c.>a b.<d.g>
+[4 a.<c.f24^32r48^32>]
+g+b<d>b<dfg+b
+;
+
+{2}
+'vox*v.8' p64 l4
+'vf*v192,1.06' feag+
+'vf*v192,1.25' <c>b<ed+
+$## 3
+'clari*v.96-o1' p78 l8
+b<de4.>b<de  f+4.d4>a4<d  >b1....r16
+b<de4.>b<de  f+4.d4>a4<a  g1g+2...r16
+## 11
+'vox*v1.2+o1' p64 l2
+c1> b1  ab ag   a1 b1  <c>b b<e
+## 19
+['warm*v1.1+o1' p64 l2
+c1> bg  a1 gb    <c1> bg  a1 j2
+'saw*v1.01-o1' p64 f2g2] ^1
+##35
+'saw*v1.23' p64 l8
+[e4.f+4.g4.f+4.edef+  d1 j2 e2d2] >b2b2<
+## 43
+c4.g16.r32g.f+.e  d4.a16.r32a.a.a
+d.g.b a.<c+.e  c.>a.f g.b.<d>
+[4 f.a.<c24^32r48^32>]
+'clari*v1.04+o1' p58 l16
+fd>bg+ <d>bg+f bg+fd g+fd>b
+;
+
+{3}
+'bass*v1.27-o3' p64
+l4 ag+<c>b    <ed+ l8 >b<b>b< l16 bb>
+$## 3
+[e8e8<e>eb<e>] <d8d8>a<dad d8d8>agf+f
+[6 e8e8<e>eb<e>] <d8d8>a<dad d8d8>aaa+b
+[4 e8e8<e>eb<e>]
+## 11
+l16 [a8a8<a>a<ea>] [g8g8<g>g<dg>]
+l8 <fcfcgd>g<g  d>a<d>a <e>b<e>b
+l16 [f8f8<f>f<cf>] [g8g8<g>g<dg>]
+l8 f<f>f<f> g<g>g<g> g+<g+>g+<g+> e<e>e<e>
+## 19
+l16 [[3 [4a8<aa>]%k-4[4b8<bb>]]%k0 j2,433
+[4a8<aa>][f8<ff>][g8<gg>]]
+$433 [8a8<aa>]
+##35
+l8 [14e<e>]<dddd
+[16c][8d]d+d+d+d+ >bb<b>b16b16
+## 43
+l16 < [4 c8<cc>] [4 d8<dd>] >
+[16 g8] [8 g8<g8>]
+<bg+fd g+fd>b <fd>bg+ bg+fg+
+;
+
+{4}
+'fkick*v168,1.19' [8"j8"]
+l16 "tt-tt-uu-uu-vv-vv- ssss"
+$## 3
+[4 "!!!o k8k8s8.k k8k8"j4"s8kk"]"srss"
+[4 "!o k8k8s8.k" j4 "k8k8s8kk"] "tt-tt-uuvv"
+## 11
+[3 "!!!o l8l8s4 ls8ls8s8" "l8l8s8."j2,414"^16 ls8.s4"]
+[3"l4s4"] "l8.lssrs"
+## 19
+[[7"l8l8s4"]"l8l8ssss"
+ [6"l8l8s4"]j2"s8l8s4 s8l8s8ss"]
+ "s4s8.lttuuvvss"
+##35
+[[4"k8.ks4" "k8k8"j4"s4"] j2":k:s8s8"] ":k:ssss"
+## 43
+["k4s4k8.ks4"]
+[4"!o k8k8s8.k k8k8s8kk"]
+"tt-tt-uu-uu-vv-vv-srsr"
+;
+
+$414 l16 ":s:"
+     "s8sl8ttuv" ]
+     
+{5}
+'harp*v1.04+o1' p48 l16
+'hf*v192,1.35' c>aea bg+eg+  <d+c>a<c d>bg+b<
+'hf*v192,1.65' ec>a<c d+>bf+b<  ge>b<e f+d+>b<d+
+$## 3
+'harp*v1.27-o1' p64 l16
+[[ b<egbegb<e>gb<eg>b<egb j2>>  a<df+adf+a<d>f+a<df+>a<df+a>>] j2
+eg>b<e>gbeg>b<egbge>bg] g+beg+>b<e>g+beg+>b<e>g+b<eg+
+## 11
+'vox*v1.2' p64 l2
+e1 d1  cd fe    f1 g1  ag g+b
+## 19
+['harp*v1.27-o1' l16
+[a<ceacea<c>ea<ce>a<cea>> j2 b<dgbdgb<d>gb<dg>b<dgb>>]
+b<dgbdgb<d>> b<dgb<d>bgd>    a<cfa[cfa<c>]fa<ce>>
+b<dgbdgb<d> gb<dgd>bgd>  j2  ab<ce>b<cea eab<cec>ba
+'saw*v1.01' p64 c2d2]
+a<c+eac+ea<c+>ea<c+e>a<c+ea   eac+e>a<c+>eac+e>a<c+ea<c+e
+##35
+[14e>beb<][f+d>f+<d]
+[8gc>g<c][4f+d>f+<d][g>bgb<]f+d+>bf+d+>b<d+f+
+## 43
+'vox*v1.1+o1' p64 e1d1
+'harp*v1.65' p64 l16
+dgb<d>gb<dg> ea<c+e>a<c+ea>
+cfa<c>fa<cf> dgb<d>gb<dg
+[facf>a<c>fa<]
+afcfc>a<c>a fa<cf>a<cfa
+'saw*v1.23' p64 l8
+dfg+f g+b<df
+;
+
+{6}
+r1r1
+$## 3
+l8 "zh"[7"ih"]
+   "zh"[6"ih"]^4
+   "zh"[7"ih"]
+   "zh"[5"ih"]^2
+## 11
+   "zh"[7"ih"]
+   "zh"[6"ih"]^4
+   "zh"[7"ih"]
+   "zh"[3"ih"]"zh"["ih"]^4
+## 19
+"!o"
+  ["zh"[7"ih"]
+   "zh"[6"ih"]^4
+   "zh"[7"ih"]
+   "zh"[3"ih"]"zhih"j2"z4z4"]^2
+##35
+[":h: z"[15"!o hi"]^]
+## 43
+[3 "!ozh"[7"ih"] ] "z1"
+;
+
+{7}
+r1r1
+$## 3
+'clari*v.83' p78 l8 &11r
+ef+g4.ef+g  a4.f+4d4f+   e1....r16
+ef+g4.ef+g  a4.f+4d4<c>  b1....r16
+## 11
+'tpet*v.65' p58 l16
+[arbr<crer d8c8>b8a8    grarbr<dr c8>b8a8g8
+ fga4.gab4. j2 ab<c4.> b<cd4.>] l8 g+.a.b <e.>b.g+
+## 19
+['clari*v.93' p58 l2
+a1 gb  <c1 d>b    a1 gb  <j2c2..  r8r1] c+1^1
+##35
+&181 [8r1]
+## 43
+'vox*v1.1' p64 g1f+1
+r1r1r1r1
+'clari*v1.04+o1' p58 l16
+d>bg+f bg+fd g+fd>b <fd>bg+
+;
+
+{8}
+r1r1
+$## 3
+[7 "y1^1"]
+## 11
+#^
+"y1y1"
+## 19
+[3"y1^1"]"y1y2y4y4"
+[3"y1^1"]"y1y1"
+##35
+["y1^1^1^1"]
+## 43
+[3"y1^1"]"y1"
+;

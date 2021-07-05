@@ -1,0 +1,317 @@
+#TITLE Techno de Chocobo
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.5
+
+########## ------------------
+#SHORTNAME FF6 Techno d'Choco
+
+##WAVE 0x02 0x00
+##WAVE 0x03 0x00
+##WAVE 0x04 0x00
+##WAVE 0x05 0x00
+#WAVE 0x20 0x41 dist
+#WAVE 0x21 0xB4 organ
+#WAVE 0x22 0x55 bass
+#WAVE 0x23 0x3A c.hihat
+#WAVE 0x24 0x3C o.hihat
+#WAVE 0x25 0x6B shaker
+#WAVE 0x26 0x1C snare
+#WAVE 0x27 0x0A kick
+#BRR 0x28; ../samples/legacy/27_synth_1          , 0000, 43D0, FFE0
+#BRR 0x29; ../samples/legacy/28_synth_2          , 0000, 4300, FFE0
+#BRR 0x2A; ../samples/legacy/29_synth_3          , 0000, 4300, FFE0
+#WAVE 0x2B 0xD6 ff7moog1
+
+#def 2@i=   |B
+#def 2@o=   o6
+#def 2@v=   v200
+#def 2@f= v1,200
+
+#def 3@i=   @3
+#def 3@o=   o5
+#def 3@v=   v90
+#def 3@f= v1,90
+
+#def 4@i=   @4
+#def 4@o=   o5
+#def 4@v=   v90
+#def 4@f= v1,90
+
+#def 5@i=   @5
+#def 5@o=   o5
+#def 5@v=   v90
+#def 5@f= v1,90
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v90
+#def 0f= v1,90
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v90
+#def 1f= v1,90
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v90
+#def 2f= v1,90
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v90
+#def 3f= v1,90
+
+#def 4i=   |4
+#def 4o=   o5
+#def 4v=   v90
+#def 4f= v1,90
+
+#def 5i=   |5
+#def 5o=   o5
+#def 5v=   v90
+#def 5f= v1,90
+
+#def 6i=   |6
+#def 6o=   o5
+#def 6v=   v90
+#def 6f= v1,90
+
+#def 7i=   |7
+#def 7o=   o5
+#def 7v=   v90
+#def 7f= v1,90
+
+#def 8i=   |8
+#def 8o=   o5
+#def 8v=   v90
+#def 8f= v1,90
+
+#def 9i=   |9
+#def 9o=   o5
+#def 9v=   v90
+#def 9f= v1,90
+
+#def Ai=   |A
+#def Ao=   o5
+#def Av=   v90
+#def Af= v1,90
+
+## auto percussion  0x23
+#drum "h"= 5e
+#drum "i"= 5f
+#drum "j"= 5f+
+#drum "k"= 5g
+#drum "l"= 5g+
+#drum "m"= 5a
+#drum "n"= 5b
+#drum "o"= 6c
+#drum "p"= 6c+
+#drum "q"= 6d
+#drum "r"= 6d+
+#drum "s"= 6e
+## auto percussion  0x24
+#drum "t"= 5e
+#drum "u"= 5g
+#drum "v"= 5a
+#drum "w"= 5a+
+#drum "x"= 6c+
+#drum "y"= 6e
+## auto percussion  0x25
+#drum "z"= 5g+
+## auto percussion  0x26
+#drum "h+"= 5a
+## auto percussion  0x27
+#drum "i+"= 5a
+## auto percussion  0x28
+#drum "j+"= 4a
+#drum "k+"= 5a
+## auto percussion  0x29
+#drum "l+"= 4a
+#drum "m+"= 5a
+## auto percussion  0x2A
+#drum "n+"= 4e
+#drum "o+"= 4f
+#drum "p+"= 4f+
+#drum "q+"= 4g
+#drum "r+"= 4g+
+#drum "s+"= 4a
+
+
+{1}
+t130%x232%b0,100%f0,0%v50'8v*v1.00'p64%e1'8o-o1'
+'8i' " !!!o j+8"
+'9i' '9v*v1.00'" !!!o l+8"
+'Ai' 'Av*v1.00'" !!!o s+8"^8r1r1'8o-o1''8v*v1.20'
+'8i' " !!!o j+8"
+'9i' '9v*v1.20'" !!!o l+8"
+'Ai' 'Av*v1.20'" !!!o s+8"r8r2r1
+$101'2@v*v.60'
+'2@i' p64%e1m48,24,239['2@o+o1'd16r8.>b8g8e8<d16r16>b16r16g16r16b16r8.
+g16r8.b4.a8g16r16g16a16g16r16f16r16g4.f8g16r16g16b16<d16r16e16r16f2]e16
+r8.c8>a8f+8a16r16<c16r16e16r16d16r8.g16r8.d4.>b8<c16r8.>a8f+8d8f+16r16
+a16r16<c16r16>b16r16b16<c16>b16r16a16r16b2<e16r8.c8>a8f+8a16r16<c16r16
+e16r16d16r8.g16r8.d4.>b8a16r16a16b16a16r16g16r16a4.g8a16r16a16b16<c16r16
+d16r16e16r8.f+4'8v*v1.20'p64%e1'8v*v1.20'
+'8i' '8o-o1'p40" !!!o j+4"'8o''8v*v.70'p110"k+4"'9v*v1.20'
+'9i' '9o-o1'p90" !!!o l+4"'9o''9v*v.70'p20"m+4"
+'Ai' 'Ao-o1''Av*v1.20'p100p192,20" !!!o s+6"'Av*v1.10'"r+6"'Av*v1.00'"q+6
+"'Av*v.90'"p+6"'Av*v.80'"o+6"'Av*v.70'"n+6"'8v*v1.20'
+'8i' '8o-o1'p40" !!!o j+4"'8o''8v*v.70'p110"k+4"'9v*v1.20'
+'9i' '9o-o1'p90" !!!o l+4"'9o''9v*v.70'p20"m+4"'Av*v1.20'p64
+'Ai' 'Ao-o1'" !!!o s+4"r4
+'8i' '8v*v1.20'" !!!o j+8"
+'9i' '9v*v1.20'" !!!o l+8"
+'Ai' 'Av*v1.20'" !!!o s+8"r8
+;101
+
+
+{5}
+r2'5@v*v.40'
+'5@i' p44
+$201%e1[4'5@o+o1'd16r16g16r16>b16r16<d16c16r16f16r16f16>a16r16<c16r16]
+[8d16r16g16r16>b16r16<d16c16r16f16r16f16>a16r16<c16r16]%e1e16c16g16e16
+c16>g16e16c16<f+16d16a16f+16d16>a16f+16d16<g16d16b16g16d16>b16g16d16<g16
+d16b16g16d16>b16g16d16<e16c16g16e16c16>g16e16c16<f+16d16a16f+16d16>a16
+f+16d16<g16d16b16g16d16>b16f+16d16<g16d16b16g16d16>b16g16d16<e16c16g16
+e16c16>g16e16c16<f+16d16a16f+16d16>a16f+16d16<g16d16b16g16d16>b16g16d16
+<g16d16b16g16d16>b16g16d16<a16a16c16r16a16r16c16a16r16a16c16r16a16r16c16
+r16a16r16>a16r16<g16r16>a16<f+16r16f+16>a16r16<f+16r16>a16r16
+;201
+
+
+{8}
+r2
+'5@i' p84
+$301'5@v*v.20'%e1r16r32'5@o+o1'd16r16g16r16>b16r16<d16c16r16f16r16f16>
+a16r16<c32[3^32r16d16r16g16r16>b16r16<d16c16r16f16r16f16>a16r16<c32][8
+^32r16d16r16g16r16>b16r16<d16c16r16f16r16f16>a16r16<c32]'5@v*v.40'%e1c16
+>g16<e16c16>g16e16c16>g16<<d16>a16<f+16d16>a16f+16d16>a16<<d16>b16<g16
+d16>b16g16d16>b16<<d16>b16<g16d16>b16g16d16>b16<<c16>g16<e16c16>g16e16
+c16>g16<<d16>a16<f+16d16>a16f+16d16>a16<<d16>b16<g16d16>b16f+16d16>b16
+<<d16>b16<g16d16>b16g16d16>b16<<c16>g16<e16c16>g16e16c16>g16<<d16>a16<
+f+16d16>a16f+16d16>a16<<d16>b16<g16d16>b16g16d16>b16<<d16>b16<g16d16>b16
+g16d16>b16<<f16f16>a16r16<f16r16>a16<e16r16e16>a16r16<e16r16>a16r16<d16
+r16>f+16r16<d16r16>f+16<c16r16c16>f+16r16<c16r16>f+16r16
+;301
+
+
+{2}
+r2
+$402[3'3@v*v.50'
+'3@i' '3@o-o1'%e1[4p64p96,124m96,22a2p64p96,0m96,22a2]['0v*v.50'
+'0i' '0o'%e1p24b16b16r16b16b8'1v*v.50'
+'1i' '1o'%e0p104d16e16f16r16f8e24f24e24d8'0v*v.50'
+'0i' '0o'%e1p24g4d4'1v*v.50'
+'1i' '1o'%e0p104r8'1v*v.50'c64'1v*v.20'^64'1v*v.50'^64'1v*v.20'^64'1v*v.50'
+^64'1v*v.20'^64'1v*v.50'^64'1v*v.20'^64'1v*v.50'^64'1v*v.20'^64'1v*v.50'
+^64'1v*v.20'^64'1v*v.50'^64'1v*v.20'^64'1v*v.50'^64'1v*v.20'^64'1v*v.50'
+^64'1v*v.20'^64'1v*v.50'^64'1v*v.20'^64'1v*v.50'^64'1v*v.20'^64'1v*v.50'
+^64'1v*v.20'^64'0v*v.50'
+'0i' '0o'%e1p24b16b16b16b16b8'1v*v.50'
+'1i' '1o'%e0p104g16r16f8a16d4^16'0v*v.50'
+'0i' '0o'%e1p24g16m60,-8^4^16'1v*v.50'
+'1i' '1o'%e1p104d16c16>b16g16a16<c16>b8a8]j3,401r1r1r1r1r1r1'4@v*v.60'
+
+'4@i' %r25p84r8'4@o-o1'g16g16g8p64d16d8d8d16p44>a8a8r1]
+$401p0'3@v*v.30''3@o+o1'
+'3@i' %e0m0,8,223r2g16r16g16r16b16r8.g16r8b16r16g16r16g16r16b16r4.'3@v*v.30'
+'3@o'
+'3@i' [4'3@v*v.30'g8.m3,-72'3@v*v.15'b64r64r32r8]'3@v*v.30''3@o+o1'
+'3@i' %e0m0,8,223g16r16g16r16b16r8.g16r8b16r16g16r16g16r16b16r4.'3@v*v.40'
+'3@o'
+'3@i' [12g48]r2[12g48]'4@v*v.60'
+'4@i' %r25p84r8'4@o-o1'g16g16g8p64d16d8d8d16p44>a8a8r1
+;402
+
+
+{3}
+r2'2v*v.50'
+'2i' p74%e0
+$501'2o'g8r4d16e16f16r8.c4>b16r16<g16r16d16r16e16f16r4c4g8r4d16e16f16r8.
+c4>b16r16<g16r16d16r16e16f16r2[g8r4d16e16f16r8.c4>b16r16<g16r16d16r16e16
+f16r2g8r4d16e16f16r8.c4>b16r16<g16r16d16r16e16f16r2]c16c16c16c16r16c16
+r16c+16d8r8>a4g8g8r4g8g8r4<c16c16c16c16r16c16r16c+16d8r8>a4g8g8r4g8g8r4
+<c16c16c16c16r16c16r16c+16d8r8>a4g8g8r4g8g8r4'3@v*v.60'
+'3@i' %r8m24,-16p84r8'3@o'm24,-16g16m24,-16g16m24,-16g8p64m24,-16d16m24,-16
+d8m24,-16d8m24,-16d16>p44m24,-16a8m24,-16a8'2v*v.50'
+'2i' p74%e0'2o-o1'a8<a8g16>a16r16<f+16r16f+16r16f+16e4
+;501
+
+
+{6}
+r2
+$601'3v*v.40''3o+o1'[p14p192,114
+'3i' '3v*v.40'" !!!o s16r16q16p16o16""n16"
+'4i' '4v*v.40'" !!!o w8"
+'3i' '3v*v.40'" !!!o m16l16"
+'4i' '4v*v.40'" !!!o u8"
+'3i' '3v*v.40'" !!!o j16i16"
+'4i' '4v*v.40'" !!!o t8"p114p192,14
+'3i' '3v*v.40'" !!!o h16i16j16k16l16m16"
+'4i' '4v*v.40'" !!!o w8"
+'3i' '3v*v.40'" !!!o n16""o16"
+'4i' '4v*v.40'" !!!o x8"
+'3i' '3v*v.40'" !!!o q16r16"
+'4i' '4v*v.40'" !!!o y8"]'3v*v.50''3o'[8
+'3i' '3v*v.50'" !!!o m16m16m16m16m16m16"
+'4i' '4v*v.50'" !!!o v8"[
+'3i' '3v*v.50'" !!!o m16m16"
+'4i' '4v*v.50'" !!!o v8"]][3
+'3i' '3v*v.50'" !!!o m16m48m48m48m16m16m16m16"
+'4i' '4v*v.50'" !!!o v8"
+'3i' '3v*v.50'" !!!o m8"
+'4i' '4v*v.50'" !!!o v8"
+'3i' '3v*v.50'" !!!o m4m16m16m16m16"
+'4i' '4v*v.50'" !!!o v8"
+'3i' '3v*v.50'" !!!o m16m16m16"
+'4i' '4v*v.50'" !!!o v16"
+'3i' '3v*v.50'" !!!o m16m16"
+'4i' '4v*v.50'" !!!o v8"
+'3i' '3v*v.50'" !!!o m16m16"][4
+'3i' '3v*v.50'" !!!o m8"
+'4i' '4v*v.50'" !!!o v8"
+'3i' '3v*v.50'" !!!o m16m16"
+'4i' '4v*v.50'" !!!o v8"]
+;601
+
+
+{7}
+r2%e0'3o'
+$701p34'3v*v.00'[4
+'3i' '3v*v.00'" !!!o m16m16m16m16m16m16"
+'4i' '4v*v.00'" !!!o v8"[
+'3i' '3v*v.00'" !!!o m16m16"
+'4i' '4v*v.00'" !!!o v8"]]
+'5i' p94%e0'5o'[64'5v*v.80'" !!!o z8"'5v*v.50'"z16z16"]
+;701
+
+
+{4}
+r2'7v*v1.20'
+'0i' p54%e0'7o'
+$801
+'7i' '7v*v1.20'" !!!o i+4i+4i+4i+4i+4i+4i+4i+4i+4i+4i+4i+4i+4i+4i+16"
+'6i' '6v*v1.20'" !!!o h+8.h+8h+16h+16"[[3
+'7i' '7v*v1.20'" !!!o i+4"
+'6i' '6v*v1.20'" !!!o h+4"
+'7i' '7v*v1.20'" !!!o i+8i+8"
+'6i' '6v*v1.20'" !!!o h+4"]
+'7i' '7v*v1.20'" !!!o i+4"
+'6i' '6v*v1.20'" !!!o h+4"
+'7i' '7v*v1.20'" !!!o i+8i+8"
+'6i' '6v*v1.20'" !!!o h+8h+16h+16"][3
+'7i' '7v*v1.20'" !!!o i+16i+16i+16i+16"
+'6i' '6v*v1.20'" !!!o h+16"
+'7i' '7v*v1.20'" !!!o i+8i+16i+4"
+'6i' '6v*v1.20'" !!!o h+4"
+'7i' '7v*v1.20'" !!!o i+8i+8"
+'6i' '6v*v1.20'" !!!o h+8."
+'7i' '7v*v1.20'" !!!o i+16i+8i+8"
+'6i' '6v*v1.20'" !!!o h+4"]
+'7i' '7v*v1.20'" !!!o i+4i+4i+4i+4i+4i+4i+16"
+'6i' '6v*v1.20'" !!!o h+8.h+8h+16h+16
+";801
+

@@ -1,0 +1,101 @@
+#TITLE Parting
+#ALBUM Lufia and the Fortress of Doom
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#WAVE 0x20 0x70 violin
+#WAVE 0x21 0x95 clari
+#WAVE 0x22 0x34 steel guitar
+#WAVE 0x23 0x35 acoustic bass guitar
+#WAVE 0x28 0xAD fret
+
+#def init= t80 %x160 %v40 %b0,85 %f0,0
+
+#def violin= |0 'v' p80 o5 m24,9,215 %r8
+#def flute= |1 'f' p88 o5 m48,18,239 %r10
+#def guitar= |2 'g' p32 o5 m12,18,192
+#def bass= |3 'b' p56 o6 m
+
+#def v=v80
+#def f=v80
+#def g=v107
+#def b=v107
+
+#cdef ( %l1
+#cdef ) %l0
+
+#drum "f"=5a |8 v127 p56 %r27
+#drum "g"=5f |8 v107 p56 %r26
+#drum "h"=5g- |8 v107 p56 %r27
+
+{1} 'init' %e1 $
+['violin' l8
+rd+(g+b) a+f+4c+    g+4.(f+16g+16)f+2
+%r18^%r8 d+(g+b) a+f+4c+    <d+4.(c+16d+16)(c+>a+4)(b16<c+16)
+## 5
+d+>g+g+<d+c+4>(ba+)   b4a+g+2g+16g+16
+f+b16b.^2f+16f+16   f+<c+16c+16^2>(bj2a+)]<c+)
+## 18
+[d+4.>b<c+4f+4  f+4.(e16d+16)c+4(>b<c+)
+d+4.>b<c+4>(ba+)  j2 g+4(a+4b4)<c+4] g+1
+;
+
+{2} %e0 &2r $
+['bass-o2' l2
+g+f+ef+ g+f+ef+
+## 5
+ef+g+4f+8e8^ b1j2f+.d+4] f+^8f+8g+8a+8
+## 18
+[ba+ ag+  ef+ g+1]
+;
+
+{3} %e1 &1r $
+['guitar-o1' l8
+[g+<d+g+d+> f+<c+f+c+>  eb<e>b f+<c+f+c+>]
+## 5
+eb<e>b f+<c+f+c+> l16 g+<d+g+d+f+re8^2> l8
+>b<f+bf+<c+>f+<d+>f+  >f+<c+f+c+> l16 f+<c+f+a+ j2> a+<d+ga+] c+f+a+<c+>
+## 18
+l8 [>b<f+bf+ >a+<f+a+f+ >a<eae >g+<d+g+d+
+>eb<e>b f+<c+f+c+> g+<d+g+d+ j2 a+d+g+d+] >g+2
+;
+
+{4} %e1 &2r
+'flute' l8 $$5 [
+rd+g+b a+f+4c+    g+4.(f+16g+16)f+2
+%r18^%r8 d+g+b a+f+4c+    <d+4.(c+16d+16)c+>a+4(b16<c+16)
+## 5
+d+>g+g+<(d+c+4)>(ba+)   (b4a+g+2)g+16g+16
+f+b16b.^2f+16f+16   f+<c+16(c+16^2>bj2a+)]<c+)
+## 18
+[(d+4.>b)<c+4f+4  f+4.(e16d+16c+4)(>b<c+)
+d+4.(>b<c+4)>(ba+)  j2 (g+4a+4)(b4<c+4)] g+1
+;
+
+{7} %e1 &14r 'flute*v.6-p24' ;5
+
+{8} %e1 &186 $
+[[5r1] r4"f8g8" ^2 r1 r2r4j2"g4"]"f8g8"
+## 18
+"h1" [7r1]
+;
+
+{6} %e1 &3r $
+'bass*v.55'
+[5r1] [d+4c+8>b8^2 'b*v.4' f+1 j2,616 c+2.>a+4<
+## 9
+l2 [d+c+>b<c+]
+>b<c+ 'b*v.55' <] $616 c+2^8c+8d+8f8
+## 18
+[ba+ ag+  ef+ g+1]
+;
+
+{5} %e1 &4r $
+'bass*v.55'
+[5r1] [g+4f+8e8^2> 'b*v.4' b1 j2 f+2.d+4
+## 9
+l2 g+f+ef+ g+f+ef+
+ef+ 'b*v.55' <] f+2^8f+8g+8a+8
+## 18
+< [f+f+ ed+  >b<c+ d+1]
+;

@@ -1,0 +1,113 @@
+#TITLE Downfall
+#ALBUM Treasure of the Rudras
+#COMPOSER Ryuji Sasai
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#SFXV ` *
+
+#WAVE 0x20 0xA4 flute - piccolo
+#WAVE 0x21 0x62 strings - violins
+#WAVE 0x22 0x34 guitar - steel
+#WAVE 0x23 0x66 strings - fast_violas
+#WAVE 0x24 0x6D jingle_bells
+#WAVE 0x25 0x0C kick - deep
+#WAVE 0x26 0x8B claves
+
+#def 0i=   |0
+#def 0o=   o4
+#def 0v=   v300
+#def 0f= v1,300
+
+#def 1i=   |1
+#def 1o=   o6
+#def 1v=   v127
+#def 1f= v1,127
+
+#def 2i=   |2
+#def 2o=   o6
+#def 2v=   v200
+#def 2f= v1,200
+
+#def 3i=   |3
+#def 3o=   o6
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |4
+#def 4v=   v100
+#def 4f= v1,100
+
+#def 5i=   |5
+#def 5v=   v150
+#def 5f= v1,150
+
+#def 6i=   |6
+#def 6v=   v150
+#def 6f= v1,150
+
+## auto percussion  0x24
+#drum "h"= 5a+
+## auto percussion  0x25
+#drum "i"= 5c
+
+#drum "j"= 5g+ %y6%s2
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+{'Note table: 192 96 48 24 12 8 4'}
+%x255{'27 131'}t120%b0,85%f0,0%v40{'05'}%e1$%k12
+'0i' '0v*v.32'p64%a9%y3%s3%r11m48,18,223r1'0o'^1^1^2^4.>a16<r16d1^2(c+48
+d12^48)r16c8r16>b8a+1<^2>(a48a+8)<r24>a8<r16>f8g1^4<r4>(d+48e8)<r24>f8<r16>g8
+a1<^2^4r8>a16<r16d1^2(d+48e8)r24f8r16c8>a+16<c16>a+1^4<r8>f8.g8<r16>a8g1
+<^2>(a+48e6^16)c6^16<r48>d1<^1[16%k26r8>c16<r16>d16<r16>d+16<r16][8r1];
+
+{6}
+{'05'}%e1$
+%k6'4i''4v' [10 r2 "!!!o h1" ^2]
+'1i' '1v*v.50'p64%a9%y7%s7%r5m48,8,195'1o'[4%k17^8>c16<r16>d16<r16
+>e16<r16][4%k22^8>c16<r16>d16<r16>e16<r16][4%k12^8>f16<r16>g16<r16>c16
+<r16][4%k17^8>c16<r16>d16<r16>e16<r16]
+%k6'4i''4v' [4 r2 "!!!o h1" ^2]
+;
+
+{3}
+{'05'}%e1$
+'1i' '1v*v.75'p64%a9%y7%s7%r5m48,8,195'1o'[%k-22>c1<^1][4%k-26>e1<^1>c1
+<^1>d1<^1>e1<^1];
+
+{4}
+{'05'}%e1$%k0 p64
+'5i' '5v*v.80'" !!!o i8"'5v*v.50'"i8"'5v*v.40'%a9"i8"'5v*v.26'"i8"
+'6i' '6v*v.63'"!!!o j8"'6v*v.50'"j8"v0'6f*v6,.40'"j8"v0'6f*v6,.26'"j8";
+
+*
+{7}
+%e1p94$%k9
+'3i' '3v*v.50'%a10%y7%s7%r8m48,8,195'3o'>c1<^1^1^1[32%k-10>c16<r16][3[16
+%k-5>c16<r16][48%k-10>c16<r16]][16%k-5>c16<r16][16%k-10>c16<r16];*
+
+{2}
+%e1p34$%k14
+'3i' '3v*v.50'%a10%y7%s7%r8m48,8,195'3o'>c1<^1^1^1[16%k-3>c16<r16][16%k-2
+>c16<r16][16%k0>c16<r16][3[32%k-3>c16<r16][16%k-2>c16<r16][16%k0>c16<r16
+]][16%k-3>c16<r16];
+
+*
+{8}
+%e1$%k6
+'4i' '4v*v1.00'
+[20r1]
+[4r2" !!!o h1"^2]
+[8r1]
+;*
+
+{5}
+%e1$
+'2i' '2v*v.50'p64{'AltTuning 12'}%a15%y7%s7%r16m48,18,199'2o'[%k-22>c8g8
+<d8d+4d8>a+8g8<][4[4%k-22>c8g8<d8d+4d8>a+8g8<][%k-24>d8a+8<e8f4e8c8d8]
+>c8g8<e8f4e8c8>g8c8g8<e8f4e8c8>c8<][%k-22>c8g8<d8d+4d8>a+8g8<];
+;

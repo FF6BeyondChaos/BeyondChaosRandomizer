@@ -1,0 +1,259 @@
+#TITLE For the Sky
+#ALBUM Final Fantasy XIV: Heavensward
+#COMPOSER Masayoshi Soken
+#ARRANGED emberling
+
+#WAVE 0x20 0x67 strings
+#WAVE 0x21 0x63 oct strings
+#WAVE 0x22 0x64 contrabass
+#WAVE 0x23 0x84 horn
+#WAVE 0x24 0x86 high horn
+#WAVE 0x25 0xB1 organ
+#WAVE 0x28 0x1A snare
+#WAVE 0x29 0x4C tom
+#WAVE 0x2A 0x7A conga open
+#WAVE 0x2B 0x7B conga slap
+#WAVE 0x2C 0xBA rev.cymbal
+#WAVE 0x2D 0xBB booom
+#WAVE 0x2E 0x9D triangle
+#WAVE 0x2F 0x6C tambourine (anvil)
+
+#def init= t111 %x240 %v40 %b0,100 %f0,0
+
+#def str= |0 's' p52 o5 m24,18,192
+#def ost= |1 's' p32 o5 m
+#def cbs= |2 'c' p60 o7 m
+#def hrn= |3 'h' p64 o5 m24,18,215
+#def trp= |4 't' p88 o5 m48,18,223
+#def org= |5 'o' p80 o5 m12,18,192
+#def tone= @3 'z' p24 o5 m %a14
+
+#def s= v46
+#def c= v110
+#def h= v92
+#def t= v50
+#def o= v64
+#def z= v14
+
+#def sf= v1,46
+
+#def snarefade= v1,74
+
+#def snare= v74 p60          m
+#def triangle= v110 p104     m
+#def anvil= v28 p96          m
+#def boomtown= v74 p64 %r17  m
+#def tomtown= v64 p64        m
+#def noise= v74 p96          m
+#def cslap= v37 p88          m
+#def conga= v37 p88 %r20     m
+#def crash= v55 p80          m
+
+#def vbreak= v74
+#def fbreak= v1,74
+
+#drum "p"=5f |8 'snare*v.4'
+#drum "q"=5f |8 'snare*v.6'
+#drum "r"=5f |8 'snare*v.8'
+#drum "s"=5f |8 'snare'
+#drum "p-"=5f |8 'snare*v.3'
+#drum "q-"=5f |8 'snare*v.5'
+#drum "r-"=5f |8 'snare*v.7'
+#drum "s-"=5f |8 'snare*v.9'
+
+#drum "n"=5c+  |8 'snare*v1.2' k0   %a12
+#drum "o"=5c+  |8 'snare*v.8' k-1   %a12
+#drum "o+"=5c+ |8 'snare*v1.2' k-1 %a12
+
+#drum "a+"=5a+ |E 'triangle*v1.11'  
+#drum "a"= 5a+ |E 'triangle'        
+#drum "a-"=5a+ |E 'triangle*v.33'   
+#drum "b"= 5a+ |E 'triangle*v.63'   
+#drum "c"= 5a+ |E 'triangle*v.77'   
+#drum "b-"=5a+ |E 'triangle*v.5'    
+
+#drum "v"=4g+ |F 'anvil'
+#drum "v+"=4g+ |F 'anvil*v1.5'
+#drum "z+"=4e |D 'boomtown*v1.15'
+#drum "z"=4e |D 'boomtown'
+#drum "z-"=4e |D 'boomtown*v.75'
+
+#drum "k"=4f  |9 %a15 'tomtown*v1.5'
+#drum "t"= 4f |9 %a15 'tomtown*v.75'
+#drum "t+"=4f |9 %a15 'tomtown'
+#drum "t-"=4f |9 %a15 'tomtown*v.5'
+#drum "u+"=5c |9 %a9 'noise'
+#drum "u"= 4a |9 %a9 'noise'
+#drum "u-"=4f |9 %a9 'noise'
+#drum "w"= 4f |9 %a15 'tomtown*v.9375'
+#drum "w+"=4f |9 %a15 'tomtown*v1.25'
+#drum "w-"=4f |9 %a15 'tomtown*v.625'
+
+#drum "y"= 5d |C 'crash'
+#drum "y-"=4g |C %a13%y2%s3%r13 'crash'
+
+#drum "e"= 6c |B 'cslap'
+#drum "f"= 6c |B 'cslap*v.8'
+#drum "g"= 6c |B 'cslap*v.6'
+#drum "h"= 6c |B 'cslap*v.4'
+#drum "h-"= 6c |B 'cslap*v.25'
+#drum "i"= 7c |A 'conga'
+#drum "i-"= 7c |A 'conga*v.67'
+#drum "j"= 6c |A 'conga'
+#drum "j-"= 6c |A 'conga*v.67'
+#drum "j+"= 6c |A 'conga*v.45'
+
+#def hr= %r17
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init' %e1 $
+'ost-o1*v.8' %a8%r8 l1
+[4ab<c>b]
+##
+'str*v.67' l2 %a10%r9
+a's'<c>be <cedg e1dg <m4,1c+2.c8>b8 ed
+## break
+'tone-o1'
+l32 [15ara16r16] arg16r16 [[grg16r16]grgr]
+##
+'ost-o1' %a9%r7 l2
+[a1<ec> a1<e>b]
+##
+'str*v1.15' l8 %a8%r9
+(ga)a+<(f4.g4) f4.. %r20^16%r9 (>b64<c...>a4)
+(ga)a+<f4.g4 (g+32a4...f4. %r20^%r9>
+(ga)a+<(f4.g4) f4.. %r20^16%r9 (c4>a4)
+'sf*v56,1.5' g16 %r20^16%r9 a+<a+a4g4g g2f+2
+;
+
+{2}
+%e1 $
+"y-1" [7^1]
+##
+['hrn-o2'
+[[%r5a4.'hr'^8<]^4 %r5 c4>b4j2e4 a2>a4.'hr'^8^1%r5] <d4e1'hr'^1]
+## break
+[ "!!!o" l16 "nonon8noo+8n4."j2"^2.z-4"]":n:z-4z-2z4"
+##
+'org-o1' l8
+[(ab<cd)eg4(f4dec)>a4^12r6
+(ab<cd)eg4(f4d)e2^12r6>]
+##
+'trp' %a4%r7 l4
+f2. %a15g8f16%r20^16%r7   f2%r20^4%r7c4
+d4%r20^4%r7f4g4 'hrn-o1*v.8' %r5%a11 r4f4<c4f4
+d2%r14^2 'trp' %r7 c2>a2
+a+2.%r17^4%r0 <d1
+;
+
+{3}
+%e1 $
+'cbs-o2' l8
+[6[4ar][4gr][4fr][4gr]]
+## break
+"!!!o" l16 "z+4z4." %e0 "e8ege8"
+"eieie8ghefghfghh-"
+"eieie4.e8ege8"
+"eieie8ghjj-ij-j-8j+8" %e1
+##
+'cbs-o2*v1.15' l8
+[[4ar][4fr][4dr][4er]]
+##
+[4d+r][4fr][4d+r][4gr]
+[4d+r][4fr][4d+r][4dr]
+;
+
+{4}
+%e1 $ m
+[14
+l16 "sp-rqs4." l32 "p-pq-q" l16 "rqr8"
+l16 "sp-rqs8rqr8" l32 "p-pq-q" l16 "r8r8"
+]
+##
+[8"sp-rqs8" %e0 "iije" %e1 l32 "p-pq-q" l16 "rqrq"
+j8"sp-rp-sp-rp- rqrqs-r-s-q"]
+##
+'snarefade*v96,.75' [4 %s "\q" %a13%s0 "\q"]
+'snarefade*v96,1.2' [4 %s "\q" %a13%s0 "\q"]
+;
+
+{5}
+%e1 $ m
+[8
+[l16 "a-ba-ca-aa-ca-ba-"j2"ca-a+8."] ":a-:b-a-b8."
+]
+##
+'ost-o1*v.8' %a8%r8 l1
+[ab<c>b]
+## break
+|9 %a8 'vbreak*.8125' o5 p96
+'fbreak*v216,1'    [6 f+16f+16r16 m-3]
+'fbreak*v216,.375' [6 f+16f+16r16 m-3]
+'fbreak*v216,0'    [6 f+16f+16r16 m-3]
+r2r8 %k0
+##
+"!!!o y-1" 'ost-o1*v.44' l8 [4cr][4dr]brbrerer
+[4cr]drdr 's*v.75' %a5%r8 << b2 %a7 g2 c2 > b2 %r16 ^2
+##
+'s*v.8' %a7%r4 l8 gaa+<f4.g4  f1  d1  ^2f2
+'s*v.5' %a11%r10 d2.%r12(g16a+16)%r15a+  %r4(a+faf)(d16c.)
+'sf*v127,.6'<c4 %r7d2^c>(a+f) 'sf*v127,.8'd1
+;
+
+{6}
+%e1 $ m
+[8
+[l16 "t+t-tt-t+8 u+u+8uu8u-u-8u-"]
+][4
+[l16 "kt-tt-t+8 u+u+8uu8t+u-8u-"]
+]
+## break
+["!o t+t-tt-t+2." "t+t-tt-t+2t4"]
+##
+'hrn-o2*v.75-p24' l8
+[ab<cdeg4f4dec>a4'hr'^4%r5
+ab<cdeg4f4dj2e2'hr'^4%r5>] e8'hr'^8 m192,1 "!!!o y2"
+##
+%a15 ^1^1^1
+'trp' %r7 a2f2 d2%r13^2 r1^1 'ost+o1*v.67' %r7 %a5 g2 %a11 f+2
+;
+
+{7}
+%e1 $
+'ost-o1*v.33'
+[4[4er][4dr][4cr][4dr]]
+##
+"!!!oy-1^1"
+'str' l2 %a9%r7
+a's*v.67'e b1 <c1> b1 <g1 c>b
+## break
+r1r1 "!!!o z1^1"
+##
+l16 "!!!o"
+[4"w+w-ww-w+2w4" "w+w-ww-w+4" "w+w-ww-w+8w8"
+"ww-ww-w+2w4" j4 "w+w-ww-w+4" "w+w-ww-w+8w8"]
+##
+":w+: w+8w8w+8w8"
+'tomtown*w.8'"w"'tomtown*w.4'"w"
+'tomtown*w1'"w"'tomtown*w.5'"w"
+'tomtown*w1.2'"w"'tomtown*w.6'"w"
+'tomtown*w1.4'"w"'tomtown*w.7'"w"
+;
+
+{8}
+%e1 $ m
+[4 "z+4v1v2z-4" "z4v1v2."]
+##
+[4 "!!!o"
+[l16 "a-ba-cv+aa-ca-ba-"j2"ca-a+8."] ":a-:b-a-b8."
+]
+## break
+r1r1r1r1
+##
+["z+b8. a-aa-b8. a-ba-ca-b" "a-a8a-a8 a-ca-a8 a-a8a-a"
+"z b8. a-aa-b8. a-ba-ca-b" "a-a8a-a8 a-ca-a8 a-a8a-a"
+"z+b8. a-aa-b8. a-ba-ca-b" "a-a8a-a8 a-ca-a8 a-a8a-a"
+"z b8. a-aa-b8. a-ba-ca-b" "a-a8a-a8 a-ca-a8 a-a8z a"]
+;

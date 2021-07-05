@@ -1,0 +1,75 @@
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x65
+#WAVE 0x21 0x64
+#WAVE 0x25 0x81
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v100
+#def 2f= v1,100
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |4
+#def 4o=   o5
+#def 4v=   v100
+#def 4f= v1,100
+
+#def 5i=   |5
+#def 5o=   o4
+#def 5v=   v100
+#def 5f= v1,100
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+%b0,100%f0,0%v50
+'0i' p50%e1'0v*v.40't70'0o'g+2a2^2r2a1f2f+2a2t20g+4t125r4r4<e16r48e16r48
+e16r48e4r4r4e16r48e16r48e16r48e4r4f4e16r8.d4e16r8.t120f4t110e16r8.t100
+d4t90e4>b8a8g+2^4<c8>b8a2^4b8a8g+4a4f+4g+2^4t125r4r1r1r1;
+
+{2}
+
+'0i' p60%e1'0v*v.40''0o'e4d4c2^2r2f4e4d+2d2d+2e2^4r4r4a16r48a16r48a16r48
+g+4r4r4a16r48a16r48a16r48g+4r4a4g+16r8.a4g+16r8.a4g+16r8.a4g+4d8c8>b2^4
+<e8d8c2^4d8c8>b2^4<e2^4r4r1r1r1;
+
+{3}
+
+'0i' p70%e1'0v*v.40''0o-o1'b2a2^2r2<c2>b2b2a2b2^4r4r4<e16r48e16r48e16r48
+e4r4r4e16r48e16r48e16r48e4r4f4e16r8.d4e16r8.f4e16r8.d4e4r1r1r1r1r1r1r1
+;
+
+{4}
+
+'1i' p75%e1'1v*v.60''1o'e4g+4a2^2r2<d4c4>b2a2b2<e2^4r4r4>e16r48e16r48e16
+r48e4r4r4e16r48e16r48e16r48e4r4f4e16r8.d4e16r8.f4e16r8.d4e4e2^4f+8g+8a2
+^4b8<c8d2>b2<e2>e4r4r1r1r1;
+
+{6}
+r1r1r1r1r1r1r1r1r1r1r1r1r1'5v*v.60'
+'5i' p64%e1m48,18,239r2'5o+o1'a24r24a24r24a24r24<e24r8>a24r24<e1^1;
+
+{7}
+r1r1r1r1r1r1r1r1r1r1r1r1r1r1'5v*v.60'
+'5i' p45%e1m48,18,239'5o+o1'g24r24g24r24g24r24<d24r8>g24r24<d2^1;
+
+{8}
+r1r1r1r1r1r1r1r1r1r1r1r1r1r1'5v*v.60'
+'5i' p80%e1m48,18,239r2'5o+o1'f24r24f24r24f24r24<c24r8>f24r24<c1;
+;

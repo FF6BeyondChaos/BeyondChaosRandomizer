@@ -1,0 +1,298 @@
+#TITLE At Doom's Gate
+#ALBUM Doom
+#COMPOSER Bobby Prince
+#ARRANGED emberling
+
+########## ------------------
+#SHORTNAME E1M1 At DOOMs Gate
+
+#WAVE 0x20 0x47 eguitar-dist-clear
+#WAVE 0x21 0x48 eguitar-dist-palm-mute-open
+#WAVE 0x22 0x49 eguitar-dist-palm-mute-closed
+#WAVE 0x23 0x39 eguitar-overdrive-lead
+#WAVE 0x24 0x51 ebass-picked
+#WAVE 0x28 0x0A kick-dry
+#WAVE 0x29 0x1C snare-rock
+#WAVE 0x2A 0x0C kick-deep
+#WAVE 0x2B 0x4A tom-dry
+#WAVE 0x2C 0x2D cymbal-crash
+#WAVE 0x2D 0x3B hihat-medium
+#WAVE 0x2E 0x2A cymbal-ride
+
+#def init= t112 %x255 %v40 %b0,85 %f0,0
+
+#def clear= |0 'c' o6
+#def open= |1 'p' o6
+#def mute= |2 'p' o6
+#def lead= |3 'l' o5
+#def bass= |4 'b' o7
+
+#def c= v112
+#def p= v56
+#def l= v72
+#def b= v80
+
+#def o= |1
+#def m= |2
+
+#drum "e"= 5b  |9 p64 v96  %e1
+#drum "d"= 5g  |9 p56 v96  %e1
+#drum "c"= 5a  |8 p64 v80  %e0
+#drum "c-"=5a  |A p64 v96  %e0
+                              
+#drum "f"= 3a+ |B p18 v96  %e1
+#drum "g"= 4e  |B p36 v96  %e1
+#drum "a"= 4g+ |B p54 v96  %e1
+#drum "b"= 5c  |B p72 v96  %e1
+#drum "h"= 5d+ |B p90 v96  %e1
+#drum "i"= 5f+ |B p108 v96 %e1
+#drum "x"= 5a+ |C p24 v52  %e1
+#drum "y"= 5a  |C p72 v112 %e1
+#drum "z"= 5g+ |C p112 v64 %e1
+#drum "y-"= 5a |C p72 v54  %e1 %r20
+                              
+#drum "a+"= 5a |D p96 v64  %e1
+#drum "r"= 5g+ |E p32 v64  %e1 %y3%s5%r17
+
+{1} 'init' %e1 $
+'clear-o2' p104 l16 m12,18,239
+[3 [e32r32e<e> e32r32e<d> e32r32e<c> e32r32j2ea+ e32r32rb<c>] ra+^4 ]
+[e32r32e<e> e32r32e<d> e32r32ej2<c> e32r32ea+ e32r32rb<c>] 'lead' l32 %g1 f+ed+f+agf+d+f+gabagf+d+ %g0
+## 9
+'clear-o2' l16
+[e32r32e<e> e32r32e<d> e32r32e<c> e32r32j2ea+ e32r32rb<c>] ra+^4
+[e32r32e<e> e32r32e<d> e32r32ej2<c> e32r32ea+ e32r32rb<c>] 'lead' l32 %g1 bgegbgb<e> bgbgb<egb %g0
+## 13
+'clear-o2' l16
+[a32r32a<a> a32r32a<g> a32r32a<f> a32r32j2a<d+> a32r32r<ef>] r<d+^4>
+[a32r32a<a> a32r32a<g> a32r32aj2<f> a32r32a<d+> a32r32r<ef>] 'lead' l32 %g1 edcec>a<ce aececec>a %g0
+## 17
+'clear-o2' l16
+[ [e32r32e<e> e32r32e<d> e32r32e<c> e32r32j2ea+ e32r32rb<c>] ra+^4 ]
+## 21
+<c+32r32c+<c+> c+32r32c+b c+32r32c+a c+32r32c+g c+32r.g+a>
+b32r32b<b> b32r32b<a> b32r32b<g> a+32r.<f^4>
+[e32r32e<e> e32r32e<d> e32r32ej2<c> e32r32ea+ e32r32rb<c>] 'lead' l32 %g1 eg>bg<e>b<ge ge>bg<egb<e %g0
+## 25
+'clear-o2' l16
+[e32r32e<e> e32r32e<d> e32r32e<c> e32r32j2ea+ e32r32rb<c>] ra+^4
+[e32r32e<e> e32r32e<d> e32r32ej2<c> e32r32ea+ e32r32rb<c>] 'lead' l32 %g1 d+d>bf+<f+d+>ba< af+d+>b<baf+d+ %g0
+## 29
+'clear-o2' l16
+[[e32r32e<g> e32r32e<f+> e32r32e<j2d+> e32r32e<d> e32r.<de>] j2 e>e32r.<c+^4>]
+'lead+o1*v.9' l32 %g1 e>bgeb<e>bg egbg<e>bge %g0
+## 33
+'clear-o2' l16
+[[a32r32a<<c>> a32r32a<b> a32r32a<j2g+> a32r32a<g> a32r.<ga>] j2 a>a32r.<g^4>]
+'lead' l32 %g1 edcec>a<ce aececec>a %g0
+## 37
+'clear-o2' l16
+[ [e32r32e<g> e32r32e<f+> e32r32e<j2d+> e32r32e<d> e32r.<de>] e>e32r.<c+^4> ]
+## 41
+<c+32r32c+<g> c+32r32c+<f+> c+32r32c+<e> c+32r32c+<c+> c+32r.<c+e>>
+b32r32b<<f+>> b32r32b<<e>> b32r32b<<d+>> a+32r.<b^4>
+[e32r32e<g> e32r32e<f+> e32r32ej2<d+> e32r32e<d> e32r.<de>]
+'lead' l32 %g1 af+d+>baf+d+>b<< baf+d+>baf+d+ %g0
+;
+
+{6} %e1 $
+[4 "f2." 'clear-o2' p104 l16 m12,18,239 re8.
+"!!!of2" j4 'clear-o2' p104 l16 r8e4. ] [8"f"]
+## 9
+'clear-o2' p104 l16
+r2.re8. r2r8e4.
+r2.re8. r2"!!!o i8h8g8ff"
+## 13
+'clear-o2' p104 l16
+r2.ra8. r2r8a4.
+r2.ra8. r2"!!!o ^32e4e8e."
+## 17
+'clear-o2' p104 l16
+[ r2.re8. r2r8e4. ]
+## 21
+"!!!o x2.^" 'clear-o1' p104 c+8.
+"!!!o z2^8" 'clear-o2' p104 a4.
+"!!!o x2.^" 'clear-o2' p104 e8.
+r2 "!!!o r2"
+## 25
+"f2." 'clear-o2' p104 re8.
+"!!!o f2" 'clear-o2' p104 r8e4.
+"!!!o f2." 'clear-o2' p104 re8.
+"!!!o f2f8f8ffff"
+## 29
+'clear-o2' p104 l16
+r2.re8. r2r8e4.
+r2.re8. r2"!!!o i8b8a8f8"
+## 33
+'clear-o2' p104 l16
+r2.ra8. r2r8a4.
+r2.ra8. r2"!!!o r4^32e8.."
+## 37
+'clear-o2' p104 l16
+[r2.re8. r2r8e4.]
+## 41
+"!!!o x2.^" 'clear-o1' p104 c+8.
+"!!!o z2^8" 'clear-o2' p104 a4.
+"!!!o x2.^" 'clear-o2' p104 e8.
+r2 "!!!o r2"
+;
+
+{2} %e1 $
+[4r1] 'mute-o2' p24 m12,18,223 l16
+['m'e'o'e<e>'m'e'o'e<d>'m'e'o'e<c>'m'e'o'j2ea+'m'e'o'rb<c>] ra+^4
+['m'e'o'e<e>'m'e'o'e<d>'m'e'o'ej2<c>'m'e'o'ea+'m'e'o'rb<c>] 'lead' l32 %g1 d+c>b<d+f+ed+>b<d+ef+gf+ed+>b %g0
+## 9
+ 'mute-o2' l16
+['m'e'o'e<e>'m'e'o'e<d>'m'e'o'e<c>'m'e'o'j2ea+'m'e'o'rb<c>] ra+^4
+['m'e'o'e<e>'m'e'o'e<d>'m'e'o'ej2<c>'m'e'o'ea+'m'e'o'rb<c>] 'lead' l32 %g1 ge>b<egegb gegegb<eg %g0
+## 13
+ 'mute-o2' l16
+['m'a'o'a<a>'m'a'o'a<g>'m'a'o'a<f>'m'a'o'j2a<d+>'m'a'o'r<ef>] r<d+^4>
+['m'a'o'a<a>'m'a'o'a<g>'m'a'o'aj2<f>'m'a'o'a<d+>'m'a'o'r<ef>] 'lead' l32 %g1 afeaecea <c>aeaeaec %g0
+## 17
+'mute-o2' l16
+[ ['m'e'o'e<e>'m'e'o'e<d>'m'e'o'e<c>'m'e'o'j2ea+'m'e'o'rb<c>] ra+^4 ]
+## 21
+<'m'c+'o'c+<c+>'m'c+'o'c+b'm'c+'o'c+a'm'c+'o'c+g'm'c+'o'rg+a>
+'m'b'o'b<b>'m'b'o'b<a>'m'b'o'b<g>'m'a+'o'r<f^4>
+['m'e'o'e<e>'m'e'o'e<d>'m'e'o'ej2<c>'m'e'o'ea+'m'e'o'rb<c>] 'lead' l32 %g1 gbe>b<gebg bge>b<gb<eg %g0
+## 25
+ 'mute-o2' l16
+['m'e'o'e<e>'m'e'o'e<d>'m'e'o'e<c>'m'e'o'j2ea+'m'e'o'rb<c>] ra+^4
+['m'e'o'e<e>'m'e'o'e<d>'m'e'o'ej2<c>'m'e'o'ea+'m'e'o'rb<c>] 'lead' l32 %g1 f+ed+>b<af+d+>b< baf+d+<d+c+>ba %g0
+## 29
+'mute-o2' l16
+[['m'e'o'e<e>'m'e'o'e<d>'m'e'o'e<j2c>'m'e'o'ea+'m'e'o'rb<c>] j2 c>'m'e'o'ra+^4 ]
+'lead+o1*v.9' l32 %g1 ge>bg<ege>b gb<e>b<ge>bg %g0
+## 33
+'mute-o2' l16
+[['m'a'o'a<a>'m'a'o'a<g>'m'a'o'a<j2f>'m'a'o'a<d+>'m'a'o'r<ef>] j2 f>'m'a'o'r<d+^4> ]
+'lead' l32 %g1 afeaecea <c>aeaeaec %g0
+## 37
+'mute-o2' l16
+[['m'e'o'e<e>'m'e'o'e<d>'m'e'o'e<j2c>'m'e'o'ea+'m'e'o'rb<c>] c>'m'e'o'ra+^4]
+## 41
+<'m'c+'o'c+<c+>'m'c+'o'c+b'm'c+'o'c+a'm'c+'o'c+g'm'c+'o'rg+a>
+'m'b'o'b<b>'m'b'o'b<a>'m'b'o'b<g>'m'a+'o'r<f^4>
+['m'e'o'e<e>'m'e'o'e<d>'m'e'o'ej2<c>'m'e'o'ea+'m'e'o'rb<c>]
+'lead' l32 %g1 baf+d+>baf+d+< <d+c+>baf+d+>ba %g0
+;
+
+{7} %e1 $
+[4r1] 'open-o2' p24 m12,18,223 l16
+[r2.re8. r2r8e4. r2.re8. r1]
+## 9
+#^
+## 13
+r2.ra8. r2r8a4. r2.ra8. r1
+## 17
+[ r2.re8. r2r8e4. ]
+## 21
+r2.r<c+8.> r2r8a4. r2.re8. r2"!!!o d2"
+## 25
+'open-o2' p24
+[r2.re8. r2r8e4. r2.re8. r1]
+## 29
+#^
+## 33
+r2.ra8. r2r8a4. r2.ra8. r1
+## 37
+[r2.re8. r2r8e4.]
+## 41
+r2.r<c+8.> r2r8a4. r2.re8. r2"!!!o d2"
+;
+
+{5} $
+'bass-o2' p64 l16
+[8 er2... ]
+## 9
+[32 er]
+## 13
+> [32 ar] <
+## 17
+[32 er]
+## 21
+[8 c+r] > [4 br] [4 ar] < [12 er] > er4.. <
+## 25
+[4 er2... ]
+## 29
+[32 er]
+## 33
+> [32 ar] <
+## 37
+[32 er]
+## 41
+[8 c+r] > [4 br] [4 ar] < [12 er] > er4..
+;
+
+{3} $
+[7 "e1"] "e2" [8"e16"]
+## 9
+l16
+[5"c8e8 cce8"] [3"c8e8"] "cce8" "e8e8e8ee"
+## 13
+[ [5"c8e8 cce8"] [3"c8e8"] "cce8" "e8e8e8e8" ]
+## 17
+#^
+## 21
+[5"c8e8 cce8"] [3"c8e8"] "cce8" "e2"
+## 25
+"e1e1e1 e2e8e8eeee"
+## 29
+[3 [5"c8e8 cce8"] [3"c8e8"] "cce8" "e8e8e8e8" ]
+## 33
+#^
+## 37
+#^
+## 41
+[5"c8e8 cce8"] [3"c8e8"] "cce8" "e2"
+;
+
+{4} $
+[7 "c-1"] "c-2" [8"c16"]
+## 9
+[28 "a+8"] [8 "c16"]
+## 13
+[28 "r8"] l16 "rc8c32c.c32c.c"
+## 17
+[28 "a+8"] "dcdcd32d32cdc"
+## 21
+l8 [3 "!!!o y-rrrrrrr"] "rrrrc2"
+## 25
+l16 "c-1c-1c-1 c-2^c8ccccc"
+## 29
+[28 "a+8"] [8"c"]
+## 33
+[28 "r8"] r"c8c32c.c8c32c32"
+## 37
+[28 "a+8"] "dcdcd32d32cdc"
+## 41
+l8 [3 "!!!o y-rrrrrrr"] "rrrrc2"
+;
+
+{8} $
+[4r1]
+[4 "y1"]
+#### 9
+##[4r1]
+#### 13
+##[4r1]
+#### 17
+##r1r1r1
+[11r1]
+r2.r32"e8.."
+## 21
+[4r1]
+## 25
+[4 "!!!o y1"]
+#### 29
+##[4r1]
+#### 33
+##[4r1]
+#### 37
+##r1r1r1
+[11r1]
+r2.r32"e8.."
+## 41
+[4r1]
+;

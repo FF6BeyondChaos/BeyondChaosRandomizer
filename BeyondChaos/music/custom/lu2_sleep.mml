@@ -1,0 +1,54 @@
+#TITLE Slumber
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#WAVE 0x20 0x35    # program 20 - nylon str. guitar
+#WAVE 0x21 0x61    # program 13 - harp
+
+#def Prog20= |0 %k24
+#def Prog13= |1 %k12
+
+#cdef ( %l1
+#cdef ) %l0
+
+{Track 1}
+t84%b0,70%v50%f0,0
+{'78'}'META 02:0''META 0D:28'%e1p20'Prog13' o4 v64g8 g16r8. (f+2 ^8)
+{'9E'} e8 e4 (d2 ^8)
+;
+
+{Track 2}
+{'AF'}%e1p64'Prog20' o3 v64g8 g16r8. (f+2 ^8)
+{'CC'} e8 e4 (d2 ^8)
+;
+
+{Track 3}
+{'DD'}%e1p40'Prog13' o4 v64b8 b16r8. (a8 ^8) (a8^8 ^8)
+{'103'} g8 g4 (f+2 ^8)
+;
+
+{Track 4}
+{'114'}%e1p80'Prog13'&2^ o5 v64d8 d16r8. (c+8^8 ^8) (c+8 ^8)
+{'13A'} >b8 b4 (a2 &23^)
+;
+
+{Track 5}
+{'14B'}%e1p96'Prog13'&2^ o5 v80f+8 f+16r8. (e4 ^8 ^8)e8
+{'16D'} d8 d4 (f+2 &23^)
+;
+
+{Track 6}
+{'17E'}%e1p64'Prog20' o3 v64b8 b16r8. (a8 ^8) (a8^8 ^8)
+{'1A4'} g8 g4 (f+2 ^8)
+;
+
+{Track 7}
+{'1B5'}%e1p64'Prog20'&2^ o4 v64d8 d16r8. (c+8^8 ^8) (c+8 ^8)
+{'1DB'} >b8 b4 (a2 &23^)
+;
+
+{Track 8}
+{'1EC'}%e1p64'Prog20'&2^ o4 v64f+8 f+16r8. (e4 ^8 ^8)e8
+{'20E'} d8 d4 (c+2 &23^)
+;

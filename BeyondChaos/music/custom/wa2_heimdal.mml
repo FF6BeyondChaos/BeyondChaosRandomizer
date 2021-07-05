@@ -1,0 +1,386 @@
+#TITLE Dungeon — Heimdal Gazzo
+#ALBUM Wild Arms 2
+#COMPOSER Michiko Naruke
+#ARRANGED Rushlight
+
+#SHORTNAME WA2 Heimdal Gazzo
+
+#WAVE 0x20 0x66 ## Strings
+#WAVE 0x21 0x34 ## Guitar
+#WAVE 0x22 0x81 ## Trumpet
+#WAVE 0x23 0x84 ## Horn
+#WAVE 0x24 0x51 ## Bass
+#WAVE 0x25 0x5A ## Timpani
+
+#WAVE 0x28 0x0A ## Kick
+#WAVE 0x29 0x1C ## Snare
+#WAVE 0x2A 0x2D ## Crash
+#WAVE 0x2B 0x3D ## HiHat (open/closed)
+#WAVE 0x2C 0x4C ## Tom
+
+#def init= t140 %x255 %v40 %b0,85 %f0,0
+
+#def bassVol=               v60
+#def timpaniVol=            v55
+#def timpaniFade=         v1,55 ## Keep this in synch with timpaniVol
+#def guitarVol=             v50
+#def hornVol=               v40
+#def trumpetVol=            v60
+#def trumpetFade=         v1,60 ## Keep this in synch with trumpetVol
+
+#def melodyStringsVol=      v75
+#def melodyStringsDuoVol=   v60
+#def melodyStringsDuoFade=v1,60 ## Keep this in synch with melodyStringsDuoVol
+#def supportStringsVol=     v70
+#def melodyStringsFade=   v1,70 ## Keep this in synch with melodyStringsVol
+#def backingStringsVol=     v32
+#def backingStringsDuoVol=  v25
+
+#def bassSustain= %r6
+#def bassRelease= %r24
+
+#def hornSustain= %r10
+#def hornRelease= %r26
+
+#def trumpetSustain=        %r0
+#def trumpetPartialSustain= %r12
+#def trumpetPartialRelease= %r16
+#def trumpetRelease= %r26
+
+#def stringsSustain= %r0
+#def stringsRelease= %r26
+
+#def strings= |0 o5
+
+#def bass=           |4 o7     'bassVol'           p70  'bassSustain'           %e0 m
+#def timpani=        |5 o6     'timpaniVol'        p95                          %e1 m
+#def guitar=         |1 o5     'guitarVol'         p10  %r14                    %e1 m
+#def horn=           |3 o5     'hornVol'           p100 'hornSustain'           %e1 m
+#def melodyStrings=  'strings' 'melodyStringsVol'  p64  'stringsSustain'        %e1 m
+#def supportStrings= 'strings' 'supportStringsVol' p64  'stringsSustain'        %e1 m
+#def backingStrings= 'strings' 'backingStringsVol' p114 'stringsSustain'        %e1 m
+#def trumpet=        |2 o5     'trumpetVol'        p64  'trumpetPartialSustain' %e1 m
+
+#drum "k"=5a  |8 v70  p75       %e0 m
+#drum "u"=5d  |C v80  p100      %e0 m
+#drum "t"=5c  |C v80  p107      %e0 m
+#drum "s"=6c+ |9 v80  p73       %e0 m
+
+#drum "h"=6c+ |B v50  p47       %e0 m %y5
+#drum "o"=6c+ |B v50  p47       %e0 m %y2
+#drum "c"=6c+ |A v127 p64  %r18 %e0 m
+
+{1}
+'init'
+## First measure lasts only one 8th note
+r8
+$
+## Melody Horn
+'horn'
+## 2
+f4 'hornRelease'  ^4 'hornSustain' f16.'hornRelease'^16.> 'hornSustain'b-16.'hornRelease'^16.<'hornSustain'f16 'hornRelease'^16 'hornSustain'
+## 3
+f+4 'hornRelease' ^4 'hornSustain' f+16.'hornRelease'^16. 'hornSustain'c+16.'hornRelease'^16. 'hornSustain'f+16'hornRelease'^16'hornSustain'
+## 4
+g+4 'hornRelease' ^4 'hornSustain' g+16.'hornRelease'^16. 'hornSustain'e-16.'hornRelease'^16. 'hornSustain'g+16'hornRelease'^16'hornSustain'
+## 5
+b-1
+## Melody Strings
+'melodyStrings+o2'
+l4
+[2
+  ## 6 / 10
+  'melodyStringsVol*v.7' c+'melodyStringsFade*v96,1'^2.
+  ## 7 / 11
+  ^4e-f6c+6>b-6
+  ## 8 / 12
+  'melodyStringsVol*v.7''melodyStringsFade*v72,1'g+2 'melodyStringsVol*v.7''melodyStringsFade*v72,1'<c4. j2 ^8
+  ## 9
+  c+c>b-8g+8b-16<c16c+16e-16
+] >b-16g+16
+## 13
+'melodyStringsVol*v.8''melodyStringsFade*v96,1' b-2'melodyStringsFade*v96,.7'^2
+## Melody Trumpet
+'trumpet'
+l6
+## 14
+r4f8.'trumpetRelease'^16
+'trumpetPartialSustain'b-8.<c8.c+8
+## 15
+e-8.c+8.f8c8.>g+8.e-8
+## 16
+## MelodyStrings, High Note
+'melodyStrings+o1'
+l24
+%l1'melodyStringsVol*v.6'r4r'melodyStringsFade*v40,1'cc+e-fg+
+l6
+'melodyStringsDuoVol'b-8.%l0g+8.f8
+## 17
+e-4f4c2
+## 18
+>b-4<f4e-8f8g+8<c8
+## 19
+c+8.c8.>b-8g+8.b-8.<c8
+## 20
+'melodyStringsDuoVol*v.7' c+4'melodyStringsDuoFade*v96,1'^2.
+## 21
+e-4c4>b-4g+4
+;
+
+
+
+{2}
+## First measure lasts only one 8th note
+r8
+$
+## Support Strings
+'supportStrings+o1'
+l4
+## 2 / 3 / 4
+[12 'stringsSustain'b-16.'stringsRelease'^8^32]
+'stringsSustain'
+## 5
+f+g+b-<c
+## Melody Strumpet
+'trumpet+o1'
+[2
+  ## 6 / 10
+  'trumpetSustain'f2f16.'trumpetRelease'^16.> 'trumpetSustain'b-16.'trumpetRelease'^16.<'trumpetSustain'f16 'trumpetRelease'^16 'trumpetSustain'
+  ## 7 / 11
+  f+2f+16.'trumpetRelease'^16. 'trumpetSustain'c+16.'trumpetRelease'^16. 'trumpetSustain'f+16'trumpetRelease'^16'trumpetSustain'
+  ## 8 / 12
+  g+2 j2 g+16.'trumpetRelease'^16. 'trumpetSustain'e-16.'trumpetRelease'^16. 'trumpetSustain'g+16'trumpetRelease'^16'trumpetSustain'
+  ## 9
+  b-1
+]
+## Measure 12, Beat 3
+<c4.>b-16g+16
+## 13
+'trumpetVol*v.8''trumpetFade*v96,1' b-2'trumpetFade*v96,.7'^2
+## 14
+r1r1
+## 16
+## Melody Trumpet
+'trumpet'
+## Originally, this lasts the full measure, but we'll drop it off quicker so the strings melody layer can come in sooner
+'trumpetPartialRelease'f2
+## MelodyStrings, Low Note
+'melodyStrings'
+'melodyStringsDuoVol'
+l6
+b-8.g+8.f8
+## 17
+e-4f4c2
+## 18
+>b-4<f4e-8f8g+8<c8
+## 19
+c+8.c8.>b-8g+8.b-8.<c8
+## 20
+'melodyStringsDuoVol*v.7' c+4'melodyStringsDuoFade*v96,1'^2.
+## 21
+e-4c4>b-4g+4
+;
+
+
+{3}
+## First measure lasts only one 8th note
+r8
+$
+## Bass
+'bass-o3'
+[4
+  ## 2 / 3 / 4 / 5
+  b-2.'bassRelease'^8b-16b-16'bassSustain'
+]
+'bassRelease'
+[48
+  ## 6 through 17
+  b-8b-16b-16
+]
+## 18
+[2 f+8f+16f+16 ] < [2 f8f16f16 ]
+## 19
+[2 e-8e-16e-16 ] [2 f8f16f16 ]
+## 20
+>[4 f+8f+16f+16 ]
+## 21
+[4 g+8g+16g+16 ]
+;
+
+
+{4}
+## Timpani
+'timpani-o2'
+'timpaniVol*v.6''timpaniFade*v24,1'
+## First measure lasts one 8th note
+b24b24b24
+$
+## Timpani
+'timpani-o2'
+l4
+## 2
+br2.
+## 3
+r2..b16b16
+## 4
+br2.
+## 5
+br 'timpaniVol*v.6''timpaniFade*v96,1'[10 b24]b12
+[4
+  ## 6 / 8 / 10 / 12
+  b
+  ## Drums
+  "!!!o"
+  "kk8.u16s"
+   ## 7 / 9 / 11 / 13
+  "kkk8u16t16s8t16"
+  ## Timpani
+  'timpani-o2'
+  b16
+]
+## 14
+b
+## Drums
+"!!!o"
+"kk8.u16s"
+## 15
+"kkk8u16t16s8t8"
+[3
+  ## 16 / 18 / 20
+  "kkk8.u16s"  
+  ## 17 / 19 / 21
+  "kkk8u16t16s8t8"
+]
+;
+
+
+{5}
+## First measure lasts only one 8th note
+r8
+$
+## Support Trumpet'trumpet'
+'trumpet+o1'
+'trumpetSustain'
+'trumpetVol*v.8'
+l16
+## 2
+c+1.'trumpetFade*v96,1'^2
+## 4
+c4.e-16e-16e-2
+## 5
+c+2c4>b-<cc+e-
+[2
+  ## 6 / 10
+  ## Squeeze a kick that isn't playing in the drums channel because of a timpani note
+  "!!!ok4"
+  ## Support Horn
+  'horn-o1'
+  r8b-16b-16<c+4f12>b-12<f12
+  ## 7 / 11
+  f+2c+2
+  ## 8 / 12
+  ## Squeeze a kick that isn't playing in the drums channel because of a timpani note
+  "!!!ok8"
+  ## Support Horn
+  'horn'
+  c16c16c4'hornRelease'^6'hornSustain'e-6>g+6
+  ## 9 / 13
+  b-2g+2
+]
+## Backing Strings High Note
+'backingStrings'
+'backingStringsDuoVol'
+l1
+## 14
+ff+g+
+## 17
+b-2g+2b-2g+2
+## 19
+f+2f2f+
+## 21
+'backingStringsVol'g+
+;
+
+
+{6}
+## First measure lasts only one 8th note
+r8
+$
+## Cymbals
+"!!!o"
+l16
+"c4!!!o"[7 "hho8"]
+;
+
+
+{7}
+## First measure lasts only one 8th note
+r8
+$
+##  Most important guitar note
+'guitar'
+l16
+[2
+  ## 2 / 3
+  c+4.>b-b-b-4.b-b-<
+]
+## 4
+c+4.>g+g+g+4.g+g+<
+## 5
+c+4.>b-b-b-4.b-b-
+[3
+  ## 6 / 10 / 14
+  b-8ff [7 b-8b-b-]
+  j3,716
+  ## 8 / 12
+  [4
+    <c8> j4 g+g+
+  ] r8
+  ## 9 / 13
+  [2 b-8b-b-] [2 <c8>g+g+]
+]
+$716
+## 16
+b-8ff [5 b-8b-b-] < [2 c8cc]
+[2
+  ## 18 / 19
+  [2 c+8c+c+] [2 c8cc]
+]
+## 20
+[4 c+8c+c+]
+## 21
+[3 c8cc] r8cr
+;
+
+
+{8}
+## First measure lasts only one 8th note
+r8
+$
+## Backing Strings Low Note
+'backingStrings'
+l1
+## 2
+c+1^1
+## 4
+cc+2%l1e-4.g+8%l0
+## 6
+c+1.r2
+## 8
+cc+2e-2
+## 10
+c+1^1cc+2e-2
+## 14
+'backingStringsDuoVol'
+c+1^1
+## 16
+cc+2f2
+## 18
+f+2e-2c+2c+2
+## 20
+c+
+## 21
+## Abandon the Strings to play the timpani
+'timpani-o2'
+'timpaniVol*v.5'r6'timpaniFade*v144,1'[18 b-24]b-12
+;

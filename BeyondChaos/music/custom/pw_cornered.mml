@@ -1,0 +1,138 @@
+#TITLE Pursuit ~ Cornered
+#ALBUM Phoenix Wright: Ace Attorney
+##with reference to Phoenix Wright: Trials and Tribulations
+#COMPOSER Masakazu Sugimori
+#ARRANGED Cecil188
+##with reference to sheet music arranged by KKslida2
+
+#WAVE 0x20 0x63
+#WAVE 0x21 0x51
+#WAVE 0x22 0x82
+#WAVE 0x23 0x3C
+#WAVE 0x24 0x0A
+#WAVE 0x25 0x1D
+#WAVE 0x26 0x0D
+#WAVE 0x27 0x69
+#WAVE 0x28 0x80
+
+#cdef ( %l1
+#cdef ) %l0
+
+#def al= [4 fr16] fg-
+#def be= [4 fr16] fe
+#def ga= [3 fr16] f16f fg-
+#def de= [3 fr16] f16f fe
+
+#def s= v90
+#def t= v90
+#def b= v85
+
+#drum "h"=5b- |3 v48 p16 %e1
+#drum "q"=5b- |3 v24 p16 %e1
+#drum "s"=5b- |4 v127 p64 %e1
+#drum "p"=6d  |5 v127 p64 %e1 %r22
+#drum "o"=6d  |5 v80 p64 %e1  %r27
+#drum "b"=5b- |6 v72 p64 %e0
+
+{1}
+t151 %x224 %v50 %b0,85 %f0,0
+|0 's*v.96' p64 %e1 o6
+#1
+l8 'al' 'be' 'ga' 'de'
+#5
+$ 'al' 'be' 'ga' 'de' 'al' 'be' 'ga' 'de' 'al' 'be' 'ga' 'de'
+#17
+'al' 'be' 'ga' 'de' 'al' 'be' 'ga' 'de'
+#25
+'al' 'be' 'ga' 'de'
+;
+
+{2}
+|8 't*v.45' p64 %e1 o5 m48,18,207
+#1
+l2 [3 r1] rg<
+#5
+$ l16 |8 't*v.45' p64 o6 m48,18,207
+ c2..>b-<c >f2..ga- b-1 l2 ge- f2.<c4 d-c4>a-4 (b-m12,5b-16<e-4..) c>b-4a-4 ga- 't*v.9'<f8. 't*v.8' f8. 't*v.7' f8. 't*v.6' f8. 't*v.5' f8 't*v.4' f8> 't*v.45' [r1]
+#17
+<ce-4.>a-16b-16 a-2..b-16<c16> b-1 ge- fc d-e-4g4 a-f b-g4e-4
+#25
+f4r2.
+|7 v127 p64 %e1 o5 l8
+r2..e- fr2.e- e-r4e-e-8.e-8.e
+;
+
+{3}
+|1 'b*v.84' p64 %e0 o5
+#1
+l8 [[4 ff16]fg- [4 ff16]fe]
+#5
+$ [[4 ff16]ff [4 a-a-16]a-a- [4 d-d-16]d-d- [4 e-e-16]e-e-] [4 ff16]ff [4 cc16]cc [4 d-d-16]d-d- [4 e-e-16]e-e-
+#17
+[[4 ff16]ff [4 a-a-16]a-a- [4 d-d-16]d-d- [4 e-e-16]e-e-]
+#25
+[4 ff16]ff [4 a-a-16]a-a- [4 d-d-16]d-d- [4 e-e-16]e-e-
+;
+
+{4}
+|4 v48 p64 %e1 o5
+#1
+[4 "^1"]
+#5
+$ l8 [8 "ssp^ss^^"] "s^ps^sp^s^ps^sp^s^ps^sp^" l16 "pooooopooooopooo"
+#17
+l8 [8 "s^ps^sp^"]
+#25
+[l8 "s^ps^sp^" l16 "pooooopooooopooo"]
+;
+
+{6}
+|3 v127 p16 %e1 o5
+#1
+l8 [16 "^h"]
+#5
+$ [12 "qhqqhqhqqhqqqhqq"]
+#17
+[8 "qhqqhqhqqhqqqhqq"]
+#25
+[4 "qhqqhqhqqhqqqhqq"]
+;
+
+{8}
+|6 v127 p64 %e1 o5
+#1
+l16 r1 r2.."bb" [8 "b^^^"]
+#5
+"!!!o" [14 "b^^^"] "b8b8b8^^"
+$      [14 "b^^^"] "b8b8b8^^" [14 "b^^^"]
+|7 v127 p64 %e1 o5 c6e-6e6
+#17
+f6r2^6^6 [r1] l8 r2..e- fr2.. r2e-8.e-8.e fr2.. r2c4e-4
+#25
+fr2.. r1r1r1
+f4 "!!!o" l16 [13 "b^^^"] "b8b8b8^^"
+;
+
+{7}
+|2 't*v.45' p64 %e1 o5 m48,18,207
+#1
+l2 [3 r1] rg<
+#5
+$ l16 c2..>b-<c >f2..ga- b-1 l2 ge- f2.<c4 d-c4>a-4 (b-m12,5b-16<e-4..) c>b-4a-4 ga- 't*v.35'>f2r2<'t*v.45'[r1]
+#17
+<ce-4.>a-16b-16 a-2..b-16<c16> b-1 ge- fc d-e-4g4 a-f b-g4e-4
+#25
+f4r2. [3 r1]<
+;
+
+{5}
+|2 't*v.9' p64 %e1 o5 m48,18,199 k1
+#1
+l16 [3 r1] r2c2
+#5
+$ f2..e-f c2fe-f<c>>a-<cga- l8 b-d-fb-a-d-fa- g>b-<e-ge->cb-<e- l16 't*v.35' f>f<cfg>g<cga-cfa-<c8>c8 <d-8>f8a-8<d-8c>cg<c>a-cfa- l8 b->b-<fb-<e->fb-<e- c>cf<c>b-ca-c g>a-<e-ga->a-<fa- <c2r2 [r1]
+#17
+'t*v1.1' >f2a-2 c1 e-1 't*v.8' c>b-<e-g>b-e-gb- <f>a-<cfc>fa-<c d->fa-<d-e->a-<g>b- <a-ce-a-f>a-<cf b-d-fb-g>b-<f>b- 
+#25
+<<f12>b-12<c12 r2. [3 r1]>
+;
