@@ -1,0 +1,384 @@
+Guard_____
+Soldier___
+Templar___
+Ninja_____
+Samurai___
+Orog______
+Mag Roader
+Retainer__
+Hazer_____
+Dahling___
+Rain Man__
+Brawler___
+Apokryphos
+Dark Force
+Whisper___
+Over-Mind_
+Osteosaur_
+Commander_
+Rhodox____
+Were-Rat__
+Ursus_____
+Rhinotaur_
+Steroidite
+Leafer____
+Stray Cat_
+Lobo______
+Doberman__
+Vomammoth_
+Fidor_____
+Baskervor_
+Suriander_
+Chimera___
+Behemoth__
+Mesosaur__
+Pterodon__
+FossilFang
+White Drgn
+Doom Drgn_
+Brachosaur
+Tyranosaur
+Dark Wind_
+Beakor____
+Vulture___
+Harpy_____
+HermitCrab
+Trapper___
+Hornet____
+CrassHoppr
+Delta Bug_
+Gilomantis
+Trilium___
+Nightshade
+TumbleWeed
+Bloompire_
+Trilobiter
+Siegfried_
+Nautiloid_
+Exocite___
+Anguiform_
+Reach Frog
+Lizard____
+ChickenLip
+Hoover____
+Rider_____
+Chupon____
+Pipsqueak_
+M-TekArmor
+Sky Armor_
+Telstar___
+Lethal Wpn
+Vaporite__
+Flan______
+Ing_______
+Humpty____
+Brainpan__
+Cruller___
+Cactrot___
+Repo Man__
+Harvester_
+Bomb______
+Still Life
+Boxed Set_
+SlamDancer
+HadesGigas
+Pug_______
+Magic Urn_
+Mover_____
+Figaliz___
+Buffalax__
+Aspik_____
+Ghost_____
+Crawler___
+Sand Ray__
+Areneid___
+Actaneon__
+Sand Horse
+Dark Side_
+Mad Oscar_
+Crawly____
+Bleary____
+Marshal___
+Trooper___
+General___
+Covert____
+Ogor______
+Warlock___
+Madam_____
+Joker_____
+Iron Fist_
+Goblin____
+Apparite__
+PowerDemon
+Displayer_
+Vector Pup
+Peepers___
+Sewer Rat_
+Slatter___
+Rhinox____
+Rhobite___
+Wild Cat__
+Red Fang__
+Bounty Man
+Tusker____
+Ralph_____
+Chitonid__
+Wart Puck_
+Rhyos_____
+SrBehemoth
+Vectaur___
+Wyvern____
+Zombone___
+Dragon____
+Brontaur__
+Allosaurus
+Cirpius___
+Sprinter__
+Gobbler___
+Harpiai___
+GloomShell
+Drop______
+Mind Candy
+WeedFeeder
+Luridan___
+Toe Cutter
+Over Grunk
+Exoray____
+Crusher___
+Uroburos__
+Primordite
+Sky Cap___
+Cephaler__
+Maliga____
+Gigan Toad
+Geckorex__
+Cluck_____
+Land Worm_
+Test Rider
+PlutoArmor
+Tomb Thumb
+HeavyArmor
+Chaser____
+Scullion__
+Poplium___
+Intangir__
+Misfit____
+Eland_____
+Enuo______
+Deep Eye__
+GreaseMonk
+NeckHunter
+Grenade___
+Critic____
+Pan Dora__
+SoulDancer
+Gigantos__
+Mag Roader
+Spek Tor__
+Parasite__
+EarthGuard
+Coelecite_
+Anemone___
+Hipocampus
+Spectre___
+Evil Oscar
+Slurm_____
+Latimeria_
+StillGoing
+Allo Ver__
+Phase_____
+Outsider__
+Barb-e____
+Parasoul__
+Pm Stalker
+Hemophyte_
+Sp Forces_
+Nohrabbit_
+Wizard____
+Scrapper__
+Ceritops__
+Commando__
+Opinicus__
+Poppers___
+Lunaris___
+Garm______
+Vindr_____
+Kiwok_____
+Nastidon__
+Rinn______
+Insecare__
+Vermin____
+Mantodea__
+Bogy______
+Prussian__
+Black Drgn
+Adamanchyt
+Dante_____
+Wirey Drgn
+Dueller___
+Psychot___
+Muus______
+Karkass___
+Punisher__
+Balloon___
+Gabbldegak
+GtBehemoth
+Scorpion__
+Chaos Drgn
+Spit Fire_
+Vectagoyle
+Lich______
+Osprey____
+Mag Roader
+Bug_______
+Sea Flower
+Fortis____
+Abolisher_
+Aquila____
+Junk______
+Mandrake__
+1st Class_
+Tap Dancer
+Necromancr
+Borras____
+Mag Roader
+Wild Rat__
+Gold Bear_
+Innoc_____
+Trixter___
+Red Wolf__
+Didalos___
+Woolly____
+Veteran___
+Sky Base__
+IronHitman
+Io________
+Pugs______
+Whelk_____
+Presenter_
+Mega Armor
+Vargas____
+TunnelArmr
+Prometheus
+GhostTrain
+Dadaluma__
+Shiva_____
+Ifrit_____
+Number 024
+Number 128
+Inferno___
+Crane_____
+Crane_____
+Umaro_____
+Umaro_____
+Guardian__
+Guardian__
+Air Force_
+Tritoch___
+Tritoch___
+FlameEater
+AtmaWeapon
+Nerapa____
+SrBehemoth
+Kefka_____
+Tentacle__
+Dullahan__
+Doom Gaze_
+Chadarnook
+Curley____
+Larry_____
+Moe_______
+Wrexsoul__
+Hidon_____
+KatanaSoul
+L.30 Magic
+Hidonite__
+Doom______
+Goddess___
+Poltrgeist
+Kefka_____
+L.40 Magic
+Ultros____
+Ultros____
+Ultros____
+Chupon____
+L.20 Magic
+Siegfried_
+L.10 Magic
+L.50 Magic
+Head______
+Whelk Head
+Colossus__
+CzarDragon
+Master Pug
+L.60 Magic
+Merchant__
+B.Day Suit
+Tentacle__
+Tentacle__
+Tentacle__
+RightBlade
+Left Blade
+Rough_____
+Striker___
+L.70 Magic
+Tritoch___
+Laser Gun_
+Speck_____
+MissileBay
+Chadarnook
+Ice Dragon
+Kefka_____
+Storm Drgn
+Dirt Drgn_
+Ipooh_____
+Leader____
+Grunt_____
+Gold Drgn_
+Skull Drgn
+Blue Drgn_
+Red Dragon
+Piranha___
+Rizopas___
+Specter___
+Short Arm_
+Long Arm__
+Face______
+Tiger_____
+Tools_____
+Magic_____
+Hit_______
+Girl______
+Sleep_____
+Hidonite__
+Hidonite__
+Hidonite__
+L.80 Magic
+L.90 Magic
+ProtoArmor
+MagiMaster
+SoulSaver_
+Ultros____
+Naughty___
+Phunbaba__
+Phunbaba__
+Phunbaba__
+Phunbaba__
+__________
+__________
+__________
+Zone Eater
+__________
+__________
+__________
+Officer___
+Cadet_____
+__________
+__________
+Soldier___
+__________
+__________
+__________
+Atma______
+__________
+__________

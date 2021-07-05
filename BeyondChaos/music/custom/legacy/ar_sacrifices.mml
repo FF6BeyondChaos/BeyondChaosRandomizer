@@ -1,0 +1,99 @@
+#TITLE Sacrifices
+#ALBUM ActRaiser
+#COMPOSER Yuzo Koshiro
+#ARRANGED Gi Nattak
+
+# Converted from binary by mfvitools
+
+#WAVE 0x20 0x07
+#WAVE 0x21 0x0D
+#WAVE 0x22 0x1B
+#WAVE 0x23 0x06
+#WAVE 0x24 0x90
+
+
+{1}
+l16t120%v50%b0,70%f0,0%e1%k1 $1 v70p60|0o6m48,18,239d2^4c2  ^4>a+2a8g8  
+a4^8^rf4g2  e4f2d4  g2f8g8a4  ^8^ra4<d2  
+^4c2^4  >a+2a8g8a4  ^8^rf4g2  e4f2g4  
+e4d4c4d2  ^8^rf2e8d8  e4c+4>a4<g2  f8e8f4d4>a4  
+<a2g8f8g2  a+4a2f4  g2^4f2  e8d8e4c+4>a4  
+<g2f8e8f4  d4>a4<a2  a+8<c8d4>a+4g4  f2e8d8e4  
+^8^ra4
+;1
+
+l16
+{2}
+l16%e1%k1 $2 v80p60|1o5ar8^ar8^  ar8^ar8^ar8^ar8^  
+fr8^fr8^er8^fr8^  fr8^fr8^dr8^dr8^  dr8^dr8^dr8^dr8^  dr8^dr8^dr8^er8^  
+er8^er8^ar8^ar8^  ar8^ar8^ar8^ar8^  fr8^fr8^er8^fr8^  fr8^fr8^dr8^dr8^  
+dr8^dr8^dr8^dr8^  cr8^cr8^cr8^d2  ^8^rd2^4  c+2^4c+2  
+^4d2^4  f2^4e2  ^4f2^4  e2^4d2  
+^4c+2^4  c+2^4d2  ^4f+2^4  d2^4d2  
+^4e2^8^r  
+;2
+
+l16
+{3}
+l16%e1%k1 $3 v80p60|1o5f2^8^re2  ^8^rd4^8^rc8^^32r32  
+c2^8^r>a+2  ^8^ra2^8^r  a+2^8^r<d8^^32r32  e8^^32r32c+8^^32r32f2  
+^8^re2^8^r  d4^8^rc8^^32r32c2  ^8^r>a+2^8^r  a2^8^ra2  
+^8^ra2^8^r  a1  ^1  ^2^4^8^r  
+<c2^8^r>a1  ^4^8^r<c4^8^r  c+8^^32r32>a1  
+^1  ^2^4^8^r  <d2^8^r>a+2  ^8^rb2^8^r  
+<c+2^8^r
+;3
+
+l16
+{4}
+l16%e1%k1 $4 v80p60|1o5o3d2  ^8^ra2^8^r  a+2^8^rf2  
+^8^rg2^8^r  d2^8^rg2  ^8^ra2^8^r  d2^8^ra2  
+^8^ra+2^8^r  f2^8^rg2  ^8^rd2^8^r  a2^8^rd2  
+^8^r<d8^^32r32>a8^^32r32f8^^32r32  a8^^32r32e8^^32r32c+8^^32r32>a8^^32r32  
+b8^^32r32<c+8^^32r32d8c+8d8e8  f8g8f8^^32r32c8^^32r32>a8^^32r32  
+<c8^^32r32d8^^32r32e8^^32r32f8^^32r32  c8^^32r32>a8^^32r32<c8^^32r32d8^^32r32  
+e8^^32r32d8^^32r32>a8^^32r32<f8^^32r32  a8^^32r32e8^^32r32c+8^^32r32>a8^^32r32  
+b8^^32r32<c+8^^32r32d8c+8d8e8  f8g8a8^^32r32f+8^^32r32d8^^32r32  
+>g8^^32r32a8^^32r32a+8^^32r32b8^^32r32  <d8^^32r32g+8^^32r32a8^^32r32e8^^32r32  
+>a8^^32r32
+;4
+
+l16
+{5}
+l16%e1%k1 $5 v80p60|1o5<d2^4  c2^4>a+2  a8g8a4^8^rf4  
+g2e4f2  d4g2f8g8  a4^8^ra4<d2  ^4c2^4  
+>a+2a8g8a4  ^8^rf4g2  e4f2g4  e2d8c8d2  
+^8^rf2^8^r  e2^8^rg2  ^8^rf2^8^r  a2^8^rg2  
+^8^ra2^8^r  g2^8^rf2  ^8^re2^8^r  g2^8^rf2  
+^8^ra2^8^r  g2^8^rg+2  ^8^ra2^8^r  
+;5
+
+l16
+{6}
+l16%e1%k1 $6 v68p74|2o5r1  
+^1  ^1  ^1  ^1  
+^1  <d8>a8<d8e8f8g8a8e8  c8e8>a8<c8>a+8f8a+8<c8  d8e8f8c8>a8<c8>f8a8  
+a+8g8a+8<c8d8e8f8d8  >a8<d8>f8a8e8d8c8e8  >a8<c8d8>a8f8a8d8r8  <d8^^32r32>v34p127|4o4a8^^32r32f8^^32r32a8^^32r32  
+e8^^32r32c+8^^32r32>a8^^32r32b8^^32r32  <c+8^^32r32d8c+8d8e8f8g8  
+f8^^32r32c8^^32r32>a8^^32r32<c8^^32r32  d8^^32r32e8^^32r32f8^^32r32c8^^32r32  
+>a8^^32r32<c8^^32r32d8^^32r32e8^^32r32  d8^^32r32>a8^^32r32<f8^^32r32a8^^32r32  
+e8^^32r32c+8^^32r32>a8^^32r32b8^^32r32  <c+8^^32r32d8c+8d8e8f8g8  
+a8^^32r32f+8^^32r32d8^^32r32>g8^^32r32  a8^^32r32a+8^^32r32b8^^32r32<d8^^32r32  
+g+8^^32r32c+8^^32r32e8^^32r32a8^^32r32  
+;6
+
+l16
+{7}
+l16%e1%k1 $7 v80p50|3o4d2^8^ra2  
+^8^ra+2^8^r  f2^8^rg2  ^8^rd2^8^r  g2^8^ra2  
+^8^rd2^8^r  a2^8^ra+2  ^8^rf2^8^r  g2^8^rd2  
+^8^ra2^8^r  d2^8^r4^  v34p0|4o3a8^^32r32f8^^32r32a8^^32r32e8^^32r32  
+c+8^^32r32>a8^^32r32b8^^32r32<c+8^^32r32  d8c+8d8e8f8g8f8^^32r32  
+c8^^32r32>a8^^32r32<c8^^32r32d8^^32r32  e8^^32r32f8^^32r32c8^^32r32>a8^^32r32  
+<c8^^32r32d8^^32r32e8^^32r32d8^^32r32  >a8^^32r32<f8^^32r32a8^^32r32e8^^32r32  
+c+8^^32r32>a8^^32r32b8^^32r32<c+8^^32r32  d8c+8d8e8f8g8a8^^32r32  
+f+8^^32r32d8^^32r32>g8^^32r32a8^^32r32  a+8^^32r32b8^^32r32<d8^^32r32g+8^^32r32  
+c+8^^32r32e8^^32r32a8^^32r32
+;7
+
+l16

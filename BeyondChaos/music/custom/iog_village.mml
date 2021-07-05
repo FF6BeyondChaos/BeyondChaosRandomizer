@@ -1,0 +1,321 @@
+#TITLE Blessing of Nature
+#ALBUM Illusion of Gaia
+#COMPOSER Yasuhiro Kawasaki
+#ARRANGED Rushlight
+
+#VARIANT ~ 
+#VARIANT ` nobird
+
+#WAVE 0x20 0x36 ## Guitar
+#WAVE 0x21 0xA3 ## Pan Flute
+#WAVE 0x22 0x22 ## Vibraphone
+
+#WAVE 0x28 0x7B ## Percussion Slap
+#WAVE 0x29 0x7A ## Conga
+
+## Original tempo is 36.6, but it essentially treats a beat as a measure.
+## It's impossible to get the chocobo sound to come out at a decent speed then.
+## So we'll multiply original tempo by 4 and adjust note durations.
+#def init= t146 %x220 %v20 %b0,70 %f0,0
+
+## This always gets multiplied by no more than 0.63
+#def flute_v= v140
+## This never gets multiplied by more than 1, and the calculation macro will roll it down to 127 if needed
+#def guit_v= v130
+#def vibra_v= v20
+## This factor is multiplied by 3 and 4 respectively, for the two chocobo channels
+#def kwehVolFactor=v6
+
+## This song uses velocity per note. Define macros for each velocity
+## The volume adjustment of velocity tends to be max_volume * (velocity/max_velocity)^2
+## We're assuming max velocity is 127
+#def flute_100= 'flute_v*v.63'
+#def flute_92=  'flute_v*v.53'
+#def flute_85=  'flute_v*v.46'
+#def flute_75=  'flute_v*v.35'
+#def flute_62=  'flute_v*v.24'
+
+#def guit_117=  'guit_v*v.86'
+#def guit_112=  'guit_v*v.79'
+#def guit_100=  'guit_v*v.63'
+#def guit_92=   'guit_v*v.53'
+#def guit_75=   'guit_v*v.35'
+
+#def guit=  |0 o5 'guit_v*v1'      %e1 %r16 %s4 m
+
+#def flute= |1 o6 'flute_v' p64 %e1 %r10 %s2 %y2 m48,40,222
+#def vibra= |2 o6 'vibra_v' p64 %e1 %r10 %s2 %y3 m48,40,222
+#def guit1= 'guit' p85
+#def guit2= 'guit' p75
+#def guit3= 'guit' p64
+#def guit4= 'guit' p53
+#def kwehBase= %e0 m v
+
+## It should be noted that the chocobo effect sections take 24 ticks, or one eighth note
+## These macros will take a quarter note to simplify things
+#def kwehR1= p110 ~[j1,9001]~ r8 `r8`
+#def kwehR2= p110 ~[j1,9002]~ r8 `r8`
+#def kwehL1= p17  ~[j1,9001]~ r8 `r8`
+#def kwehL2= p17  ~[j1,9002]~ r8 `r8`
+
+## #drum "k"=5a  |8 v120 p75  %r0  %e0 m
+#drum  "s"=5b- |8 v40 p43 %r0 %e0 m
+## 3 different conga notes, with various volumes.
+## We'll use c, k and q for the notes, with adjacent letters for higher volumes
+#drum  "c"=5d  |9 v40 p85 %r20 %e0 m
+#drum  "k"=5e- |9 v40 p85 %r20 %e0 m
+#drum  "l"=5e- |9 v56 p85 %r20 %e0 m
+#drum  "q"=5e  |9 v56 p85 %r20 %e0 m
+#drum  "r"=5e  |9 v75 p85 %r20 %e0 m
+## volumes are gonna be 20v30v50
+
+{1}
+'init'
+r4
+$
+## Pan Flute, originally track 5
+'flute-o1'
+l4
+'flute_100'd1r>'flute_92'b<d
+## 3
+'flute_100'g'flute_92'f+1r2'flute_75'e
+## 5
+f+'flute_85'g1reg
+## 7
+'flute_75'<c>b2'flute_92'a2ga2
+## 9
+rd1r'flute_85'>b<d
+## 11
+'flute_92'gf+2. 'flute_75'g'flute_85'a2g
+## 13
+f+g1f+2g2g1^1r2.
+## 18
+[5r1]
+## 23
+## Vibraphone, originally track 5
+'vibra'
+l4
+rd1^4>b<d
+## 25
+gf+1.ef+g1^4eg
+## 29
+<c>b2a2ga2
+## 31
+## Pan Flute, originally track 5
+'flute-o1'
+l4
+r'flute_100'd1'flute_92'r>b<'flute_100'd
+## 33
+gf+2.'flute_85'g'flute_92'a2'flute_85'g'flute_75'f+'flute_92'g1f+2g2 g1.r2'flute_100'e1^4'flute_85'gf+
+## 41
+ee-2.>'flute_62'b'flute_92'b2.<e-8e8'flute_85'f1.e
+## 45
+'flute_92'dc+1^1'flute_100'e1r'flute_85'g'flute_75'f+
+## 49
+'flute_85'ee-2.>'flute_75'b'flute_85'b2<cd'flute_92'e1'flute_85'f+2g2'flute_92'a1^1
+;
+
+
+{2}
+r4
+$
+## Guitar 1, originally track 1
+'guit1-o2'
+l1
+'guit_112'ggbb aa<d1..
+## 9
+d4>ggbb a<dcc >bb'guit_100'a<d> g<d2.
+## 23
+^4>
+'guit_117'g'guit_112'g bbaa<d1..
+## 31
+d4>gg bba<d> gg2f+2eb bb<dd> aaeb bbaa< dd
+;
+
+
+{3}
+r4
+$
+## Guitar 2, originally track 2
+'guit2-o1'
+l2
+r4'guit_100'gg2.<g>r4f+f+2.<drc2.>gg4r<ee4c
+## 9
+^4r>b2.gg4r<d2.>f+
+## 13
+f+4r<e2.c>a4r<e2.>g
+## 17
+g4r<d2.>aa4r 'guit_92' <g2.>a
+## 21
+a4r2.'guit_75'<d2.>a4
+## 23
+^4r4'guit_100'dd2.g4
+## 25
+<g4rd2.>f+<f+4rc2.>g4<geee4c
+## 31
+>rdd2.g4
+## 33
+<g4rdag>r4e2.<f+g r4>g2.r4g2.r4gg2.<g re-2.>aa4r<f1d r4>eg2.<gr>b2.g
+## 49
+g4r<f+1e->r4eg2.<grc2.>f+f+4
+;
+
+
+{4}
+r4
+$
+## Guitar 3, originally track 3
+'guit3-o1'
+l2
+r'guit_100'b2.gg4r<d2.>f+
+## 5
+f+4r<e1ceag>g4
+## 9
+^4r<g1>b<f+>a1a r4eg2.<cgc1e f+>a1<f+r4 'guit_92'>gg2.<c r4 'guit_75' >g2.<'guit_92'f+2.
+## 23
+>'guit_75'f+4r'guit_112'b2.'guit_100'd4<d4
+## 25
+r4f+>a1a<ge2.e
+## 29
+e4bag>g4
+## 31
+^4r'guit_112'b2.'guit_100'd4<d4
+## 33
+r4f+2.g>f+<f+4rc2.c
+## 37
+>a4rb1<d>rb2.g
+## 41
+g4<rf+1e->r4aa2.<f rc+2.>gg4r<g1>b r4f+a2.<arc2.>g
+## 53
+g4r<f+1c
+;
+
+
+{5}
+r4
+$
+## Guitar 4, originally track 4
+'guit4'
+l2
+rg2.r4>b<f+>a1ar4 eg2.<gr4c>g<a
+## 9
+^4r4>gg2.<g>r4f+f+2.<d rcf+g>r4gg2.<c>r4 f+f+2.<dr'guit_92'cf+g r'guit_75'>b2.<c
+## 23
+^4'guit_117'd>'guit_100'g2.b
+## 25
+b4r4f+f+2.<e>r4eg2.<c4
+## 29
+<c4>r4c>g<a
+## 31
+^4'guit_117'd>'guit_100'g2.b
+## 33
+b4r4ab2.a<g2.>g2.<c g2.>g2.r4f+r4<g1>b r4f+a2.<ard2.>a
+## 45
+a4r<e1c+>r4gg2.<g rd+2.>aa4r<e1c> r4f+f+2.<f+
+
+;
+
+
+{6}
+## Percussions, originally track 6
+l4
+r
+$
+"!!!o"
+## It's deceptive but this pattern cuts off partway through at the end of the song before the song loops
+[14 "krs krs kr"j14"s qs kqs cr"]
+;
+
+
+{7}
+r4
+$
+## Chocobo pitch modulation base
+'kwehBase'
+r1
+p110
+'kwehR1' r2
+## 3
+r1r2. 'kwehL1'
+## 5
+r1r1r1r1
+## 9
+r1r4 'kwehR1' r2r1r1
+## 13
+r2. 'kwehL1' r1r1r1
+## 17
+r1r1r4 'kwehR1' r2r1
+## 21
+r1r2. 'kwehL1'
+## 23
+r1r1
+## 25
+r1r1r1r4 'kwehR1' r2
+## 29
+r4 'kwehR1' r2r1
+## 31
+r2 'kwehL1' r4r1
+## 33
+r1r1r4 'kwehL1' r2r1
+## 37
+r4 'kwehR1' r2r1r1r2. 'kwehR1'
+## 41 
+r2. 'kwehL1' r1r1r1
+## 45
+r1r4 'kwehR1' r2 'kwehR1' r4r2r1
+## 49
+'kwehR1' r2 'kwehL1' r1r1r1
+## 53
+r1r1r4
+;
+
+
+{8}
+r4
+$
+## Chocobo
+'kwehBase'
+r1
+p110
+k0'kwehR2' r2
+## 3
+r1r2. k-3'kwehL2'
+## 5
+r1r1r1r1
+## 9
+r1r4 k0'kwehR2' r2r1r1
+## 13
+r2. k-3'kwehL2' r1r1r1
+## 17
+r1r1r4 k0'kwehR2' r2r1
+## 21
+r1r2. k-3'kwehL2'
+## 23
+r1r1
+## 25
+r1r1r1r4 k0'kwehR2' r2
+## 29
+r4 k0'kwehR2' r2r1
+## 31
+r2 k-3'kwehL2' r4r1
+## 33
+r1r1r4 k-1'kwehL2' r2r1
+## 37
+r4 k0'kwehR2' r2r1r1r2. k-2'kwehR2'
+## 41 
+r2. k-3'kwehL2' r1r1r1
+## 45
+r1r4 k0'kwehR2' r2 k-2'kwehR2' r4r2r1
+## 49
+k-1'kwehR2' r2 k-3'kwehL2' r1r1r1
+## 53
+r1r1r4
+;
+
+
+
+
+$9001 ## Chocobo sfx layer 1
+@4 'kwehVolFactor*v3' v6,0 %n1 %c27 [5c48] %n0 v r48]
+$9002 ## Chocobo sfx layer 2
+@3 o12 %p1 'kwehVolFactor*v4' m255,+3 v0,1,191 &21c12 %p0 v m r64]

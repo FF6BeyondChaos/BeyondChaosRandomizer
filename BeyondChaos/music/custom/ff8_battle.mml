@@ -1,0 +1,447 @@
+#TITLE Don't Be Afraid
+#ALBUM Final Fantasy VIII
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#VARIANT _ tr
+#VARIANT `
+
+#WAVE 0x20 0x66 strings
+#WAVE 0x21 0x63 strings (oct.)
+#WAVE 0x22 0x82 trumpet
+#WAVE 0x23 0x80 trumpet (oct.)
+#WAVE 0x24 0x84 horn
+#WAVE 0x25 0x87 brass sect.
+#WAVE 0x26 0x54 syn.bass
+#WAVE 0x27 0x08 g.piano
+#WAVE 0x28 0x29 t.bells
+#WAVE 0x29 0x5A timpani
+#WAVE 0x2A 0x1C snare
+#WAVE 0x2B 0x8A side stick
+#WAVE 0x2C 0x2D crash cymbal
+#WAVE 0x2F 0x9D triangle
+
+#def init= t165 %v35 %b0,100 %f0,0
+
+#def strings=  |0 o5 %a10
+#def ostrings= |1 o5
+#def trumpet=  |2 o5
+#def otrumpet= |3 o5
+#def horn=     |4 o5
+#def brass=    |5 o5
+#def bass=     |6 o5
+#def piano=    |7 o6 %r13
+#def bell=     |8 o5 %y3%s1
+#def timpani=  |9 o6
+
+#def oneString= |0 %a10
+#def twoString= |1
+
+#def s= v48
+#def t= v48
+#def h= v38
+#def b= v48
+#def y= v48
+#def p= v42
+#def l= v48
+#def k= v60
+
+#def sf= v1,48
+
+## "mixed horn and brass" and "tuba (as trumpet)" may need different mixing values from main inst
+## hb - horn + brass as octave trumpet
+## shb - horn + brass + strings as octave strings
+## hh - horn + brass (same octave) as horn
+#def hb= v34
+#def shb= v94
+#def u= v34
+#def hh= v53
+
+#def snareVol= v58
+#def stickVol= v32
+#def crashVol= v88
+#def triVol=   `v100` _v40_
+
+#def setSnareNoVolume= o5 |A 'panSnare' %r22
+
+#drum "u"= 5a+ |A 'panSnare' 'snareVol*v1.84' %r22
+#drum "t"= 5a+ |A 'panSnare' 'snareVol*v1.72' %r22
+#drum "s"= 5a+ |A 'panSnare' 'snareVol*v1.44' %r22
+#drum "r"= 5a+ |A 'panSnare' 'snareVol*v1.30' %r22
+#drum "q"= 5a+ |A 'panSnare' 'snareVol*v1.14' %r22
+#drum "p"= 5a+ |A 'panSnare' 'snareVol*v0.86' %r22
+#drum "o"= 5a+ |A 'panSnare' 'snareVol*v0.72' %r22
+#drum "n"= 5a+ |A 'panSnare' 'snareVol*v0.56' %r22
+#drum "m"= 5a+ |A 'panSnare' 'snareVol*v0.42' %r22
+#drum "l"= 5a+ |A 'panSnare' 'snareVol*v0.28' %r22
+
+#drum "y"= 5g |C 'panCrash' 'crashVol*v1.44' %y0%s6%r19
+
+#drum "c"= 5a+ |B 'panStick' 'stickVol*v1.30'
+#drum "d"= 5a+ |B 'panStick' 'stickVol*v0.42'
+
+#drum "a"= 5b |F 'panTriangle' 'triVol*v0.86'
+#drum "b"= 5b |F 'panTriangle' 'triVol*v0.28'
+
+#drum "e"= 4a |9 'panTimpani' 'k*v1.72'
+#drum "f"= 5d |9 'panTimpani' 'k*v1.72'
+#drum "g"= 5f |9 'panTimpani' 'k*v1.72'
+
+#def panHorn= p24
+#def panTrumpet= p54
+#def panBrass= p84
+#def panTuba= p114
+#def panStr1= p4
+#def panStr2= p34
+#def panStr3= p64
+#def panStr4= p94
+#def panStr5= p124
+#def panPiano= p110
+#def panBells= p20
+#def panTriangle= p100
+#def panStick= p20
+#def panSnare= p64
+#def panCrash= p60
+#def panTimpani= p75
+#def panBass= p64
+
+#def panStr12= p19
+#def panStr13= p34
+#def panHornBrass= p54
+#def panStr35= p94
+#def panStr35HornBrass= p74
+#def panStr45= p109
+
+#cdef ( %l1
+#cdef ) %l0
+
+#cdef ~ %r28^%r0
+
+## Structure:
+## 1st measure 1/4, all rest 5/4 time
+## 01 - 09: intro
+## Inf. loop point at 10
+## Complex loop starts at 10, approx. AAAA BB CC AAAA DD CC, ending at 26
+## [3 <j3 to end> (10) (11) (12) (13) <j2 to D> (14) (15) $C (16) (17) ] $D (22) (23) <;C> $end
+
+{1} 'init' %e1
+r4
+## 02 - 09: strings iv
+[ 'panStr4''strings-o1' l16
+[4 [3 's*v1.3'ar8. j3 's*v.72'ar] ar8. j1,1002 m-1] %k0
+]
+$ ## 10 - 17 .. 21: strings i+ii -> strings i
+[3 j3,1026
+'ostrings+o1''panStr12''s*v1.14' l4
+a.b.<cd>  a1^    a.< 'oneString''panStr1' gd8eb  <d1^>>
+j2,1022
+l8 b4<c>b4a g4ag4d f4e4d4 >
+$1023
+l16 (&13 's*v.56'b 's*v.64'<c 's*v.72'd 's*v.78'g
+'s*v.86' a&59r arr4 ar8. ar8.    arr4 arr4 ar8.br8.
+]
+## 22: strings i, second iteration
+$1022 's*v.86' d1.^8c4.>b4 %j1023
+## 26: horn (merged w/ brass)
+$1026
+'horn-o1''panHornBrass''hh*v1.29' l4
+a2.<ed  e1g  f+1^  d2.ef    e1^  >a1^
+"!!!o y2."
+'horn''panHornBrass''hh*v.93' c>b<c1^
+## 34: horn - strings i+iii / strings i
+e1^ g1^ f+1^ f1^
+'ostrings+o1''panStr13''s*v.72' d1^
+'oneString''panStr1' a1^ g1^ f1^
+## 42: 
+'horn-o1''panHornBrass''hh*v1.29' l4
+a2.<ed  e1g  f+1^  d2.c>b a1^1^
+'timpani-o1''panTimpani''k*v1.72' cf1^1.
+;
+
+## 1002 - transpose for strings iv (mid)
+## Also providing $9 for universal 'end loop here' jump target
+$1002 %k3 $9]
+
+{2} %e1
+l16 "mprt"
+## 06 - 09: lead strings (ii/i)
+"t4" [23^4]
+'panStr2''strings''s*v1.3' l16
+(&13 agab < 'sf*v188,.88' &188 c v3,0 ^64)
+'panStr1''s*v1.3'
+(&13 edef 'sf*v192,.86' &239 g ) a+1^4
+$ ## 10 - 17 .. 21: crash / tuba / strings iv+v
+[3 j3,2026 ##  @22: horn
+[ "!!!o y1^4" j2,213
+'trumpet+o1''panTrumpet' l16
+[3 't*v1.14' er 't*v1' er j3 er m-1] 't*v1.14' d8 't*v1' c+r %k0
+]$213
+^4 j2,2022
+'trumpet-o1''panTuba''u*v1.14' l4
+dc>ba g1.
+$2023
+'ostrings-o1''panStr45' j2,2024 's*v1.37' 
+g8defg8
+$2024
+l16 [[3 's*v1.37' ar8. j3 's*v.79' ar] ar8. ]
+]
+## 22: horn
+$2022 r1 'horn-o1''panHorn''h*v1.14' b4.a4.g1.. %j2023
+## 26: strings ii - trumpet
+$2026
+'strings''panStr2''s*v.72' l4
+e1^ g1^ a1^ <c1^> e1^
+'trumpet''panTrumpet''t*v1.14'
+r2. aga1^1^ r
+## 34: trumpet - strings ii
+a2.<ed  e1g  f+1^  d2.fg  a1^1.
+'strings''panStr2''s*v.72' b1^ a+1^
+## 42: 
+'bass-o1''panBass' l16 %e0
+[4 ['y*v1.58'ar 'y*v.42' arar] j4,245 ['y*v1.58'ar 'y*v.42' ar] ]
+$245 'y*v1.58'ar 'y*v.42' ar
+%e1 'strings''panStr1'
+( &13 l16 's*v.64'a 's*v.72'b 's*v.78'<c 's*v.86'f 's*v.94'&23 %a
+[4 l8 a)gafc fagaf ]
+;
+
+
+{3} %e1
+r4
+'panStr35''ostrings' l16
+[4 [3 's*v1.29' dr8. j3 's*v.71'dr] dr8. ]
+[4 [4 'panStr35HornBrass' 'shb*v1.36' dr
+   'panHornBrass''otrumpet''hb*v.78' dr
+   'ostrings' j3,9j4 'panStr35HornBrass''shb*v.75' dr ] ]
+$ ## 10 - 17 .. 21: bass - trumpet (crash) trumpet
+[3 j3,3026
+'bass-o1''panBass' l16 %e0
+[4 [3 'y*v1.58'ar8. j3 'y*v.42' ar] ar8. ]
+'trumpet''panTrumpet''t*v1.14' %e1 l8
+j2,3022
+b4<c>b4a g4ag4d f4e4d4>b4
+$3023
+"!!!o y4^1"
+'trumpet''panTrumpet''t*v1.14' l16
+err4 f+rr4 gr8.ar8.
+]
+## 22: trumpet
+$3022 l8
+ba+b<c>b<cdg af+gf+gaga b<cd>b
+%j3023
+## 26: bass / tuba
+$3026
+'bass-o1''panBass' l16 %e0
+[6 ['y*v1.58'ar 'y*v.42' arar] j6,331 ['y*v1.58'ar 'y*v.42' ar] ]
+$331 'trumpet-o2''panTuba''u*v1.14' %e1 l4
+aga1^1.
+## 34: tuba - strings iii
+a2.<ed  e1g  f+1^  d2.fg  a1^1.
+'strings''panStr3''s*v.72' d1^1.
+## 42: 
+'panStr2' e1^ g1^ a1^ <c1^
+'trumpet+o1''panTrumpet''t*v1.14' c1^ d1^ e1^ f1^
+;
+
+{4} %e1
+r4
+## 02 - 09: Perc Mixed Primary
+l16 [8 [4 "c8ad" j3,9 j4 "d8"] ]
+$ ## 10 - 17 .. 21: (timpani+) snare - strings ii - snare
+[3 j3,4026
+'timpani-o2''panTimpani''k*v1.72' a1^4
+[3 l8 "!!!o sm" j3 "m" ] l16 "mpru u4."
+'strings+o1''panStr2''s*v1.14'
+l4  gd8eb  <d1^
+'setSnareNoVolume' j2,4022
+":s:" l8 [4 "!v0 s4o"] "ss4s4s" l16 "npqs"
+$4023
+["!v0 s4.s4.s4s4"]
+]
+## 22: snare
+$4022
+":s:" l16 [ [4 "!v0 s8mm" j3,9 j4 "m8"] ]
+%j4023
+## 26: snare +triangle
+$4026
+"!!!o" l8
+[ [4 "uabpao" j4 "bqua" ] "ua" l24 "usqpnl" ]
+## 34: timpani~snare
+l8 [4 ["eoo"]["eo"]] [4 ["!o foo"]j4,441["!o fo"]] $441 "fof16f16f16f16"
+## 42: snare +triangle
+[4 "uabpao" j4 "bqua" ] "ua" l24 "usqpnl"
+[4 l16 ["s8mmm8"]["s8mm"] ]
+;
+
+{5} %e1
+r4
+## 02 - 09: crash / harmony strings (ii)
+"y4" [19^4] "y1"
+'panStr2''strings+o1' v0 l16
+ &237 c 'sf*v3,.86' ^64^4 d1
+(&13 dcde 'sf*v192,.86' &239 f )
+$ ## 10 - 17 .. 21: strings iii - ii - iii
+[3 j3,5026
+'strings''panStr3''s*v1.14' l4
+e.e.ee e1^   f.b.<cd f1^
+j2,5022
+'panStr2' l8
+d4ed4c >b4<c>b4f a4g4f4
+'panStr3' l16 $5023
+( &13 's*v.56'g 's*v.86'a 's*v1.14'a+ 's*v1.44'b <
+'s*v1.84' c&59r d32^24&58r e32^24&34r f+32^24&34r
+'s*v1.14' crr4 drr4 er8.f+r8.
+]
+## 22: strings iii
+$5022
+> 's*v.86' g4.d4.>b2..<c4.d4
+%j5023
+## 26
+$5026
+'strings''panStr3''s*v.72' l4
+c1^ e1^ d1^1ed c1^ 'panStr2'
+g1^ a1^ <c1>
+( l16 &13 's*v.86'a 's*v.94'b 's*v1'<c 's*v1.08'd
+## 34: strings ii - horn~timpani
+'s*v1.14' [4 e j1,5033 $5034 ~) <c~>  c~b~<c~>a~  e~<c~>c~a~ ]
+'s*v.72' l4 > a1^ <c1^
+'horn''panHorn''h*v1.84' l16
+drr4 drr4 dr8.dr8.
+drr4 drr4 dr8.dr
+"!!!o o8"
+## 42: strings iii
+'strings''panStr3''s*v.72' l4
+c1^ e1^ d1^1.
+>a1^ b1^< c1^ d1^
+;
+
+$5033 &11 %j5034
+
+{6} %e1
+r4
+'panHornBrass''otrumpet' l16
+[4 [4'hb*v1.43' dr 'hb*v.78' dr j3,9 j4 dr] ]
+'panTrumpet''trumpet+o1'
+[4 [4't*v1.14' dr 't*v.56' dr j3,9 j4 dr] ]
+$ ## 10 - 17 .. 21: brass -> timpani
+[3 j3,6026
+r1r4
+'brass''panBrass' l16
+[3 'b*v1.84' er 'b*v1.44' er j3 er %k3 j1,9 %k2] %k0 'b*v1.84' f8.
+'timpani-o2''panTimpani''k*v1.72' l16
+aa1^4 j2,6022 ^1 aaaa
+g1.r8g4g4g8gggg
+$6023
+a4.a4.a4a4 a4.a4.a4a4
+]
+## 22: timpani
+$6022
+l16 a4.a4a8a4<e4>     g1<d4>  g1gggg
+%j6023
+## 26: timpani - strings iv ~~ timpani
+$6026
+a4
+'panStr4''strings-o1' l16
+['s*v.72'er 's*v1.3'er8.] er8.
+[4 [gr8. 's*v.72' gr 's*v1.3'] j3,6029 g $630 r8.gr8. m-1]%k0
+[gr8. 's*v.72' gr 's*v1.3']
+'timpani-o2''panTimpani''k*v1.72' l16
+a4g4a4
+'panStr4''strings-o1' l16
+['s*v.72'f+r 's*v1.3'f+r8.] f+r8.
+[ fr8. 's*v.72' fr 's*v1.3'] fr8.
+'timpani-o2''panTimpani''k*v1.72' l16
+aaaa
+## 34: brass ~~ strings iv
+'brass-o1''panBrass''b*v1' l4  a1^ <c1^ d1^1.>
+l16 [4 [3 'b*v1.84''brass-o1''panBrass' ar8. j3 'strings-o1''panStr4''s*v.72' ar] ar8. j1,1002 m-1] %k0
+## 42: 
+'timpani-o2''panTimpani''k*v1.72' l16
+a1^1^4aaaa a1^1^4
+'bass-o1''panBass' l16 %e0
+'y*v1.58'ar 'y*v.42' ar
+[4 ['y*v1.58'fr 'y*v.42' frfr] ['y*v1.58'fr 'y*v.42' fr] ]
+%e1
+;
+
+$6029 a16 %j630
+
+{7} %e1
+'timpani-o2''panTimpani' l16
+'k*v.42'a 'k*v.86'a 'k*v1.30'a 'k*v1.72'a 
+## 06 - 09: Tuba
+[20^4]
+'trumpet-o2''u*v1.14''panTuba' l4
+d1^ f1^ g1^ g+1^
+$ ## 10 - 17 .. 21: horn - piano - brass
+[3 j3,7026
+r1r4 'horn''panHorn' l16
+[3 'h*v1.84' ar 'h*v1.44' ar j3 ar ] 'h*v1.84' a8.r
+r1. j2,7022 'piano-o2''panPiano''p*v1.14' l4 dc>bag1.
+'brass-o1''panBrass''b*v1.44' l8 gd4e4f4g a
+$7023 rr1 'b*v1.84' l16 err4 f+rr4 gr8.ar8.
+]
+## 22: crash - brass
+$7022
+r2. "!!!o y1."
+'brass''panBrass''b*v1.14' d4.c4.>b2 r8
+%j7023
+## 26: crash, .... strings iii
+$7026
+"!!!o y4" [24^4]
+'strings''panStr3''s*v.72' l4
+e1^ d1^1^ l16 (&13 's*v.86'c 's*v.94'd 's*v1'e 's*v1.08'&11g
+## 34: crash~~strings iii -> strings v
+"!!!o y4." 'strings''panStr3''s*v1.14' l16
+[4 j1,734 a~<e~>e~ $734 <d~e~c~>  a~<e~>e~<c~> ]
+"!!!o y1^4" 'strings''panStr3''s*v.72' f1^4
+'panStr5' l16 > [ [3 's*v1.44' dr8. j3 's*v.86' dr] dr8.]
+## 42: 
+'panStr4'
+[3's*v1.3'er8. j3 's*v.72'er] er8.
+[3's*v1.3'gr8. j3 's*v.72'gr] gr8.
+[3's*v1.3'f+r8. j3 's*v.72'f+r] f+r8.
+[3's*v1.3'fr8. j3 's*v.72'fr] fr8.
+"!!!o y2."
+'bell+o1''l*v1.72''panBells' l4 c1^ d1^ e1^ f2
+;
+
+{8} %e1
+r4
+## 02 - 09: Perc Mixed Secondary
+l16 [4 [4 "b8d8" j3,9 j4 "b8"] ]
+['piano-o3''p*v1.84''panPiano' d1^4
+ 'bell+o1''l*v1.72''panBells' d1^4 ]
+$ ## 10 - 17 .. 21: stick (+timpani) - crash - tuba - horn
+[3 j3,8026
+[4 "!!!o" l16 [3 "c8dd" j3 "d8"] j2,8011 "c8dd" ]
+j2,8022 "y1."
+'trumpet-o2''panTuba''u*v1.14' l8 gd4e4f4g a $8023 rr1
+'horn''panHorn''h*v1.84' l16 crr4 drr4 er8.f+r8.
+]
+## 22: strings iv+v
+$8022'ostrings-o1''panStr45'
+l16 [[3 's*v1.37' gr8. j3 's*v.79' gr] gr8. ] r8
+%j8023
+## 26: add'l triangle; bass
+$8026
+"!!!o" l8
+[3 "b"r4"b"r"b"r"ab"r ] "b"r4"b"r"bb"r"ba"  "b"r4"b"r"b"r"ab"r  "b"r4"b"r"b"
+'bass-o1''panBass' l16 %e0
+[3 j1,831 ['y*v1.58'ar 'y*v.42' arar] $831 ['y*v1.58'ar 'y*v.42' ar] ]
+%e1
+## 34: claves
+[8 "!!!o" l16 ["c8ddd8"]["c8dd"] ]
+## 42: triangle // (timpani) strings iv + triangle
+"!!!o" l8
+[3 "b"r4"b"r"b"r"ab"r ] "b"r4"b"r"bb"r"ea"   "ga"
+ l16
+[3'strings-o1''panStr4' j3 's*v.72' cr 's*v1.3' cr "!!!o a8"] 's*v1.3' cr "!!!o a8"
+[4'strings-o1''panStr4''s*v1.3' dr "!!!o a8" j3,9 j4 'strings-o1''panStr4''s*v.72' dr]
+[4'strings-o1''panStr4''s*v1.3' er "!!!o a8" j3,9 j4 'strings-o1''panStr4''s*v.72' er]
+[4'strings-o1''panStr4''s*v1.3' fr "!!!o a8" j3,9 j4 'strings-o1''panStr4''s*v.72' fr]
+;
+
+## Weave timpani into claves pattern @ m.11
+$8011 'timpani-o2''panTimpani''k*v1.72' l16 aaar ]
+

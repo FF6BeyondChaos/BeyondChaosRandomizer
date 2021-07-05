@@ -1,0 +1,195 @@
+#TITLE Slam Shuffle
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#SFXV ` *
+
+#VARIANT _
+#VARIANT ~ orig
+
+#WAVE 0x21 _0_ ~0x04~ 
+#WAVE 0x22 _0_ ~0xC2~
+#WAVE 0x23 _0_ ~0xC3~
+#WAVE 0x26 _0_ ~0x52~
+#WAVE 0x28 _0_ ~0x0D~
+#WAVE 0x29 _0_ ~0x1D~
+#WAVE 0x2A _0_ ~0x3D~
+#WAVE 0x2B _0_ ~0x8F~
+#WAVE 0x2C _0_ ~0x8E~
+
+## clavinet
+#def 1@i= _   @1  _ ~    |1  ~
+#def 1@o= _   o5  _ ~    o5  ~
+#def 1@v= _  v100 _ ~   v167 ~
+
+#def 1i= _   @1  _ ~    |1  ~
+#def 1o= _   o5  _ ~    o5  ~
+#def 1v= _  v100 _ ~   v100 ~
+
+## lead
+#def 2@i= _ @2   _  ~    |2  ~
+#def 2@o= _ o5   _  ~    o5  ~
+#def 2@v= _ v100 _  ~   v100 ~
+
+## wee ooooo
+#def 3@i= _ @3   _  ~    |3  ~
+#def 3@o= _ o5   _  ~    o4  ~
+#def 3@v= _ v100 _  ~   v200 ~
+
+## bass
+#def 6@i= _ @6   _  ~    |6  ~
+#def 6@o= _ o5   _  ~    o7  ~
+#def 6@v= _ v100 _  ~   v90 ~
+
+## percs
+#def 4@v= _ v100 _
+#def 5@v= _ v100 _
+#def 7@v= _ v100 _
+
+## pitchbende
+#def b= m8,2
+#def bb= m16,2
+#def f= m4,-12^48
+
+## auto percussion  0x04
+#drum "h"= 3a @4 '4@v*v1.20' %p0%e0 %r20
+#drum "i"= 6a @4 '4@v*v.80' %p0%e0 %r30
+
+#drum "j"= 5c @5 '5@v*v1.25' %p1%e1 m7,32 %s0%r26
+#drum "k"= 5g @5 '5@v*v1.25' %p1%e1 m6,31 %s0%r26
+
+## bc mode percussion
+#drum "l"= 5f |9 v125 %e0 %r20
+#drum "m"= 5a |8 *v50* `v80` %e0
+              
+#drum "n"= 5a |B v100 %e0
+#drum "o"= 5a |C v100 %e0
+
+#drum "p"= 5a |A v50 %e1
+
+## clavinet 1
+{2}
+t115%b0,100%f0,0_%x165_~%x232~%v50'1@v*v.60'
+'1@i' p40%e1m48,18,239%r20'1@o-o1'[8e12r12e12r4]
+$101'1@i''1@v*v.60''1@o-o1'%r20[16e12r12e12r4][8g12r12g12r4][8e12r12e12r4]
+'1i''1v*v.80''1o-o1'%r20
+[b12r12b12<a6g12g+6e12r6e12a6g12g+6e12r6e12r6e12>]<e12r12e12<d6c12c+6>
+a12r6a12<d6c12c+6>a12r6a12r6a12e12r12e12<d6c12c+6>a12r6a12<a12g12e12d+12
+d12c+12c2^2r4c12>b12a+12a1r1
+;101
+
+## clavinet 2
+{3}
+'1@v*v.60'
+'1@i' p40%e1m48,18,239%r20[4'1@o-o2'a12r12a12<c6>b12a12r12a12<d+6e12]
+$201'1@i''1@v*v.60'%r20[8'1@o-o2'a12r12a12<c6>b12a12r12a12<d+6e12][4c12r12c12d+6
+d12c12r12c12f+6g12][4>a12r12a12<c6>b12a12r12a12<d+6e12]
+'1i''1v*v.80''1o-o1'%r20e12r12
+e12<f+6r12d6r3f+6r12d6r2r12>e12r12e12<f+6r12d6r3f+6r12d6r2r12>a12r12a12
+<b6r12g6r3b6r12g6r2r12>a12r12a12<b6r12g6r3a12g12e12d+12d12c+12c2^2r4c12
+>b12a+12a1r1
+;201
+
+## wee ooo
+_{5}_ ~{6}~
+'3@v*v.40'
+'3@i' p90%e1m48,18,239r1r1'3@o-o1'[8a8m8,3^24^12]
+$301'3@o-o1'[32a8m8,3^24^12]<[16c8m8,3^24^12]>[16a8m8,3^24^12][16b8m8,3
+^24^12]<[12e8m8,3^24^12]r1r1>[8a8m8,3^24^12]
+;301
+
+## bass
+{4}
+'6@v*v1.20'
+'6@i' p64%e0m24,64,239r1r1'6@o-o4'a12r3%l1g+12a12r3%l1g+12a12r12%l1g+12
+a12r12%l1g+12a12r4.r24
+$401[4a12r3%l1g+12a12r3%l1g+12a12r12%l1g+12a12r12%l1g+12a12r4.r24]<[c12
+r3>%l1b12<c12r3>%l1b12<c12r12>%l1b12<c12r12>%l1b12<c12r4.r24]>[a12r3%l1
+g+12a12r3%l1g+12a12r12%l1g+12a12r12%l1g+12a12r4.r24]%r20e12r12e12e12r12
+e12e12r12e12e12r12e12e12r12e12e12r12e12e12r12e12<e6>d+12e12r12e12e12r12
+e12e12r12e12e12r12e12e12r12e12e12r12e12e12r12e12e12f+12g+12a12r12a12a12
+r12a12a12r12a12a12r12a12a12r12a12a12r12a12a12r12a12<g6>g+12a12r12a12a12
+r12a12a12r12a12a12r12a12<a12g12e12d+12d12c+12c2^2^4c12>b12a+12%r0a12r3
+%l1g+12a12r3%l1g+12a12r12%l1g+12a12r12%l1g+12a12r4.r24
+;401
+
+## lead
+~
+{1}
+'2@v*v.80'
+'2@i' p64%e1m16,18,239r1r1r1r1
+$501'2@o' [3
+%k-2 'b'a12r6 <'b'a12r6 'bb'd+4.m8,-12^24 %k0e12
+f+12.m8,-2^24e12f+12.m8,-2^24g12%k-2'b'f+6%k0e12%k-2'b'd+12%k0c12>b12 j2,502 j3,503
+a16'f'r3<%k-2m9,2d+12%k0e16'f'r3>g+12
+a16'f'r12b12<c16'f'r12d+12%k-2'bb'e4.m16,-12^12%k0r24> ]
+$502
+a16'f'r3b12<c16'f'r3>%k-2'b'g+12%k0
+a16'f'r12b12<c16'f'r12>b12%k-2'bb'a4.m16,-12^12%k0r24
+
+<%k-2'b'c12r6<'b'c12r6>'bb'f+4.m8,-12^24%k0g12
+a12.m8,-2^24g12a12.m8,-2^24a+12%k-2'b'a6%k0g12%k-2'b'f+12%k0d+12d12
+c16'f'r3%k-2m9,2f+12%k0g16'f'r3>b12<
+c16'f'r12d12d+16'f'r12f+12%k-2'bb'g4.m16,-12^12%k0r24> ]
+$503
+##a12r6<a12r6d+4^6e12
+##f+6e12f+6g12f+6e12d+12c12>b12
+a16'f'r3b12<c16'f'r3>g+12
+a16'f'r12%k-2'b'b12%k0<c16'f'r12>b16m4,-2^48%k-2'bb'a4.m16,-12^12%k0r24
+
+r1r1r1r1r1r1r1r1r1r1r1
+;501
+~
+_
+{1}
+'2@v*v.80'
+'2@i' p64%e1m48,18,239r1r1r1r1
+$501'2@o'a12r6<a12r6d+4^6e12f+6e12f+6g12f+6e12d+12c12>b12a12r3<d+12e12
+r3>g+12a12r12b12<c12r12d+12e12^4.r24>a12r6<a12r6d+4^6e12f+6e12f+6g12f+6
+e12d+12c12>b12a12r3b12<c12r3>g+12a12r12b12<c12r12>b12a12^4.r24<c12r6<c12
+r6>f+4^6g12a6g12a6a+12a6g12f+12d+12d12c12r3f+12g12r3>b12<c12r12d12d+12
+r12f+12g12^4.r24>a12r6<a12r6d+4^6e12f+6e12f+6g12f+6e12d+12c12>b12a12r3
+b12<c12r3>g+12a12r12b12<c12r12>b12a12^4.r24r1r1r1r1r1r1r1r1r1r1r1
+;501
+_
+
+## pitch modulation operator (orig mode only)
+*_
+{6}
+@7p64'7@v*v0'r64%e1
+'7@i' v0,180,201'7@o+o13'p0,255,60%a4%l1 c64
+$701 c64
+;701
+_*
+
+## perc - orig mode
+## must be after pitch operator unless sfxv prevents using that many channels
+_
+*{7}* `{6}`
+p75r1r1r1r1
+$801
+[46 "i12"r12"i12 h4"] r2 [6 "i12"r12"i12"]
+[%i r4 "!!!o j4" r4 "k4"]
+;801
+_
+
+## perc - bc mode
+~
+{5}
+p75r1r1r1r1
+$
+[46 "m12"r12"m12 l16"%e1^8.%e0] r2 [6 "!!!o" "m6p12"]
+[ "!!!o" "p12"r12"p12 n32"%e1^8..%e0 "p12"r12"p12 o4" ]
+;
+
+{7}
+p75r1r1r1r1
+$
+[46 "p12"r12"p12" r4]
+r2 [6 "p12"r6]
+r1r1
+;
+~

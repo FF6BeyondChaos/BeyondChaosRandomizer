@@ -1,0 +1,129 @@
+#TITLE Town Veiled In White
+#ALBUM Octopath Traveler
+#COMPOSER Yasunori Nishiki
+#ARRANGED Cecil188
+
+########## ------------------
+#SHORTNAME OT Town Veiled in_
+
+#WAVE 0x20 0x02 ~ was 0x0C piano
+#WAVE 0x21 0x71 ~ was 0x69 fiddle
+#WAVE 0x22 0x18 ~ was 0x20 rhodes
+#WAVE 0x23 0x66 ~ was 0x0D strings-mono
+#WAVE 0x24 0x6D ~ was 0x37 jingle bells
+#WAVE 0x25 0x63 ~ was 0x94 strings-octave
+#WAVE 0x26 0x06 (piano o7+)
+#WAVE 0x27 0x07 (piano o3-)
+#WAVE 0x28 0x09 (piano o6)
+
+#drum "b+"=5b- |4 v80 p64 %e1
+#drum "b"=5b- |4 v40 p64 %e1
+#drum "b-"=5b- |4 v16 p64 %e1
+
+#cdef ( %l1
+#cdef ) %l0
+
+#def oct0= o5
+#def oct1= o4
+#def oct2= o4
+#def oct3= o5
+#def oct4= o5
+#def oct5= o5
+#def oct6= o2
+#def oct7= o5
+#def oct8= o4
+
+#def vol0= v88
+#def vol1= v88
+#def vol2= v100
+#def vol3= v88
+#def vol4= v88
+#def vol5= v88
+#def vol6= v100
+#def vol7= v88
+#def vol8= v88
+
+#def vof3= v1,88
+
+#def <= |8>
+#def >= |0<
+
+{1}
+t90 %x255 %v50 %b0,100 %f0,0
+$ |6 'vol6*v.96' p64 %e1 'oct6+o2' %y1
+l2 d->a-b-f<d->a-r1<d->a-b-f3a-6<c3d-6c6>a-6f6e-3a-6f<d->a-b-f<d->a-r2f6g-6a-6b-r6<c6d-6e-f3c3d-6c6>b-r1
+ 'vol8*v1.27' |8 'oct8+o1' #%y0%s2
+ d->a-b-f<d->a-r1<d->a-b-f3a-6<c3d-6c6>a-6f6e-3a-6f6r3 <d->a-b-f<d->a-rf6g-6a-6b-r6<c6d-6e-f3c3d-6c6>b-r1
+;
+
+{2}
+$ |8 'vol8*v.64' p64 %e1 'oct8-o1'
+l6
+g-<d-g-a-2> g-<d-a-b-2 [>f<cga-2]>
+g-<d-g-a-2> g-<d-a-b-2> b-<fb-<c2>> b-<f<fd-c>f>
+g-<d-g-a-2> g-<d-a-b-2 [>f<cga-2]>
+e-b-<fg-2>  e-<cfa-2>   b-<f<cd-2>> b-<f<d-c>b-f
+|7 'oct7''vol7*v.96'
+>>g-<d-g-a-2>g-<d-a-b-2[>f<cga-2]>g-<d-g-a-2>g-<d-a-b-2>b-<fb-<c3r6>>b-<f<fd-c>f l12 'vol7*v1.27'[>g-<d-g-d-b-<cd-c>b-a-d-a-][>f<ca-fa-<ce-c>a-fa-d-]>e-b-<g->b-<g-b-<d->b-g-fe->b-f<ca-ca-<ce-c>a-<c>a-e->b-<<d-c>b-fb-d-fe-d-cd->b-1
+;
+
+{3}
+$ |5 'vol5*v.16' p64 %e1 'oct5+o2' m48,18,207 %r1
+l1 [8 r] d-^^^>%r2b-<cd-.%r12^2
+##measure 17-24
+'vol3*v.64' |3 %a4%r2 'oct3-o1' r6(b-6<c6d-.)e-c>r6(b-6<c6d-.)f.. l24 'vol3*v.8' %r3 <(cd-e-fg-a-
+##measure 25-32
+l1 'vol3*v.96' b-)fa-<c2>a-2g-fb-.%r15^2
+;
+
+{4}
+$
+l6 [4"^2b+bb-^1^1^1"]
+|2 'vol2*v.32' p64 %e1 'oct2+o2'
+ l2 d->a-b-f<d->a-r1<d->a-b-f3a-6<c3d-6c6>a-6f6e-3a-6f6r3 'vol2*v.64'<d->a-b-f<d->a-rf6g-6a-6b-r6<c6d-6e-f3c3d-6c6>b-r1 
+;
+
+{5}
+$ |3 'vol3*v.16' p64 %e1 'oct3+o2' m48,18,207 %a7%r2
+l1 [8 r] d-^^^>%r6b-<cd-.%r12^2
+##measure 17-24
+'vof3*v192,.64' %r6 'oct3-o1' e-6g-6a-6b-.a-^ 'vol3*v.16''vof3*v192,.64' e-6g-6a-6b-. <c3d-6e-3d-6c2>b-2
+##measure 25-32
+l1 |1 'oct1-o1' 'vol1*v.32' b-b-a-^b-<c>b-.%r12^2
+;
+
+{6}
+$ |3 'vol3*v.08' p64 %e1 'oct3+o1' m48,18,207 %a7%r3
+l1 [8 r] d-^^^>%r7b-<cd-.%r15^2
+##measure 17-24
+|3 'vol3*v.32' p64 %e1 'oct3' m48,18,207 %a2%r6
+l1 r6(g-6a-6b-.)<e-c>r6(g-6a-6b-.)<f.. l24 'vol3*v.8' %a15 > e-fg-a-b-<c
+##measure 25-32
+l1 'vol3*v.64' d->b-<ce-2c2d-cd-.r2
+;
+
+{7}
+$
+$ |0 'vol0*v.24' p64 %e1 'oct0-o1'
+l6
+g-<d-g-a-2> g-<d-a-b-2 [>f<cga-2]>
+g-<d-g-a-2> g-<d-a-b-2> b-<fb-<c2>> b-<f<fd-c>f>
+g-<d-g-a-2> g-<d-a-b-2 [>f<cga-2]>
+e-b-<fg-2>  e-<cfa-2>   b-<f<cd-2>> b-<f<d-c>b-f
+##measure 17-24
+|3 %e1 'vol3*v.64' p64 %a6%r2 'oct3-o2'
+l1 r2g-.f^g-^b-^
+##measure 25-32
+g-^f^e-f%r10b-^
+;
+
+{8}
+$
+[16r1]
+##measure 17-24
+[7r1] r2.
+l24 'vol5*v.32' |5 'oct5+o1' %e1 %a4%r3 m48,18,207
+(cd-e-fg-a-
+##measure 25-32
+l1 'vol5*v.48' b-)fa-<c2>a-2g-ff%r10^1
+;

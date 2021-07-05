@@ -1,0 +1,331 @@
+#TITLE The End of the Raging Waves
+#ALBUM Etrian Odyssey 3
+#COMPOSER Yuzo Koshiro
+#ARRANGED emberling
+
+########## ------------------
+#SHORTNAME EO3 _Raging Waves
+
+#WAVE 0x20 0x88  Brass Lead
+#WAVE 0x21 0xD2  Rock Organ
+#WAVE 0x22 0x33  Bassy Pluck
+#WAVE 0x23 0x54  Bass Guitar
+#WAVE 0x24 0x39  Clean Lead
+#WAVE 0x25 0x08  Grand Piano
+#WAVE 0x26 0xC4  pads
+
+#WAVE 0x27  0x0A          Kick
+#WAVE 0x28  0x1D  Snare
+#WAVE 0x29  0x4D  Tom
+#WAVE 0x2B  0x3C Hi-Hat
+#WAVE 0x2C  0x2D  Cymbal
+
+#def global= t188 %v36 %x232 %b0,85 %f0,0
+
+#def organ= |1 p48 v18 o6 %a6 
+#def organ2= |1 p48 v22 o6 %r10
+#def lead1= p40 'L1v' |5 v96 %y7%s6%r5 o6 
+#def L1v= m24,18,255
+#def L1v0= m48,18,231%r1
+#def L1v1= m18,16,247%r3
+#def L1v2= %r5
+#def lead2= p72 |4 v72 m48,18,255 o6 
+#def lead3= p64 |0 m24,18,223 v112 o7 
+#def lead4= p48 |1 v40 o6 m36,18,215 %a11%y3%s3%r9
+#def celesta_solo= @3 v64p96v24,18,255%y0%s0%r0 o4
+#def celesta_duo= @3 v64p64v24,18,255%y0%s0%r0 o6
+#def deepness= v |5 v104 o4 %r6 m96,32,199 
+#def deepness2= v |5 v80 o4 %a0%r6 m96,18,255 
+#def deepness3= v |5 v72 o4 %r6 m48,18,207 
+#def atmosynth= p80 |2 v56 o6 %a6%s7%r1 
+#def atmosynth2= p80 |2 v64 o6 
+#def pad1= |6 v64 %a3%y4%s4 o5 
+#def pad2= |6 v52 %a5%y2%s4 o5 
+#def bass= |3 v127 p52 'basso' %y3%s5
+#def basso= o5
+#def midpluck= p32 |2 v64 %r12 o5 
+#def lowpluck= |6 v56 %a5%s4 o5  
+#def secretharmony= |0 v64 o6 
+#def cv=v127
+#def hv=v48
+
+#drum "k"=5a |7 %e0
+#drum "s"=5a |8 %e1
+#drum "r"=5g |8 %e1
+#drum "q"=5b |8 %e1
+#drum "t"=5d |9 %e1
+#drum "u"=4a |9 %e1
+#drum "v"=4d |9 %e1
+
+##### ORGAN #####
+{1} 'global' %e1 'organ' l8
+p0,60,127
+[4f>a<dg>a<da>a< de>a<df>a<d>a< $0]
+[3 j1,0 $ j1,18
+p0,60,127
+[8f>a<dg>a<da>a< de>a<df>a<d>a< $99]
+p
+
+$18 l8>
+e-2^b-<e->b- e4.e4.e4 f2^<cfc> g-4.g-4.g-4
+g2^<dgd> a-4.a-4.a-4 f2^<cfc> gf4f4.f4
+e-2^b-e-b- e4.e4.e4 f2^<c>f<c> g-4.g-4.g-4
+g2^<d>g<d> a-4.<c4.>a-4 f4.a4.<c4> f4.f4.a<c
+d4.c4.f4 drr2.
+
+'midpluck' l8
+ge-gge-e-ge- e-ge-e-ge-b-e- fdffddfd dgddgdb-d
+ge-gge-e-ge- e-ge-e-ge-ge- fdfgddgd dgddgdgd
+ge-gge-e-ge- e-ge-e-ge-b-e- fdffddfd dgddgagf
+v192,64
+[2ge-g<c4.>b-4] [4gfg<c4.>b-4]
+v192,40gfg<c4.>b-4 v192,16gfg<c4.>b-4
+
+'organ' j1,11 'organ2' $11 ]
+
+$19
+'secretharmony' p48 l4
+[8a.b-.f1r]
+'organ2' [3 ;
+
+##### LEAD #####
+{2} l16 %e1
+'celesta_solo'
+d1^2 ^4. o5p80 a<cd1^1 ^1 ^2.^8<fd c>a16^8^2.v192,0^1v
+[3 j1,0 $ j1,28
+'lead1' l8
+r2^ag<c> a4.g4.a4 f4.e4.f4. e4.d4c4
+c4.d4.> 'l1v0' a4 ^1 'l1v1'^1 'l1v2'^1 'l1v'<
+r2^ag<c> a4.g4.a4 f4.e4.f4. d4.g4a4<
+c4. 'l1v0'd4.^1 'l1v1'^1 'l1v2'^1 'l1v' >r4
+
+$28 l8
+'lead2'
+[r2r16.a32b-ag g4.c4.g4 a2^cfa a4.b-4.<c4>   j2
+b-2rdgb- <c4.>a-4.e-r16f16 g4.f1^4r4.]
+b-4.r4b-<cd e-4.d4.>b-r16.<c32 d4.c1 r4>fa<c
+d4.c4^16e-16f4 d.r2.
+
+'lead3'
+c16
+d2.r>g16r16< dc>b-a4b-<c16r16 c4.>b-4<c4fr f4.d4.r.c16
+d4.>g4.rg16r16 <dc>b-<c.r16c16r16fg a4.b-4.g4 ^2...c16
+d2.r>g16r16 <dc>b-a4b-<c16r16 c4.>b-4<c4f.r16 f4.d4c>b-a
+[2g4.<d1^4r>f4] v255,72 g4.<d^2^1^1 r1
+
+]
+
+$29
+'lead4' l8
+[[a4.f4.g4. d4.rdfg a4.f4.<j2c4. d2..>] c4 rfe-dc>b-<cd>]
+m [3
+;
+
+##### ATMOSPHERE MID #####
+{3} l1 %e1
+'deepness' p112
+d^^^ >b-^^^
+[3 j1,0 $ j1,38
+'deepness' p112
+d^^^ >b-^
+'celesta_duo'
+c4.d8^2^1 v
+'deepness' p112
+d^^^ >b-^
+'celesta_duo'
+c4.d4.a4.g4.f4e4
+
+$38
+v p112 'pad1' L1
+ggfab-<c>b-a
+ggfg- g<c4.d4.>b-4a^2^4
+%yv72 a8.r16 a4r8a4r8a8r8 a8r2..
+
+v p112 'pad2' L1
+b- ^ a b-
+b- ^ a4.b-8^2
+'celesta_duo'
+<a4.b-4.g4>
+v p112 'pad2' L1
+b- ^ a b-
+'celesta_duo' L4
+[3 v64 r2.f g.<d.>v40f] g.<d.>r4 r1 v
+
+]
+
+$39
+v p112 'pad2' L1 >
+[8 d1 ^1]
+[3 ;
+
+##### ATMOSPHERE LOW #####
+{7} l1 %e1
+'deepness2' p16 
+d^^^ >b-^^^
+[3 j1,0 $ j1,48
+'deepness2'd^^^>b-^ 
+'celesta_duo'>
+a4.a4.a4^1
+'deepness2'd^^^>b-^ 
+'celesta_duo'>
+a4.b-4.<f4.e4.d4c4
+
+$48
+'pad1' v p16 l1
+e-ecg-da-
+'celesta_duo'
+g4.f4.c4> a4.g4.f4
+'pad1' v p16 l1
+e-ecg- da-f^2^8
+%yv72 f8r4 f4r8f4r8f8r8 f8r2..
+
+'pad2' v p16 l1
+f4.g8^2 ^ f f
+f4.g8^2 ^ f4.g8^2
+'celesta_duo'
+<f4.g4.d4>
+'pad2' v p16 l1
+f4.g8^2 ^ f f
+'lead2' p16 l4 %l1
+[3 v24 r2.f g.<d.>v16f] g.<d.>r4 r1 %l0
+
+]
+
+$49
+'secretharmony' p80 l4
+[8f.f.d1r]
+[3 ;
+
+##### ATMOSPHERE HIGH #####
+{8} l8 %e1
+'atmosynth'
+p0,83,104
+[4 [5dfe]d ] 
+[3 j1,0 $ j1,58
+p0,83,104
+   [5dfe]d   [4dfe]cfec
+[3 [5dfe]d ] [4dfe]cfec
+[2 [5dfe]d ]
+p
+
+$58
+'pad1' p80 l1
+>b-<c>a<d>b-<e->c2.<c4^>
+b-<c>a<d> b-<e-4.d4.>b-4c^2.r8
+%yv72 c8 d4.c4.f8r8 a8.r16r2.
+
+l1 'lowpluck'
+d ^ c       d
+d ^ d4.d2^8 d4.d2^8
+d ^ c       d
+ 'deepness3'
+f4.g8^1. a4.g8^1. g1^1^1 g1 
+
+'atmosynth' j1,51 'atmosynth2' $51 ]
+
+$59
+> l8
+[[3 [4gfb-]gf<c>b- ]
+    [3gfb-]<fe-dc>b-<cd> ]
+[3 ;
+
+##### BASS #####
+{5} l16
+'bass' %e0 %p1
+d8r8drd8.rdrd8.r drd8.rdrd8r8drcr d8r8drd8.rdrd8.r drd8.rdrd8r8drcr>
+b-8r8b-rb-8.rb-rb-8.r b-rb-8.rb-rb-8r8b-rar b-8r8b-rb-8.rb-rb-8.r b-rb-8.rb-rb-8r8b-rb-r
+[3 j1,0 $ j1,68
+ 'basso' l8
+<d>dd<d>dd<d>d d<d>dd<d>d<d>d <d>dd<d>dd<d>d d<d>dd<d>d<d>d
+[b->b-b-<b->b-b-<b->b- b-<b->b-b-<b->b-<b->b-<] 
+<d>dd<d>dd<d>d d<d>dd<d>d<d>d <d>dd<d>dd<d>d d<d>dd<<c>c<c>c
+[b->b-b-<b->b-b-<b->b- b-<b->b-b-<b->b-<b->b-<] 
+
+$68
+l16 'basso' %r12
+[e-2^8b-8<e-8>b-8 e4^re4^re8r8 f2^8<c8f8c8> g-4^rg-4^rg-8r8
+g2^8<d8g8d8> j2 a-4^ra-4^ra-8r8 f2^8<c8f8c8 fgf4f4f8c8>f8]
+a-4.<c4.e-4 f4.>a4.<c4> f4.a4.<c4 d8>d8d8d8r8d8a8<c8 d8r2..
+
+o6 l8
+ e->e-e-<e->e-e-<e->e- e-<e->e-e-<e->e-<e->e- <d>dd<d>dd<d>d g<g>gg<g>g<g>g
+<e->e-e-<e->e-e-<e->e- e-<e->e-e-<e->e-<e->e- <g>gg<g>gg<g>g g<g>gg<g>g<g>g
+<e->e-e-<e->e-e-<e->e- e-<e->e-e-<e->e-<e->e- <d>dd<d>dd<d>d g<g>gg<g>g<g>g
+<e->e-e-<e->e-e-<e->e- e-<e->e-e-<e->e-<e->e- <f>ff<f>ff<f>f f<f>ff<f>f<f>f
+[3[2gg16r16g16r16]gg16r16] r1
+
+]
+
+$69 l8
+[[3[4<g>gg][2<g>g]]
+   [3<g>gg] fe-<dc>b-<cd>]
+[3 ;
+
+##### DRUMS #####
+{4} l8
+v0p72
+[ "k4.k4.k4.k4.k4k4"]
+v127
+##|8g|7gg|8g|7gg|8g|7g g|8g|7gg|8g|7g|8g|7g
+"skkskksk  kskksksk"
+##|8g|7gg|8g|7gg|8g|7g gg16|8d16d|9f>aaa<|7g
+"skkskksk  kk16r16ruvvvk"
+
+[3 j1,0 $ j1,78
+v127p72
+##[30|7gg|8g4]
+[30"!!!o kks4"]
+##g|7gg|8g16d.g16d16|9ec
+"skks16r.s16r16tu"
+
+$78 l8
+##[ [|7g4.g|8g4.|7g2g|8g2]
+[ ["!o k4.ks4.k2ks2"]
+##|7g4.g|8g2 |7g|8g4|7g|8g4.|7g  j2 g4.g|8g4|7gg4 |8b|7g8.|8g16b4.|7g]
+"k4.ks2  ks4ks4.k" j2 "k4.ks4kk4  qk8.s16q4.k"]
+##g4.g|8g|7g4|8b |9bbbfffc|8f f|7ff|8f32f16.|7ff|8f32f16.|7f |8f1
+"k4.ksk4q  tttuuuvs  skks32s16.kks32s16.k  s1"
+
+##[22|7gg|8g4] g|7gg|8g16b.g16b16|9fc
+[22"kks4"] "skks16q.s16q16uv"
+##|7g4.g|8g4. |7g2g|8g2
+"k4.ks4.  k2ks2"
+##|7g4.g|8g4|7gg4 |8b|7g.|8g16b|9bf16f16|7gg1 ^1 ^1
+"k4.ks4kk4  qk.s16qtu16u16k" ##"k1 ^1 ^1"
+[3"k4."v0"k4.k4"]v127
+##|8b|7gg|8b16g.b16g16|9fc
+"qkkq16s.q16s16uv"
+
+]
+
+$79 l8
+##[[6|7gg|8g4] [2|7gg16g16|8g4]
+[[6 "!!!o kks4"] ["kk16k16s4"]
+## [6|7gg|8g4] |7gg|8gg16e16gggg]
+ [6 "kks4"] "kkss16r16ssss"]
+[3;
+
+##### CYMBALS #####
+{6} l8
+v96p56 o5
+[4r1]
+#'cv'|Cg4.'hv'|Bg|Agg|Bg|Ag g|Bg|Agg|Bg|Ag|Bg|Ag |Bg|Agg|Bg|Agg|Bg|Ag g1
+'cv'|Cg4.'hv*v1.33'|B%s0%y0g%y6gg%y0g%y6g g%y0g%y6gg%y0g%y6g%y0g%y6g %y0g%y6gg%y0g%y6gg%y0g%y6g g1
+[3 j1,0 $ j1,88
+p56 o5 l4
+'cv'|Cg 'hv'|B[15g] 'cv'|Cg 'hv'|B[12g]'cv'|Cg'hv'|Bg'cv'|Ca
+g 'hv'|B[15g] 'cv'|Cg 'hv'|B[11g] 'cv'|Cg'hv'|Bgg2
+
+$88
+'cv'|Cg 'hv'|B[28g] 'cv'|Cg4. |9a8f16f16c8
+|Cg 'hv'|B[15g] 'cv'|Cg 'hv'|B[7g] 'cv'|Cg 'hv'|Bggg 'cv'|9r2..c8^1^1
+
+|Cg 'hv'|B[12g] 'cv'|Cg'hv'|Bg'cv'|Cbg 'hv'|B[12g] 'cv'|Cg'hv'|Bg'cv'|Cbg 'hv'|B[11g] 'cv'|Cb'hv'|Bggr
+'cv'|Cg 'hv'|B[12g] 'cv'|Cg2^8|9c8 ^1 ^1 ^1 |Cb'hv'|Bgg2
+
+]
+
+$89 l4
+['cv'|Cg 'hv'|B[12g] 'cv'|Cg'hv'|Bg'cv'|Cbg 'hv'|B[11g]
+'cv'|Cg 'hv'|Bb8 'cv'|9b8f8f8c8c8]
+[3;

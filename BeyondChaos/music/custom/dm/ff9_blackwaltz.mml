@@ -1,0 +1,122 @@
+#TITLE The Black Waltz
+#ALBUM Final Fantasy IX
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#VARIANT ~_
+#VARIANT ~` tier1
+#VARIANT ?` tier2
+#VARIANT ?_ tier3
+
+#WAVE 0x21 0x67
+#WAVE 0x22 0x06
+#WAVE 0x23 0xB0
+#WAVE 0x24 0xF2
+#WAVE 0x28 0x28
+
+#def init= t80 %x255 %v50 %b0,100 %f0,0
+
+#def string1= |1 's' o4
+#def string2= |1 't' o5 
+#def harp=    |2 'h' o2
+#def oboe=    |3 'o' o5
+#def flute=   |4 'f' o4
+#def piano=   |8 'p' o7
+
+#def s= v85
+#def t= v85
+#def h= v95
+#def o= v85
+#def f= v75
+#def p= v125
+
+#def trem1= v0,10,191
+
+#drum "c"= 7e |8 p36 v60 %s7%r26
+#drum "t"= 7e |8 p36 v60 %y3%s1%r15
+
+{1}
+$4441 'init' %e1
+r1r1r1
+$
+'string2' 'trem1' p48 %a7%r7 l8
+[d+4.dd+c  f+2.  g4.f+gd+  a2.]
+<c4>a+4d+4 a4g4c4 f+1.
+<c4>a+4d+4 a4g4c4 f+2^g a2.
+`:4441`
+;
+
+{2}
+$4442 %e1
+r1r1r1
+$
+'oboe' p64 %r8 m48,18,215 l8
+r1r1r1
+d+4.dd+c  f+2.  g4.f+gd+  a2.
+r1r1r1 p80 %a11 'o*v.8'
+<c4>a+4d+4 a4g4c4 f+2^g a2.
+`:4442`
+;
+
+{3}
+$4443 %e1
+'string2-o1' 'trem1' p64 %a7%r7
+g2. g+2. g2. f+2.
+$
+[4g2. a2. a+2. a2.]
+`:4443`
+;
+
+{4}
+$4444 %e0
+"c4t2 c4t2 c8c8t2 c4t2"
+$
+["c8c8t8c8t4  c4t2  c4t4.c8  c4t2"]
+["t2. t2. c8c8t8c8t4  c4t2"]
+`:4444`
+;
+
+{5}
+$4445 %e1
+r1r1r1
+$
+'piano-o2' p54 %r12 m
+r1r1r1
+c1^1^1
+r1. c1.
+'flute+o2' p48 %r10 l8 m48,18,231
+c4>a+4d+4 a4g4c4 f+2^g a2.
+`:4445`
+;
+
+{6}
+$4446 %e1
+'string1*v.25-o1' p64 l24
+[18g][18g+][18g][18f+]
+$
+[4[18g][18a][18a+][18a]]
+`:4446`
+;
+
+{7}
+$4447 %e1
+r1r1r1
+$
+[2
+r1r1r1
+[3 'harp-o1' p0 j1,71 'h*v.75' p127 j2,71 'h*v.5' p0
+   $71 l24 g<cfga+<d+ ] r1r1r4
+]
+`:4447`
+;
+
+{8}
+$4448 %e1
+r1r1r1
+'oboe*v0-o2' p80 l24 %r3 'trem1' %l1 
+$
+[72c]
+'t' %l1 [72c] v72,0 [36c]
+'t' %l1 [108c] v72,0
+`:4448`
+;

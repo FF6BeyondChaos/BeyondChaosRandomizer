@@ -1,0 +1,144 @@
+#TITLE Awakening
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x01 piano
+#WAVE 0x21 0xA5 flute
+#WAVE 0x22 0x60 harp
+#WAVE 0x23 0x65 strings
+#WAVE 0x24 0x53 fbass
+#WAVE 0x25 0x93 oboe
+
+#def 0i=   |0
+#def 0o=   o4
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v100
+#def 2f= v1,100
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |4
+#def 4o=   o4
+#def 4v=   v150
+#def 4f= v1,150
+
+#def 5i=   |5
+#def 5o=   o5
+#def 5v=   v115
+#def 5f= v1,115
+
+
+{1}
+t75%x174%b0,70%f0,0%v50'1v*v.70'
+'1i' p44%e1m48,18,239'1o'%l1f32f+2^32r16e8>%l1b8g8%l0%l1<d8c8>%l0%l1g8
+e8d+8%l0%l1b4a8%l0%l1g16e16%l0%l1f+16g16%l0%l1b16<d16%l0f+4.^16r16e8%l1
+g+32a16^32g8>%l0%l1b8<c8%l0%l1g4.f8%l0e1r1r1r2r4.
+
+{9}
+t75%b0,70%f0,0%v50'0v*v1.00'
+'0i' p84%e1m'0o+o1'a16b16
+$101'0o+o2'c16e16c2^4>b16a16b4e2^8a16b16<c16e16c2^4>b16a16b4<e2^8c16d16
+e16g16e2^4d16c16d4>g2^8<c16>b16a2^4.<c16>b16a2^4.r8r1r1r1r2r4.a16b16
+;101
+
+
+{2}
+'2v*v.60'
+'2i' p24%e0r1r1r1r1'2o+o1'['2v*v.50''2f*v192,.00'[8f+16g16]j2,201'2v*v.50'
+'2f*v192,.00'[8e16f16]]
+$201'2v*v.50''2f*v168,.00'[7e16f16]
+
+{10}
+
+'2i' p24%e1r8
+$202'2o''2v*v.60'[>a16<c16e16a16<c16^2r8.>>g16b16<e16g16b16^2r8.]>g16<
+c16e16g16<c16^2r8.>>g16b16<d16g16b16^2r8.>f16a16<c16f16a16^8.>f16a16<d16
+f16a16^8.>a16<c16e16a16<c16^2r8.'2o+o1'%e0['2v*v.60''2f*v192,.20'[8f+16
+g16]'2v*v.60''2f*v192,.20'[8e16f16]]
+;202
+
+
+{7}
+'2v*v.60'
+'2i' p104%e0r1r1r1r1'2o'['2v*v.50''2f*v192,.00'[8b16<d16>]j2,701'2v*v.50'
+'2f*v192,.00'[8a16<c16>]]
+$701'2v*v.50''2f*v168,.00'[7a16<c16>]
+
+{15}
+'2v*v.60'
+'2i' p104%e0'2o'r8
+$702r1r1r1r1r1r1r1r1'2o'['2v*v.60''2f*v192,.20'[8b16<d16>]'2v*v.60''2f*v192,.20'
+[8a16<c16>]]
+;702
+
+
+{3}
+'5v*v.20'
+'5i' p94%e1'5o+o1'[%l1[4c+8d8]%l0%l1c8d8c8d8%l0%l1c8d+8c8d+8%l0]
+'3i' p94%e1%a4%r6'3v*v.60'>%a4'3o'b1a1b1a2^4.
+
+{11}
+^8
+'3i' p94%e1%a4%r6'3v*v.60''3o'
+$301<%a4c2e4c4>b1<c2e4c4>b1<c2e4c4>b1<c2d2c1>b1a1b1a1
+;301
+
+
+{4}
+'3v*v.60'
+'3i' p74%e1%a4%r6'3o'b1a2g2b1a2g2d1e1d1e2^4.
+
+{12}
+^8'3v*v.60'
+'3i' p74%e1%a4%r6'3o'
+$401%a4e2a4e4^1e2a4e4^1e2g4e4d1f1e1d1e1d1e1
+;401
+
+
+{5}
+'3v*v.60'
+'3i' p54%e1%a4%r6'3o'd1e2d+2d1e2d+2>e1f1e1f2^4.
+
+{13}
+^8'3v*v.60'
+'3i' p54%e1%a4%r6'3o-o1'
+$501a1g1a1g1g1^1a1^1e1f1e1f1
+;501
+
+
+{6}
+'3v*v.60'
+'3i' p34%e1%a4%r6'3o-o1'e1f1e1f1r1r1r1r2r4.
+
+{14}
+'3v*v.60'
+'3i' p34%e1%a4%r6'3o-o2'r8
+$601a1e1a1e1<c1>g1f2d2a1r1r1r1r1
+;601
+
+
+{8}
+'4v*v.40'
+'4i' p64%e1%r13'4o'e1f1e1f1e1f1e1f2^4.
+
+{16}
+^8'4v*v.40'
+'4i' p64%e1%r13'4o'
+$801a1e1a1e1<c1>g1f2d2a1e1f1e1f1
+;801
+

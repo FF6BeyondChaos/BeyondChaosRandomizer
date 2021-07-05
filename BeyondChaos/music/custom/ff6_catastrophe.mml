@@ -1,0 +1,141 @@
+#TITLE Catastrophe
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x21 0xA5 flute
+#WAVE 0x22 0x84 horn
+#WAVE 0x23 0x64 contrabass
+#WAVE 0x24 0x08 gpiano
+#WAVE 0x25 0x5A timpani
+#WAVE 0x26 0x2D crash
+
+#WAVE 0x2B 0xBB boom
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2 %k0
+#def 2o=   o5
+#def 2v=   v90
+#def 2f= v1,90
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v125
+#def 3f= v1,125
+
+#def 4i=   |4
+#def 4o=   o4
+#def 4v=   v75
+#def 4f= v1,75
+
+#def 5i=   |5
+#def 5o=   o6
+#def 5v=   v100
+#def 5f= v1,100
+
+#def 6i=   |6 %k-5
+#def 6o=   o6
+#def 6v=   v80
+#def 6f= v1,80
+
+#drum "b"= 4g |B v96 %r15
+
+{1}
+%x240%b0,80%f0,0%v70'0v*v.60'
+'0i' p80%e1
+$101
+t80##r2
+"!!!o b2" '0v*v.60''0i'
+'0o-o1'a+4<c4c+2^4t60^4
+t80##r2
+"!!!o b2" '0v*v.60''0i''0o'
+>a+4<c4f2^4t60^4
+t80##r2
+"!!!o b2" '0v*v.60''0i''0o'
+>a+4<c4c+2^4
+t60^4
+t80##r2
+"!!!o b2" '0v*v.60''0i''0o'
+>a+4<c4f2^4t60^4t110d+2g2f+2a+4<c4d+2g2f+2a+4<c4t85r4>d24r24
+d24r24d24r24d16r16c16r16d16r16d+16r16f1r4e24r24e24r24e24r24e16r16d16r16
+e16r16f16r16g1t90f2d+2c+2>b4%l1b24<c+24d+24f24f+24g+24a+2%l0g+2f+2e8t85
+^8t80^8t75^8
+;101
+
+
+{2}
+'0v*v.60'
+'0i' p75%e1
+$201r2'0o-o1'f4g4g+1r2f4g4<c+1r2>f4g4g+1r2f4g4<c+1c2d2d+2f2<c2d2d+2f2r4
+>f+24r24f+24r24f+24r24f+16r16e16r16f+16r16g16r16a1r4g+24r24g+24r24g+24
+r24g+16r16f+16r16g+16r16a16r16b1c2>a+2g+2f+2<f+2e2d2c2
+;201
+
+
+{3}
+'0v*v.60'
+'0i' p70%e1
+$301r2'0o-o1'd+4d4c+1r2d+4d4g+1r2d+4d4c+1r2d+4d4g+1g2a+2a+2<c+2g2a+2a+2
+<c+2r4>d24r24d24r24d24r24d16r16c16r16d16r16d+16r16f1r4e24r24e24r24e24r24
+e16r16d16r16e16r16f16r16g1a2g2f2d+4%l1d+24f24f+24g+24a+24b24<c+2%l0>b2
+a2g8g+8a8a+8
+;301
+
+
+{4}
+'1v*v.45'
+'1i' p55%e1m12,18,239
+$401[r2'1o'a+4<c4c+1r2>a+4<c4f1]r1r1r1r1r1>a2g4a4f+4r2r4b2a2<f2d+2c+2>
+b2a+2g+2f+2e2
+;401
+
+
+{5}
+
+$501'6v*v.80'
+'6i' p50%e1'6o-o2'a1^2^2'6v*v.80'
+'6i' p50%e1'6o-o2'a1^2^2'6v*v.80'
+'6i' p50%e1'6o-o2'a1^2^2'6v*v.80'
+'6i' p50%e1'6o-o2'a1^2^2'2v*v.70'
+'2i' p60%e1m48,18,239'2o-o1'd+2g2f+2a+4<c4d+2g2f+2a+4<c4r1>f2d+4f4d4r2
+r4g2f2r1'2v*v1.00'r2>b24r24<d+24r24c+24r24f+24r24>a24r24b24r24'2v*v.70'
+<c+2>b2a4.'2v*v1.00'a24a24a24'2v*v.70'g16r16g+16r16a16r16a+16r16
+;501
+
+
+{6}
+'3v*v1.00'
+'3i' p100%e1%r8
+$601'3o'c1^1c1^1c1^1c1^1<c2>a+2f+2f2c2d2d+2f2c1^1d1^1<d+2c+2>b2a2f2f+2
+g+2a+2
+;601
+
+
+{7}
+'4v*v.90'
+'4i' p35%e0%r8
+$701'4o-o1'c1^1c1^1c1^1c1^1<c2>a+2f+2f2c2d2d+2f2c1^1d1^1<d+2c+2>b2a2f2
+f+2g+2a+2
+;701
+
+
+{8}
+'5v*v1.20'
+'5i' p85%e0
+$801'5o-o1'c1^1c1^1c1^1c1^1r1r1r1r1r1c4>f12f12f12<c4>f4^1<d4>g12g12g12
+<d2d+1r2r4'5v*v.20''5f*v48,1.20'>a32a32a32a32a32a32a32a32f2r2r2a+8a+8a+8
+a+8
+;801
+

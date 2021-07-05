@@ -1,0 +1,130 @@
+#TITLE The Black Waltz
+#ALBUM Final Fantasy IX
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#VARIANT _ tr
+#VARIANT ! 
+
+#WAVE 0x20 0x63
+#WAVE 0x21 0x67
+#WAVE 0x22 0x60
+#WAVE 0x23 0x93
+#WAVE 0x24 0xA4
+#WAVE 0x25 0x08
+#WAVE 0x28 0x9D
+
+#def init= !t80 %v50 %b0,100! %x255 %f0,0  `t55t96,80 %v255,50 %b255,100`
+
+#def string1= |0 's' o5
+#def string2= |1 't' o5 
+#def harp=    |2 'h' o5
+#def oboe=    |3 'o' o5
+#def flute=   |4 'f' o3
+#def piano=   |5 'p' o6
+
+#def s= v64
+#def t= v64
+#def h= v32
+#def o= v64
+#def f= v96
+#def p= v64
+
+#def trem1= v0,10,191
+
+#drum "c"= 5a+ |8 p36 v64 k4 %r26
+#drum "t"= 5a+ |8 p36 v64 k12 %r15
+
+{1} %e1
+r1r1r1 $993
+$
+'string2' 'trem1' p48 %a7%r7 l8
+[d+4.dd+c  f+2.  g4.f+gd+  a2.]
+<c4>a+4d+4 a4g4c4 f+1.
+<c4>a+4d+4 a4g4c4 f+2^g a2.
+;
+
+{2} %e1
+r1r1r1 $994
+$
+'oboe' p64 %r8 m48,18,215 l8
+r1r1r1
+d+4.dd+c  f+2.  g4.f+gd+  a2.
+r1r1r1 p80 %a11 'o*v.8'
+<c4>a+4d+4 a4g4c4 f+2^g a2.
+;
+
+{3} 'init' %e1
+'string2-o1' 'trem1' p64 %a7%r7
+g2. g+2. g2. f+2.
+$
+g2. a2. a+2. a2.
+;
+
+{4} %e0
+"c4t2 c4t2 c8c8t2 c4t2"
+$
+["c8c8t8c8t4  c4t2  c4t4.c8  c4t2"]
+["t2. t2. c8c8t8c8t4  c4t2"]
+;
+
+{5} %e1
+r1r1r1 $991
+$
+'piano-o2' p54 %r12 m
+r1r1r1
+c1^1^1
+r1. c1.
+'flute+o2' p48 %r10 l8 m48,18,231
+c4>a+4d+4 a4g4c4 f+2^g a2.
+;
+
+{6} %e1
+'string1*v.75-o1' p64 l24
+[18g][18g+][18g][18f+]
+$
+[18g][18a][18a+][18a]
+;
+
+{7} %e1
+r1r1r1 $992
+$
+r1r1r1
+[3 'harp-o1' p0 j1,71 'h*v.75' p127 j2,71 'h*v.5' p0
+   $71 l24 g<cfga+<d+ ] r1r1r4
+;
+
+{8} %e1
+r1r1r1
+'string2*v0-o2' p80 l24 %a11%s7
+$
+[72c]
+'t*v.67' [72c] v72,0 [36c]
+'t*v.67' [108c] v72,0
+;
+
+## Train stuff
+_
+{5}
+|F v80p64 o4 %e1
+v216,50 [3a32a4a32a16] v216,20 [3a32a4a32a16] v144,0 [a32a4a32a16]
+;991
+
+{7} ##adjust final & to match n-1 of first note/rest after train sfx is over
+|F v80p64 o5k2 %e1 &1r
+v216,50 [3a32a4a32a16] v216,20 [3a32a4a32a16] v144,0 [a32a4a32a16]
+k0 &191
+;992
+
+{1}
+@4%s0 v80p64 %n1%c22 %e1%g1
+v216,50 [3c32c4c32c16] v216,20 [3c32c4c32c16] v144,0 [c32c4c32c16]
+%n0%c0 %g0
+;993
+
+{2}
+@4%s0 v80p64 %p1 %e1%g1
+v216,50 [3d32d4d32d16] v216,20 [3d32d4d32d16] v144,0 [d32d4d32d16]
+%p0 %g0
+;994
+_

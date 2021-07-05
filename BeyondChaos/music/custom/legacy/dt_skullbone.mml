@@ -1,0 +1,93 @@
+#TITLE Skull Bone 1
+#ALBUM DynamiTracer
+#COMPOSER Nobuo Uematsu
+#ARRANGED Gi Nattak
+# Converted from binary by mfvitools
+
+#WAVE 0x20 0x0B
+#WAVE 0x21 0x18
+#WAVE 0x22 0x11
+#WAVE 0x23 0x2A
+#WAVE 0x24 0x14
+
+{1}
+l16t110|0v30p50%e1%b0,70%f0,0%v20o5c4r6c12>b4r6b12  a+4r6b12r6b12r6b12  
+<c4r6c12>b4r6b12  <c6c12c6d12r2  c4r6c12>b4r6b12  a+4r6b12r6b12r6b12  
+<c12r12v50<c12f+12g12fd48d+6c12>a+6g12  f+6f12r6d+2^12   $1 v50o5c6<c12r6>b12a+4.^24a12  
+g+6g12f+6g12r2  r1  r1  c6<c12r6>b12a+4.^24a12  
+g+6g12f+6g12r2  r1  r1  r8.r24e48f6d+12f6g12f6d+12  
+f6d+12r6c2^12  r8.r24e48f6d+12f6g12f6d+12  f6d+12r6c3d+6c12  ^1  
+^1  r1  r1  v30r6c12r6c2^12  
+r1  r6e12r6e2^12  r1  
+;1
+
+l16
+{2}
+l16|0v30p50%e1o4g4r6g12g4r6g12  
+g4r6g12r6g12r6g12  g4r6g12g4r6g12  g6a12a+6b12r2  g4r6g12g4r6g12  
+g4r6g12r6g12r6g12  g12r6v50<<a+12r6g6r12f6r12  c6c12r6c2^12   $2 v50o5r6g12r6g12f+4.^24f+12  
+d+6d12c6>b12r6c12d+12c12d+12  c2r6c12d+12c12d+12  c1  r6<g12r6g12f+4.^24f+12  
+d+6d12c6>b12r6c12d+12c12d+12  c2r6c12d+12c12d+12  c1  r4<c6r12c6r3  
+c6>a+12r6g2^12  r4<c6r12c6r3  c6>a+12r6g3a+6g12  ^1  
+^1  r1  r1  v30r6g12r6g2^12  
+r1  r6a12r6a2^12  r1  
+;2
+
+l16
+{3}
+l16|1v127p64%e1o6c4r6c12d4r6d12  
+d+4.^24d4d12g6>b12  <c4r6c12d4r6d12  d+6f12f+6g12r4.r24>b12  <c4r6c12d4r6d12  
+d+4.^24d4d12g6>b12  <c12r2r4.r24  r2r12a+12a12g12>a+12b12   $3 o6c4r6c12d4r6d12  
+d+6f12f+6g12r2  c4r6c12>g4r6g12  <c4.^24>g4g12a+6b12  <c4r6c12d4r6d12  
+d+6f12f+6g12r2  c4r6c12>g4r6g12  <c4r6c12>g4<c12d+12e12  f4r2r4  
+f6g12r6c3c12d+12e12  f4r2r4  f6g12r6g+3a+6<c12  ^4r6c12>g4r6g12  
+c4r6c12>g4<c12>b12a+12  a4r6a12<e4r6e12  >a4r6a12<e4>a12a+12b12  
+<c4r6c12>g4r6g12  <c4r6c12>g4<c12>b12a+12  a4r6a12<e4r6e12  >a4r6a12<e4>a12a+12b12  
+
+;3
+
+l16
+{4}
+l16|2p90%e1o5[7v50g+4v25g+6g+12]r2  [4v50g+4v25g+6g+12]v50g+12r2  
+r4.r24v50g+6g+12r6g+2  ^12 $4 [16v50g+4v25g+6g+12]v50g+4r2  r4v50g+6g+4g+3  
+g+6v25g+12v50g+4r2  r4v50g+6g+4g+3  g+6g+12^4v25g+6g+12v50g+4  v25g+6g+12[14v50g+4v25g+6g+12]
+;4
+
+l16
+{5}
+l16|3v50p10%e0r1  
+r1  r1  r1  r1  
+r1  r1  r1   $5 r1  
+r1  o5r4a4r4a4  r4a4r4a4  r1  
+r1  r4a4r4a4  r4a4r4a4  r1  
+r1  r1  r1  r4a4r4a4  
+r4a4r4a4  r4a4r4a4  r4a4r4a4  r4a4r4a4  
+r4a4r4a4  r4a4r4a4  r4a4r4a4  
+;5
+
+l16
+{6}
+l16|4v50p64%e0r1  
+r1  r1  r1  r1  
+r1  r1  r1   $6 o6g+4r6g+12g+4r6g+12  
+g+6g+12g+6g+12r2  g+4r6g+12g+4r6g+12  g+4.^24g+4g+12g+6g+12  g+4r6g+12g+4r6g+12  
+g+6g+12g+6g+12r2  g+4r6g+12g+4r6g+12  g+4r6g+12g+4r12r12g+12  g+4r2r4  
+g+6g+12r6g+3r6g+12  g+4r2r4  g+6g+12r6g+3g+6g+12  ^4r6g+12g+4r6g+12  
+g+4r6g+12g+4r6g+12  g+4r6g+12g+4r6g+12  g+4r6g+12g+4r6g+12  g+4r6g+12g+4r6g+12  
+g+4r6g+12g+4r6g+12  g+4r6g+12g+4r6g+12  g+4r6g+12g+4r6g+12  
+;6
+
+l16
+{7}
+l16&3r1  
+|3v50p115%e0r1  r1  r1  r1  
+r1  r1  r1  r1  
+ $7 r1  r1  o5r4g+4r4g+4  r4g+4r4g+4  
+r1  r1  r4g+4r4g+4  r4g+4r4g+4  
+r1  r1  r1  r1  
+r4g+4r4g+4  r4g+4r4g+4  r4g+4r4g+4  r4g+4r4g+4  
+r4g+4r4g+4  r4g+4r4g+4  r4g+4r4g+4  r4g+4r4g+4  
+
+;7
+
+l16

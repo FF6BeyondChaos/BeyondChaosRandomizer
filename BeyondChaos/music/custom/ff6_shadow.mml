@@ -1,0 +1,161 @@
+#TITLE Shadow's Theme
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0xAF jaw harp
+#WAVE 0x21 0xA6 whistle
+#WAVE 0x22 0x36 classical guitar
+#WAVE 0x23 0x50 acoustic bass
+#WAVE 0x24 0xD0 sine (whistle high)
+#WAVE 0x25 0x3B hihat
+#WAVE 0x26 0x0A kick
+#WAVE 0x27 0x1C snare
+#WAVE 0x28 0x8B side stick
+
+#def 0i=   |0
+#def 0o=   o3
+#def 0v=   v200
+#def 0f= v1,200
+
+#def 1i=   |1
+#def 1o=   o6
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v100
+#def 2f= v1,100
+
+#def 3i=   |3
+#def 3o=   o4 %y4%s5%r12
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |5
+#def 4o=   o5
+#def 4v=   v200
+#def 4f= v1,200
+
+#def 5i=   |5
+#def 5o=   o5
+#def 5v=   v200
+#def 5f= v1,200
+
+#def 6i=   |6
+#def 6o=   o5
+#def 6v=   v100
+#def 6f= v1,100
+
+#def 7i=   |7
+#def 7o=   o5
+#def 7v=   v100
+#def 7f= v1,100
+
+#def 8i=   |8
+#def 8o=   o5
+#def 8v=   v100
+#def 8f= v1,100
+
+## auto percussion  0x24
+#drum "h"= 5a %y6%s0
+## auto percussion  0x25
+#drum "i"= 5a %y2%s0
+## auto percussion  0x26
+#drum "j"= 5a
+## auto percussion  0x27
+#drum "k"= 5a %r22
+## auto percussion  0x28
+#drum "l"= 6d+ %r24
+
+#def wh= |4> %a10
+#def wl= |1<
+
+{1}
+t160%b0,100%f0,0%v50'1v*v.70'
+'1i' p74%e1m48,18,227r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2'1o+o1'%l1e4
+$101b2^4%l0^4%l1b4a4%l0%l1g4f+4e4%l0%l1f+4g4d4e2^4^2^4^2^4r2%l1e4b2^4%l0
+^4%l1b4a4%l0%l1g4f+4e4%l0%l1f+4>b4<d4e2^4^2^4^2^4r2'wh'%l1b4<d2^4^4%l0%l1>
+b8<c+8d4c+2^4^2r4%l1d4c+4>b4%l0%l1<c+4>f+4a4b2^4^4.'wl'r8%l1e4b2^4%l0^4%l1
+b4a4%l0%l1g4f+4e4%l0%l1f+4g4d4e2^4^2^4^2^4r2r4'0v*v.60'
+'0i' p84%e1'0o'e2^4^4e4e4e2^4^2^4e2^4^4e4e4e2^4^2'1v*v.70'
+'1i' p74%e1m48,18,227'1o+o1'%l1e4
+;101
+
+
+{2}
+'2v*v.70'
+'2i' p44%e0r32r64'2o'[8e2^4]
+$201[e2^4e2^4e2^4f+2^4e2^4e2^4e2^4e2^4]d2^4d2^4e2^4e2^4d2^4e2^4f+2^4f+2
+^4e2^4e2^4e2^4f+2^4[12e2^4]
+;201
+
+
+{3}
+'2v*v.70'
+'2i' p44%e0r32'2o-o1'[8b2^4]
+$301[b2^4b2^4<c2^4d2^4>b2^4b2^4b2^4b2^4]b2^4b2^4<c+2^4c+2^4>b2^4<c+2^4
+>b2^4b2^4b2^4b2^4<c2^4d2^4>[12b2^4]
+;301
+
+
+{4}
+'2v*v.70'
+'2i' p44%e0r64'2o-o1'[8g2^4]
+$401[g2^4g2^4g2^4b2^4g2^4g2^4g2^4g2^4]g2^4g2^4a2^4a2^4g2^4a2^4a2^4a2^4
+g2^4g2^4g2^4b2^4[12g2^4]
+;401
+
+
+{5}
+'2v*v.70'
+'2i' p44%e0'2o-o1'[8e2^4]
+$501[e2^4e2^4e2^4f+2^4e2^4e2^4e2^4e2^4]d2^4d2^4e2^4e2^4d2^4e2^4d+2^4d+2
+^4e2^4e2^4e2^4f+2^4[12e2^4]
+;501
+
+
+{6}
+'3v*v1.24'
+'3i' p64%e0m72,24,227r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4
+$601'3o'e2^4^4e4f+4g2c4>b2<d4e2^4^2e4e2^4^2^4e2^4^4e4d4c2g4f+2>b4<e2^4
+^2e4e2<d4c+4>a4b4g2^4^4g4g+4a2^4^2a4g2g4f+2a4b2^4f+2f+4e2e4b2b4<c2^4>b4
+f+4d4e2^4^4<d4c+4>b2^4^2^4e2^4^2^4^2^4^4>b4<d4e2^4^2^4^2^4^2^4
+;601
+
+
+{7}
+'0v*v.60'
+'0i' p84%e1'0o'[e2^4^4e4e4e2^4^2^4]
+$701
+'4i' p74%e0'4o'[19'4v*v.40'" !!!o h4"'4v*v.20'"h4h4h4h4h4"]'4v*v.40'"h4
+"'4v*v.20'"h4h4h4"'4v*v.40'"h8"
+'5i' '5v*v.40'" !!!o i8"
+'4i' '4v*v.40'" !!!o h4
+";701
+
+
+{8}
+'6v*v.70'p54%e0r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4
+$801'6o'[3p54'6v*v.70'
+'6i' " !!!o j2j4"p64'8v*v1.20'
+'8i' " !!!o l2"p54'6v*v.70'
+'6i' " !!!o j4j2j4"p64'8v*v1.20'
+'8i' " !!!o l4"r2]p54'6v*v.70'
+'6i' " !!!o j2j4"p64'8v*v1.20'
+'8i' " !!!o l2"p54'6v*v.70'
+'6i' " !!!o j4j2j4"p54'7v*v1.00'
+'7i' " !!!o k4k4k4"[5p54'6v*v.70'
+'6i' " !!!o j2j4"p64'8v*v1.20'
+'8i' " !!!o l2"p54'6v*v.70'
+'6i' " !!!o j4j2j4"p64'8v*v1.20'
+'8i' " !!!o l4"r2]p54'6v*v.70'
+'6i' " !!!o j2j4"p64'8v*v1.20'
+'8i' " !!!o l2"p54'6v*v.70'
+'6i' " !!!o j4j2j4"p54"j4"'7v*v1.00'
+'7i' " !!!o k4k4
+";801
+

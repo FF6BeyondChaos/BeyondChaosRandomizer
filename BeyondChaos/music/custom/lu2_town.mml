@@ -1,0 +1,480 @@
+#TITLE Theme of Town
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED Rushlight
+
+#WAVE 0x20 0x72 ## Violin
+#WAVE 0x21 0xA8 ## Harmonica
+#WAVE 0x22 0x66 ## Strings
+#WAVE 0x23 0x52 ## Bass
+#WAVE 0x24 0x61 ## Harp
+#WAVE 0x25 0x17 ## Electric piano
+
+#def init= t144 %x160 %v40 %b0,85 %f0,0
+
+
+#def melodyViolinVol=     v120
+#def violinEchoVol=       'melodyViolinVol*v.4'
+#def melodyHarmonicaVol=  v50
+#def harmonicaEchoVol=    'melodyHarmonicaVol*v.85'
+#def bassVol=             v70
+#def stringsVol=          v60
+#def harp1Vol=            v110
+#def harp2Vol=            'harp1Vol*v.8'
+#def layerPianoVol=       v33
+
+#def violin=    |0 o5
+#def harmonica= |1 o6
+#def harp=      |4 o5
+
+
+#def melodyViolin=    'violin'    'melodyViolinVol'    p64     %y0 %s5 %r7  %e1 m0,16,195
+## The original seems to have echo (%e1) on the violin echo in the first loop but not after. Let's assume it's an oversight and have it for all loops.
+#def violinEcho=      'violin'    'violinEchoVol'      p64     %y0 %s5 %r10 %e1 m
+#def melodyHarmonica= 'harmonica' 'melodyHarmonicaVol' p64         %r7      %e1 m
+#def harmonicaEcho=   'harmonica' 'harmonicaEchoVol'   p64         %r0      %e0 m
+#def bass=            |3 o6       'bassVol'            p64         %r11     %e1 m
+#def supportStrings=  |2 o5       'stringsVol'         p64 %a8     %r0      %e1 m
+#def harp1=           'harp'      'harp1Vol'           p64         %r18     %e1 m
+#def harp2=           'harp'      'harp2Vol'           p64         %r18     %e1 m
+#def layerPiano=      |5 o5       'layerPianoVol'      p45         %r11     %e1 m
+
+{1}
+'init'
+$
+## Melody Violin, originally track 1
+'melodyViolin-o1'
+l4
+[2
+  ## 1 / 17
+  g+ab2.< ee-e
+  ## 3 / 19
+  c+1^1
+  ## 5 / 21
+  >ab<c+2. e-ef+
+  ## 7 / 23
+  e-1^1
+  ## 9 / 25
+  cc+e-2. cc+e-
+  ## 11 / 27
+  f+ee-e c+1> j2
+  ## 13
+  ab<c+2. >ab<c+
+  ## 15
+  e-1 f+1>
+]
+## 29
+a1 <e1
+## 31
+e-1 f+1
+## 33
+e1^1
+## 35
+^1^2 
+## Melody Harmonica, originally track 1
+'melodyHarmonica'
+l2
+[2
+  b4<e4
+  ## 37 / 41
+  e-c+> ba
+  ## 39 / 43
+  a1 j2 g+
+]
+[3
+  ## 44 / 45 / 46
+  g+e4f+4
+]
+## 47 
+g+<c+ e1
+## 49
+ec+ >af+
+## 51
+e-1f+1
+;
+
+
+{2}
+$
+## Bass, originally track 3
+'bass-o2'
+l4
+[2
+  ## 1 / 17
+  e1.. b
+  ## 3 / 19
+  a1 a2g+2
+  ## 5 / 21
+  f+1.. c+
+  ## 7 / 23
+  b1 b2a2
+  ## 9 / 25
+  g+1 ^4b-<c2
+  ## 11 / 27
+  c+2c2 >b2b-2
+  ## 13 / 29
+  a1. a2
+  ## 15 / 31
+  b1. >b2<
+]
+## 33
+e1^1
+## 35
+^1^1
+## 37
+a1^1
+## 39
+e1^1
+## 41
+a1^1
+## 43
+e1. e-2
+## 45
+c+1 c1
+## 47
+>b1 b-1
+## 49
+<a1^1
+## 51
+b1. >b2
+;
+
+
+{3}
+$
+## Support Strings 1, originally channel 4
+'supportStrings'
+l2
+[2
+  ## 1 / 17
+  e1.. >b4
+  ## 3 / 19
+  a1 ag+
+  ## 5 / 21
+  f+1.. c+4
+  ## 7 / 23
+  b1 ba
+  ## 9 / 25
+  g+1 g+4b-4<c
+  ## 11 / 27
+  c+c >bb-
+  ## 13 / 29
+  a1. a
+  ## 15 / 31
+  b1. >b<<
+]
+## 33
+<e>g+ af+
+## 35
+g+1 ^1
+## 37
+a1 ^1
+## 39
+e1^1
+## 41
+a1^1
+## 43
+e1. e-
+## 45
+c+1 c1
+## 47
+>b1 b-1
+## 49
+<a1^1
+## 51
+b1^1
+;
+
+
+{4}
+## Support Strings 2, originally channel 2
+'supportStrings'
+l4
+## Measures 1 through 16 play on every playthrough except the first, so we'll use this one-time opening before the infinite loop point.
+[16 r1]
+## Jump into the upcoming loop and play measures 17 through 28, get thrown back into this loop, then jump to measure 29
+[3 j2,417 j3,429]
+$
+## Support Strings 2, originally channel 2
+'supportStrings'
+l4
+[2
+  $417
+  ## 1 / 17
+  e1^1
+  ## 3 / 19
+  >a2.b <c+>bag+
+  ## 5 / 21
+  f+1^1
+  ## 7 / 23
+  b2.<c+ e-c+>ba
+  ## 9 / 25
+  g+1 <g+f+ee-
+  ## 11 / 27
+  c+2e-c+ e1 j2
+  ## 13
+  >a1 ^1
+  ## 15
+  b1 ^1<
+]
+## 29
+$429
+e1 a1
+## 31
+b1 b1
+## 33
+^1 ^1
+## 35
+^1 ^1
+[2
+  ## 37 / 41
+  b2a2 g+2ef+
+  ## 39 / 43
+  f+1 e1
+]
+## 45
+c+1 ^4e-eg+
+## 47
+<c+2e2 g+1
+## 49
+<c+1 ^1
+## 51
+e-1 ^1
+;
+
+
+{5}
+$
+## Harp 1, originally track 5
+'harp1'
+l2
+e<e g+1
+## 3
+c+1 c+c+
+## 5
+>f+<f+ a1
+## 7
+e-1 e-e-
+## 9
+>g+<g+ <c1
+## 11
+c+>e >g+c+
+## 13
+>a<c+ c+e
+## 15
+l4
+>b<f+f+f+ <e-e-e-b
+## 17
+>ebbb <g+>be>g+
+## 19
+<a<eee <c+>e>ac+
+## 21
+f+<c+c+c+ ac+>f+>a
+## 23
+<b<f+f+f+ <e->f+>be-
+## 25
+g+<e-e-e- <c>e->g+c
+## 27
+c+g+g+g+ <eee<c+
+## 29
+>>a<c+c+c+ eeeg+
+## 31
+<f+>b<e->f+ be-f+>b
+## 33
+<< [4 e>a]
+## 35
+<ebbb <g+g+g+<e
+## 37
+>>a<eee <c+c+ac+
+## 39
+>>ebbb< g+g+<e>g+
+## 41
+>a<eee< c+c+ac+
+## 43
+>>ebbb <g+g+<eg+
+## 45
+>c+g+g+g+ <eee<c+
+## 47
+<c+>eg+c+ e>g+<c+>e
+## 49
+>>a<eee <c+c+c+a
+## 51
+>>b<f+f+f+< e-1
+;
+
+
+{6}
+## Harp 2, originally track 7
+'harp2'
+l2
+r4
+$
+## Harp 2, originally track 7
+'harp2'
+l2
+## Measure comments will be one beat late until further notice, since we have half notes on beat 4 a lot
+b<f+1>b
+## 3
+^1 a<e
+## 5
+c+g+1 c+
+## 7
+^1 >b<f+
+## 9
+e-b-1 <e-
+## 11
+>g+c+ >e>g+
+## 13
+bb <e-f+4.
+## Measure comments will be one half-beat late starting now until further notice, since we have quarter notes on beat 4-and a lot
+## 15
+l4
+e-e-bb b<f+f+<e-
+## 17
+>>g+g+<ee e>g+>be
+## 19
+<<c+c+aa ac+>e>a
+## 21
+<aa<f+f+ f+>ac+>f+
+## 23
+<<e-e-bb be->f+>b
+## 25
+<<ccg+g+ g+c>e->g+
+## 27
+<ee<c+c+ c+g+g+<e
+## 29
+>>bb<e-e- e-f+f+a
+## 31
+<e->f+be- f+>b<e->f+
+## 33
+<<[4 >bb]
+## 35
+<g+g+<ee ebb<g+
+## 37
+>c+c+aa a<ee>a
+## 39
+>g+g+<ee ebbe
+## 41
+c+c+aa a<ee>a
+## 43
+>g+g+<ee eb<f+e
+## 45
+>ee<c+c+ c+g+g+<e
+## 47
+g+c+e>g+ <c+>eg+c+
+## 49
+>c+c+aa a<ee<c+
+## 51
+>>e-e-bb8 ^1
+## 53
+^4
+;
+
+
+{7}
+$
+## Layer Piano, originally track 6
+'layerPiano'
+l4
+[2
+  ## 1 / 17
+  g+ab2.< ee-e
+  ## 3 / 19
+  c+1^1
+  ## 5 / 21
+  >ab<c+2. e-ef+
+  ## 7 / 23
+  e-1^1
+  ## 9 / 25
+  cc+e-2. cc+e-
+  ## 11 / 27
+  f+ee-e c+1> j2
+  ## 13
+  ab<c+2. >ab<c+
+  ## 15
+  e-1 f+1>
+]
+## 29
+a1 <e1
+## 31
+e-1 f+1
+## 33
+e1^1
+## 35
+^1^2 
+l2
+>
+[2
+  b4<e4
+  ## 37 / 41
+  e-c+> ba
+  ## 39 / 43
+  a1 j2 g+
+]
+[3
+  ## 44 / 45 / 46
+  g+e4f+4
+]
+## 47 
+g+<c+ e1
+## 49
+ec+ >af+
+## 51
+e-1f+1
+;
+
+
+{8}
+## This channel plays melody echo, it's always one 8th note behind.
+r8
+$
+## Violin Echo, originally track 8
+'violinEcho-o1'
+l4
+[2
+  ## 1 / 17
+  g+ab2.< ee-e
+  ## 3 / 19
+  c+1^1
+  ## 5 / 21
+  >ab<c+2. e-ef+
+  ## 7 / 23
+  e-1^1
+  ## 9 / 25
+  cc+e-2. cc+e-
+  ## 11 / 27
+  f+ee-e c+1> j2
+  ## 13
+  ab<c+2. >ab<c+
+  ## 15
+  e-1 f+1>
+]
+## 29
+a1 <e1
+## 31
+e-1 f+1
+## 33
+e1^1
+## 35
+^1^2 
+## Harmonica Echo, originally track 8
+'harmonicaEcho'
+l2
+[2
+  b4<e4
+  ## 37 / 41
+  e-c+> ba
+  ## 39 / 43
+  a1 j2 g+
+]
+[3
+  ## 44 / 45 / 46
+  g+e4f+4
+]
+## 47 
+g+<c+ e1
+## 49
+ec+ >af+
+## 51
+e-1f+1
+;

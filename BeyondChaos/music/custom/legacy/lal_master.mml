@@ -1,0 +1,137 @@
+#TITLE Birds Fly, Fish Swim
+#ALBUM Live A Live
+#COMPOSER Yoko Shimomura
+#ARRANGED Gi Nattak
+
+# Converted from binary by mfvitools
+
+#SHORTNAME LAL Birds Fly
+
+#WAVE 0x20 0x03
+#WAVE 0x21 0x18
+#WAVE 0x22 0x1B
+#WAVE 0x23 0x0D
+#WAVE 0x24 0x37
+#WAVE 0x25 0x3E
+#WAVE 0x26 0x16
+
+{1}
+l16%v50%e1%k1t95v80p60|0o4g+8b8o5c+4^8e8d+8e8  f+4c+2^4  o4g+8b8o5c+4^8e8d+8e8  
+f+4g+2^4  b4a4^8f+g+a4  <c+8d+8e8d+32ed+32>g+4v40g+v24g+v10g+v80r  
+g+4b8ag+f+4v40f+v24f+v10f+v80r  f+4g+2v40g+v24g+v10g+ $1 v80r  o4g+8b8<c+4^8e8d+8e8  
+f+4c+2^4  o4g+8b8o5c+4^8e8d+8e8  f+4g+2^4  e8f+8g+4^8b8f+4  
+^8d+8e8d+8c+8o4b8o5c+4  e8f+8g+4^8b8f+8g+8  b8g+8o6c+2^4  o5e8f+8g+4^8b8f+4  
+^8d+8e8d+8c+8o4b8o5c+4  e8f+8g+4^8b8f+8g+8  b8g+8<c+2^4  o4g+8b8o5c+4^8e8d+8e8  
+f+4c+2^4  o4g+8b8o5c+4^8e8d+8e8  f+4g+2^4  b4a4^8f+g+a4  
+<c+8d+8e8d+32ed+32>g+4v50g+v24g+v10g+v80r  g+4b8ag+f+4v50f+v24f+v10f+v80r  
+f+4g+2v50g+v24g+v10g+
+;1
+
+l16
+{2}
+l16%e1%k1v127p74|1r4  o3a2b2  
+<c+4g+4o5c+2  o3a2b2  o4e4b4<e2  >f+2^4o3g+4  
+<c+2^4c+4  d1  c+8g+8o5c+8d+8e2   $2 o3a2b2  
+o4c+4g+4<c+2  o3a2b2  <e4b4o5e2  o3a8o4e8o5c+4o3b8o4f+8o5d+4  
+>c+8g+8o5c+8d+8e4o3b4  a8o4e8<c+4o3b8<f+8<d+4  o4c+8g+8o5e8d+8c+4o3b4  
+a8<e8<c+4o3b8<f+8o5d+4  o4c+8g+8o5c+8d+8e4o3b4  a8<e8<c+4o3b8<f+8o5d+4  
+o4c+8g+8o5c+8d+8f2  o3a2b2  <c+4g+4o5c+2  o3a2b2  
+o4e4b4o5e2  o4f+2^4>g+4  <c+2^4c+4  d1  
+c+8g+8<c+8d+8e4^4  
+;2
+
+l16
+{3}
+l16%e1%k1v50p60|2o5r4o7c+^32c+32>b^32b32g+^32g+32f+^32f+32c+^32c+32>b^32b32  
+g+^32g+32f+^32f+32o7c+^32c+32>b^32b32g+^32g+32f+^32f+32c+^32c+32>b^32b32  
+g+^32g+32f+^32f+32o7c+^32c+32>b^32b32g+^32g+32f+^32f+32c+^32c+32>b^32b32  
+g+^32g+32f+^32f+32o7c+^32c+32>b^32b32g+^32g+32e^32e32c+^32c+32>b^32b32  
+g+^32g+32e^32e32o7c+^32c+32>a^32a32g+^32g+32f+^32f+32c+^32c+32>a^32a32  
+g+^32g+32f+^32f+32<g+^32g+32f+^32f+32e^32e32c+^32c+32>g+^32g+32f+^32f+32  
+e^32e32c+^32c+32o7d^32d32>b^32b32a^32a32g+^32g+32f+^32f+32d^32d32  
+c+^32c+32>b^32b32o7c+^32c+32>b^32b32g+^32g+32f+^32f+32c+^32c+32>b^32b32  
+ $3 g+^32g+32f+^32f+32o7c+^32c+32>b^32b32g+^32g+32f+^32f+32c+^32c+32>b^32b32  
+g+^32g+32f+^32f+32o7c+^32c+32>b^32b32g+^32g+32f+^32f+32c+^32c+32>b^32b32  
+g+^32g+32f+^32f+32o7c+^32c+32>b^32b32g+^32g+32f+^32f+32c+^32c+32>b^32b32  
+g+^32g+32f+^32f+32o7c+^32c+32>b^32b32g+^32g+32e^32e32c+^32c+32>b^32b32  
+g+^32g+32e^32e32o7c+c+>bbg+g+f+f+g+g+f+f+  d+d+>bb<c+c+eef+f+g+g+f+f+g+g+  
+bb<c+c+c+c+>bbg+g+f+f+g+g+f+f+  d+d+>bbc+ef+g+f+g+bo6c+>bo6c+ef+  
+ef+g+b<c+c+>bbg+g+f+f+g+g+f+f+  d+d+>bb<c+c+eef+f+g+g+f+f+g+g+  
+bb<c+c+c+c+>bbg+g+f+f+g+g+f+f+  d+d+>bbo7c+^32c+32>g+^32g+32f+^32f+32f^32f32g+^32g+32f+^32f+32  
+f^32f32c+^32c+32<c+^32c+32>b^32b32g+^32g+32f+^32f+32c+^32c+32>b^32b32  
+g+^32g+32f+^32f+32o7c+^32c+32>b^32b32g+^32g+32f+^32f+32c+^32c+32>b^32b32  
+g+^32g+32f+^32f+32o7c+^32c+32>b^32b32g+^32g+32f+^32f+32c+^32c+32>b^32b32  
+g+^32g+32f+^32f+32o7c+^32c+32>b^32b32g+^32g+32e^32e32c+^32c+32>b^32b32  
+g+^32g+32e^32e32o7c+^32c+32>a^32a32g+^32g+32f+^32f+32c+^32c+32>a^32a32  
+g+^32g+32f+^32f+32<g+^32g+32f+^32f+32e^32e32c+^32c+32>g+^32g+32f+^32f+32  
+e^32e32c+^32c+32o7d^32d32>b^32b32a^32a32g+^32g+32f+^32f+32d^32d32  
+c+^32c+32>b^32b32o7c+^32c+32>b^32b32g+^32g+32f+^32f+32c+^32c+32>b^32b32  
+
+;3
+
+l16
+{4}
+l16%e1%k1v50p34|3o5r4v16,16,32g+2f+2  e4d+4c+2  g+2f+2  
+e4f+4g+2  e2d+2  c+8d+8e8f+8e4d+8e8  f+4c+4d4g+8b8  
+o6c+1  > $4 o5g+2f+2  e4d+4c+2  g+2f+2  
+e4f+4g+2  e2d+2  e4f+4g+2  e2d+2  
+e8d+8c+8o4b8<c+2  e2d+2  e4f+4g+2  e2d+2  
+g+4f+4f2  g+2f+2  e4d+4c+2  g+2f+2  
+e4f+4g+2  e2d+2  c+8d+8e8f+8e4d+8e8  f+4c+4d4g+8b8  
+o6c+2^4^4  
+;4
+
+l16
+{5}
+l16%e1%k1v50p34|3o5r1  ^1  ^1  
+^1  ^4v16,16,32c+2>b2  g+8b8<c+8d+8c+4>b8<c+8  d4>a2<f+8g+1  
+^8 $5 r1  ^1  ^1  ^1  
+c+2>b2  <c+4d+4e2  c+2>b2  <c+8>b8g+2^4  
+<c+2>b2  <c+4d+4e2  c+2>b2  <f4d+4c+2  
+r1  ^1  ^1  ^1  
+c+2>b2  g+8b8<c+8d+8c+4>b8<c+8  d4>a2<f+8g+8  r2^4^4  
+
+;5
+
+l16
+{6}
+l16%e1%k1v60p50|4o5r4>e8o6b8r8b8r8b8  r8b8r8b8r8b8r8b8  
+r8b8o4e8o6b8r8b8r8b8  r8b8r8b8r8b8r8b8  r8b8r8b8r8b8r8b8  r8b8r8b8r8b8r8b8  
+r8b8r8b8r8b8r8b8  r8b8r8b8r8b8r8b8   $6 r8b8o4e8o6b8r8b8r8b8  r8b8r8b8r8b8r8b8  
+r8b8o4e8o6b8r8b8r8b8  r8b8r8b8r8b8r8b8  r8b8r8b8r8b8r8b8  r8b8r8b8r8b8r8b8  
+r8b8r8b8r8b8r8b8  r8b8v10[16v128,80b32]bv60r4^b8r8b8  r8b8r8b8r8b8r8b8  
+r8b8r8b8r8b8r8b8  r8b8r8b8r8b8o4e8r^32o6v10[9v80,80b32  ]v60b8r4b8o4e8o6b8r8b8  
+r8b8r8b8r8b8r8b8  r8b8r8b8o4e8o6b8r8b8  r8b8r8b8r8b8r8b8  r8b8r8b8r8b8r8b8  
+r8b8r8b8r8b8r8b8  r8b8r8b8r8b8r8b8  r8b8r8b8r8b8r8b8  r8b8v0,60
+;6
+
+l16
+{7}
+l16%e1%k1v24p94|5o5r4g+g+g+8f+8f+8  
+d+8f+8g+32g+32g+32g+32g+32g+32g+32g+32g+g+g+8f+8f+8  d+8f+8g+g+f+f+g+g+g+8f+8f+8  
+d+8f+8g+32g+32g+32g+32g+32g+32g+32g+32bbb8f+8f+8  g+8g+8bbf+f+c+8<c+c+8^c+c+8  
+^c+c+c+8c+c+>g+g+f+f+g+8d+f+g+  g+bf+g+8^f+>a8<aa8^aa8  ^aaa8aag+g+f+f+g+8d+f+g+  
+g+bf+ $7 g+8^f+g+g+g+8f+8f+8d+8  f+8g+32g+32g+32g+32g+32g+32g+32g+32g+g+g+8f+8f+8d+8  
+f+8g+g+f+f+g+g+g+8f+8f+8d+8  f+8g+32g+32g+32g+32g+32g+32g+32g+32bbb8f+8f+8g+8  
+g+8bbf+f+g+g+f+f+g+8d+f+g+g+  bf+g+8^f+g+g+f+f+g+8d+f+g+g+  bf+g+8^f+g+g+f+f+g+8d+f+g+g+  
+bf+g+8^f+g+g+f+f+g+8d+f+g+g+  bf+g+8^f+g+g+f+f+g+8d+f+g+g+  bf+g+8^f+g+g+f+f+g+8d+f+g+g+  
+bf+g+8^f+g+g+f+f+g+8d+f+g+g+  bf+g+8^f+g+g+f+f+g+8d+f+g+g+  a+f+g+8^f+g+g+g+8f+8f+8d+8  
+f+8g+32g+32g+32g+32g+32g+32g+32g+32g+g+g+8f+8f+8d+8  f+8g+g+f+f+g+g+g+8f+8f+8d+8  
+f+8g+32g+32g+32g+32g+32g+32g+32g+32bbb8f+8f+8g+8  g+8bbf+f+c+8<c+c+8^c+c+8^  
+c+c+c+8c+c+>g+g+f+f+g+8d+f+g+g+  bf+g+8^f+>a8<aa8^aa8^  aaa8aag+g+f+f+g+8d+f+g+g+  
+bf+
+;7
+
+l16
+{8}
+l16%e1%k1v80p60|6o5r1  ^4>g+4<f+4>g+4  r1  a32a32a32a32a32a32a32a32g+4<f+4>g+4  
+r4o5c+2^4  f4o4g+4<f4>g+2  g+4r^32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32  
+g+1   $8 r1  g+4o5f+4>g+4r1  a32a32a32a32a32a32a32a32g+4<f+4>g+4  
+r4o5f4^8c8f4  ^8d32dd32a4g4a2  f4^8c8f4d32dd32d32dd32  a4g4a2  
+f8ccf4^8c8f8c8  g+8d+d+g+8d+4d+8c+8f8  f8ccf4^8c8f8c8  r1  
+^1  o4g+4o5f+4>g+4r1  a32a32a32a32a32a32a32a32g+4o5f+4>g+4  r4<c+2^4  
+f4o4g+4<f4>g+2  g+4r^32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32g+32  
+g+2^4^4  
+;8
+
+l16

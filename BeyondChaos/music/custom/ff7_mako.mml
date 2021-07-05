@@ -1,0 +1,264 @@
+#TITLE Mako Reactor
+#ALBUM Final Fantasy VII
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#WAVE 0x20 0x05 GrandPiano
+#WAVE 0x21 0x73 Choir
+#WAVE 0x22 0x63 Strings
+#WAVE 0x23 0xC4 SynthStringPad
+#WAVE 0x24 0x55 SynthBass
+#WAVE 0x25 0xD6 moog1
+#WAVE 0x27 0x28 Tubular
+#WAVE 0x28 0x5A Timpani
+#WAVE 0x2C 0xBA Rev.Cymbal
+
+#def init= t80 %x255 %v50 %b0,100 %f0,0
+
+#def piano= |0 'p' o7 m
+#def vox= |1 'v' o5 m40,18,175
+#def strings= |2 's' o5 m #%a9
+#def pad= |3 'y' o5 m
+#def synb= |4 'b' o8 m %y6%s1
+#def boop= |5 'm' o6 m
+#def bell= |7 'l' o5 m %r13
+#def timpani= |8 't' o6 m
+
+#def revc= |C p64 o3 'c' m %a1%r5 'cf*v87,1.27' g1 'cf*v192,.72' ^1 'fc*v122,.37' ^1
+
+#def p= v57
+#def v= v52
+#def vf= v1,52
+#def s= v40
+#def y= v64
+#def b= v32
+#def bf= v1,32
+#def m= v48
+#def l= v80
+#def t= v96
+#def c= v64
+#def cf= v1,64
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init' %e1
+'piano-o2*v1.09' p110 l16 k-2
+[c4.'p*v.68'c'p*v.77'c'p*v.84'c4'p*v.97'c4'p*v1.09'c1]
+$
+'piano-o2*v2.18' p60 l16 k-1
+c4.'p*v1.36'c'p*v1.54'c'p*v1.68'c4'p*v1.94'c4'p*v2.18'c1
+'p*v1.09' p110 k-2 [3 c4.'p*v.68'c'p*v.77'c'p*.84'c4'p*v.97'c4'p*v1.09'c1 ]
+## 13
+[2 c4.'p*v.68'c'p*v.77'c'p*.84'c4'p*v.97'c4'p*v1.09'c1 ]
+## 17
+'p*v2.18' p60 k-1 >
+[4 g4.'p*v1.36'g'p*v1.54'g'p*v1.68'g4'p*v1.94'g4'p*v2.18'g1]
+## 25
+[4 a+4.'p*v1.36'a+'p*v1.54'a+'p*v1.68'a+4'p*v1.94'a+4'p*v2.18'a+1]
+;
+
+{2}
+%e1
+'piano-o2*v1.09' p10 l16
+[c4.'p*v.68'c'p*v.77'c'p*v.84'c4'p*v.97'c4'p*v1.09'c1]
+$
+'pad' p64 l8 r4(gg+a+<g>)
+'p*v.5' p10 (a+<g>)
+'p*v.25' p110 (a+<g>) r1
+'p' p64
+(gg+a+<gr(fa+rc+)rr2>
+r4(gg+a+<grd+)r1>
+r4(fgg+<c+r>(b<c)rr2.
+## 13
+'strings+o1' l16
+[4 ['s' p25 cr 's*v.5' p100 cr]  >['s' p25 a+r 's*v.5' p100 a+r]< ]
+## 17
+'bell-o1' p64 l4
+ra+a2 rfg2 ra+af g2
+'strings' l16
+['s' p25 a+r 's*v.5' p100 a+r  j2  's' p25 ar 's*v.5' p100 ar]
+'bell-o1' p64 l4  a+a2
+'strings' l16 p25 a+r 's*v.5' p100 a+r
+'bell-o1' p64 l4 fg2 ra+a<c> a+2
+'strings' l16 p25 a+r 's*v.5' p100 a+r  's' p25 ar 's*v.5' p100 ar
+## 25
+[
+p25 a+r 's*v.5' p100 a+r
+'bell' p64 l4 c+c2
+'strings' l16 p24 a+r 's*v.5' p100 a+r
+'bell-o1' p64 l4 g+a+2
+r<c+cj2,231>g+ a+2
+'strings' l16 p24 a+r 's*v.5' p100 a+r   's' p24 g+r 's*v.5' p100 g+r
+] $231 l4 d+ c+2
+'strings' l16 p24 a+r 's*v.5' p100 a+r   's' p24 g+r 's*v.5' p100 g+r
+;
+
+{3}
+%e1
+'timpani-o1' p64 l16
+[c4.'t*v.62'c't*v.71'c't*v.77'c4't*v.89'c4't'c1]
+$
+'timpani-o1' p64 l16
+[32c4]
+## 13
+[16c4]
+## 17
+> [14g4]          g8 'strings*v.5' p100 gr
+ 'timpani-o2' p64 g8 'strings*v.5' p100 fr
+['timpani-o2' p64 g8 'strings*v.5' p100 gr]
+['timpani-o2' p64 g8 'strings*v.5' p100 fr]
+ 'timpani-o2' p64 g4
+                  g8 'strings*v.5' p100 gr
+['timpani-o2' p64 g8 'strings*v.5' p100 fr]
+ 'timpani-o2' p64 [6g4]
+                  g8 'strings*v.5' p100 gr
+ 'timpani-o2' p64 g8 'strings*v.5' p100 fr
+## 25
+[
+['timpani-o2' p64 a+8 'strings*v.5' p100 fr]
+['timpani-o2' p64 a+8 'strings*v.5' p100 d+r]
+ 'timpani-o2' p64 a+4
+                  a+8 'strings*v.5' p100 fr
+['timpani-o2' p64 a+8 'strings*v.5' p100 d+r]
+ 'timpani-o2' p64 [6a+4]
+                  a+8 'strings*v.5' p100 fr
+ 'timpani-o2' p64 a+8 'strings*v.5' p100 d+r
+]
+;
+
+{4}
+%e1 'revc' ^1
+#$
+'vox*v.33''vf*v192,.77' p50 g1 'vf*v192,0' ^1 $
+'pad*v.5' p10 r2 l8
+(gg+a+<gr(fa+rc+)rr2>
+r4(gg+a+<grd+)r1>
+r4(fgg+<c+r>(b<c)rr2
+## 13
+'strings' l16
+[4 ['s' p25 d+r 's*v.5' p100 d+r]  ['s' p25 c+r 's*v.5' p100 c+r] ]
+## 17
+[4 ['s' p25 a+r 's*v.5' p100 a+r] j4,420 ['s' p25 ar 's*v.5' p100 ar] ] $420
+'vox*v.61''vf*v24,.84' p50 g8.'vf*v12,.69'^16 'vf*v24,.84' d8.'vf*v12,.69'^16
+'vf*v24,.84' g1 'vf*v192,0' ^1
+'strings'
+[ ['s' p25 a+r 's*v.5' p100 a+r] j2,424 ['s' p25 ar 's*v.5' p100 ar] ] $424
+'vox*v.61''vf*v24,.84' p50 g8.'vf*v12,.69'^16 'vf*v24,.84' d8.'vf*v12,.69'^16
+## 25
+[ 'vf*v24,.84' f1 'vf*v192,0' ^1
+'strings'
+[ ['s' p25 a+r 's*v.5' p100 a+r] j2,428 ['s' p25 g+r 's*v.5' p100 g+r] ] $428
+'vox*v.61''vf*v24,.84' p50 f8.'vf*v12,.69'^16 'vf*v24,.84' j2,432 d+8.'vf*v12,.69'^16
+] $432 g+8.'vf*v12,.69'^16
+##
+'vf*v24,.84' g1 'vf*v192,0' ^1
+;
+
+{5}
+%e1 'synb*v.61-o2' p64 l48
+r1r1r1 [12cr] 'bf*v96,1.2' [12cr]
+#$
+'vox*v.47''vf*v192,.77' p80 c1 'vf*v192,0' ^1 $
+'pad*v.25' p110 r2. l8
+(gg+a+<gr(fa+rc+)rr2>
+r4(gg+a+<grd+)r1>
+r4(fgg+<c+r>(b<c)r4.
+## 13
+'strings' l16
+[4 ['s' p25 gr 's*v.5' p100 gr]  ['s' p25 fr 's*v.5' p100 fr] ]
+## 17
+[4 ['s' p25 dr 's*v.5' p100 dr] j4,520 ['s' p25 cr 's*v.5' p100 cr] ] $520
+'vox*v.61-o1''vf*v24,.84' p80 a+8.'vf*v12,.69'^16 'vf*v24,.84' a8.'vf*v12,.69'^16
+'vf*v24,.84' a+1 'vf*v192,0' ^1
+'strings'
+[ ['s' p25 dr 's*v.5' p100 dr] j2,524 ['s' p25 cr 's*v.5' p100 cr] ] $524
+'vox*v.61-o1''vf*v24,.84' p80 a+8.'vf*v12,.69'^16 'vf*v24,.84' a8.'vf*v12,.69'^16
+## 25
+[ 'vf*v24,.84' a+1 'vf*v192,0' ^1
+'strings'
+[ ['s' p25 c+r 's*v.5' p100 c+r] j2,528 ['s' p25 cr 's*v.5' p100 cr] ] $528
+'vox*v.61-o1''vf*v24,.84' p80 a+8.'vf*v12,.69'^16 'vf*v24,.84' j2,532 g+8.'vf*v12,.69'^16
+] $532 <c8.'vf*v12,.69'^16
+##
+'vf*v24,.84' c1 'vf*v192,0' ^1
+;
+
+{6}
+%e1 [4r1]
+#$
+'vox*v.47''vf*v192,.77' p64 d+1 'vf*v192,0' ^1 $
+'piano-o2*v1.05' p10 l16
+[3 c4.'p*v.68'c'p*v.77'c'p*v.84'c4'p*v.97'c4'p*v1.09'c1]
+## 13
+[c4.'p*v.68'c'p*v.77'c'p*v.84'c4'p*v.97'c4'p*v1.09'c1]
+## 17
+'boop-o1' l16 [8
+p10  m4,1 f+r  < p115 m4,1 ar  >>
+p100 m4,1 ar  << p25  m4,1 f+r >>
+p40  m4,1 f+r << p85  m4,1 c+r >>
+p70  m4,1 c+r  < p55  m4,1 ar  
+]
+## 25
+[8
+p10  m4,1 a r << p115 m4,1 c r >>
+p100 m4,1 c r  < p25  m4,1 a r >>
+p40  m4,1 a r << p85  m4,1 e r >>
+p70  m4,1 e r << p55  m4,1 c r >
+]
+#
+'vox*v.69' p64
+'vf*v24,.84' d+1 'vf*v192,0' ^1
+;
+
+{7}
+%e1 [4r1]
+$
+'revc' [5^1]
+## 13
+[4r1]
+## 17
+'strings' l16
+[4 ['s' p25 gr 's*v.5' p100 gr] j4,720 ['s' p25 fr 's*v.5' p100 fr] ] $720
+'vox*v.61''vf*v24,.84' p64 d8.'vf*v12,.69'^16 'vf*v24,.84' c8.'vf*v12,.69'^16
+'vf*v48,.24' d4
+'strings'
+'s' p25 a+r 's*v.5' p100 a+r   ['s' p25 ar 's*v.5' p100 ar]
+'s' p25 gr 's*v.5' p100 gr      's' p25 a+r 's*v.5' p100 a+r   ['s' p25 ar 's*v.5' p100 ar]
+[ ['s' p25 gr 's*v.5' p100 gr] j2,724 ['s' p25 fr 's*v.5' p100 fr] ] $724
+'vox*v.61''vf*v24,.84' p64 d8.'vf*v12,.69'^16 'vf*v24,.84' c8.'vf*v12,.69'^16
+## 25
+[ 'vf*v48,.24' c+4
+'strings'
+'s' p25 a+r 's*v.5' p100 a+r   ['s' p25 g+r 's*v.5' p100 g+r]
+'s' p25 fr 's*v.5' p100 fr      's' p25 a+r 's*v.5' p100 a+r   ['s' p25 g+r 's*v.5' p100 g+r]
+[ ['s' p25 fr 's*v.5' p100 fr] j2,728 ['s' p25 d+r 's*v.5' p100 d+r] ] $728
+'vox*v.61''vf*v24,.84' p64 c+8.'vf*v12,.69'^16 'vf*v24,.84' j2,732 c8.'vf*v12,.69'^16
+] $732 d+8.'vf*v12,.69'^16
+;
+
+{8}
+%e1 [4r1]
+$
+'synb*v1.2-o2' p64 l48 [12cr]
+'pad*v.5' p10 l8 (gg+)
+'p*v.25' p110 (gg+)
+'synb*v1.2-o2' p64 l48 [12cr] 'bf*v96,1.2' [12cr]
+[3 [12cr] 'bf*v80,.61' [24cr] 'bf*v96,1.2' [12cr] ]
+## 13
+[2 [12cr] 'bf*v80,.61' [24cr] 'bf*v96,1.2' [12cr] ]
+## 17
+'revc' ^2
+'strings' l16
+   's' p25 dr 's*v.5' p100 dr    's' p25 cr 's*v.5' p100 cr
+[ ['s' p25 dr 's*v.5' p100 dr]    ['s' p25 cr 's*v.5' p100 cr] ]
+r1.
+   's' p25 dr 's*v.5' p100 dr    's' p25 cr 's*v.5' p100 cr
+## 25
+[
+[ ['s' p25 c+r 's*v.5' p100 c+r]    ['s' p25 cr 's*v.5' p100 cr] ]
+r1.
+   's' p25 c+r 's*v.5' p100 c+r    's' p25 cr 's*v.5' p100 cr
+   ]
+;

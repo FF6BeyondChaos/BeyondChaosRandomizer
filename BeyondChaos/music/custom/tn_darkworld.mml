@@ -1,0 +1,256 @@
+#TITLE Departure
+#ALBUM Terranigma
+#COMPOSER Miyoko Kobayashi
+#ARRANGED emberling
+
+#SFXV ` *
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x21 0x63 oct.strings
+#WAVE 0x22 0x67 contrabass
+#WAVE 0x23 0x81 trumpet
+#WAVE 0x24 0xA5 flute
+#WAVE 0x25 0x61 harp
+#WAVE 0x26 0x52 bass
+#WAVE 0x27 0x28 bell
+#WAVE 0x28 0x92 oboe
+
+#def init= t120 %v58 %b0,90 %f0,0
+
+#def strings=  |0 o5  's'         
+#def ostrings= |1 o5  'o'         %y2%s0
+#def contra=  *|2 o5* 'c' `|6 o6` %a10%s7
+#def trumpet=  |3 o5  't'         %s5
+#def flute=    |4 o4  'f'         %a12
+#def harp=     |5 o5  'h'         %r16
+#def bass=    *|6 o6* 'b' `|2 o5` %a10%s7
+#def bell=     |7 o4  'l'         
+#def oboe=     |8 o4  'r'         %a12%r10
+
+#def s=  v64
+#def o=  v48
+#def c= *v24* `v0`
+#def t=  v64
+#def f=  v48
+#def h=  v56
+#def b= *v24* `v64`
+#def l=  v64
+#def r=  v32
+
+#def sf=  v1,64
+#def of=  v1,48
+#def cf= *v1,24* `v0`
+#def tf=  v1,64
+#def ff=  v1,48
+#def hf=  v1,56
+#def bf= *v1,24* `v1,64`
+#def lf=  v1,64
+#def rf=  v1,32
+
+#def flutevib= m30,50,215
+#def flutevib2= m24,28,251
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} 'init' %e1
+'bell*v1.05' p113 f+1 'l*v1.323' &142f+
+'strings+o1*v1.254' p64 l8 ab
+$## Starts loop 2 ticks early
+## Original channel 3 - lead strings - flute
+'strings+o1*v1.008' p64 l8 m
+'sf*v30,1.26' g+4.'s*v1.14'f+4.c+4
+'s*v.912' 'sf*v30,1.14' f+4. 's*v.6''sf*v72,.4' ^4.
+'flute+o1*v1.159' 'flutevib' a 'f*v1.049' b
+g+4^16r16f+4^16r16e8.'f*v.92'd+32'f*v.85'd32 'flutevib2''f*v1.049'c+2 'ff*v88,.46' ^2 m
+## 7 - lead strings cont.
+'strings+o1*v1.197' l8 c+ 's*v1.08' >b<c+d^12r12 's*v1.026' e^32&2r 's*v1.08' d^32&2r
+&34e&2r 's*v1.197' f+^32&2r 's*v1.08' e^64&1r d^64&1r 's*v.95' &34e&2r 's*v1.08' d^32&2r
+'s*v.855''sf*v192,1.311' c+1 'sf*v110,.513' ^2.r4
+## 11 - original channel 3 - trumpet 1 -> strings
+'trumpet*v1.26' m30,40,211
+&66g+r32 &66f+r32 c+8^64r32. < c+48^64&5r m24,28,241 't*v1.14' c+2..r8>
+'t*v1.26' m32,32,207 &66g+r32 &37f+&35r c+6^16r48  &66er32 f+6^16r48 g+8.^64r64 't*v1.14'a8^48&2r
+'t*v1.01' m32,24,221 b1 't*v1.14' <e2.. 't*v1.26' d24^64&13r
+'t*v1.14' c+24 d24 &176c+ 'tf*v120,.855' ^2^8r8 m
+'strings+o1*v1.31' c+8. g+16
+## 19 - original channel 3 - strings lead
+'s*v.912''sf*v30,1.197' &66g+r32 's*v1.323' &25f+&23r 's*v.969''sf*v20,1.197' g+6^64&13r 's*v1.323' a12r24
+'s*v.808''sf*v15,1.061' &34b&2r 's*v1.323' &34a&2r 's*v1.197' g+16.r32 's*v1.323' e8^32&2r c+8^32&2r 's*v1.197' >b8r24<
+'s*v.968''sf*v60,1.271' &252c+  'sf*v60,.908' ^4^16 's*v1.311' r8 &34c+&2r g+16
+##23
+'s*v.912''sf*v30,1.197' &66g+r32 's*v1.323' &25f+&23r 's*v1.271' g+6^64&13r 's*v1.323' a12r24
+'s*v.808''sf*v15,1.061' &34b&2r 's*v1.323' &34a&2r g+12r24 's*v1.197' e8^32&2r 's*v1.323' c+8^32&2r 's*v1.197' &17er16r64
+'s*v1.323' f+16 'sf*v34,.63' ^6^32 'sf*v44,.945' &46^ 'sf*v94,1.348' &156^ 'sf*v58,.819' ^4.r16
+'s*v1.197' &34c+&2r g+16
+##27
+&66g+r32 's*v1.323' &25f+&23r 's*v1.197' g+6^64&13r 's*v1.323' a12r24
+'s*v1.061' &34b&2r 's*v1.323' &34a&2r g+12r24 's*v1.271' e8^32&2r 's*v1.061' <c+8^32&2r> 's*v1.197' b8r24
+'s*v.918''sf*v120,1.188' <c+1 'sf*v140,.594' ^2.> 's*v1.197' &34c+&2r g+16
+##31
+'s*v.912''sf*v30,1.197' &66g+r32 's*v1.323' &25f+&23r 's*v.969''sf*v24,1.197' g+6^64&13r 's*v1.323' a12r24
+'s*v.912''sf*v15,1.197' &34b&2r 's*v1.323' &34a&2r g+12r24 e8^32&2r c+8^32&2r &17g+r16r64
+'s*v.648''sf*v192,1.134' g+1 'sf*v192,.486' f+1
+;
+
+{2} %e1 p64
+'strings-o2*v.882''sf*v192,1.26' f+1 'sf*v96,1.54' ^2 'sf*v96,1.6' &94 ^2
+$## Starts loop 2 ticks early
+## Original channel 1 - harmony strings 1
+'strings*v.8' m %r6 [a1^4^16r16 f+24^64&1rg+24^64&1r a4..r16]
+## 7
+a1 b1 a2.r8 's*v1.008' f+24^64&1r 's*v.8' g+24^64&1r a2..r8
+## 11 - original channel 4 - trumpet 2
+'trumpet-o1*v.701' p107 m30,36,216 r1r8 a4 < c+16.r32 f+8. g+8. a8
+&66br32 't*v.638' a2^8r8 't*v.701' <&58c+&5c>b48&5a+ a12r24 't*v.638' b8.^64r64 't*v.56' <c+12^64r48r32
+'t*v.706' d1 > g2 &87dr32. f+1 'tf*v110,.605' ^2^8 r4.
+## 19 - original channel 1 - strings chord top
+'strings+o1*v.907' %r6 p30
+[[d2c+4>b4  a2g+2  j2 a2b2  <c+4.>b4.<c+4] b1 j2 a+2.<c+4] 'sf*v190,.819' a+1
+;
+
+{3}
+'bass-o3*v1.026' p78 %r0
+'bf*v192,1.14' f+1 'bf*v112,1.254' ^1
+$
+## Original channel 2 - string that is bass - bass layer
+'bass-o3*v1.425' %r10 f+2..f+12r24  f+2.<e4    d2..d12r24  d2^8r8d4
+## 7 bass cont.
+> g2..g12r24 g2.&44gr48
+%r0 'bf*v96,1.026' f+2 'bf*v94,1.14' ^2 'bf*v190,1.31' ^1
+## 11
+'b*v1.22' f+1 r8 < &94f+m94,-15^16^64 r24r64 'b*v1.295' c+4
+'b*v1.22' d1 d2^16r8. d4 &59g&13r > &59g&13r < d4. g32^48m10,2^6^32 g4. > g8 g16 a16
+<f+24^64&13r> f+4f+16.r32    <g+24^64&13r> g+4g+16.r32    <a24^64&13r> a4a16.r32
+[g+24^64&13r] < &23e&1r e24^64&1r e32^48&2r
+## 19 - original channel 2 - bass layer
+[4 'b*v1.22' [4 d6^24r24] [4 e6^24r24] 'b*v1.348' >[8 f+6^24r24]< ]
+;
+
+{4} %e1
+'harp*v.67' p16 l12
+'hf*v192,.72' [ p96,127 f+a<c+f+a<c+ p96,0 f+c+>af+c+>a 'hf*v192,.77']
+$
+## Original channel 5 - harp
+'harp*v.8' p16
+[4 p96,127 f+a<c+f+a<c+ p96,0 f+c+>af+c+>a ]
+## 7
+[ p96,127 gb<dgb<d p96,0 gd>bgd>b ]
+[ p96,127 f+a<c+f+a<c+ p96,0 f+c+>af+c+>a ]
+## 11 - switch to strings 2 at 17
+[4 p96,127 f+a<c+f+a<c+ p96,0 f+c+>af+c+>a ]
+[  p96,127 gb<dgb<d p96,0 gd>bgd>b ]
+'strings*v1.026' p89 %r6 r12r32 's*v.764''sf*v46,1.083' c+4 's*v.96'c+12r24
+'s*v1.083' d+12r24 's*v.798''sf*v46,1.106' d+4 's*v.98'd+12r24
+'s*v1.106' e12r24 's*v.821''sf*v46,1.14' e4 's*v1.01' e12r24
+e6^24r24 p30 's*v.922' e4
+## 19 - original channel 7/5 - strings chord middle, mixed in harp
+p30 's*v.819' f+1 d2d2 c+2d+2 &2r
+'harp*v1.1' l16 p15 f+g+a<c+> p113 g+a<c+f+> p15 a<c+f+ p113 ag+f+c+>a
+p30 'strings*v0''sf*v6,.819' %r6 &190f+ d2d2 &2r
+'harp*v1.1' r2 p15 f+g+a+<c+ p113 f+g+a+<c+ p15 f+c+>a+g+ p113 <c+>a+g+f+ p15 a+g+f+c+ p113 f+c+>a+f+
+p30 'strings*v0''sf*v6,.819' %r6 &190 f+1 d2d2 c+2d+2 &2r
+'harp*v1.1' l16 p15 f+g+a<c+> p113 g+a<c+f+> p15 a<c+f+a p113 g+f+c+>a
+p30 'strings*v0''sf*v6,.819' %r6 &190f+ d2d2 &2r
+'harp*v.5' 'hf*v192,1.1' r2 p15 f+g+a+<c+ p113 f+g+a+<c+
+'hf*v192,.8' p15 f+c+>a+g+ p113 <c+>a+g+f+ p15 a+g+f+c+ p113 f+c+>a+f+
+;
+
+{5} %e1
+r1 &142r
+'ostrings+o1*v1.254' p64 l8 ab
+$## Starts loop 2 ticks early
+## Original channel 7 - harmony strings 2
+'strings*v.92' p78
+f+1^1 d1^1
+## 7
+g1^1 &174f+r16. f+1
+## 11 - original channel 1 - harmony strings 1
+'strings+o2*v.693' %r6 p15
+[16 's*v.5' c+12r24 's*v.25' c+12r24 ]>
+[8 's*v.5' b12r24 's*v.25' b12r24 ]>
+## grab first note of strings 2 at 17
+'s*v1.026' p89 c+12r24 p39
+'s*v.969''sf*v20,1.083' &59a&13r
+r8 's*v.855''sf*v46,1.058' &59b&13r
+r8 's*v1.058' <&59c+&13r> 's*v.98' b4 p30 's*v.909' <c+4
+## 19 - original channel 4 - strings chord low
+m30,36,216 'strings-o1*v.758' p122 [4 d1e1f+1^1 ] m
+;
+
+{6}
+'contra-o3*v1.026' p78 %r0
+'cf*v192,1.14' f+1 'cf*v112,1.254' ^1
+$
+## Original channel 4 - bell
+'bell*v1.14' %e1 p113r1  f+1^1 f+1^1 r1r1&190r1
+## 11 - original channel 7 - harmony strings 2
+'strings+o1*v.63' %r6
+[16 's*v.45' e12r24 's*v.225' e12r24 ]
+[4 's*v.45' d12r24 's*v.225' d12r24 ]
+[4 's*v.45' g12r24 's*v.225' g12r24 ]
+&2r 'harp*v.8' p0 p96,127 l12 f+a<c+f+a<c+ p96,0 f+c+>af+c+>a r1
+## 19 - original channel 7, strings chord middle (when harp is playing)
+r1 ['strings*v.819' %r6 p30 &190
+r1r1 e4.d+4.e4 &2f+ v6,0 &190^
+'s*v.819' r1 j2 c+1..c+4 &2f+ v6,0 ^1]
+'sf*v90,1.008' c+2.. 'sf*v182,.882' &218^
+;
+
+{7} %e1 p64
+'ostrings-o2*v.882''of*v192,1.26' f+1 'of*v96,1.54' ^2 'of*v96,1.6' &94 ^2
+$## Starts loop 2 ticks early
+## Original channel 3 layer - strings - oboe
+'ostrings+o1*v1.008' p64 l8
+'of*v30,1.26' g+4.'o*v1.14'f+4.c+4
+'o*v.912' 'of*v30,1.14' f+4. 'o*v.6''of*v72,.4' ^4.
+'oboe+o1*v1.159' 'flutevib' a 'r*v1.049' b
+g+4.f+4.e8.'r*v.92'd+32'r*v.85'd32 'flutevib2''r*v1.049'c+2 'rf*v88,.46' ^2 m
+## 7 - strings cont.
+'ostrings+o1*v1.197' l8 c+ 'o*v1.08' >b<c+d^12r12 'o*v1.026' e^32&2r 'o*v1.08' d^32&2r
+&34e&2r 'o*v1.197' f+^32&2r 'o*v1.08' e^64&1r d^64&1r 'o*v.95' &34e&2r 'o*v1.08' d^32&2r
+'o*v.855''of*v192,1.311' c+1 'of*v110,.513' ^2.r4
+## 11
+'ostrings+o2*v.693' %r6
+[16 'o*v.5' c+12r24 'o*v.25' c+12r24 ]>
+[8 'o*v.5' b12r24 'o*v.25' b12r24 ]>
+## 17: mixing in channel 7 when 1 is silent here
+p89 'o*v1.026' c+12r24 p39 'o*v.969''of*v20,1.083' &59a&13r
+p89 'o*v1.083' d+12r24 p39 'o*v.855''of*v46,1.058' &59b&13r
+p89 'o*v1.106' e12r24  p39 'o*v1.058' <&59c+&13r> 'o*v.98' b4
+'ostrings+o1*v1.31' p64 c+8. g+16
+## 19 - original channel 3 strings layer
+'o*v.912''of*v30,1.197' &66g+r32 'o*v1.323' &25f+&23r 'o*v.969''of*v20,1.197' g+6^64&13r 'o*v1.323' a12r24
+'o*v.808''of*v15,1.061' &34b&2r 'o*v1.323' &34a&2r 'o*v1.197' g+16.r32 'o*v1.323' e8^32&2r c+8^32&2r 'o*v1.197' >b8r24<
+'o*v.968''of*v60,1.271' &252c+  'of*v60,.908' ^4^16 'o*v1.311' r8 &34c+&2r g+16
+##23
+'o*v.912''of*v30,1.197' &66g+r32 'o*v1.323' &25f+&23r 'o*v1.271' g+6^64&13r 'o*v1.323' a12r24
+'o*v.808''of*v15,1.061' &34b&2r 'o*v1.323' &34a&2r g+12r24 'o*v1.197' e8^32&2r 'o*v1.323' c+8^32&2r 'o*v1.197' &17er16r64
+'o*v1.323' f+16 'of*v34,.63' ^6^32 'of*v44,.945' &46^ 'of*v94,1.348' &156^ 'of*v58,.819' ^4.r16
+'o*v1.197' &34c+&2r g+16
+##27
+&66g+r32 'o*v1.323' &25f+&23r 'o*v1.197' g+6^64&13r 'o*v1.323' a12r24
+'o*v1.061' &34b&2r 'o*v1.323' &34a&2r g+12r24 'o*v1.271' e8^32&2r 'o*v1.061' <c+8^32&2r> 'o*v1.197' b8r24
+'o*v.918''of*v120,1.188' <c+1 'of*v140,.594' ^2.> 'o*v1.197' &34c+&2r g+16
+##31
+'o*v.912''of*v30,1.197' &66g+r32 'o*v1.323' &25f+&23r 'o*v.969''of*v24,1.197' g+6^64&13r 'o*v1.323' a12r24
+'o*v.912''of*v15,1.197' &34b&2r 'o*v1.323' &34a&2r g+12r24 e8^32&2r c+8^32&2r &17g+r16r64
+'o*v.648''of*v192,1.134' g+1 'of*v192,.486' f+1
+;
+
+{8} %e1
+r1 'bell*v0' p113 &141f+ 'lf*v1,1.323' &51^
+$
+## Original channel 2 - string that is bass - string layer
+'contra-o3*v1.425' p78 %e0 %r10 f+2..f+12r24  f+2.<e4    d2..d12r24  d2^8r8d4
+## 7
+> g2..g12r24 g2.&44gr48
+%r0 ('cf*v96,1.026' f+2 'cf*v94,1.14' f+2 'cf*v190,1.31' f+1)
+## 11 contrabass cont.
+'c*v1.22' f+1 r8 < &94f+m94,-15^16^64 r24r64 'c*v1.295' c+4
+'c*v1.22' d1 d2^16r8. d4 &59g&13r > &59g&13r < d4. g32^48m10,2^6^32 g4. > g8 g16 a16
+<f+24^64&13r> f+4f+16.r32    <g+24^64&13r> g+4g+16.r32    <a24^64&13r> a4a16.r32
+[g+24^64&13r] < &23e&1r e24^64&1r e32^48&2r
+## 19 - original channel 2 contrabass layer
+[4 'c*v1.22' [4 d6^24r24] [4 e6^24r24] 'c*v1.348' >[8 f+6^24r24]< ]
+;

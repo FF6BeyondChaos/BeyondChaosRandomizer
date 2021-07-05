@@ -1,0 +1,148 @@
+#TITLE For the Savior
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#WAVE 0x20 0x65  violas standard
+#WAVE 0x21 0x63  octave strings
+#WAVE 0x22 0x62  violins high
+#WAVE 0x23 0x84  horn
+#WAVE 0x24 0x5A  timpani
+#WAVE 0x28 0x1B  snare
+#WAVE 0x2C 0x2C  clash
+
+#def lead= |0 o5 'l' m48,18,199
+#def oct= |1 o5 'o' m %y3%s3
+#def vins= |2 o5 'v' m
+#def horn= |3 o5 'h' m48,18,223 %r8
+#def timp= |4 o7 't' m
+
+#def l= v76
+#def o= v96
+#def v= v64
+#def h= v42
+#def t= v180
+
+#def init= t86 %x255 %v50 %b0,85 %f0,0
+
+#drum "y"=5a |C v88 p84
+
+#drum "a"=5a |8 's*v.11' p84
+#drum "b"=5a |8 's*v.25' p84
+#drum "c"=5a |8 's*v.34' p84
+#drum "d"=5a |8 's*v.36' p84
+#drum "e"=5a |8 's*v.41' p84
+#drum "f"=5a |8 's*v.42' p84
+#drum "g"=5a |8 's*v.46' p84
+#drum "h"=5a |8 's*v.48' p84
+
+#def s= v166
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init' r16 %e1
+$
+'lead' p45 l8
+[r4g+4f+4bf+ g+1  r4g+4f+4bf+ j2 ^2g+2] ^1g+1
+## 11
+l32
+[[g+8.(f+ef+8.)(ed+e8.)j2(d+c+d+12)>b12g+12<   c+2.c+12d+12e12] (d+c+d+12)e12f+12  g+2j2d+2]
+(>d+g+<cd+>g+<cd+g+cd+g+<c>d+g+<cd+)
+## 19
+l32
+[c+2^8'l*v1.5'c+rd+r'l'e8g+8  f+4.d+8>b4a4   j2 g+8.<d+16^2.^1]
+g+2a+2<c2.c+8d+8
+;
+
+{2}
+r16 %e1
+$
+'vins+o1' p35 l24
+[3 [[3d+r48][3c+r48]] d+r48d+r48c+r48c+r48] [[3c+r48][3cr48]] c+r48c+r48cr48cr48
+[3 [[3d+r48][3c+r48]] d+r48d+r48c+r48c+r48] [[[3c+r48][3cr48]] c+r48c+r48cr48cr48]
+## 11
+[[3 [[3d+r48][3c+r48]] d+r48d+r48c+r48c+r48] [[3c+r48][3cr48]] c+r48c+r48cr48cr48]
+## 19
+[> [[3br48][3ar48]] br48br48ar48ar48    [<[3c+r48]>[3br48]] <c+r48c+r48>br48br48 <
+j2,225 [ [[3d+r48][3c+r48]] d+r48d+r48c+r48c+r48 ] ] $225
+[ [[3c+r48][3cr48]] c+r48c+r48cr48cr48 ]
+;
+
+{3}
+%e1 'oct-o2' p64 l8 g+16
+$
+'oct-o2' p64 l8
+[<c+2..>b a2..g+  f+2.f+g g+2...g+16] g+2...g+16
+## 11
+[<c+2..>b a2..g+  f+2.f+g g+2...g+16]
+## 19
+l16
+a2..a12r24 b2..b12r24  <c+2.^16.r32c+12r24 c+2 'o*v1.33'%s7 c+d+ef+ed+c+>b 'o'%s3
+a2..a12r24 b2..b12r24  g+2.^16.r32f+g g+1
+;
+
+{4}
+%e1 'timp-o3*v.61' p64 l8 g+16
+$
+'timp-o3*v.61' p64 l8
+<c+2.c+>b a2.ag+  f+2.f+g g+2.g+g+
+<c+2.c+>b a2.a't*v.46'g+  't*v.61'f+2.f+g g+2...g+32g+32
+g+g+.g+g+16 l32 't*v.46'g+g+'t*v.54'g+g+'t*v.57'g+g+'t*v.61'g+g+'t*v.65'[8g+]
+## 11, 19
+"!!!o" l32
+[16 "hfd16f16hfd16f16dfhhhfd16f16hfd16f16dfhh"]
+;
+
+{5}
+%e1 r16
+$
+'horn' p45 l8
+[r4e4d+4f+d+ e1  r4e4d+4f+d+ j2 c+2c2] c+1c1
+## 11
+'h*v.85'
+[[r4c+4>b4..'h'g+32r32'h*v.85' j2 a1<] <c+4.(d+16c+16)j2c2] d+2
+## 19
+l32 'h'
+[e2^8'h*v1.5'erf+r'h'g+8e8  f+2^8'h*v1.5'f+rg+r'h'a8f+8
+g+2^8'h*v1.5'g+rf+rg+rarg+rf+r'h'  j2 g+1]  g+2d+2
+;
+
+{6}
+%e1 r16
+$
+'vins+o1*v.85' p74 l24 [9[16g+r48]]
+## 11
+[8[16g+r48]]
+## 19
+[[16er48][16f+r48][32g+r48]]
+;
+
+{7}
+%e1 r16
+$
+'vins+o1*v.85' p93 l24
+[[48er48][16d+r48]] [16d+r48]
+## 11
+[[48er48][16d+r48]]
+## 19
+[16c+r48][16d+r48][32er48]
+[16c+r48][48d+r48]
+;
+
+{8}
+%e1 r16
+$
+[8"y1"] l32 "!!!o"
+[8"a"][4"b"][4"c"][4"ec"][4"ge"]
+## 11
+['timp-o2*v.61' p64 l8
+c+.c+.cc+.c+.>b a.a.aa.a.g+  f+.f+.f+f+.f+.g g+.g+.g
+l32 't*v.46'g+g+'t*v.54'g+g+'t*v.57'g+g+'t*v.61'g+g+'t*v.65'[8g+]]
+## 19
+[l8 't*v.61'
+ae.ae16ae.ae32e32  bf+.bf+16bf+.bb32<c32 j2
+c+>g+.<c+>g+16<c+>g+.<c+>b32b32  <c+>g+.<c+>g+16<c+>g+ l32 't*v.48'bb't*v.54'bb't*v.57'bb't*v.61'b't*v.65'b
+]> l8 g+d+.g+d+16g+d+.g+f+32g32  g+d+.g+d+16g+4  l32 't*v.48'd+d+'t*v.54'd+d+'t*v.57'd+d+'t*v.61'd+'t*v.65'd+
+;
