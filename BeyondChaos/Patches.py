@@ -157,4 +157,121 @@ def show_coliseum_rewards(fout):
         0x68, 0xC0, 0x60, 0xA9, 0xFF, 0x20, 0x54, 0xF9, 0x60, 0xFF
         ])
     rewards_sub.write(fout)
+
+def informative_miss(fout):
+    info_miss_sub = Substitution()
+    info_miss_sub.set_location(0x026470) #$C26470 (End: $C26801)
+#!C2Space    = $C26470
+#!C2SpaceEnd = $C26801
+
+#!miss = $3A5A ; miss targets
+#!msgs = $3F52 ; 2 bytes before "null" bytes (for offset)
+#!null = $3F54 ; immune targets
+#!fail = $3F56 ; failed targets
+#!bck1 = $EA   ; backup $11AA statuses
+#!bck2 = $EC   ; backup $11AA statuses
+
+    
+    info_miss_sub.bytestring = bytes([
+        #ClearMiss:
+        0x9C, 0x3A, 0x5A,   #  STZ !miss
+        0x9C, 0x3F, 0x56,   #  STZ !fail
+        0x9C, 0x3F, 0x54,   #  STZ !null
+        0x60,               #  RTS
+        #StatusHelp:        ; (10 bytes)
+        0xA5, 0xFC,         #  LDA $FC           status to set (1-2)
+        0x05, 0xF4,         #  ORA $F4           status to clear (1-2)
+        0x85, 0xE8,         #  STA $E8           store for now
+        0x39, 0x33, 0x1C,   #  AND $331C,Y       are any vulnerable?
+        0x60,               #  RTS
+        #BackUpAttack:      ; (22 bytes)
+        0xC2, 0x20,         #  REP #$20         ; 16-bit A
+        0x20, 0x44, 0xFF,   #  JSR $44FF        ; zero statuses to set/clear
+        0xAD, 0x11, 0xAA,   #  LDA $11AA        ; attack statuses 1-2
+        0x85, 0xEA,         #  STA !bck1        ; save backup
+        0xAD, 0x11, 0xAC,   #  LDA $11AC        ; attack statuses 3-4
+        0x85, 0xEC,         #  STA !bck2        ; save backup
+        0x9C, 0x11, 0xAA,   #  STZ $11AA        ; clear statuses 1-2
+        0x9C, 0x11, 0xAC,   #  STZ $11AC        ; clear statuses 3-4
+        0x60,               #  RTS
+        #RestoreAttack:     ; (14 bytes)
+        0x20, 0x44, 0x06,   #  JSR $4406        ; re-run status setting routine
+        0xA5, 0xEA,         #  LDA !bck1        ; get backup statuses
+        0x8D, 0x11, 0xAA,   #  STA $11AA        ; restore statuses 1-2
+        0xA5, 0xEC,         #  LDA !bck2        ; get backup statuses
+        0x8D, 0x11, 0xAC,   #  STA $11AC        ; restore statuses 3-4
+        0x60,               #  RTS 
+        #DeathNull:
+        0xB9, 0x3A, 0xA1,   #  LDA $3AA1,Y     ; check immune to instant death bit
+        0x80, ????          ##  BRA BitSet
+        #SuplexNull:
+        0xB9, 0x3A, 0xA1,   #  LDA $3C80,Y     ; check fractional dmg immunity bit
+        #BitSet:
+        0x24, 0x04,         #  BIT #$04        ; immune to instant death (or fractional)
+        0xF0, ????          ##  BEQ SetEnd      ; if not immune, exit
+        #SetNull:
+        0x08,               #  PHP             ; save M, Z flags
+        0xC2, 0x20,         #  REP #$20        ; 16-bit A
+        0xB9, 0x30, 0x18,   #  LDA $3018,Y     ; get unique bit for target
+        0x0C, 0x3F, 0x54,   ##  TSB !null       ; set null miss bit
+        0x28,               #  PLP             ; restore 8-bit A, no zero flag
+        #SetEnd:
+        0x60               #  RTS
+    ])
+
+
+
+
+
+
+
+
+#StunFail:
+#  STA $3DE8,Y       ; displaced vanilla code
+#  BRA SetFailBit
+#StamFail:
+#  LDA $3B40,Y       ; stamina
+#  CMP $EE           ; compare to random(128)
+#  BCC FailExit      ; exit if hits
+#SetFailBit:
+#  PHP               ; store flags
+#  REP #$20          ; 16-bit A
+#  LDA $3018,Y       ; unique bitmask
+#  TSB !fail         ; set "Fail" for target
+#  PLP               ; restore flags
+#FailExit:
+#  RTS
+
+#MissType:
+#  CLC               ; default to no "miss" text
+#  LDX #$04          ; point to "fail" bytes first
+#.loop
+#  BIT !msgs,X       ; is this miss message flagged
+#  BNE .done         ; exit with X offset if so
+#  DEX #2            ; point to next lowest message
+#  BNE .loop
+#.done
+#  TRB !miss         ; test and reset miss flag
+#  BNE .set_msg      ; if set, convert X to message value
+#  DEX               ; else check if "null" or "fail" was set
+#  BMI .exit         ; if not, exit
+#  TSB !miss         ; else, show fail/null on next loop
+#.exit
+#  RTS 
+#.set_msg
+#  TRB !fail         ; clear "fail" bit
+#  TRB !null         ; clear "null" bit
+#  SEC               ; indicate "miss" text
+#  TXA               ; get message flag in A
+#  XBA               ; move to hi byte
+#  RTS
+
+#FinishMiss:
+#  LDA !miss         ; any misses left
+#  BEQ .continue     ; exit if not
+#  JMP $62F3         ; else, loop again to handle null/fail
+#.continue
+#  PLY
+#  PLX
+#  RTS
     
