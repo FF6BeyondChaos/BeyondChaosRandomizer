@@ -182,6 +182,7 @@ class MonsterBlock:
         self.sketchptr = 0xF4300 + (0x2 * monster_id)
         self.rageptr = 0xF4600 + (0x2 * monster_id)
         self.aiptr = 0xF8400 + (0x2 * monster_id)
+        self.attackanimationptr = 0xF37C0 + monster_id
         self.stats = {}
         self.moulds = set([])
         self.width, self.height = None, None
@@ -639,7 +640,7 @@ class MonsterBlock:
         fout.seek(self.specialeffectpointer)
         fout.write(bytes(random.randint(0, 0x21)))
 
-        candidates = sorted(set(range(0, 0x5A)) - set([0, 0x1C]))
+        candidates = list(range(0, 68))
         self.attackanimation = random.choice(candidates)
 
     def mutate_graphics_swap(self, candidates):
@@ -689,7 +690,7 @@ class MonsterBlock:
             self.null = ord(f.read(1))
             self.weakness = ord(f.read(1))
 
-            f.seek(self.pointer + 26)
+            f.seek(self.attackanimationptr)
             self.attackanimation = ord(f.read(1))
 
             f.seek(self.pointer + 27)
@@ -1095,7 +1096,7 @@ class MonsterBlock:
         fout.write(bytes([self.null]))
         fout.write(bytes([self.weakness]))
 
-        fout.seek(self.pointer + 26)
+        fout.seek(self.attackanimationptr)
         fout.write(bytes([self.attackanimation]))
 
         fout.seek(self.pointer + 27)
