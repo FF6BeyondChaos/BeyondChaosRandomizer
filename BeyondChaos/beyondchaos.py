@@ -11,6 +11,7 @@ from PyQt5.QtWidgets import QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel
 
 import character
 import config
+import configparser
 import esperrandomizer
 import formationrandomizer
 import itemrandomizer
@@ -134,7 +135,18 @@ class Window(QWidget):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
-        
+        previous_rom_path = ""
+
+        try:
+            config = configparser.ConfigParser()
+            config.read('bcex.cfg')
+            if 'ROM' in config:
+                previous_rom_path = config['ROM']['Path']
+        except IOError:
+            pass
+
+        self.romText = previous_rom_path
+
         # build the UI
         self.CreateLayout()
 
