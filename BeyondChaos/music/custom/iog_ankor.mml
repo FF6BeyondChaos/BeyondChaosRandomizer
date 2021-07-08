@@ -1,0 +1,589 @@
+#TITLE Unexplored Temple
+#ALBUM Illusion of Gaia
+#COMPOSER Yasuhiro Kawasaki
+#ARRANGED Rushlight
+
+#WAVE 0x20 0x66 ## Strings
+#WAVE 0x21 0x81 ## Horn
+#WAVE 0x22 0x64 ## Contrabass
+#WAVE 0x23 0x69 ## Orchestra
+#WAVE 0x24 0x60 ## Harp
+#WAVE 0x25 0x62 ## Backing Strings
+
+#WAVE 0x28 0x5B ## Timpani
+
+## The original uses a tempo of 66 bpm, but that gives a weird 2/4 time signature,
+## with a signature change halfway through measure 10. So we'll work in 4/4 with 132 bpm
+#def init= t132 %x255 %v40 %b0,85 %f0,0
+
+#def hornVol=            v58
+#def hornFade=         v1,58 ## Keep this volume in line with hornVol
+#def contrabassVol=      v127
+#def contrabassHi=       'contrabassVol*v1'
+#def contrabassMed=      'contrabassVol*v.73'
+#def contrabassLo=       'contrabassVol*v.56'
+#def contrabassQuickLo=  'contrabassVol*v.95'
+#def stringsVol=         v33
+#def backingStringsVol=  v28
+#def timpaniVol=         v95
+#def timpaniLow1=        'timpaniVol*v.15'
+#def timpaniLow2=        'timpaniVol*v.25'
+#def timpaniLow3=        'timpaniVol*v.35'
+#def timpaniV1=          'timpaniVol*v.55'
+#def timpaniV2=          'timpaniVol*v.7'
+#def timpaniV3=          'timpaniVol*v.85'
+#def timpaniV4=          'timpaniVol*v1'
+#def timpaniV5=          'timpaniVol*v1.15'
+#def timpaniV6=          'timpaniVol*v1.3'
+#def timpaniV7=          'timpaniVol*v1.45'
+#def orchestraVol=       v40
+#def harpVol=            v31
+
+#def harpLeft=  p30
+#def harpRight= p98
+
+## Use a little bit of attack to accentuate the staccato of the 48th notes, and to help synchronize with the contrabass
+#def horn=            |1 o6 'hornVol*v.9'       p64        %r10 %e1 %a10 %s5 %y7 m48,24,244
+#def contrabass=      |2 o7 'contrabassLo'      p78        %r0  %e1 %a15 %s7 %y7 m
+## Use higher volume, with a decay and sustain level, to try and counteract the sample's built-in attack and synchronize with the trumpet
+#def quickContrabass= |2 o7 'contrabassQuickLo' p78        %r0  %e1 %a15 %s4 %y0 m
+#def strings1=        |0 o6 'stringsVol'        p39        %r0  %e1              m
+#def strings2=        |0 o6 'stringsVol'        p89        %r0  %e1              m
+## This Strings sample sounds better for the intro, but doesn't work so well when it's at the forefront. So we'll use both at times.
+#def backingStrings1= |5 o6 'backingStringsVol' p39        %r0  %e1 %a11         m
+#def backingStrings2= |5 o6 'backingStringsVol' p89        %r0  %e1 %a11         m
+#def timpani=         |8 o4 'timpaniV4'         p50        %r20 %e0              m
+## Original orchestra sample is tuned 3 semitones too high, but notes will be adjusted manually. We want 3a mostly
+#def orchestra=       |3 o5 'orchestraVol'      p64             %e1              m
+#def harp=            |4 o5 'harpVol'           'harpLeft' %r12 %e1 %a13         m
+
+
+{1}
+'init'
+$
+## Time signature starts at 4/4
+## Horn, originally track 3
+'horn'
+l8
+dag+a<c>b24<c24>b24ag+fefg+a<c>b24<c24>b24a
+## 3
+fefg+af24f+24f24g+abg+abg+g24g+24g24fe
+## 5
+fgg+b<c>b24<c24>b24g+gfde-dfg+gf
+## 7
+e-fe-fg+g24g+24g24fgbg+gg+<c>e-fg+
+## 9
+'hornVol*v.5' 'hornFade*v48,.8' a1e1
+## 11
+d1e1
+## 13
+'hornVol*v.3' 'hornFade*v24,.7' g+4f4g1^4r4
+## 15
+'hornVol*v.3' 'hornFade*v24,.7' g+4f4g1g+2
+## 17
+a2b-2eereerer
+## 19
+r4e2.
+## 20
+## Time signature changes to 11/8
+## Strings 1, originally track 4
+'strings1'
+l8
+[8 re->g+<d> j8,123 f+ j2,120 j4,120 j6,120 <] 
+$120 ^8<]
+$123 r4<
+[2
+  ## Time signature stays (or becomes) 11/8
+  ## Horn, originally track 3
+  ## 24 / 34
+  'horn'
+  'hornVol*v.7'
+  l8
+  fr4.f+fr4.f+r
+  ## 25 / 35
+  fr4.f+f4cdef+
+  ## 26 / 36
+  g+b-<c>rf+fr4.f+4
+  ## 27 / 37
+  fr4.f+f4.f+r4
+  ## 28 / 38
+  ## Time signature changes to 4/4
+  l12
+  r1 'hornVol*v.7' 'hornFade*v24,1.1' g+4ge-gb-2
+  ## 30 / 40
+  r1 'hornVol*v.7' 'hornFade*v24,1.1' f+4f+ff+<c+2
+  ## 32 / 42
+  'hornVol*v.7' 'hornFade*v24,1.1' e4dc>b 'hornVol*v.7' 'hornFade*v72,1' g2
+  ## 33 / 43
+  ^2.r4
+]
+## 44
+r1 'hornVol*v.7' 'hornFade*v24,1.1' g+4ge-gb-2
+## 46
+r1 'hornVol*v.7' 'hornFade*v24,1.1' f+4f+ff+<c+2
+
+[4
+  'hornVol*v.7' 'hornFade*v24,1.1' j1,148 j3,148 e-4 $149 dc>b 'hornVol*v.5' 'hornFade*v72,.9' g1^4r4<
+  j4,156
+]
+$148 e4 %j149
+$156
+;
+
+
+{2}
+$
+## Time signature starts at 4/4
+## Contrabass, originally track 1
+'quickContrabass-o2'
+l8
+dag+a<c>bag+fefg+a<c>ba
+## 3
+fefg+afg+abg+abg+gfe
+## 5
+fgg+b<c>bg+gfde-dfg+gf
+## 7
+e-fe-fg+gfgbg+gg+<c>gg+b
+## 9
+## Still contrabass, originally track 1
+'contrabass-o2' 'contrabassMed' d2.a1^4
+## 11
+f2.e1^4
+## 13
+f2. c1^4
+## 15
+g+2.g2.f+2
+## 17
+f2e2 'contrabassHi' eereerer
+## 19
+r4e2.
+## 20
+## Time signature changes to 11/8
+## Strings 2, originally track 5
+'strings2'
+l8
+[8 rgcf+> j8,223 b- j2,220 j4,220 j6,220 <] 
+$220 ^8<]
+$223 r4<
+[2
+  ## 24 / 34
+  ## Time signature stays (or becomes) 11/8
+  ## Strings 1, originally track 4
+  'strings1'
+  l8
+  [8 re->g+<d> j8,227 f+ j2,224 j4,224 j6,224 <] 
+  $224 ^8<]
+  $227 r4
+  ## 28 / 38
+  ## Time signature changes to 4/4
+  l8
+  r4b-8.r16<c+1^4r4>
+  ## 30 / 40
+  r4g+8.r16b1^4r4
+  ## 32 / 42
+  r4g8.r16b1^4r4
+]
+## 44
+r4b-8.r16<c+1^4r4>
+## 46
+r4g+8.r16b1^4r4
+## 48
+r4g8.r16b1^4r4
+[2
+  ## 50 / 54
+  r4g8.r16<c1^4r4>
+  j2
+  ## 52
+  r4g8.r16b1^4r4
+]
+;
+
+
+{3}
+$
+## Time signature starts at 4/4
+## Strings 1, originally track 4
+'backingStrings1'
+l8
+[2
+  ## 1 / 9
+  dag+a<c>bag+fefg+a<c>ba
+  ## 3 / 11
+  fefg+afg+abg+abg+gfe
+  ## 5 / 13
+  fgg+b<c>bg+gfde-dfg+gf
+  ## 7 / 15
+  e-fe-fg+gfgbg+gg+<c>gg+b
+]
+## 17
+[2 <c>b]<c+cc+c 'stringsVol*v1.2' ccrccrcr
+## 19
+r4c2.
+## 20
+## Contrabass, originally track 1
+'contrabass-o2'
+'contrabassMed'
+l8
+## All 4 passes of this loop are different, but have notes in common with the first
+[4
+  j3,322 f r4. $320  cf j4,323 r j2,321 r4 c4
+]
+$321 cd ef+]
+$322 g+b-<c>r %j320
+$323 ^4cr4
+[2
+  ## 24 / 34
+  ## Time signature stays (or becomes) 11/8
+  ## Strings 2, originally track 5
+  'strings2'
+  l8
+  [8 rgcf+> j8,327 b- j2,324 j4,324 j6,324 <] 
+  $324 ^8<]
+  $327 r4<
+  ## 28 / 38
+  ## Time signature changes to 4/4
+  l8
+  r4f8.r16g+1^4r4
+  ## 30 / 40
+  r4e-8.r16f+1^4r4
+  ## 32 / 42
+  r4e8.r16g1^4r4
+]
+## 44
+r4f8.r16g+1^4r4
+## 46
+r4e-8.r16f+1^4r4
+## 48
+r4e8.r16g1^4r4
+[2
+  ## 50 / 54
+  r4e-8.r16g1^4r4
+  j2
+  ## 52
+  r4e8.r16g1^4r4
+]
+;
+
+{4}
+$
+## Time signature starts at 4/4
+## Strings 2, originally track 5
+'backingStrings2-o1'
+l8
+[2
+  ## 1 / 9
+  dag+a<c>bag+fefg+a<c>ba
+  ## 3 / 11
+  fefg+afg+abg+abg+gfe
+  ## 5 / 13
+  fgg+b<c>bg+gfde-dfg+gf
+  ## 7 / 15
+  e-fe-fg+gfgbg+gg+<c>gg+b
+]
+## 17
+[2 <c>b]<c+cc+c g+g+rg+g+rg+r
+## 19
+r4g+2.
+## 20
+## Time signature changes to 11/8
+## Timpani, originally track 2
+'timpani'
+l8
+[4
+  d4>g<d4dd4 j4 >g<d4
+]
+> 'timpaniV7' g4.
+## 24
+## Time signature still 11/8
+## Contrabass, originally track 1
+'contrabass-o2'
+'contrabassMed'
+l8
+## All 4 passes of this loop are different, but have notes in common with the first
+[4
+  j3,426 f r4. $424  cf j4,427 r j2,425 r4 c4
+]
+$425 cd ef+]
+$426 g+b-<c>r %j424
+$427 ^4cr4
+## Time signature changes to 4/4
+## Timpani, originally track 2
+'timpani'
+l8
+[2
+  ##28 / 30
+  d>g4<d>g4<d16d16>g<
+  d>g4<d>g4<d>g<
+]
+## 32
+d>g4<d>g1<
+l24 'timpaniV2' ed 'timpaniV3' ed 'timpaniV4' ed 'timpaniV5' e 'timpaniV6' deded
+## 34 - We won't loop back to 24 because the contrabass is quite different the second time around
+## Time signature changes to 11/8
+## Contrabass, originally track 1
+'contrabass-o2'
+'contrabassMed'
+l8
+f4r1r
+## 35
+f2.rcdef+
+## 36
+g+b-<c4.>f2.
+## 37
+e2^8e-2.
+## 38
+## Time signature changes to 4/4
+## This note holds for another 8th note duration, so hold it before wi switch to Timpani.
+## We'll hold it 6 ticks less though, so the contrabass can play notes early in the other channel to counteract the sample's built-in attack.
+^16.
+## Timpani, originally track 2
+'timpani'
+## This silence balances out the ticks we cut off on the previous note hold
+r32
+l8 >
+[2
+  ##38 / 40
+  g4<d>g4<d16d16>g<
+  d>g4<d>g4<d>g<
+  j2
+  ## This is actually the forst note of measure 40. It's here because the first note of 38 can't be in the loop due to being in another channel.
+  d>
+]
+## 42
+'timpaniV3'
+[6 d>g<]
+l24
+'timpaniV2' ed 'timpaniV3' ed 'timpaniV4' ed 'timpaniV5' e 'timpaniV6' deded
+## 44
+l4
+'timpaniV4' [22 d>g<]
+l24
+'timpaniLow1' ed 'timpaniLow2' ed 'timpaniLow3' ede 'timpaniV1' dede 'timpaniV2' d
+e 'timpaniV3' de 'timpaniV4' d 'timpaniV5' eded 'timpaniV6' eded
+;
+
+
+{5}
+$
+## Time signature starts at 4/4
+## Timpani, originally track 2
+'timpani'
+l8
+[4
+  ## 1 / 3 / 5 / 7
+  d>g4<d>g4<d16d16>g<d>g4<d j4 >g4<d>g<
+]
+## Measure 8, beat 3
+l24
+'timpaniV2'ed'timpaniV3' ed 'timpaniV4' ed 'timpaniV5' e 'timpaniV6' deded
+## 9
+l8
+d1.r4.'timpaniV4'd16d16
+## 11 / 13
+[2 'timpaniV6' >g1.r4. 'timpaniV4' <d16d16]
+## 15
+'timpaniV6' >g2r2 'timpaniV1' [3 <d>g ] 'timpaniV3' <d>g
+## 17
+'timpaniV5' [2 <d>g]
+l24
+< 'timpaniV2' ed 'timpaniV3' ed 'timpaniV4' ed 'timpaniV5' e 'timpaniV6' deded 'timpaniV5'
+l8 dd4dd4dr
+## 19
+r4 d4.r4.
+## 20
+## Time signature changes to 11/8
+[44 r8]
+## 24
+## Time signature still 11/8
+## Timpani, originally track 2
+'timpani'
+l8
+[4
+  d4>g<d4dd4 j4 >g<d4
+]
+> 'timpaniV7' g4.
+## 28
+## Time signature changes to 4/4
+## Contrabass, originally track 1
+'contrabass-o2'
+l8
+## Make the first note last 6 ticks less, so that all the quick notes afterwards activate sooner to counteract the sample's built-in attack.
+## We can't use the decay/sustain level/higher volume trick here because medium contrabass level would bring us above v127.
+&18
+[8 'contrabassMed' e- 'contrabassLo' e-]
+## 30
+[8 'contrabassMed' c+ 'contrabassLo' c+]
+## 32
+[2 'contrabassMed' c 'contrabassLo' c] ^32 'contrabassMed' c1^4r4
+## 34 - We won't loop back to 24 because the timpani is different in what's already a loop. We can't enforce outer loop conditions within an inner loop.
+## Time signature changes to 11/8
+## Timpani, originally track 2
+'timpani'
+l8
+'timpaniV6' d [10 ^8]
+## 35
+'timpaniV4'
+[3
+  d4>g<d4dd4 j3 >g<d4
+]
+> 'timpaniV7' g4.
+## 38
+## We want to do one final 8th note before we swap with contrabass, but make it last 6 ticks less so the contrabass notes play earlier
+'timpaniV7' <d16.
+## Contrabass, originally track 1
+'contrabass-o2'
+l8
+## Since we're 6 ticks early, all the quick notes will activate sooner to counteract the sample's built-in attack.
+## We can't use the decay/sustain level/higher volume trick here because medium contrabass level would bring us above v127.
+[7 'contrabassLo' e- 'contrabassMed' e-] 'contrabassLo' e-
+## 40
+[8 'contrabassMed' c+ 'contrabassLo' c+]
+## 42
+[8 'contrabassMed' c 'contrabassLo' c]
+## 44
+[8 'contrabassMed' e- 'contrabassLo' e-]
+## 46
+[8 'contrabassMed' c+ 'contrabassLo' c+]
+## 48
+[28 'contrabassMed' c 'contrabassLo' c] 'contrabassMed' c1
+## Add the extra 6 ticks at the end of the last note to synchronize everything back
+^32
+;
+
+
+{6}
+$
+## Time signature starts at 4/4
+## Orchestra, originally track 6
+'orchestra-o1'
+b1r1r1r1
+## 5
+<d1r1r1r1
+## Harp, originally channels 7 and 8
+'harp'
+l24
+[4
+  ## 9 / 11 / 13 / 15
+  'harpLeft' d 'harpRight'   f 'harpLeft' a 'harpRight' <d 'harpLeft' f  'harpRight' a
+  'harpLeft' <d> 'harpRight' a 'harpLeft' f 'harpRight' d  'harpLeft' >a 'harpRight' f r1.
+  j2,607 j4,609
+]
+## Transpose and go back to the loop
+$607 %k3 ]
+$609 %k0
+## 17
+## Orchestra, originally track 6
+'orchestra'
+l8 d2c+2c+c+rc+c+rc+r
+## 19
+r4 c+2.
+## 20
+## Time signature changes to 11/8
+[44 r8]
+[2
+  ## 24 / 34
+  [44 r8]
+  ## Time signature changes to 4/4
+  ## Harp, originally channels 7 and 8
+  'harp'
+  l24
+  ## 28 / 38
+  ## Orchestra, originally track 6
+  'orchestra'
+  c2
+  ## Harp, originally channels 7 and 8
+  'harp'
+  l24
+  'harpLeft' e- 'harpRight' g 'harpLeft' b- 'harpRight' <e- 'harpLeft' g 'harpRight' b-
+  'harpLeft' <e-> 'harpRight' b- 'harpLeft' g 'harpRight' e- 'harpLeft' >b- 'harpRight' g r1
+  ## 30 / 40
+  ## Orchestra, originally track 6
+  'orchestra-o1'
+  b-2
+  ## Harp, originally channels 7 and 8
+  'harp'
+  l24
+  %k-2
+  'harpLeft' e- 'harpRight' g 'harpLeft' b- 'harpRight' <e- 'harpLeft' g 'harpRight' b-
+  'harpLeft' <e-> 'harpRight' b- 'harpLeft' g 'harpRight' e- 'harpLeft' >b- 'harpRight' g r1
+  %k0
+  ## 32 / 42
+  ## Orchestra, originally track 6
+  'orchestra-o1'
+  a2
+  ## Harp, originally channels 7 and 8
+  'harp'
+  l24
+  ## Third harp pattern has different note distances and can't be done by transposing the first one
+  'harpLeft' c 'harpRight' e 'harpLeft' g 'harpRight' b 'harpLeft' <e 'harpRight' g
+  'harpLeft' b 'harpRight' g 'harpLeft' e> 'harpRight' b 'harpLeft' g 'harpRight' e r1
+]
+## 44
+## Orchestra, originally track 6
+'orchestra'
+c2
+## Harp, originally channels 7 and 8
+'harp'
+l24
+'harpLeft' e- 'harpRight' g 'harpLeft' b- 'harpRight' <e- 'harpLeft' g 'harpRight' b-
+'harpLeft' <e-> 'harpRight' b- 'harpLeft' g 'harpRight' e- 'harpLeft' >b- 'harpRight' g r1
+## 46
+## Orchestra, originally track 6
+'orchestra-o1'
+b-2
+## Harp, originally channels 7 and 8
+'harp'
+l24
+%k-2
+'harpLeft' e- 'harpRight' g 'harpLeft' b- 'harpRight' <e- 'harpLeft' g 'harpRight' b-
+'harpLeft' <e-> 'harpRight' b- 'harpLeft' g 'harpRight' e- 'harpLeft' >b- 'harpRight' g r1
+%k0
+## Third harp pattern has different note distances and can't be done by transposing the first one
+## 48
+## Orchestra, originally track 6
+'orchestra-o1'
+a2
+## Harp, originally channels 7 and 8
+'harp'
+l24
+'harpLeft' c 'harpRight' e 'harpLeft' g 'harpRight' b 'harpLeft' <e 'harpRight' g
+'harpLeft' b 'harpRight' g 'harpLeft' e> 'harpRight' b 'harpLeft' g 'harpRight' e r1
+[2
+  ## 50 / 54
+  r2
+  'harpLeft' c 'harpRight' e- 'harpLeft' g 'harpRight' <c 'harpLeft' e- 'harpRight' g
+  'harpLeft' <c> 'harpRight' g 'harpLeft' e- 'harpRight' c 'harpLeft' >g 'harpRight' e- r1
+  j2
+  ## 52
+  r2
+  'harpLeft' c 'harpRight' e 'harpLeft' g 'harpRight' b 'harpLeft' <e 'harpRight' g
+  'harpLeft' b 'harpRight' g 'harpLeft' e 'harpRight' >b 'harpLeft' g 'harpRight' e r1
+]
+;
+
+
+{7}
+$
+## Time signature starts at 4/4
+## Only the orchestra (originally track 6) ever plays here, when it gets bumped to channel 7 by the harp
+'orchestra-o1'
+[8 r1]
+## 9
+b1r1r1r1
+## 13
+<d1
+## 14
+[6 r1]
+## 20
+## Time signature changes to 11/8
+[44 r8]
+[2
+  ## 24 / 34
+  [44 r8]
+  ## Time signature changes to 4/4
+  ## 28 / 38
+  [6 r1]
+]
+## 44
+[12 r1]
+;

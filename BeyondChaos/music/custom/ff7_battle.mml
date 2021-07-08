@@ -1,0 +1,342 @@
+#TITLE Let the Battles Begin!
+#ALBUM Final Fantasy VII
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+########## ------------------
+#SHORTNAME FF7 Fighting
+
+#WAVE 0x20 0x66 strings
+#WAVE 0x21 0x63 strings-oct
+#WAVE 0x22 0x82 trumpet
+#WAVE 0x23 0x80 trumpet-oct
+#WAVE 0x24 0x84 horn
+#WAVE 0x25 0xA4 flute
+#WAVE 0x26 0x54 bass
+#WAVE 0x27 0x5C timpani
+#WAVE 0x28 0x1F snare
+#WAVE 0x29 0x0F trash
+#WAVE 0x2A 0x4A tom
+#WAVE 0x2C 0x2D crash
+#WAVE 0x2F 0x6C tamb
+
+#def init= t179 %v35 %b0,100 %f0,0
+
+#def sstr= |0 o5 's' 
+#def ostr= |1 o5 's' 
+#def strp= |2 o5 't' 
+#def otrp= |3 o5 't' 
+#def rtrp= |2 o5 'r' 
+#def horn= |4 o5 'h' %y0
+#def flute=|5 o3 'f' 
+#def bass= |6 o7 'b' %e0
+#def timp= |7 o5 'd' 
+
+#def s= v100
+#def t= v60
+#def r= v80
+#def h= v80
+#def f= v90
+#def b= v80
+#def d= v100
+
+#def tf= v1,60
+#def hf= v1,80
+#def df= v1,100
+
+#def ss= |0
+#def os= |1
+#def st= |2
+#def ot= |3
+
+#def snv= v70
+#def snf= v1,70
+#def tamvol= v150
+
+#drum "a"=4e |F p110 'tamvol*v.15'
+#drum "b"=4e |F p110 'tamvol*v.22'
+#drum "c"=5a |9 p10 v48
+#drum "d"=4c |F p110 'tamvol*v.75'
+#drum "e"=3g |F p10 'tamvol*v.75'
+
+#drum "y"=5a |C p40 v88 %y0%s4%r24
+
+#drum "q"=5g+ |8 p50
+#drum "r"=5g+ |8 p50 'snv*v.3'
+#drum "s"=5g+ |8 p50 'snv*v.6'
+
+#drum "t"=5d |A p90 v40 
+#drum "o"=4a |A p60 v40 
+#drum "m"=4e |A p30 v40 
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} 'init' %e1 $
+['ostr+o1*v.75' l8 p20
+[[3's*v.75'f16.r32's*v.37'f16.r32f16.r32]'s*v.9'j2fcd+f+fd+f+]
+j2'ss'>g+<d+4d+4d+4] f'ss'c4d+4f+4
+[## 9
+>> 's*v.75' m48,18,207 l4
+[3f.g.g+.a+.<cj3d+]^ m>>
+ ## 15
+[3's*v.95'f8's*v.9'<f12r24f12r24>]
+'s*v.95' l8 [)(f^48gg+a+g+ga+g+12^48 's*v.9'<]> ^48fd+12^48) f+^2
+]## 29
+>[3's*v.95'f8's*v.9'<f12r24f12r24>]
+'s*v.95'(f^48gg+a+g+ga+g+12^48)
+'s*v.9' < (f^48gg+a+g+gc12^48)(f^48efgg+gg+a+12^48)
+## 33
+'os''s*v.75' l8 m72,18,207
+r(<c^48>b<c>a+g+fgg+6^16)c+c4c+f4 ^1^1
+r(g+^48efgfd+c+ f>a+<cc+12^48)(d+^48c+fc+12^48) >a+1^ m
+'s*v.9' l16 a+a+<ccc+c+d+d+ffggg+g+
+## 41
+'otrp-o1*v.9' p95 l8
+[f1.^rf4  c+1.^rc+4  d+1.^rd+4]
+;
+
+
+{2} $ %e1
+'horn*v.6' p35 l16
+[3frr4] r8 "!!!o c2"r4 
+$ 
+'horn*v.6' p35 l16 [3frr4] r8
+'rtrp+o1*v.68' p80 m48,18,202 c4>b4a+4 g+1^4 m
+'horn*v.75' p35 crcr d+4c4>a+4g+4g4f2
+'sstr*v.9' p20 a+4g+4f+4
+[## 9
+'horn*v.6-o1' p35 l4
+c.>a+.<c.d+.g+g  f1..r < a+.g.g+.'h*v.33''hf*v168,.9'[7g16r16]
+## 15
+'h*v.6' g+4.f8 [j1,2026] r8
+'otrp+o1*v.3' p58 'tf*v168,.68' [7f16r16] m48,18,202 f4.
+p80 'st' f+16r8.f+16r16d+4 m
+]## 29
+r2 [j1,2026] r1
+'rtrp+o1*v.68' p80 m48,18,202 c4f4e4d+4
+## 33
+c+1 m
+'horn*v.6' p35 l4 rc+d+f g+1^1 r1r1 c+.c.>a+.g+.gd+
+## 41
+l2 < r1 <c>a+ g+1^1   r1 a+g g+1^1   ^1 <c>g+ g1
+l16 r8 ##'otrp+o1*v.4''tf*v168,.9' p58 [7gr]
+       'horn*v.33''hf*v168,.9' p35 [7gr]
+## Loop
+'horn*v.6' p35 g+2 %r9 ^2 %r14 ^2.
+'flute*v.41+o2' p50 r8d+16r16
+;
+
+## Repeating snippet [trash -> trombone]
+$2026 r2. "!!!oc2" 'strp-o1*v.9' p95 d+4 ]
+
+{3} l16 %e1
+['otrp*v.9-o1' p95 [4f.r32j4r4]j2r4f.r32r8 'st'>f+4]'st'>f+4f+4f+4
+$ "!!!o y4."
+['otrp*v.9-o1' p95 f.r32 j2,306 [r4f.r32] "!!!oc8"r8]
+$306 r8 >'st'f+4
+<'ot' [4f.r32j4r4]'st'>f+4f+4f+4
+[## 9
+[[5'strp*v.9-o1' %e1p95 j5 f.r32 'bass-o2*v.37' %e0p64 f.r32f.r32] j2 f4d+4 %k-4]f4e4 %k0
+[5'otrp*v.9-o1' %e1p95 j5 a+.r32 'bass-o3*v.37' %e0p64 a+.r32a+.r32] a+4a+4
+## 15
+[j1,3015] 'st'>f+4f+4f+4
+]## 29
+[j1,3015] f4e4d+4
+## 33
+'st' [4g+.r32r4] g+4g+4
+<'r*v.68' m48,18,202 p80
+g+4grg+4a+r<crc+r d+4c+rd+4frgrg+r a+1...r8
+'flute*v.41+o2' p50 c+4.c4.>a+4. l8 a+<cc+d+fgg+
+## 41
+l16
+[[r8frg+r8.gra+r8.g+r <c4>a+r<c+4c8>g+8f8]
+r8d+rgr8.frg+r8.gr   a+4g+r<c4>a+8g8d+8]
+## Loop
+'otrp*v.9-o1' p95 f.r32
+'flute*v.41+o2' p50 frg+r
+'otrp*v.9-o1' p95 f.r32
+'flute*v.41+o2' p50 d+rgr
+'otrp*v.9-o1' p95 f.r32
+'flute*v.41+o2' p50 fr8.
+'otrp*v.9-o1' p95 f.r32
+"!!!o c4"
+'otrp*v.9-o1' p95 f.r32
+r8 'st'>f+4< 'ot' [4f.r32j4r4] 'st'>f+4f+4f+4
+;
+
+## Recurring trombone/tuba line weaved with bass
+$3015 l16 [5'otrp*v.9-o1' %e1 p95 f.r32 'bass-o3*v.37' %e0 p64 f.r32j5f.r32] 'strp*v.9-o2' %e1 p95 f+4
+          [4'otrp*v.9-o1' %e1 p95 f.r32 j4 'bass-o3*v.37' %e0 p64 f.r32f.r32] ]
+          
+{4} $ l8 %e1
+"c" [[3"!oab"j3"c"] v0 j1,406
+'horn*v.75' p35 $406 c16r16 "!!!o ab4bcb"
+[3"!o ca"j3"b"]
+[j1,4004] j2
+'otrp*v.9-o1' p95 f16.r32]
+[## 9
+l8 [3[6"!!!o sr"j5j6"r"]]
+## 15
+[j1,4015]
+]## 29
+[j1,4015]
+## 33
+[4 ":r"
+ [3 "srr"] j4,440 "srr" ["sr"] 
+] $440 'snf*v168,.75' [7"q"]
+## 41
+'sstr*v.52+o1' %a8 p20 l16 [32fr][16gr]
+"!!!o" l8 [5"rsr"]"r" [4"rsr"] ["sr"] [4"rsr"] 'snf*v96,.75'[8"q16"]
+;
+
+## Main recurring percussion pattern - proceeds into $4004
+$4015 l8 [[3"!!!o ca"j3"b"] j2":a:b4ab4bcb"]
+## Snare roll merged with trash can
+$4004 'snv*v.6' l24 'snf*v48,.375'[6"!!!oq"] "!v0c" 'snv*v.3375''snf*v40,.15'[5"!oq"]
+      'snf*v48,.375'[6"q"] "!v0c" 'snv*v.4125''snf*v40,.6'[5"!oq"]  ]
+
+{5} %e1
+'timp*v.9-o2' p64 f4.
+'horn*v.6' p35 l16 crr4cr8. r1 
+$ [3crr4] r8
+'rtrp+o1*v.68' p80 m48,18,202 d+4d+4d+4f1^4 m
+'horn*v.75-o1' p35 frfr a+4g+4g4f4d+4c2
+'strp*v.9-o1' p95 d+4d+4d+4
+[## 9
+'sstr*v.75-o1' p20 m48,18,207 l4 c.d+.f.g.g+a+
+'rtrp*v.68' p80 m48,18,202 f.g.g+.a+.<cd+
+'flute*v.41+o2' p50 m f.g.g+.a+.<c2
+## 15
+'horn*v.6' p35 c4.>b8
+'bass-o3*v.9' p64 l16 [3r4f.r32]r8f+.r32'b*v.37'f+.r32'b*v.9'f.r32 %e1
+'otrp*v.3' p58 'tf*v168,.68' [7br]
+m48,18,202 b4. m j2 'st' p80 <cr8.cr>b4
+] <cr8.cr>b4
+## 29
+[j1,7001]
+'rtrp*v.68' p80 m48,18,202 r4g+4a+4<c4>
+## 33
+f1
+'horn*v.6-o1' p35 r4f4g+4<c+4
+'rtrp*v.68' p80 l16 f4d+rf4grg+ra+r <c4>a+r<c4c+rd+rfr  f1...r8
+'horn*v.6-o1' p35 m a+4.f4.c+4.c+4.c+4c+4
+## 41
+l2 r1 <g+f c+1^1    r1 g>a+< f1^1    ^1 fc+ d+1
+l16 r8 ##'otrp*v.4''tf*v168,.9' p58 [7a+r]
+       'horn*v.33''hf*v168,.9' p35 [7c+r]
+## Loop
+'horn*v.6' p35 c2 %r12 ^2 %r17 ^8 %r0
+'flute*v.41+o2' p50 l16  frg+r8.d+rf+r8.>f+r
+;
+
+{6} $ %e1
+[ l16
+[7'bass-o3*v.9' p64 f.r32'b*v.37'f.r32f.r32j4,602]
+j2 f.r32 'strp*v.9-o1' %e1 p95 d+4d+4d+4]
+'rtrp+o1*v.68' %e1 p80 l16 crd+r8.r8d+r8.d+r
+[## 9
+'timp-o2*v.9' p64 f2
+"!!!o d1e4" 'timp-o1*v.9' p64 c4c+2
+"!!!o d1e4" 'timp-o2*v.9' p64 g+4a+2
+"!!!o d2^8" 'timp-o2*v.22' p64 'df*v168,.9' [7a+8]
+## 15
+< f1 r2. c4 f8
+'sstr*v.95' p20 f8r8f2..d+4d+4f+4
+]## 29
+l8 r1r1r frf2..f4e4d+4
+## 33
+'strp-o1*v.9' p95 l16
+[[4c+.r32r4]c+4j2c+4]c4
+'ot' [[4a+.r32r4]a+4a+4]
+## 41
+'timp-o2*v.9' p64 l8
+f1 r 'd*v.22''df*v168,.9' [7f]
+<c+1 r 'd*v.22''df*v168,.9' [7c+]
+d+1 r 'd*v.22''df*v168,.9' [7d+]
+>f2<c2>f2<c4>f4<
+c+1 c+2>g+2<
+d+1 r 'd*v.22''df*v168,.9' [7d+]
+;
+
+$602 l16 'b*v.9'f.r32'b*v.37'f.r32
+         'strp*v.9-o1'%e1 p95 d+4]
+         
+{7} $ l8 %e1
+'horn*v.6' p35 l16 cr
+l8 [j1,7002] $ r8
+'sstr*v.9' p20 g<c4>b4a+4
+[3 'horn*v.6' p35 l16 fr l8 "!!!orr"]
+[j1,7009]
+r [j1,7008]
+[## 9
+'strp*v.9' p95 l16
+[4c.r32r4] c4>g4 [4g+.r32r4]g+4g+4
+'horn*v.6' p35 c+4.c4.>a+4. 'h*v.33''hf*v72,.57'[3a+r]
+"!!!o e4" 'horn*v.66-o1''hf*v48,.9' p35 a+ra+r
+## 15
+<'h*v.6' f4.d+8 r2 r1 r8
+'h*v.22''hf*v168,.6' [7d+16r16] d+4
+'strp*v.9-o1' p95 d+4d+4d+4
+]## 29
+'bass-o3*v.9' p64 l16 [4f.r32r4]f.r32r8 f+.r32'b*v.37'f+.r32
+'b*v.9' [3f.r32r4] 'b*v.37'f.r32 'b*v.9' f4e4d+4 <
+## 33
+[4'b*v.9' c+.r32 'b*v.37' c+.r32c+.r32]'b*v.9'c+8d+8f8g+8
+%e1"!!!o y4." 'bass-o2' p64
+[3'b*v.9' c+.r32 'b*v.37' c+.r32c+.r32]'b*v.9'c+8d+8f8>g+8
+[4'b*v.9' a+.r32 'b*v.37' a+.r32a+.r32]'b*v.9'a+8<c8c+8f8>
+%e1"!!!o y4." 'bass-o3' p64
+[3'b*v.9' a+.r32 'b*v.37' a+.r32a+.r32]'b*v.9'a+8<c8c+8d+8
+%e1
+## 41
+'sstr*v.52+o1' %a8 p20 l16 [16cr][16c+r][16d+r]
+'flute*v.41+o1' p50
+[r8g+r<cr8.>a+r<c+r8.cr  d+4c+rf4d+8c8>g+8]
+r8gra+r8.g+r<cr8.>a+r<c+4crd+4c+8>a+8g8
+## Loop
+"!!!o y4."
+[j1,7004]
+;
+
+## Snare Pattern
+## Enter at 1, 2, or 4
+## Also may enter at 9 but must already have program/pan set for snare
+$7001 l8 "!!!o s"
+$7002    "!!!o rr"
+$7004    ["!!!o srr"]
+$7009    'snv*v.15''snf*v168,.6'[8"q"] [3":s:r"j3"rs"]    ]
+## Toms
+$7008 l8 "!!!o mttoomm" ]
+
+{8} %e1
+"!!!o y1.." l8 $
+'timp-o1*v.9' p64 c4>f1 r 'd*v.22''df*v168,.9'<[7c]> f4.
+'horn*v.6' p35 l16 crr4crr4 'h*v.75'> p35 frr4.
+'timp-o2*v.45''df*v72,.9' p64 l8 fff f1^
+'rtrp*v.68' p80 l16 g+rf+rr4f+r8.f+r
+[## 9
+"!!!o y1^1"
+'rtrp*v.68' p80 l4 m48,18,202 c+.d+.f.g.g+a+
+'flute*v.41+o2' p50 m c+.d+.f.g.g+2
+## 15
+"!!!o y4."
+l8 [j1,7004] r8
+'timp-o1*v.22' p64 l8 'df*v168,.9' [7c8]
+]## 29
+f1.. c4 f1^8 [j1,7008]
+## 33
+r1r8 'timp-o1*v.22' p64 l8 'df*v168,.9' [7c8] c+4.
+'strp-o1*v.9' p95 l16 [3g+.r32r4] g+4g+4
+r1r8 'timp-o2*v.22' p64 l8 'df*v168,.9' [7a+8] a+4.a+4.a+4.a+4.
+<'d*v.3''df*v96,.9' [8c16]
+## 41
+[6 "!!!o y1^8" j6,8052 'otrp+o1*v.3''tf*v168,.68' p80
+j3,8046 l16 [7fr]]
+$8046 l16 [7gr]]
+$8052 'bass-o2*v.9' p64 l8 d+>a+<c+d+>a+<gd+
+## Loop
+'timp*v.9-o2' p64 %e1 f8
+'flute*v.41+o1' p50 l16
+g+r<cr8.>gra+r8.g+r8. g+r<cr8.>gra+r
+;

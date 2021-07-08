@@ -1,0 +1,525 @@
+#TITLE The Sea of Eden
+#ALBUM Chrono Cross
+#COMPOSER Yasunori Mitsuda
+#ARRANGED Rushlight
+
+#WAVE 0x20 0x75 ## Vox
+#WAVE 0x21 0x74 ## Chorus
+#WAVE 0x22 0x60 ## Harp
+
+## Note that the tempo varies a lot throughout the song. 
+## Note also that the time signature is 3/4.
+#def init= t90 %x200 %v50 %b0,100 %f0,0
+
+
+#def voxVol=              v120
+#def voxFade=           v1,120 ## Keep this in line with voxVol
+#def supportVoxVol=       'voxVol*v.35'
+## Use this as a base to apply multipliers on. The max multiplier that is used in the song is 0.9.
+#def harpBaseVol=         v110
+#def harpFade=          v1,110 ## Keep in line with harpBaseVol
+#def chorusVol=           v120
+#def chorusFade=        v1,120 ## Keep this in line with chorusVol
+#def supportChorusVol=    v96 ## Keep this as chorusVol * 0.8, but we're not using a macro for that because the corresponding fade macro wouldn't work
+#def supportChorusFade= v1,96 ## Keep this in line with supportChorusVol
+
+#def supportChorusFadeIn=      'supportChorusVol*v.4' 'supportChorusFade*v72,1'
+#def supportChorusFadeOut=     'chorusMedRelease'
+#def backingChorusPrepareNote= 'supportChorusVol*v.3'
+#def backingChorusFadeIn=      'supportChorusFade*v36,1'
+#def backingChorusFadeOut=     'chorusRelease'
+
+#def voxSustain=       %r0
+#def voxSlowRelease=   %r4
+#def voxMedRelease=    %r16
+#def voxLateRelease=   %r18
+#def voxRelease=       %r20
+
+#def voxNormalAttack= %a6
+#def voxQuickAttack=  %a8
+
+#def chorusSustain=       %r0
+#def chorusSlowRelease=   %r4
+#def chorusMedRelease=    %r14
+#def chorusRelease=       %r18
+
+#def chorusSlowAttack=    %a4
+#def chorusSupportAttack= %a6
+#def chorusMelodyAttack=  %a5
+#def chorusQuickAttack=   %a10
+
+
+#def vox=    |0 o4
+#def chorus= |1 o5
+
+#def melodyVox=     'vox'    'voxVol'           'voxNormalAttack'     p64
+#def supportVox1=   'vox'    'supportVoxVol'    'voxNormalAttack'     p10
+#def supportVox2=   'vox'    'supportVoxVol'    'voxNormalAttack'     p44
+#def harp=          |2 o5    'harpBaseVol*v.8'                        p64
+#def melodyChorus=  'chorus' 'chorusVol'        'chorusMelodyAttack'  p64
+#def supportChorus= 'chorus' 'supportChorusVol' 'chorusSupportAttack' p64
+#def backingChorus= 'chorus' 'supportChorusVol' 'chorusSlowAttack'    p64
+
+{1}
+'init'
+## Melody Vox, channel 1 in VGMTrans output
+'melodyVox+o1'
+v0 'voxFade*v48,1'e2^24 t78 ^12'voxRelease'^8
+## 2
+t90 'voxSustain'c2^24 t78 ^12'voxRelease'^8
+## 3
+t90 'voxSustain'd2^24 t78 ^12'voxRelease'^8
+## 4
+t90'voxSustain'g2^24 t78 ^12'voxRelease'^8
+## 5
+t90'voxSustain'e2^24 t78 ^12'voxRelease'^8
+## 6
+t90'voxSustain'c4..'voxRelease'^16'voxSustain''voxQuickAttack'd24 t78 ^8.
+## (One 48th before) 7
+## 7
+t89 t236,71 >'voxVol*v.8''voxFade*v255,.2'a2.
+## 8
+^2^24 t50 ^12'voxRelease'^16^24.
+$
+## Melody Chorus, channels 4 and 5 in VGMTrans output. Plays half the notes, alternating with channel 2
+'melodyChorus+o1'
+[2
+  >
+  ## 9 / 17
+  a48 t90 ^48^6^24'chorusRelease' ^6.'chorusSustain' a6.'chorusRelease'
+  ## 10 / 18
+  ^4^6.'chorusSustain' b-6.'chorusRelease'
+  ## 11 / 19
+  ^6.'chorusSustain' g6.'chorusRelease' ^6.'chorusSustain'
+  ## 12 / 20
+  <c4^6.'chorusRelease' ^-6.'chorusSustain'
+  ## 13 / 21
+  >a24^6^24'chorusRelease' ^6.'chorusSustain' a6.'chorusRelease'
+  ## 14 / 22 (One 48th note before)
+  ^4^6.'chorusSustain' <c6.'chorusRelease'
+  ## 15 / 23 (One 48th note before)
+  ^2.
+  ## 16 / 24 (One 48th note before)
+  ^2^6.'chorusSustain'
+]
+[2
+  ## 25 / 33 (One 48th note before)
+  f2^6.'chorusRelease'
+  ## 26 / 34 (One 48th note before)
+  ^4^6.'chorusSustain' e6.'chorusRelease'
+  ## 27 / 35 (One 48th note before)
+  ^4^6.'chorusSustain' e6.'chorusRelease'
+  ## 28 / 36 (One 48th note before)
+  ^6.'chorusSustain' c4^6.'chorusRelease'
+  ## 29 / 37 (One 48th note before)
+  ^2 j2 ^6.'chorusSustain'
+  ## 30 (One 48th note before)
+  e4^6.'chorusRelease' ^6.'chorusSustain'
+  ## 31 (One 48th note before)
+  d4^6.'chorusRelease' ^6.'chorusSustain'
+  ## 32 (One 48th note before)
+  g4^6.'chorusRelease' ^6.'chorusSustain'
+]
+## Remainder of measure 37
+^4'chorusSustain'
+## 38 (One 48th note before)
+d6.'chorusRelease' ^6.'chorusSustain' f6.'chorusRelease'
+## 39 (One 48th note before)
+t142,72
+^2.
+## 40 (One 48th note before)
+^2^8.
+;
+
+
+{2}
+## Harp, channels 11 and 14 in VGMTrans output.
+'harp'
+## 1 through 7
+[7 r8.r24'harpBaseVol*v.56'e24.<'harpBaseVol*v.65'c12^4.>]
+## 8
+r8.r24'harpBaseVol*v.56'e24.<'harpBaseVol*v.65'c12^4^16^24
+$
+## Melody Chorus, channels 4 and 5 in VGMTrans output. Plays half the notes, alternating with channel 1
+'melodyChorus+o1'
+[2
+  >
+  ## 9 / 17
+  ^6.'chorusSustain' g6.'chorusRelease' ^6.'chorusSustain'
+  ## 10 / 18
+  <c4^6.'chorusRelease' ^6.'chorusSustain'
+  ## 11 / 19
+  >a6.'chorusRelease' ^6.'chorusSustain' a6.'chorusRelease'
+  ## 12 / 20
+  ^4^6.'chorusSustain' b-6.'chorusRelease'
+  ## 13 / 21
+  ^6.'chorusSustain' g6.'chorusRelease' ^6.'chorusSustain'
+  ## 14 / 22 (One 48th note before)
+  <d4^6.'chorusRelease' ^6.'chorusSustain'
+  ## 15 / 23 (One 48th note before)
+  c2.
+  ## 16 / 24 (One 48th note before)
+  ^2^6.'chorusRelease'
+]
+[2
+  ## 25 / 33 (One 48th note before)
+  ^2^6.'chorusSustain'
+  ## 26 / 34 (One 48th note before)
+  g4^6.'chorusRelease' ^6.'chorusSustain'
+  ## 27 / 35 (One 48th note before)
+  f4^6.'chorusRelease' ^6.'chorusSustain'
+  ## 28 / 36 (One 48th note before)
+  d6.'chorusRelease' ^4^6.'chorusSustain'
+  ## 29 / 37 (One 48th note before)
+  d2 j2 ^6.'chorusRelease'
+  ## 30 (One 48th note before)
+  ^4^6.'chorusSustain' c6.'chorusRelease'
+  ## 31 (One 48th note before)
+  ^4^6.'chorusSustain' a6.'chorusRelease'
+  ## 32 (One 48th note before)
+  ^4^6.'chorusSustain' e6.'chorusRelease'
+]
+## Remainder of measure 37
+^4'chorusRelease'
+## 38 (One 48th note before)
+^6.'chorusSustain' e6.'chorusRelease' ^6.'chorusSustain'
+## 39 (One 48th note before)
+e2'chorusSlowRelease'^4
+## 40 (One 48th note before)
+^2'chorusRelease'^8.
+;
+
+
+{3}
+## Harp, channel 12 VGMTrans output.
+'harp'
+'harpVol*v.61'
+## 1 through 8
+[8 r4r48a4.^12^48]
+$
+## Will now play the Harp line, alternating notes with channel 3
+'harp-o1'
+[2
+  [3
+    ## 9 / 11 / 13 / 17 / 19 / 21
+    r8'harpBaseVol*v.71'a4'harpVol*v.75'<f4>a8
+    j3
+    ## 10 / 12 / 18 / 20
+    r8'harpVol*v.7'b-4'harpVol*v.75'<f4'harpVol*v.76'b-8>
+  ]
+  ## 14 / 22
+  r8'harpBaseVol*v.71'f4<c4'harpBaseVol*v.75'f8>
+  ## 15 / 23
+  r8'harpBaseVol*v.71'g4'harpBaseVol*v.72'<f4'harpBaseVol*v.66'<c8
+  ## 16 / 24
+  ^8'harpBaseVol*v.65'f8r8'harpBaseVol*v.71'c4'harpBaseVol*v.65'>e8>
+]
+[2
+  ## 25 / 33
+  r8'harpBaseVol*v.74'a4<e4'harpBaseVol*v.78'a8
+  ## 26 / 34
+  r8'harpBaseVol*v.75'>g4'harpBaseVol*v.77'<d4'harpBaseVol*v.76'c8
+  ## 27 / 35
+  r8>f4'harpBaseVol*v.78'<c4'harpBaseVol*v.77'e8
+  ## 28 / 36
+  r8'harpBaseVol*v.78'>e4'harpBaseVol*v.71'<c4'harpBaseVol*v.76'g8
+  ## 29 / 37
+  r8'harpBaseVol*v.74'>d4'harpBaseVol*v.71'b-4'harpBaseVol*v.81'<f8
+  j2
+  ## 30
+  r8'harpBaseVol*v.73'>e4'harpBaseVol*v.7'<c4'harpBaseVol*v.74'c8
+  ## 31
+  r8'harpBaseVol*v.77'>f4'harpBaseVol*v.79'<d4a8
+  ## 32
+  r8'harpBaseVol*v.7'>g4'harpBaseVol*v.75'<d4c8>
+]
+## 38
+r8'harpBaseVol*v.72'>g+4'harpBaseVol*v.73'<d4'harpBaseVol*v.79'd8
+## 39
+r8>'harpBaseVol*v.7'e4<'harpBaseVol*v.65'd4'harpBaseVol*v.6'a8
+## 40
+^2^8.
+;
+
+
+{4}
+## Bass Harp, channel 16 VGMTrans output
+'harp-o1'
+'harpVol*v.61'
+## 1 through 8
+[8 d2.]
+$
+## Will now play the Harp line, alternating notes with channel 2.
+## Will also play bass harp notes (channel 16 in VGMTrans output) for one beat before letting a lower channel take over.
+'harp'
+[2
+  [3
+    ## 9 / 11 / 13 / 17 / 19 / 21
+    >'harpVol*v.83'd4<'harpVol*v.69'e4<c4>
+    j3
+    ## 10 / 12 / 18 / 20
+    >'harpVol*v.76'e-4<e-4g4
+  ]
+  ## 14 / 22
+  >>'harpVol*v.68'b-4'harpVol*v.66'<b-4'harpVol*v.72'<d4
+  ## 15 / 23
+  >'harpVol*v.75'c4<'harpVol*v.66'c4'harpVol*v.68'g4
+  ## 16 / 24
+  'harpVol*v.74'<e4'harpVol*v.63'e4'harpVol*v.7'>g4
+]
+[2
+  ## 25 / 33
+  >'harpVol*v.71'd4<'harpVol*v.65'd4'harpBaseVol*v.77'f4
+  ## 26 / 34
+  >'harpVol*v.71'c4<'harpBaseVol*v.8'c4'harpBaseVol*v.78'e4
+  ## 27 / 35
+  >>'harpBaseVol*v.7'b-4<'harpBaseVol*v.69'b-4'harpBaseVol*v.74'<d4
+  ## 28 / 36
+  >>'harpBaseVol*v.69'a4<'harpBaseVol*v.68'a4'harpBaseVol*v.74'<e4
+  ## 29 / 37
+  >>'harpBaseVol*v.73'g4<'harpBaseVol*v.69'a4'harpBaseVol*v.71'<d4
+  j2
+  ## 30
+  >>'harpBaseVol*v.77'a4<'harpBaseVol*v.69'a4'harpBaseVol*v.72'<e4
+  ## 31
+  >>'harpBaseVol*v.78'b-4<'harpBaseVol*v.77'b-4'harpBaseVol*v.78'<f4
+  ## 32
+  >'harpBaseVol*v.78'c4<'harpBaseVol*v.75'c4'harpBaseVol*v.73'e4
+]
+## 38
+>>'harpBaseVol*v.76'g+4<'harpBaseVol*v.83'b4'harpBaseVol*v.78'<f4
+## 39
+>>'harpBaseVol*v.7'a4<'harpBaseVol*v.73'a4<'harpBaseVol*v.67'e4
+## 40
+^2^8.
+;
+
+
+{5}
+## Harp, channel 13 VGMTrans output
+'harp'
+'harpVol*v.6'
+## 1 through 8
+[8 r4 j8 f2]
+f4..^24
+$
+## Support Chorus, channels 8 and 9 in VGMTrans output
+'supportChorus'
+[2
+  [3
+    ## 9 / 11 / 13 / 17 / 19 / 21 (One 48th note before)
+    d2^8'supportChorusFadeOut'^8'chorusSustain''chorusQuickAttack'
+    'supportChorusFadeIn'
+    j3
+    ## 10 / 12 / 18 / 20 (One 48th note before)
+     e-2^8'supportChorusFadeOut'^8'chorusSustain'
+    'supportChorusFadeIn'
+    
+  ]
+  ## 14 / 22 (One 48th note before)
+  >b-2^8'supportChorusFadeOut'^8'chorusSustain'
+  ## 15 / 23 (One 48th note before)
+  <'supportChorusFadeIn'c2.
+  ## 16 / 24 (One 48th note before)
+  ^2^8'supportChorusFadeOut'^8'chorusSustain'
+  'supportChorusFadeIn'
+]
+
+[2
+  ## 25 / 33 (One 48th note before)
+  d2^8'supportChorusFadeOut'^8'chorusSustain'
+  ## 26 / 34 (One 48th note before)
+  'supportChorusFadeIn'e2^8'supportChorusFadeOut'^8'chorusSustain'
+  ## 27 / 35 (One 48th note before)
+  'supportChorusFadeIn'f2^8'supportChorusFadeOut'^8'chorusSustain'
+  ## 28 / 36 (One 48th note before)
+  'supportChorusFadeIn'e2^8'supportChorusFadeOut'^8'chorusSustain'
+  ## 29 / 37 (One 48th note before)
+  'supportChorusFadeIn'd2^8'supportChorusFadeOut'^8'chorusSustain'
+  j2
+  ## 30 (One 48th note before)
+  'supportChorusFadeIn'e2^8'supportChorusFadeOut'^8'chorusSustain'
+  ## 31 (One 48th note before)
+  'supportChorusFadeIn'  d2^8'supportChorusFadeOut'^8'chorusSustain'
+  ## 32 (One 48th note before)
+  'supportChorusFadeIn'c2^8'supportChorusFadeOut'^8'chorusSustain'
+  'supportChorusFadeIn'
+]
+## 38
+'supportChorusFadeIn'd2^8'supportChorusFadeOut'^8'chorusSustain'
+## 39
+'supportChorusFadeIn'e2'chorusSlowRelease'^4
+## 40
+^2'chorusRelease'^8.
+;
+
+
+{6}
+## Harp, channel 15 VGMTrans output
+'harp'
+'harpBaseVol*v.46'
+## 1 through 7
+[7 r8.r48 d24^2]
+## 8
+r8.r48 d48^2
+$
+## Chorus Accents, channels 6 and 7 in VGMTrans output
+'backingChorus'
+[2
+  ## 9 / 17 (One 48th note before)
+  r2.
+  ## 10 through 13 and 18 through 21 (One 48th note before)
+  r1r1r1 ## 12 beats, 4 measures at 3/4
+  ## 14 / 22 (One 48th note before)
+  'backingChorusPrepareNote'f8'backingChorusFadeIn'^4.'backingChorusFadeOut'^4'chorusSustain'
+  ## 15 / 23 (One 48th note before)
+  'backingChorusPrepareNote'f8'backingChorusFadeIn'^4.'backingChorusFadeOut'^4'chorusSustain'
+  ## 16 / 24 (One 48th note before)
+  'backingChorusPrepareNote'e8'backingChorusFadeIn'^4.'backingChorusFadeOut'^4'chorusSustain'
+]
+[2
+  ## 25 / 27 (One 48th note before)
+  'backingChorusPrepareNote'a8'backingChorusFadeIn'^4.'backingChorusFadeOut'^4'chorusSustain'
+  ## 26 / 28 (One 48th note before)
+  'backingChorusPrepareNote'g8'backingChorusFadeIn'^4.'backingChorusFadeOut'^4'chorusSustain'
+]
+## 29 (One 48th note before)
+'backingChorusPrepareNote'b-8'backingChorusFadeIn'^4.'backingChorusFadeOut'^4'chorusSustain'
+[4
+  ## 30 / 32 / 34 / 36 (One 48th note before)
+  'backingChorusPrepareNote'g8'backingChorusFadeIn'^4.'backingChorusFadeOut'^4'chorusSustain'
+  j4
+  ## 31 / 33 / 35 (One 48th note before)
+  'backingChorusPrepareNote'a8'backingChorusFadeIn'^4.'backingChorusFadeOut'^4'chorusSustain'
+]
+## 37 (One 48th note before)
+'backingChorusPrepareNote'b-8'backingChorusFadeIn'^4.'backingChorusFadeOut'^4'chorusSustain'
+## 38 (One 48th note before)
+'backingChorusPrepareNote'a8'backingChorusFadeIn'^4.'backingChorusFadeOut'^4'chorusSustain'
+## 39 (One 48th note before)
+'backingChorusPrepareNote'<d8'backingChorusFadeIn'^4.'backingChorusFadeOut'^4'chorusSustain'
+## 40
+c+4'chorusSlowRelease'^4'chorusRelease'^8.
+;
+
+
+{7}
+## Support Vox 1, channel 2 in VGMTrans output
+'supportVox1+o1'
+r48
+## 1 (One 48th in) 
+r8.c4'voxMedRelease'^4^16
+## 2 (One 48th in) 
+^8.>'voxSustain'g4'voxMedRelease'^4^16
+## 3 (One 48th in) 
+^8.'voxSustain'a4'voxMedRelease'^4^16
+## 4 (One 48th in) 
+^8.<'voxSustain'c4'voxMedRelease'^4^16
+## 5 (One 48th in) 
+^8.'voxSustain'c4'voxMedRelease'^4^16
+## 6 (One 48th in) 
+^8.>'voxSustain'g4'voxMedRelease'^4^16
+## 7 (One 48th in) 
+^8.<'voxSustain'c4'voxMedRelease'^4^24
+## 8
+^2^8.^24
+$
+## 9 through 24 (One 48th note before)
+[16 r2.]
+
+## Support Vox 1, channel 2 in VGMTrans output
+'supportVox1+o1'
+[2
+  ## 25 / 33 (One 48th note before)
+  f2^6^24'voxLateRelease'^24'voxSustain''voxQuickAttack'
+  ## 26 / 34 (One 48th note before)
+  g4^6^24'voxLateRelease'^24'voxSustain' e6^24'voxLateRelease'^24'voxSustain'
+  ## 27 / 35 (One 48th note before)
+  f4^6^24'voxLateRelease'^24'voxSustain' e6^24'voxLateRelease'^24'voxSustain'
+  ## 28 / 36 (One 48th note before)
+  d6^24'voxLateRelease'^24'voxSustain' c4^6^24'voxLateRelease'^24'voxSustain'
+  ## 29 / 37 (One 48th note before)
+  d2 j2 ^6^24'voxLateRelease'^24'voxSustain'
+  ## 30 (One 48th note before)
+  e4^6^24'voxLateRelease'^24'voxSustain' c6^24'voxLateRelease'^24'voxSustain'
+  ## 31 (One 48th note before)
+  d4^6^24'voxLateRelease'^24'voxSustain' a6^24'voxLateRelease'^24'voxSustain'
+  ## 32 (One 48th note before)
+  g4^6^24'voxLateRelease'^24'voxSustain' e6^24'voxLateRelease'^24'voxSustain'
+]
+## Remainder of measure 37
+^8'voxLateRelease'^8'voxSustain'
+## 38 (One 48th note before)
+d6^24'voxLateRelease'^24'voxSustain' e6^24'voxLateRelease'^24'voxSustain' f6^24'voxLateRelease'^24'voxSustain'
+## 39 (One 48th note before)
+e2'voxSlowRelease'^4
+## 40 (One 48th note before)
+^2'voxLateRelease'^8.
+;
+
+
+{8}
+## Support Vox 2, channel 3 in VGMTrans output
+'supportVox2'
+r48
+## 1 (One 48th in) 
+r8.g4'voxMedRelease'^4^16
+## 2 (One 48th in) 
+^8.'voxSustain'e4'voxMedRelease'^4^16
+## 3 (One 48th in) 
+^8.'voxSustain'f4'voxMedRelease'^4^16
+## 4 (One 48th in) 
+^8.'voxSustain'g4'voxMedRelease'^4^16
+## 5 (One 48th in) 
+^8.'voxSustain'a4'voxMedRelease'^4^16
+## 6 (One 48th in) 
+^8.'voxSustain'e4'voxMedRelease'^4^16
+## 7 (One 48th in) 
+^8.'voxSustain'a4'voxMedRelease'^4^24
+## 8
+^2.
+
+$
+## Bass Harp sustain, for channel 16 VGMTrans output. Takes over from a higher channel to hold the notes longer, allowing a larger number of important things in the top channels
+'harp-o1'
+[2
+  [3
+    ## 9 / 11 / 13 / 17 / 19 / 21
+    v0 d8...'harpFade*v3,.83'^2^64
+    j3
+    ## 10 / 12 / 18 / 20
+    v0 e-8...'harpFade*v3,.76'^2^64
+  ]
+  ## 14 / 22
+  >v0 b-8...'harpFade*v3,.68'^2^64
+  ## 15 / 23
+  <v0 c8...'harpFade*v3,.75'^2^64
+  ## 16 / 24
+  ^2.
+]
+[2
+  ## 25 / 33
+  v0 d8...'harpFade*v3,.71'^2^64
+  ## 26 / 34
+  c2.
+  ## 27 / 35
+  v0 >b-8...'harpFade*v3,.7'^2^64
+  ## 28 / 36
+  v0 a8...'harpFade*v3,.69'^2^64
+  ## 29 / 37
+  v0 g8...'harpFade*v3,.73'^2^64
+  j2
+  ## 30
+  v0 a8...'harpFade*v3,.77'^2^64
+  ## 31
+  v0 b-8...'harpFade*v3,.78'^2^64
+  ## 32
+  v0 <c8...'harpFade*v3,.78'^2^64
+]
+## 38
+v0 g+8...'harpFade*v3,.76'^2^64
+## 39
+v0 a8...'harpFade*v3,.7'^2^64
+## 40
+r2^8.
+;

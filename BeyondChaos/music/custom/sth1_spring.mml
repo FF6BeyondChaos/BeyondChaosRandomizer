@@ -1,0 +1,153 @@
+#TITLE Spring Yard Zone
+#ALBUM Sonic the Hedgehog
+#COMPOSER Masato Nakamura
+#ARRANGED emberling
+
+#WAVE 0x20 0xC1 - was 0x5C ultrapulse
+#WAVE 0x21 0x81 - was 0x9A trumpet
+#WAVE 0x22 0x84 - was 0x7A horn
+#WAVE 0x23 0x88 - was 0x6A oct.brass
+#WAVE 0x24 0x22 - was 0x42 vibraphone
+#WAVE 0x25 0x56 - was 0x4A slap bass
+#WAVE 0x26 0x83 - was 0x1A tuba
+#WAVE 0x28 0x0D - was 0x59 syn.kick
+#WAVE 0x29 0x1D - was 0x21 hard snare
+#WAVE 0x2A 0x3B - was 0x5A hihat
+
+#def init= t100 %x240 %v40 %b0,85 %f0,0
+
+#def synth= |0 %e1 o5
+#def tpet=  |1 %e1 't' o5
+#def horn=  |2 %e1 'h' o5
+#def brass= |3 %e1 'b' o5
+#def vibe=  |4 %e1 'v' o5
+#def slap=  |5 %e0 'g' o6
+#def tuba=  |6 %e1 'o' o7
+
+#def s= v36
+#def t= v88
+#def h= v80
+#def b= v52
+#def v= v68
+#def g= v88
+#def o= v32
+
+#def sf= v1,36
+#def y= 's*v.45''sf*v13,.64'
+
+#drum "k"=6d |8 %e0 v80 p64
+#drum "s"=6c+ |9 %e0 v112 p64 %y2%s3
+#drum "h"=6d |A %e0 v56 p64 %y5%s0
+#drum "i"=6d |A %e0 v56 p64 %y6%s0
+
+#def ib= m2,-1
+
+#def hv= m12,17,223
+#def bv= m3,17,199
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} 'init'
+'slap*v1.07-o2' l16 p64
+arargrgrfrfrere24r24d24
+$##
+'slap*v1.03-o2' l16 p64
+[r12d6[erdr]f12a12r24a24  <r12e6crcr>ararf8^12e24
+r12e6[f+rer]g12j2a+12r24a24  r12a6grgrfrfre8^12d24] a+6
+[5ar]r4r12a+24
+##
+[3 r12a+6<cr>a+ra8r8a+12a12r24g24  r12g6argrfrfrg12a12r24j3a+24]e24
+r12e6erera8.ra8^12d24 r2..r12d24
+;
+
+{2}
+'tuba-o2*v.83' p127 l16 k1
+['ib'a+r]<['ib'cr]['ib'c+r]'ib'dr'ib'dr48 k0
+'horn+o1*v.88' p64 e24
+$##
+['horn+o1*v.88' p64 l12 'hv' re6c24r>a24r<e8^c24 r4
+'tpet*v.87' m [r8 a<c24df24>] r8r
+'horn+o1*v.88' 'hv' f+24  rf+6d24r>b24r<f+4j2d8^f24^2..re24]
+d4f24rf24rgf24gr24a8r4. m
+##
+'vibe+o1*v.71' l16
+[r12f6erdrcrdrc12>a12r24a+24  r12a+6<cr>a+ra12a+12r24<c24^4  j2
+r12f6erdrcrdrc12>a6  <c4g8^12a24r12a24grf4]
+'tpet+o1*v.87' r12a6grgrfrfre12f24e12d24 r2..r12
+'horn+o1*v.88' p64 e24
+;
+
+{3}
+'tuba-o2*v.83' p0 l16
+['ib'a+r]<['ib'cr]['ib'c+r]['ib'dr]
+$##
+'brass+o1*v.59' p0 l8 'bv'
+e2.fg  e2.cd  e2.fg  a1
+e2.fg  e2.cd  e2.fg  l16 <[5c+r]> r4r12d24
+##
+r12d6drdrcrarfrr12>a+24  r12a+6a+ra+rarr4r12<d24
+r12d6drdrcrarfrr12>a+24  r12a+6a+ra+rarara+12<c12r24d24
+r12d6drdrcrarfrr12>a+24  r12a+6a+ra+rarr4r12a24
+^4<c+4e4<c+8^12d24 r1
+;
+
+{4}
+l8 "sssssss12s24s12"
+$##
+[3"kk6s kk4s^12"] "kk6skksss12"
+[3"kk6s kk4s^12"] ^24"sssss4^12s24s12"
+##
+[3"kk6s kk4s^12"] "kk6skksss12"
+[3"kk6s kk4s^12"] "k24^4s^12k24ssss12"
+;
+
+{5}
+'synth-o2' p64 l16
+['ib''y'a+64r..]<['ib''y'cr]['ib''y'c+r]['ib''y'dr]
+$##
+['brass+o1*v.59' p127 l8 'bv' k1
+e2.fg  e2.cd  e2.fg  
+'tpet*v.87' p64 l24 j2
+<r8ar12r8gr12r8fr12erfer12]
+ara<c+rc+eregrgar12r4r12>f
+##
+l16
+[r12f6frfrerr4r12d24  r12d6drdrcrr4r12j2f24  
+r12f6frfrerr4r12d24  r12d6drdrcrcrd12e12r24f24]
+r24'vibe+o1*v.71' r8e24r12e4f4e8^12d24 r1
+;
+
+{6}
+r1
+$##
+'synth+o1' p64 l8
+(['y'e2.'y'f'y'g  'y'e2.'y'c'y'd
+  'y'e2.'y'f'y'g  j2 'y'a1] <l16 'y'c+r)[4'y'c+r] r4> r12'y'd24
+##
+l16 [3
+r12'y'd6'y'^r'y'dr'y'cr'y'ar'y'frr12'y'>a+24 
+r12'y'a+6'y'^r'y'a+r'y'ar j1,611 j3 'y'ar('y'a+12'y'<c12)r24'y'd24]
+r4r12 ('y'a24^4'y'<c+4'y'e4'y'<c+8^12'y'd24) r1
+;
+
+$611 r4r12'y'<d24 ]
+
+{7}
+[8"^12i24"]
+$##
+"h12i24"
+;
+
+{8}
+r1
+$##
+'brass+o1*v.59' p127 l16 k1 'bv'
+r1r1r1 a1
+r1r1r1 <[5c+r]> r4r12d24
+##
+r12d6drdrcrarfrr12>a+24  r12a+6a+ra+rarr4r12<d24
+r12d6drdrcrarfrr12>a+24  r12a+6a+ra+rarara+12<c12r24d24
+r12d6drdrcrarfrr12>a+24  r12a+6a+ra+rarr4r12a24
+^4<c+4e4<c+8^12d24 r1
+;

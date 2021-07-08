@@ -1,0 +1,294 @@
+#TITLE Gurgu Volcano
+#ALBUM Final Fantasy (PSX)
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+########## ------------------
+#SHORTNAME FF1 Gurgu V. (PSX)
+
+#WAVE 0x20 - 0xA3 ~ panflute  ~ was 0x03
+#WAVE 0x21 - 0x77 ~ brightfx  ~ was 0x41
+#WAVE 0x22 - 0x25 ~ marimba   ~ was 0x86
+#WAVE 0x23 - 0x97 ~ bassclari ~ was 0x9F
+#WAVE 0x24 - 0x55 ~ synbass   ~ was 0x1C
+#WAVE 0x25 - 0x35 ~ fingbass  ~ was 0x80
+#WAVE 0x26 - 0xC0 ~ calliope  ~ was 0x83
+#WAVE 0x27 - 0x69 ~ orchi     ~ was 0x77
+#WAVE 0x28 - 0xAC ~ synkick   ~ was 0x59
+#WAVE 0x29 - 0x28 ~ tubular   ~ was 0x24
+
+#def init= t120 %x255 %v40 %b0,85 %f0,0
+
+#def flute=    |0 'f' o5 %e1 m48,18,223 %y4%s3%r13
+#def calliope= |6 'e' o5 %e1 m48,18,223 %y4%s3%r13
+#def chiff=    |1 'c' o5 %e1 m %y3%s4%r10
+#def marimba=  |2 'm' o5 %e1 m %r17
+#def bassoon=  |3 'b' o6 %e1 m48,18,207 %r8
+#def synbass=  |4 's' o6 %e1 m %y3%s2
+#def guitar=   |5 'g' o5 %e1 m 
+#def bell=     |9 't' o6 %e1 m %a3%r15
+#def orch=     |7 'o' o4 %e1 m 
+#def bleep=    @6 'y' o5 %e1 m %s4%r17
+#def saw=      @5 'w' o6 %e1 m48,18,239 
+
+#def f= v127
+#def e= v127
+#def c= v127
+#def m= v72
+#def b= v48
+#def s= v127
+#def g= v96
+#def t= v64
+#def o= v64
+#def y= v20
+#def w= v16
+
+#def yf= v1,16
+#def mf= v1,72
+
+#drum "z"=4a |8 v80 p64 m6,-32
+#drum "z+"=4a |8 v100 p64 m6,-32
+
+#def f^= %r26^%r13
+#def f^8.= %r26^8.%r13
+#def c^= %r27^%r10
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} 'init' $
+'flute-o1' %e1 l16 p64
+r1. [j1,9003]
+'bleep+o2*v.33' p90 dr
+'flute' p64 [j1,9005] d1
+## 12
+['orch*v1.27' l16 p80 d 'o*v.5'p40 d]
+'marimba*v.57' p60 ^2r16r24 l24
+d 'm*v.67'f 'm*v.78'g <'m*v.89'c48
+['orch*v1.04+o1' l16 p80 d 'o*v.42'p40 d] ^2.
+['orch*v1.27' l16 p80 d 'o*v.5'p40 d] ^2.
+['orch*v1.04+o1' l16 p80 d 'o*v.42'p40 d] ^2r16r24 l24
+'marimba*v.57' p60 l24
+d 'm*v.67'f 'm*v.78'g <'m*v.89'c48
+## 16
+'chiff' p80 l16
+[[d'c^']f'c^'d'c^'c'c^'e8.'c^'d8.'c^'d'c^'f'c^'d'c^'e'c^'g8.'c^'g'c^']
+## 20
+'bassoon-o1' p50 l16
+[c+8d8frar<d1^r >(b24<c24>b24)arbr
+<c8>j2brargrf8g16.r32arfr d1]
+arfrar<e8f16.r32ercr d1
+## 28
+'chiff*v.8' p40 l16
+[[<c8>arf24r12a24r12 b8<cr>b24r12a24r12 j2,130
+l32 [b4r8bbbb]] $130 <[d4r8dddd]>'c']
+## 32
+#^^
+;
+
+{2}
+$ %e1 'marimba*v.93' l16 p64
+dr
+'m*v.99'  c  'm*v.89'd
+'m'      >a< 'm*v.82'd
+'m*v1.13'>g< 'm*v.79'd
+'m*v1.16'>f  'm*v.92'a
+'m*v1.17' e  'm*v.92'a
+'m*v1.18' d  'm*v.92'a
+'m*v1.19'>a< 'm*v.92'a
+;
+
+{3}
+$
+'bleep+o2*v.39' p90 l16
+'yf*v144,.67'[3dr8.] 'yf*v144,.73'[4dr8.] 'yf*v192,.51'[5dr8.]
+'calliope-o2' p64 [c+8d8f'f^'a'f^'<d2 j2 ^4r2.r1r1>]
+'saw' c8>a24r12f24r12a24r12<e8f24r12e24r12c24r12 d1
+## 12
+'synbass-o2+%s2' p64 l16 drd r2r8.
+'marimba*v.63' p60 l24 e 'm*v.72'g 'm*v.81'b48
+'m*v.9'd64<'m*v.97'&21d>'m*v.9'd64<'m*v1.08'&25d r2.
+'synbass-o2+%s2' p64 l16 drd &152r
+'marimba*v.9' p60 d64<'m*v.97'&21d>'m*v.9'd64<'m*v1.08'&25d> r2r8
+'m*v.63'l24 e 'm*v.72'g 'm*v.81'b
+## 16
+'synbass-o1' p64 l16
+[drdr r4. 's*v.8'c4's'd8.rdr r2.]
+## 20
+'guitar-o2*v.8' p64 l16
+[d.r32d.r32f.r32f.r32d4.r8
+ d.r32d.r32g.r32g.r32d4.r8
+ d.r32d.r32a.r32a.r32d4.r8
+ d.r32d.r32g.r32g.r32d4.r8]
+## 28
+'calliope*v.6' p64
+l8. [[4c'f^'] > [4b'f^'] <]
+## 32
+'chiff-o1' p80 l16
+d.r32d.r32f.r32f.r32d8.r8.c.r32
+d.r32d.r32g.r32g.r32d8.r8.c.r32
+d.r32d.r32a.r32a.r32d8.r8.c.r32
+d.r32d.r32g.r32g.r32d8.r8.r8
+;
+
+{4}
+$
+[r4 [j1,2001]]
+[4'synbass-o2' p64 l16 drdr [j1,2001]
+  "!!!o" ["z8"] [j1,2001]]
+## 12
+[4"!!!o" ["z+8"] [j1,2001]]
+## 16
+[ 'orch*v1.2' p40 l16 drdr [j1,2001]
+  'orch*v.8+o1' p40 l16 drdr [j1,2001]]
+## 20
+'flute-o1' p64 r2 l16
+[c+8d8f'f^'a'f^'<d1^'f^' >(b24<c24>b24)a'f^'b'f^'
+<c8>j2b'f^'a'f^'g'f^'f8g16.l32'f^'l16a'f^'f'f^' d1]
+a'f^'f'f^'a'f^'<e8f16.l32'f^'l16e'f^'c'f^' d2
+## 28
+[r4 [j1,2001]]
+## 30
+[6"!!!o" ["z+8"] [j1,2001]]
+;
+
+{5}
+$
+'flute-o1*v.33' %e1 l16 p0
+r1.. [j1,9003]
+'bleep+o2*v.27' p90 dr
+'flute*v.33' p0 [j1,9005] d2.
+## 12
+'bleep+o2*v.09' p90
+'yf*v192,.3'[4dr8.] 'yf*v192,.36'[4dr8.]
+'yf*v192,.39'[4dr8.] 'yf*v144,.41'[4dr8.]
+## 16
+'y' [16 p120 dr p0 dr]
+## 20
+'marimba*v.98' [
+[4 %a%r17 p120 f %a13%s5 p0 f %a%r17 p120 d %a13%s5 p0 d]
+[4 %a%r17 p120 g %a13%s5 p0 g %a%r17 p120 d %a13%s5 p0 d]
+[4 %a%r17 p120 a %a13%s5 p0 a %a%r17 p120 d %a13%s5 p0 d]
+[4 %a%r17 p120 g %a13%s5 p0 g %a%r17 p120 d %a13%s5 p0 d]]
+## 28
+'calliope*v.6-o1'
+l16 [ p32 [4f'f^8.'] p96 [4e'f^8.'] ]
+## 32
+'calliope*v.7' p64
+l16 [[4c'f^8.'] > [4b'f^8.'] <]
+;
+
+{6}
+$
+[14 r16 [j1,3001]]
+## 16
+'calliope-o1' p64 l12
+[[d24'f^']f24'f^'d24'f^'c24'f^' l16 e8.'f^'d8.'f^'
+l12 d24'f^'f24'f^'d24'f^'e24'f^' l16 g8.'f^' l12g24'f^']
+## 20
+l16 [
+'synbass-o1+%s2*v.75' dr's*v.64'dr 's*v.45'frfr 'guitar-o1' d24r12d24r12 f24r12f24r12
+'synbass-o1+%s2*v.75' dr's*v.64'dr 's*v.45'grgr 'guitar-o1' d24r12d24r12 g24r12g24r12
+'synbass-o1+%s2*v.75' dr's*v.64'dr 's*v.45'arar 'guitar-o1' d24r12d24r12 a24r12a24r12
+'synbass-o1+%s2*v.75' dr's*v.64'dr 's*v.45'grgr 'guitar-o1' d24r12d24r12 g24r12g24r12]
+## 28
+r1r1 'bleep+o2*v.42'
+'yf*v192,.88' l16 [4 p120 cr p0 cr]
+'yf*v168,.97' l16 [4 p120 dr p0 dr]
+## 32
+'synbass-o2' drdr
+'bleep+o2*v1.19' [3 p120 cr p0 cj3r]
+r24 'marimba' p60 d48
+'bleep+o1*v1.19' [4 p120 br p0 br]
+'synbass-o2' drdr
+'bleep+o2*v1.19' [3 p120 cr p0 cr] [4 p120 dr j4 p0 dr] r8
+;
+
+{7}
+$
+'flute-o1*v.22' %e1 l16 p127
+r1r1 [j1,9003] ^8 > [j1,9005] d4.r8
+## 12
+'bell-o2*v1.2+%a1' p20 k1
+r8 g1^1 't*v1.08' <a2.. 't*v1.2' f1 k0
+## 16
+[%e1 'marimba*v.77' l16 p0 %a13%s5 rdr
+      'm*v.82'  c  'm*v.74'd
+      'm*v.83' >a< 'm*v.68'd
+      'm*v.94'>g<  'm*v.66'd
+      'm*v.97'>f   'm*v.77'a
+      'm*v.97' e   'm*v.77'a
+      'm*v.98' d   'm*v.77'a
+      'm*v.99'>a24<<
+%r%r17 p60 ['m' d64<'m*v1.2'j2&21d>] &13d> %a13%s5 p0
+'m*v.82'  c  'm*v.74'd
+      'm*v.83' >a< 'm*v.68'd
+      'm*v.94'>g<  'm*v.66'd
+      'm*v.97'>f   'm*v.77'a
+      'm*v.97' e   'm*v.77'a
+      'm*v.98' d   'm*v.77'a
+      'm*v.99'>a  ]
+## 20
+'bassoon-o1*v.5' p127 l16 r
+[c+8d8frar<d1^r >(b24<c24>b24)arbr
+<c8>j2brargrf8g16.r32arfr d1]
+arfrar<e8f16.r32ercr d2...
+## 28
+'calliope*v.6-o1'
+l16 [ p48 [4a'f^8.'] p80 [4g'f^8.'] ]
+## 32
+'calliope*v.7-o1' p32
+l16 [ [4f'f^8.'] [4e'f^8.'] ]
+;
+
+{8}
+$
+r1r1r1 l16
+'bleep+o2*v.45' p90 dr8. 'y*v.39' dr
+'calliope-o2*v.5' p0 [d8f'f^'a'f^'<d2^4r2r1j2r1r4>c+8]
+## 12
+'bell-o2*v1.08' p110
+r8. g16^2.^8. << c16^2.^4.^16r16 > g2^1
+## 16
+[6r1 "!!!o" ["z8"] r2.]
+## 20
+#^^
+## 28
+'marimba*v.8' p60
+[<c8>arf24r12a24r12 b8<cr>b24r12a24r12 j2,830
+l32 'm*v.9'[b4r8bbbb]] $830 'm' <[d4r8dddd]>
+## 32
+'calliope-o1*v.5' p48 l16 [3a'f^8.'] a l24'f^'
+'marimba*v.7''mf*v28,1.2' p60 l48 defgab<c64&21d> 'm'd64<'m*v1.2'&25d
+'calliope-o1*v.5' p48 l16 [3g'f^8.'] a l12 'f^'
+'marimba-o1*v.67''mf*v44,.9' p60 l48 defgab<cdefgab 'mf*v12,.84' <cdef
+'calliope-o1*v.5' p48 l16 [a'f^8.'] g l12 'f^'
+'marimba-o1*v.71''mf*v40,1.05' p60 l48 defgab<cdef gab<c l64dc>
+'mf*v39,.21' [bagfedc>] ^16
+'calliope-o1*v.5' p48 l16 g'f^'
+'marimba+o1*v1.08' p60 l32 dddd
+;
+
+## right marimba echo pattern -- 3 beats
+$2001 %e1 'marimba*v.93' l16 p120  dr
+      'm*v.83'  c          d
+      'm*v.98' >a< 'm*v.83'd
+      'm*v1.03'>g< 'm*v.83'd
+      'm*v1.05'>a< 'm*v.83'd
+      'm*v1.06'>d< 'm*v.83'd ]
+## left marimba echo pattern -- 15/16 measure
+$3001 %e1 'marimba*v.77' l16 p0 %a13%s5 dr
+      'm*v.82'  c  'm*v.74'd
+      'm*v.83' >a< 'm*v.68'd
+      'm*v.94'>g<  'm*v.66'd
+      'm*v.97'>f   'm*v.77'a
+      'm*v.97' e   'm*v.77'a
+      'm*v.98' d   'm*v.77'a
+      'm*v.99'>a   ]
+## flute 3.5 - 5.5
+$9003 l16 [c+8d8f'f^'a'f^'<d2] ]
+## flute 5.75 - 10
+$9005  l12 (b24<c24>b24)a24'f^' b24'f^'
+       <c8>b24'f^'a24'f^'g24'f^'f8g24'f^'a24'f^'f24'f^'
+       l16 d2>[c+8d8f'f^'a'f^'<d2]^8> l12 (b24<c24>b24)a24'f^' b24'f^'
+       <c8>a24'f^'f24'f^'a24'f^'<e8f24'f^'e24'f^'c24'f^'  ] 

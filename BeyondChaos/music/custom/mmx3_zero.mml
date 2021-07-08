@@ -1,0 +1,370 @@
+#TITLE Zero
+#ALBUM Mega Man X3
+#COMPOSER Kinuyo Yamashita
+#ARRANGED Rushlight
+
+#VARIANT ! vic
+#VARIANT ~
+
+#WAVE 0x20 ~0x39~ !0x40! ## Solo Electric Guitar
+#WAVE 0x21 ~0x45~ !0x45! ## Distorsion Guitar
+#WAVE 0x22 ~0x47~ !0x43! ## Support Electric Guitar
+#WAVE 0x23 ~0x56~ !0x56! ## Bass
+          
+#WAVE 0x28 ~0x0A~ !0x0A! ## Kick
+#WAVE 0x29 ~0x1D~ !0x1D! ## Snare
+#WAVE 0x2A ~0x2D~ !0x2D! ## Crash
+#WAVE 0x2B ~0x4D~ !0x4D! ## Toms
+
+#def init= t122 %x255%v40 %b0,55 %f0,0
+
+#def generalSustain=             %r0
+#def generalRelease=             %r18
+#def introDistorsionSlowRelease= %r12
+#def introDistorsionFastRelease= %r19
+#def introOverdriveRelease=      %r15
+#def rhythmDistorsionRelease=    %r23
+
+
+#def leadGuitarVol=                  v37
+#def leadGuitarPartialQuietVol=      'leadGuitarVol*v.58'
+#def leadGuitarQuietVol=             'leadGuitarVol*v.47'
+#def leadGuitarFadeVol1=             'leadGuitarVol*v.73'
+#def leadGuitarFadeVol2=             'leadGuitarVol*v.42'
+#def leadGuitarFadeVol3=             'leadGuitarVol*v.12'
+#def leadGuitarEchoVol=              'leadGuitarVol*v.57'
+#def leadGuitarEchoQuietVol=         'leadGuitarVol*v.25'
+
+#def layerGuitarVol=                 'leadGuitarVol*v.92'
+#def layerGuitarQuietVol=            'leadGuitarVol*v.45'
+#def layerGuitarFadeVol1=            'leadGuitarVol*v.7'
+#def layerGuitarFadeVol2=            'leadGuitarVol*v.37'
+#def layerGuitarFadeVol3=            'leadGuitarVol*v.12'
+
+#def distorsionGuitarVol=            v41
+#def distorsionGuitarQuietVol=       'distorsionGuitarVol*v.6'
+#def distorsionGuitarMainVol=        'distorsionGuitarVol*v.75'
+#def distorsionGuitarFadeVol1=       'distorsionGuitarVol*v.75'
+#def distorsionGuitarFadeVol2=       'distorsionGuitarVol*v.45'
+#def distorsionGuitarFadeVol3=       'distorsionGuitarVol*v.1'
+#def introRhythmDistorsionGuitarVol= 'distorsionGuitarVol*v.6'
+#def rhythmDistorsionGuitarQuietVol= 'distorsionGuitarVol*v.28'
+
+#def supportGuitarVol=               ~v48~ !v24!
+#def bassVol=                        v35
+
+#def overdrive=     |0 ~o5~ !o4!
+#def distorsion=    |1 ~o7~ !o7!
+#def supportGuitar= |2 ~o6~ !o6!
+
+#def leadGuitar=                               'overdrive'     'leadGuitarVol'                  p82 'generalSustain' %e1 m
+#def leadGuitarLeftLayer=                      'overdrive'     'layerGuitarVol'                 p28 'generalSustain' %e0 m
+#def leadGuitarRightLayer=                     'overdrive'     'layerGuitarVol'                 p99 'generalSustain' %e0 m
+#def leadGuitarSingleLayer=                    'overdrive'     'layerGuitarVol'                 p45 'generalSustain' %e0 m
+#def leadGuitarEcho=                           'overdrive'     'leadGuitarEchoVol'              p45 'generalSustain' %e0 m
+#def leadGuitarEchoCentered=                   'overdrive'     'leadGuitarEchoVol'              p64 'generalSustain' %e0 m
+#def introDistorsionGuitar=                    'distorsion'    'distorsionGuitarVol'            p64 'generalSustain' %e0 m
+#def rhythmDistorsionGuitar=                   'distorsion'    'distorsionGuitarMainVol'        p64 'generalSustain' %e0 m
+#def introRhythmDistorsionGuitar=              'distorsion'    'introRhythmDistorsionGuitarVol' p45 'generalSustain' %e0 m
+#def introRhythmDistorsionGuitarLayer=         'distorsion'    'introRhythmDistorsionGuitarVol' p64 'generalSustain' %e0 m
+#def leadDistorsionGuitar=                     'distorsion'    'distorsionGuitarMainVol'        p82 'generalSustain' %e1 m
+#def leadDistorsionGuitarLayerLeft=            'distorsion'    'distorsionGuitarMainVol'        p28 'generalSustain' %e0 m
+#def leadDistorsionGuitarLayerRight=           'distorsion'    'distorsionGuitarMainVol'        p99 'generalSustain' %e0 m
+#def leadDistorsionGuitarLayerCenter=          'distorsion'    'distorsionGuitarMainVol'        p64 'generalSustain' %e0 m
+#def supportGuitarLeft=                        'supportGuitar' 'supportGuitarVol'               p28 'generalSustain' %e0 m
+#def supportGuitarRight=                       'supportGuitar' 'supportGuitarVol'               p99 'generalSustain' %e0 m
+#def bass=                                     |3 o7           'bassVol'                        p64 %r15             %e0 m
+
+#drum "k"=5f  |8                                               v73                              p64                  %e0 m
+#drum "s"=5g+ |9                                               v81                              p64                  %e0 m
+#drum "c"=5f+ |A                                               v127                             p64 %r17             %e0 m
+
+#def tomVol=                                                   v80
+#drum "t"=4e  |B                                               'tomVol'                         p64                  %e0 m
+#drum "u"=4g  |B                                               'tomVol'                         p64                  %e0 m
+#drum "v"=4g+ |B                                               'tomVol'                         p64                  %e0 m
+#drum "w"=5c+ |B                                               'tomVol'                         p64                  %e0 m
+#drum "x"=5e- |B                                               'tomVol'                         p64                  %e0 m
+
+
+{1}
+'init'
+## Lead Guitar, originally track 8
+'leadGuitar+o1'
+l16
+f+f+'leadGuitarQuietVol'f+'leadGuitarVol'e'introOverdriveRelease'^8'generalSustain'd4..'introOverdriveRelease'^8.'generalSustain'
+## 2
+dd'leadGuitarQuietVol'd'leadGuitarVol'c+'introOverdriveRelease'^8'generalSustain'>b8..'introOverdriveRelease'^8^32'generalSustain'b8<c+d
+## 3
+[2 c+c+'leadGuitarQuietVol'c+4'leadGuitarVol'] c+8de
+## 4
+f+8'leadGuitarQuietVol'f+8'leadGuitarVol'f+4..'introOverdriveRelease'^4^16'generalSustain'
+## 5
+f+4'leadGuitarFadeVol1'f+4'leadGuitarFadeVol2'f+4'leadGuitarFadeVol3'f+4
+## Lead Distorsion Guitar, originally track 8
+'leadDistorsionGuitar-o2'
+l8
+## 6
+r[3 f+'generalRelease'^16'generalSustain']b16'generalRelease'^16'generalSustain'a'generalRelease'^16
+$
+## Lead Guitar, originally track 8
+'leadGuitar+o1'
+l16
+[2
+  ## 7 / 11
+  b4'leadGuitarQuietVol'b4'leadGuitarVol'de8f+8'generalRelease'^16'generalSustain'>b8<
+  ## 8 / 12
+  f+4a'generalRelease'^16'generalSustain'f+4..'generalRelease'^16'generalSustain'e j2 f+
+  ## 9
+  'generalRelease'^8'generalSustain'c+4'generalRelease'^8'generalSustain'c+d8e'generalRelease'^8'generalSustain'c+8
+  ## 10
+  f+4..'generalRelease'^8'generalSustain'ed8c+'leadGuitarPartialQuietVol'c+'leadGuitarVol'e'leadGuitarPartialQuietVol'e'leadGuitarVol'
+] d
+## 13
+c+4..'generalRelease'^16'generalSustain'c+>b8a'leadGuitarPartialQuietVol'a8'leadGuitarVol'<c+8>
+## 14
+b4..'generalRelease'^8'generalSustain'<f+f+'leadGuitarPartialQuietVol'f+'leadGuitarVol'f+'leadGuitarPartialQuietVol'f+'leadGuitarVol'b-8
+;
+
+
+{2}
+## Lead Guitar Layer Left, originally track 4
+'leadGuitarLeftLayer+o1'
+l16
+dd'layerGuitarQuietVol'd'layerGuitarVol'c+'introOverdriveRelease'^8'generalSustain'>b4..'introOverdriveRelease'^8.'generalSustain'
+## 2
+bb'layerGuitarQuietVol'b'layerGuitarVol'a'introOverdriveRelease'^8'generalSustain'g8..'introOverdriveRelease'^8^32'generalSustain'g8ab
+## 3
+[2 gg'layerGuitarQuietVol'g4'layerGuitarVol'] g8b<c+
+## 4
+c+8'layerGuitarQuietVol'c+8'layerGuitarVol'c+4..'introOverdriveRelease'^4^16'generalSustain'
+## 5
+d4'layerGuitarFadeVol1'd4'layerGuitarFadeVol2'd4'layerGuitarFadeVol3'd4
+## Lead Distorsion Guitar Layer Left, originally track 4
+'leadDistorsionGuitarLayerLeft-o3'
+l8
+## 6
+r [3 b'generalRelease'^16'generalSustain']<d16'generalRelease'^16'generalSustain'c+'generalRelease'^16'generalSustain'
+$
+## Lead Guitar Single Layer, originally track 3
+'leadGuitarSingleLayer+o1'
+l16
+[2
+  ## 7 / 11
+  d4'layerGuitarQuietVol'd4'layerGuitarVol'>b<c+8d8'generalRelease'^16'generalSustain'>f+8<
+  ## 8 / 12
+  d4f+'generalRelease'^16'generalSustain'd4..'generalRelease'^16'generalSustain'c+ j2 d>
+  ## 9
+  'generalRelease'^8'generalSustain'a4'generalRelease'^8'generalSustain'ab8<c+'generalRelease'^8'generalSustain'>a8<
+  ## 10
+  d4..'generalRelease'^8'generalSustain'c+>b8b-'layerGuitarQuietVol'b-'layerGuitarVol'<c+'layerGuitarQuietVol'c+'layerGuitarVol'
+] >b
+## 13
+a4..'generalRelease'^16'generalSustain'ae8e'layerGuitarQuietVol'e8'layerGuitarVol'a8
+## 14
+f+4..'generalRelease'^8'generalSustain'<c+c+'layerGuitarQuietVol'c+'layerGuitarVol'c+'layerGuitarQuietVol'c+'layerGuitarVol'f+8
+;
+
+
+{3}
+## Bass, originally track 6
+'bass-o3'
+l16
+b2^8b4a8 g2^8g4g8
+## 3
+ee^4ee^4e4 f+4f+2.
+## 5 / 6
+[2 b8.b8.b4b8<f+>b8.]
+$
+## Bass, originally track 6
+'bass-o3'
+[2
+  ## 7 / 11
+  b8.b8.b4b-8<f+>b8.
+  ## 8 / 12
+  g8.g8.g4g8<d>b8.
+  ## 9 / 13
+  a8.a8.a4a8<c+>a8.
+  ## 10 / 14
+  b8.b8.b4b-8b-<c+8.>
+]
+;
+
+
+{4}
+## Percussions, originally track 5
+l4
+"c2^8wu8" "c2^16x8.w16v8t16"
+## 3
+l16
+"c4.c2^8" "c4c4kkskskss"
+## 5
+"c4s8kk8.k8sk8."
+## 6
+"k8.ks8kk8skssk8s"
+$
+## Percussions, originally track 5
+"!!!o"
+[
+  ## 7 / 11
+  "c4s8kk8.k8sk8."
+  ## 8 / 9 / 12 / 13
+  [2 "k8.ks8kk8.k8sk8."]
+  ## 10 / 14
+  "k8.ks8kk8ks8ss8s"
+]
+;
+
+
+{5}
+## Lead Guitar Layer Right, originally track 7
+'leadGuitarRightLayer'
+l16
+bb'layerGuitarQuietVol'b'layerGuitarVol'a'introOverdriveRelease'^8'generalSustain'f+4..'introOverdriveRelease'^8.'generalSustain'
+## 2
+f+f+'layerGuitarQuietVol'f+'layerGuitarVol'e'introOverdriveRelease'^8'generalSustain'd8..'introOverdriveRelease'^8^32'generalSustain'd8ef+
+## 3
+[2 ee'layerGuitarQuietVol'e4'layerGuitarVol'] e8gg
+## 4
+b-8'layerGuitarQuietVol'b-8'layerGuitarVol'b-4..'introOverdriveRelease'^4^16'generalSustain'<
+## Rhythm Distorsion Guitar, originally track 3
+'introRhythmDistorsionGuitar-o3'
+l16
+[2
+  ## 5 / 6
+  [2 bbb8'rhythmDistorsionRelease'^8'generalSustain'] bbb8
+]
+$
+## Support Guitar Left, originally track 4
+'supportGuitarLeft-o1'
+l16
+[2
+  [2
+    ## 7 / 8 / 11 / 12
+    [4 f+'generalRelease'^8'generalSustain'] f+f+'generalRelease'^8'generalSustain'
+  ]
+  ## 9 / 13
+  [4 e'generalRelease'^8'generalSustain'] ee'generalRelease'^8'generalSustain'
+  ## 10 / 14
+  [2 f+'generalRelease'^8'generalSustain'] f+8'generalRelease'^8'generalSustain'e'generalRelease'^8'generalSustain'ee8
+]
+;
+
+
+{6}
+## Rhythm Distorsion Guitar, originally track 2
+'introDistorsionGuitar-o3'
+l8
+b4..'introDistorsionSlowRelease'^4..'generalSustain'a
+## 2
+g4..'introDistorsionSlowRelease'^4..'generalSustain'a
+## 3
+[3 e4 j3 'introDistorsionFastRelease'^8'generalSustain']
+## 4
+f+'distorsionGuitarQuietVol'f+'distorsionGuitarVol'f+4..'introDistorsionFastRelease'^4^16'generalSustain'
+## Lead Guitar Layer Right, originally track 7
+'leadGuitarRightLayer+o1'
+## 5
+b4'layerGuitarFadeVol1'b4'layerGuitarFadeVol2'b4'layerGuitarFadeVol3'b4
+## Support Guitar Right, originally track 7
+'supportGuitarRight-o1'
+l8
+## 6
+r [3 b'generalRelease'^16'generalSustain']<d16'generalRelease'^16'generalSustain'c+'generalRelease'^16'generalSustain'
+$
+## Support Guitar Right, originally track 7
+'supportGuitarRight'
+l16
+[2
+  [2
+    ## 7 / 8 / 11 / 12
+    [4 d'generalRelease'^8'generalSustain'] dd'generalRelease'^8'generalSustain'
+  ]
+  ## 9 / 13
+  [4 c+'generalRelease'^8'generalSustain'] c+c+'generalRelease'^8'generalSustain'
+  ## 10 / 14
+  [2 d'generalRelease'^8'generalSustain'] d8'generalRelease'^8'generalSustain'c+'generalRelease'^8'generalSustain'c+c+8
+]
+;
+
+
+{7}
+## Lead Guitar Echo, originally track 3
+'leadGuitarEcho+o1'
+l16
+r2f+f+'leadGuitarEchoQuietVol'f+'leadGuitarEchoVol'e'introOverdriveRelease'^8'generalSustain'd8
+## 2
+r2dd'leadGuitarEchoQuietVol'd'leadGuitarEchoVol'c+'introOverdriveRelease'^4'generalSustain'
+## Rhythm Distorsion Guitar, originally track 3
+'introRhythmDistorsionGuitar-o1'
+l16
+## 3
+[2 c+c+'rhythmDistorsionGuitarQuietVol'c+4'introRhythmDistorsionGuitarVol'] c+8de
+## 4
+f+8'rhythmDistorsionGuitarQuietVol'f+8'introRhythmDistorsionGuitarVol'f+4..'introOverdriveRelease'^4^16
+## Lead Distorsion Guitar Layer Center, originally track 2
+'leadDistorsionGuitarLayerCenter-o3'
+l4
+## 5
+b'distorsionGuitarFadeVol1'b'distorsionGuitarFadeVol2'b'ldistorsionGuitarFadeVol3'b<
+## 6
+l8
+'distorsionGuitarMainVol'
+r[3 d'generalRelease'^16'generalSustain']f+16'generalRelease'^16'generalSustain'e'generalRelease'^16
+$
+## Rhythm Distorsion Guitar, originally track 2
+'rhythmDistorsionGuitar-o2'
+l16
+[2
+  [2
+    ## 7 / 9 / 11 / 13
+    [4 a'generalRelease'^8'generalSustain']aa'generalRelease'^8'generalSustain'
+    j2,710
+    ## 8 / 12
+    [4 b'generalRelease'^8'generalSustain']bb'generalRelease'^8'generalSustain'
+  ]
+  $710
+  ## 10 / 14
+  [2 b'generalRelease'^8'generalSustain']b8'generalRelease'^8'generalSustain'b-'generalRelease'^8'generalSustain'b-b-8
+]
+;
+
+
+{8}
+## Lead Guitar Layer Echo, originally track 1
+'leadGuitarEchoCentered+o1'
+l16
+r2dd'leadGuitarEchoQuietVol'd'leadGuitarEchoVol'c+'introOverdriveRelease'^8'generalSustain'>b8
+## 2
+r2bb'leadGuitarEchoQuietVol'b'leadGuitarEchoVol'a'introOverdriveRelease'^4'generalSustain'
+## 3
+r1r1
+## Rhythm Distorsion Guitar Layer
+'introRhythmDistorsionGuitarLayer-o4'
+l16
+[2
+  ## 5 / 6
+  [2 bbb8'rhythmDistorsionRelease'^8'generalSustain'] bbb8
+]
+## This will play an echo of the melody for the rest of the song, including the infinite loop.
+## So we'll just add an 8th rest here. Measure comments from now on will now actually be one 8th note later than indicated.
+r8
+$
+## Lead Guitar Echo
+'leadGuitarEchoCentered+o1'
+l16
+[2
+  ## 7 / 11
+  b4'leadGuitarEchoQuietVol'b4'leadGuitarEchoVol'de8f+8'generalRelease'^16'generalSustain'>b8<
+  ## 8 / 12
+  f+4a'generalRelease'^16'generalSustain'f+4..'generalRelease'^16'generalSustain'e j2 f+
+  ## 9
+  'generalRelease'^8'generalSustain'c+4'generalRelease'^8'generalSustain'c+d8e'generalRelease'^8'generalSustain'c+8
+  ## 10
+  f+4..'generalRelease'^8'generalSustain'ed8c+'generalRelease'^16'generalSustain'e'generalRelease'^16'generalSustain'
+] d
+## 13
+c+4..'generalRelease'^16'generalSustain'c+>b8a'generalRelease'^8'generalSustain'<c+8>
+## 14
+b4..'generalRelease'^8'generalSustain'<f+f+'generalRelease'^16'generalSustain'f+'generalRelease'^16'generalSustain'b-8
+;

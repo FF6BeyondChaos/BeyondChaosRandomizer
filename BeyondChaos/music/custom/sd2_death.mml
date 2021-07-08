@@ -1,0 +1,104 @@
+#TITLE I Closed My Eyes
+#ALBUM Secret of Mana
+#COMPOSER Hiroki Kikuta
+#ARRANGED emberling
+
+#SHORTNAME SD2 Closed My Eyes
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x19
+
+#def 0i=   |0 %y6%s2
+#def 0o=   o5
+#def 0v=   v200
+#def 0f= v1,200
+
+
+{1}
+%x100%v50%b0,70%f0,0
+$101t86p32'0v*v.40'
+'0i' %e1p0,220,220'0o-o1'
+f1                      f2g4.g8                a1
+f1                      f2g4.g8                a1
+f1                      f2g4.g8                a1 t192,77
+f1 '0f*v192,.2' t192,68 f2g4.g8 v192,0 t192,58 a1
+;
+
+
+{2}
+
+$201p40'0v*v.40'
+'0i' %e1p0,220,220'0o'
+r8c2.^8              r8c4.b4>b4<        r8e2.e8
+r8c2.^8              r8c4.b4>b4<        r8e2.e8
+r8c2.^8              r8c4.b4>b4<        r8e2.e8
+r8c2.^8 '0f*v192,.2' r8c4.b4>b4< v192,0 r8e2.e8
+;
+
+
+{3}
+
+$301p48'0v*v.40'
+'0i' %e1p0,220,220'0o'
+r4.g8a4.<c8              r4.>a8r8g4.        r4.<e8d8c+4.>
+r4.g8a4.<c8              r4.>a8r8g4.        r4.<e8d8c+4.>
+r4.g8a4.<c8              r4.>a8r8g4.        r4.<e8d8c+4.>
+r4.g8a4.<c8 '0f*v192,.2' r4.>a8r8g4. v192,0 r4.<e8d8c+4.>
+;
+
+
+{4}
+
+$401p56'0v*v.40'
+'0i' %e1p0,220,220'0o'
+r4f2.              r4f4d2        r4a2a4
+r4f2.              r4f4d2        r4a2a4
+r4f2.              r4f4d2        r4a2a4
+r4f2. '0f*v192,.2' r4f4d2 v192,0 r4a2a4
+;
+
+
+{5}
+
+$501p72'0v*v.40'
+'0i' %e1p0,220,220'0o+o1'
+a2e2              ^2.d4        ^1
+a2e2              ^2.d4        ^1
+a2e2              ^2.d4        ^1
+a2e2 '0f*v192,.2' ^2.d4 v192,0 ^1
+;
+
+
+{6}
+
+$601p80'0v*v.40'
+'0i' %e1p0,220,220'0o+o1'
+r8c2.>a8              ^2.^8<f8        ^1
+r8c2.>a8              ^1              a1<
+r8c2.>a8              ^2.^8<f8        ^1
+r8c2.>a8 '0f*v192,.2' ^1       v192,0 a1
+;
+
+
+{7}
+
+$701p88'0v*v.40'
+'0i' %e1p0,220,220'0o+o1'
+r4d2.              >b2b2<           e1
+r4d2.              >b2b4.b8<        ^1
+r4d2.              >b2b2<           e1
+r4d2. '0f*v192,.2' >b2b4.b8< v192,0 ^1
+;
+
+
+{8}
+
+$801p96'0v*v.40'
+'0i' %e1p0,220,220'0o+o1'
+r4.g2^8              ^4c4.c4.        ^1
+r4.g2^8              ^4c4.c4.        ^1
+r4.g2^8              ^4c4.c4.        ^1
+r4.g2^8 '0f*v192,.2' ^4c4.c4. v192,0 ^1
+;
+

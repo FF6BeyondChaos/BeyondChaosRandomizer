@@ -1,0 +1,63 @@
+#TITLE Ally Joins
+#ALBUM Secret of Mana
+#COMPOSER Hiroki Kikuta
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x17
+#WAVE 0x21 0x75
+#WAVE 0x22 0xA4
+#WAVE 0x23 0x19
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o4
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2
+#def 2o=   o4
+#def 2v=   v100
+#def 2f= v1,100
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v100
+#def 3f= v1,100
+
+
+{1}
+t66%x255
+%v40 %b0,85 %f0,0
+r64p64'1v*v.52'
+'1i' %e1%a13%r10m11,17,195'1o+o1'c8d16c16>b16a16g16b16a8<d8c+4;
+
+{2}
+p64'2v*v.37'
+'2i' %e1%a10%r10r48m12,17,195r2'2o'a16t64b16t60<c+16t56e16t50a4;
+
+{3}
+p88'0v*v.57'
+'0i' %e1r64'0o'g16<c16g16d16e16g16<c16>b16a4<a4;
+
+{4}
+p32'0v*v.60'
+'0i' %e1%r8v12,23,204r64'0o'c4d4e2;
+
+{5}
+p40'0v*v.60'
+'0i' %e1%r8v12,23,204r64'0o-o1'a4b4<c+2;
+
+{6}
+p48'0v*v.60'
+'0i' %e1%r8v12,23,204r64'0o-o1'f4g4a2;
+
+{7}
+p96'3v*v.50'
+'3i' %e1r48'3o'g16<c16g16d16e16g16<c16>b16a4<a4;
+;

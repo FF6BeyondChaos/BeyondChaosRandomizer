@@ -1,0 +1,311 @@
+#TITLE Holy Ruins
+#ALBUM Final Fantasy Legend III (SaGa 3)
+#COMPOSER Ryuji Sasai
+#ARRANGED Rushlight
+
+#WAVE 0x20 0x19 ## Celesta
+#WAVE 0x21 0x65 ## Strings
+#WAVE 0x22 0x64 ## Contrabass
+#WAVE 0x23 0x94 ## Oboe
+#WAVE 0x24 0x55 ## Bass
+#WAVE 0x25 0x78 ## Chorus
+#WAVE 0x26 0xA7 ## Flute
+#WAVE 0x27 0x22 ## Vibraphone
+
+#WAVE 0x28 0x0A ## Kick
+#WAVE 0x29 0x1A ## Snare
+#WAVE 0x2A 0x6C ## Tambourine
+
+## Time signature is 5/4
+#def init= t176 %x90 %v40 %b0,85 %f0,0
+
+#def lateSst= %r0
+#def lateDcy= %r14
+
+#def celesta=    |0 o4
+#def strings=    |1 o5
+#def flute=      |6 o4
+#def oboe=       |3 o5
+#def contrabass= |2 o7
+#def chorus=     |5 o5
+#def vibraphone= |7 o4
+
+## The song is more or less split into three sections - early, middle, late.
+## Late then alternates between "late" and "lateAlt", where lead stays the same throughout.
+## Since the original is Game Boy, it doesn't really have instruments, so macros are named after section and role rather than instrument.
+#def earlyLead1=        'vibraphone' v80  p72  %r16      %e1 m
+#def earlyLead2=        'celesta'    v60  p42  %r6       %e1 m
+#def earlySupport1=     'oboe'       v95  p55  %r4       %e1 m0,9,205
+#def earlySupport2=     'contrabass' v100 p85  %r4       %e1 m
+#def earlySupport3=     'chorus'     v70  p32  %r4       %e1 m
+#def earlyLeadEcho=     'vibraphone' v40  p115 %r16      %e1 m
+#def earlyLeadMemory=   'celesta'    v40  p12  %r16      %e1 m
+#def earlyLeadMemoryFadeToMid= v240,20
+#def earlyLeadMemoryFadeToMax= v240,40
+
+#def middleSupport1=    'flute'      v40       %r6       %e1 m0,18,205
+#def middleSupport2=    'chorus'     v70       %r6       %e1 m
+
+#def lateLead1=         'strings'    v127 p72  'lateSst' %e1 m
+#def lateSupport1=      'strings'    v127 p42  'lateSst' %e1 m
+#def lateSupport2=      'oboe'       v50 p55   %r4       %e1 m0,9,205
+#def lateSupport3=      'contrabass' v70 p84   %r4       %e1 m
+
+#def lateAltLead2=      'chorus'     v80  p42  %r0       %e1 m
+#def lateAltSupport1=   'flute'      v80       %r10      %e1 m
+
+#def bass=              |4 o4        v90  p64  %r20      %e0 m
+
+#DRUM "k"=4a  |8 v120 p27  %r0  %e0 m
+#DRUM "s"=5e  |9 v105 p100 %r0  %e0 m
+#DRUM "t"=6c  |a v85  p64  %r0  %e0 m
+
+
+{1}
+'init'
+$
+## Early Lead 1
+'earlyLead1+o2'
+l8
+[10 d>gg<d>gg<d>g<c>g<]
+>
+[2
+  ## 11 / 19
+  g4d   a4d   b-d   gd
+  a4d   b-4d  <c>d  ad
+  ## 13 / 21
+  b-4e-  <c4>e- b-e-   ae-
+  g4e-   a4e-   b-e-   ae-
+  ## 15 / 23
+  b-4e  <c4>e <d>e  <c>e
+  b-4c  a4c   gc    ac
+  ## 17 / 25
+  <d4>d <c4>d <e->d <d>d
+  <c>d  b-d   ad    g>b-<   f>a<
+]
+## 27
+## Late Lead 1
+'lateLead1+o1'
+g2. 'lateDcy' ^2 'lateSst'
+f2. 'lateDcy' ^2 'lateSst'
+## 29
+e-2. 'lateDcy' ^2 'lateSst'
+>b-4.a4.f4d4<
+## 31
+g2. 'lateDcy' ^2 'lateSst'
+a2. 'lateDcy' ^2 'lateSst'
+## 33
+a4 b-8 g4. 'lateDcy' ^2 'lateSst'
+>e-4.f4.g4a4
+;
+
+{2}
+## Early Support 1
+$
+'earlySupport1-o1'
+g1^1^2
+## 3
+e-1^1^2
+## 5
+f1^1^2
+## Middle Support 1
+'middleSupport1'
+l8
+[4
+  ## 7 / 9 / 11 / 19
+  p0 g1^4 p127 g1^4
+  j1,210
+  j2,210
+  ## 13 / 21
+  p0 e-1^4 p127 e-1^4
+  ## 15 / 23
+  p0 e1^4 p127 e1^4
+  ## 17 / 25
+  p0 e-1^4 p127 e-1^4
+  $210
+]
+## Late Support 1
+'lateSupport1+o1'
+## 27
+d2. 'lateDcy' ^2 'lateSst'
+c2. 'lateDcy' ^2 'lateSst'
+## 29
+b-2. 'lateDcy' ^2 'lateSst'
+## Late Alt Support 1
+'lateAltSupport1+o1'
+l8
+p0 gdg p127 ada p0 b-d p127 <c>a
+## Late Support 1
+'lateSupport1+o1'
+## 31
+[2 d2. 'lateDcy' ^2 'lateSst']
+## 33
+e-2. 'lateDcy' ^2 'lateSst'
+## Late Alt Support 1
+'lateAltSupport1+o2'
+l8
+p0 d>g<d p127 c>g<c> p0 b-d p127 ad
+;
+
+
+{3}
+$
+## Early Support 2
+'earlySupport2-o2'
+g1^1^2
+## 3
+e-1^1^2
+## 5
+f1^1^2
+## 7
+## Bass
+'bass'
+l4
+[28 g4.g4.gg]
+;
+
+
+{4}
+$
+## Early Support 3
+'earlySupport3'
+g1^1^2
+## 3
+e-1^1^2
+## 5
+f1^1^2
+## 7
+## Percussion
+l4
+"!!!o"
+[14 "k4.k4.ks k4.k4.kt8t8"]
+;
+
+
+{5}
+## Early Lead 2
+$
+'earlyLead2+o1'
+l8
+[10 d>gg<d>gg<d>g<c>g<]
+>
+[2
+  ## 11 / 19
+  g4d   a4d   b-d   gd
+  a4d   b-4d  <c>d  ad
+  ## 13 / 21
+  b-4e-  <c4>e- b-e-   ae-
+  g4e-   a4e-   b-e-   ae-
+  ## 15 / 23
+  b-4e  <c4>e <d>e  <c>e
+  b-4c  a4c   gc    ac
+  ## 17 / 25
+  <d4>d <c4>d <e->d <d>d
+  <c>d  b-d   ad    g>b-<   f>a<
+]
+## 27
+## Late Support 3
+'lateSupport2-o1'
+g1^4
+f1^4
+## 29
+e-1^4
+## Late Alt Lead 2
+'lateAltLead2-o1'
+b-4.a4.f4d4
+
+## Late Support 3
+'lateSupport2-o1'
+## 31
+g1^4
+a1^4
+## 33
+b-1^4
+## Late Alt Lead 2
+'lateAltLead2-o1'
+e-4.f4.g4a4
+;
+
+
+{6}
+$
+[30 r4]
+## Middle Support 2. Will be a counterpart to Middle Support 1, playing on the opposite side
+'middleSupport2'
+l8
+[4
+  ## 7 / 9 / 11 / 19
+  p127 g1^4 p0 g1^4
+  j1,610
+  j2,610
+  ## 13 / 21
+  p127 e-1^4 p0 e-1^4
+  ## 15 / 23
+  p127 e1^4 p0 e1^4
+  ## 17 / 25
+  p127 e-1^4 p0 e-1^4
+  $610
+]
+## 27
+## Late Support 3
+'lateSupport3-o2'
+g1^4
+f1^4
+## 29
+e-1^4
+r1^4
+## 31
+g1^4
+a1^4
+## 33
+b-1^4
+r1^4
+;
+
+
+{7}
+r16.
+$
+## Early Lead Echo. We could have this on channel 6 for 6 measures, but moving an echo between two channels will lead to cuts.
+'earlyLeadEcho+o2'
+l8
+[10 d>gg<d>gg<d>g<c>g<]
+>
+[2
+  ## 11 / 19
+  g4d   a4d   b-d   gd
+  a4d   b-4d  <c>d  ad
+  ## 13 / 21
+  b-4e-  <c4>e- b-e-   ae-
+  g4e-   a4e-   b-e-   ae-
+  ## 15 / 23
+  b-4e  <c4>e <d>e  <c>e
+  b-4c  a4c   gc    ac
+  ## 17 / 25
+  <d4>d <c4>d <e->d <d>d
+  <c>d  b-d   ad    g>b-<   f>a<
+]
+## 27
+## We're the echo delay behind, but we don't need to put it back in synch unless we need chis channel for something else here
+[40 r4]
+;
+
+
+{8}
+$
+'earlyLeadMemory+o2'
+l8
+[30 r4]
+## 7
+v0
+'earlyLeadMemoryFadeToMid'
+gcc gcc gc fc
+'earlyLeadMemoryFadeToMax'
+gcc gcc gc fc
+## 9
+[24 gcc gcc gc fc]
+'earlyLeadMemoryFadeToMid'
+gcc gcc gc fc
+v240,0
+gcc gcc gc fc
+;

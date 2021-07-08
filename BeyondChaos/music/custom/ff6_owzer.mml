@@ -1,0 +1,219 @@
+#TITLE The Magic House
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.5
+
+########## ------------------
+#SHORTNAME FF6 Magic House
+
+#WAVE 0x20 0x00 (oboe)
+#WAVE 0x21 0xA5 flute
+#WAVE 0x22 0x12 harpsi
+#WAVE 0x23 0x65 strings
+#WAVE 0x24 0x64 contra
+#WAVE 0x25 0x51 bass
+
+#WAVE 0x26 0x9F Mark Tree
+
+#WAVE 0x2A 0x91 oboe B6 (G+6+)
+#WAVE 0x2B 0x92 oboe F6 (D+6 - G6)
+#WAVE 0x2C 0x93 oboe C+6 (A+5 - D6)
+#WAVE 0x2D 0x94 oboe A5 (A5-)
+
+#def o2u= |C
+#def o3u= |B>
+#def o4u= |A
+#def o1d= |D
+#def o2d= |C<
+#def o3d= |B
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o4
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2 %y4%s1
+#def 2o=   o5
+#def 2v=   v100
+#def 2f= v1,100
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |4
+#def 4o=   o7
+#def 4v=   v100
+#def 4f= v1,100
+
+#def 5i=   |5
+#def 5o=   o7
+#def 5v=   v100
+#def 5f= v1,100
+
+#def oboe= '0v*v.6'p80%e1m48,18,239
+#def oboe1= 'oboe' |D o5
+#def oboe2= 'oboe' |C o5
+#def oboe3= 'oboe' |B o4
+#def oboe4= 'oboe' |A o4
+#def flute= '1v*v.6''1i''1o'p60%e1m48,18,239
+#def harpsi2= '2v*v.4''2i''2o'p55%e1%r18m
+#def harpsi= '2v''2i''2o'p75%e1%r18m
+#def strings1= '3v''3i''3o'p50%e1m
+#def strings2= '3v''3i''3o'p55%e1m
+#def strings3= '3v''3i''3o'p70%e1m
+#def contra= '4v*v.6''4i''4o'p64%e1m
+#def bass= '5v*v.7''5i''5o'p64%e0m %r14
+
+#def lowspooky= |6 p64p0,48,24 v24 %a0%r3 m192,255,255 v0,100,191 o3 d+1
+#def tinklefalls= |6 p115p96,12p0,48,24 v9 %r15 m192,-12 o7 c2
+#def tinklefall2= |6 p12p96,115p0,48,24 v6 %r15 m192,-12 o6 g2
+#def glitchrise=  |6 p12p96,115p0,48,24 v6 %r15 m192,12 o7 c2
+#def glitchrise2= |6 p115p96,12p0,48,24 v6 %r15 m192,12 o6 g2
+#def normalbells= |6 p80p192,40p v16 %a7%r11 m192,-1 o5 a1
+
+{1}
+t100%b0,70%f0,0%v50
+['strings3*v.6'e16r4r16c8>g+16r4r16a8b8<d8%l1c48d48c12>%l0b8g+8a16r16
+a16r16a8<e16r4r16c8>g+16r4r16g+16r16f8e8<%l1c48d48c48d48c48d48c8>%l0a8
+j2r4a8] r4.
+## 9
+['bass-o3'a4r8b16r16<c4r8d16r16e8f16r16f+16r16g+16
+r16a2d16r8.>a16r8.<e4r4j2e16r8.>g+16r8.a4r8<d+8]
+e16r8.>g+16r8.a4r4<d4e4a8>a8b8<d8e4>g+4a2
+$['5o-o3'a4r8b16r16<c4r8d16r16e8f16r16f+16r16g+16r16a2d16r8.>a16r8.<e4
+r4j2e16r8.>g+16r8.a4r8<d+8]
+e16r8.>g+16r8.a4r4<d4e4a8>a8b8<d8e4>g+4a4.a8[<e16r4r16c8>g+16r4r16
+a8b8<d8c8>b8g+8a16r16a16r16a8<e16r4r16c8>g+16r4r16g+16r16f8e8<c4
+>a8r4j2a8]r8
+;
+
+{2}
+['contra-o1'e16r4r16c8>g+16r4r16a8b8<d8c8>b8g+8a16r16a16r16a8<e16
+r4r16c8>g+16r4r16g+16r16f8e8<c4>a8r4j2a8]
+## 9
+'oboe1'd+16r16[t95e8a16r16<'o2u'c16r16
+>%l1b48<c48>b12%l0'o1d'a8g+16r16'o2u'b16r16<'o3u'f8e8t90'o2d'd8t85c8t80>b8t70<c4.t95^8r1
+r2r4.j2>'o1d'd+16r16]
+'harpsi+o1*v.8'a16b16<c16>d16
+b16d16a16d16g+16d16a16c16e16c16f16>a16<d16>a16<c4>b48<c48>b48<c32>b32a16b16a2
+$## 19
+['oboe1'e8a16r16<'o2u'c16r16>%l1b48<c48>b12%l0'o1d'a8g+16r16'o2u'b16r16<'o3u'f8e8'o2d't90d8t85c8t80
+>b8t70<c4.t95^8
+'strings1*v.6'a16r8.<c16r8.>b4r4b16r8.<d16r8.c4r8 j2
+'oboe1'd+16r16]'harpsi*v.8+o1'a16b16
+<c16>d16b16d16a16d16g+16d16a16c16e16c16f16
+>a16<d16>a16<c4>b48<c48>b48<c32>b32a16b16a2
+t100
+## 29
+'strings1*v.4+o1'
+[r8e16r16e16r4r16f16r16f16r8.r8g+16r16g+16r4r16a16r16a16j2r8.]r16
+'oboe1'
+a8<'o3u'e16r4r16'o2d'c8>'o1d'g+16r4r16a8'o2u'b8<d8%l1c48d48c12>%l0
+b8'o1d'g+8a16r16a16r16a8<'o3u'e16r4r16'o2d'c8>'o1d'g+16r4r16g+16r16f8e8<'o2u'%l1c48d48c48d48c48
+d48c8>%l0'o1d'a8r4d+8
+;
+
+{3} %e1
+'lowspooky-p40' ^1^1^1^1^1^1^1 vp
+## 9
+['flute+o1'r1...e16r16%l1f48g48f12%l0
+e16r16%l1a48b48a12%l0e16r16%l1e48f48e12%l0d16r8.d16r16%l1e48f48e12%l0d16
+r16%l1b48<c48>b12%l0d16r16%l1d48e48d12%l0c16j2r4r16]r8.
+'harpsi2'a16b16<c16>d16b16d16a16d16g+16d16a16c16e16c16f16>a16
+<d16>a16<c4>b48<c48>b48<c32>b32a16b16a2
+$## 19
+['strings1*v.6'
+e16r4r16e16r16e16r4r16f16r16e8f16r16f+16r16g+16r16a4.
+'flute+o1'
+e16r16%l1f48g48f12%l0e16r16%l1a48b48a12
+%l0e16r16%l1e48f48e12%l0d16r8.d16r16%l1e48f48e12%l0d16r16%l1b48<c48>b12
+%l0d16r16%l1d48e48d12%l0c16j2r4r16] r8.
+'harpsi2'a16b16
+<c16>d16b16d16a16d16g+16d16a16c16e16c16f16>a16
+<d16>a16<c4>b48<c48>b48<c32>b32a16b16a2
+## 29
+'harpsi*v.6'
+[r8a16b16<c4r8>b16
+<c16d4r8>b16<d16e8>b8<e8d32e32d16c4>r8a16b16<c4r8>b16<c16d8c16d16e16d+16
+e16f16e16d48e48d48c16>b16<c16e16>b16<e16>a4]
+;
+
+{4} %e1
+r1r1r1'lowspooky+p40' ^1^1^1^1 vp
+## 9
+[[4'tinklefalls']
+[4'glitchrise']] vp
+r1...'oboe1'd+16r16
+$## 19
+['strings2*v.6'
+c16r4r16d16r16c16r4r16c16r16d8d16r16d+16r16d16r16e4.
+'harpsi*v.6'e8f48g48f12e16r16a48b48a12e16r16e48f48
+e12d16r8.d16r16e48f48e12d16r16b48<c48>b12d16r16d48e48d12c16r16r4]
+'strings1*v.6'a4b4<c4>a4^4b4a4.
+'contra-o2'a8
+## 29
+[<e16r4r16c8>g+16r4r16a8b8<d8%l1c48d48
+c12>%l0b8g+8a16r16a16r16a8<e16r4r16c8>g+16r4r16g+16r16f8e8<%l1c48d48c48
+d48c48d48c8>%l0a8j2r4a8]r4.
+;
+
+{5} %e1
+[8r1]
+## 9
+[r4 [3'tinklefall2'] r4
+[r4'glitchrise2'r4]]
+r1'normalbells' vp
+$## 19
+['strings3*v.6-o1'a16r4r16b16r16a16r4r16a16r16b8a16r16a16r16b16r16<
+c4.r8c16r8.d16r8.d4r4d16r8.e16r8.e4r4]d2c4d4c4d4c4.r8
+## 29
+'strings2*v.4+o1'
+[r8c16r16c16r4r16d16r16d16r8.r8e16r16e16r4r16e16r16e16r8.]
+'strings1*v.4+o1'
+[r8e16r16e16r4r16f16r16f16r8.r8g+16r16g+16r4r16a16r16a16r8.]
+;
+
+{6}
+[8r1]
+## 9
+[10r1]
+$## 19
+['strings2*v.6' r1r1
+f16r8.f16r8.g+4r4g+16r8.b16r8.a4r4]
+f4e2f4e2^4.r8
+## 29
+'strings3*v.4'
+[4r8b16r16b16r4r16<c16r16c16r8.r8d16r16d16r4r16c16r16c16r8.>]
+;
+
+{7} %e1
+[8r1]
+## 9
+[10r1]
+$## 19
+'lowspooky-p30' ^1^1^1^1^1^1^1^1 vp 'normalbells' vp
+## 29
+r1r1r1r1
+'strings2*v.4+o1'
+[r8c16r16c16r4r16d16r16d16r8.r8e16r16e16r4r16e16r16e16r8.]
+;
+
+{8} %e1
+[8r1]
+## 9
+[10r1]
+$## 19
+r1r1r1 'lowspooky+p30' ^1^1^1^1^1^1
+## 29
+r1r1r1r1
+r8'normalbells'^2..^1^1 vp
+;
+

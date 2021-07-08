@@ -1,0 +1,235 @@
+#TITLE Phantom Forest
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#WAVE 0x20 0xA5 flute
+#WAVE 0x21 0x65 violas
+#WAVE 0x22 0x75 soprano
+#WAVE 0x23 0x34 steel guitar
+#WAVE 0x24 0x36 acoustic bass
+
+#def fl= |0 o5 %e1 p84 'f' m48,18,239 
+#def st= |1 o5 %e1 p50 's' m 
+#def vx= |2 o5 %e1 p74 'v' m48,18,215
+#def gt= |3 o5 %e1 p34 'g' m %r16
+#def bs= |4 o4 %e0 p64 'b' m72,18,215 %y4%s5%r11
+
+#def f= v60
+#def s= v60
+#def v= v100
+#def g= v70
+#def b= v127
+
+#def ff= v1,100
+#def sf= v1,100
+#def vf= v1,100
+#def gf= v1,100
+#def bf= v1,100
+
+#def vl= p70
+#def vr= p74
+
+#def sh= 'st-p10' %a4%r6
+#def sm= 'st' %a4%r4
+#def sl= 'st+p10' %a4%r6
+
+#def init= t120 %x248 %b0,100 %f0,0 %v50
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init'
+'vx-o1*v.6' l16
+[er'vl'<cr>'vr'er8.er'vl'<cr>'vr' fr'vl'<cr>'vr'fr8.fr'vl'<cr>'vr' f+r'vl'<cr>'vr'f+r8.f+r'vl'<cr>'vr' fr'vl'<cr>'vr'fr8.fr'vl'<cr>'vr' ]
+$## 9
+'fl-o1' l4
+a<<c>b agf e2. ^8r8cd    e2.^2. r2.r2.>
+a<<c>b agf e2. ^8r8cd
+## 21
+e2f d2. ^2. r2.    <e2f d2. ^2^8r8 dc>a+
+## 29
+a2. ^2. r2. r2.
+'sm' l4 (eee)(fff)(f+f+f+)(fff)
+## 37
+cde fed c2. ^2.
+'fl' ab<c dc>b a2. aga
+## 45
+b2<c> g>b<c a2. g2.
+'vx-o1*v.7' r(b<c)> g2. r(f+g) e2.
+## 53
+'sm' cde fed c2. ^2.
+'fl-o1' ab<c def
+## 59
+g2a+ a2a+ g2. ^8r8a+a8f8
+g2. ^2. ^r2 r2.
+;
+
+{2}
+'vx-o1*v.6' l16
+[8r8arr4.ar]
+$## 9
+'sh' l4
+a2.^2.^2.<c2>b  a2.^2.^2.^2.  a2.^2.^2.<c2>b
+## 21
+a+2. a2. <c2.> a+2.     ^2. ^2. ^2. a+ag
+## 29
+a2.^2.^2.<c2>b  a2.^2.^2.^2.
+## 37
+ab<c dc>b a2. ^2.
+<f2. d2. c2.> a2.
+## 45
+g2. ^2. a+2. b2.
+rb<c> g2. rf+g e2.
+## 53
+ab<c dc>b a2. ^2.    agf ^ga
+## 59
+a+1. <c1.  d2. d+2. e2. d+2.
+;
+
+{3}
+'gt-o2' l8
+[4r2.]
+a<ea2> a<fa2> a<f+a2> a<fa2>
+$## 9
+'gt-o2' l8
+[3 a<ea2> a<fa2> a<f+a2> a<fa2>]
+## 21
+[a+<fa+2> a+<ea+2> a+<fa+2> a+<ga+2>]
+## 29
+[ a<ea2> a<fa2> a<f+a2> a<fa2>]
+## 37
+[ f<cf2> f<df2> f<ef2> f<df2> ]
+## 45
+< cg<c2> ca<c2> ca+<c2> cb<c2>
+  cg<c2> ca<c2> cb<c2> ca+<c2> >
+## 53
+f<cf2> f<df2> f<ef2> f<df2>    f<cf2> da<d2>
+## 59
+d+a+<d+2> d+<cd+2> f<cf2> f<df2>
+g<dg2> g<d+g2> g<eg2> g<d+g2>
+;
+
+{4}
+'bs-o1' l8
+[4r2.] a1. a1.
+$## 9
+'bs-o1' l8
+a2. aar2 r2. r4<af>bg+
+a2. aar2 r4.ab<c> b<cdr4.>
+a2. aar2 r2. r4<af>b<d>
+## 21
+a+2. a+a+r2 r2. <ra+egfd>
+a+2^a16a+16 <c2^>a+16a16 a+2. ^2.
+## 29
+a2. aar2 r2. r4<af>bg+
+a2. aar2 r4.ab<c> b<cdr4.>
+## 37
+f4.<cge f2. ^4.cge f2.
+f2^e16f16 d2. c2^>b16<c16 >a2.
+## 45
+l4 g2<g c2. ^2. ^ed
+   c2. g2f e2. c2.>
+## 53
+l8 f4.<cge f2. ^4.cge f2.    f2^e16f16 d2.
+## 59
+l4 d+2. ^>a+g f2. <fcd+
+   d2.> g2. ^2. ^2.
+;
+
+{5}
+[8r2.]
+$
+## 9
+'sm' l4
+[3 (eee)(fff)(f+f+f+)(fff) ]
+## 21
+[ (fff)(eee)(fff)(ggg) ]
+## 29
+(eee)(fff)(f+f+f+)(fff)
+'sl' c2. ^2. ^2. ^2.
+## 37
+'vx-o1*v.7' l16 [4'v*v.7' ar8.ar8. 'v*v.3' ar8.]
+'sm' l4 [(aaa)(fff)]
+## 45
+(eee eee) (ggg ggg)
+rga (eee) rde (ccc)
+## 53
+'vx-o1*v.7' l16 [6'v*v.7' ar8.ar8. 'v*v.3' ar8.]
+## 59
+'v*v.6' 'vl'
+g2. ^2. f2. ^2. 'vr' b2. a2. <c2.> a2.
+;
+
+{6}
+[8r2.]
+$
+## 9
+'vx-o1*v.6' l16
+[3 er'vl'<cr>'vr'er8.er'vl'<cr>'vr' fr'vl'<cr>'vr'fr8.fr'vl'<cr>'vr'
+   f+r'vl'<cr>'vr'f+r8.f+r'vl'<cr>'vr' fr'vl'<cr>'vr'fr8.fr'vl'<cr>'vr' ]
+## 21
+[ fr'vl'<dr>'vr'fr8.fr'vl'<dr>'vr' er'vl'<dr>'vr'er8.er'vl'<dr>'vr'
+  fr'vl'<dr>'vr'fr8.fr'vl'<dr>'vr' gr'vl'<dr>'vr'gr8.gr'vl'<dr>'vr' ]
+## 29
+[ er'vl'<cr>'vr'er8.er'vl'<cr>'vr' fr'vl'<cr>'vr'fr8.fr'vl'<cr>'vr'
+  f+r'vl'<cr>'vr'f+r8.f+r'vl'<cr>'vr' fr'vl'<cr>'vr'fr8.fr'vl'<cr>'vr' ]
+## 37
+'vl' [4'v*v.7' fr8.fr8. 'v*v.3' fr8.]
+'vr' [4'v*v.7' ar8.ar8. 'v*v.3' ar8.]
+## 45
+'v*v.7' gr8.gr8. 'v*v.3' gr8.
+'v*v.7' ar8.ar8. 'v*v.3' ar8.
+'v*v.7' a+r8.a+r8. 'v*v.3' a+r8.
+'v*v.7' br8.br8. 'v*v.3' br8.
+[4r2.]
+## 53
+'vl'
+[6 'v*v.6' fr8.fr8. 'v*v.3' fr8. ]
+## 59
+'v*v.6''vr' a+1. <c1.>
+'vl' g1. ^1.
+;
+
+{7}
+[8r2.]
+$
+## 9
+'sl'
+[3([12c4])]
+## 21
+[ ([12d4]) ]
+## 29
+([12c4]) [12r4]
+## 37
+[4r2.]
+'vx-p4*v.7-o1' l16 [4'v*v.7' fr8.fr8. 'v*v.3' fr8.]
+## 45
+[4'v*v.7' er8.er8. 'v*v.3' er8.]
+[4r2.]
+## 53
+[4r2.] 'sm' l4 (ccc) (ddd)
+## 59
+([6d+]) ([6f]) ([12g])
+;
+
+{8}
+[8r2.]
+$
+## 9
+'vx-o1*v.6' l16
+[12r8arr4.ar]
+## 21
+[8r8a+rr4.a+r]
+## 29
+[8r8arr4.ar]
+## 37
+[8r2.]
+## 45
+[8r2.]
+## 53
+[6r2.]
+## 59
+[8r2.]
+;

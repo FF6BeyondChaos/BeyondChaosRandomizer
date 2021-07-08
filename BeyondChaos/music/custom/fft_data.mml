@@ -1,0 +1,248 @@
+#TITLE Data Screen
+#ALBUM Final Fantasy Tactics
+#COMPOSER Hitoshi Sakimoto
+#ARRANGED Rushlight
+
+#WAVE 0x20 0x61 ## Harp
+#WAVE 0x21 0x65 ## Strings
+#WAVE 0x22 0x22 ## Vibraphone
+#WAVE 0x23 0x15 ## Santur
+
+#def init= t90 %x240 %v40 %b0,85 %f0,0
+
+#def bassSanturVol=  v95
+#def layerSanturVol= v75
+#def harpVol=        v80
+#def noPluckHarpVol= 'harpVol*v.7'
+#def lowStringsVol=  v95
+#def highStringsVol= 'lowStringsVol*v.45'
+#def vibraphoneVol=  v21
+
+#def strings= |1 o5
+#def harp=    |0 o5
+#def santur=  |3 o5
+
+#def stringsQuickAttack= %a10
+#def stringsBaseAttack=  %a8
+#def stringsMedAttack=   %a6
+
+#def stringsSustain=    %r0
+#def stringsRelease=    %r16
+#def lowStringsRelease= %r12
+#def vibraphoneSustain= %r10
+#def vibraphoneRelease= %r20
+
+#def highStrings= 'strings' 'highStringsVol' p44 'stringsBaseAttack' 'stringsSustain'    %e1 m
+#def lowStrings=  'strings' 'lowStringsVol'  p74 'stringsBaseAttack' 'stringsSustain'    %e1 m
+#def pluckedHarp= 'harp'    'harpVol'        p64                     %r14                %e1 m
+#def noPluckHarp= 'harp'    'noPluckHarpVol' p64 %a7                 %r14                %e1 m
+#def bassSantur=  'santur'  'bassSanturVol'  p64                 %s4 %r10                %e1 m
+#def layerSantur= 'santur'  'layerSanturVol' p64                     %r18                %e1 m
+#def vibraphone=  |2 o4     'vibraphoneVol'  p44                 %s5 'vibraphoneSustain' %e1 m
+
+{1}
+'init'
+$
+## High Strings, originally channels 6 and 7
+'highStrings+o2'
+'stringsMedAttack'd4'stringsQuickAttack'
+[
+  ## Measure 1 / 5, Beat 2
+  c8.'stringsRelease'^16'stringsBaseAttack''stringsSustain'>g8.'stringsRelease'^16'stringsSustain'<c8.'stringsRelease'^16'stringsSustain'
+  ## 2 / 6
+  d8.'stringsRelease'^16'stringsSustain'c8.'stringsRelease'^16'stringsSustain'g8.'stringsRelease'^8.'stringsSustain''stringsMedAttack'c16'stringsRelease'^16'stringsSustain'
+  ## 3 / 7
+  'stringsQuickAttack'd8.'stringsRelease'^16'stringsBaseAttack''stringsSustain'c8.'stringsRelease'^16'stringsSustain'g8.'stringsRelease'^16'stringsSustain'c8.'stringsRelease'^16'stringsSustain'
+  ## 4 / 8
+  >b-8.'stringsRelease'^16'stringsSustain'<c2^8.'stringsRelease'^16'stringsSustain'
+  j2
+  ## 5
+  'stringsMedAttack'd8.'stringsRelease'^16'stringsSustain''stringsBaseAttack'
+]
+[2
+  ## 9 / 13
+  'stringsMedAttack'f8.'stringsRelease'^16'stringsBaseAttack''stringsSustain'e-8.'stringsRelease'^16'stringsSustain'>b-8.'stringsRelease'^16'stringsSustain'<e-8.'stringsRelease'^16'stringsSustain'
+  ## 10 / 14
+  f8.'stringsRelease'^16'stringsSustain'e-8.'stringsRelease'^16'stringsSustain'b-8.'stringsRelease'^8.'stringsMedAttack''stringsSustain'e-16'stringsRelease'^16'stringsSustain'
+  ## 11 / 15
+  'stringsQuickAttack'f8.'stringsRelease'^16'stringsBaseAttack''stringsSustain'e-8.'stringsRelease'^16'stringsSustain'b-8.'stringsRelease'^16'stringsSustain'e-8.'stringsRelease'^16'stringsSustain'
+  ## 12 / 16
+  c+8.'stringsRelease'^16'stringsSustain'e-2^8.'stringsRelease'^16'stringsSustain'
+]
+;
+
+
+{2}
+r1
+$
+## Low Strings, originally channels 10 and 11
+'lowStrings-o1'
+r1r1
+## 4
+'stringsSustain'r2.'stringsMedAttack'g4
+## 5 
+'stringsQuickAttack'd8.'lowStringsRelease'^16'stringsBaseAttack''stringsSustain'e-8.'lowStringsRelease'^16'stringsSustain''stringsQuickAttack'b-4..'lowStringsRelease'^16'stringsSustain'
+## 6
+b-4..'lowStringsRelease'^16'stringsSustain'g+8.'lowStringsRelease'^16'stringsSustain'g8.'lowStringsRelease'^16'stringsSustain'
+## 7
+g8.'lowStringsRelease'^16'stringsSustain'g+8.'lowStringsRelease'^16'stringsSustain'f4..'lowStringsRelease'^16'stringsSustain'
+## 8
+'stringsMedAttack'e-4..'lowStringsRelease'^16'stringsBaseAttack''stringsSustain'c+4..'stringsRelease'^16
+## 9
+^1r1r1
+## 12
+'stringsSustain'r2.'stringsMedAttack'b-8.'lowStringsRelease'^16'stringsSustain'
+## 13
+'stringsQuickAttack'f8.'lowStringsRelease'^16'stringsBaseAttack''stringsSustain'f+8.'lowStringsRelease'^16'stringsSustain'<'stringsQuickAttack'c+4..'lowStringsRelease'^16'stringsSustain'
+## 14
+c+4..'lowStringsRelease'^16'stringsSustain'>b8.'lowStringsRelease'^16'stringsSustain'b-8.'lowStringsRelease'^16'stringsSustain'
+## 15
+b-8.'lowStringsRelease'^16'stringsSustain'b8.'lowStringsRelease'^16'stringsSustain'g+4..'lowStringsRelease'^16'stringsSustain'
+## 16
+'stringsMedAttack'f+4..'lowStringsRelease'^16'stringsBaseAttack''stringsSustain'e4..'stringsRelease'^16
+## Hold for an extra measure and loop to measure 2
+^1
+;
+
+
+{3}
+$
+## This channel plays Main Harp Layering, playing low santur notes to match non-plucked Main Harp notes to try and replicate some of the multi-octave sound.
+## It also plays half the plucked Main Harp 1 / Main Harp 2 notes, since those do not need the santur layering
+l8
+[2
+  ## 1 / 5
+  ^8'layerSantur-o2'b-<e-fg2
+  ## 2 / 6
+  ^8e-g+'pluckedHarp-o1'b-2^8
+  ## 3 / 7
+  ^8'layerSantur-o1'cfgg+2
+  ## 4 / 8
+  ^4c+e-fg+'pluckedHarp'c4
+]
+[2
+  ## 9 / 13
+  ^8'layerSantur-o1'c+f+g+'pluckedHarp-o1'b-2
+  ## 10 / 14
+  ^8'layerSantur-o1'f+'pluckedHarp-o1'b4<e-2
+  ## 11 / 15
+  ^8'layerSantur-o1'e-g+'pluckedHarp-o1'b-2^8
+  ## 12 / 16
+  ^8'layerSantur-o2'b<ef+g+'pluckedHarp-o1'b4<e8
+]
+;
+
+
+{4}
+$
+## Main Harp 1, a subset of the notes originally playing in channel 1-5. Alternates notes with channel 3 (for plucked notes) and channel 6 (for non-plucked notes).
+l4
+[2
+  ## 1 / 5
+  ^8'noPluckHarp-o1'b-<f2^8
+  ## 2 / 6
+  ^8e-.'pluckedHarp'c2
+  ## 3 / 7
+  ^8'noPluckHarp'cg2^8
+  ## 4 / 8
+  ^4c+f.'pluckedHarp'c+8
+]
+[2
+  ## 9 / 13
+  ^8'noPluckHarp'c+g+2^8
+  ## 10 / 14
+  ^8f+'pluckedHarp'c+2^8
+  ## 11 / 15
+  ^8'noPluckHarp'e-.'pluckedHarp-o1'b2
+  ## 12 / 16
+  ^8'noPluckHarp-o1'b<f+.'pluckedHarp'e-
+]
+;
+
+
+{5}
+$
+## Bass Harp, a subset of the notes originally playing in channel 1-5.
+l1
+'bassSantur-o2'
+[2
+  ## 1 / 5
+  e-g+f
+  ## 4 / 8
+  c+8g+2..
+]
+## 9
+[2 f+bg+e]
+;
+
+
+{6}
+$
+## Main Harp 2, a subset of the notes originally playing in channel 1-5. Plays some non-plucked harp notes, alternating with channel 4.
+l4
+'noPluckHarp'
+[2
+  ## 1 / 5
+  ^4e-g2
+  ## 2 / 6
+  ^4g+r2
+  ## 3 / 7
+  ^4fg+2
+  ## 4 / 
+  ^4.e-g+r8
+]
+[2
+  ## 9 / 13
+  ^4f+r2
+  ## 10 / 14
+  r1
+  ## 11 / 15
+  ^4g+r2
+  ## 12 / 16
+  ^4eg+r
+]
+;
+
+
+{7}
+$
+## Vibraphone, originally channels 8 and 9
+'vibraphone+o3'
+l4
+[2
+  ## 1 / 5
+  dc>g<c
+  ## 2 / 6
+  dcg'vibraphoneRelease'^8'vibraphoneSustain'c8
+  ## 3 / 7
+  dcgc
+  ## 4 / 8
+  >b-<c2.
+]
+[2
+  ## 9 / 13
+  fe->b-<e-
+  ## 10 / 14
+  fe-b-'vibraphoneRelease'^8'vibraphoneSustain'e-8
+  ## 11 / 15
+  fe-b-e-
+  ## 12 / 16
+  c+e-2.
+]
+;
+
+
+{8}
+$
+## Bass Harp Support. Takes over to hold a note as Bass Harp has to leave it to play another
+'bassSantur-o2'
+[2
+  ## 1 / 5
+  r1r1r1
+  ## 4 / 8
+  ## Play the note at 0 volume while Bass Harp is playing it, then take over that note at normal volume when Bass Harp plays the next note
+  v0c+8'bassSanturVol'^2..
+]
+## 9
+[8r1]
+;

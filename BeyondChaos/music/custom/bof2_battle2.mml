@@ -1,0 +1,213 @@
+#TITLE Dying Corpse
+#ALBUM Breath of Fire II
+#COMPOSER Yuko Takehara
+#ARRANGED emberling
+
+## 1: 40, 36       -- SYNTH OVERDRIVE, BRASS SYNTH
+## 2: 22, 25, 41   -- CRASH, HIHAT O/C
+## 3: 37, 28, 36   -- SYNTH BRASS, SYNTH STRINGS, BRASS SYNTH
+## 4: 37, 40, 46   -- SYNTH BRASS, SYNTH OVERDRIVE, DIST FUZZ
+## 5: 28           -- SYNTH STRINGS
+## 6: 31, 44, 42   -- KICK, HARD SNARE, TOM
+## 7: 28, 40, 36   -- SYNTH STRINGS, SYNTH OVERDRIVE, BRASS SYNTH
+## 8: 39           -- BASS
+
+#WAVE 0x20 0x39 overdrive
+#WAVE 0x21 0xc2 sawtooth
+#WAVE 0x22 0x87 brass
+#WAVE 0x23 0x67 strings
+#WAVE 0x24 0x41 distfuzz
+#WAVE 0x25 0x52 ebass
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1D snare
+#WAVE 0x2A 0x4A tom
+#WAVE 0x2C 0x2D crash
+#WAVE 0x2E 0x3B hihat open
+#WAVE 0x2F 0x3A hihat closed
+
+#def init= t208 %x255 %v50 %b0,50 %f0,0
+
+#def lead=  |0 'l' o5 m24,18,239 v6,36,255
+#def saw=   |1 'y' o5 m48,18,223 v6,18,15
+#def brass= |2 't' o5 m48,18,215 v
+#def str=   |3 's' o5 m v6,18,31
+#def dist=  |4 'd' o7 m v
+#def bass=  |5 'b' o6 m v
+
+#def l= v88
+#def y= v64
+#def t= v72
+#def s= v56
+#def d= v80
+#def b= v64
+
+#drum "k"=5a |8 p64 v96 %e0
+#drum "s"=5b |9 p64 v112 %e1 %y3%s3
+#drum "t"=5g+ |A p93 v80 %e1
+#drum "u"=5f  |A p59 v80 %e1
+#drum "v"=5c  |A p28 v80 %e1
+
+#drum "y+"=5a |C p14 v80 %e1 %r17
+#drum "y"=5a  |C p14 v80 %e1 %r20
+#drum "y-"=5a |C p14 v80 %e1 %r22
+
+#drum "o"=5f+ |E p93 v64 %e1
+#drum "h"=5a |F p93 v40 %e1 %r22
+
+#cdef ~ %r24^%r0
+#cdef ( %l1
+#cdef ) %l0
+
+{1} 'init' %e1
+'str*v.9-o1' p78 l16
+g2...~ a2...~ a+2...~ <c2...~
+$## 5 (ch7-lead)
+'lead*v.8' p53 l4
+g.a+.<d c+.>a.<c+ c.>g+.<c >a+.g.^
+g.a+.<d c+.>a.<c+ c.d.d+ d8>a+g.^
+## 13 (ch7-lead)
+f.g.g+ a+.g+.g f.g.f d+.d.c
+>b1< c1 c+1 d1
+## 21 (ch7-lead)
+l8
+d4+.g4a+4ga~f~    g4.f4g4dd+~f~
+d4+.g4a+4ga~<c~>  a+4.g4a4fd+~f~
+[16 d16d+16 ]
+## 29 (ch5-strings)
+'str*v.9-o1' p78 l16
+g2...~ a2...~ a+2...~ <c2...~>
+## 33 (ch5-strings)
+g2...~ a2...~ a+2...~ <c4.d4.^4
+;
+
+{2} %e1
+'str*v.7-o1' p48 l16
+r12 g2...~ a2...~ a+2...~ <c6^2.
+$## 5 (ch5-strings)
+'str*v.9' p78 l16
+[ d2...~ e2...~ d+2...~ d2...~ ]
+## 13 (ch5-strings)
+c2...~ f2...~ d+2...~ c2d+2
+d2...~ d+2...~ e2...~ > a2...~ <
+## 21 (ch5-strings)
+g1.a2...~a+2<c1.d2...~d+2>f+2...~d2...~
+## 29 (ch3-strings)
+'str*v.7-o1' p48 l16
+r12 g2...~ a2...~ a+2...~ <c6^2.
+## 33 (ch7-synth)
+'saw*v*.8' p38 l4
+d8~rd8~ e8~re8~ f8~rf8~ g8~a2 l8~
+;
+
+{3}
+[14 "k8s8"] l16 "ktttuuvv"
+$## 5
+[ [ "!!!o"  l8 "kksk4ks4" "kksk"j2"ks4k"] l16 "ksss ssss" ]
+## 13
+[4 l8 "kksk4ks4" "kksk"j4"ks4k" ] l16 "ksss ssss"
+## 21
+[4 l8 "k4ks4ks4k4k4" ] "k4sk4ksk" "k4k4k4k4"
+## 29
+[14 "!!!o k8s8"] l16 "ktttuuvv"
+## 33
+[14 "!o k8s8"] "ksss ssss"
+;
+
+{4}
+'bass-o3' %e0 %y1%s6%r18 l8
+[8g][8a][8a+]<[6c]>a+a
+$## 5
+'bass-o3' %e0 %y1%s6%r18 l8
+[64g]
+## 13
+[32f] [24g]<[8d]
+## 21
+l16 [ d+8d+8[3d+rd+8]f8.rf8.r
+      d+8d+8[3d+rd+8]c8.rd8.r ]
+l8  [8d] [4d>a<]
+## 29
+> [8g][8a][8a+]<[6c]>a+a
+## 33
+[8g][8a][8a+]<cccddd>aa
+;
+
+{5}
+l4 "y" [13"o"] ^2
+$## 5 (ch4-brass)
+'brass*v.9+o1' p88 %e1 l8
+[ %rd%r24^2 %rd%r24^4    %rc+%r24^2 %rc+%r24^4
+  %rc%r24^2 %rc%r24^4    > %ra+%r24^4 %ra+%r24^8 %rj2def+ <] g%r24^4 <
+## 13 (ch4-brass->lead2)
+%rc%r24^2 %rc%r24^4    %rd%r24^2 %rd%r24^4
+%rd+%r24^2 %rd+%r24^4  %rc%r24^2 %rc%r24^4
+'lead*v.63-o1' p38 g1 a1 a+1 f+1
+## 21 (ch4-dist)
+'dist*v.9-o2' p84
+[ l16 [d+8.~ d+32~r32]d+8d+32~r32 [f8~r]
+      [d+8.~ d+32~r32]d+8d+32~r32 c8~rd8~r ]
+[16 l32 d16.~ ]
+## 29 (ch2-hihat -> ch4=dist)
+l4 "!!!o" "y" [13"o"]
+'dist*v.9-o3' p48 l32
+r8(g8<g16fd+ dc>a+a)
+## 33 (ch4-dist)
+[8 g16.~ ] [8 a16.~ ] [8 a+16.~ ] < [8 c16.~ ] 
+;
+
+{6}
+r1r1r1r1 %e1
+$## 5
+'brass*v.9' p93 %e1 l8
+[ %ra+%r24^2 %ra+%r24^4    %ra%r24^2 %ra%r24^4
+  %rg+%r24^2 %rg+%r24^4    %rg%r24^4 %rg%r24^8 %rj2>a<dd ] d%r24^4
+## 13 (ch3-brass)
+%rg+%r24^2 %rg+%r24^4    %ra+%r24^2 %ra+%r24^4
+<%rc%r24^2 %rc%r24^4>    %rg+%r24^2 %rg+%r24^4
+r1r1r1r1
+## 21 (ch3-strings)
+[6r1]
+'str*v.9' p104 l16
+d2...~ > a2...~
+## 29
+[4r1]
+## 33 (ch3-saw)
+'saw*v.77-o1' p63 l4
+a+8~ra+8~ <c8~rc8~ d8~rd8~ d+8~f+2 l8~
+;
+
+{7}
+r1r1r1r1 %e1 r12
+$## 5 (ch1-lead-echo)
+'lead*v.63' %a10 p23 l4
+g.a+.<d c+.>a.<c+ c.>g+.<c >a+.g.^
+g.a+.<d c+.>a.<c+ c.d.d+ d8>a+g.^
+## 13 (ch1-lead-echo)
+f.g.g+ a+.g+.g f.g.f d+.d.c
+>b1< c1 c+1 d1
+## 21
+l8
+d4+.g4a+4ga~f~    g4.f4g4dd+~f~
+d4+.g4a+4ga~<c~>  a+4.g4a4fd+~f~
+[16 d16d+16 ]
+## 29
+[4r1]
+## 33 (ch1-saw-echo)
+'saw*v.63' p23 l4
+d8~rd8~ e8~re8~ f8~rf8~ g8~a2 l8~
+;
+
+{8}
+r1r1r1r1 l8
+$## 5
+[ "y2" [24"h"]"h2" ]
+## 13
+"y2" [28"h"]
+"y+1y+1y+1 y-4y-4y-4y-4"
+## 21
+[4 [8"!o h"] "y-4y-4" ]
+"y+1 y-4y-4y-4y-4"
+## 29
+[4r1]
+## 33
+l4 "y" [13"o"] ^2
+;

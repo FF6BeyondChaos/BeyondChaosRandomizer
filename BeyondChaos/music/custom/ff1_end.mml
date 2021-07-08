@@ -1,0 +1,165 @@
+#TITLE Ending Theme
+#ALBUM Final Fantasy
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x22 0x61 harp
+#WAVE 0x23 0x95 clari
+#WAVE 0x24 0xA1 recorder
+#WAVE 0x25 0xA8 harmonica
+#WAVE 0x26 0x92 oboe D+6 - G6
+#WAVE 0x27 0x93 oboe A+5 - D6
+#WAVE 0x28 0x94 oboe A5 -
+
+#def init= t100 %x170 %v40 %b0,85 %f0,0
+
+#def o1= |8
+#def o2= |7
+#def o3= |6
+#def o2u= |7
+#def o3u= |6>
+#def o1d= |8
+#def o2d= |7<
+#def o3d= |6
+
+#def str= |0 's' o5 p96 m48,18,192 %a11%r2
+#def ost= |0 's' o5 p64 m48,18,192 %a9%r1
+#def hrp= |2 'h' o5 p32 m
+#def clr= |3 'c' o5 p48 m48,18,223 %r9
+#def rec= |4 'r' o4 p80 m48,18,207 %r7
+#def hrm= |5 'm' o6 p48 m48,18,207 %r8
+#def obo= |8 'o' o5 p80 m48,18,223 %r11
+
+#def s= v72
+#def h= v72
+#def c= v96
+#def r= v66
+#def m= v42
+#def o= v84
+
+#def sf= v1,72
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} %e1 'init'
+'hrp-o1' l8
+cdga<cdga
+##
+[b<dg>b <cegc df+ad cegc>]
+$ ## 6
+'clr' l8
+b4<d4>a4(b<c>)  (ba)g2.    <c4.c>g4a4  (b2a2)
+b4<d4>a4(b<c>)  (ba)g2.    <c4.c>g4a4  g2 %r16 ^2
+## 14
+['obo+o1' 'o2u''o3u' l8
+g4(f+e)'o2d'd2  'o3u'e4'o2d'(dc)>j2b2<
+c4>(ba)'o1d'(ga)'o2u'b'o1d'e   g4(ag)f+2]
+b4<(cd)  'o3u'e2^'o2d'(cd)'o3u'e   e2'o2d'd2
+;
+
+{2} %e1
+r1
+'hrp' l8
+[dgbd eg<c>e f+a<d>f+ eg<c>g]
+$ ## 6
+[gb<d>g f+a<c>f+ fb<d>f eg<c>e
+d+g<c>d+ dgac gb<d>g j2 f+a<c>f+] d+f+bd+
+## 14
+[gebg f+daf+ ecae gdbg  j2
+fcaf e>b<ge ec+ge f+d+bf+]
+ecac ecac ge<c>g d>a<f+d
+;
+
+{3} %e1
+r1
+'ost-o1*v1.5'
+g1^1^1^2%r13^4%r19^8 's*v.67''sf*v72,1.33'%r1g
+$ ## 6
+l2 ^f+ fe d+d4c4 gd4c4    gf+ fe d+d4c4 >b<f+
+## 14
+gf+ eg  fe ^f+
+gf+ eg  f1 ad
+{temp loop fix} g4&48;
+
+{4} %e1
+r1
+'str*v.67'
+g1^1^1^1
+$ ## 6
+'str' l4
+d2c2 d2.c cd+cf+ d2c2    d2c2 d2.c cd+cf+ d2d+>b<
+## 14
+l8  [e2f+4ed  c2d4c>b    a4<e4j2d4>b4  <c+4>b<c+d+4>b4<]
+c4a4  g2f+2
+;
+
+{5} %e1
+r1
+'str*v.8-o1' l8
+br4b <cr4c dr4d cr4c> br4b <cr4e dr4r12r48
+'clr' l8
+(b24<c12^48)>b(ag)
+$ ## 6
+'str*v.5' l8
+b4<d4>a4(b<c>)  (ba)g2.    <c4.c>g4a4  (b2a2)
+b4<d4>a4(b<c>)  (ba)g2.    <c4.c>g4a4  g2 'obo' f+'o2u'b<'o3u'(d+f+)
+## 14
+'str*v.5+o1' l8
+[g4f+ed2  e4dc>j2b2<  c4>bagabe  g4agf+2]
+b4<cd  e2^cde^2d2
+## 6 2nd
+'rec' l8
+g4(f+g)f+4(dc)  dfd4.c(>b<c)    d+4.g(d4c4)  g4(f+e)d4c4
+>b2<c4>(ba)<  d2^c(>b<c)    d+2(d4c4) >b2 'obo' f+'o2u'b<'o3u'(d+f+)
+## 14 2nd
+'hrm'
+[e2f+4(ed)  c2d4(c>b)    a4<(e4j2d4)>b4  <c+4>(b<c+)d+4>b4<]
+c4)a4  g2f+2
+;
+
+{6} %e1
+r1
+'str*v.33+o1'
+([32g8])
+$ ## 6
+'hrp-o1' l8
+[b<dg>b a<cf+>a b<df>b g<ce>g
+g<cd+>g g<cc>f+ b<dg>b j2 a<cf+>a] f+b<d+>f+
+## 14
+[bg<e>b af+<d>a ae<c>a bg<d>b j2
+af<c>a gebg ge<c+>g bf+<d+>b]
+af<c>f af<c>f <c>a<ec>f+daf+
+;
+
+{7} %e1
+r1
+'ost*v.33-o1' l8
+([28g8]) 's*v.67' <c>ba>g
+$ ## 6
+l2 ^f+ fe d+d4c4 gd4c4    gf+ fe d+d4c4 >b<f+
+## 14
+gf+ eg  fe ^f+
+gf+ eg  f1 ad
+{temp loop fix} g4&48;
+;
+
+{8} %e1
+r1r1r1r1r4. 'str*v.8' l8 d
+'str*v.5+o1' l8
+c>bag
+$ ## 6
+'str*v.5'
+[15r2] f+b<d+f+
+## 14
+[8r1]
+## 6 2nd
+'str*v.5' l8
+b4<d4>a4(b<c>)  (ba)g2.    <c4.c>g4a4  (b2a2)
+b4<d4>a4(b<c>)  (ba)g2.    <c4.c>g4a4  g2 'str*v.5' f+b<d+f+
+## 14 2nd
+'str*v.5+o1' l8
+[g4f+ed2  e4dc>j2b2<  c4>bagabe  g4agf+2]
+b4<cd  e2^cde^2d2
+;

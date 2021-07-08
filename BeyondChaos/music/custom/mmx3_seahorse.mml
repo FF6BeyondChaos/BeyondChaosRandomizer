@@ -1,0 +1,297 @@
+#TITLE Toxic Seahorse
+#ALBUM Mega Man X3
+#COMPOSER Kinuyo Yamashita
+#ARRANGED Rushlight
+
+#WAVE 0x20 0x39 ## Solo Electric Guitar
+#WAVE 0x21 0x45 ## Distorsion Guitar
+#WAVE 0x22 0x88 ## Brass
+#WAVE 0x23 0x51 ## Bass
+#WAVE 0x25 0x47 ## Support Electric Guitar
+
+#WAVE 0x28 0x0A ## Kick
+#WAVE 0x29 0x1D ## Snare
+#WAVE 0x2A 0x4D ## Toms
+#WAVE 0x2B 0x3D ## Open hihat and quick cymbal
+#WAVE 0x2C 0x2D ## Crash
+
+#def init= t171 %x180 %v40 %b0,55 %f0,0
+
+#def leadHiVol=  v110
+#def leadMedVol= 'leadHiVol*v.875'
+#def leadLowVol=  'leadHiVol*v.75'
+#def leadSustain= %r0
+#def leadExpire=  %r16
+
+#def secondHiVol=  v110
+#def secondLowVol= 'secondHiVol*v.75'
+
+#def distHiVol=    v70
+#def distLowVol=   'distHiVol*v.5'
+#def distOutroVol= 'distHiVol*v1.5'
+#def distSustain=  %r0
+#def distExpire=   %r24
+
+#def supportHiVol=   v90
+#def supportLowVol=  'supportHiVol*v.6'
+#def supportSustain= %r0
+#def supportExpire=  %r24
+
+#def bassHiVol=   v60
+#def bassLowVol=  'bassHiVol*v.2'
+#def bassSustain= %r12
+#def bassExpire=  %r24
+
+#def soloGuitar= |0 o5
+#def supportGuitar= |5 o6 'supportSustain' 'supportHiVol' %e0
+
+#def leadGuitar=         'soloGuitar' 'leadSustain' 'leadHiVol' p64 %e1
+#def secondGuitar=       'soloGuitar' %r0        'secondHiVol' p64 %e0
+#def supportGuitarRight= 'supportGuitar' p111
+#def supportGuitarLeft= 'supportGuitar' p16
+#def distorsionGuitar= |1 o7 'distSustain' 'distHiVol' p64 %e0 %s7
+#def bass= |3 o7 'bassSustain' 'bassHiVol' p64 %e0 
+#def brass= |2 o6 %r7 v80 p64 %e0
+
+#def hihatRelease= %r24
+#def hihatVol=     v40
+#def tomVol=       v85
+#DRUM "k"=5f  |8 v110           p64
+#DRUM "s"=5g  |9 v120           p64
+#DRUM "r"=5e  |9 v110           p64
+#DRUM "t"=5b  |a 'tomVol'       p122
+#DRUM "u"=5g  |a 'tomVol'       p89
+#DRUM "v"=5e  |a 'tomVol'       p38
+#DRUM "w"=4b  |a 'tomVol'       p5
+#DRUM "g"=3a  @4 'hihatVol'     p64 %a12 %r0 %s1
+#DRUM "h"=4b  @4 'hihatVol'     p64 %a12 'hihatRelease'
+#DRUM "i"=4b  @4 'hihatVol*v.5' p64 %a12 %r0
+
+#DRUM "o"=5a  |b v90  p64      %y2
+#DRUM "c"=5g+ |c v80  p64      %r17
+#DRUM "d"=5f+ |c v100 p64      %r17
+#DRUM "e"=5g+ |c v100 p64      %r17
+
+{1}
+'init'
+## Distorsion Guitar, originally track 3
+$
+'distorsionGuitar-o2'
+l8
+e-f 'distLowVol' f 'distHiVol' e-4 f 'distLowVol' f 'distHiVol' >b4bb4b<d4^16 'distExpire' ^16 'distSustain'
+e-f 'distLowVol' f 'distHiVol' e-4 f 'distLowVol' f 'distHiVol' >b4bb4bb-4^16 'distExpire' ^16 'distSustain'<
+## 5
+## Lead Guitar, originally track 8
+'leadGuitar'
+l8
+b-4 'leadExpire' ^4 'leadSustain' < e-4>b-<f+4fe-4e-d- 'leadLowVol' d- 'leadHiVol' e-4. 'leadExpire' ^4. 'leadSustain'
+> b-4g+f+f 'leadLowVol' f 'leadHiVol' e-4f4 f+4. g+4 b-4 b <e-4 b- 'leadLowVol' b- 'leadHiVol' b- b-8. g+8. f+
+f4 'leadExpire' ^4 'leadSustain' g+4 f+ f4 d d4 d6e-6f6
+## 13
+f+f 'leadLowVol' f 'leadHiVol' f+4. 'leadExpire' ^4. 'leadSustain' e-e-4e-f4^16 'leadExpire' ^16 'leadSustain'
+f+f 'leadLowVol' f 'leadHiVol' f+ 'leadLowVol' f+ 'leadHiVol'b-4 g+ 'leadLowVol' g+ 'leadHiVol' f+4f4e-4f
+## 17
+[4 f+12g+12b-12] <e-8. 'leadExpire' ^4.. 'leadSustain' > b-4^16 'leadExpire' ^16 'leadSustain'
+< c4^16 'leadExpire' ^16 'leadSustain' d-4^16 'leadExpire' ^16 'leadSustain' c d4. 'leadExpire' ^4 'leadSustain' d6e-6f6
+## 21
+'leadLowVol' e-2. 'leadExpire' ^1^4 'leadSustain'
+>b4. 'leadExpire' ^2 'leadSustain' g+4. 'leadExpire' ^4. 'leadSustain' f+4 f
+## 25
+'leadHiVol' [8 f+12f12e-12] g+12f+12f12f12e-12d12d6e-6f6f6f+6g+6g+6f+6f6
+## 29
+g+2. 'leadExpire' ^2. 'leadSustain' g+6b-6g+6
+g4. 'leadExpire' ^2. 'leadMedVol' 'leadSustain' f+fe->b- g+8. 'leadExpire' ^16 'leadSustain' f+
+;
+
+
+{2}
+## Drums, originally track 5
+$
+l8
+"!!!o"
+"dks4" [6 "kks4"] l16 "ttuuvvww" l8
+## 5
+"!!!o" [2 "dks4" [14 "kks4"] "r6r6r6" ]
+## 21
+## Second Guitar, originally track 3
+'secondGuitar'
+l8
+e-4b-g+ 'secondLowVol' g+ 'secondHiVol' f+4f4f+ff+ 'secondLowVol' f+ 'secondHiVol' e-4.
+>g+4<g+f+ 'secondLowVol' f+ 'secondHiVol' g+4f4>b-4.<f+4f4
+## 25
+##Drums, originally track 5
+"!!!o"
+l8
+"dks4" [6 "kks4"] "r6r6r6"
+## 29
+"dks4" [2 "kks4"] "r6r6r6"
+"kks4k16s8.ss16s16dkkkk16s8.ss16s16"
+;
+
+
+{3}
+## Bass, originally track 6
+$
+'bass-o2'
+l8
+e-f 'bassLowVol' f 'bassHiVol' e-4f 'bassLowVol' f 'bassHiVol' >b4bb4b<d4^16 'bassExpire' ^16 'bassSustain'
+e-f 'bassLowVol' f 'bassHiVol' e-4f 'bassLowVol' f 'bassHiVol' >b4bb4bb-4^16 'bassExpire' ^16 'bassSustain'<
+## 5
+[2
+  [3 e-f 'bassLowVol' f 'bassHiVol' e-4f 'bassLowVol' f 'bassHiVol' >b4bb4bb-4^16 'bassExpire' ^16 'bassSustain'< ]
+  >a<a 'bassLowVol' a 'bassHiVol'>a4<a 'bassLowVol' a 'bassHiVol'>b-4b-b-4b-6b-6b-6<
+]
+## 21
+## Alternate Cymbals, originally track 5
+"!!!o"
+l8
+"dhok"
+"!!!o"[5 "khoh"] "ksh" l16 "osttuuvvww"
+## 25
+## Bass, originally track 6
+'bass-o2'
+l8
+[7 e-] >b8^16 'bassExpire' ^16 'bassSustain' [7 b]
+[7 g+] b-8^16 'bassExpire' ^16 'bassSustain' b-b-b-b-6<c6d6
+## 29
+[7 e-] e-8^16 'bassExpire' ^16 'bassSustain' e-e-e-e-6e-6e-6 [8 e-]
+'bassExpire' ^8 'bassSustain' f+fe->b- g+8^16 'bassExpire' ^16 'bassSustain' f+
+;
+
+
+{4}
+## Support Guitar Right, originally track 7
+$
+'supportGuitarRight'
+l8
+e-f 'supportLowVol' f 'supportHiVol' e-4 f 'supportLowVol' f 'supportHiVol' >b4bb4b<d4^16 'supportExpire' ^16 'supportSustain'
+e-f 'supportLowVol' f 'supportHiVol' e-4f 'supportLowVol' f 'supportHiVol' >b4bb4bb-4^16 'supportExpire' ^16 'supportSustain'<
+## 5
+## Distorsion Guitar, originally track 3
+'distorsionGuitar-o2'
+l8
+[2
+  [3 e-f 'distLowVol' f 'distHiVol' e-4 f 'distLowVol' f 'distHiVol' >b4bb4bb-4^16 'distExpire' ^16 'distSustain'< ]
+  > aaa4aa4b-4bb-4b-6b6<c6
+]
+## 21
+## Bass, originally track 6
+'bass-o2'
+l8
+e-4^16 'bassExpire' ^16 'bassSustain' e- e-4^16 'bassExpire' ^16 'bassSustain' 
+>b4.. 'bassExpire' ^16 'bassSustain' b b4.. 'bassExpire' ^16 'bassSustain'<
+f4^16 'bassExpire' ^16 'bassSustain' f f4^16 'bassExpire' ^16 'bassSustain' 
+d4.. 'bassExpire' ^16 'bassSustain' dd  d8^16 'bassExpire' ^16 'bassSustain' d
+## 25
+## Main Cymbals, originally track 2
+"!!!o" [15 "h"]"o" "!!!o" [12"h"] "e6e6e6"
+## 29
+## Distorsion Guitar, originally track 3
+'distorsionGuitar-o3'
+l8
+b- [2 b-b-8. 'distExpire' ^16 'distSustain' ] b-8. 'distExpire' ^16 'distSustain' b- b-8. 'distExpire' ^16 'distSustain' b-6b-6b-6
+b- [2 b-b-8. 'distExpire' ^16 'distSustain' ] b- 'distExpire' ^8< 'distSustain' 'distOutroVol' f+fe->b-g+8. 'distExpire' ^16 'distSustain' f+
+;
+
+
+{5}
+## Support Guitar Left, originally track 4
+$
+'supportGuitarLeft-o1'
+l8
+b-<c 'supportLowVol' c> 'supportHiVol' b-4< c 'supportLowVol' c 'supportHiVol' >f+4f+f+4f+b-4^16 'supportExpire' ^16 'supportSustain'
+b-<c 'supportLowVol' c> 'supportHiVol' b-4< c 'supportLowVol' c 'supportHiVol' >f+4f+f+4f+f4^16 'supportExpire' ^16 'supportSustain'
+## 5
+## Support Guitar Right, originally track 7
+'supportGuitarRight'
+[2
+  [3 e-f 'supportLowVol' f 'supportHiVol' e-4f 'supportLowVol' f 'supportHiVol' >b4bb4bb-4^16 'supportExpire' ^16 'supportSustain'<]
+  >aaa4aa4b-4b-b-4b-6b6<c6
+]
+## 21
+[2
+  e- [2 e- e-8. 'supportExpire' ^16 'supportSustain']
+  >[2 b8. 'supportExpire' ^16 'supportSustain' b] b4^16 'supportExpire' ^16 'supportSustain'<
+  f [2 f f8. 'supportExpire' ^16 'supportSustain'] j2,524
+  [2 d8. 'supportExpire' ^16 'supportSustain' d] d4^16 'supportExpire' ^16 'supportSustain'
+] $524 d8. 'supportExpire' ^16 'supportSustain' d d8. 'supportExpire' ^16 'supportSustain' d6e-6f6
+## 29
+g+ [2 g+ g+8. 'supportExpire' ^16 'supportSustain']
+g+8. 'supportExpire' ^16 'supportSustain' g+ g+8. 'supportExpire' ^16 'supportSustain' g+6g+6g+6
+g [2 g g8. 'supportExpire' ^16 'supportSustain'] g 'supportExpire' ^1
+;
+
+
+{6}
+## Main Cymbals, originally track 2
+$
+l8 "!!!o"
+[2 [15 "h"] "o"]
+## 5
+## Support Guitar Left, originally track 4
+'supportGuitarLeft-o1'
+[2
+  [3 b-<c 'supportLowVol' c> 'supportHiVol' b-4< c 'supportLowVol' c 'supportHiVol' >f+4f+f+4f+f4^16 'supportExpire' ^16 'supportSustain']
+  eae4ee4f4ff4f6f+6g6
+]
+## 21
+[2
+  b- [2 b- b-8. 'supportExpire' ^16 'supportSustain']
+  [2 f+8. 'supportExpire' ^16 'supportSustain' f+] f+4^16 'supportExpire' ^16 'supportSustain'
+  <d [2 d d8. 'supportExpire' ^16 'supportSustain']> j2,624
+  [2 b-8. 'supportExpire' ^16 'supportSustain' b-] b-4^16 'supportExpire' ^16 'supportSustain'
+] $624 b-8. 'supportExpire' ^16 'supportSustain' b- b-8. 'supportExpire' ^16 'supportSustain' b-6<c6d6
+## 29
+e- [2 e- e-8. 'supportExpire' ^16 'supportSustain']
+e-8. 'supportExpire' ^16 'supportSustain' e- e-8. 'supportExpire' ^16 'supportSustain' e-6e-6e-6
+e- [2 e- e-8. 'supportExpire' ^16 'supportSustain'] e- 'supportExpire' ^1
+;
+
+
+{7}
+## Support Cymbals, originally track 1
+$
+l8
+"!!!o"
+"c1"r1r1r1
+## 5
+## Main cymbals, originally track 2
+l8
+"!!!o"
+[2
+  [3 [15 "h"] "o"]
+  "!!!o" [12 "h"] "e6e6e6"
+]
+## 21
+"g4." 
+[3 "!!!ohi4^16" 'hihatRelease' ^8. j3 ^4.]
+"!!!ohh"r2.
+## 25
+## Brass, originally track 3
+'brass'
+l1
+e->b<fd2d6e-6f6
+## 29
+## Main cymbals, originally track 2
+l8
+"!!!o"
+[15 "h"]"e!!!o"[15 "h"]"o"
+;
+
+
+{8}
+$
+r1r1r1r1
+## 5
+## Support Cymbals, originally track 1
+"!!!o"
+"c1" [6 r1] r2 "c6c6c6"
+## 13
+"c1" [7 r1]
+## 21
+"c1"r1r1r1
+## 25
+"c1"r1r1r2"c6c6c6"
+## 29
+r1r1r1"c1"
+;

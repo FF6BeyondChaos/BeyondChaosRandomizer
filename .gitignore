@@ -22,3 +22,9 @@
 /beyondchaos/Updater License
 *.smc
 /BeyondChaos/bcex.cfg
+/env
+/BeyondChaos/custom/sprites
+/BeyondChaos/custom/spritereplacements
+Changes.txt
+BeyondChaos/beyondchaos - Copy.py
+BeyondChaos/randomizer - Copy.py

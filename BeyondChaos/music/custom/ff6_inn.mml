@@ -1,0 +1,52 @@
+#TITLE Good Night
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x14
+
+#def 3@i=   @3
+#def 3@o=   o5
+#def 3@v=   v100
+#def 3@f= v1,100
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v100
+#def 0f= v1,100
+
+
+{1}
+%x160%b0,50%f0,0%v50'0v*v.60'
+'0i' p64%e1t75&6r1'0o+o2'd8>a+8t144,40a8g8f+2;
+
+{2}
+'0v*v.60'
+'0i' p64%e1&6r1'0o+o1'f+8g8c+8e8d2;
+
+{3}
+'0v*v.60'
+'0i' p64%e1&6r1r2r4'0o+o2'd4;
+
+{4}
+&6r1'0v*v.60'
+'0i' p64%e1r2r4'0o'd4;
+
+{5}
+&6r1'3@v*v.60'
+'3@i' %r13p64%e1'3@o+o2'd8>a+8a8g8f+2;
+
+{6}
+&4r1'3@v*v.60'
+'3@i' %r13p64%e1'3@o+o1'a8r8e4d2;
+
+{7}
+&2r1'3@v*v.60'
+'3@i' %r13p64%e1'3@o+o1'f+4c+4>a2;
+
+{8}
+'3@v*v.60'
+'3@i' %r13p64%e1'3@o+o1'd4>a4f+2;
+;

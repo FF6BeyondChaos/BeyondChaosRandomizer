@@ -1,0 +1,313 @@
+#TITLE Singing Mountain
+#ALBUM Chrono Trigger
+#COMPOSER Yasunori Mitsuda
+#ARRANGED Rushlight
+##created with sqspcmml beta 1.1.0
+## Additional changes and comments made by hand. Notably, wind effect has been taken out.
+## Two echo tracks have also been added for the piano, to sound a bit closer to the original (which has longer echo delay than FF6 can do)
+
+#WAVE 0x20 0x74 ## Choir
+#WAVE 0x21 0x60 ## Harp
+#WAVE 0x22 0x01 ## Piano
+
+#def init= t57 %x160 %v40 %b0,105% %f0,0
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v90
+#def 0f= v1,90
+
+#def 1i=   |1
+#def 1o=   o6
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2
+#def 2o=   o6
+#def 2v=   v100
+#def 2f= v1,100
+
+
+{1}
+'init'
+'2v*v1.00'%e1
+## Piano, originally track 6
+'2i' '2v*v1.10'p64'2o'
+## Measure 1 lasts only one 8th note
+d8
+## 2
+$102
+a+8a+16a16a+8<c8>a4f8.d16
+## 3
+g8g16f16g8a8f4.d8
+## 4
+a+8a+16a16a+8<c8>a4f8d8
+## 5
+d+8a+8a8g16a16g4.d8
+## 6
+a+8a+16a16a+8<c8>a4f8.d16
+## 7
+g8g16f16g8a8f4.d8
+## 8
+a+8a+16a16a+8<c8>a4f8d8
+## 9
+d+8a+8a8g16a16g2
+## 10
+<d8d16c16d8d+8f4c8.>f16
+## 11
+a+8a+16a16a+8<c8d4>a8.f16
+## 12
+g8g16f16g8a8a+4f8<d8
+## 13
+d+8d8c8>a+8a2
+## 14
+^4f+4g4a4
+;102
+
+
+{2}
+'1v*v1.00'%e1
+## Measure 1 lasts only one 8th note
+r8
+## 2
+$202
+## Harp, originally track 5
+'1i' '1v*v.70'p64'1o-o1'p0,192,127
+d16g16a+16<d16g16d16>a+16g16d16f16a16<c16f16c16>a16f16
+## 3
+d+16g16a+16<d+16g16d+16>a+16g16d16f16a16<d16>c16f16a16<c16>
+## 4
+d16g16a+16<d16g16d16>a+16g16d16f16a16<c16f16c16>a16f16
+## 5
+d+16g16a+16<d+16>f16a16<c16f16>g16a+16<d16g16a+16g16d16>a+16
+## 6
+d16g16a+16<d16g16d16>a+16g16d16f16a16<c16f16c16>a16f16
+## 7
+d+16g16a+16<d+16g16d+16>a+16g16d16f16a16<d16>c16f16a16<c16>
+## 8
+d16g16a+16<d16g16d16>a+16g16d16f16a16<c16f16c16>a16f16
+## 9
+d+16g16a+16<d+16>f16a16<c16f16>g16<c16d16g16>g16b16<d16g16
+## 10
+>>a+16<d16f16a+16<d16>a+16f16d16c16f16a16<c16f16c16>a16f16
+## 11
+>g16a+16<d16g16<d16>a+16g16d16>a16<d16f16a16<d16>a16f16d16
+## 12
+>g16<d+16g16a+16<d+16>a+16g16d+16>a+16<d16f16a+16<d16>a+16f16d16
+## 13
+c16d+16g16a+16>a16<c16d+16g16>a16<d16f+16a16<d16f+16a16<d16
+## 14
+f+16d16>a16f+16d16>a16f+16d16<d16>a16f+16d16a32f+32d32>a32<d32>a32f+32d32
+;202
+
+
+{3}
+'0v*v1.00'%e1
+## Lead Chorus, originally track 1
+'0i' '0v*v1.00'p64'0o'
+## Measure 1 lasts only one 8th note
+d8
+## 2
+$302
+a+8a+16a16a+8<c8>a4f8.d16
+## 3
+g8g16f16g8a8f4.d8
+## 4
+a+8a+16a16a+8<c8>a4f8d8
+## 5
+d+8a+8a8g16a16g4.d8
+## 6
+a+8a+16a16a+8<c8>a4f8.d16
+## 7
+g8g16f16g8a8f4.d8
+## 8
+a+8a+16a16a+8<c8>a4f8d8
+## 9
+d+8a+8a8g16a16g2
+## 10
+<d8d16c16d8d+8f4c8.>f16
+## 11
+a+8a+16a16a+8<c8d4>a8.f16
+## 12
+g8g16f16g8a8a+4f8<d8
+## 13
+d+8d8c8>a+8a2
+## 14
+^4f+4g4a4
+;302
+
+
+{4}
+'0v*v1.00'%e1
+## Measure 1 lasts only one 8th note
+r8
+## 2
+$402
+## Support Choir 1, originally track 3
+'0i' '0v*v.75'p27'0o'
+d2c2
+## 3
+d2^4c4
+## 4
+d2c2
+## 5
+>a+4a4a+2<
+## 6
+d2c2
+## 7
+d2^4c4
+## 8
+d2c2
+## 9
+>a+4a4<c4>b4<
+## 10
+d2c2
+## 11 
+d2>a4<d4
+## 12
+^1
+## 13
+>a+4<c4d2
+## 14
+^4c4>a+4a4
+;402
+
+
+{5}
+'0v*v1.00'%e1
+## Measure 1 lasts only one 8th note
+r8
+## 2
+$502
+## Low Choir, originally track 2
+'0i' '0v*v.80'p100'0o-o2'
+g2d2
+## 3
+d+2a+4a4
+## 4
+g2d2
+## 5
+d+4f4g2
+## 6
+g2d2
+## 7
+d+2a+4a4
+## 8
+g2d2
+## 9
+d+4f4g2
+## 10
+a+2f2
+## 11
+g2d2
+## 12
+d+2a+2
+## 13
+<c4>a4d2
+## 14
+^1
+;502
+
+
+{6}
+'0v*v1.00'%e1
+## Measure 1 lasts only one 8th note
+r8
+$602
+## Support Choir 2, originally track 4
+'0i' '0v*v1.00'p64'0o-o1'
+[
+  ## 2 / 3 / 4 / 6 / 7 / 8
+  [3 g2f2]
+  ## 5 / 9
+  g4f4d2
+]
+## 10
+f2a2
+## 11
+f2^4f4
+## 12
+g2f2
+## 13
+g2f+2
+## 14
+^1
+;602
+
+
+{7}
+## We'll reproduce channel 1 exactly, but on a 8-tick delay
+&8r
+%e1
+## Piano echo. Doesn't exist in the original, it's something to try and reproduce a portion of the original's song 160ms echo delay.
+'2i' '2v*v0.45'p64'2o'
+## Measure 1 lasts only one 8th note
+d8
+$702
+## 2
+$102
+a+8a+16a16a+8<c8>a4f8.d16
+## 3
+g8g16f16g8a8f4.d8
+## 4
+a+8a+16a16a+8<c8>a4f8d8
+## 5
+d+8a+8a8g16a16g4.d8
+## 6
+a+8a+16a16a+8<c8>a4f8.d16
+## 7
+g8g16f16g8a8f4.d8
+## 8
+a+8a+16a16a+8<c8>a4f8d8
+## 9
+d+8a+8a8g16a16g2
+## 10
+<d8d16c16d8d+8f4c8.>f16
+## 11
+a+8a+16a16a+8<c8d4>a8.f16
+## 12
+g8g16f16g8a8a+4f8<d8
+## 13
+d+8d8c8>a+8a2
+## 14
+^4f+4g4a4
+;702
+
+
+{8}
+## We'll reproduce channel 1 exactly, but on a 16-tick delay
+&16r
+%e1
+## Piano echo 2. Doesn't exist in the original, it's something to try and reproduce a portion of the original's song 160ms echo delay.
+'2i' '2v*v0.25'p64'2o'
+## Measure 1 lasts only one 8th note
+d8
+$802
+## 2
+$102
+a+8a+16a16a+8<c8>a4f8.d16
+## 3
+g8g16f16g8a8f4.d8
+## 4
+a+8a+16a16a+8<c8>a4f8d8
+## 5
+d+8a+8a8g16a16g4.d8
+## 6
+a+8a+16a16a+8<c8>a4f8.d16
+## 7
+g8g16f16g8a8f4.d8
+## 8
+a+8a+16a16a+8<c8>a4f8d8
+## 9
+d+8a+8a8g16a16g2
+## 10
+<d8d16c16d8d+8f4c8.>f16
+## 11
+a+8a+16a16a+8<c8d4>a8.f16
+## 12
+g8g16f16g8a8a+4f8<d8
+## 13
+d+8d8c8>a+8a2
+## 14
+^4f+4g4a4
+;802

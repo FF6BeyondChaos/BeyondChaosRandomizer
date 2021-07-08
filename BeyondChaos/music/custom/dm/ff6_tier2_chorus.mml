@@ -1,0 +1,125 @@
+#TITLE Dancing Mad (Tier 2)
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED Nobuo Uematsu
+# Converted from binary by mfvitools
+
+#VARIANT ~_
+#VARIANT ~` tier1
+#VARIANT ?` tier2
+#VARIANT ?_ tier3
+
+#WAVE 0x20 -- 0xB0  #C.Organ
+#WAVE 0x22 -- 0x75  #Maria
+#WAVE 0x23 -- 0x73  #Draco
+#WAVE 0x24 -- 0x1B  #Snare
+#WAVE 0x25 -- 0x5A  #Timpani
+#WAVE 0x26 -- 0x2D  #Cymbal
+
+#def chorg= |0
+#def porg=  |0
+#def sopra= |2
+#def tenor= |3
+#def snare= |4
+#def timpa= |5
+#def crash= |6
+
+#def 0o= o5
+#def 1o= o4
+#def 2o= o5
+#def 3o= o3
+#def 4o= o5
+#def 5o= o6
+#def 6o= o6
+
+#drum "a"= 5e
+#drum "r"= 5r
+
+{1}
+l16 $4441
+t115%b0,100%f0,0%v50v60'chorg'p64%e1'0o'
+? [4[3g+8r8g+8g8]g+8g8b4] ?
+$26 t115[2'0o'[4[3g+8r8g+8g8]g+8g8b4  ]<[2<c+2>>c+2  <<c+4>>c+4<g2  
+][2<e2>>e2  <<e4>>e4<a+2  ]]t30a+t40<ct50c+t60>gt70a+t80<c+t90>g+t95a+t100<c>fg+<c>gg+a+e  
+ga+fgg+dfg+gceg<c>ca+c  g+cecfcg+ct85r1  r1  r8f8d8d+8f8gfd+8d8  
+d+8r8a4r12f+12d+12c12>a12f+12  g8r8<b4r2  t100<c>gfcc+>g+<d+c+c8.>ff+b<c+f+  
+fc>a+<cc+d+g+f+g+d+c+d+ef+ba  g+8<c+8>b8f+8e8a8g+8d+8  <c+>g+f+c+d>a<edc+8.>f+g<cdg  
+g+8t95<c+8t90>b8t85<c+8t40drr8t40e8t20d8 ` :4441`
+;26
+
+{2}
+l16 $4442
+v60'chorg'p64%e1
+? '0o'[4[3e8r8e8d+8]e8d+8d4] ?
+$28 [2'0o'[4[3e8r8e8d+8]e8d+8d4  ]<[2g+2>>g+2  <<g+4>>g+4<<d2  ][2b2>>b2  
+<<b4>>b4<<f2  ]]r1  r1  r2g4>g8g+8  
+a+8<c>a+g+8g8g+4f8g8  g+8a+g+g8f8g4f+4  g2<c8r8f+4  r2r4d4  
+r2r1  r1  r1  r1  
+c+8f+8e8f+8gr8.a8g8  `:4442 `
+;28
+
+{3}
+l16 $4443
+v80'porg'p64%e1
+? [4'1o-o1'[6c+8r8]c+8c8>b4] ?
+$30 [2[4'1o-o1'[6c+8r8  
+]c+8c8>b4]v60'chorg'p64%e1'0o+o1'[2f+2  >>f+2<<f+4>>f+4  <<c2][2a2  >>a2<<a4>>a4  
+<<d+2]]v80'porg'p64%e1'1o'c+4.c4.  >a+4^8g+4.g2  g+2a+1  
+<f4d+4c+4c4  >b4<c4d4>g4  <c8r8>c4r2  g8r8g4r2  
+r1  r1  <<d+8c+8>b8a+8a8f+8d+8g+8  g+8.g+f+8g+ab>b<c+de8>b8  
+a+8g+8g8d+8dr8.a+8g+8 ` :4443`
+;30
+
+{4}
+l16 $4444
+v120'sopra'p50%e1
+? r1  r1  r1  r1  '2o'[2r8c+r8.c+r8.c+r8.c+r  r8c+r8.c+r8.c+rd4  ] ?
+$32 [2v120'sopra'p50%e1'2o'[4r8c+r8.c+r8.c+r8.c+r  
+r8c+r8.c+r8.c+rd4  ]r2c+2  r2c2  r2c+2  
+r2c2  r2>b2  r2a+2  r2b2  
+r2a+2  ]r1  r1  r2r1  
+r1  r1  v60'chorg'p64%e1'0o'f+8r8d+4r2  d8r8g4r2  
+r1  r1  r1  r1  
+f8d+8d8>a+8ar8.<f8d+8 ` :4444 `
+;32
+
+{5}
+l16 $4445 v120'timpa'p40%e1
+? [8r1] ?
+$34 [2[4'5o-o1'c+4>g+4<c+4>g+4  <c+4>g+4<c+8>g+8b4  ]<[2c+2>g+2  
+<c+4>g+4<c2  ][2e2>b2  <e4>b4<d+2  ]]
+[12r1]  r2 
+`:4445 `
+;34
+
+{6}
+l16 $4446
+v60'snare'p64%e0
+? r1  
+r1  r1  r2r4'4o'%g1v80v48,20[8a32][4v30v96,100[16a32]v96,30[16a32]] 
+? ~'4o'~
+$36 %g1[2[8v30v96,100[16a32]v96,30[16a32]][7r2  
+r4v100v48,30[8a32]]r1  ]
+[12r1]  r2
+`%g0 :4446 `
+;36
+
+{7}
+l16 $4447 v120'crash'p70%e0
+? [8r1] ?
+$38 [2[4"a2a2  a1"  ][8^2"a2  "
+]] 
+[12r1]  r2
+`:4447`
+;38
+
+{8}
+l16 $4448 v120'tenor'p80%e1
+? r1  r1  r1  r1  
+'3o+o2'[2r8c+r8.c+r8.c+r8.c+r  r8c+r8.c+r8.c+rd4  ] ?
+ $40 [2'3o+o2'[4r8c+r8.c+r8.c+r8.c+r  
+r8c+r8.c+r8.c+rd4  ]r2c+2  r2c2  r2c+2  
+r2c2  r2>b2  r2a+2  r2b2  
+r2a+2  ]
+[12r1]  r2  `:4448`
+;40

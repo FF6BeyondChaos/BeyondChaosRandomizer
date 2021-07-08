@@ -1,0 +1,304 @@
+#TITLE Final Battle // The Last Duel
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED Rushlight
+
+#SHORTNAME LU2 The Last Duel
+
+#WAVE 0x20 0x66 ## Strings
+#WAVE 0x21 0x81 ## Trumpet
+#WAVE 0x22 0x52 ## Bass
+#WAVE 0x23 0x61 ## Harp
+
+#WAVE 0x28 0x3D ## Hihat, both open and closed
+#WAVE 0x2A 0x2D ## Cymbal
+#WAVE 0x2B 0x4D ## Tom
+#WAVE 0x2C 0x0A ## Kick
+#WAVE 0x2D 0x1C ## Snare
+
+#def init= t144 %x224 %v40 %b0,85 %f0,0
+
+## The lead strings get a release rate halfway through.... %r8
+#def strings=        |0 o5 %e1
+
+#def trumpet=         |1 o5 %e1 %r10 m1,31,205 p64  v100
+#def leadStrings=     'strings' %r0  m1,8,197  p64  v110
+#def lateLeadStrings= 'strings' %r8  m1,8,197  p64  v110
+#def supportStrings=  'strings' %r0  m         p64  v80
+#def backStrings1=    'strings' %r0  m         p16  v50
+#def backStrings2=    'strings' %r0  m         p105 v50
+#def bass=            |2 o6 %e0 %r11 m         p64  v70
+#def harp=            |3 o5 %e1 %r18 m         p64  v50
+
+#DRUM "k"=6c  |c v100 p64
+#DRUM "s"=5g+ |d v80  p64
+#DRUM "t"=4g+ |b v100 p70
+#DRUM "u"=5e- |b v100 p64
+#DRUM "v"=5f+ |b v100 p54
+#DRUM "h"=6d  |8 v90  p46      %y5
+#DRUM "i"=6d  |8 v112 p46      %y5
+#DRUM "o"=5a  |8 v127 p46      %y2
+#DRUM "c"=5g+ |a v127 p80 %r17
+
+#drum "r"=5r
+
+{1}
+'init'
+r1^1
+##3
+$
+## Trumpet, originally track 1
+'trumpet-o1'
+l16
+r1^2.
+a<dag
+##5
+a2..gf g4.fef4<c4> a1.agfgfedc
+##9
+d4.>a1^4.aa<daa2.^16a<daa1
+##13
+^1^1^1^2.
+##3 beats into measure 16
+## Lead strings, originally track 1
+'leadStrings-o1'
+a<dag
+##17
+a2..gf g4.fef4<c4> a1.agfgfedc
+##21
+d4.>a1^4.aa<da 'lateLeadStrings' a1^1
+##25
+d1e1f1g2a4<c4
+##29
+l8
+d2^8def e2c4>g4 g4.<c>a1.<
+##33
+d2^8def g2f4g4 g4.<c>a1.
+##37
+a2^8agf g2e4g4 g1 f1
+##41
+f2^8fed e2c4>a4< d1^1
+;
+
+
+{2}
+## Support strings, originally track 2
+'supportStrings-o1'
+l16
+drar<d8>ar<er>ar<f8>ar< gr>ar<fr>ar<er>ar<d8>cr
+##3
+$
+## Support strings, originally track 2
+'supportStrings-o1'
+l16
+drar<d8>ar<er>ar<f8>ar< gr>ar<fr>ar<er>ar<d8>cr
+##5
+[2
+  drar<d8>ar<er>ar<f8>ar< gr>ar<fr>ar<er>ar<d8>cr
+  >b-r<frb-8fr<cr>fr<d8>fr< er>fr<dr>fr<cr>frb-8 j2 cr
+] >b-r<
+##13
+[2
+  drar<d8>ar<er>ar<f8>ar< gr>ar<fr>ar<er>ar<d8>cr
+]
+##17
+l8
+[2
+  da<d>a<e>a<f>a<  g>a<f>a<e>a<d>a
+  >b-<fb-f<c>f<d>f< e>f<d>f<c>fb- j2 c
+] >b-<
+##25
+[2
+  da<d>a<e>a<f>a<  g>a<f>a<e>a<d>c
+]
+##29
+b-<fb-f<c>fb-f cg<c>g<d>g<c>g
+da<d>a<e>a<f>a< e>a<d>a<c>gcg>
+##33
+b-<fb-f<c>fb-f cg<c>g<d>g<c>g
+da<d>a<e>a<c>g da<d>a<e>a<c>g>
+##37
+b-<fb-f<c>f<d>f cg<c>g<d>g<e>g
+da<d>a<e>a<f>a da<d>a<e>a<c>g>
+##41
+b-<fb-f<c>fb-f cg<c>g<d>g<c>g>
+l16
+drar<d8>ar<er>ar<f8>ar< gr>ar<fr>ar<er>ar<d8>cr
+;
+
+
+{3}
+## Bass, originally Track 3
+'bass-o2'
+l8
+d1...c
+##3
+$
+## Bass, originally Track 3
+'bass-o2'
+l8
+d1^1
+##5
+l4
+[d1..c>b-1..<c]
+##13
+l8
+d1...cd1^2.c4
+##17
+[7d]d16d16 ddddfdfc> [13b-]ab-<c
+##21
+[12 d]fdec > [13 b-]ab-<c
+##25
+[32 d]
+##29
+[2
+  >[8 b-]< [8 c] j2,1 [14 d]cc
+] $1 [2 [6 d]cc]
+##37
+[2
+  >[8 b-]< [8 c] j2,2 [14 d]cc
+] $2 d1^1
+;
+
+
+{4}
+## Cymbals, originally track 8
+l8
+[8"ih"]
+##3
+$
+l8
+"!!!o"
+[56"ih"]
+##17
+l16
+"c4!!!o" [13"ih"]"o8"
+"!!!o" [3 [15"ih"] "o8"]
+##25
+"c2!!!o" [4"ih"] "c2!!!o" [3"ih"] "o8"
+"c2!!!o" [4"ih"] "c4!!!o" [5"ih"] "o8"
+##29
+"c2!!!o" [11"ih"] "o8"
+"!!!o" [6 [15"ih"] "o8"]
+##43
+"c1^1"
+;
+
+
+{5}
+##Harp, originally track 4
+'harp-o1'
+l16
+[2 dfa<dfa<dfafd>afd>af]
+##3
+$
+##Harp, originally track 4
+'harp-o1'
+l16
+[4 dfa<dfa<dfafd>afd>af]
+[>b-<dfb-<dfb-<dfd>b-fd>b-fd]
+##9
+[10 dfa<dfa<dfafd>afd>af]
+##19
+[>b-<dfb-<dfb-<dfd>b-fd>b-fd]
+##21
+[8 dfa<dfa<dfafd>afd>af]
+##29
+[4
+  >b-<dfb-<dfb-<dfd>b-fd>b-fd
+  ceg<ceg<cegec>gec>ge
+  dfa<dfa<dfafd>afd>af
+  dfa<dfa<dfafd> j4 gec>ge
+] afd>af
+;
+
+
+{6}
+## Back strings 1, originally track 5
+'backStrings1'
+l16
+frfr8.frerer8.er grgr8.grerer8.er
+##3
+$
+## Back strings 1, originally track 5
+'backStrings1'
+l16
+frfr8.frerer8.er grgr8.grerer8.er
+##5
+[2
+  frfr8.frfrfr8.fr frfr8.frfrdrercr
+  drdr8.drdrdr8.dr drdr8.drdrdrerer
+]
+##13
+[2 frfr8.frerer8.er grgr8.grerer8.er]
+##17
+[2
+  frfr8.frfrfr8.fr frfr8.frfrdrercr
+  drdr8.drdrdr8.dr drdr8.drdrdrerer
+]
+##25
+>[4a1]<
+##29
+[2 f1 e2g2 f1 a4g4e4c4]
+##37
+f1 e1 f1 d1 
+##41
+>b-2^8b-8<c8d8 e2g2 
+frfr8.frerer8.er grgr8.grerer8.er
+;
+
+
+{7}
+## Back strings 2, originally track 6
+'backStrings2'
+l16
+[2 arar8.ararar8.ar]
+##3
+$
+## Back strings 2, originally track 6
+'backStrings2'
+l16
+[2 arar8.ararar8.ar]
+##5
+[2
+  arar8.ararar8.ar arar8.ararfrgrer
+  frfr8.frfrfr8.fr frfr8.frfrfrgrgr
+]
+##13
+[4 arar8.ararar8.ar]
+##17
+[2
+  arar8.ararar8.ar arar8.ararfrgrer
+  frfr8.frfrfr8.fr frfr8.frfrfrgrgr
+]
+##25
+[4d1]
+##29
+[2 a1 g2<c2> a1 f4e4c4>a4<]
+##37
+a1 g1 a1 f1
+##41
+d2^8d8e8f8 g2<c2>
+[2 arar8.ararar8.ar]
+;
+
+
+{8}
+## Drums, originally track 7
+r2.."k8k2s12r24r4k8"
+##3
+$
+"!!!o"
+"k2..k8k2s12r24r4k8"
+##5
+[3 "k2..k8k2s12r24r8k4k2..k8k2" j3 "s12r24r8k4"] "k16v32v32v16v16u16u16t16t16"
+##17
+l16
+[6
+  "!o k4s12r24r4k8s12r24kk k8kk" j6 "s12r24r4k8s12r24kk"
+] "s12r24r8kss12r24s12r24ss"
+##29
+[7
+  "!o k4s12r24r4k8s12r24kk k8kk" j7 "s12r24r4k8s12r24kk"
+] "s12r24r8kss12r24s12r24ss"
+"k2..k8k2s12r24r4k8"
+;

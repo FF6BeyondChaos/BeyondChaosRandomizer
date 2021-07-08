@@ -10,16 +10,20 @@ from time import time, sleep, gmtime
 import traceback
 from typing import BinaryIO, Callable, Dict, List, Set, Tuple
 
-import numpy.random
+from numpy import random as numpyrandom
 
 import character
+import chestrandomizer
 import esperrandomizer
 import formationrandomizer
+import itemrandomizer
 import locationrandomizer
-import musicrandomizer
+import monsterrandomizer
+import music.musicrandomizer
 import options
 import towerrandomizer
-from Randomizers.characterstats import CharacterStats
+from monsterrandomizer import MonsterBlock
+from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance
 from character import get_characters, get_character, equip_offsets
@@ -36,7 +40,7 @@ from formationrandomizer import (REPLACE_FORMATIONS, KEFKA_EXTRA_FORMATION,
 from itemrandomizer import (reset_equippable, get_ranked_items, get_item,
                             reset_special_relics, reset_rage_blizzard,
                             reset_cursed_shield, unhardcode_tintinabar,
-                            cleanup, ItemBlock)
+                            ItemBlock)
 from locationrandomizer import (get_locations, get_location, get_zones,
                                 get_npcs, randomize_forest)
 from menufeatures import (improve_item_display, improve_gogo_status_menu,
@@ -46,13 +50,12 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
                                get_metamorphs, get_ranked_monsters,
                                shuffle_monsters, get_monster, read_ai_table,
                                change_enemy_name, randomize_enemy_name,
-                               get_collapsing_house_help_skill,
-                               monsterCleanup, MonsterBlock)
-from musicrandomizer import randomize_music, manage_opera, insert_instruments
+                               get_collapsing_house_help_skill)
+from music.musicinterface import randomize_music, manage_opera, get_music_spoiler, music_init
 from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
-                     cycle_statuses, add_esper_bonuses)
+                     cycle_statuses)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -70,6 +73,7 @@ from utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    mutate_index, utilrandom as random, open_mei_fallback,
                    AutoLearnRageSub)
 from wor import manage_wor_recruitment, manage_wor_skip
+from importlib import reload
 
 
 VERSION = "4"
@@ -77,8 +81,8 @@ BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = True
-TEST_SEED = "4.normal.bcdefgijklmnopqrstuwyzmakeoverpartypartycanttouchthisdearestmolulueasymodonotawaiter.1111111111"
+TEST_ON = False
+TEST_SEED = "4.normal.bcdefgijklmnopqrstuwyzmakeoverpartypartycanttouchthisdearestmolulueasymodo.1111111111"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -205,21 +209,21 @@ def log_break_learn_items():
 
 def rngstate() -> int:
     state = sum(random.getstate()[1])
-    print(state)
     return state
 
 
 def Reset():
     global seedcounter
     seedcounter = 0
-    cleanup()
-    monsterCleanup()
-    formationrandomizer.cleanup()
-    character.cleanup()
-    esperrandomizer.cleanup()
-    locationrandomizer.cleanup()
-    musicrandomizer.cleanup()
-    towerrandomizer.cleanup()
+    reload(itemrandomizer)
+    reload(monsterrandomizer)
+    reload(formationrandomizer)
+    reload(character)
+    reload(esperrandomizer)
+    reload(locationrandomizer)
+    reload(music.musicrandomizer)
+    reload(towerrandomizer)
+    reload(chestrandomizer)
 
 
 def reseed():
@@ -4326,7 +4330,6 @@ def diverge(fout: BinaryIO):
         split_line = line.strip().split(' ')
         address = int(split_line[0], 16)
         data = bytes([int(b, 16) for b in split_line[1:]])
-        #print(hex(address), hex(len(data)))
         fout.seek(address)
         fout.write(data)
 
@@ -4608,7 +4611,7 @@ def randomize(args: List[str]) -> str:
         "The randomization is very thorough, so it may take some time.\n"
         'Please be patient and wait for "randomization successful" to appear.')
 
-    rng = numpy.random.default_rng(seed)
+    rng = numpyrandom.default_rng(seed)
 
     if Options_.is_code_active("thescenarionottaken"):
         diverge(fout)
@@ -4800,7 +4803,7 @@ def randomize(args: List[str]) -> str:
                 substitutions = mutated_character.get_bytes()
                 for substitution_address in substitutions:
                     fout.seek(substitution_address)
-                fout.write(substitutions[substitution_address])
+                    fout.write(substitutions[substitution_address])
         else:
             for c in characters:
                 c.mutate_stats(fout, start_in_wor)
@@ -4949,17 +4952,18 @@ def randomize(args: List[str]) -> str:
     reseed()
 
     has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
-    if has_music or Options_.is_code_active('alasdraco'):
-        insert_instruments(fout, 0x310000)
-        opera = None
-
+    if has_music:
+        music_init()
+        
     if Options_.is_code_active('alasdraco'):
         opera = manage_opera(fout, has_music)
+    else:
+        opera = None
     reseed()
 
     if has_music:
-        music_log = randomize_music(fout, Options_=Options_, opera=opera, form_music_overrides=form_music)
-        log(music_log, section="music")
+        randomize_music(fout, Options_, opera=opera, form_music_overrides=form_music)
+        log(get_music_spoiler(), section="music")
     reseed()
 
     if Options_.mode.name == "katn":
@@ -4983,7 +4987,7 @@ def randomize(args: List[str]) -> str:
     write_all_locations_misc()
     for fs in fsets:
         fs.write_data(fout)
-
+        
     # This needs to be after write_all_locations_misc()
     # so the changes to Daryl don't get stomped.
     event_freespaces = [FreeBlock(0xCFE2A, 0xCFE2a + 470)]
@@ -4992,7 +4996,7 @@ def randomize(args: List[str]) -> str:
 
     if Options_.random_zerker or Options_.random_character_stats:
         manage_equip_umaro(event_freespaces)
-
+        
     if Options_.is_code_active('easymodo') or Options_.is_code_active('llg') or Options_.is_code_active('exp'):
         for m in monsters:
             if Options_.is_code_active('easymodo'):
@@ -5042,7 +5046,7 @@ def randomize(args: List[str]) -> str:
         whelkshell = get_monster(0x100)
         whelkshell.stats['hp'] = 1
         whelkshell.write_stats(fout)
-
+        
     for item in get_ranked_items(allow_banned=True):
         if item.banned:
             assert not dummy_item(item)
@@ -5051,13 +5055,17 @@ def randomize(args: List[str]) -> str:
         manage_santa()
     elif Options_.is_code_active('halloween') and not Options_.is_code_active('ancientcave'):
         manage_spookiness()
-
+        
     banon_life3(fout)
     allergic_dog(fout)
     y_equip_relics(fout)
     fix_gogo_portrait(fout)
     cycle_statuses(fout)
     #add_esper_bonuses(fout) #Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
+    monster_list = get_monsters()
+    for i in range(len(monster_list)):
+        print(str(monster_list[i].name) + " has attack animation " + 
+              str(monster_list[i].attackanimation))
 
     if not Options_.is_code_active('fightclub'):
         show_coliseum_rewards(fout)
@@ -5067,7 +5075,7 @@ def randomize(args: List[str]) -> str:
 
     if Options_.sprint:
         sprint_shoes_hint()
-
+        
     if Options_.mode.name == "katn":
         the_end_comes_beyond_katn()
     elif Options_.mode.name == "dragonhunt":

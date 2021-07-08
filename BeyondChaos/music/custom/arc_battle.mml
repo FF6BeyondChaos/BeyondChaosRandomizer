@@ -1,0 +1,250 @@
+#TITLE Conflict
+#ALBUM Arcana
+#COMPOSER Jun Ishikawa, Hirokazu Ando
+#ARRANGED emberling
+
+#SHORTNAME ARCANA Conflict
+
+#VARIANT ~ 
+#VARIANT ` nointro
+
+#WAVE 0x20 0x67 strings
+#WAVE 0x21 0xE2 overdrive overkill
+#WAVE 0x22 0x47 distortion portion
+#WAVE 0x23 0x95 clarinet
+#WAVE 0x24 0xA4 piccolo
+#WAVE 0x25 0x51 bass
+#WAVE 0x26 0xC1 synth
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x4B toms
+
+#def init= t151 %v40 %b0,85 %f0,0
+
+#def strings=   |0 's' o5 %r1
+#def overdrive= |1 'o' o5
+#def dist=      |2 'd' o6
+#def clarinet=  |3 'c' o5 %r2
+#def piccolo=   |4 'f' o3 %r2
+#def bass=      |5 'b' o7
+#def synth=     |6 'y' o5 %a13%r22
+
+#def s= v112
+#def o= v50
+#def d= v75
+#def c= v100
+#def f= v60
+#def b= v127
+#def y= v75
+
+#cdef ( %l1
+#cdef ) %l0
+
+#def FluteVib= m30,13,231 v
+#def StringsVib= m12,14,221 v0,7,173
+#def OverVib= m10,17,236 v
+
+#def snarevol= v125
+#def kickvol= v125
+#def tomvol= v100
+
+#drum "i"= 5a |8 p64 'kickvol*v.63'
+#drum "j"= 5a |8 p64 'kickvol*v.67'
+#drum "k"= 5a |8 p64 'kickvol*v.71'
+
+#drum "p"=  5a |9 p64 'snarevol*v.63'
+#drum "q"=  5a |9 p64 'snarevol*v.67'
+#drum "r"=  5a |9 p64 'snarevol*v.71'
+#drum "s"=  5a |9 p64 'snarevol*v.76'
+#drum "r+"= 5a |9 p64 'snarevol*v.80'
+#drum "s+"= 5a |9 p64 'snarevol*v.84'
+
+#drum "t+"= 5e |A p89 'tomvol*v.84'
+#drum "t"= 5e  |A p89 'tomvol*v.80'
+#drum "u"= 5e  |A p89 'tomvol*v.76'
+#drum "v"= 5e  |A p89 'tomvol*v.71'
+#drum "c"= 4b  |A p39 'tomvol*v.80'
+#drum "a"= 4g+ |A p39 'tomvol*v.84'
+#drum "g"= 4f+ |A p39 'tomvol*v.84'
+
+{1} %e1 'init' ~
+## From track 7 / high synth
+'dist-o1*v.64' p21
+m8,8a+24 [3m4,-4^48 m8,8^24]
+'overdrive*v.712' a+32^48&2ra+8r16
+~$## 2-17 -- from track 5 / flute
+'clarinet*v.623+o2' p64 'FluteVib' l16
+[d+2..>a+b<  c+2..>a+b    a+2..b<c+>  b1 j2
+ f+2..f+g+  a+2.b8.a+    g+1  f+3g+3a+3<]
+<m9,1g2..f+e  f+2d+2    d1 'piccolo+o2*v.867' [5gab]g
+## 18-25 -- from track 2 / strings
+'strings*v.76+o1' 'StringsVib' p78
+c+4.>bab4<c+4  c4.>g+<cf4c4    c+4.>bab4<c+4>  b4.abab12r24a12r24b8.
+a+4.a+a+a+4.g+a+  <c4.cc>a+4.g+8    g+1.
+'overdrive*v.525+o1' 'OverVib' m9,1 g6f+6e6
+;
+
+{2} %e1 ~
+## From track 2 / middle synth
+'dist-o1*v.68' p39
+m8,8d+24 [3m4,-4^48 m8,8^24]
+'overdrive*v.757' g32^48&2rg8r16
+~$## 2-17 -- from track 4 / synth
+'dist*v.68' p89 l16
+['d*v.68'([3d+>'d*v.646'b <]]'d*v.68')([d+>'d*v.646'b <])
+['d*v.68'([3e >'d*v.646'b <]]'d*v.68')([e >'d*v.646'b <])
+['d*v.68'([3f >'d*v.646'b <]]'d*v.68')([f >'d*v.646'b <])
+['d*v.68'([3e >'d*v.646'b <]]'d*v.68')([e >'d*v.646'b <])
+['d*v.68'([3d+>'d*v.646'a+<]]'d*v.68')([d+>'d*v.646'a+<])
+['d*v.68'([3c+>'d*v.646'a+<]]'d*v.68')([c+>'d*v.646'a+<])
+['d*v.68'([3e >'d*v.646'g+<]]'d*v.68')([e >'d*v.646'g+<])
+['d*v.68'([3d+>'d*v.646'f+<]]'d*v.68')([d+>'d*v.646'f+<])
+
+['d*v.68'([3d+>'d*v.646'b <]]'d*v.68')([d+>'d*v.646'b <])
+['d*v.68'([3e >'d*v.646'b <]]'d*v.68')([e >'d*v.646'b <])
+['d*v.68'([3f >'d*v.646'b <]]'d*v.68')([f >'d*v.646'b <])
+['d*v.68'([3e >'d*v.646'b <]]'d*v.68')([e >'d*v.646'b <])
+['d*v.68'([3d+>'d*v.646'g+<]]'d*v.68')([d+>'d*v.646'g+<])
+['d*v.68'([3c+>'d*v.646'f+<]]'d*v.68')([c+>'d*v.646'f+<])
+['d*v.68'([3d >'d*v.646'g <]]'d*v.68')([d >'d*v.646'g <])
+['d*v.68'([3d >'d*v.646'g <]]'d*v.68')([d >'d*v.646'g <])
+## 18-25 -- from track 4 / synth
+>
+['d*v.68'([3a <'d*v.646'c+>]]'d*v.68')([a <'d*v.646'c+>])
+['d*v.68'([3g+<'d*v.646'c >]]'d*v.68')([g+<'d*v.646'c >])
+['d*v.68'([3a <'d*v.646'c+>]]'d*v.68')([a <'d*v.646'c+>])
+['d*v.68'([3b <'d*v.646'd >]]'d*v.68')([b <'d*v.646'd >])
+<
+['d*v.68'([3f+ 'd*v.646'a+ ]]'d*v.68')([f+ 'd*v.646'a+ ])
+['d*v.68'([3g+<'d*v.646'c >]]'d*v.68')([g+<'d*v.646'c >])
+['d*v.68'([3f  'd*v.646'a+ ]]'d*v.68')([f  'd*v.646'a+ ])
+ 'd*v.68'([3f  'd*v.646'a+ ] 'd*v.68')( f  'd*v.646'a+  )
+ 'd*v.714'e6e6e6
+;
+
+{3} %e1
+## from track 3 / bass
+'bass-o3*v.89' p64 l16 ~
+r6^ d+d+8r
+~$## 2-17 -- from track 3 / bass
+[8 'b*v.8' g+8.'b*v.76'g+<g+8>g+4g+8.<g+>d+8 ]
+[5         g+8.        g+<g+8>g+4g+8.<g+>d+8 ]
+         < d+8.        d+<d+8>d+4d+8.<d+>a+8 >
+           g8.         g <g8 >g4 g8. <g  d8 >
+           g8.         g <g8 >g8.<g>g8<gd8b
+## 18-25 -- from track 3 / bass + extra synths
+f+8^48r24f+8r4..>f+f+6r48<
+f8^48r24f8r4..>ff6r48<
+f+8^48r24f+8r4..>f+f+6r48<
+g4^32r16.g24r48>ggg12r24g12r24g<g8
+
+'synth-o1' p64 p0,12,16
+[8 'y*v.5'a+ 'y*v.33'd+]
+[8 'y*v.5'<c>'y*v.33'f ]
+[12'y*v.5'a+ 'y*v.33'c+]
+
+'bass-o2*v.71' p p64 a6 <'b*v.76'a6>> 'b*v.84'a6
+;
+
+{4} %e1 ~
+## from track 1 / drumset
+l16 r6^ "s+s+8i"
+~$## 2-17 -- from track 1 / drumset + track 6 / toms
+"!!!o" l16
+[15"g8.vs4k8u8r8i8"]
+"g8.vs4k8u8r8t+t+"
+## 18-25 -- from track 1 / drumset + track 6 / toms
+"!!!o" [4"g8.vs4k8u8r8i8"]
+"!!!o" [3"a8.vs4i8j8r8t8"]
+"g8.vspt8rs8r+8qr8"
+;
+
+{5} %e1 ~
+## from track 4 / glitchy bass
+'overdrive-o1*v.68' p107 %r6
+m8,8f+24 [3m4,-4^48 m8,8^24]
+'o*v.757' a+32^48&2ra+8r16
+~$## 2-17 -- from track 2 / flute
+'clarinet*v.578+o1' p64 'FluteVib' l16
+d+2..>a+b<  c+2..>a+b    a+2..b<c+>  b1
+k2< f+2..f+g+  f+2.b8.a+    g+1 k0 d+3f3f+3
+b2..f+g+  a+2..a+b    k2a+2..b<c+>k0  g+1
+<e2..d+c+  d+2>a+2    b1 'piccolo*v.623+o3' d1
+## 18-25 -- from track 5 / strings
+'strings*v.76' 'StringsVib' p78
+a4.g+f+g+4a4  g+4.fgg+4g4    a4.g+f+g+4a4  f+4.ef+ef+12r24e12r24f+8.
+c+4.c+c+c+4.c+c+  d+4.d+d+d+4.d+8    d+2.^c+.c.  c+2
+'overdrive*v.525+o1' 'OverVib' m9,1 e-6d+6c+6
+;
+
+{6} %e1 ~
+## from track 6 / low synth
+'dist-o1*v.68' p107
+m8,8c+24 [3m4,-4^48 m8,8^24]
+'overdrive*v.757' c+32^48&2rc+8r16
+~$## 2-17 -- from track 7 / synth
+'dist*v.736-o1' p39 l16
+['d*v.736'([3b 'd*v.7'g+]]'d*v.736')([b 'd*v.7'g+])
+['d*v.736'([3b 'd*v.7'g+]]'d*v.736')([b 'd*v.7'g+])
+['d*v.736'([3b 'd*v.7'g+]]'d*v.736')([b 'd*v.7'g+])
+['d*v.736'([3b 'd*v.7'g+]]'d*v.736')([b 'd*v.7'g+])
+['d*v.736'([3a+'d*v.7'f+]]'d*v.736')([a+'d*v.7'f+])
+['d*v.736'([3a+'d*v.7'f+]]'d*v.736')([a+'d*v.7'f+])
+['d*v.736'([3b 'd*v.7'e ]]'d*v.736')([b 'd*v.7'e ])
+['d*v.736'([3a+'d*v.7'd+]]'d*v.736')([a+'d*v.7'd+])
+
+['d*v.736'([3b 'd*v.7'g+]]'d*v.736')([b 'd*v.7'g+])
+['d*v.736'([3b 'd*v.7'g+]]'d*v.736')([b 'd*v.7'g+])
+['d*v.736'([3b 'd*v.7'g+]]'d*v.736')([b 'd*v.7'g+])
+['d*v.736'([3b 'd*v.7'g+]]'d*v.736')([b 'd*v.7'g+])
+['d*v.736'([3b 'd*v.7'e ]]'d*v.736')([b 'd*v.7'e ])
+['d*v.736'([3a+'d*v.7'd+]]'d*v.736')([a+'d*v.7'd+])
+['d*v.736'([3b 'd*v.7'e ]]'d*v.736')([b 'd*v.7'e ])
+['d*v.736'([3b 'd*v.7'e ]]'d*v.736')([b 'd*v.7'e ])
+## 18-25 -- from track 7 / synth
+['d*v.736'([3f+'d*v.7'a ]]'d*v.736')([f+'d*v.7'a ])
+['d*v.736'([3f 'd*v.7'g+]]'d*v.736')([f 'd*v.7'g+])
+['d*v.736'([3f+'d*v.7'a ]]'d*v.736')([f+'d*v.7'a ])
+['d*v.736'([3g 'd*v.7'b ]]'d*v.736')([g 'd*v.7'b ])
+<
+['d*v.736'([3d+'d*v.7'f+]]'d*v.736')([d+'d*v.7'f+])
+['d*v.736'([3f 'd*v.7'g+]]'d*v.736')([f 'd*v.7'g+])
+['d*v.736'([3c+'d*v.7'f ]]'d*v.736')([c+'d*v.7'f ])
+ 'd*v.736'([3c+'d*v.7'f ] 'd*v.736')( c+'d*v.7'f  )
+> 'd*v.773' a6a6a6
+;
+
+{7} %e1 ~
+## from track 5 / high bass octave
+'bass-o2*v.76' p64 l16
+r6^ d+d+8r
+~$## 2-17 -- from track 6 / toms + track 1 / drumset
+"!!!o" l16
+[15"k4.t4j8uu8c"]
+   "k4.t4j8tti8"
+## 18-25 -- from track 6 / toms + track 1 / drumset
+"!!!o" [4"k4.t4j8uu8c"]
+"!!!o" [3"k4.t8a8.v8.j8"]
+"k8.k"r8"k4u8uu8c"
+;
+
+{8} %e1 ~
+## from track 8 / flute
+'piccolo+o2*v.66'
+r6r16 b32r32b32r32r8
+~$## 2-17 -- 
+'piccolo*v.623+o2' p64 'FluteVib' l16
+[d+2..>a+b<  c+2..>a+b    a+2..b<c+>  b1 j2
+ f+2..f+g+  a+2.b8.a+    g+1  f+3g+3a+3<]
+<m9,1g2..f+e  f+2d+2    d1 'clarinet+o1*v.289' [5gab]g
+## 18-25 -- extra synths
+'synth-o1' p64 p0,12,16 m
+[8'y*v.5'a 'y*v.33'a ]
+[8'y*v.5'g+'y*v.33'g+]
+[8'y*v.5'a 'y*v.33'a ]
+[8'y*v.5'b 'y*v.33'b ]
+[8'y*v.5'f+'y*v.33'f+]
+[8'y*v.5'g+'y*v.33'g+]
+[8'y*v.5'f 'y*v.33'f ]
+[4'y*v.5'f 'y*v.33'f ] e6e6e6 p
+;
