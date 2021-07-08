@@ -135,6 +135,9 @@ class Window(QWidget):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
+        # build the UI
+        self.CreateLayout()
+
         previous_rom_path = ""
 
         try:
@@ -146,9 +149,6 @@ class Window(QWidget):
             pass
 
         self.romText = previous_rom_path
-
-        # build the UI
-        self.CreateLayout()
 
         # show program onscreen
         self.show()    #maximize the randomizer
