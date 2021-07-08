@@ -1,0 +1,130 @@
+#TITLE Ayla's Theme
+#ALBUM Chrono Trigger
+#COMPOSER Yasunori Mitsuda
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#VARIANT / vic
+#VARIANT ~ a
+
+#WAVE 0x20 ~0x66~/0x67/ strings
+#WAVE 0x21 ~0x81~/0x81/ trumpet 
+#WAVE 0x22 ~0x5C~/0x5C/ timpani
+#WAVE 0x23 ~0x1C~/0x1B/ snare
+#WAVE 0x24 ~0x4B~/0x4A/ tomtom
+#WAVE 0x25 ~0x2D~/0x2D/ crash 
+#WAVE 0x26 ~0x85~/0x7F/ horn
+
+#def 0i=   |0 %e1
+#def 0o=   o6
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1 %e1
+#def 1o=   o5
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2 %e1
+#def 2v=   v80
+#def 2f= v1,80
+
+#def 3i=   |3 %e0
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |4 %e0
+#def 4v=   v100
+#def 4f= v1,100
+
+#def 5i=   |5 %e1
+#def 5v=   v100
+#def 5f= v1,100
+
+#def 6i=   |6 %e1
+#def 6o=   o5
+#def 6v=   v115
+#def 6f= v1,115
+
+#drum "a"= 3a |2 %e1 p64
+#drum "b"= 5a |5 %e1 p64
+#drum "d+"= 4f+ |4 %e0 p10
+#drum "f+"= 4a |4 %e0 p40
+#drum "g"= 5g |3 %e0 p80
+
+
+{1}
+t171%v40%b0,80%f0,0
+~'4v*v.94'{P+}r4." !!!o f+4."^4{P-}~
+$101[8r1]'6v*v.94'%e1
+'6i' '6v*v.94'p64'6o'm24,24,201a4.<c4.g4^8f+4.e8f+24e12d4c4.d4.e4^8>a8
+g8a8f+8g8f+8d8a4.<c4.g4^8f+4.e8f+24e12d4c4.d4.e4^8a8g8f+8g8f+8e8d8>a4.
+<c4.g4^8f+4.e8f+24e12d4c4.d4.e4^8>a8g8a8f+8g8f+8d8a4.<c4.g4^8f+4.e8f+24
+e12d4c4.d4.e4^8a8g8f+8g8f+8e8d8
+;101
+
+
+{2}
+~'4v*v.94'{P+}r2r8" !!!o f+4."{P-}~
+'1v*v1.13''1i' '1v*v.94'p30'1o+o1'%e1
+$201[c12r4r24c12r24c12r24c12r4r24d12r4r24d12r24d12r24d12r4r24e12r4r24e12
+r24e12r24e12r4r24f+12r4r24f+12r24f+12r24f+12r24g12r24g12r24][c12r4r24c12
+r24c12r24c12r4r24d12r4r24d12r24d12r24d12r4r24e12r4r24e12r24e12r24e12r4
+r24f+12r4r24f+12r24f+12r24f+12r24g12r24g12r24c12r4r24c12r24c12r24c12r4
+r24d12r4r24d12r24d12r24d12r4r24e12r4r24e12r24e12r24e12r4r24f+12r4r24f+12
+r24a16r16a16r16a16r16a16r16]
+;201
+
+
+{3}
+~'4v*v.94'{P+}r2r4'4v*v.94'" !!!o d+4"{P-}~
+'1v*v1.13''1i' '1v*v.94'p98'1o'%e1
+$301[6g12r4r24g12r24g12r24g12r4r24a12r4r24a12r24a12r24a12r4r24<c12r4r24
+c12r24c12r24c12r4r24d12r4r24d12r24d12r24d12r24e12r24e12r24>]
+;301
+
+
+{5}
+~r1~
+%e1'0i' '0v*v.35'p108'0o'%a8%r8
+$401[6e1f+1g1a1]
+;401
+
+
+{6}
+~'3v*v.94'{P+}r16" !!!o g16"^8^2^4{P-}~
+'0v*v.66''0i' '0v*v.35'p20'0o'%e1%a8%r8
+$501[6c1d1e1f+1]
+;501
+
+
+{7}
+~'3v*v.94'{P+}r32" !!!o g32"^16^8^2^4{P-}~
+'0v*v1.13'%e1'0i' '0v*v1.20'p64'0o-o3'%a10
+$601[24a12r4r24a12r24a12r24a12r4r24]
+;601
+
+
+{4}
+~{P+}'3v*v.94'" !!!o g16"^16"g8g2"^4'3v*v1.20'~
+$701'3v*v1.27'"a4"'3v*v1.20'"g8"'3v*v1.27'"a16a16a4"'3v*v1.20'"g4"'3v*v1.27'
+"a4"'3v*v1.20'"g8"'3v*v1.27'"a8a4"'3v*v1.20'"g4"'3v*v1.27'"a4"'3v*v1.20'
+"g8"'3v*v1.27'"a16a16a4"'3v*v1.20'"g4"'3v*v1.27'"a4"'3v*v1.20'"g8"'3v*v1.27'
+"a8a4"'3v*v1.20'"g8g8"'3v*v1.27'"a4"'3v*v1.20'"g8"'3v*v1.27'"a16a16a4"'3v*v1.20'
+"g4"'3v*v1.27'"a4"'3v*v1.20'"g8"'3v*v1.27'"a8a4"'3v*v1.20'"g4"'3v*v1.27'
+"a4"'3v*v1.20'"g8"'3v*v1.27'"a16a16a4"'3v*v1.20'"g4"'3v*v1.27'"a4"'3v*v1.20'
+"g8"'3v*v1.27'"a8a4"'3v*v1.20'"g16g16g8"[7'3v*v1.27'"a4"'3v*v1.20'"g8"'3v*v1.27'
+"a16a16a4"'3v*v1.20'"g4"'3v*v1.27'"a4"'3v*v1.20'"g8"'3v*v1.27'"a8a4"'3v*v1.20'
+"g4"]'3v*v1.27'"a4"'3v*v1.20'"g8"'3v*v1.27'"a16a16a4"'3v*v1.20'"g4"'3v*v1.27'
+"a4"'3v*v1.20'"g8"'3v*v1.27'"a8"'3v*v1.20'"g8g8g8g8
+";701
+
+
+{8}
+~r1~
+$801'5v*v1.20'{P+}[" !!!o b1"^1r1r1]{P-}
+'0i' '0v*v.33'p40'0o+o1'%e1%a10%r8[r1r1r1r2a8.g16e16d16c16>b16a2^4r4r1
+r1a8<c8d8e8d8e8g8a8]
+;801
+

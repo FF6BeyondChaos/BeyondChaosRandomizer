@@ -1,0 +1,123 @@
+#TITLE Kids Run Through the City
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x95 clari
+#WAVE 0x21 0x50 abass
+#WAVE 0x22 0x36 guitar
+#WAVE 0x23 0x65 violas
+#WAVE 0x24 0xA1 recorder
+
+#def 0i=   |0
+#def 0o=   o4
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o4
+#def 1v=   v75
+#def 1f= v1,75
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v150
+#def 2f= v1,150
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |4
+#def 4o=   o4
+#def 4v=   v75
+#def 4f= v1,75
+
+
+{1}
+%b0,70%f0,0%v50t110r4t105r4t100r4t90r4.t85r8t75r4t110'0v*v.70'
+'0i' p84%e1m48,18,215'0o+o1'b4a4b4g2%l1g8a8%l0b4.a8b4<d2>g4<e4d4c4c4.>
+b8%l1b8<c8%l0>a2^4r2%l1g8a8%l0b4a4b4g2%l1g8a8%l0b4.a8b4<d2>g4<e4f+4g4>
+b2a4a2^4g2^4
+$101b4a4b4g2%l1g8a8%l0b4.a8b4<d2>g4<e4d4c4c4.>b8%l1b8<c8%l0>a2^4r2%l1g8
+a8%l0b4a4b4g2%l1g8a8%l0b4.a8b4<d2>g4<e4f+4g4>b2a4a2^4g2^4r2r4r2g4<g4f+4
+g4e4.d8c8e8d2^4>b2^4<g4f+4g4e4.d8c8e8d2^4r2r4g4f+4g4e2%l1e8f+8%l0g4.f+8
+g4a2^4e4f+4g4>b2a4a2^4g2^4r2r4r2r4
+;101
+
+
+{2}
+r4r4r4r4r4r4'1v*v.90'
+'1i' p64%e0m48,12,215'1o'g2g4e2^4g2g4b2^4<c2c4>a2a4f2f4<d4>a4<c4>g2g4e2
+^4b2b4g2^4<c2c4d2c4c2>f+4g2^4
+$201'1v*v.90'g2g4e2^4g2g4b2^4<c2c4>a2a4f2f4<d4>a4<c4>g2g4e2^4b2b4g2^4<
+c2c4d2c4c2>f+4g2^4g2g4f4.g8f4<c2>%l1b8'1v*v1.27'<c8%l0'1v*v.90'd2>a4b2
+a4g2%l1a8'1v*v1.27'b8%l0'1v*v.90'<c2c4>a2<d4>g4<d4>g4f+2f+4e2e4a2g8f+8
+e2e4f2^4<c2c4d2c4c2>f+4g2^4g2g4g2^4
+;201
+
+
+{3}
+'2v*v.50'
+'2i' p44%e1'2o+o1'd4c4>a4f+4.f+8%l1g16'2f*v12,1.20'^16a8%l0'2v*v.50''2o-o1'
+g8b8<d8g8d8>b8g8b8<e8g8e8>b8g8b8<d8g8d8>b8f+8b8<d8f+8d8>b8g8<c8e8g8e8c8
+>a8<c8e8a8e8c8>a8<c8f8a8f8c8>a8<d8f+8a8f+8d8>g8b8<d8g8d8>b8g8b8<e8g8e8
+>b8f+8b8<d8f+8d8>b8f8b8<d8g8d8>b8g8<c8e8g8e8c8>a8<d8f+8a8f+8d8>a8<c8d+8
+a8d+8c8>g8b8<d8g8d8>b8
+$301g8b8<d8g8d8>b8g8b8<e8g8e8>b8g8b8<d8g8d8>b8f+8b8<d8f+8d8>b8g8<c8e8g8
+e8c8>a8<c8e8a8e8c8>a8<c8f8a8f8c8>a8<d8f+8a8f+8d8>g8b8<d8g8d8>b8g8b8<e8
+g8e8>b8f+8b8<d8f+8d8>b8f8b8<d8g8d8>b8g8<c8e8g8e8c8>a8<d8f+8a8f+8d8>a8<
+c8d+8a8d+8c8>g8b8<d8g8d8>b8g8b8<d8g8d8>b8g8b8<d8f8d8>b8g8<c8e8g8e8c8>a8
+<d8f+8a8f+8d8>f+8b8<d8f+8d8>b8g8b8<d8g8d8>b8g8<c8e8g8e8c8>a8<c8e8a8e8c8
+>g8b8<d8g8d8>b8f+8b8<d8f+8d8>b8g8b8<e8g8e8>b8a8<c+8e8a8e8c+8>g8b8<e8g8
+e8>b8a8<c8f8a8f8c8>g8<c8e8g8e8c8>a8<d8f+8a8f+8d8>a8<c8d+8a8d+8c8>g8b8<
+d8g8d8>b8g8b8<d8g8d8>b8g8<c8d+8a8d+8c8>
+;301
+
+
+{4}
+'2v*v.50'
+'2i' p44%e1'2o'r4r4r4d2d4'3v*v.60'
+'3i' p54%e1%a4%r6r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2
+r4r2r4r2r4
+$401'3o'g2^4^2^4g2^4f+2^4g2^4a2^4^2^4^2^4g2^4^2^4f+2^4f2^4g2^4a2^4^2^4
+g2^4^2^4f2^4<e4d4e4c4.d8f+8a8b2^4^2^4e4d4e4c4.d8e8a8b2^4^2^4e4d4e4c+2c+8
+d8e4.d8e4f2^4e2^4f+2^4a2^4g2^4^2^4a2^4
+;401
+
+
+{5}
+'2v*v.50'
+'2i' p44%e1'2o'f+4e4c4>a2b4'3v*v.60'
+'3i' p74%e1%a4%r6r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2
+r4r2r4r2r4
+$501'3o'd2^4e2^4d2^4^2^4e2^4^2^4f2^4f+2^4d2^4e2^4d2^4^2^4e2^4f+2^4d+2^4
+d2^4^2^4^2^4g2^4f+2^4^2^4f2^4g2^4f+2^4g2^4f+2^4b2^4a2^4b2^4a2^4<c2^4^2
+^4c2^4>b2^4^2^4<c2^4
+;501
+
+
+{7}
+'2v*v.50'
+'2i' p44%e1'2o-o1'd4e4f+4d2d4'3v*v.60'
+'3i' p94%e1%a4%r6r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2
+r4r2r4r2r4
+$701'3o-o1'b2^4^2^4b2^4^2^4<c2^4^2^4c2^4^2^4>b2^4^2^4b2^4^2^4<c2^4^2^4
+c2^4>b2^4^2^4^2^4<c4d4e4d2^4d2^4^2^4c4d4e4c2^4d2^4^2^4e2^4^2^4e2^4f2^4
+g2^4f+2^4d+2^4d2^4^2^4d+2^4
+;701
+
+
+{6}
+r4r4r4r4r4r4'4v*v.40'
+'4i' p44%e1m48,18,215r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2
+r4r2r4r2r4r2r4
+$601'4o+o1'd4c4d4>b2%l1b8<c8%l0d4.c8d4f+2r4g4f+4e4e4.d8%l1d8e8%l0c2^4r2
+>%l1b8<c8%l0d4c4d4>b2%l1b8<c8%l0d4.c8d4f2r4e4d4c4d2c4c2^4>b2^4r2r4r2r4
+r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2r4r2
+r4
+;601
+

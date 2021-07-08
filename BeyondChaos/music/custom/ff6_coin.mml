@@ -1,0 +1,133 @@
+#TITLE Coin of Fate
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0xA5 flute
+#WAVE 0x21 0x65 violas
+#WAVE 0x22 0x19 rhodes
+#WAVE 0x23 0x53 fretless
+##WAVE 0x2A 0x91 oboe B6 (G+6+)
+##WAVE 0x2B 0x92 oboe F6 (D+6 - G6)
+#WAVE 0x2C 0x93 oboe C+6 (A+5 - D6)
+#WAVE 0x2D 0x94 oboe A5 (A5-)
+
+#def o1= |D
+#def o2= |C
+#def o3= |B
+#def o4= |A
+#def o2u= |C
+#def o3u= |B>
+#def o4u= |A
+#def o1d= |D
+#def o2d= |C<
+#def o3d= |B
+
+#def 3@i=   |2
+#def 3@o=   o4
+#def 3@v=   v200
+#def 3@f= v1,200
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v200
+#def 0f= v1,200
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v200
+#def 1f= v1,200
+
+#def 2i=   |A
+#def 2o=   o5
+#def 2v=   v200
+#def 2f= v1,200
+
+#def 3i=   |3
+#def 3o=   o4
+#def 3v=   v400
+#def 3f= v1,400
+
+
+{1}
+t70%b0,70%f0,0%v50%x127
+$101'3@v*v.60'
+'3@i' p84%e1%r13m48,16,12'3@o'g+8.^24r48b4a+4f+4g+1e8.^24r48g+4f+4c4c+2
+c+8d+8e8g+8<c+4>b8<c+8d+4>b4g+4f+8g+8b4g+4f+4e8f+8g+4e4c+2^8d+8e8g+8<c+4
+>b8<c+8d+4>b4g+4f+8g+8b4g+4f+4e8f+8g+4a+8<c8c+1'0v*v.60'
+'0i' p84%e1m48,18,239'0o-o1'b8<c+8>a8f+8g+8a8<c+8f+8e4c+2^8r8c+8d8>a8f+8
+d8f+8a8<d8c+2^4.r8>b8<c+8>a8f+8g+8a8<c+8f+8g+4e2^4r1<%l1c+8d8%l0>%l1a8
+g+8%l0f+2r1%l1b8<c8%l0>%l1g8f+8%l0e2r1r1r1r1
+;101
+
+
+{2}
+
+$201'3@v*v.60'
+'3@i' p74%e1%r13m48,16,12r8.r24'3@o'g+4f+4c+4d+48^2^4.^16^24c+48^8.^48
+r48e4d4>g+4g+48^1r4.<a8g+2r4.e16^32^64r64f+2r4.c16^32^64r64d+4r4r1r4.a8
+g+2r4.e16^32^64r64f+2r4.c16^32^64r64d+4e8d+8'1v*v.30'
+'1i' p54%e1%a4%r6'1o'r2f2f+1g+1b1a1a1g+1<c+1^1>b1^1b1a+1<c+1c1
+;201
+
+
+{6}
+'1v*v.35'
+'1i' p64%e1%a4%r6
+$301r1r1r1r1r1r1r1r1r1r1r1r2'1o-o1'b2<c+1e1f+1^1e1e1f+1^1e1^1e1^1f+1^1
+
+;301
+
+
+{7}
+'1v*v.40'
+'1i' p74%e1%a4%r6
+$401r1r1r1r1r1r1r1r1r1r1r1r2'1o-o1'g+2a1<c+1^1^1c+1^1e1^1d1^1c+1^1d+1^1
+
+;401
+
+
+{8}
+'1v*v.45'
+'1i' p84%e1%a4%r6
+$501r1r1r1r1r1r1r1r1r1r1r1r2'1o-o1'c+2f+1e1d1c+1f+1e1d1^1c1^1f+1^1g+1^1
+
+;501
+
+
+{3}
+
+$601'3@v*v.60'
+'3@i' p64%e1%r13m48,16,12r8.r48'3@o'e4c+4>a+4g+24^2^4.^12a24^8.^48<c+4
+>a4f+4e24^1r4<e8.^32^64f+2^64r4>b8.^32^64<e2^64r4>a8.^32^64<c2^64r4>g+4
+r2r4<e8.^32^64f+2^64r4>b8.^32^64<e2^64r4>a8.^32^64<c2^64r1r1r1r1r1r1r1
+'2v*v.50'
+'2i' p64%e1m48,18,239'2o+o1''o2'%l1c+8d8%l0>'o1d'%l1a8g+8%l0f+2r1'o2u'%l1b8<c8%l0>'o1d'%l1
+g8f+8%l0e2r2r8c8d8e8f+1r1r1r1
+;601
+
+
+{5}
+'3@v*v.60'
+'3@i' p54%e1%r13m48,16,12
+$701'3@o-o1'e2d+2c1>a2<d2c+1r8<c+4^16^32d+2^32r8>g+4^16^32<c+2^32r8>f+4
+^16^64r64g+2^32r8e4e8r8b8a+8g+8r8<c+4^16^32d+2^32r8>g+4^16^32<c+2^32r8
+>f+4^16^64r64g+2^32<f+4g+8f+8f2>f+8<c+8f+4.>b8<c+8>a8c+8g+8<e2^4>>b8<f+8
+b8<d8f+2>f+8<c+8f+4.>b8<c+8>a8f+8<c+8f+4.>b8<c+8>a8c+8g+8<e2^4>d8a8<d8
+f+8a2>d1c8g8<c8e8g2>c1f+8b8<c+8f+4c+8>b8f+8f+8a+8<c+8f+8a+2>g+8<c+8d+8
+g+4d+8c+8>g+8g+8<c8d+8g+8<c2
+;701
+
+
+{4}
+
+$801'3@v*v.60'
+'3@i' p44%e1%r13m48,16,12r1r1r1r1'3@o-o1'a4.^16^64g+2^32^64e4.^16^64f+2
+^32^64d4.^16^64f+2^32^64c+2c+2a4.^16^64g+2^32^64e4.^16^64f+2^32^64d4.^16
+^64f+2^32^64<c+4>g+4c+2'3v*v.50'
+'3i' p64%e1m48,24,215%a10%r13'3o'f+1c+1>b1<f+2^4c+4f+1c+1d1<d4.>a4f+4d8
+c1<c4.>g4e4c8f+2^8c+4c+8f+1d+2^8g+4g+8d+1
+;801
+

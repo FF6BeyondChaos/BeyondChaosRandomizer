@@ -1,0 +1,265 @@
+[Samples]
+
+# PIANO                                                  -------------
+01: 01_sd3_gpia6      , 0810, +0    , FFEF, {563}  [+12] GrandPiano6
+02: 02_sd3_gpia5      , 651F, -3.762, FFEB, {915}  [   ] GrandPiano5
+03: 03_sd3_gpia4      , 6426, +2.930, FFEA, {1119} [   ] GrandPiano4
+04: 04_l2_cpia3       , 3B01, f-85  , BF8E, {41}   [   ] CasinoGrand3
+05: 05_sd3_gpia2      , A803, -0.226, CFCD, {122}  [-24] GrandPiano2
+06: 06_tn_hpia8       , 7500, *.8797, AF2F, {14}   [+36] LQ Piano8
+07: 07_thg_pia        , 6F06, *.658 , DF90, {186}  [   ] ClearPiano~4
+08: 08_ct_lowpia      , 7B03, 5200  , FFEA, {111}  [-12] Bass Piano
+09: 09_fm_gpia6       , BA0C, c+-08 , FFEF, {433}  [+12] G.Piano6 LQ
+
+# ZITHERS ETC                                                        -------------
+10: 10_smr_bpia4            , 6F18  , -7.086, FFEC    , {883}  [   ] BrightPiano4
+11: 11_smr_bpia3            , 2913  , +2.875, FFED    , {572}  [   ] BrightPiano3
+12: 12_thg_harpsi           , 9B04  , *1.324, EF8F    , {137}  [   ] Harpsichord
+13: 13_ct_12stg             , D413  , BB74  , FFEE    , {574}  [   ] Bright 12str
+14: 14_rh_dulci             , 330C  , -2.210, F 7 7 0A, {351}  [   ] Dulcimer
+15: 15_ff10_santur4         , @229bl, ^b+20 , FFEC    , {237}  [   ] Santur
+16: 16_rh_clavi             , 4F05  , -3.398, F 7 7 0F, {166}  [-24] Clavinet
+17: 17_rh_softrep           , B706  , -2.210, F 4 3 0A, {195}  [   ] Soft Rock EP
+18: 18_ff7_choreplq         , @75bl ,  ^d-26, F 1 3 0B, {105}  [+12] Chorus EP LQ
+19: 19_ff7_chorep           , @279bl, *0.750, FFEA    , {545}  [+12] Chorus Epiano
+
+# BELLS ETC                                                            -------------
+20: 20_tn_celesta             , 3804  , *.807 , FFEF    , {142}  [   ] Celesta/ToyP
+21: 21_ff5_glock              , F504  , FE48  , FFF0    , {297}  [+36] Glockenspiel
+22: 22_rs3_vibra              , 4605  , E100  , FFEC    , {152}  [+12] Vibraphone
+23: 23_ff6_marimb             , 5406  , A960  , FFEC    , {195}  [   ] Marimba
+24: 24_smr_marimb             , F300  , -0.25 , FFF4    , {36}   [   ] Marimba LQ
+25: 25_rh_xylo                , CE07  , -2.210, F 3 1 0A, {226}  [   ] Xylophone
+26: 26_smr_steeld             , F207  , A8A6  , FFD3    , {229}  [   ] Steel Drum
+27: 27_rs1_bell               , D104  , E300  , FFF2    , {141}  [+12] Melodic Bell
+28: 28_ff7_tbell              , @268bl, *0.505, FFEB    , {317}  [+12] Tubular Bell
+29: 29_sd2_tbell              , 3B01  , F200  , FF8D    , {49}   [+12] T.Bell Alt.
+
+# ACOUSTIC GUITARS                                               -------------
+30: 30_ct_sitar             , 830A  , FE00  , FFEE, {308}  [-12] Sitar
+31: 31_ff7_banjo            , @256bl, *1.100, FFEB, {261}  [   ] Banjo
+32: 32_ff5_bouz             , 1803  , FC90  , FFF1, {97}   [-12] Mandolin
+33: 33_sd2rs_12stg          , 2A03  , FC60  , FFEF, {99}   [-12] 12str.Guitar
+34: 34_ff7_steelg           , @389bl, *0.704, FFEB, {437}  [   ] Steel Guitar
+35: 35_l2_nylong            , 2A03  , *0.769, FFED, {97}   [-12] Nylon Guitar
+36: 36_ff7_classig          , @319bl, *0.605, FFEB, {330}  [   ] Classical Gtr
+
+# ELECTRIC GUITARS                                                   -------------
+38: 38_ff7_cleang            , @283bl, *0.770, FFEA   , {290}  [-12] Clean Elec.G
+39: 39_ctx_jcm12st           , @628bl, d-48  , FFE0   , {642}  [   ] SoloOverdrive
+40: 40_ebr_synod             , 5202  , *1.316, F 7 7 0, {69}   [+12] SynthOverdrive
+41: 41_ff6_s50dist           , FA05  , 29C0  , FFE0   , {444}  [-24] S50 DistFuzz
+42: 42_misc_s50distl         , @299bl, b-19  , FFE0   , {454}  [-12] S50 DistLoop
+43: 43_misc_s50distc         , @107bl, f+70  , FFE0   , {118}  [-12] S50 DistClean
+44: 44_misc_s50distp         , @268bl, c-6   , FFE0   , {398}  [-12] S50 Pwr.Chord
+45: 45_rh_fzdist             , 7B0C  , -3.00 , F 6 7 0, {523}  [-24] Fuzzy Dist.G
+46: 46_fmgh_dist             , 7E09  , CC00  , FFE0   , {524}  [-12] Chug Dist.G
+47: 47_lal_dist              , 3D05  , E170  , CFC0   , {519}  [-12] Clear Dist.G
+48: 48_ebr_dgpopen           , 2103  , *0.821, FFE0   , {119}  [-12] DG Open PM/LQ
+49: 49_ebr_dgpmute           , 8004  , *0.984, FFE0   , {137}  [-12] DG Palm Mute
+
+# BASS GUITARS AND SYNTHS                                      -------------
+50: 50_tn_abass        , EB02  , d-44  , F 4 5 C, {90}   [-12] Acoustic Bass   
+51: 51_smr_ebass       , 3702  , -0.261, FFEC   , {81}   [-24] Picked Bass
+52: 52_fm_ebstone      , 1200  , *0.99 , DFAD   , {11}   [-12] Ebass LQ
+53: 53_l2_fretlbs      , AE06  , g+35  , FFEB   , {200}  [-12] Fretless Bass
+54: 54_ff7m_synbs      , @179bl, *0.715, FFEB   , {192}  [-24] SynBass Sweep
+55: 55_ff6_synbs       , 8004  , FDA0  , FFE0   , {146}  [-24] SynBass Alt.
+56: 56_top_slapb       , BF04  , *1.149, FFCE   , {156}  [-24] Slap Bass
+
+# ORCHESTRA A                                                  -------------
+57: 57_sd3_pizzb            , 5D0F, g+    , FFEA, {437}  [   ] Pizzi Bass
+58: 58_lal_pizzo            , 7008, B700  , BE73, {253}  [   ] Pizzi Oct.
+59: 59_top_pizz             , B502, *.877 , FFF4,  {79}  [+12] Pizzicato
+5A: 5A_l2_timpa             , 0306, a+04  , FFF1, {207}  [-12] Timpani Crop
+5B: 5B_ff6_timpa            , 0000, a+-19 , FFE0, {400}  [   ] Timpani Full
+5C: 5C_ebr_timpa            , E907, c++01 , FFE0, {225}  [   ] Timpani Deep
+5D: 5D_ff5_timpa            , 9411, FB00  , FFE0, {500}  [   ] Timpani Heavy
+60: 60_ff6_harp             , 9F03, A940  , FFF0, {106}  [   ] Harp
+61: 61_l2_harp              , 1404, *0.659, FFF2, {122}  [   ] Spoony Harp
+
+# STRINGS                                                            -------------
+62: 62_misc_s50hvins         , @120bl, ^a-20 , FFE0   , {714}  [   ] Str/Violins
+63: 63_misc_s50ovias         , @165bl, ^f+20 , FFE0   , {570}  [   ] Oct.Str/Horn
+64: 64_ff6_trcontra          , 7704  , C500  , FFE0   , {492}  [-24] ContrabassTrm
+65: 65_ff6_strings           , 2103  , AFA0  , FFE0   , {1046} [   ] Str/Violas
+66: 66_tcx_fstrings          , @1bl  , ^f++40, FDE0   , {814}  [   ] Str/ViolaFast
+67: 67_misc_s50svias         , @1bl  , ^d++22, D 2 5 0, {356}  [   ] Str/ViolaLQ
+
+# ORCHESTRA B                                                  -------------
+68: 68_ff7_orch             , @0bl, *0.927, FFE0, {315}  [+12] Orch Stabs
+69: 69_thg_orch             , BB17, *1.003, FFE0, {675}  [   ] Orch Hit
+70: 70_rs3_vinv             , B409, ^f-23 , FFE0, {762}  [   ] Violin Vib
+71: 71_ebr_vin              , 1D04, *0.878, FFE0, {119}  [+12] Solo Violin
+72: 72_smr_vin              , 9306, -2.285, FFE0, {191}  [   ] Fiddle
+
+# VOX                                                            -------------
+73: 73_ff7_tvox            , @0240bl, *0.752, FFE0, {729}  [   ] Tenor Choir
+74: 74_sd3_avox            , 2400   , -3.906, FAE0, {730}  [   ] Alto Choir
+75: 75_rs2_svox            , 1B00   , c-11  , FFE0, {248}  [+12] Soprano Choir
+76: 76_smr_flute           , 7704   , -3.125, FFE0, {378}  [   ] Voice Oohs
+77: 77_fm_rscbright        , 7704   , FFF0  , FFE0, {588}  [   ] BrightnessPad
+78: 78_sd2_vox             , 1B00   , E200  , FEE0, {378}  [   ] Vox Pad
+79: 79_sd2x_ovox           , @1bl   , ^g+   , FEE0, {452}  [   ] Oct Vox Pad
+
+# BRASS                                                               -------------
+7F: 7F_ebr_hobo               , 0A02  , *0.657, F 7 7 0, {61}   [   ] ReedyHornLQ
+80: 80_ff4_tpx2               , D002  , b+19  , F 7 7 0, {88}   [   ] OctLQ Trumpet
+81: 81_ct_tpet                , 9C06  , E16C  , F 2 7 0, {192}  [   ] Trumpet
+82: 82_ff4_tpet               , 8C01  , b+19  , F 7 7 0, {48}   [   ] Trumpet LQ
+83: 83_ff6rs_tuba             , 5304  , FDA0  , FFE0   , {131}  [-12] Euphonium
+84: 84_ff7_horn               , @311bl, *0.880, F 3 5 0, {323}  [   ] Horn
+85: 85_rh_horn                , 721E  , -2.210, F 0 7 0, {870}  [   ] Power horn
+86: 86_mq_horn                , C906  , ^e+20 , F 0 7 0, {196}  [   ] Mellow horn
+87: 87_misc_rscbrass1         , @151bl, ^a-15 , FFE0   , {301}  [   ] Brass Section
+88: 88_misc_rscbrasso         , @301bl, ^a-15 , FFE0   , {451}  [   ] Octave Brass
+89: 89_sd3_obrass             , 1B09  , +8.625, FFE0   , {274}  [   ] OctBrassBrite
+ 
+# REED                                                     -------------
+90: 90_smr_bsoon      , 4902  , -0.25 , FFE0, {74}   [-12] Bassoon
+91: 91_ebr_oboe83     , 2001, *0.879  , FFE0, {34}   [+12] Oboe83 (B6)
+92: 92_lal_oboe77     , 4401  , E086  , FFE0, {38}   [+12] Oboe77 (F6)
+93: 93_tn_oboe73      , 3201  , *.660 , FFE0, {37}   [   ] Oboe73 (C+6)
+94: 94_ebr_oboe69     , 9E01  , *0.879, FFE0, {50}   [   ] Oboe69 (A5)
+95: 95_rs1_clari      , EC04  , b+30  , FFE0, {144}  [   ] Clari mild
+96: 96_smr_clari      , BF04  , -0.210, FFE0, {144}  [   ] Clari harsh
+97: 97_smr_bclari     , A404  , -0.25 , FFE0, {150}  [-24] Bass Clarinet
+98: 98_ct_tsax        , F50D  , D300  , FEE0, {412}  [-12] Tenor Sax
+99: 99_ff6_bagp       , E20B  , 6EE0  , FFE0, {351}  [   ] Bagpipe
+                      
+# WIND                                                           -------------
+A1: A1_rs3_rcdr               , A905, FB00  , FFE0, {404}  [+12] Recorder
+A2: A2_ct_panfl               , 6402, EE00  , FFE0, {309}  [+12] Pan Flute
+A3: A3_l2_bblow               , 9A02, *0.877, FFE0, {76}   [+12] Bottle Blow
+A4: A4_smr_picco              , 7F02, -2.277, FFE0, {72}   [+24] Piccolo
+A5: A5_fmgh_flute             , F105, 3760  , FFE0, {299}  [+12] Flute HQ
+A6: A6_bl_whistle             , 5D06, -2.26 , FFE0, {185}  [   ] Whistle
+A7: A7_ff6_flute              , 4104, E158  , FFE0, {123}  [+12] Flute LQ
+
+# ORGANS                                                        -------------
+B0: B0_ff6_pipeorgl     , 1B00 , f++37 , FFE0    , {299}  [-12] Pipe Organ HQ
+B1: B1_l2_pipeorg       , 1C02 , *1.094, FFE0    , {65}   [   ] Pipe Organ LQ
+B2: B2_ff7_polyorg      , @57bl, *0.733, FFE0    , {67}   [   ] PolyOrgan
+B3: B3_fmgh_rockorg     , 6E04 , ^e-51 , FFE0    , {151}  [   ] Rock Organ
+B4: B4_ff6_percorg      , 3B01 , BE90  , FFE0    , {116}  [-12] Perc Organ
+B5: B5_lal_rotorg       , E601 , ^g-45 , FFE0    , {202}  [   ] Rotary Org Hi
+B6: B6_rh_rotorg        , 1B00, -2.257 , F 2 5 00, {242}  [-12] Rotary Org Lo
+B7: B7_rs3_voxorg       , 6402, EF00   , FFE0    , {282}  [+12] Vox Mellotron
+
+A8: A8_l2_harmo               , B502  , *0.769, FFE0, {84}   [-12] Harmonica
+A9: A9_top_harmo              , 8208  , *.875 , FFE0, {246}  [   ] Melodica
+B9: B9_ct_accord              , 7704  , A07F  , FFE0, {410}  [   ] Accordion
+
+# SYNTHS                                                          -------------
+C0: C0_smr_callio             , 7704 , -0.121  , FFE0    , {350}  [+24] Calliope Oct
+C1: C1_ctrw_pwm               , @9   ,  b+10   , FFE0    , {257}  [   ] UltraPulseM
+C2: C2_rhx_saw                , @78bl, ^g+50   , FFE0    , {483}  [   ] UltraSawtooth
+C3: C3_fm_warm                , 7704   , FEE0  , FFE0    , {551}  [+12] Warmth Pad
+C4: C4_bf2_synstr             , 2901   , d-15  , FFE0    , {352}  [   ] SynString Pad
+C5: C5_bl_piapad              , 5F0A   , +5.77 , FFE0    , {840}  [+12] Piano Pad
+C6: C6_rh_sweep               , E30D, -2.210   , F 7 7 00, {399}  [   ] Sweep Synth
+
+# WAVEFORMS                                              -------------
+D0: D0_rh_sine       , 2400, -14.210, FFE0, {6}    [+12] SineWave
+D1: D1_misc_tri      , @1bl, b+19   , FFE0, {5}    [   ] TriangleWave
+D2: D2_rh_pduty50    , 0900, -2.210 , FFE0, {5}    [   ] Pulse D50
+D3: D3_ff7_pduty75   , @1bl, *0.880 , FFE0, {3}    [+12] Pulse D75
+D4: D4_misc_pduty88  , @1bl, b+21   , FFE0, {5}    [   ] Pulse D88
+D5: D5_fmgh_polytone , 1B00, 5200   , FFE0, {6}    [+24] OctaveTone
+D6: D6_ff7_mog1      , @2bl, *0.933 , FFE0, {19}   [-12] Ff7moog1
+
+E0: E0_fm_x6eris             , 1B00, ^d-40  , FFE0    , {10}   [-24] CursedDiscord
+E1: E1_fm_x7tari             , 1B00,  e+19  , FFE0    , {4}    [+12] CursedAtari
+E2: E2_top_odg               , 2307, *.878  , FFE0    , {207}  [   ] BitcrusherODG
+E3: E3_smr_mtpet             , 7101  , -7.25, FFE0    , {44}   [   ] Mute Trumpet 
+
+# KICK
+0A: 0A_ff6_kick            , 6504, 0000 , FFE0, {137}  [   ] Dry Kick A5
+0B: 0B_thg_kick            , 8C0A, *.508, FFE0, {300}  [   ] Hard Kick F5
+0C: 0C_rh_dkick            , FC09, -11  , FFE0, {284}  [   ] Deep Kick F5
+0D: 0D_rs3_trancebdr       , 0000, 0000 , FFE0, {303}  [   ] synth kick
+
+# SNARE                                                        -------------
+0E: 0E_smr_brush            , 9306, +0    , FCE0, {187}  [   ] Brush Snare    
+0F: 0F_ff7_trash            , @0bl, *0.579, FFE0, {315}  [   ] Trashcan
+1A: 1A_sd3_msnare           , CA08, +0    , FFE0, {250}  [   ] March Snare
+1B: 1B_ff6_snare            , 0000, 0000  , FFE0, {250}  [   ] Orch.Snare
+1C: 1C_rs3_snare            , 0000, 0000  , FFE0, {437}  [   ] Rock Snare
+1D: 1D_l2_hsnare            , 9807, *0.500, FFE0, {216}  [   ] Hard Snare
+1E: 1E_smr_synsn            , 9306, +0    , FFE0, {187}  [   ] Synth Snare
+1F: 1F_sd3_jsnare           , 9306, +3    , FFE0, {187}  [   ] Martial Snare
+
+# CYMBALS                                                        -------------
+2C: 2C_thg_clash          , 6207, *.618 , FFEE    , {344}  [   ] Orch.Clash
+2D: 2D_thg_crash          , 7305, *.752 , FFEE    , {354}  [   ] Crash Cymbal
+2E: 2E_bf2_crash          , BF04, *0.580, FFEE    , {260}  [   ] Crash LQ
+2F: 2F_rs3_gong           , 320A, E100  , FFEA    , {473}  [+12] Gong
+
+# HI HATS                                                          -------------
+3A: 3A_ff6_chh           , 0000   , 0000  , FFE0    , {81}   [   ] Closed Hihat
+3B: 3B_rs3_ohh           , 0000   , 0000  , F 5 7 00, {375}  [   ] Medium Hihat
+3C: 3C_ct_ohh            , 0000   , 0000  , F 2 7 00, {375}  [   ] Open Hihat
+3D: 3D_l2_dynhh          , 0900   , *1.000, F 5 0 18, {98}   [   ] Hihat LQ Clsd
+3E: 3D_l2_dynhh          , 0900   , *1.000, F 2 0 18, {98}   [   ] Hihat LQ Open
+2A: 2A_ff7_ride          , @0175bl, ^d++46, FFEC    , {259}  [   ] Ride Cymbal
+2B: 2B_fmghrs_ride       ,  8004  , C000  , F 7 7 12, {352}  [   ] Ride alt.
+
+# TOM                                                   -------------
+4A: 4A_misc_s50tomdry  , 0   , ^b+60, FFE0, {202} [   ] S50 Dry Tom
+4B: 4B_ff6_s50tom      , 0000, b    , FFE0, {750} [   ] S50 Full Tom
+4C: 4C_bl_gtom         , F80A, e    , FFE0, {312} [   ] Gated Tom
+4D: 4D_mq_tom          , 5907, ^c   , FFD4, {224} [   ] Lite Tom
+
+4E: 4E_rs3_timbale     , 0000, 0000  , FFE0, {437}  [   ] Timbale HQ
+4F: 4F_top_timbale     , 0000, ^f++22, FFEC, {164}  [   ] Timbale LQ
+
+# TAIKO                                            -------------
+5E: 5E_ff7_mdaiko, @0bl, ^a+46, FFE0, {783}  [   ] Miyadaiko
+5F: 5F_sd3_slam  , 2F0D, +0   , FFE0, {375}  [   ] Slam       
+BB: BB_sd3_boom  , FA05, -2   , FFEB, {409}  [   ] Distant Boom
+
+# SHAKEN                                                     -------------
+6A: 6A_lal_shake           , 8403, E000  , FFE0, {100} [   ] Shaker Short
+6B: 6B_ff6_shake           , 0000, 0000  , FFE0, {243} [   ] Shaker Full
+6C: 6C_smr_tamb            , 9306, +0    , FFE0, {187} [   ] Tambourine
+6D: 6D_top_jingle          , FF06, *1.046, FFF4, {332} [   ] Jingle Bells
+
+# CONGA ETC.                                                  -------------
+6E: 6E_ct_tablach           , 0000, 1E00 , FFE0, {264}  [   ] Tabla Chick
+6F: 6F_ct_tablane           , 0000, C000 , FFE0, {240}  [   ] Tabla Ne
+7A: 7A_top_congao           , 0000, *.523, FFEC, {149}  [   ] Conga Open
+7B: 7B_top_congas           , 0000, *.523, FFEC, {69}   [   ] Conga Slap
+7C: 7C_thg_conga            , 7E00, d+48 , FFF2, {100}  [   ] M.Conga @18
+7D: 7C_thg_conga            , 7E00, d+48 , FFF7, {100}  [   ] M.Conga @23
+7E: 7C_thg_conga            , 7E00, d+48 , FFFC, {100}  [   ] M.Conga @28
+
+# ACCENTS                                                -------------
+8A: 8A_bf2_clave      , 0000, *1.000, FFE0, {51}   [   ] Side Stick NQ
+8B: 8B_sd2_rim        , 8C0A, 9830  , FFE0, {300}  [-12] Side Stick HQ
+8C: 8C_ct_wblock      , 0000, 0000  , FFE0, {116}  [   ] Wood Block
+8E: 8E_ff7_snaps      , @0bl, *0.615, FFE0, {117}  [   ] Finger Snap
+8F: 8F_rh_claps       , BF04, -9.002, FFE0, {135}  [   ] Claps
+9A: 9A_top_guiro      , 0000, *.784 , FFE0,  {91}  [   ] Guiro Short
+9B: 9B_smr_guiro      , 8000, +0    , FFE0, {281}  [   ] Guiro Long
+
+# BELLS                                                     -------------
+9C: 9C_lal_cowb            , 2502, B500, FFE0, {61}   [   ] Cowbell
+9D: 9D_lal_trim            , A905, E500, FFF8, {188}  [   ] Mute Triangle
+9E: 9E_lal_trio            , 1302, FE00, DF75, {265}  [   ] Open Triangle
+9F: 9F_misc_s50mktree      , @1bl, 8000, FAE9, {919}  [   ] S50 Mark Tree
+
+# SFX                                                            -------------
+AA: AA_ff7_air              , @0bl, *0.918, FFE0   , {783} [   ] Air Wrench
+AB: AB_top_cuica            , 0000, ^f+50 , FFEC   , {166} [   ] Cuica
+AC: AC_fm_hiq               , 2E02, 0000  , FFE0   , {62}  [   ] 808 HiQ Zap
+AD: AD_top_fret             , 0000, *.587 , FFE0   , {207} [   ] Fret Noise
+AE: AE_smr_sfxwh            , 9501, -2.25 , FFA0   , {109} [-12] SFX Whistle 
+AF: AF_lal_jharp            , 5D0F, 2D00  , FFE0   , {437} [   ] LL jaw harp
+BA: BA_ff7_revc             , @2bl, ^g++52, 3 7 7 F, {114} [   ] rev.cymbal
+
+# RESERVED AREA - NOT FOR USE BY CUSTOM MUSIC                  ..............
+F0  : F0_ff6_ralse            , 1B00, 8000, FFE0, {414}  [-12] ralse      
+F1  : F1_ff6_draco            , 7704, 8800, FFE0, {496}  [-12] draco      
+F2  : F2_ff6_maria            , 1302, 29E4, FFE0, {344}  [+12] maria      
+FA  : FA_ff6_crane            , D20F, 0000, FFE0, {450}        sfxCrane
+FC  : FC_ff6_crowd            , 1200, 0000, FFE0, {717}        sfxCrowd

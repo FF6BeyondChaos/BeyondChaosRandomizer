@@ -1,0 +1,95 @@
+#TITLE Epitaph
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x13
+#WAVE 0x21 0x34
+#WAVE 0x22 0xA5
+
+#def 0i=   |0 %y4%s4
+#def 0o=   o6
+#def 0v=   v115
+#def 0f= v1,115
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v120
+#def 1f= v1,120
+
+#def 2i=   |2 %y0%s6%r2
+#def 2o=   o5
+#def 2v=   v85
+#def 2f= v1,85
+
+
+{1}
+t70%b0,70%f0,3%v50'0v*v.60'
+'0i' p64%e1r1r1r1r1
+$101'0o'a4<e8d8c+4.>a8b8<c+8>b4g4b4a1^2^4.^8a4<e8d8c+4.>a8<g4f4e4.d8e1
+^2^4.^8e8d8c8>a8b8<c8d8e8^2^4^4^1^2^4>d4f2^4e8f8g2^4^8d8f2^8a8g8f8g2^8
+^8e4a1^1r1r1
+;101
+
+
+{4}
+'1v*v.60'
+'1i' p55%e0%r12r4.'1o'e2^8r4.e2^8r4.e2^8r4.e2^8
+$201r4.e2^8r4.e2^8r4.e2f8r4.e2^8r4.e2^8r4.g2^8r4.e2e8r4.e2^8r4.f8r4.f8
+r4.e2^8r4.e8r4.e8r4.f+2^8'1v*v.10''1f*v192,.30'[24f24]'1f*v192,.10'[24
+e24]'1f*v192,.30'[24g24]'1f*v192,.10'[24g24]'1v*v.60'r4.e4.e4r4.e4.e4r4.
+g4.g4r2f+2
+;201
+
+
+{5}
+'1v*v.60'
+'1i' p50%e0%r12r4'1o'c+2^4r4d2^4r4c+2^4r4d2^4
+$301r4c+2^4r4d2^4r4c+2d4r4c+2^4r4c+2^4r4d2^4r4c+2d4r4c+4.c+4.r4c4r4>b4
+r4b4.b4.r4<d4r4c+4r4c+4.c+4.r4>a+4a+4a+4r4a+4a+4a+4r4a+4a+4a+4r4a+4a+4
+a+4r4<d4d4.d8r4c+4c+4.c+8r4c4c4.c8r4c2^4
+;301
+
+
+{6}
+'1v*v.60'
+'1i' p45%e0%r12r8'1o-o1'a2^4.r8g2^4.r8a2^4.r8g2^4.
+$401r8a2^4.r8g2^4.r8a2a4.r8a2^4.r8a2^4.r8a+2^4.r8a2g4.r8a2^8a4r8a4.r8g4.
+r8g2^8g4r8g4.r8g4.r8a2^8a4r8f4f4f4f8r8e4e4e4e8r8g4g4g4g8r8g4g4g4g8r8a2
+a4.r8a2a4.r8a2a4.r8a4a2^8
+;401
+
+
+{3}
+'1v*v.60'
+'1i' p40%e0%r12'1o-o2'a1e1a1e1
+$501a1e1a2<d2>a1a1g1a2e2a1<d2>g2<c1>e2a2<d1>a+1e1g1<c1>a1a1<d1d1>
+;501
+
+
+{2}
+'2v*v.50'
+'2i' p74%e1m48,18,239r1r1r1r1
+$601r1r1r4'2o-o1'a4<f4d4e2^4.r8r1r1r4>a4<e4d4c+2^4.r8r1r1%l1g8f+8%l0%l1
+e8>b8%l0<%l1c+8d8%l0%l1e8f+8^2^8r4.d1^2^4.r8d1^2^4.r8d2^8%l1e8d8%l0>b8
+<c+2^4.r8c1^2^4r4
+;601
+
+
+{7}
+'2v*v.50'
+'2i' p84%e1m48,18,239r1r1r1r1
+$701r1r1r4'2o-o1'e4<d4>a4<c+2^4.r8r1r1r4>e4g4b4a2^4.r8r1r1r1r1a+1^2^4.
+r8a+1^2^4.r8a1^2^4.r8g2^8a8g8e8f+2^4r4
+;701
+
+
+{8}
+'2v*v.50'
+'2i' p94%e1m48,18,239r1r1r1r1
+$801r1r1r1r1r1r1r1r1r1r1r1r1'2o-o1'f1g2^4.r8f1e2^4.r8e1^2^4.r8d1^2^4r4
+
+;801
+

@@ -1,0 +1,116 @@
+#TITLE Gargan Roo
+#ALBUM Final Fantasy IX
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#VARIANT *
+#VARIANT _ tr
+
+#WAVE 0x20 0x11 ~ was 0x58 cembalo
+#WAVE 0x21 0x59 ~ was 0x19 pizzicato
+#WAVE 0x22 0x13 ~ was 0x7B dulcimer-like-thing
+#WAVE 0x23 0x03 ~ was 0x8a piano4
+#WAVE 0x24 0x07
+
+#WAVE 0x28 0x0a ~ was 0x22 kick
+#WAVE 0x29 0x4a ~ was 0x66 tom
+#WAVE 0x2A 0x1d ~ was 0x7e snare
+#WAVE 0x2B *0x3c* _0x3e_ ~ was *0x68* _0x8F_ hihat
+#WAVE 0x2C 0x9b ~ was 0x2D guiro
+
+#def global= t90 %v50 %b0,70 %f0,0 %x255
+
+#def low= |0 v80 o3 p44 
+#def mid= |3 v127 o4 p74
+#def hi1= |2 v48 o6 p44 %r5%s5
+#def hi2= |2 v72 o6 p74 %r5%s3
+#def fb= |3 v64 o3 %r19 p64
+#def mid2= |4 v127 o4 p74 %r12
+#def st= %r21
+#def su= %r11
+#def p= "!!!op8"'fb'
+#def f= "!!!of8"'fb'
+
+#drum "b"=4c @7 v10 %a9%r26 p114 ##
+#drum "c"=5g |B v60 %r29
+#drum "f"=4f |C v100 %r17
+#drum "g"=5c |C v52 %r14 p16
+#drum "k"=5f |8 v100 p64
+#drum "o"=5f |B v40 %r
+#drum "p"=4a+ |1 v80
+#drum "s"=5b |A v80 p64
+#drum "t"=4b |9 v80 p64
+#drum "u"=4a+ |9 v80 p32
+#drum "v"=4g |9 v80 p96
+
+{1}
+'global' $ %e1
+['low''st' l4
+fa+<c>c+ <c>d+<c8>d+8'su'c+   'st'<c>a+f<d 'su'c1]
+'hi2' l16
+[aa+g8 <c>f+d+f+ f8f+24f24d+24 a+8d+8  j2
+<d+>bg+b <c>fd+f+ f8f+24f24d+24 a+8r8]
+f+d+fd+a+d+f+d+fdd+cd>a+g+f
+##13
+'mid2+o1'
+[r8d+>g< d8>dr ag<d+>g <d8>dr    r8ag <g>a+<d+>g f+dar <dj2>dar<]^8.^2
+;
+
+{2}
+$ %e1
+['low''st' l4
+<c>d+fg+ fa+f8a+8'su'g+   'st'fd+<c>g 'su'f1]
+'hi2' l8
+[<d16r.>f16r.r2  j2   a+16r.f+16r.r2] r1
+##13
+'mid2'
+l16[r8ar f+8r8 <d+r>ar f+8r8    r8<d+r cr>ar <dr8.>f+j2r8.]^8.^2
+;
+
+{3}
+$ %e1
+['mid''st' l4 k1 ^8
+d+d+a+d+ d+d+d+a a+d+d+a d+d+ad+8]
+'hi1' k0
+[l8 fd+c+c l16 >a+r<dr>a+r<c+r   j2,312  l8 f+fd+c l16 [>a+r<dr]]
+$312 l8 c>ba+ag+f+fd
+'low*v.8''st' l8 [15d+<d+>]'su'd+4^2
+;
+
+{5}
+$ %e1
+['mid''st' l4 ^8
+a+a+d+a+ a+aad+ aaad+ aad+a8]
+[4r1]
+'low*v.8''st' l4 [15a+]'su'a+^2
+;
+
+{6}
+$ %e1
+['mid''st' l4 k2 ^8
+aaaa aa+a+a+ d+a+a+a+ a+a+a+a+8]
+[4r1]
+'low*v.8''st'p64 l4 [15d+]'su'd+^2
+;
+
+{7}
+$ %e1
+['fb' l8
+f4d+'p'f4c+'f' f4d+'p'fd+c'f' f4d+'p'f4g'f' %rf4.'p'r4.'p']
+[4r1]
+[18"!!!ok4"]
+;
+
+{4}
+$ %e1
+l8 [32"kc"]
+[4r1]
+l4 r8 %e0 ["!!!otuv16v8.s tuv16v8."j2"u16u8."] r2r8
+;
+
+{8}
+$ %e1
+l4 [[6"gb"]"g1"]
+[4r1]
+l4 r8 [8"!!!oco"]"co8"
+;

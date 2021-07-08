@@ -1,0 +1,33 @@
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x81
+#WAVE 0x21 0x83
+
+#def 0i=   |0
+#def 0o=   o4
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o4
+#def 1v=   v100
+#def 1f= v1,100
+
+
+{1}
+%b0,70%f0,0%v70'0v*v.60'
+'0i' p50%e1m48,18,239t110'0o+o1'b4b24r24b24r24b24r24<t105c4t100d4e2^4r4
+;
+
+{2}
+'0v*v.60'
+'0i' p60%e1m48,18,239'0o+o1'e4g+24r24f+24r24e24r24e4f+4g+2^4r4;
+
+{3}
+'0v*v.60'
+'0i' p70%e1m48,18,239'0o'g+4b24r24a24r24g+24r24g4a4b2^4r4;
+
+{4}
+'1v*v.60'
+'1i' p80%e1m48,18,239'1o'e4e24r24e24r24e24r24c4>a4g+2^4r4;
+;

@@ -1,0 +1,168 @@
+#TITLE The Prophet // The Mystery Lady
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED Rushlight
+
+#SHORTNAME LU2 The Prophet
+
+#WAVE 0x20 0x61 ## Harp
+#WAVE 0x21 0x53 ## Bass
+#WAVE 0x22 0x66 ## Strings
+#WAVE 0x23 0x75 ## Choir
+#WAVE 0x24 0x20 ## Toy Piano
+
+#WAVE 0x2B 0x92 ## Oboe F6
+#WAVE 0x2C 0x93 ## Oboe C+6
+#WAVE 0x2D 0x94 ## Oboe A5
+
+
+#def init= t135 %x180 %v40 %b0,85 %f0,0
+
+#def harpVol=    v95
+#def oboeVol=    v80
+#def bassVol=    v75
+#def stringsVol= v90
+#def choirVol=   v70
+#def glockVol=   v110
+
+#def harp=         |0 o5 'harpVol'    %r18 m p35 %e1
+#def oboe=         |D o5 'oboeVol'    %r8  m0,18,207 p45 %e1
+#def bass=         |1 o6 'bassVol'    %r11 m p65 %e1
+#def strings=      |2 o5 'stringsVol' %r8  m p85 %e1
+#def choir=        |3 o4 'choirVol'
+#def choir1=       'choir'            %r7  m p84 %e1
+#def choir2=       'choir'            %r8  m p35 %e1
+## The Toy Piano sample we're using has less punch than the original (relative to its sustained note). 
+## To compensate, we'll use higher volume counterbalanced by a low sustain level.
+#def glockenspiel= |4 o5 'glockVol'   %r8 %s1 m0,36,215 p65 %e1
+
+#def oboe2= |B %r8
+#def oboe3= |C %r8
+#def oboe4= |D %r8
+
+#def upToOboe2=   'oboe2'>
+#def downToOboe3= 'oboe3'<
+
+{1}
+'init'
+## Harp, originally track 2
+'harp-o1' l8
+[4a<eb<cgc>be>]
+## 5
+[2a<eb<cgc>be>] [2g<dab<g>bad>] [2f<cga<g>agc>] [2g<dab<g>bad>]
+## 13
+[2a<eb<cgc>be>] [2g<dab<g>bad>] f<cga<g>agc> g<dab<g>bad> [2a<eb<cgc>be>]
+$
+## 21
+'harp-o1' l8
+[2a<eb<cgc>be>] [2g<dab<g>bad>] [2f<cga<g>agc>] [2g<dab<g>bad>]
+## 29
+[2a<eb<cgc>be>] [2g<dab<g>bad>] f<cga<g>agc> g<dab<g>bad> [4a<eb<cgc>be>]
+;
+
+
+{2}
+## Bass, originally track 3
+'bass-o2' l1
+a1^1 a1^1
+## Oboe, originally track 1
+'oboe'
+l4
+[2
+  ## 5 / 13
+  'oboe4'a2<'oboe3'c2>b2.'oboe4'g
+  ## 7 / 15
+  e1^2.g
+  ## 9 / 17
+  a2 j2 <'oboe3'c2>b2.'oboe4'g
+  ## 11
+  <'upToOboe2'e1'downToOboe3'd1> 
+]
+## Measure 17, beat 3
+^2'oboe3'b<c>b'oboe4'g
+## 19
+a1^1
+$
+'oboe'
+l4
+[2
+  ## 21 / 29
+  'oboe4'a2<'oboe3'c2>b2.'oboe4'g
+  ## 23 / 31
+  e1^2.g
+  ## 25 / 33
+  a2 j2 <'oboe3'c2>b2.'oboe4'g
+  ## 27
+  <'upToOboe2'e1'downToOboe3'd1> 
+]
+## Measure 33, beat 3
+^2'oboe3'b<c>b'oboe4'g
+## 35
+a1^1^1^1
+;
+
+
+{3}
+[4r1]
+## 5
+## Bass, originally track 3
+'bass-o2' l1
+a1^1 g1^1 f1^1 g1^1
+## 13
+a1^1 g1^1 fga1^1
+$
+## 21
+## Bass, originally track 3
+'bass-o2' l1
+a1^1 g1^1 f1^1 g1^1
+## 29
+a1^1 g1^1 fga1^1 a1^1
+;
+
+
+{4}
+[20r1]
+$
+##21
+## Strings, originally track 4
+'strings' l4
+a2<c2>b2.g e1^2.g a2<c2>b2.g <e1d1>
+## 29
+a2<c2>b2.g e1^2.g a1b<c>bg a1^1^1^1
+;
+
+
+{5}
+[20r1]
+$
+## 21
+## Glockenspiel, originally track 7
+'glockenspiel+o1' l4
+c2e2d2.>b< c1^1 c2e2d2.>b< c1>b1<
+## 29
+c2e2d2.>b< c1^1 c1ded>b< c1^1^1^1
+;
+
+
+{6}
+[20r1]
+$
+## 21
+## Choir 1, originally track 5
+'choir1' l1
+a1^1 g1^1 f1^1 g1^1
+## 29
+a1^1 g1^1 fg a1^1^1^1
+;
+
+
+{7}
+[20r1]
+$
+## 21
+## Choir 2, originally track 6
+'choir2-o1' l1
+<c1^1> b1^1 a1^1 b1^1
+## 29
+<c1^1> b1^1 ab <c1^1^1^1>
+;

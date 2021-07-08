@@ -1,0 +1,122 @@
+#TITLE Another Moon
+#ALBUM Final Fantasy IV
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x51 bass
+#WAVE 0x21 0x65 strings
+#WAVE 0x22 0x08 lpiano
+#WAVE 0x23 0x82 trumpet
+#WAVE 0x24 0x5B timpani
+#WAVE 0x25 0xD1 triangle
+
+## When we only have 6 channels to work with, let's play the bass part with piano to capture both~
+#SFXV ` *
+
+## Bass
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v80
+#def 0f= v1,80
+
+## Strings
+#def 1i=   |1
+#def 1o=   o6
+#def 1v=   v80
+#def 1f= v1,80
+
+## Lpiano
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v54
+#def 2f= v1,54
+
+## Trumpet
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v80 m3,2
+#def 3f= v1,80
+
+## Timpani
+#def 4i=   |4
+#def 4o=   o3
+#def 4v=   v100
+#def 4f= v1,100
+
+## Starfall sfx
+#def 5i=   |5 
+#def 5o=   o6 m240,-24
+#def 5v=   v60
+#def 5f= v1,60
+
+
+*{7}
+'0v*v1.20'p85
+'0i' {'VolEnvMode 11'}%r13{'Duration 95%'}%e1
+$701'0o-o1'f1^2.<c4
+;701*
+
+{1}
+t86%v90%b0,100%f0,0%x232
+m96,50,197'1v*v.90'p75
+'1i' {'VolEnvMode 12'}%r8{'Duration 95%'}%e1
+$101r1r1r1r1'1o'[r4g+8f8g+4g4^2.r4r4f+8d+8f+4f4^2.r4]>a4<d4c4>a+4a4g4f4
+g4d+2a+2<d+2a+2a4<d4c4>a+4a4g4f4e4d+2<c2^1
+;101
+
+{2}
+m96,50,197'1v*v.80'p65
+'1i' {'VolEnvMode 12'}%r8{'Duration 95%'}%e1
+$201r1r1r1r1['1o'r4c2.^2.r4r4>b2.^2.r4]>a+1<d2c+2c1^1d2f2a2<c2>a+1<d+1
+;201
+
+{3}
+m96,50,197'1v*v.80'p55
+'1i' {'VolEnvMode 12'}%r8{'Duration 95%'}%e1
+$301r1r1r1r1'1o-o1'[4r4f2.^2.r4]>f1^1g1^1a+2<d2f2a2g+1^1
+;301
+
+## 8 channel version (piano part)
+*{4}
+'2v*v1.27'p45
+'2i' {'VolEnvMode 11'}%r8{'Duration 95%'}%e1
+$401'2o-o2'f1^1
+;401*
+
+## 6 channel version (bass part on piano)
+`{4}
+'2v*v1.27'p85
+'2i' {'VolEnvMode 11'}{'Duration 95%'}%e1
+$'2o-o2' '2i'%r8'2v*v1.27' f1^2. '0i''0o'%r13'0v*v1.2' c4
+;`
+
+{5}
+{'PitchSlideMode delay=0 len=3 depth=2'}
+'3i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e1
+$501[6'3o-o1'p65'3v*v.90'a+32r16r32p115'3v*v.40'<a+32r16r32p15'3v*v.90'
+a32r16r32p65'3v*v.40'<a32r16r32p115'3v*v.90'>>a32r16r32p15'3v*v.40'<a32
+r16r32p65'3v*v.90'>>a32r16r32p15'3v*v.40'<a32r16r32p65'3v*v.90'a+32r16
+r32p115'3v*v.40'<a+32r16r32p15'3v*v.90'a32r16r32p65'3v*v.40'<a32r16r32
+p115'3v*v.90'>>a32r16r32p15'3v*v.40'<a32r16r32p65'3v*v.90'>>a+32r16r32
+p15'3v*v.40'<a+32r16r32][6p65'3v*v.90'a+32r16r32p115'3v*v.40'<a+32r16r32
+p15'3v*v.90'g+32r16r32p65'3v*v.40'<g+32r16r32p115'3v*v.90'>>g+32r16r32
+p15'3v*v.40'<g+32r16r32p65'3v*v.90'>>g+32r16r32p15'3v*v.40'<g+32r16r32
+][p65'3v*v.90'a+32r16r32p115'3v*v.40'<a+32r16r32p15'3v*v.90'f32r16r32p65
+'3v*v.40'<f32r16r32p115'3v*v.90'>>g+32r16r32p15'3v*v.40'<g+32r16r32p65
+'3v*v.90'>>f+32r16r32p15'3v*v.40'<f+32r16r32]
+;501
+
+{6}
+'4v*v1.27'p35
+'4i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e1
+$601'4o'f1^2.<c4
+;601
+
+*{8}
+m48,24,212'5v*v.20'
+'5i' {'VolEnvMode 12'}%r8{'Duration 95%'}%e1{'PitchSlideMode delay=0 len=240 depth=-24'}
+$801r1r2p25p240,105'5o+o1'b1^4r1r1
+;801*
+

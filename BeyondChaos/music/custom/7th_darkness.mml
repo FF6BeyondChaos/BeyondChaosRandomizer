@@ -1,0 +1,425 @@
+#TITLE Battle in a World of Darkness
+#ALBUM 7th Saga
+#COMPOSER Norihiko Yamanuki
+#ARRANGED Rushlight
+
+#SHORTNAME 7TH Battle 3
+
+#WAVE 0x20 0xB2 ## Oboe
+#WAVE 0x21 0x81 ## Trumpet
+#WAVE 0x22 0x5A ## Timpani
+#WAVE 0x23 0x54 ## Bass
+
+#WAVE 0x28 0x0A ## Kick
+#WAVE 0x29 0x1D ## Snare
+
+#def init=t141 %x220 %v40 %b0,70 %f0,0
+
+#def introOboeVol=       v50
+#def leadOboeVol=        v90
+#def supportOboeVol=     'leadOboeVol*v.7'
+#def supportTrumpetVol=  v84
+#def accentTrumpetVol=   'supportTrumpetVol*v1.1'
+#def introLowTrumpetVol= v104
+#def introTrumpetHiVol=  v52
+#def introTrumpetMedVol= 'introTrumpetHiVol*v.8'
+#def introTrumpetLowVol= 'introTrumpetHiVol*v.7'
+#def introTimpaniHiVol=  v127
+#def fadeToTimpaniHi=    v240,127
+#def introTimpaniLowVol= 'introTimpaniHiVol*v.3'
+#def mainTimpaniVol=     'introTimpaniHiVol*v1'
+#def bassVol=            v75
+#def bassLayerVol=       'bassVol*v.50'
+
+#def oboe=            |0 o5
+#def timpani=         |2 o6
+#def trumpet=         |1 o5
+
+#def introTrumpet1=   'trumpet' 'introTrumpetHiVol'  p64  %r0  %e0 m
+#def introTrumpet2=   'trumpet' 'introTrumpetMedVol' p43  %r0  %e0 m
+#def introTrumpet3=   'trumpet' 'introTrumpetHiVol'  p83  %r0  %e0 m
+#def introTrumpet4=   'trumpet' 'introTrumpetHiVol'  p64  %r0  %e0 m
+#def introOboe=       'oboe'    'introOboeVol'       p36  %r0  %e0 m
+#def leadOboe=        'oboe'    'leadOboeVol'        p64  %r0  %e1 m24,18,218
+#def supportOboe=     'oboe'    'supportOboeVol'     p64  %r0  %e1 m
+#def introLowTrumpet= 'trumpet' 'introLowTrumpetVol' p36   %r0  %e0 m
+#def supportTrumpet=  'trumpet' 'supportTrumpetVol'  p64  %r0  %e1 m
+#def accentTrumpet=   'trumpet' 'accentTrumpetVol'   p64  %r0  %e1 m
+#def introTimpani=    'timpani' 'introTimpaniHiVol'  p64  %r18 %e0 m
+#def mainTimpani=     'timpani' 'mainTimpaniVol'     p43  %r18 %e0 m
+#def bass=            |3 o6     'bassVol'            p81  %r0 %e0 m
+#def bassHiLayer=     |3 o7     'bassLayerVol'       p89  %y2%s3%r0 %e0 m
+
+#DRUM "k"=5f  |8 v70 p9  %r0  %e1 m
+#DRUM "s"=5a  |9 v85 p9  %r0  %e0 m %y3%s3%r15
+#DRUM "e"=5^  %e1
+
+
+{1}
+'init'
+##NOTE: Intro lasts 2 measures minus one 16th note
+## Intro Trumpet 1, originally track 6
+'introTrumpet1+o1'
+l16
+f+1^32r32'introTrumpetLowVol'
+## 2
+[2 f+f+f+f+8f+ j2 f+8] f+
+## Tempo changes after the intro
+t149
+
+## Bass, originally track 3a
+'bass-o1'
+l16
+## 3
+[2 f+rf+<f+>f+rf+<f+f+>f+f+rr4]
+$
+## Lead Oboe, originally track 1
+'leadOboe' k1
+l16
+[2
+  ## 5 / 9
+  f+g+f+ef+4^16r16f+8g+8a8g+4e4r8c+8a8g+8
+  ## 7 / 11
+  f+1 j2 r1
+]
+l8
+## 12
+r2rb-b<c+
+## 13
+>b2^8rg+4
+## 14 
+e2r>b<ab
+## 15
+a8.b16<c+2.
+## 16
+r2.>a4
+## 17
+g+2rab<c+>
+## 18
+g+2^8rf4
+## 19
+f+ff+g+ag+ab
+## 20
+<c+2r>b-b<c+>
+## 21
+b2..r
+## 22
+e2r>a<ab
+## 23
+a^16b16<c+2.
+## 24
+r2r>a16r16a16r16a16r16
+## 25
+g+4.b4.a4
+## 26
+g+2rff+g+
+## 27
+f+1.r4.<
+l16
+[2
+  [2
+    c+r
+    ## 29 / 31 / 33 / 35
+    c+8>f+rf+8<c+rc+8>f+r j2,131 f+8<c+r
+    ## 30 / 34 (Except last 8th note)
+    c+8.>f+16f+2r8<
+  ]
+  $131
+  ## End of 31 / 35
+  a8b8
+  ## 32 / 36 (except last 8th note)
+  a8.g+16 f+2r8<
+]
+## last 8th note of 36
+c+r
+;
+
+
+{2}
+## Intro Trumpet 2, originally track 5
+'introTrumpet2+o1'
+l16
+e1^32r32'introTrumpetLowVol'
+## 2
+[2 eeee8e j2 e8] e
+## Drums, originally track 2
+"!!!o"
+l8
+## 3
+[2 "ksksksk16k16s"]
+$
+## Bass, originally track 3
+'bass-o1'
+l16
+## 5 / 6 / 7 / 8 / 9
+[5 f+rf+<f+>f+rf+<f+f+>f+f+rr4]
+l8
+## 10
+e<e>e<e>e16e16<e>e<e>
+## 11
+c+<c+>c+<c+>c+16c+16<c+>c+<c+>
+## 12
+[2 d<d>] [2e<e>]
+## 13
+[4 d<d>]
+## 14
+[4 g+<g+>]
+## 15
+[4 a<a>]
+## 16
+[4 d<d>]
+## 17
+[4 g+<g+>]
+## 18
+[4 c+<c+>]
+## 19
+[4 f+<f+>]
+## 20
+[4 b-<b->]
+## 21
+[4 b<b>]
+## 22
+[4 e<e>]
+## 23
+[4 a<a>]
+## 24
+[4 d<d>]
+## 25
+[4 g+<g+>]
+## 26
+[4 c+<c+>]
+## 27
+[8 f+<f+>]
+l16
+[2
+  ## 29 / 33
+  [2 dr<dr>] [2 er<er>]
+  ## 30 / 34
+  [4 f+r<f+r>]
+  ## 31 / 35
+  [2 ar<ar>] [2 g+r<g+r>]
+  ## 32 / 36
+  [4 f+r<f+r>]
+]
+;
+
+
+{3}
+## Intro Low Trumpet, originally track 2
+'introLowTrumpet-o2'
+l16
+[2 f+b-a<c+>g+ j2 b-aefg+g ]
+## Intro Oboe, originally track 2
+'introOboe+o2'
+l24
+## 2
+%l1
+[2 f+fee-dc+c>bb-ag+g]
+%l0
+## Main Timpani, originally track 5
+'mainTimpani-o2'
+l8
+## 3
+b<c+2^8r4r1
+## 5
+$
+## Drums, originally track 2
+"!!!o"
+l8
+## Repeat this pattern forever
+"ksksksk16k16s"
+;
+
+
+{4}
+## Intro Timpani, originally track 4
+'introTimpani-o2'
+f+2^8
+'introTimpaniLowVol'
+[4 f+32]
+'fadeToTimpaniHi'
+[30 f+24]
+## 3
+r1r1
+$
+## Support Oboe, originally track 6
+'supportOboe'
+l16
+[2
+  ## 5 / 9
+  c+e-c+>b<c+4^16r16 c+8e-8e8e-4>b4r8g+8<e8e-8
+  ## 7 / 11
+  c+1 j2 r1
+]
+## 12
+## Support Trumpet, originally track 4
+'supportTrumpet'
+l8
+r2rb-b<c+
+## 13
+>b2^8rg+4
+## 14 
+e2r>b<ab
+## 15
+a2^8rf+4
+## 16
+d2^8ra4
+## 17
+g+2^8rf+4
+## 18
+f2c+2
+## 19
+f+4..r16 f+4..r16
+## 20
+e4..r16 c+4..r16
+## 21
+d4..r16 f+4..r16
+## 22
+a4..r16 g+4..r16
+## 23
+e4..r16 c+4..r16
+## 24
+d4..r16 f+4..r16
+## 25
+g+2^8r f+4
+## 26
+f2c+2
+## 27
+f+1.r2
+## Accent Trumpet, originally track 4
+'accentTrumpet+o1'
+l16
+## 29
+[64 c+r]
+;
+
+
+{5}
+## Intro Trumpet 3, originally track 3
+'introTrumpet3+o1'
+l16
+c1^32r32
+## 2
+[2 cccc8c j2 c8] c
+## 3
+r1r1
+$
+## Timpani, originally track 5
+'mainTimpani-o2'
+## 5
+[4 r1]
+## 9
+f+1e1c+1d2e2
+## 13
+[16 r1]
+## 29 / 31 / 33
+[3 r4d2e2f+2 j3 f+8f+8] f+4
+## 35
+r4a2g+2f+2  f+8f+8
+;
+
+
+{6}
+## Intro Trumpet 4, originally track 1
+'introTrumpet4-o3'
+l16
+f+1^32r32'introTrumpetLowVol'
+## 2
+[2 f+f+f+f+8f+ j2 f+8] f+
+## 3
+r1r1
+$
+## 5
+[8 r1]
+## 13
+[15 r1]
+## 28
+## Support Oboe, originally track 6
+'supportOboe'
+r2..
+l16
+## Beat should be ok, just fix the notes
+[2
+  [2
+    g+r
+    ## 29 / 31 / 33 / 35
+    g+8c+rc+8g+rg+8c+r j2,631 c+8g+r
+    ## 30 / 34 (Except last 8th note)
+    g+8.c+16c+2r8
+  ]
+  $631
+  ## End of 31 / 35
+  e8f+8
+  ## 32 / 36 (except last 8th note)
+  e8.e-16 c+2r8
+]
+## last 8th note of 36
+g+r
+;
+
+{8}
+## Bass +5th layer
+%k-5
+{7}
+## Bass +oct layer
+r1r1
+## Bass, originally track 3a
+'bassHiLayer-o1'
+l16
+## 3
+[2 f+rf+<f+>f+rf+<f+f+>f+f+rr4]
+$
+## Bass, originally track 3
+'bassHiLayer-o1'
+l16
+## 5 / 6 / 7 / 8 / 9
+[5 f+rf+<f+>f+rf+<f+f+>f+f+rr4]
+l8
+## 10
+e<e>e<e>e16e16<e>e<e>
+## 11
+c+<c+>c+<c+>c+16c+16<c+>c+<c+>
+## 12
+[2 d<d>] [2e<e>]
+## 13
+[4 d<d>]
+## 14
+[4 g+<g+>]
+## 15
+[4 a<a>]
+## 16
+[4 d<d>]
+## 17
+[4 g+<g+>]
+## 18
+[4 c+<c+>]
+## 19
+[4 f+<f+>]
+## 20
+[4 b-<b->]
+## 21
+[4 b<b>]
+## 22
+[4 e<e>]
+## 23
+[4 a<a>]
+## 24
+[4 d<d>]
+## 25
+[4 g+<g+>]
+## 26
+[4 c+<c+>]
+## 27
+[8 f+<f+>]
+l16
+[2
+  ## 29 / 33
+  [2 dr<dr>] [2 er<er>]
+  ## 30 / 34
+  [4 f+r<f+r>]
+  ## 31 / 35
+  [2 ar<ar>] [2 g+r<g+r>]
+  ## 32 / 36
+  [4 f+r<f+r>]
+]
+;

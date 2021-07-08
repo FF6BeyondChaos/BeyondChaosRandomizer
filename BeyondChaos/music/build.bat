@@ -1,0 +1,2 @@
+pyinstaller johnnydmad.py -F --add-data tables;tables --add-data playlists;playlists --add-data static_music;static_music --add-data custom;custom --add-data custom/dm;custom/dm --add-data custom/legacy;custom/legacy --add-binary custom/brr;custom/brr --add-binary samples;samples --add-binary samples/legacy;samples/legacy -p mfvitools
+@pause

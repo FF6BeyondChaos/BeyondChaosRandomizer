@@ -1,0 +1,349 @@
+#TITLE God of Decadence
+#ALBUM Breath of Fire II
+#COMPOSER Yuko Takehara
+#ARRANGED Rushlight
+
+#WAVE 0x20 0xB0 ## Organ
+#WAVE 0x21 0x75 ## Chorus
+
+#def init= t101 %x230 %v40 %b0,70 %f0,0
+
+#def organVibrato= m0,17,218
+## Using less vibrato on echo tracks to avoid lag
+#def organEchoVibrato= m0,17,199
+## Note that the original puts vibrato on the voice, but our sample already has vibrato.
+#def chorusVibrato= m
+
+#def organ=          |0 o6 %e1 %r0
+## The original has a second, slightly different organ sample (single octave, pretty much). We're using the same sample for both, but we can still define separate macros.
+#def altOrgan=       'organ'
+#def vox=            |1 o4 %e1 %r0
+
+#def leadOrganHiVol=          v50
+#def leadOrganMedVol=         'leadOrganHiVol*v.85'
+#def leadOrganLowVol=         'leadOrganHiVol*v.70'
+
+#def secondaryOrgan1Vol=      'leadOrganHiVol*v.6'
+#def secondaryOrgan2Vol=      'leadOrganHiVol*v.6'
+
+#def supportOrganHiVol=       'leadOrganHiVol*v.75'
+#def supportOrganLowVol=      'supportOrganHiVol*v.85'
+
+#def leadOrganEchoVol=        'leadOrganHiVol*v.3'
+#def secondaryOrgan1Echo1Vol= 'leadOrganHiVol*v.27'
+#def secondaryOrgan2Echo1Vol= 'leadOrganHiVol*v.27'
+#def secondaryOrgan1Echo2Vol= 'leadOrganHiVol*v.23'
+#def secondaryOrgan2Echo2Vol= 'leadOrganHiVol*v.23'
+
+#def chorusLeadVol=           v80
+#def chorusEchoVol=           'chorusLeadVol*v.6'
+
+#def leadOrgan=            'organ'          'leadOrganHiVol'          p72  'organVibrato'
+#def secondaryOrgan1=      'organ'          'secondaryOrgan1Vol'      p108 'organVibrato'
+#def alternateOrgan=       'altOrgan'       'secondaryOrgan1Vol'      p108 'organVibrato'
+#def secondaryOrgan2=      'organ'          'secondaryOrgan1Vol'      p20  'organVibrato'
+#def supportOrgan=         'organ'          'supportOrganHiVol'       p55  'organEchoVibrato'
+#def leadOrganEcho=        'organ'          'leadOrganEchoVol'        p58  'organEchoVibrato'
+#def secondaryOrgan1Echo1= 'organ'          'secondaryOrgan1Echo1Vol' p127 'organEchoVibrato'
+#def alternateOrganEcho=   'altOrgan'       'secondaryOrgan1Echo1Vol' p127 'organEchoVibrato'
+#def secondaryOrgan2Echo1= 'organ'          'secondaryOrgan2Echo1Vol' p0   'organEchoVibrato'
+#def secondaryOrgan1Echo2= 'organ'          'secondaryOrgan1Echo2Vol' p88  'organEchoVibrato'
+#def secondaryOrgan2Echo2= 'organ'          'secondaryOrgan2Echo2Vol' p39  'organEchoVibrato'
+#def chorusLead=           'vox'            'chorusLeadVol'           p39  'chorusVibrato'
+#def chorusEcho=           'vox'            'chorusEchoVol'           p85  'chorusVibrato'
+
+#cdef ( %r24
+#cdef ) %r0
+
+{1}
+'init'
+## Lead Organ, originally track 8
+'leadOrgan-o2'
+'leadOrganMedVol'
+l4
+a2.ef+g+a2.ef+g+f2.efef2.
+## Decelerando over 3 beats in measure 6
+t91 e t75 g+ t59 e
+## 7
+$
+t156
+## Lead Organ, originally track 8
+l4
+'leadOrgan-o2'
+[2 a<c>b<dc4.d8c8>b8 j2 a8g+8] <c8d8
+## 11
+[2 ecdfe4.d8c8>b8 j2 <c8d8] a8g+8
+## 15
+a2e8(^8)a8(^8)<d8(^8)c8(^8)>b8(^8)a8(^8)
+## 17
+g2d8(^8)g8(^8)<c8(^8)>b8(^8)a8(^8)g8(^8)
+## 19
+f2c8(^8)f8(^8)b8(^8)a8(^8)g8(^8)f8(^8)
+## 21
+e8(^8)f+8(^8)g+8(^8)b8(^8)
+a2b2
+## 23
+<c2d2e 'leadOrganLowVol' f+g+> 'leadOrganHiVol' e
+## 25
+a2b2<c2d2e>bg+bf8(^8)d8(^8)e8(^8)b8(^8)
+## 29
+<e2>e2
+## 30
+t144
+a2
+t121
+^2^1(^8)
+;
+
+
+{2}
+## Secondary Organ 2, originally track 5
+'secondaryOrgan2-o1'
+l8
+a4b4a4g+2.ag+ab<
+## 3
+c>ag+32a32g+32a32g+4f+e4
+## 4
+f4g4f4e2.fefg
+## 6
+afe32f32e32f32e4f+g+b
+## 7
+$
+## Chorus Lead, originally track 7
+'chorusLead+o1'
+l4
+c1^4>b<cde1^4defg1>g1
+## 13
+<c1e2d2c1^4d2c
+## 17
+>b1^4<c2>ba1^4b2a
+## 21
+g+2^8a8b8<d8c1..de2.f+8g+8
+## 25
+a1..bg+2.f+8e8f8(^8)d8(^8)e8(^8)>b8(^8)
+## 29
+[4 g+16a16]g+2a1^1(^8)
+;
+
+
+{3}
+## Secondary Organ 1, originally track 6
+'secondaryOrgan1'
+l4
+[2 cdc>b2.<]
+>[2 abag+2.]
+## 7
+$
+## Secondary Organ 1, originally track 6
+'secondaryOrgan1-o1'
+l8
+[2 ae<c>ebe<d>e <c>eaebe j2 g+e] ge
+## 11
+[2 <c>g<e>g<d>g<f>g <e>g<c>g<d>gb j2 g] g+
+## 15
+ab<c>bagfef2...(^16)
+## 17
+gabagfede2...(^16)
+## 19
+fgagfedcd2...(^16)
+## 21
+efedc>bag+ab<c>ab<cd>b<
+## 23
+cdecdefdecd>b<c>bag+
+## 25
+<<cdecdefd efgefga
+## Alternate Organ, originally track 6
+'alternateOrgan'
+b
+## 27
+[4 g+16a16]g+4f+e a8(^8)b8(^8)a8(^8)g+8(^8)
+## 29
+e2^8.(^16)f+g+a1^2...(^8.)
+;
+
+
+{4}
+## Lead Organ Echo, originally track 3
+'leadOrganEcho-o2'
+l4
+r12
+a2.ef+g+a2.ef+g+f2.efef2.eg+e6
+## 7 - Last note was cut off early to switch this channel to a non-echo role
+$
+## Secondary Organ 2, originally track 5
+'secondaryOrgan2-o1'
+l4
+[2 ced>b< c2^8.(^16)>b<]
+## 11
+[2 cefd c2^8.(^16) j2 >g<] >g+<
+## 15
+l8
+e2...(^16)af<dc>bagf
+## 17
+d2...(^16)ge<c>bagfe
+## 19
+c2...(^16)fdbagfed
+## 21
+>b2...(^16)<cdecdefd
+## 23
+efgefgab [4 g+16a16]g+4f+g+
+## 25
+ab<c>ab<cd>b< cdecdefd
+## 27
+ecd>b<c>bag+ f8(^8)d8(^8)e8(^8)>b8(^8)<
+## 29
+g+4..(^16)e4..(^16) d2^8^16(^16)c>b<
+## 31
+c2...(^8.)
+;
+
+{5}
+## Secondary Organ 1 Echo 1, originally track 2
+'secondaryOrgan1Echo1'
+l4
+r12
+[2 cdc>b2.<]
+>[2 aba j2 g+2.] g+2^6
+## 7 - Last note was cut off early to switch this channel to a non-echo role
+$
+## Support Organ, originally track 4
+'supportOrgan-o2'
+l4
+[2 eaag+ a2^8.(^16) j2 e] g
+## 11
+[2 g<cc>b g2^8.(^16) j2 f] g+
+## 15
+<c2>a8(^8)<c8(^8)
+f8(^8)e8(^8)d8(^8)c8(^8)>
+## 17
+b2g8(^8)b8(^8)<
+e8(^8)d8(^8)c8(^8)>b8(^8)
+## 19
+a2f8(^8)a8(^8)<
+d8(^8)c8(^8)>b8(^8)a8(^8)
+## 21
+g+8(^8)a8(^8)b8(^8)<d8(^8)
+e2f2
+## 23
+g2a2 b2eg+
+## 25
+e2f2 g2a2
+## 27
+bg+eg+ <d8(^8)>f8(^8)<c8(^8)>e8(^8)<
+## 29
+d2>b2 e1^1(^8)
+;
+
+
+{6}
+## Secondary Organ 2 Echo 1, originally track 1
+'secondaryOrgan2Echo1-o1'
+l8
+r12
+a4b4a4g+2.ag+ab<
+## 3
+c>ag+32a32g+32a32g+4f+e4
+## 4
+f4g4f4e2.fefg
+## 6
+afe32f32e32f32e4f+g+ b24
+## 7
+^12
+$
+## Chorus Echo, originally track 3
+'chorusEcho+o1'
+l4
+c1^4>b<cde1^4defg1>g1
+## 1/3 beat into 13
+<c1e2d2c1^4d2c
+## 1/3 beat into 17
+>b1^4<c2>ba1^4b2a
+## 1/3 beat into 21
+g+2^8a8b8<d8c1..de2.f+8g+8
+## 1/3 beat into 25
+a1..bg+2.f+8e8f8(^8)d8(^8)e8(^8)>b8(^8)
+## 1/3 beat into 29
+[4 g+16a16]g+2a1^1(^8)
+;
+
+
+{7}
+## Secondary Organ 1 Echo 2, originally track 4
+'secondaryOrgan1Echo2'
+l4
+r8
+[2 cdc>b2.<]
+>[2 aba j2 g+2.] g+2^8
+## 7
+r12
+$
+## Secondary Organ 1 Echo 1, originally track 2
+'secondaryOrgan1Echo1-o1'
+l8
+[2 ae<c>ebe<d>e <c>eaebe j2 g+e] ge
+## 1/3 beat into 11
+[2 <c>g<e>g<d>g<f>g <e>g<c>g<d>gb j2 g] g+
+## 1/3 beat into 15
+ab<c>bagfef2...(^16)
+## 1/3 beat into 17
+gabagfede2...(^16)
+## 1/3 beat into 19
+fgagfedcd2...(^16)
+## 1/3 beat into 21
+efedc>bag+ab<c>ab<cd>b<
+## 1/3 beat into 23
+cdecdefdecd>b<c>bag+
+## 1/3 beat into 25
+<<cdecdefd efgefga
+## Alternate Organ Echo, originally track 2
+'alternateOrganEcho'
+b
+## 1/3 beat into 27
+[4 g+16a16]g+4f+e a8(^8)b8(^8)a8(^8)g+8(^8)
+## 1/3 beat into 29
+e2^8.(^16)f+g+a1^2...(^8.)
+;
+
+
+{8}
+## Secondary Organ 2 Echo 2, originally track 7
+'secondaryOrgan2Echo2-o1'
+l8
+r8
+a4b4a4g+2.ag+ab<
+c>ag+32a32g+32a32g+4f+e4
+f4g4f4e2.fefg
+afe32f32e32f32e4f+g+
+## 7
+r12
+$
+## Secondary Organ 2 Echo 1, originally track 1
+'secondaryOrgan2Echo1-o1'
+l4
+[2 ced>b< c2^8.(^16)>b<]
+## 1/3 beat into 11
+[2 cefd c2^8.(^16) j2 >g<] >g+<
+## 1/3 beat into 15
+l8
+e2...(^16)af<dc>bagf
+## 1/3 beat into 17
+d2...(^16)ge<c>bagfe
+## 1/3 beat into 19
+c2...(^16)fdbagfed
+## 1/3 beat into 21
+>b2...(^16)<cdecdefd
+## 1/3 beat into 23
+efgefgab [4 g+16a16]g+4f+g+
+## 1/3 beat into 25
+ab<c>ab<cd>b< cdecdefd
+## 1/3 beat into 27
+ecd>b<c>bag+ f8(^8)d8(^8)e8(^8)>b8(^8)<
+## 1/3 beat into 29
+g+4..(^16)e4..(^16) d2^8^16(^16)c>b<
+## 1/3 beat into 31
+c2...(^8.)
+;
+
+## EDITOR NOTES:
+## Changed vox from 78 to 75 per style guide
+## -emberling

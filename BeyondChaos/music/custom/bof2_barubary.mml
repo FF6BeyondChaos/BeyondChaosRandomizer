@@ -1,0 +1,305 @@
+#TITLE Critical Moment
+#ALBUM Breath of Fire II
+#COMPOSER Yuko Takehara
+#ARRANGED Rushlight
+
+#WAVE 0x20 0x40 ## Synth
+#WAVE 0x21 0x45 ## Distorsion Guitar
+#WAVE 0x22 0x62 ## Strings
+#WAVE 0x23 0x56 ## Bass
+
+#WAVE 0x28 0x0A ## Kick
+#WAVE 0x29 0x1C ## Snare
+#WAVE 0x2A 0x2D ## Crash
+#WAVE 0x2B 0x3D ## Closed Hihat
+#WAVE 0x2C 0x3B ## Open hihat
+#WAVE 0x2D 0x4D ## Tom
+
+
+#def init= t179 %x220 %v40 %b0,70 %f0,0
+
+#def synthSustain=      %r0
+#def synthRelease=      %r24
+#def bassSustain=       %r15
+#def bassRelease=       %r24
+#def stringsSustain=    %r0
+#def stringsRelease=    %r24
+#def distorsionSustain= %r0
+#def distorsionRelease= %r26
+
+#def leadSynthVol=  v80
+#def layerSynthVol= 'leadSynthVol*v.92'
+#def echoSynthVol=  'leadSynthVol*v.5'
+#def bassVol=       v65
+#def stringsVol=    v65
+#def distorsionVol= v55
+
+
+#def synth= |0 o4
+
+#def leadSynth=  'synth' 'leadSynthVol'  p64  'synthSustain'      m0,18,231  %e1
+#def layerSynth= 'synth' 'layerSynthVol' p40  'synthSustain'      m0,18,231  %e1
+#def echoSynth=  'synth' 'echoSynthVol'  p87  'synthSustain'      m0,18,231  %e1
+#def bass=       |3 o7   'bassVol'       p64  'bassSustain'       m          %e0
+#def strings=    |2 o5   'stringsVol'    p27  'stringsSustain'    m0,18,231  %e1
+#def distorsion= |1 o7   'distorsionVol' p100 'distorsionSustain' m48,18,231 %e1
+
+#drum "k"=5g  |8  v60  p64  %e0
+#drum "s"=6d  |9  v80  p64  %e1
+#drum "t"=4g  |D  v80  p10  %e1
+#drum "u"=5c+ |D  v80  p64  %e1
+#drum "v"=5g  |D  v80  p117 %e1
+
+#drum "h"=5a  |B  v50  p107 %e1
+#drum "o"=5f- |C  v70  p107 %e1
+#drum "c"=5g  |A  v110 p15  %e1 %r14
+#drum "r"=5^                    %r18
+
+{1}
+'init'
+## Lead Synth, originally track 7
+'leadSynth'
+f4.e-16'synthRelease'^4^16'synthSustain'g+4
+## 2
+^8g16'synthRelease'^4^16'synthSustain'b-8'synthRelease'^8'synthSustain'g+8'synthRelease'^8'synthSustain'
+## 3
+b2..g1^8
+$
+## Lead Synth, originally track 7
+'leadSynth'
+l8
+[2
+  ## 5 / 7
+  g4.g+gf+'synthRelease'^8'synthSustain'g
+  ## 6 / 8
+  'synthRelease'^8'synthSustain'g+'synthRelease'^8'synthSustain'a'synthRelease'^8'synthSustain'b-'synthRelease'^8'synthSustain'b
+] <
+[2
+  ## 9 / 11
+  c4.c+c>b'synthRelease'^8'synthSustain'<c
+  ## 10 / 12
+  'synthRelease'^8'synthSustain'c+'synthRelease'^8'synthSustain'd'synthRelease'^8'synthSustain'e-'synthRelease'^8'synthSustain'e
+]
+## 13
+'synthRelease'^4'synthSustain'>f4e-'synthRelease'^4.'synthSustain'
+## 14
+g+4g'synthRelease'^4.'synthSustain'b-4
+## 15
+g+'synthRelease'^8'synthSustain'ba16'synthRelease'^16'synthSustain'b<c16'synthRelease'^16'synthSustain'de-
+## 16
+ef
+;
+
+
+{2}
+## drums, originally track 6
+l8
+[2
+  ## 1 / 2
+  "kv16u16t16t16k" j2 "skkk"
+] "k4ks"
+## 3
+"k4k4k4k4"
+## 4
+"k4k4k16v16v16u16u16u16t16t16"
+$
+## drums, originally track 6
+"!!!o"
+l8
+[4
+  ## 5 / 7 / 9 / 11
+  "k4sk4ks4"
+  j4
+  ## 6 / 8 / 10
+  "kksk4ks4"
+]
+## 12
+"kkskk16v16v16v16u16u16t16t16"
+## 13 / 14 / 15
+[3 "!!!okk16k16skks" ]
+## Measure 15, beat 1
+l16
+"k4k4ksss"
+## 16
+"ssss"
+;
+
+
+{3}
+## Bass, originally track 8
+'bass-o2'
+l8
+[2 f4.cc32'bassRelease'^16.'bassSustain'c]
+## Measure 2, beat 2
+g32'bassRelease'^16.'bassSustain'>g<f32'bassRelease'^16.'bassSustain'>f
+## 3
+g4g4g4g4
+## 4
+[4 <g32'bassRelease'^16.'bassSustain'>g]
+$
+## Bass, originally track 8
+'bass-o2'
+[4
+  ## 5 / 7
+  c4cc32'bassRelease'^16.'bassSustain'<c32'bassRelease'^16.'bassSustain'>c4c16'bassRelease'^16'bassSustain'
+  ## 6 / 8
+  ccc32'bassRelease'^16.'bassSustain'c<c32'bassRelease'^16.'bassSustain'>c<c32'bassRelease'^16.'bassSustain'>c
+  ## Go transpose 7 semitones down, then come back for 2 more loops
+  j2,309
+  j4,313
+]
+$309 %k-7]
+## Restore transpose
+$313 %k0
+## 13
+[3 cc32'bassRelease'^16.'bassSustain' f4 j3 c4]
+## 15
+f4 [4 g32'bassRelease'^16.'bassSustain'>g<]
+;
+
+
+{4}
+## Strings, originally track 4
+'strings'
+f4.e-16'stringsRelease'^4^16'stringsSustain'g+4
+## 2
+^8g16'stringsRelease'^4^16'stringsSustain'b-8'stringsRelease'^8'stringsSustain'g+8'stringsRelease'^8'stringsSustain'
+## 3
+b2.. g1^16'stringsRelease'^16'stringsSustain'
+$
+## Strings, originally track 4
+'strings'
+l16
+## 5
+[16 gg+gb-]
+## 9
+< [16 cc+ce-]
+## 13
+'stringsRelease'^4'stringsSustain'>>g+4g8'stringsRelease'^4.'stringsSustain'
+## 14
+<c4c8'stringsRelease'^4.'stringsSustain'e4
+## 15
+c8'stringsRelease'^8'stringsSustain'> [8 bg]
+
+;
+
+
+{5}
+## Cymbals, originally track 2
+#"c2.c2.c4c4c1^1"
+"c16r8.^2 c16r8.^2 c16r8. c16r8. c16r1...."
+$
+## Cymbals, originally track 2
+"!!!o"
+l8
+## 5
+#"c2" [27 "h"] "o"
+"c16r4.." [27 "h"] "o"
+## 9
+#"c2" [24 "h"]^2
+"c16r4.." [24 "h"]^2
+## 13
+#"c2.c2.c2.c4c4c4c4"
+[3"c16r8.^2"][4"c16r8."]
+;
+
+
+{6}
+## Distorsion Guitar, originally track 3
+'distorsion-o3'
+l8
+ff'distorsionRelease'^2'distorsionSustain'ff
+## 2
+'distorsionRelease'^2'distorsionSustain'<cc'distorsionRelease'^4
+## 3
+^8'distorsionSustain'>ggg48'distorsionRelease'^12^48'distorsionSustain'gggg8
+## 4
+^2...'distorsionRelease'^16'distorsionSustain'
+## 5
+$
+## Distorsion Guitar, originally track 3
+'distorsion-o2'
+l8
+[8
+  ## 5 / 6 / 7 / 8
+  [3 c48'distorsionRelease'^12^48'distorsionSustain'c j3,605 c] $605
+  ## Go transpose 7 semitones down, then come back for 4 more loops
+  j4,609
+  j8,613
+]
+$609 %k-7]
+## Restore transpose
+$613 %k0
+## 13
+[3 c16'distorsionRelease'^16'distorsionSustain'c8'distorsionRelease'^2'distorsionSustain']
+## Measure 15, beat 1
+>g [3 gg48'distorsionRelease'^12^48'distorsionSustain']g
+;
+
+
+{7}
+## Layer Synth, originally track 5
+'layerSynth'
+d4.c16'synthRelease'^4^16'synthSustain'f4
+## 2
+^8e-16'synthRelease'^4^16'synthSustain'g8'synthRelease'^8'synthSustain'f8'synthRelease'^8'synthSustain'
+## 3
+g2..d1^8
+$
+## Layer Synth, originally track 5
+'layerSynth'
+l8
+## 5 / 6 / 7 / 8 / 9 / 10 / 11 / 12
+[8 r1]
+## 13
+r4d4c'synthRelease'^4.'synthSustain'
+## 14
+f4e'synthRelease'^4.'synthSustain'g4
+## 15
+f'synthRelease'^8'synthSustain'gf16'synthRelease'^16'synthSustain'ga16'synthRelease'^16'synthSustain'b<c
+## 16
+c+d
+;
+
+
+{8}
+## This plays the same notes as the melody, but one 12th note behind. Accordingly, measure comments will be one 12th note late.
+r12
+## Melody Synth Echo, originally track 1
+'echoSynth'
+f4.e-16'synthRelease'^4^16'synthSustain'g+4
+## 2
+^8g16'synthRelease'^4^16'synthSustain'b-8'synthRelease'^8'synthSustain'g+8'synthRelease'^8'synthSustain'
+## 3
+b2..g1^8
+$
+## Melody Synth Echo, originally track 1
+'echoSynth'
+l8
+[2
+  ## 5 / 7
+  g4.g+gf+'synthRelease'^8'synthSustain'g
+  ## 6 / 8
+  'synthRelease'^8'synthSustain'g+'synthRelease'^8'synthSustain'a'synthRelease'^8'synthSustain'b-'synthRelease'^8'synthSustain'b
+] <
+[2
+  ## 9 / 11
+  c4.c+c>b'synthRelease'^8'synthSustain'<c
+  ## 10 / 12
+  'synthRelease'^8'synthSustain'c+'synthRelease'^8'synthSustain'd'synthRelease'^8'synthSustain'e-'synthRelease'^8'synthSustain'e
+]
+## 13
+'synthRelease'^4'synthSustain'>f4e-'synthRelease'^4.'synthSustain'
+## 14
+g+4g'synthRelease'^4.'synthSustain'b-4
+## 15
+g+'synthRelease'^8'synthSustain'ba16'synthRelease'^16'synthSustain'b<c16'synthRelease'^16'synthSustain'de-
+## 16
+ef
+;
+
+## * EDITOR COMMENTS
+## Added missing echo param to instrument macros. Adjusted global echo param
+## Raised snare and non-percussion volume by around 30% (60% for lead). The original has a sort of overcompressed "wall of sound" feel to me, and while I don't want to mimic that exactly, we still want to have a lot of punch.
+## Gave cymbal a two-stage decay, more or less imitating original's behavior and addressing an issue in submitted version where the cymbal was interrupted without decaying sufficiently.
+## - emberling

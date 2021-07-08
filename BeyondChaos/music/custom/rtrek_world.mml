@@ -1,0 +1,231 @@
+#TITLE The World of Quintenix
+#ALBUM Robotrek
+#COMPOSER Ayako Yoda
+#ARRANGED Rushlight
+
+#WAVE 0x20 0x19 ## Rhodes Piano
+#WAVE 0x21 0x72 ## Cello
+#WAVE 0x22 0x22 ## Vibraphone
+#WAVE 0x23 0x71 ## Violin
+
+#def init= t85 %x170 %v40 %b0,85 %f0,0
+
+#def vibraphoneVol=      v40
+#def vibraphoneLayerVol= 'vibraphoneVol*v.8'
+#def rhodes1Vol=         v70
+#def rhodes2Vol=         'rhodes1Vol*v.7'
+## Note: This gets multiplied by 1.6, so anything higher than 80 loses the full effect
+#def celloVol=           v60
+#def celloFade=        v1,60 ## Keep this in line with celloVol!
+## Note: This gets multiplied by up to 2.7, so anything higher than 47 loses the full effect
+#def violinBaseVol=      v45
+#def violinFade=       v1,45 ## Keep this in line with violinBaseVol!
+#def supportViolinVol=   'violinBaseVol*v.55'
+#def leadViolinVol=      'violinBaseVol*v1'
+#def layerViolinVol=     'violinBaseVol*v1.6'
+
+#def vibraphone=      |2 o4 'vibraphoneVol'      p64       %r20 %e1      m
+#def vibraphoneLayer= |2 o5 'vibraphoneLayerVol' p64       %r20 %e1      m
+#def rhodes1=         |0 o4 'rhodes1Vol'         p64       %r0  %a10 %e1 m
+#def rhodes2=         |0 o4 'rhodes2Vol'         p64       %r0  %a10 %e1 m
+#def cello=           |1 o5 'celloVol'           p64       %r2  %e1      m48,18,231
+#def supportViolin=   |3 o4 'supportViolinVol'   p64  %a14 %r0  %e1      m36,12,215
+#def leadViolin=      |3 o4 'leadViolinVol'      p0   %a14 %r0  %e0      m24,15,231
+#def layerViolin=     |3 o4 'layerViolinVol'     p103 %a15 %r0  %e0      m24,15,231
+
+
+{1}
+'init'
+$
+'leadViolin+o1'
+l8
+[15 r]
+[2
+  a
+  ## 3 / 7
+  g+e>b<c+2d ef+e2re
+  ## 5 / 9
+  d4. j2 a2^8'violinFade*v168,.35'^2..'leadViolinVol'
+]
+## Measure 9, beat 2 and a half
+< m6,1 'violinFade*v96,1.4' c+2^8 'violinFade*v144,1.9'^2. 'violinFade*v192,1.1' d4
+## 11
+c+2.>b<c+> bg+ 'violinFade*v72,1.55' a4. > 'violinFade*v96,1' m6,12 b4<f+
+## 13
+a4.g4.>a<c g4f2c4
+## 15
+e4b2g4
+## 16
+<g1^1 'violinFade*v168,.1' ^1
+;
+
+
+{2}
+$
+## Vibraphone, originally track 4
+'vibraphone+o2'
+l8
+## 1
+[8 e>a<c+>c+<]
+## 5
+[4 f+>a<c+>d<]
+## 7
+[4 e>a<c+>c+<]
+## 9
+[4 f+>a<c+>d<]
+## 11
+f >bg+<g+  f>b<g+>g+<
+## 12
+f+>a<c+>e< f+>a<c>e-<
+## 13
+[2 g>a<d>e<]
+## 14
+afc>a< gd>bg<
+[4
+  ## 15 / 16 / 17 / 18
+  g>b<e>g< g>b<d>g<
+]
+;
+
+
+{3}
+$
+## Rhodes Piano 1, originally track 1
+'rhodes1-o2'
+l8
+[4 a<e<c+g+2^8>>]
+## 5
+[2 a<f+<da2^8>>]
+## 7
+[2 a<e<c+g+2^8>>]
+## 9
+[2 a<f+<da2^8>>]
+## 11
+g+<f<c+g+2^8>>
+## 12
+f+<f+<<c+4>>> b<b<<c4>>>
+## 13
+e<e<f+<d2^8>>>
+## 14
+d<d<d4>> g<f<a4
+## 15
+l16
+egbage<c>b a<gec>b<abg
+## 16
+ecdeg<cde c>b<ecge>bg
+## 17
+[3 <ge>b j3 g] <g^4
+## 18
+r1
+;
+
+
+{4}
+## This is always on a slight delay compared to lead violin.
+## We'll ignore that when displaying measure numbers in comments
+&3r1
+$
+'layerViolin'
+l8
+[15 r]
+[2
+  a
+  ## 3 / 7
+  g+e>b<c+2d ef+e2re
+  ## 5 / 9
+  d4. j2 a2^8'violinFade*v168,.6'^2..'layerViolinVol'
+]
+## Measure 9, beat 2 and a half
+< m9,2 'violinFade*v96,2.2' c2^8 'violinFade*v144,2.7'^2. 'violinFade*v192,1.75' d4
+## 11
+c+2.>b<c+> bg+ 'violinFade*v72,2.4' a4. 'violinFade*v96,1.6' m9,2 a4 m9,-2g+
+## 13
+a4.g4.>a<c g4f2c4
+## 15
+e4b2g4
+## 16
+<g1^1 'violinFade*v168,.4' ^1
+;
+
+
+{5}
+$
+## Cello, originally track 3
+'cello-o2'
+l1
+[8 a]
+## 9
+a2 'celloFade*v96,1.2' ^2 'celloFade*v192,1.6' a
+## 11
+'celloFade*v192,1' g+ f+2 b2 e d2 g2
+## 15
+c^1^1r
+;
+
+
+{6}
+$
+## Rhodes Piano 2, originally track 2
+'rhodes1-o1'
+l8
+[4 r4b<e2^8>]
+## 5
+< [2 r4c+f+2^8]
+## 7
+> [2 r4b<e2^8>]
+## 9
+< [2 r4c+f+2^8]
+## 11
+> r4b<f2^8
+## 12
+r4e4r4e-4
+## 13
+r4eb2^8
+## 14
+r4c4r4f4
+## 15
+[4 r1]
+;
+
+
+{7}
+$
+## Vibraphone Layer (Additional layering to get a sound closer to the original multi-octave sample in channel 4)
+'vibraphoneLayer+o2'
+l8
+## 1
+[8 e>a<c+>c+<]
+## 5
+[4 f+>a<c+>d<]
+## 7
+[4 e>a<c+>c+<]
+## 9
+[4 f+>a<c+>d<]
+## 11
+f >bg+<g+  f>b<g+>g+<
+## 12
+f+>a<c+>e< f+>a<c>e-<
+## 13
+[2 g>a<d>e<]
+## 14
+afc>a< gd>bg<
+[4
+  ## 15 / 16 / 17 / 18
+  g>b<e>g< g>b<d>g<
+]
+;
+
+
+{8}
+$
+## Support Violin, originally track 7
+'supportViolin+o2'
+l1
+[8 e]
+## 9
+f+ f+ g+ f+2>a2
+## 13 
+<d >g< g g
+## 17
+g r
+;

@@ -1,0 +1,107 @@
+#TITLE Spinach Rag
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x01
+#WAVE 0x21 0x07
+
+#def 0i=   |0
+#def 0o=   o4
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i= |1
+#def 1o= o5
+
+{1}
+t200%x232%b0,70%f0,0%v50'0v*v.60'
+'0i' p64%e1
+$501'0o'a8b8<c8c+4c8c+8d8e8d+8e8f+4e8f+8g8a8g8f+8g4f+8e8d8c+8r8a8r8>a2
+
+$101'0o+o1'b8a4f8f+4.b8^8a4f8f+2b8a4f8f+8a8b8<d8c+4e8r8>a2a8g4d+8e4.a8
+^8g4d+8e2a8g4c8c+8e8f+8g8f+8b4a8e4f+8g8b8a4f8f+4.b8^8a4f8f+2b8a4f8f+8a8
+b8<d8c+4e8r8>a2<c+8>b8a8<c+8>b4g8a8^8g8f+8a8g4e8f8f+8d4f+8e8c8c+8e8d8r4.
+<d4>>a8b8<c+4c+4c+8>b8a8b8<c+8>e4f8f+4e4<c+4c+4c+8>b8a8b8<c+8e8f+8a8g+4
+e4d4d4d8c+8>b8<c+8d8>f+4g8g+4f+4<d8c+8>b8<d4c+8>b8<d8c+8r2r4.c+4c+4c+8
+>b8a8b8<c+8>e4f8f+4e4<c+4c+4c+8>b8a8b8<c+8e8f+8a8g+2g+8f+8e8g+8f+4d8e8
+^8d8c+8e8d8>b8<c+8d8c+8>a4<c+8>b8g8g+8b8a4r4<a2r8'0o+o1'f+8g+8a8b8a8g+8
+f+8f8f+8g+8f8c+4d+8f8f+8f8f+8a8g+8f+8f8d+8c+8r8<c64c+16^32^64r8>c+2r8f+8
+g+8a8b8a8g+8f+8f8f+8g+8f8c+4d+8f8f+8f8f+8g+8a8g+8a8b8<c+1r8>>b8<c+8d8e8
+d8e8f+8a8g+4f+8c+4>a4b8<c+8d8r8>g+4.b8a8b8<c+8r8>f+2r8b8<c+8d8e8d8e8f+8
+r8>a8b8<c+8f+8f8f+8a8g+8c+8f8g+8<c+8>b8a8g+8f+8r4.a2
+;101
+
+
+{2}
+'0v*v.60'
+'0i' p64%e1
+$601r1r1r1r2'0o'g2
+$201'0o+o1'f8f+4d8d4.f8^8f+4d8d2f8f+4d8d4f+4e4a8r8c+2c8c+4c8c+4.c8^8c+4
+c8c+2c8c+4>a8a4<c+4d4.d8c+4>a4<f8f+4d8d4.f8^8f+4d8d2f8f+4d8d4f+4e4a8r8
+c+2e2d4.c+8^2>b2a2g2f+8r4.<d4r4>a4a4a8r4.a8r2r4.a4a4a8r4.a4<c+4>b4r4b4
+b4a+8r4.a8r4.e4r4b8r4.b8r4.a8r2r4.a4a4a8r4.a8r2r4.a4a4a8r4.a4<c+4>b4r4
+<e8r4.d4r8c+8^8r4.>b8r4.a8r4.g+8r4.r2a2r2'0o+o1'd4d+4r1r2b8r4.r1r2d4d+4
+r1r2f+4f+4f1r1c+8>b4a8a4r4r1r1r1r1r2<f4r4f+8r4.c+2
+;201
+
+
+{3}
+'0v*v.60'
+'1i' p64%e1
+$701r1r1r1r2'1o'e2
+$301'1o'r4a8r4.a8r8r4a8r4.a8r8r4a8r4.a8r8r4a8r4.a8r8r4a8r4.a8r8r4a8r4.
+a8r8r4a8r4.a8r8r4a8r8g8r4.r4a8r4.a8r8r4a8r4.a8r8r4a8r4.a8r8r4a8r4.a8r8
+r4a8r4.g8r8r4f+8r4.g8r8r4f+8r4.e8r8d8r4.d4r4r4e8r4.f+8r8r1r4e8r4.f+8r8
+r4e8r4.g+8r8r4f+8r4.f+8r8r4d8r4.d8r8r4f+8r8g+8r8g+4e8r8e4d+4d4r4e8r4.f+8
+r8r1r4e8r4.f+8r8r4e8r4.g+8r8r4g+8r4.f+8r8r4e8r4.f+8r8r4e8r4.e8r8e4r4e2
+r4'1o+o1'c+8r8>g+4a4r4<c+8r4.>b8r8r4<c+8r4.c8r8r1r4c+8r8>g+4a4r4<c+8r4.
+>b8r8r4<c+8r4.d8r8r1r4>f+8r4.f+8r8r4f+8r4.f+8r8r1r1r4f+8r4.f+8r8r4f+8r4.
+f+8r8r4b2b8r8a8r4.g2
+;301
+
+
+{4}
+'0v*v.60'
+'1i' p64%e1
+$801'1o-o1'a8b8<c8c+4c8c+8d8e8d+8e8f+4e8f+8g8a8g8f+8g4f+8e8d8c+8r4.>a2
+
+$401'1o'd4f+8r8>a4<f+8r8d4f+8r8>a4<f+8r8d4f+8r8>a4<f+8r8c+4e8r8>a4<e8r8
+c+4e8r8>a4<e8r8c+4e8r8>a4<e8r8c+4e8r8>a4<e8r8d4f+8r8e8r8>a4<d4f+8r8>a4
+<f+8r8d4f+8r8>a4<f+8r8d4f+8r8>a4<f+8r8c+4e8r8>a4<e8r8c+4e8r8>b4<d8r8>a4
+<c+8r8>b4<d8r8>a4<d8r8>a4<c+8r8>a8r4.d4r4a4<c+8r8>a4<d8r8c+8>a4b4<c4c+8
+>a4<c+8r8>a4<d8r8>a4<c+8r8>g+4<e8r8>b4<d8r8>a+4<d8r8>a4b8r8g+4b8r8b4<d8
+r8e8r8d4c+8r2r4.>a4<c+8r8>a4<d8r8c+8>a4b4<c4c+8>a4<c+8r8>a4<d8r8>a4<c+8
+r8>g+4<e8r8>b4<e8r8>a4<d8r8>g+4<c+8r8>b4<d8r8>a4<c+8r8>b4<d8r8c+4r4>a2
+'1o'f+4a8r8>b4<c4c+4g+8r8d+4f8r8f+4a8r8d+4g+8r8c+8r8<c+8r8>c+2f+4a8r8>
+b4<c4c+4g+8r8d+4f8r8f+4a8r8d4a8r8<c+8r8>g+8r8c+2>b4<d8r8>f+4<d8r8>f+4<
+c+8r8>a4<c+8r8d8e8f+8r8f4.f8c+8d8e8r8>a4<c+4>b4<d8r8>a+4<d8r8>a4<c+8r8
+>f+4<c+8r8c+4g+2f8r8f+8r4.>a2
+;401
+
+
+{5}
+'0v*v.60'
+'0i' p64%e1k2
+;501
+
+
+{6}
+'0v*v.60'
+'0i' p64%e1k2
+;601
+
+
+{7}
+'0v*v.60'
+'1i' p64%e1k2
+;701
+
+
+{8}
+'0v*v.60'
+'1i' p64%e1k2
+;801
+

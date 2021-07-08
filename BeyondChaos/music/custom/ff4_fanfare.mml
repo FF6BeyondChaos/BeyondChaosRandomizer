@@ -1,0 +1,92 @@
+#TITLE Victory Fanfare
+#ALBUM Final Fantasy IV
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x82
+#WAVE 0x21 0x51
+#WAVE 0x22 0x0A
+#WAVE 0x23 0x1F
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2
+#def 2v=   v100
+#def 2f= v1,100
+
+#def 3i=   |3
+#def 3v=   v100
+#def 3f= v1,100
+
+## auto percussion  0x22
+#drum "h"= 5a
+## auto percussion  0x23
+#drum "i"= 5f+
+
+
+{1}
+t141%v40%b0,85%f0,0'0v*v1.10'p75
+'0i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e1m96,36,193'0o-o1'c24e24g24
+<c24e24g24<c24e24g24c24r24c24r24c24r24c4>g+4a+4<c12r12>a+12<c2.
+$101>g4f4g4f16r16a+8^8a+16r16a4a+16r16a4a16r16g4f4e4f8d8^1g4f4g4f16r16
+a+8^8a+16r16a4a+16r16a4a16r16g4f4g4a+8<c8^1
+;101
+
+
+{2}
+'0v*v.90'p65
+'0i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e1m96,36,215r4.'0o'f24r24f24
+r24f24r24e4d+4d12>a+12<f12e12r12d12e2.
+$201e4d4e4d16r16f8^8f16r16f4f16r16f4f16r16e4c4c4c8>a+8^1<e4d4e4d16r16f8
+^8f16r16f4f16r16f4f16r16e4d4e4f8g+8^1
+;201
+
+
+{3}
+'0v*v.90'p50
+'0i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e1m96,36,215r4.'0o-o1'g24r24
+a24r24b24r24<c4>g+12g12f+12f4g12r12f12g2.<
+$301c4c4c4c16r16c8^8c16r16c4c16r16c4c16r16c4>a4g4a8f8^1<c4c4c4c16r16c8
+^8c16r16c4c16r16c4c16r16c4c4c4d8d+8^1
+;301
+
+
+{4}
+'1v*v1.00'p64
+'1i' {'VolEnvMode 11'}%r13{'Duration 95%'}%e0r4.'1o'c12c12c12c4>g+4a+4
+<c12r12>g12<c2.
+$401c8g16r16>g8<f16r16c8g16r16>g8<f16r16>a+8<f16r16>f8<f16r16>a+8<f16r16
+>f8<f16r16c8>g16r16<c8>g16r16<c8>g16r16<c8>g16r16a+8f16r16a+8f16r16a+8
+f16r16a+8f16r16<c8g16r16>g8<f16r16c8g16r16>g8<f16r16>a+8<f16r16>f8<f16
+r16>a+8<f16r16>f8<f16r16c8g16r16>g8<f16r16c8g16r16>a+8<f16r16>g+8<d+16
+r16>d+8<d+16r16>g+8<d+16r16>a+8<f16r16
+;401
+
+
+{5}
+'3v*v.75'p64
+'3i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e0r4.'3o'" !!!o i12i12i12i4i4
+i4i12"r12"i12"'3f*v288,.00'"i24i24i24i24i24i24i24i24i24i24i24i24i24i24
+i24i24i24i24
+"
+$501'3v*v.75'"i8"'3v*v.50'"i16i16"'3v*v.75'"i8"'3v*v.50'"i16i16"'3v*v.75'
+"i8"'3v*v.50'"i16i16"'3v*v.60'"i16i16i16i16
+";501
+
+
+{6}
+'2v*v1.00'p64
+'2i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e0r4.r1r1
+$601'2o'" !!!o h4
+";601
+

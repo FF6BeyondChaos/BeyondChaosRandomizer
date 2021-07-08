@@ -1,0 +1,135 @@
+#TITLE Troops March On
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x65 violas
+#WAVE 0x21 0x81 trumpet
+#WAVE 0x22 0x84 horn
+#WAVE 0x23 0x51 ebass
+#WAVE 0x24 0x1A march snare
+#WAVE 0x25 0x5A timpani
+#WAVE 0x26 0x1F march snare 2
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o4
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v100
+#def 2f= v1,100
+
+#def 3i=   |3
+#def 3o=   o4
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |4 %r20
+#def 4j=   |6 %a13%r22
+#def 4o=   o5
+#def 4v=   v100
+#def 4f= v1,100
+
+#def 5i=   |5
+#def 5o=   o6
+#def 5v=   v100
+#def 5f= v1,100
+
+## auto percussion  0x24
+#drum "h"= 5g+
+#drum "i"= 5g
+
+
+{1}
+t70%b0,70%f0,0%v50'0v*v.60'
+'0i' p34%e1'0o'c16r16c24r48c24r48c+8c16r8.c24r48c24r48c+8>b16r16<c+8c16
+r16c+8c16r16>b8<c16r16c+8>a+16r16<
+$101[[4[3'0v*v.70'c16r16'0v*v.40'c8]'0v*v.70'c16r16'0v*v.40'c+8]]<a+16
+r16a+24a+24a24g+4.g+16a16a+16a+16a+16g+16f+8.f16d+4.>a+16<d16d+16f16f+16
+a16a+16r16a+24a+24a24g+4.g+16a+16b16b16b16a+16g+8.f+16e4.e16f+16g+16f+16
+e16d16d+16r8>a+16<d+4.e16f+16g+16f+16e16d16d+16r8>a+16<d+2^4>
+;101
+
+
+{2}
+'0v*v.60'
+'0i' p44%e1'0o-o1'g16r16g24r48g24r48g+8g16r8.g24r48g24r48g+8f+16r16g+8
+g16r16g+8g16r16f+8g16r16g+8f16r16
+$201[[4[4'0v*v.70'g16r16'0v*v.50'g8]]]<a+16r16a+24a+24a24g+4.g+16a16a+16
+a+16a+16g+16f+8.f16d+4.>a+16<d16d+16f16f+16a16a+16r16a+24a+24a24g+4.g+16
+a+16b16b16b16a+16g+8.f+16e4.e16f+16g+16f+16e16d16d+16r8>a+16<d+4.e16f+16
+g+16f+16e16d16d+16r8>a+16<d+2^4>
+;201
+
+
+{3}
+r1r1
+$301['1v*v.60'
+'1i' p94%e1m48,18,215'1o+o2'c16r16c24c24c24g4.f32r32g32r32f16d+32r32c+32
+r32d+32r32c16r8.>g4.g32r32g+32r32a+8g+32r32g32r32<c16r8.>g4.'2v*v.60'
+'2i' p94%e1m48,18,215'2o'c+32r32d+32r32f16d+32r32c+32r32d+32r32c16r8>g16
+<c2^4]'2o-o1'a+16r16a+16r16<d+8c+16>b16a+16r16a+16r16a+16r16a+16r16a+16
+r16a+16r16<d+8c+16>b16a+16r16a+16r16a+16r16a+16r16b16r16b16r16<e8d+16c+16
+>b16r16b16r16b16r16b16r16b16r16b16r16<e8d+16c+16>b16r16b16r16b16r16b16
+r16a+8a24r48a24r48a+8a24r48a24r48a+8a24r48a24r48b16r16b8a+8a24r48a24r48
+a+8a24r48a24r48a+8a24r48a24r48a+16r16<d+8
+;301
+
+
+{4}
+r1r1
+$401['1v*v.60'
+'1i' p84%e1m48,18,215'1o+o1'a+16r16a+24a+24a24g4.<c+32r32d+32r32c+16c32
+r32>a+32r32<c32r32>g16r8.c4.c32r32f32r32g8f32r32c32r32g16r8.c4.'2v*v.60'
+
+'2i' p84%e1m48,18,215'2o'>a+32r32<c32r32c+16c32r32>a+32r32<c32r32>g16r8
+f16d+2^4]'2o-o1'd+16r16d+16r16f+8f16f16d+16r16d+16r16d+16r16d+16r16d+16
+r16d+16r16f+8f16f16d+16r16d+16r16d+16r16d+16r16e16r16e16r16g+8f+16f+16
+e16r16e16r16e16r16e16r16e16r16e16r16g+8f+16f+16e16r16e16r16e16r16e16r16
+d+8d+24r48d+24r48d+8d+24r48d+24r48d+8d+24r48d+24r48e16r16e8d+8d+24r48d+24
+r48d+8d+24r48d+24r48d+8d+24r48d+24r48d+16r16d+8
+;401
+
+
+{5}
+'3v*v.80'
+'3i' p64%e0'3o+o1'[8c16r16c16c16]
+$501[[4c16r16c16c16c16r16c16c16c16r16c16c16c16r16c+8]][d+16r16d+16d+16
+d+16r16d+16d+16d+16r16d+16d+16d+16r16d+8][e16r16e16e16e16r16e16e16e16r16
+e16e16e16r16e8]d+16r16d+16d+16d+16r16d+16d+16d+16r16d+16d+16e16r16e8d+16
+r16d+16d+16d+16r16d+16d+16d+16r16d+16d+16d+16r16d+8
+;501
+
+
+{6}
+
+'4i' p50%e0r1r1
+$601'4o'[3%g0'4v*v.40'" !!!o i8"'4v*v.20'%g1"i16i16"]'4v*v.40'%g0"i8"'4f*v24,.10'
+%g1"i48i48i48i48i48i48
+";601
+
+
+{7}
+'5v*v1.20'
+'5i' p74%e0'5o-o1'c8c16c16c2^4c8c16c16c2^4
+$701[[4c8c16c16c2c8c+8]]d+8d+16d+16d+2d+8d+8d+8d+16d+16d+2d+8d+8e8e16e16
+e2e8e8e8e16e16e2e8e8d+8d+16d+16d+2e8e8d+8d+16d+16d+2d+8d+8
+;701
+
+
+{8}
+
+'4j' p80%e0r1&193r1
+$801'4o'[3%g0'4v*v.40'" !!!o h8"'4v*v.20'%g1"h16h16"]'4v*v.40'%g0"h8"'4f*v24,.10'
+%g1"h48h48h48h48h48h48
+";801
+

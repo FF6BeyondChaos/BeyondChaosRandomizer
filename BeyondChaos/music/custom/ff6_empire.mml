@@ -1,0 +1,133 @@
+#TITLE The Gestahl Empire
+#ALBUM Final Fantasy VI
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#--------- ------------------
+#SHORTNAME FF6 Gestahl Empire
+
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x81
+#WAVE 0x21 0x83
+#WAVE 0x22 0x65
+#WAVE 0x23 0x1A
+#WAVE 0x24 0x28
+#WAVE 0x25 0x08
+#WAVE 0x26 0x5A
+
+#def 0i=   |0
+#def 0o=   o4
+#def 0v=   v70
+#def 0f= v1,70
+
+#def 1i=   |1
+#def 1o=   o6
+#def 1v=   v67
+#def 1f= v1,67
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v115
+#def 2f= v1,115
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |4
+#def 4o=   o4
+#def 4v=   v100
+#def 4f= v1,100
+
+#def 5i=   |5
+#def 5o=   o4
+#def 5v=   v100
+#def 5f= v1,100
+
+#def 6i=   |6
+#def 6o=   o6
+#def 6v=   v100
+#def 6f= v1,100
+
+## auto percussion  0x23
+#drum "h"= 5a
+
+
+{1}
+t90%x196%b0,100%f0,0%v50r1r1r1r1r1r1r1r1
+$101['1v*v.60'
+'1i' p35%e1m48,18,215'1o'c16r8.c24r24c24r24c24r24g2^8r8f8g8f8d+8c+8d+8
+c2>g2^8r8g8g+8a+4g+8g8<c2>g2^4'0v*v.80'
+'0i' p35%e1m48,18,215'0o+o1'c+8d+8f8d+8c+8d+8c1^2^4r4]'1v*v.50'
+'1i' p35%e1m48,18,215'1o-o1'a+12r6a+16r48a+16r48a+16r48a+2^8r2r4.a+12r6
+a+16r48a+16r48a+16r48a+2^8r2r4.b12r6b16r48b16r48b16r48b2^8r2r4.b12r6b16
+r48b16r48b16r48b2^8r8<e8f+8g+8f+8e8d8d+12r6>a+16r48a+16r48a+16r48<d+2^8
+r2r4.d+12r6>a+16r48a+16r48a+16r48<d+2^8r2r4.
+;101
+
+
+{2}
+r1r1r1r1r1r1r1r1
+$201['1v*v.60'
+'1i' p40%e1m48,18,215'1o-o1'a+16r8.a+24r24a+24r24a24r24g2^8r8<c+8d+8c+8
+c8>a+8<c8>g2d+2^8r8d+8f8g4f8d+8g2d+2^4'0v*v.80'
+'0i' p35%e1m48,18,215'0o'a+8<c8c+8c8>a+8<c8>g1^2^4r4]'1v*v.40'
+'1i' p40%e1m48,18,215'1o-o1'd+12r6d+16r48d+16r48d+16r48d+2^8r2r4.d+12r6
+d+16r48d+16r48d+16r48d+2^8r2r4.e12r6e16r48e16r48e16r48e2^8r2r4.e12r6e16
+r48e16r48e16r48e2^8r8g+8a+8b8a+8g+8e8d+12r6g+16r48g+16r48g+16r48f+2^8r2
+r4.d+12r6g+16r48g+16r48g+16r48f+2^8r2r4.
+;201
+
+
+{3}
+'2v*v.60'
+'2i' p90%e1%a4%r6r2'2o+o1'a+2a2g+2g1^1r2>a+2a2g+2g1^1
+$301[%a4%r6'2v*v.60'c2a+2a2g+2g1^1c2a+2a2g+2g1^1]%a15%r0'2v*v.50'<a+8r8
+a+12a+12a12g+2^4g+8a8a+8a+8a+8g+8f+4.f8d+2^4>a+8<d8d+8f8f+8a8a+8r8a+12
+a+12a12g+2^4g+8a+8b8b8b8a+8g+4.f+8e2^4e8f+8g+8f+8e8d8d+1^1r1r1>
+;301
+
+
+{4}
+'2v*v.60'
+'2i' p95%e1%a4%r6r2'2o+o1'd+2d+2d2c1^1r2>d+2d+2d2c1^1
+$401[%a4%a6'2v*v.60'r2g2f2d+2c1^1r2g2f2d+2c1^1]%a15%r0'2v*v.50'a+8r8a+12
+a+12a12g+2^4g+8a8a+8a+8a+8g+8f+4.f8d+2^4>a+8<d8d+8f8f+8a8a+8r8a+12a+12
+a12g+2^4g+8a+8b8b8b8a+8g+4.f+8e2^4e8f+8g+8f+8e8d8d+1^1r1r1
+;401
+
+
+{5}
+'2v*v.60'
+'2i' p100%e1%a4%r6r2'2o+o1'd2c2c2>a+1^1r2d2c2c2>a+1^1'3v*v.40'
+'3i' p70%e0'3o'
+$501[11r2r4." !!!o h24h24h24h4"r8"h24h24h24h4"r4]r2r4."h24h24h24h4"r2r4
+r2r4."h24h24h24h4"r8"h24h24h24h4"r4r2r4."h24h24h24h4"r8"h24h24h24h4"r4
+
+;501
+
+
+{6}
+'4v*v.60'
+'4i' p80%e1'4o+o1'c1^1c1^1c1^1c1^1
+$601[c1^1c1^1c1^1c1^1]d+1^1d+1^1e1^1e1^1d+1^1d+1^1
+;601
+
+
+{7}
+'5v*v.90'
+'5i' p50%e0%r9'5o-o1'c1^1c1^1c1^1c1^1
+$701[c1^1c1^1c1^1c1^1]d+1^1d+1^1e1^1e1^1d+1^1d+1^1
+;701
+
+
+{8}
+'6v*v1.20'
+'6i' p60%e1r1r1r1r1r1r1r1r1
+$801[8'6o-o1'c4c12c12c12c2r1]d+4d+12d+12d+12d+2r2d+4>a+4<d+4d+12d+12d+12
+d+2r2d+4>a+4<e4e12e12e12e2r2e4>b4<e4e12e12e12e2r1d+4d+12d+12d+12d+2r1d+4
+d+12d+12d+12d+2r1
+;801
+

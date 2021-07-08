@@ -1,0 +1,289 @@
+#TITLE Electric de Chocobo
+#ALBUM Final Fantasy VII
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+########## ------------------
+#SHORTNAME FF7 Elec d'Chocobo
+
+#WAVE 0x20 0xB2 - was 0x0B organ
+#WAVE 0x21 0x38 - was 0x80 elecg
+#WAVE 0x22 0x32 - was 0x1D mandolin
+#WAVE 0x23 0x51 - was 0x6B ebass
+#WAVE 0x24 0xB6 - was 0x9B rotary
+
+#WAVE 0x28 0x0A - was 0x22 kick
+#WAVE 0x29 0x1C - was 0x71 snare
+#WAVE 0x2A 0x4B - was 0x84 tom
+#WAVE 0x2B 0x2A - was 0x88 ride
+#WAVE 0x2C 0x2D - was 0x12 crash
+
+#def init= t160 %x255 %b0,85 %v40 %f0,0
+
+#def organ= |0 %e1 'o' p64 o5 m48,18,223 v0,18,151
+#def clean= |1 %e1 'c' p10 o6 mv ##%y1%s4%r12
+#def mute=  |2 %e1 'm' p105 o6 mv %y4%s1%r10
+#def bass=  |3 %e0 'b' p64 o7 mv %y1%s4%r14
+#def organa=|4 %e1 'r' p64 o5 mv
+
+#def o= v72
+#def c= v44
+#def m= v88
+#def b= v64
+#def r= v48
+
+#def ov33= 'o*v.5'
+#def ov17= 'o*v.1'
+#def ov08= v0
+
+#drum "k"=5a %e0mv |8 v72 p60
+#drum "s+"=5e %e0mv |9 v80 p60 %y4%s4
+#drum "s"=5e %e0mv |9 v72 p60 %y4%s4
+#drum "t"=5e %e0mv |9 v65 p60 %y4%s4
+#drum "u"=5e %e0mv |9 v58 p60 %y4%s4
+#drum "v"=5e %e0mv |9 v43 p60 %y4%s4
+#drum "w"=5e %e0mv |9 v29 p60 %y4%s4
+#drum "c"=5d+ %e1mv |A v72 p75
+#drum "a"=4a %e1mv |A v72 p55
+#drum "a+"=4a %e1mv |A v96 p55
+#drum "r"=5a %e1mv |B v40 p70 ##%y4%s0%r17
+#drum "y"=5a %e1mv |C p100 %r20
+ 
+{1} 'init'
+'mute-o1' l16 
+c+cc>bba+a+aag+g+ggf+f+f
+##
+l8 [8ebgb] [8g<d>a+<d>]
+$[## 10
+'organ+o1'
+[l8 dr>bge<d>bg  brgrb4.a
+l16 grgagrfrg4.f8  grgb<drerf2]
+## 18
+[l8 erc>af+a<ce drgrd4.>b j2 <cr>af+df+a<c> l16 brb<c>brarb2<]
+l16 arabargra4.g8  arab<crdrer8.f+4
+]##26
+g8r1... k1 [[j1,9001]r48] r2. k-3 [[j1,9001]r48] r2 k0
+'bass-o1' g16 m36,-9 ^8.
+## 30
+[l8 [c4c>a+gga+b  <cc>a+<c4j2>ga+b<] cd+e
+f4fd+ccd+effd+f4>ga+b  <c4c>a+gga+b <cc>a+<c4dff+
+g4gfddfg ffd+f4>ga+b  <c4c>a+gga+b <cc>a+<c4j2>ga+b<]
+## 42
+#^
+^4.
+## 54
+'organ+o1'
+[l8 erc>af+a<ce drgrd4.>b j2 <cr>af+df+a<c> l16 brb<c>brarb2<]
+l16 arabargra4.g8  arab<crdrer8.f+4
+## 62
+g8r2.. k3 [[j1,9001]r48] r2. k0
+'clean-o1' m48,-1g4m48,1^4^2
+k-2 [[j1,9001]r48] r4 k0
+'organ-o4' %y2%s6%r31 l16 g<da<eb<f<cg
+;
+
+{2}
+'clean-o2' r1
+##
+r1r1 m48,-1b4m48,1^4^1. r1r1 < m48,-1d4m48,1^1.
+'organ-o2' %y2%s6%r31 l16 b<f<cg
+$[##10
+'mute-o2' l8
+[8 g<d>b<d> f<c>a<c>]
+## 18
+<ccec dd>a<d>  ggbf+ f+f+bf+    <ccec dd>a<d>  ggaaa+a+bb
+<ccec dd>a<d>  ggbf+ f+f+bf+    aaba <c>aba  <ddc>bar "!!!oy4"
+]##26
+'clean*v.75-o1' g4 r1..
+k1 [[j1,9002]r64] r2. k-3 [[j1,9002]r64] r2. k0
+## 30
+'mute-o1' l8
+[cc16c16c>a+gga+b <cc>a+<c4j2>ga+b<] cd+e
+ff16f16fd+ccd+e ffd+f4>ga+b  <cc16c16c>a+gga+b <cc>a+<c4dff+
+gg16g16gfddfg ffd+f4>ga+b  <cc16c16c>a+gga+b<cc>a+<c4>ga+b
+## 42
+'m*v1.2'
+<gg16g16ec>a<gec  ee16e16ce4r4d    cc16d16c>a+<c>a+ga+  <cc16e16gaa+2
+<cc16c16>afd<c>af  aa16a16fa4r4g  ee16f16ededcd  ee16f16gaa+2
+<dd16d16>bge<d>bg  rl16<cc>bba+a+aag+g+ggf+f+    l8e4ed>a+a+<dd+  eede
+'organ-o4' l16 %y2%s6%r31
+a<eb<f+<c+g<da
+## 54
+'mute-o2' l8
+<ccec dd>a<d>  ggbf+ f+f+bf+    <ccec dd>a<d>  ggaaa+a+bb
+<ccec dd>a<d>  ggbf+ f+f+bf+    aaba <c>aba  <ddc>bar "!!!oy4"
+## 62
+'clean*v.75-o1' g4 r2.
+k3 [[j1,9002]r64] r2. k0
+'clean-o1' m48,-1d4m48,1^4^2
+k-2 [[j1,9002]r64] r4 k0
+'organ-o4' %y2%s6%r31 l16 r32b<f<cg<da<eb32
+;
+
+{3}
+'clean-o1' r1
+##
+r1r1 m48,-1e4m58,1^4^1. r1r1 m48,-1g4m48,1^1.^64
+'organ-o1' l16 %y2%s6%r31 cg<da32.
+$[##10
+'bass-o2' l8
+[8g4gfd4df]
+## 18
+<c4c>gf+4f+<c> b4.bb4.b  <c4c>gf+4f+a g4a4a+4b4
+<c4c>gf+4f+<c> b4.bb4.b  aaba<c>aba <ddc>bard4
+]##26
+g "!!!o" [31"r"]
+## 30
+[88"r"] r1
+## 42
+[88"r"] r2
+'organ-o4' l16 %y2%s6%r31
+r64b<f+<cg<da<eb32.
+## 54
+'bass-o2' l8
+<c4c>gf+4f+<c> b4.bb4.b  <c4c>gf+4f+a g4a4a+4b4
+<c4c>gf+4f+<c> b4.bb4.b  aaba<c>aba <ddc>bard4
+## 62
+[8grbr]
+;
+
+{4}
+r1 l8
+##
+[64"r"]
+$[##10
+"!!!o" [64"r"]
+## 18
+[48"r"]
+"kkcck4sk k4cck4s4"
+]##26
+["kkssk4s4 k4ssk4s4"]
+## 30
+[6"k4sskks4" j6 "kksk4ksk"] ":s" l16 "k8wwv8ww u8vvutss+"
+## 42
+'organ-p44*v.5' l16
+[crcrgrgr>a+r<e4er  crcrgrgr>a+r<g8d+8d8]
+frfr<crcr>d+ra4ar  frfr<crcr>d+r<c8>g+8g8
+crcrgrgr>a+r<e4er  crcrgrgr>a+r<g8d+8d8
+grgr<drdr>frb4br  l8rgf+fed+dc+
+c4c>a+gga+b<cc>a+<c
+'organ-o3' l16 %y2%s6%r31
+r32c+g<da<eb<f+<c+32
+## 54
+"!!!o" l8 [48"r"]
+"kkcck4sk k4cck4s4"
+## 62
+"!!!o" [32"r"]
+;
+
+{5}
+'bass-o2' r1
+##
+l8 [8ergr] [8gra+r]
+$[##10
+'organa' l8
+[4d4.c+c4.c+ d4.c+c2]
+## 18
+[3ced+e df+ff+  [>b<dc+d]] >aaba<c>aba <ddeff+rf+4
+]##26
+g8 r1...r1r1
+## 30
+[12r1]
+## 42
+'organ-p44' l16
+[['ov17'<crcr>'ov33'f+rf+r'ov17'a+r'ov33'j2d+4d+r]e8r4]
+['ov17'<frfr>'ov33'brbr'ov17'<d+r>'ov33'j2g+4g+r]a8r4
+['ov17'<crcr>'ov33'f+rf+r'ov17'a+r'ov33'j2d+4d+r]e8r4
+'ov17'<grgr'ov33'c+rc+r'ov17'fr>'ov33'a+4a+r
+'ov08'l8<rgf+fed+dc+  c4c>a+gga+b<cc>a+<c
+'organ-o3' l16 %y2%s6%r31
+r32.da<eb<f+<c+g<d64
+## 54
+'organa' l8
+[3ced+e df+ff+  [>b<dc+d]] >aaba<c>aba <ddeff+rf+4
+## 62
+g'mute-o2' <d>b<d> [7g<d>b<d>]
+;
+
+{6}
+r1
+##
+l8 [4"kkssk4s4 k4ssk4s4"]
+$[##10
+[4"!!!o kkssk4s4 k4ssk4s4"]
+## 18
+[3"kkssk4s4 k4ssk4s4"]
+"^4aa4.a+4 ^4aa^2"
+]##26
+"r" r2.. r1r1r1
+## 30
+[12r1]
+## 42
+[6"k4sskks4" j6 "kksk4ksk"] ":s" l16 "k8wwv8ww u8vvutss+"
+## 54
+l8 [3"kkssk4s4 k4ssk4s4"]
+"^4aa4.a+4 ^4aa^2"
+## 62
+"!!!o" ["kkssk4s4 k4ssk4s4"]
+;
+
+{7}
+r1
+##
+r1 k1 [[j1,9001]r48] r1.. k-3 [[j1,9001]r48] r1..
+k3 [[j1,9001]r48] r1.. k-2 [[j1,9001]r48] k0 r4
+'organ-o4' l32 %y2%s6%r31 gb<dfa<ceg16 l16 <da<eb32
+$[##10
+'clean-o1' l8
+[4r4ggr4fr r4ggrfrf]
+## 18
+'c*v.75'
+g4g4aa4a gg4f+4f+f+f+  g4g4aa4a gg4f4fff
+g4g4aa4a gg4f+4f+f+f+  r4ffr4fr r4ddr4dr
+]##26
+'c*v.5' b4 r2. r1r1r1
+## 30
+[12r1]
+## 42
+[12r1]
+## 54
+'clean-o1*v.75'
+g4g4aa4a gg4f+4f+f+f+  g4g4aa4a gg4f4fff
+g4g4aa4a gg4f+4f+f+f+  r4ffr4fr r4ddr4dr
+## 62
+'c*v.5' b4 r2. r1r1r2
+'organ-o4' %y2%s6%r31 l16 r64a<eb<f<cg<da32.
+;
+
+{8}
+r1
+##
+r1 k1 [[j1,9002]r64] r1.. k-3 [[j1,9002]r64] r1..
+k3 [[j1,9002]r64] r1.. k-2 [[j1,9002]r64] k0 r4
+'organ-o4' l32 %y2%s6%r31 r64a<cegb<dfa16 l16 <eb<f<c64
+$[##10
+'clean-o1*v.7' l8
+[4r4bbr4ar r4bbrara]
+## 18
+'c*v.5'
+[<e4e4f+f+4f+ dd4>b4bbb j2 <c4c4dd4d> bb4b4bbb]
+<r4ccr4cr> r4aar4ar
+]##26
+<d4 r2. r1r1r1
+## 30
+[12r1]
+## 42
+[12r1]
+## 54
+'clean-o1*v.5'
+[<e4e4f+f+4f+ dd4>b4bbb j2 <c4c4dd4d> bb4b4bbb]
+<r4ccr4cr> r4aar4ar
+## 62
+<d4 r2. r1r1r2
+'organ-o3' %y2%s6%r31 l16 r32.cg<da<eb<f<c64
+;
+
+$9001 ## Chocobo sfx layer 1
+l16%e0p20@4vmv24v6,0%n1%c27[5c48]%n0 ]
+$9002 ## Chocobo sfx layer 2
+l16%e0p20m%p1@3v32o12m255,+3v0,1,191&21c12v%p0 ]

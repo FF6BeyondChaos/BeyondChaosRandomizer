@@ -1,0 +1,246 @@
+#TITLE Succession of Witches (Dancing Mad remix)
+#ALBUM Final Fantasy VIII
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#VARIANT ~_
+#VARIANT ~` tier1
+#VARIANT ?` tier2
+#VARIANT ?_ tier3
+
+#WAVE 0x20 0x67 C.Organ
+#WAVE 0x21 0xB0 P.Organ
+#WAVE 0x22 0xF2 Maria
+#WAVE 0x23 0xF1 Draco
+#WAVE 0x24 0x1B Snare
+#WAVE 0x25 0x5A Timpani
+#WAVE 0x27 0x28 Bells
+#WAVE 0x2B 0xB7 VoxOrgan
+
+#def global= ~t90~?t70t255,90? %v50 %b0,70 %f0,0 %x224
+
+#def hch= |1 v64
+#def str= |0 v64
+#def obo= |B v64
+#def oca= |2 v64
+#def vox= |3 v64
+#def bel= |7 v80
+
+#def ho= o4
+#def so= o5
+#def oo= o4 %a9
+#def fo= o4
+#def vo= o7
+#def bo= o4
+
+#def 01= 'vox' p80
+#def 02= 'oca' p64
+#def 03= 'obo' p64
+#def 04= 'obo' p35
+#def 05= 'obo' p95
+#def 06= 'str' p30 %a6
+#def 07= 'str' p40 %a6
+#def 08= 'str' p50 %a6
+#def 09= 'str' p80 %a6
+#def 10= 'str' p20
+#def 11= 'str' p30
+#def 12= 'str' p40
+#def 13= 'str' p50
+#def 14= 'str' p80
+#def 15= 'str' p100
+#def 16= 'hch' p64
+#def 17= 'hch' p64
+#def 18= 'hch' p64
+#def 19= 'hch' p64
+#def 20= 'obo' p64
+#def 21= 'hch' p10
+#def 22= 'hch' p110
+#def 23=  p64
+#def 24= 'bel' p90
+#def 25= p64
+
+#def 10h= 'hch' p20
+#def 11h= 'hch' p30
+#def 12h= 'hch' p40
+#def 13h= 'hch' p50
+
+#def lv= m48,18,207
+#def hv= m48,18,231
+
+#drum "d"=4g |5 v127 p64
+#drum "t"=5e |4 v64 p90
+#drum "u"=5e |4 v80 p90
+
+{1}
+$4441
+'global' %e1
+?##intro
+'14''so+o1'%r12 c4c2. d4d2. d+4d+2. fff2. a4a2. aaa2. 
+?##1
+'16''ho+o2' %r7 [[ed+b4]ed+<c4>a1.>]
+##7
+$'01' 'vo-o1' 'hv' [3%ra4%r16a2.] aaa2.
+'02' 'fo' %r8 ba<e4d+1^4 l24 >ab<cfga l8 ba<e4 d+1.
+##15
+'01' 'vo-o1' 'hv' [3%ra4%r16a2.] aaa2.
+%e0m["d4.dd2"] ^4 %e1'18''ho' f2. <c4d4d+4e4
+##23
+'10h''ho+o1' %r17 [6 a4a4a2] g+4g+4%r12g+2 %r17f+4f+4%r12f+2
+##31
+'15''so-o2''lv' %r7 e2^f+ga f4<c2.> g2^ab<c> g+4<d2.
+##end
+`m:4441`
+'09''so-o2''lv' v24 %r7 a1 [5^1]
+;
+
+{2}
+$4442
+%e1
+?##intro
+'13''so-o1'%r7 c1 a+1 g+1 a1 a1 a1
+?##1
+'17' 'ho+o1' %r7 l4 [[a<c>]a<ec1.>>]
+##7
+$'17' 'ho' l8 refere4e rfgfrf4f rf+gf+rf+4f+ rfgfrf4f
+[ reae rfaf rf+af+ rfaf ]
+##15
+refere4e rfgfrf4f rf+gf+rf+4f+ rfgfrf4f
+rd+f+d+rd+4d+ rdfdrd4d re2.. r4b4a4g+4
+##23
+'11h''ho+o1' %r17 [3f+4f+4f+2 f4f4f2] e4e4%r12e2 %r17>d4d4%r12d2
+##31
+'14''so-o1''lv' %r7 e2^f+ga f4<c2.> g2^ab<c> g+4<d2.
+##end
+`m:4442`
+'08''so-o1''lv' v24 %r7 a1 [5^1]m
+;
+
+{3}
+$4443
+%e1
+?##intro
+'12''so'%r10 v40 f1g1g+1a1 b4gab<cde dc>b<cdefd
+?##1
+'19' 'ho+o1' %r7 l2 [eff+f1.>]
+##7
+$'19' 'ho-o1'  l8 [16a2]
+##15
+'16' 'ho+o1' l8 r2 redc>b2< rfedc2 >rab<cd4.d24e24d24 c4>b4
+a1 r1r4. a<c>b<df ed+ba<c>b<d>b
+##23
+'13h''ho+o1' %r17 [3c4c4c2 >b4b4b2<] >a4a4%r12a2 %r17>g4g4%r12g2
+##31
+'11*v.5''so''hv' %r11 b4<f+4edc4> b<cd>a<c4>ba b4gab<cde dc>b<cdefd
+##end
+`m:4443`
+'07''so+o1''lv' v16 %a5%r8 e1 [5^1]m
+
+;
+
+{4}
+$4444
+%e1
+?##intro
+[6r1]
+?##1
+[6r1]
+##7
+$[4r1]
+'09' 'so-o2' %r6 a1^1^1^1
+##15
+'06' 'so+o1' v24 %a6 e1f1f+1f1
+'14' 'so-o2' v64 %a6%r7  a1^1^1^1
+##23
+'03''hv' 'oo+o1' [4r1] %r8
+&45e%l1a+64b4.%l0a%l1g48a48g48^16%l0f+ fga&21d+%l1a64g4%l0fd+ %l1e48f48&172e%l0%l1e32a32 &180e%l0r16
+##31
+'10*v.5''so+o1''hv' %r11 b4<f+4edc4> b<cd>a<c4>ba b4gab<cde dc>b<cdefd
+##end
+`m:4444`
+'06''so+o2''lv' v16 %a5%r8 e1 [5^1]
+;
+
+{5}
+$4445
+%e1
+?##intro
+[6r1]
+?##1
+[6r1]
+##7
+$[4r1]
+'08' 'so-o1' %r6 a1^1^1^1
+##15
+'07''so+o1' v24 %a6 c1>b1<c1c1
+'15' 'so-o3' v64 %a6%r7  a1^1^1^1
+##23
+'04''lv'|2%r7 'fo+o1' r1r1 l4 r2.c >r2.b r2.a r2.b l8 r4b<cdc>b4 aa+<cdf+ed>a+
+##31
+'16''ho+o1'm b4<f+4edc4> b<cd>a<c4>ba b4gab<cde dc>b<cdefd
+##end
+`:4445`
+'16''ho+o2' %r7 [[ed+b4]ed+<c4>a1.>]
+;
+
+{6}
+$4446
+%e1 
+?##intro
+[6r1]
+?##1
+[6r1]
+##7
+$[4r1]
+'16' 'ho' [ba<e4 d+1.]
+##15
+'19' 'ho-o1' l8 [13a2]^2 <a4g+4f+4e4
+##23
+'05''lv'|3%r7 'vo-o1' r1r1 l4 r f+r2. fr2. er2. fr2. l8 a4.g+f+e d1
+##31
+'17''ho+o1'm l4 rd2. rf2. re2e rfrg+8b8
+##end
+`:4446`
+'17' 'ho+o1' %r7 l4 [[a<c>]a<ec1.>>]
+;
+
+{7}
+$4447
+%e1 
+?##intro
+[6r1]
+?##1
+[6r1]
+##7
+$[4r1]
+'06' 'so+o1' v24 %r15 [ ^4e2f2f+2f4]
+##15
+'24' 'bo' [4a1]
+'21' 'ho-o2' v64 a1^1^1^2r2
+##23
+[4 "^2^t16t16u4 ^2^t24t24t24u4"]
+##31
+'18''ho' rg2.. ra2.. <rd4d4d4d re4ere4.
+##end
+`:4447`
+'19' 'ho+o1' %r7 l2 [eff+f1.>]
+;
+
+{8}
+$4448
+%e1 
+?##intro
+[6r1]
+?$##1
+[6r1]
+##7
+[4r1]
+'07' 'so' v24 %r15 [8 ^4c4]
+##15
+'20' 'oo+o1' v12 e1f1f+1f1
+'22' 'ho-o3' v64 a1^1^1^1
+##23
+'12h''ho+o1' %r17 [3e4e4e2 d+4d+4d+2] c4c4%r12c2 %r17>a+4a+4%r12a+2
+##31
+'19''ho' %r7 e1 f1 g2g2 g+2b2
+`:4448`
+;

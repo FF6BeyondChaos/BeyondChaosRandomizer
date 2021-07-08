@@ -1,0 +1,1397 @@
+#TITLE Assault of the Silver Dragons
+#ALBUM Final Fantasy IX
+#COMPOSER Nobuo Uematsu
+#ARRANGED Rushlight
+
+##         ------------------
+#SHORTNAME FF9 Silver Dragons
+
+#VARIANT ~
+#VARIANT ` tr
+
+#WAVE 0x20 0x66 ## Strings
+#WAVE 0x21 0xA7 ## Flute
+#WAVE 0x22 0x84 ## Horn
+#WAVE 0x23 0x94 ## Oboe
+#WAVE 0x24 0x95 ## Mild Clarinet
+#WAVE 0x25 0x96 ## Harsh Clarinet
+#WAVE 0x26 0x81 ## Trumpet
+#WAVE 0x27 0x83 ## Low Brass
+#WAVE 0x28 0xA4 ## Piccolo
+#WAVE 0x29 0x5C ## Timpani
+#WAVE 0x2A 0x2C ## Orchestra Clash
+#WAVE 0x2B 0x1A ## Snare
+#WAVE 0x2C 0x6C ## Tambourine
+#WAVE 0x2D 0x80 ## Octave Trumpet
+#WAVE 0x2E 0x63 ## Octave Strings
+
+## Note: The initial tempo doesn't for the whole song
+#def init= t134 %x255 %v40 %b0,70 %f0,0
+
+## Note that the use of "solo", "duo" and "trio" usually reference the number of channels playing the same layer, though volume adjustments in this arrangement are just a bit of a mess
+#def stringsBaseVol=          v70
+#def baseStringsVol=          'stringsBaseVol*v1.7'
+#def quietBaseStringsVol=     'stringsBaseVol*v1.2'
+#def regularStringsVol=       'stringsBaseVol*v.7'
+#def regularStringsQuietVol=  'stringsBaseVol*v.5'
+#def melodyStringsDuoVol=     'stringsBaseVol*v.8'
+#def regularStringAccentVol=  'stringsBaseVol*v.55'
+#def stringAccentVol=         'buriedOctaveStringsVol*v1.45'
+#def stringAccentDuoVol=      'buriedOctaveStringsVol*v.75'
+#def buriedOctaveStringsVol=  v33
+#def normalOctaveStringsVol=  'buriedOctaveStringsVol*v1.3'
+#def baseOctaveStringsVol=    v127
+#def fluteVol=                v53
+#def fluteFade=             v1,53 ## Keep this in line with fluteVol
+#def soloFluteVol=            'fluteVol*v1.8'
+#def fluteDuoVol=             'fluteVol*v1.1'
+#def fluteQuietVol=           'fluteVol*v.8'
+#def fluteTrioVol=            'fluteVol*v.65'
+#def piccoloVol=              v50
+#def piccoloQuietVol=         'piccoloVol*v.8'
+#def piccoloAccentVol=        'piccoloVol*v.8'
+#def mildClarinetVol=         v77
+#def mildClarinetLoudVol=     'mildClarinetVol*v1.3'
+#def mildClarinetLouderVol=   'mildClarinetVol*v1.7'
+#def mildClarinetDuoVol=      'mildClarinetVol*v.9'
+#def mildClarinetTrioVol=     'mildClarinetVol*v.9'
+#def harshClarinetVol=        v75
+#def harshClarinetTrioVol=    'harshClarinetVol*v.9'
+#def oboeVol=                 v70
+#def lowBrassVol=             v53
+#def lowBrassLoudVol=         'lowBrassVol*v1.8'
+#def timpaniVol=              v105
+#def timpaniFade=           v1,105 ## Keep this in line with timpaniVol
+#def altTimpaniVol=           'timpaniVol*v.75'
+#def altTimpaniMidVol=        'timpaniVol*v.65'
+#def altTimpaniQuietVol=      'timpaniVol*v.5'
+#def trumpetTrioVol=          v49
+#def trumpetTrioFade=       v1,49 ## Keep this in line with trumpetTrioVol
+#def trumpetDuoVol=           'trumpetTrioVol*v1.5'
+#def trumpetSoloVol=          'trumpetTrioVol*v1.4'
+#def octaveTrumpetHighVol=    v30
+#def octaveTrumpetLowVol=     'octaveTrumpetHighVol*v.7'
+#def hornVol=                 v49
+#def hornTrioVol=             'hornVol*v0.95'
+#def hornDuoVol=              'hornVol*v1.3'
+#def hornSoloVol=             'hornVol*v1.8'
+#def hornSoloAccentsVol=      'hornVol*v2.6'
+#def hornSoloQuietVol=        'hornVol*v1.4'
+#def hornSoloQuieterVol=      'hornVol*v1'
+## This is just a base vol, it shouldn't be used directly. Multiplications will be applied on it, with the highest factor being 0.6.
+#def snareBaseVol=            v130
+#def tambourineBaseVol=       v57
+#def tambourineLowVol=        'tambourineBaseVol*v.71'
+
+#def stringsNormalAttack= %a8
+#def stringsMidAttack=    %a10
+#def stringsQuickAttack=  %a12
+
+#def stringsHalfMeasureRelease= %r16
+
+#def trumpetAttack=       %a10
+#def trumpetQuickAttack=  %a15
+
+#def timpaniStrike=       %a15
+#def timpaniQuickStrike=  %a13
+
+#def fluteSustain=        %r0
+#def fluteRelease=        %r20
+
+#def hornRelease=         %r20
+
+#def regularTimpaniPan= p44
+#def altTimpaniPan=     p64
+
+#def strings=       |0 o5
+#def octaveStrings= |E o5
+#def timpani=       |9 o5
+
+## Note: Because no vibrato at all is used in this song, the instrument macros won't have a command to disable it.
+## Likewise for echo, which is just enabled on everything so it will just be turned on at the start of each channel.
+#def baseStrings=          'strings'       'baseStringsVol'          p74                 'stringsNormalAttack'
+#def regularStrings=       'strings'       'regularStringsVol'       p49                 'stringsNormalAttack'
+#def baseOctaveStrings=    'octaveStrings' 'baseOctaveStringsVol'    p74                 %s4 %y0               
+#def regularOctaveStrings= 'octaveStrings' 'buriedOctaveStringsVol'  p49                                       
+#def flute=                |1 o4           'fluteVol'                p34                                      
+#def piccolo=              |8 o3           'piccoloVol'              p14                                      
+#def mildClarinet=         |4 o5           'mildClarinetVol'         p74                                      
+#def harshClarinet=        |5 o5           'harshClarinetVol'        p74                                      
+#def oboe=                 |3 o5           'oboeVol'                 p84                                      
+#def lowBrass=             |7 o6           'lowBrassVol'             p104                                     
+#def regularTimpani=       'timpani'       'timpaniVol'              'regularTimpaniPan' 'timpaniStrike'      
+#def altTimpani=           'timpani'       'altTimpaniVol'           'altTimpaniPan'     'timpaniStrike'      
+#def trumpet=              |6 o5           'trumpetTrioVol'          p24                 'trumpetAttack'      
+#def octaveTrumpet=        |D o5           'octaveTrumpetHighVol'    p34                 'trumpetAttack'      
+#def horn=                 |2 o5           'hornVol'                 p79                                      
+
+#drum "b"= 5b  |A v127                p64 %r17 ## Shorter version for when channels are really short. Should be used when only 2 beats are available.
+#drum "c"= 5b  |A v127                p64
+#drum "x"= 4d  |C v127                p64
+#drum "y"= 5g+ |C 'tambourineLowVol'  p64
+#drum "z"= 5g+ |C 'tambourineBaseVol' p64
+## Bunch of snares with different volumes...
+#drum "d"= 5g+ |B ~'snareBaseVol*v.1' ~ `'snareBaseVol*v.15' p64`
+#drum "e"= 5g+ |B ~'snareBaseVol*v.12'~ `'snareBaseVol*v.15' p64`
+#drum "f"= 5g+ |B ~'snareBaseVol*v.13'~ `'snareBaseVol*v.15' p64`
+#drum "g"= 5g+ |B ~'snareBaseVol*v.15'~ `'snareBaseVol*v.15' p64`
+#drum "h"= 5g+ |B ~'snareBaseVol*v.16'~ `'snareBaseVol*v.15' p64`
+#drum "i"= 5g+ |B ~'snareBaseVol*v.2' ~ `'snareBaseVol*v.25' p64`
+#drum "j"= 5g+ |B ~'snareBaseVol*v.21'~ `'snareBaseVol*v.25' p64`
+#drum "k"= 5g+ |B ~'snareBaseVol*v.24'~ `'snareBaseVol*v.25' p64`
+#drum "l"= 5g+ |B ~'snareBaseVol*v.25'~ `'snareBaseVol*v.25' p64`
+#drum "m"= 5g+ |B ~'snareBaseVol*v.3' ~ `'snareBaseVol*v.35' p64`
+#drum "n"= 5g+ |B ~'snareBaseVol*v.33'~ `'snareBaseVol*v.35' p64`
+#drum "o"= 5g+ |B ~'snareBaseVol*v.36'~ `'snareBaseVol*v.35' p64`
+#drum "p"= 5g+ |B ~'snareBaseVol*v.38'~ `'snareBaseVol*v.35' p64`
+#drum "q"= 5g+ |B ~'snareBaseVol*v.39'~ `'snareBaseVol*v.35' p64`
+#drum "r"= 5g+ |B ~'snareBaseVol*v.49'~ `'snareBaseVol*v.50' p64`
+#drum "s"= 5g+ |B ~'snareBaseVol*v.5' ~ `'snareBaseVol*v.50' p64`
+#drum "t"= 5g+ |B ~'snareBaseVol*v.52'~ `'snareBaseVol*v.50' p64`
+#drum "u"= 5g+ |B ~'snareBaseVol*v.6' ~ `'snareBaseVol*v.60' p64`
+
+{1}
+'init'%e1
+## Base Strings, channel 25 in the VGMTrans output
+'baseStrings-o1'
+'stringsQuickAttack'
+l16
+## Measure 1 lasts only 2 beats
+## 1 / 2
+[3 e-ff+ff+fe-f]
+## 3
+[2 ef+g+f+g+f+ef+]
+## 4
+e1
+## 5
+r1
+## 6
+r1
+## 7
+## Mild Clarinet, channel 5 in VGMTrans output
+'mildClarinet-o1''mildClarinetTrioVol'
+l4
+rb-<f+e-
+## 8
+b-f+<c+>b-
+## 9
+<f1
+## 10
+l16
+f+fc+>b<e-r>b-<c+^2
+## 11
+r8>bb-g+b-g+f+ r8g+f+ff+fe-
+## 12
+c+>b-b<e-f+e-ff+ <c+>b-b<e-g+ff+b-
+
+## Strings, a mix of notes from channels 21 and 22 in VGMTrans output
+'regularStrings+o2''melodyStringsDuoVol'
+l4
+[2
+  ## 13 / 17
+  c2>g<c>
+  ## 14 / 18
+  b2gb
+  ## 15 / 19
+  b-2gb-
+  j2
+  ## 16
+  a2f2<
+]
+a4.%l1 a24b-24b24<c2 %l0
+## 21
+t145
+r1r1r1r1
+
+## Piccolo, channel 1 in VGMTrans output
+'piccolo+o2'
+## 25 through 40
+'melodyNotes25To40'
+$
+[2
+  ## 41 / 45
+  ## Flute, channel 3 in VGMTrans output
+  'flute+o1''fluteDuoVol'
+  l8
+  rg+ef+e-er4
+  ## 42 / 46
+  ## Squeeze one low strings note here from channel 27 in VGMTrans output
+  'baseStrings-o1''stringsMidAttack'c+
+  ## Back to flute, channel 3 in VGMTrans output
+  'flute+o1''fluteDuoVol'
+  l8
+  g+ef+e-ee->b<
+  ## 43 / 47
+  ## Squeeze one low strings note here from channel 27 in VGMTrans output
+  'baseStrings-o1''stringsMidAttack'c+
+  ## Back to flute, channel 3 in VGMTrans output
+  'flute+o1''fluteDuoVol'
+  l8
+  g+ef+e-er4
+  ## 44 / 48
+  ## Clarinet, channel 5 in VGMTrans output
+  'mildClarinet'
+  l8
+  c+eg+ j2 f+bg+<e-e
+]
+## Remainder of 48
+b<e-f+b-b
+
+## Piccolo, channel 1 in VGMTrans output
+'piccolo+o1'
+## 49 through 64
+'melodyNotes25To40'
+
+[2
+  ## 65 / 73
+  ## High Upper Strings, A mix of notes from channels 21 and 22 in VGMTrans output
+  'regularStrings+o2''melodyStringsDuoVol'
+  e1
+  ## 66 / 74
+  e-2g+2
+  ## 67 / 75
+  c+1
+  ## 68 / 76
+  ^2 j2 e-4e4
+  ## 69
+  f+2g+2
+  ## 70
+  ^1
+  ## 71
+  ## Piccolo, channel 1 in VGMTrans output
+  'piccolo+o1'
+  rc+g+f+bg+<e-e
+  ## 72
+  f+g+c+e->bf+ee-
+]
+## Remainder of measure 76
+>b4g+4<
+## 77
+e-2c+2
+## 78
+^1
+## 79
+## Middle Strings High, channel 25 in VGMTrans output
+'regularStrings+o1'
+l8
+e-c+
+## Use octave strings to combine channels 25 and 21 in VGMTrans output
+'regularOctaveStrings+o1''normalOctaveStringsVol'
+bag+f+
+## Back to Middle Strings High, channel 25 in VGMTrans output
+'regularStrings'
+ee-
+## 80
+<f+e
+## Back to octave strings to combine channels 25 and 21 in VGMTrans output
+'regularOctaveStrings+o2''normalOctaveStringsVol'
+e-c+>bag+f+
+;
+
+
+{2}
+%e1
+## High Flute, channel 4 in VGMTrans output
+'flute+o1'
+l24
+## Measure 1 lasts only 2 beats
+r2
+## 2
+e-ff+ab-<de-d>b-af+f'fluteFade*v48,1.3'e-4'fluteRelease'^4
+## 3
+## Low Brass, channel 16 in VGMTrans output
+'lowBrass-o2'
+b-1
+## 4
+b1
+## 5
+## Lower Horn, a mix of notes from channels 8-9-10 in VGMTrans output
+'horn-o1''hornTrioVol'
+l24
+b-12r6b-24.r48b24.r48<c24.r48c+2
+## 6
+^4^6r12[4 c+24.r48]c24.r48>b24.r48
+## 7
+b-1
+## 8
+^1
+## 9
+## Higher Trumpet, a mix of notes from channels 11 and 12 in VGMTrans output
+'trumpet+o1''trumpetQuickAttack'
+e-12r6 [3 e-24.r48]e-2
+## 10
+^4^6r12 [4 e-24.r48]f24.r48f+24.r48
+## 11
+b-1
+## 12
+^1
+## 13
+## Oboe, channel 7 in VGMTrans output
+'oboe-o1'
+r4c24.r48f24.r48g24.r48<c2
+## 14
+r1
+## 15
+## Flute, channel 3 in VGMTrans output
+'highFluteArpeggio'
+## 16
+a12
+## Oboe, channel 7 in VGMTrans output
+'oboe'
+'highNotesPattern16'
+## 17
+## Mild Clarinet, channel 5 in VGMTrans output
+'mildClarinet''mildClarinetDuoVol'
+r4c24.r48f24.r48g24.r48<c2
+## 18
+## Higher Trumpet, a mix of notes from channels 11 and 12 in VGMTrans output
+'trumpet''trumpetQuickAttack'
+r6 [10 b24.r48]
+## 19
+## Flute, channel 3 in VGMTrans output
+'highFluteArpeggio'
+## 20
+a12
+## Higher Trumpet, a mix of notes from channels 11 and 12 in VGMTrans output
+'trumpet+o1''trumpetQuickAttack'
+'highNotesPattern16'
+## 21
+[7 r1]
+## 28
+## Piccolo accents, channel 2 in VGMTrans output
+'piccolo+o3''piccoloAccentVol'l8 cr>g+rgrgr
+## 29
+## Octave Trumpet, simultaneously playing channels 11 and 14 in VGMTrans output
+'octaveTrumpet+o1'
+'octaveTrumpetLowVol'
+c1^1
+## 31
+'octaveTrumpetHighVol'
+d1^1
+## 33
+
+e-1^1
+## 35
+f1^1
+## 37
+g1^1
+## 39
+r1
+## 40
+## Piccolo accents, channel 2 in VGMTrans output
+'piccolo+o3''piccoloAccentVol'l8 cr>g+rgrgr
+$
+## 41
+## High Horn, channel 8 in VGMTrans output
+'horn''hornDuoVol'
+l24
+r2.c+8e-eg+
+## 42
+b2b-2
+## 43
+g+1
+## 44
+r1
+## 45
+## High Trumpet, channel 11 in VGMTrans output
+'trumpet+o1'
+'trumpetDuoVol'
+'trumpetQuickAttack'
+l24
+r2.c+8e-eg+
+## 46
+b2.<c+4>
+## 47
+g+1
+## 48
+r1
+
+## Trumpet, channel 11 in VGMTrans output
+'trumpet+o1''trumpetSoloVol'
+[3
+  ## Get out of the loop. We need the third iteration we can can do a jump during the second iteration.
+  j3,265
+  ## 49 / 57
+  e-1
+  ## 50 / 58
+  d2g2
+  ## 51 / 59
+  c1
+  ## 52 / 60
+  ^4..r16 j2,260 d4e-4
+  ## 53
+  f2g2
+  ## 54
+  ^1
+  ## 55 / 63
+  $263
+  r1
+  ## 56 / 64
+  ## String accent, channel 22 in VGMTrans output
+  'regularStrings+o2'
+  l8
+  'stringsMidAttack''stringAccentVol'cr>g+rgrgr 
+  ## Back to Trumpet, channel 11 in VGMTrans output
+  'trumpet+o1''trumpetSoloVol'
+]
+$260
+## Remainder of 60
+>b-4g4<
+## 61
+d2c2
+## 62
+^1
+## Go back into the loop
+%j263
+$265
+[2
+  ## 65 / 73
+  ## Horn, channel 8 in VGMTrans output
+  'horn''hornSoloQuieterVol'
+  c+1
+  ## 66 / 74
+  e-2e2
+  ## 67 / 75
+  a1
+  j2
+  ## 68
+  g+2e2
+  ## 69
+  b2<c+2
+  ## 70
+  ^1
+  ## 71
+  r1
+  ## 72
+  ## Piccolo accent, channel 2 in VGMTrans output
+  'piccolo+o2''piccoloAccentVol'
+  l8
+  c+r>arg+rg+r
+]
+## 76
+^2f+4g+4
+## 77
+a1
+## 78
+^1
+## 79
+'flute+o1''fluteQuietVol'
+l8
+r4bag+f+r4
+## 80
+r4<e-c+>bag+f+
+;
+
+
+{3}
+%e1
+## Mild Clarinet, channel 5 in VGMTrans output
+'mildClarinet''mildClarinetLoudVol'
+l16
+## Measure 1 lasts only 2 beats
+r2
+## 2
+r2e-ff+ab-ab-<d
+## 3
+e1
+## 4
+## Trumpet, channel 12 in VGMTrans
+'trumpet+o1'
+'trumpetTrioFade*v192,1.5'c+1
+## Snare, channel 17 in VGMTrans output
+l32
+[4
+  ## 5 / 7 / 9 / 11
+  "!!!o o4 eefhilmp r4" r8 "dgkq"
+  ## 6 / 8 / 10 / 12
+  "t8 egjn s8" r8r2
+]
+## 13
+## Low Horn, a mix of notes from channels 8 and 9 in VGMTrans output
+'horn'
+r4c24.r48f24.r48g24.r48<c2
+## 14
+>
+'LowNotesPattern14'
+## 15
+e-1
+## 16
+r12
+'lowNotesPattern16'
+## 17
+## Squeeze one timpani note from channel 19 in VGMTrans output
+'regularTimpani-o1'
+c4
+## Trumpet, channel 11 in VGMTrans output
+'trumpet''trumpetDuoVol''trumpetQuickAttack'
+c24.r48f24.r48g24.r48<c2
+## 18
+## Harsh Clarinet, a mix of notes from channels 5 and 6 in VGMTrans output (we use harsh clarinet for lower notes)
+'harshClarinet''harshClarinetTrioVol'
+'LowNotesPattern14'
+## 19
+'harshClarinetVol'e-1
+## 20
+'harshClarinetTrioVol'r12
+'lowNotesPattern16'
+## Tambourine, channel 30 in VGMTrans
+l8
+## 21 through 20
+[80 "!!!ozy"]
+$
+## 41 through 78
+[152 "!!!ozy"]
+## 79
+## Middle Low Strings, channel 26 in VGMTrans output
+'regularStrings'
+l8
+bag+f+ee-c+>b
+## 80
+<<e-c+>bag+f+ee-
+;
+
+
+{4}
+%e1
+## Strings, channel 21 in VGMTrans output
+'regularStrings-o1'
+## Measure 1 lasts only 2 beats
+b-2
+## 2
+^1
+## 3
+^1
+## 4
+## Trumpet, channel 11 in VGMTrans
+'trumpet'
+'trumpetTrioFade*v192,1.5'g1
+## Higher Low Strings, a mix of notes from channels 25 and 26 in VGMTrans output
+'baseStrings-o1'
+'stringsQuickAttack'
+l12
+## 5 / 6 / 7 / 8 / 9 / 10 / 11 / 12
+[16 e-r6e-e-e-]
+'stringsNormalAttack'
+[2
+  ## Octave Low Strings, channels 25 and 26 in VGMTrans output
+  'baseOctaveStrings-o1'
+  ## 13 /14 / 17 / 18
+  c1^1
+  ## Low Brass, channel 16 in VGMTrans output
+  'lowBrass-o2''lowBrassLoudVol'
+  ## 15 / 16 / 19 / 20
+  c1^1
+]
+
+## Low Strings, channel 27 in VGMTrans output
+'baseStrings-o1''stringsMidAttack'
+l8
+[5
+  ## 21 / 25 / 29 / 33 / 37
+  cr4cr4e-4
+  ## 22 / 26 / 30 / 34 / 38
+  cr4cr4>b-4<
+  ## 23 / 27 / 31 / 35 / 39
+  cr4cr4e-4
+  j3,432
+  ## 24 / 28 / 32 / 36 / 40
+  r
+  $424
+  ge-fde->b-<d
+  j5,441
+]
+$432
+## Squeeze one accent note from channel 22 in VGMTrans output at the start of measure 32
+'regularStrings+o2''stringsMidAttack''stringAccentVol'c8
+## Go back to base Strings then jump back into the loop
+'baseStrings-o1''stringsMidAttack'
+%j424
+## Landing spot after the end of the previous loop
+$441
+$
+[2
+  ## 41 / 45
+  c+r4c+r2
+  ## 42 / 46
+  ## Low Brass, channel 16 in VGMTrans output
+  'lowBrass-o2''lowBrassLoudVol'
+  c+1
+  ## 43 / 47
+  ^1
+  ## 44 / 48
+  ## Low Strings, channel 27 in VGMTrans output
+  'baseStrings-o1''stringsMidAttack'
+  c+r4c+r2
+]
+
+l8
+[4
+  j4,461
+  ## 49 / 53 / 57
+  cr4cr4e-4
+  ## 50 / 54 / 58
+  cr4cr4>b-4<
+  ## 51 / 55 / 59
+  cr4cr4e-4
+  j1,451 j3,451
+  ## 52 / 56 / 60
+  r
+  $452
+  ge-fde->b-<d
+]
+$451
+## Squeeze one accent note from channel 22 in VGMTrans output at the start of measure 32
+'regularStrings+o2''stringsMidAttack''stringAccentVol'c8
+## Go back to base Strings then jump back into the loop
+'baseStrings-o1''stringsMidAttack'
+%j452
+## Landing spot after the end of the previous loop
+$461
+## 61
+>g+r4g+r4<e-4>
+## 62
+g+r4g+r4g+4
+## 63
+b-r4b-r4<f4>
+## 64
+b-r4b-r4b-4
+[2
+  ## 65 / 73
+  'baseStrings-o1''quietBaseStringsVol'
+  c+1
+  ## 66 / 74
+  e-2e2
+  ## 67 / 75
+  a1
+  j2
+  ## 68
+  g+2e2
+  ## 69
+  ## Switch to Octave Strings to combine low strings and Middle Strings High, respectively channel 27 and a mix of 25 and 26 in VGMTrans output
+  'regularOctaveStrings''normalOctaveStringsVol'
+  b2<c+2
+  ## 70
+  ^1
+  ## 71
+  ## Low Strings, channel 27 in VGMTrans output
+  'baseStrings-o1''stringsMidAttack''quietBaseStringsVol'
+  l8
+  c+r4c+r4e4
+  ## 72
+  rg+ef+e-e>b<e-
+]
+## 76
+^2f+4g+4
+## 77
+## Switch to Octave Strings to combine low strings and Middle Strings High, respectively channels 27 and 26 in VGMTrans output
+'regularOctaveStrings''normalOctaveStringsVol'
+a1
+## 78
+^1
+## 79
+'baseStrings-o2'
+b1
+## 80
+'stringsQuickAttack'
+l16
+b16.r32<c+16.r32e-16.r32c+16.r32e-16.r32e16.r32f+16.r32a16.r32
+;
+
+
+{5}
+%e1
+## Strings, channel 22 in VGMTrans output
+'regularStrings'
+## Measure 1 lasts only 2 beats
+r2
+## 2
+e-1
+## 3
+## Low Brass, channel 15 in VGMTrans output (and not playing that low notes here)
+'lowBrass-o1'
+l24
+r2.b-24.r48<e24.r48g+24.r48
+## 4
+## Timpani, channel 19 in VGMTrans output
+'regularTimpani-o2'
+l24
+'timpaniVol*v.45''timpaniFade*v192,1'%g1'timpaniQuickStrike'[24 b]%g0
+## 5
+## Higher Horn, a mix of notes from channels 8-9-10 in VGMTrans output
+'horn''hornTrioVol'
+l24
+f+12r6[3 f+24.r48]f+2
+## 6
+^4^6r12 [6 f+24.r48]
+## 7
+f+1
+## 8
+^1
+## 9
+## Octave Trumpet playing middle and low trumpet (which is sometimes a low brass sample), a mix of notes from channels 11 and 12, plus channels 14 and 15 in VGMTrans output
+'octaveTrumpet''trumpetQuickAttack'
+b-12r6b-24.r48b24.r48<c24.r48c+2
+## 10
+^4^6r12 [4 c+24.r48]c24.r48>b24.r48
+## 11
+b-1
+## 12
+^1
+## 13
+## High Horn, a mix of notes from channels 8 and 9 in VGMTrans output
+'horn'
+r1
+## 14
+r6 [10 b24.r48]
+## 15
+b-1
+## 16
+<r12
+'highNotesPattern16'
+## 17
+## Switch to Low Horn
+g1
+## 18
+## Mild Clarinet, a mix of notes from channels 5 and 6 in VGMTrans output (we use mild clarinet for higher notes)
+'mildClarinet''mildClarinetTrioVol'
+r6 [10 b24.r48]
+## 19
+'mildClarinetDuoVol'b-1
+## 20
+'mildClarinetTrioVol'<r12
+'highNotesPattern16'
+## 21
+r1r1r1r1
+
+## String accent, channel 22 in VGMTrans output
+'regularStrings+o2'
+l8
+## 25
+r1r1r1
+## 28
+'stringsMidAttack''stringAccentDuoVol'cr>g+rgrg 
+## Low horn, channel 9 in VGMTrans output
+'horn-o1'
+l16
+'hornSoloAccentsVol'
+cc
+'hornSoloVol'
+## 29
+g1
+## 30
+^2.r8'hornSoloAccentsVol'e-e-'hornSoloVol'
+## 31
+b-1
+## 32
+^2.r8'hornSoloAccentsVol'gg'hornSoloVol'
+## 33
+<d2c2
+## 34
+^1
+## 35
+r1
+## String accent, channel 22 in VGMTrans output
+'regularOctaveStrings+o2'
+'stringAccentVol'
+l8
+[2
+  ## 36 / 40
+  cr>g+rgrgr j2
+  ## 37 / 38 / 39
+  r1r1r1<
+  ## Use lower volume for the second iteration, because piccolo accent will be playing
+  'stringAccentDuoVol'
+]
+$
+## 41
+## Low Horn, channel 9 in VGMTrans output
+'horn-o1''hornDuoVol'
+l24
+r2.c+8e-eg+
+## 42
+b2b-2
+## 43
+g+1
+## 44
+r1
+## 45
+## Low Trumpet, channel 14 in VGMTrans output
+'trumpet'
+'trumpetDuoVol'
+'trumpetQuickAttack'
+l24
+r2.c+8e-eg+
+## 46
+b2.<c+4>
+## 47
+g+1
+## 48
+r1
+
+## Low horn, A mix of notes from channels 8 and 9 in VGMTrans output
+'horn-o1'
+'hornSoloQuietVol'
+[2
+  ## 49 / 57
+  g1
+  ## 50 / 58
+  b-2g2
+  ## 51 / 59
+  g+1
+  ## 52 / 60
+  ^2 j2 g+4g4
+  ## 53
+  g1
+  ## 54
+  ^1
+  ## 55
+  r1
+  ## 56
+  r1
+]
+## Remainder of measure 60.  Playing High Horn now
+b-4g4
+## 61
+## Playing Middle Horn now (channel 10 in VGMTrans out
+g+2g+2
+## 62
+^1
+## 63
+r1
+## 64
+r1
+[2
+  ## 65 / 73
+  ## Middle Strings High, a mix of notes from channels 25 and 26 in VGMTrans output
+  'regularStrings+o1'
+  c+1
+  ## 66 / 74
+  >b1
+  j2
+  ## 67
+  a1
+  ## 68
+  ^1
+  ## 69
+  ## Clarinet, channel 5 in VGMTrans output
+  'mildClarinet+o1''mildClarinetLouderVol'
+  l8
+  r4c+>bag+r4
+  ## 70
+  r4bag+f+ee-
+  ## 71
+  r1
+  ## 72
+  ## High Strings accent, channel 26 in VGMTrans output
+  'regularStrings+o1''regularStringAccentVol'
+  l8
+  c+r>arg+rg+r
+]
+## 75
+^2a2
+## 76
+g+2e2
+## 77
+## Clarinet, channel 5 in VGMTrans output
+'mildClarinet''mildClarinetLouderVol'
+l8
+r4ag+f+er4
+## 78
+'mildClarinetVol'
+r4<c+>bag+f+e
+## 79
+r4bag+f+r4
+## 80
+r4<e-c+>bag+f+
+;
+
+
+{6}
+%e1
+## Low Flute, channel 3 in VGMTrans output
+'flute'
+l24
+## Measure 1 lasts only 2 beats
+r2
+## 2
+b-<de-ff+ab-af+fe-d>'fluteFade*v48,1.3'b-4'fluteRelease'^4
+## 3
+## Strings, channel 23 in VGMTrans output
+'regularStrings'
+e1
+## 4
+^1
+## 5
+## Orchestra Clash, channel 20 in VGMTrans output
+"!!!oc1"
+## 6
+r1
+## 7
+## Octave Strings playing Higher and Lower Strings, channels 21-22 in VGMTrans output
+'regularOctaveStrings''buriedOctaveStringsVol'
+l4
+rb-<f+e-
+## 8
+b-f+<c+>b-
+## 9
+<f1
+## 10
+l16
+'stringsQuickAttack'
+f+fc+>b<e-r>b-<c+^2
+## 11
+r8>bb-g+b-g+f+ r8g+f+ff+fe-
+## 12
+## The higher strings stop playing at measure 12. Switch to regular strings. Now playing just channel 21 in VGMTrans output.
+'regularStrings''stringsQuickAttack'
+c+>b-b<e-f+e-ff+ <c+>b-b<e-g+ff+b-
+[2
+  ## 13 / 17
+  ## Orchestra Clash, channel 20 in VGMTrans output
+  "!!!oc1"
+  ## 14 / 18
+  r1
+  ## 15 / 19
+  'flute'
+  l24
+  [2 e-fgab-<c j2 d][2 >b-ag j2 fe-dc]e-
+  ## 16 / 20
+  f12r6r2.
+]
+## 21
+r1r1r1r1
+## Octave Strings, channels 21 and 25 in VGMTrans output
+'regularOctaveStrings+o1''normalOctaveStringsVol'
+## 25 through 40
+'melodyNotes25To40'
+$
+## 41
+[2
+  ## 41 / 45
+  ## Strings, channel 25 in VGMTrans output
+  'regularStrings+o1''melodyStringsDuoVol''stringsMidAttack'
+  l8
+  rg+ef+e-er4
+  ## 42 / 46
+  ## Squeeze one timpani note here from channel 19 in VGMTrans output
+  'regularTimpani-o1''timpaniVol*v1.1'c+
+  ## Back to strings, channel 25 in VGMTrans output
+  'regularStrings+o1''melodyStringsDuoVol''stringsMidAttack'
+  l8
+  g+ef+e-ee->b<
+  ## 43 / 47
+  rg+ef+e-er4
+  ## 44 / 48
+  ## Octave Strings, playing channels 21 and 25 in VGMTrans output
+  'regularOctaveStrings+o1'
+  l8
+  c+eg+ j2 f+bg+<e-e
+]
+## Remainder of 48
+b<e-f+b-b
+
+## Octave Strings, channels 21 and 25 in VGMTrans output
+'regularOctaveStrings+o1''normalOctaveStringsVol'
+## 49 through 64
+'melodyNotes25To40'
+[2
+  ## 65 / 73
+  ## Middle Strings Low, a mix of notes from channels 25 and 26 in VGMTrans output
+  'regularStrings''regularStringsQuietVol'
+  g+1
+  ## 66 / 74
+  ^1
+  ## 67 / 75
+  e1
+  j2
+  ## 68
+  ^1
+  ## 69
+  e-2e2
+  ## 70
+  ^1
+  ## 71
+  ## High Strings, channel 25 in VGMTrans output
+  'regularStrings'
+  rc+g+f+bg+<e-e
+  ## 72
+  f+g+c+e->bf+ee-
+]
+## 76
+^2c+2
+## 77
+e1
+## 78
+^1
+## 79
+r1
+## Piccolo, channel 1 in VGMTrans output
+'piccolo+o2''piccoloQuietVol'
+l8
+r4f+ee-c+>ba
+;
+
+
+{7}
+%e1
+## Oboe, channel 7 in VGMTrans output
+'oboe-o1'
+l16
+## Measure 1 lasts only 2 beats
+## 1 / 2
+[3 e-ff+ff+fe-f]
+## 3
+[2 ef+g+f+g+f+ef+]
+## 4
+## Strings, channel 21 in VGMTrans output
+'regularStrings-o1'
+b1
+## Timpani, channel 19 (and most of 18) in VGMTrans output
+'regularTimpani-o1'
+l4
+[4
+  ## 5 / 7 / 9 / 11
+  e-2.'altTimpaniMidVol''altTimpaniPan'>c'altTimpaniVol'
+  ## 6 / 8 / 10 / 12
+  cc'timpaniVol''regularTimpaniPan'<e->b-<
+]
+[3
+  j3,721
+  ## 13 / 17
+  j2,717
+  c1
+  ## 14 / 18
+  $718
+  r1
+  ## 15 / 19
+  l24
+  'timpaniVol*v.45''timpaniFade*v192,1''timpaniQuickStrike'%g1[24 c]
+  ## 16 / 20
+  'timpaniFade*v96,.67'[12 c]'timpaniFade*v96,1.1'[12 c]%g0'timpaniStrike'
+]
+$717
+## Squeeze a High Horn note from channel 8 in VGMTrans output
+'horn+o1'
+c1
+## Switch back to timpani, to play channel 19 from VGMTrans output
+'regularTimpani-o1'
+%j718
+$721
+## 21
+## Switch to just channel 18 in VGMTrans output
+>'altTimpaniVol''altTimpaniPan'
+[11 c4.c4'altTimpaniQuietVol'c8'altTimpaniVol'c4]
+## 32
+## Squeeze one accent note from channel 22 in VGMTrans output
+c4.'altTimpaniQuietVol'c8 'regularOctaveStrings+o1''stringAccentVol'g8 'altTimpani-o2' c8c4
+## 33
+[3 c4.c4'altTimpaniQuietVol'c8'altTimpaniVol'c4]
+## Switch to just channel 19 in VGMTrans output
+l24
+<'regularTimpaniPan'
+'timpaniVol*v.6''timpaniFade*v192,1.1''timpaniQuickStrike'%g1[24 c]%g0'timpaniStrike'
+## 37
+c4.
+## Switch to just channel 18 in VGMTrans output
+>'altTimpaniVol''altTimpaniPan'c4'altTimpaniQuietVol'c8'altTimpaniVol'c4
+## 38
+## Switch to just channel 18 in VGMTrans output
+<'regularTimpaniPan'
+l24
+'timpaniVol*v.6''timpaniFade*v192,1.1''timpaniQuickStrike'%g1[24 c]%g0'timpaniStrike'
+## 39
+l8
+'timpaniVol*v.8''timpaniFade*v192,.95' [4 c>g<]
+## 40
+'timpaniFade*v192,1.1' [4 c>g<]
+$
+'regularTimpani-o1''timpaniVol*v1.1'
+[2
+  ## 41 / 45
+  l16
+  c+2..>bb
+  ## 42 / 46
+  ## Squeeze one low timpani note (channel 19 in VGMTrans output) here, as the regular timpani note moves to the strings channel.
+  ## We do this because there's more time available here and lower timpani notes last longer.
+  'altTimpaniVol''altTimpaniPan'c4.
+  ## Squeeze one low strings note here from channel 27 in VGMTrans output
+  'baseStrings-o1''stringsMidAttack'c+8r4.
+  ## Back to timpani, channel 19 in VGMTrans output
+  'regularTimpani-o2''timpaniVol*v1.1'
+  l16
+  bb<
+  ## 43 / 47
+  c+4.
+  ## Squeeze one low strings note here from channel 27 in VGMTrans output
+  'baseStrings-o1''stringsMidAttack'c+8r4.
+  ## Back to timpani, channel 19 in VGMTrans output
+  'regularTimpani-o2''timpaniVol*v1.1'
+  l16
+  bb<
+  ## 44 / 48
+  c+2> 'timpaniVol*v.6''timpaniFade*v96,1.1''timpaniQuickStrike'%g1[12 b24]%g0'timpaniStrike'<
+]
+
+## Timpani, channel 19 in VGMTrans out
+'regularTimpani-o1''timpaniVol*v1.1'
+[2
+  ## 49 / 57
+  c4.
+  ## Low Timpani, channel 18 in VGMTrans out
+  >'altTimpaniVol''altTimpaniPan'
+  c4'altTimpaniQuietVol'c8'altTimpaniVol'c4
+  ## 50 / 51 / 52 / 58 / 59 / 60
+  [3
+    c4. j3,752 c4'altTimpaniQuietVol'c8'altTimpaniVol'c4
+  ]
+  $752
+  ## Remainder of measure 52 / 60
+  ## Squeeze one accent note from channel 22 in VGMTrans output
+  'altTimpaniQuietVol'c8 'regularOctaveStrings+o1''stringAccentVol'g8 'altTimpani-o2' c8c4
+  j2,561
+  ## 53
+  c4.c4'altTimpaniQuietVol'c8'altTimpaniVol'c4
+  ## 54
+  <'regularTimpaniPan''timpaniVol*v.6''timpaniFade*v192,1.1' %g1[24 c24]%g0
+  ## 55
+  c4.>g4.<c8>g8<
+  ## 56
+  c8>g4g4g8<c8>g8<
+]
+
+$561
+## Back to Timpani, channel 19 in VGMTrans out
+'regularTimpaniPan''timpaniVol*v1.1'
+## 61 / 62
+[2 g+4.g+4g+8< j2 e-4>]
+## Remainder of measure 62
+e-8>g+8
+## 63
+b-4.b-4b-8<f4
+## 64
+[4 >b-8<f8]
+[2
+  ## 65 / 73
+  ## Orchestra Clash, channel 20 in VGMTrans output
+  "!!!oc1"
+  ## 66 / 74
+  ## Low Upper Strings, A mix of notes from channels 21 and 22 in VGMTrans output
+  'regularStrings+o1''melodyStringsDuoVol'
+  e-2g+2
+  ## 67 / 75
+  c+1
+  ## 68 / 76
+  ^2 j2,776 e-4e4
+  ## 69
+  f+2'stringsHalfMeasureRelease'g+2
+  ## 70
+  ## Timpani, channel 19 in VGMTrans output
+  'regularTimpani-o1'
+  'timpaniVol*v.6''timpaniFade*v192,1.1'%g1[24 c+24]%g0
+  ## 71
+  'timpaniVol'
+  l8
+  c+4.>g+4.<c+>g+
+  ## 72
+  <c+>g+4g+4g+<c+>g+
+]
+$776
+## Remainder of measure 76
+>b4g+4
+## 77
+'regularTimpani-o2''timpaniVol*v1.1'
+l8
+## 78 / 79
+[2 a4.a4a< j2 e4>]
+## Remainder of 79
+e>a
+## 79
+b1
+## 80
+'timpaniVol*v.6''timpaniFade*v192,1.1'[24 b24]
+;
+
+
+{8}
+%e1
+## Measure 1 lasts only 2 beats
+r2
+## 2
+r1
+## 3
+## Timpani, channel 19 in VGMTrans output
+'regularTimpani-o2'
+b-1
+## 4
+## Trumpet, channel 14 in VGMTrans output
+'trumpet'
+b4.a8g2
+## Higher Low Brass, channel 15 in VGMTrans output
+'lowBrass-o1'
+l12
+## 5
+## Middle Horn, a mix of notes from channels 8-9-10 in VGMTrans output
+'horn''hornTrioVol'
+l24
+e-12r6[3 e-24.r48]e-2
+## 6
+^4^6r12 [6 e-24.r48]
+## 7
+'hornRelease'e-4
+## Flute, channel 3 in VGMTrans output
+'flute''fluteTrioVol'
+l4
+b-<f+e-
+## 8
+b-f+<c+>b-<
+## 9
+f1
+## 10
+l16
+f+fc+>b<e-r>b-<c+^2
+## 11
+r8>bb-g+b-g+f+ r8g+f+ff+fe-
+## 12
+>c+>b-b<e-f+e-ff+ <c+>b-b<e-g+ff+b-
+
+## Strings, a mix of notes from channels 21 and 22 in VGMTrans output
+'regularStrings+o1''melodyStringsDuoVol'
+l4
+[2
+  ## 13 / 17
+  c2>g<c>
+  ## 14 / 18
+  b2gb
+  ## 15 / 19
+  b-2gb-
+  j2
+  ## 16
+  a2f2<
+]
+a4.%l1 a24b-24b24<c2 %l0
+
+## Snare and Clang, channels 17 and 29 in VGMTrans output
+## 21 / 22 / 23 / 24 / 25 / 26 / 27 / 28 / 29 / 30 / 31
+~
+[11 "!!!o u2x4.i24o24r24"]
+## 32
+## Play the normal notes, but squeeze a couple accent notes from channel 22 in VGMTrans output in-between.
+"u4" 'regularOctaveStrings+o1''stringAccentVol'g+8r8 "!!!ox4" 'regularOctaveStrings+o1''stringAccentVol'g8 "!!!oi24o24r24"
+## 33 / 34 / 35 / 36
+[4"u2x4.i24o24r24"]
+## 37
+## Replace the first snare hit in this measure with a (shortened) orchestra clash note. This clash note will obscure the snare's absence.
+"b2x4.i24o24r24"
+## 38 / 39 / 40
+[3"u2x4.i24o24r24"]
+~
+## 'tr' data space optimized / downgraded version of 21 ~ 40  -emberling
+`[20 j17,837 "!!!o u2" $838 "!!!o x4.i24o24r24"]`
+$
+## 41
+## Orchestra Clash, channel 20 in VGMTrans output
+[8 "!!!o c1"]
+
+[2
+  ## 49 / 57
+  ## Orchestra Clash, Clang, Snare (Channels 20, 29, nnd 17 in VGMTrans out)
+  "!!!o b2x4.i24o24r24"
+  ## 50 / 51 / 58 / 59
+  [2 "u2x4.i24o24r24"]
+  ## 52 / 60
+  ## Play the normal notes, but squeeze a couple accent notes from channel 22 in VGMTrans output in-between.
+  "u4" 'regularOctaveStrings+o1''stringAccentVol'g+8r8 "!!!ox4" 'regularOctaveStrings+o1''stringAccentVol'g8 "!!!oi24o24r24"
+  ## 53 / 54 / 55 / 61 / 62 / 63
+  [3 "u2x4.i24o24r24"]
+  ## 56
+  j2
+  "u2x4.i24o24r24"
+]
+## 64
+l24
+"!!!o u2x4mnnoop"
+#  [2
+#    ## 65 / 73
+#    l8
+#    ## Squeeze one timpani note from channel 19 in VGMTrans output
+#    'regularTimpani-o1''timpaniVol*v1.1'c+
+#    ## Snare, channel 17 in VGMTrans output
+#    "!!!o lplplp16p16l"
+#    ## 66 / 67 / 69 / 69 / 70 / 74 / 75 / 76 / 77 / 78
+#    [5 "!!!o plplplp16p16l"]
+#    j2,879
+#    ## 71 / 72
+#    [2 "!!!o plplplp16p16l"]
+#  ]
+#  $879
+## More efficient 65 ~ 78  -emberling
+[14 l8
+ j1,865 j9,865
+ ":l: p"
+ $866
+ "!!!o lplplp16p16l"
+]
+## 79
+## Orchestra Clash, channel 20 in VGMTrans output
+"!!!o c1"
+## 80
+r1
+;
+
+$865 'regularTimpani-o1''timpaniVol*v1.1' c+8 ;866
+` $837 ":r: b2" ;838 `
+
+
+## Plays the lower notes pattern that appears first at measure 14 (then also at 18).
+#def LowNotesPattern14= [j1,9314]
+$9314
+r6 [4 e-24.r48][2 f24.r48e-24.r48]e-24.r48f24.r48
+## Then go back to wherever we came from
+]
+
+
+## Plays the higher flute notes for measures 15 and 19
+#def highFluteArpeggio= [j1,9215]
+$9215
+'flute'
+l24
+[2 gab-<cd j2 e-f] [2 e-dc>b- j2 agf]g
+## Then go back to wherever we came from
+]
+
+
+## Plays the higher notes pattern that appears first at measure 16 (then also at measure 20). This starts playing one 12th note into the measure.
+#def highNotesPattern16= [j1,9216]
+$9216
+c24.r48>a24.r48[2 g24.r48a24.r48<c24.r48>]a24.r48<c24.r48>a24.r48
+## Then go back to wherever we came from
+]
+
+
+## Plays the lower notes pattern that appears first at measure 16 (then also at measure 20). This starts playing one 12th note into the measure.
+#def lowNotesPattern16= [j1,9316]
+$9316
+g24.r48f24.r48[2 c24.r48f24.r48g24.r48]f24.r48g24.r48f24.r48
+## Then go back to wherever we came from
+]
+
+
+## Plays melody notes from measure 25 to measure 40 (inclusively)
+#def melodyNotes25To40= [j1,9125]
+$9125
+## We'll start counting at measure 25, although this can be reused at other points in the song (namely at measure 49)
+l8
+[4
+  [2
+    ## 25 / 27 / 29 / 31 / 33 / 35 / 37 / 39
+    rcgfb-g<de-
+    j2,9128
+    ## 26 / 30 / 34 / 38
+    c>gfb-e-dcf
+  ]
+  $9128
+  ## 28 / 32 / 36 / 40
+  fgcd>b-fe-d
+]
+## Then go back to wherever we came from
+]

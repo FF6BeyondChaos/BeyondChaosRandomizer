@@ -1,0 +1,267 @@
+#TITLE Gurgu Volcano
+#ALBUM Final Fantasy
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#WAVE 0x20 0x65 - was 0x0D - strings
+#WAVE 0x21 0x04 - was 0x58 - cembalo
+#WAVE 0x22 0x64 - was 0x2C - contra
+#WAVE 0x23 0x55 - was 0x1C - synbass
+#WAVE 0x24 0x94 - was 0x40 - oboe
+#WAVE 0x25 0x60 - was 0x1B - harp
+#WAVE 0x26 0x81 - was 0x9A - trumpet
+          
+#WAVE 0x28 0x0A - was 0x22 - kick
+#WAVE 0x29 0x1B - was 0x14 - snare
+#WAVE 0x2A 0x3C - was 0x11 - hihat
+#WAVE 0x2F 0x3A - was 0x0F - hihat
+
+#def init= t150 %x255 %v50 %b0,70 %f0,0
+
+#def strings= |0 's' p70 o5 m %e1
+#def cembalo= |1 'p' p50 o5 m %e1
+#def contra= |2 'c' p40 o6 m %e1
+#def bass= |3 'b' p70 o5 m %e0
+#def oboe= |4 'o' p40 o5 m48,18,223 %e1
+#def vox= @3 'v' p65 o5 m12,36,255 %e1 %a10%y2%s2%r8
+#def harp= |5 'h' p20 o5 m %e1
+#def tpet= |6 't' p76 o5 m48,18,231 %e1
+
+#def s= v64
+#def p= v48
+#def c= v88
+#def b= v40
+#def o= v56
+#def of= v1,56
+#def v= v48
+#def h= v32
+#def t= v44
+#def tf= v1,44
+
+#drum "k"=5a |8 v64 p55 %e0
+#drum "s"=5a |9 v88 p75 %e1
+#drum "h"=5a |F v32 p100 %e0
+#drum "o"=5a |A v24 p100 %e0 %r17
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} 'init' $
+'cembalo' l16 %r17 %k0
+[drdrfrdr cre4d8  ^8drfrdr erg4gr]
+##
+['oboe' l8
+%r14 c+dfa %r 'of*v16,.33'<d12[3'of*v8,.67'^24j3'of*v8,.33'^24]'of*v6,.92'^12^8
+^2^8 'o'%r14> l16 b24<c24>b24arbr j2,105
+l8 <c>bag fgaf %r 'of*v16,.33'd12[3'of*v8,.67'^24j3'of*v8,.33'^24]'of*v6,.92'^12^8
+^2] $105
+l8 <c>afa <efec %r 'of*v16,.33'd12[3'of*v8,.67'^24j3'of*v8,.33'^24]'of*v6,.92'^12^8
+^2
+##
+'cembalo+o1' l8 m48,18,119
+'p*v1.2'%r22 c>afa b<c>ba    'p'%r16 b4.b16b16 b4.b16b16
+'p*v1.2'%r22 <c>afa b<c>ba   'p'%r16 <d4.d16d16 d4.d16d16
+'p*v1.2'%r22 d+c>g+<c dd+dc> 'p'%r16 a+4.a+16a+16 a+4.a+16a+16
+'p*v1.2'%r22 <d+c>g+<c dd+dc 'p'%r16 f4.f16f16 f4.f16f16
+##
+'cembalo' l16 %r17
+[drdrfrdr cre4d8  ^8drfrdr erg4gr %k3]
+'p*v.6'[erg4gr'p*v.3']
+##
+['vox' v1,32,255
+l8 c+dfa<d1^8> l16 (b24<c24>b24)arbr j2,115
+l8 <c>bag fgaf d1] $115
+l8 <c>afa <efec d1
+v
+##
+'tpet*v1.5' l16 %r9
+<cr>arfrar b8<cr>brar    b4.bb b4.bb
+<cr>arfrar b8<cr>brar    <d4.dd d4.dd
+d+rcr>g+r<cr d8d+rdrcr>          a+4.a+a+ a+4.a+a+
+<d+rcr>g+r<cr d8d+rdrcr          f4.ff f4.ff
+;
+
+{2} $
+'cembalo-o1' l8 %r17 %k0
+[aar4.gra r2ggrg]
+##
+['oboe-o1' l16
+'of*v16,.33'a12[3'of*v8,.67'^24j3'of*v8,.33'^24]'of*v6,.92'^12^8
+%r14'o' r8frgrar
+%r 'of*v16,.33'b12[3'of*v8,.67'^24j3'of*v8,.33'^24]'of*v6,.92'^12^8
+%r14'o' r8grarbr
+%r 'of*v16,.33'<c12[3'of*v8,.67'^24j3'of*v8,.33'^24]'of*v6,.92'^12^8
+%r14'o' r8>arbr<cr>
+%r 'of*v16,.33'b12[3'of*v8,.67'^24j3'of*v8,.33'^24]'of*v6,.92'^12^8
+%r14'o' r8grarbr]
+##
+'strings*v.67' %a6
+[%r16 f4c4>a4<c4 %r12 >g2g2<]
+[%r16 g+4d+4 c4d+4 %r12 >a+2a+2<]
+##
+'cembalo-o1' l8 %r17
+aar4.<cr>a+ r2<cere
+c+c+r4.d+rc+ r2d+grg
+r1##
+%r22 %k3
+['p'ddffd>'p*v.6'a<f'p'c
+'p'ddggd>'p*v.6'a<g'p'c
+'p'ddaad>'p*v.6'a<a'p'c
+'p'ddggd>'p*v.6'a<g'p'c]
+##
+'strings*v.8-p10' l8
+[ar4ar4ar brbr4.br]
+<[cr4cr4cr drdr4.dr]
+;
+
+{3} $
+'bass' l16 %k0
+[drdrr4.c4dr r2cr>b4^r<]
+##
+[drdrfrfr drr4cr  drdrgrgr drr4cr
+drdrarar drr4cr  drdrgrgr drr4cr]
+##
+>[frfr<frfr8.>fr<frcr>  [g4..r16]]
+[g+rg+r<g+rg+r8.>g+r<g+rd+r> [a+4..r16]]<
+##
+drdrr4.c4>a+4  <a+r>ar<ar>gr<grcr<cr>
+c+rc+rd+rfrgra+4g+4  g+rf+rc+rd+rg4gr
+"!!!oh4h4h2"##
+['tpet-o1' %k3 l16
+'tf*v16,.33'a12[3'tf*v8,.67'^24j3'tf*v8,.33'^24]'tf*v6,.92'^12^8
+%r16't' r8frgrar
+%r 'tf*v16,.33'b12[3'tf*v8,.67'^24j3'tf*v8,.33'^24]'tf*v6,.92'^12^8
+%r16't' r8grarbr
+%r 'tf*v16,.33'<c12[3'tf*v8,.67'^24j3'tf*v8,.33'^24]'tf*v6,.92'^12^8
+%r16't' r8>arbr<cr>
+%r 'tf*v16,.33'b12[3'tf*v8,.67'^24j3'tf*v8,.33'^24]'tf*v6,.92'^12^8
+%r16'o' r8grarbr]
+##
+'bass-o1' l8 %r13
+[f4.<c4>f4f+  g4.<d4>j2g4f+]g.g.
+[g+4.<d+4>g+4a a+4.<f4>j2a+4a]a+.a+.
+;
+
+{4} $
+l8 ["ssh4hshs h4h4sshs"]
+##
+[[3" !!!o kksk khsh"] "kksk kk16k16sh"]
+##
+"!!!o" [
+"kksh oksh" "sksk sksk"
+"kksh oksh" "sksk sks16s16"j2"k"]":s:s"
+##
+"!!!o"
+["sssh osks  kksh ssks"]
+"k4k4k2"##
+[32"k4"]
+##
+[3":h:kksh oksh" "kksh kksh"]
+"kksh oksh kksh kkss16s16"
+;
+
+{5} $
+'strings' l16 %k0
+[drdrfrdr cre4d8  ^8drfrdr erg4gr]
+##
+['strings' l8
+c+dfa <d2
+^2^8 > l16 (b24<c24>b24)arbr j2,505
+l8 <c>bag fgaf d2
+^2] $505
+l8 <c>afa <efec d2
+^2
+##
+'strings' l16
+'s'%r <cr>arfrar br<cr>brar    's*v.8'%a6%r12 b4.a4.g+4
+'s'%r <cr>arfrar br<cr>brar    's*v.8'%a6%r12 <d4.c4.>b4
+'s'%r <d+rcr>g+r<cr drd+rdrcr> 's*v.8'%a6%r12 a+4.<c4.d4
+'s'%r d+rcr>g+r<cr drd+rdrcr  's*v.8'%a6%r12 f4c4d4>a+4
+##
+'strings' l16
+[drdrfrdr cre4d8  ^8drfrdr erg4gr %k3]
+'s*v.67'[erg4gr's*v.33']##
+'harp' l8
+[ [d>a<f>a<] [d>a<g>a<] [d>a<a>a<] [d>a<g>a<] ]
+##
+'strings*v.8' l8
+[cr4cr4cr drdr4.dr]
+[d+r4d+r4d+r frfr4.fr]
+;
+
+{6} $
+'strings-o1*v.75' l8 %k0
+[aar4.gra r2ggrg]
+##
+['strings-o1*v.85' l16
+a2 r8frgrar
+b2 r8grarbr
+<c2 r8>arbr<cr>
+b2 r8grarbr]
+##
+'cembalo' %r22 l8
+[f4c4 >a4<c4  fdfd fdfd]
+[g+4d+4 c4d+4  g+fg+f g+fg+f]
+##
+'strings*v.75-o1'
+aar4.gra r2ggrg
+g+g+r4.<d+rc+ r2>a+<d+rd+
+r1##
+['oboe-o2*v.5' l16 %k3
+'of*v16,.17'a12[3'of*v8,.33'^24j3'of*v8,.17'^24]'of*v6,.46'^12^8
+%r14'o*v.5' r8frgrar
+%r 'of*v16,.17'b12[3'of*v8,.33'^24j3'of*v8,.17'^24]'of*v6,.46'^12^8
+%r14'o*v.5' r8grarbr
+%r 'of*v16,.17'<c12[3'of*v8,.33'^24j3'of*v8,.17'^24]'of*v6,.46'^12^8
+%r14'o*v.5' r8>arbr<cr>
+%r 'of*v16,.17'b12[3'of*v8,.33'^24j3'of*v8,.17'^24]'of*v6,.46'^12^8
+%r14'o*v.5' r8grarbr]
+##
+'strings*v.7-p20' l16 k1
+<cr>arfrar (b8<c)r>brar    [b8%r19^4%rbb]
+<cr>arfrar (b8<c)r>brar    <[d8%r19^4%rdd]
+d+rcr>g+r<cr (d8d+)rdrcr>          [a+8%r19^4%ra+a+]
+<d+rcr>g+r<cr (d8d+)rdrcr          [f8%r19^4%rff] k0
+;
+
+{7} $
+'contra' l16 %k0
+[drdrr4.c4dr r2cr>b4^r<]
+##
+[drdrfrfr drr4cr  drdrgrgr drr4cr
+drdrarar drr4cr  drdrgrgr drr4cr]
+##
+>
+[frfr<frfr8.>fr<frcr>  <[4frdr]>]
+[g+rg+r<g+rg+r8.>g+r<g+rd+r> <[4g+rfr]>]
+##
+frfrr4.c4>a+r< r2erc4^r
+c+rc+rr4.a+4gr r2d+rg4^r
+r1##
+['vox' v0,32,255 k1 %k3
+l8 c+dfa<d1^8> l16 (b24<c24>b24)arbr j2,715
+l8 <c>bag fgaf d1] $715
+l8 <c>afa <efec d1
+v k0
+##
+'strings*v.8-o1-p30' l8
+[fr4fr4fr grgr4.gr]
+[g+r4g+r4g+r a+ra+r4.a+r]
+;
+
+{8} $
+l8 ["kk^4.k4k ^2kk4k"]
+##
+[8 "!!!o ^h^o ^^o^"]
+##
+"!!!o"
+["^h^^ ^h^^  hhhh hhhh"
+ "^h^^ ^h^^  hhhh hhoh"]
+##
+"!!!o"
+["kk^^ ^khk ^h^^ hkhk"]
+r1##
+[16"o4"] [16":h:o8h8"]
+##
+[15"^h^^"] "^h^h"
+;

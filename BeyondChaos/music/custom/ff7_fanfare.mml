@@ -1,0 +1,145 @@
+#TITLE Fanfare
+#ALBUM Final Fantasy VII
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#WAVE 0x20 0x82 trumpet
+#WAVE 0x21 0xD4 trombone (synth)
+#WAVE 0x22 0x67 strings
+#WAVE 0x23 0x63 oct strings
+#WAVE 0x24 0xD6 synth
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare (rock)
+#WAVE 0x2A 0x1F snare (march)
+#WAVE 0x2B 0x6C tambourine
+#WAVE 0x2C 0x3D hihat
+
+#def init= t130 %x255 %v40 %b0,100 %f0,0
+
+#def trp= |0 o4 %e1 't' m48,18,215
+#def tbn= |1 o5 %e1 'b' m48,18,223 %a11%y2%s6
+#def str= |2 o5 %e1 's' m %a11%s6
+#def oct= |3 o5 %e1 'o' m
+#def syn= |4 o5 %e1 'y' m
+
+#def t= v64
+#def b= v32
+#def s= v32
+#def o= v64
+#def y= v100
+
+#def sf= v1,48
+
+#def vroll= v64
+#def vtamb= v48
+
+#drum "a"= 5e  |A p64 %e1 'vroll'      k16
+#drum "a-"= 5e |A p64 %e1 'vroll*v.8'  k16
+#drum "b"= 5e  |A p64 %e1 'vroll*v.7'  k8
+#drum "c"= 5e  |A p64 %e1 'vroll*v.5'  k0
+#drum "d"= 5e  |A p64 %e1 'vroll*v.65' k8
+#drum "e"= 5e  |A p64 %e1 'vroll*v.48' k0
+#drum "f"= 5e  |A p64 %e1 'vroll*v.6'  k8
+#drum "g"= 5e  |A p64 %e1 'vroll*v.45' k0
+
+#drum "s"= 5a |A p64 %e1 v64
+#drum "r"= 5g |9 p64 %e1 v80
+#drum "k"= 5a |8 p64 %e0 v104 m0,0
+
+#drum "t"= 5a |B p20 %e1 'vtamb*v.86' m192,-24
+#drum "u"= 5a |B p20 %e1 'vtamb*v.60' m192,-24
+
+#drum "h"= 5a |C p72 %e0 v56 %y5%s0 m0,0
+#drum "o"= 5f |C p72 %e1 v72 %y2%s0
+ 
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init'
+"a16.b16.b16" k0
+'syn*v.7' p120 l12
+( ceg<c>ge c+d+g+a+<df> fg+a+<c+fg+ l16 <c>g+fc+c>g+fc+ <
+$##
+[g+<c>g+fg+r (g+<c>g+fg+a+ <c>a+g+f
+ a<c>afar (a<c>afaa+ <c>a+af         j2
+ g+<c>g+fg+r (g+<c>g+fg+a+ <c>a+g+f
+ g+<c>g+eg+r (g+<c>g+eg+a+ <c>a+g+e  ]
+[a+<c+>a+f+a+r (a+<c+>a+f+a+<c c+c>a+f+]
+[a+<d>a+ga+r (a+<d>a+ga+<c dc>a+g]
+;
+
+{2}
+r32 "a-16.c16.c32" k0
+'trp+o2' p50 l24
+crcrcr c4>g+4a+4< l12 cr>a+<c2.
+$##
+l8 [6 "!!!o k4.kr4ku" ]
+"k4.kr4k4 ^k4krktu"
+"k4.kr4k4 ^k4krktk"
+;
+
+{3}
+r16 "c16.c16." k0
+'tbn-o1' p80
+l24 crcrcr c4g+4g4 l12 frd+ c+2.
+$##
+'str*v.7+o1' p15 l16
+[48cr]
+'s*v.33''sf*v192,.94'c+1.'sf*v96,.33'^2
+'s*v.33''sf*v192,.94'd1.'sf*v96,.33'^2
+;
+
+{4}
+r4 l12
+"sss" "a16.b16.b16" "s6sssss6s" "a16.b16.b16. d16.d16.d16. f16.f16." k0
+$##
+'str*v.7' p35 l16
+[8g+r] [8ar] [24g+r] [8ar]
+'s*v.33''sf*v192,.94'a+1.'sf*v96,.33'^2
+'s*v.33''sf*v192,.94'^1.'sf*v96,.33'^2
+;
+
+{5}
+r4
+'trp+o1' p60
+l24 argrfr g4d+4f4 l12 erd f2.
+$##
+'str*v.7' p55 l16
+[8gr] [16fr] [8er] [8gr] [8fr]
+'s*v.33''sf*v192,.94'f+1.'sf*v96,.33'^2
+'s*v.33''sf*v192,.94'g1.'sf*v96,.33'^2
+;
+
+{6}
+r4
+'trp+o1' p70
+l24 frerdr e4c+4d4 l12 crc d+2.
+$##
+'str*v.7' p75 l16
+[8d+r] [8dr] [8d+r] [8c+r] [8d+r] [8dr]
+'s*v.33''sf*v192,.94'd+1.'sf*v96,.33'^2
+'s*v.33''sf*v192,.94'^1.'sf*v96,.33'^2
+;
+
+{7}
+r4
+'syn*v.41' p37 l12 
+r8 ( ceg<c>ge c+d+g+a+<df> fg+a+<c+fg+ l16 <c>g+fc+c>g+
+$##
+l8
+[3 "!!!o thhthhhh thhthohh"]
+"thhthhth hthhtuho"
+"thhthhth hthhtuhu"
+;
+
+{8}
+r4 l32
+r4 "^a-c^cc^c" r2. "^a-c^cc^ce ^ee^ee^gg ^gg^gg" k0
+$##
+'oct*v1.22-o1' p105 l16
+frr4 frr4 frr8    grr4 grr4 grr8    c+rr4 c+rr4 c+rr8    f+rr4 f+rr4 f+rr8
+frr4 frr4 frr8    grr4 grr4 grr8
+g+rr4 g+rr4 g+rr4 g+rr4 g+r"!!!o o8"'oct*v1.22-o1'p105 g+rr8
+g+rr4 g+rr4 g+rr4 g+rr4 [g+r"!!!o o8"'oct*v1.22-o1'p105]
+;
