@@ -19,7 +19,7 @@ import locationrandomizer
 import musicrandomizer
 import options
 import towerrandomizer
-from randomizers.characterstats import CharacterStats
+from Randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance
 from character import get_characters, get_character, equip_offsets
@@ -78,7 +78,7 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = True
-TEST_SEED = "4.normal.bcdefgijklmnopqrstuwyzmakeoverpartypartycanttouchthisdearestmolulueasymodo.1111111111"
+TEST_SEED = "4.normal.bcdefgijklmnopqrstuwyzmakeoverpartypartycanttouchthisdearestmolulueasymodonotawaiter.1111111111"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -5058,8 +5058,6 @@ def randomize(args: List[str]) -> str:
     fix_gogo_portrait(fout)
     cycle_statuses(fout)
     #add_esper_bonuses(fout) #Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
-    for m in get_monsters():
-        print(m.attackanimation)
 
     if not Options_.is_code_active('fightclub'):
         show_coliseum_rewards(fout)
