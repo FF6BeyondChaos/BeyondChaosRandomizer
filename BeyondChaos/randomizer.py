@@ -5062,10 +5062,6 @@ def randomize(args: List[str]) -> str:
     fix_gogo_portrait(fout)
     cycle_statuses(fout)
     #add_esper_bonuses(fout) #Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
-    monster_list = get_monsters()
-    for i in range(len(monster_list)):
-        print(str(monster_list[i].name) + " has attack animation " + 
-              str(monster_list[i].attackanimation))
 
     if not Options_.is_code_active('fightclub'):
         show_coliseum_rewards(fout)
