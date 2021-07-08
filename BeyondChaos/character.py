@@ -1,7 +1,7 @@
 from typing import List
 
 import options
-from gameobjects.character import Character
+from GameObjects.character import Character
 from itemrandomizer import get_ranked_items
 from utils import CHAR_TABLE, hex2int, utilrandom as random
 
