@@ -743,6 +743,17 @@ class Window(QWidget):
         if self.romText == "":  # Checks if user ROM is blank
             QMessageBox.about(self, "Error", "You need to select a FFVI rom!")
         else:
+            try:
+                f = open(self.romText, 'rb')
+                f.close()
+            except IOError as e:
+                if '[Errno 2]' in str(e):
+                    self.romInput.setText('')
+                    QMessageBox.about(self, "Error", "No ROM was found at the path " + str(self.romText) + ". Please choose a different ROM file.")
+                else:
+                    QMessageBox.about(self, "Error", str(e))
+                return
+
             self.seed = self.seedInput.text()
 
             displaySeed = self.seed
