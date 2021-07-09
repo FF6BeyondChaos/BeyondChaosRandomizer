@@ -15,12 +15,6 @@ fsetdict = None
 formdict = None
 
 
-def cleanup():
-    global fsetdict, formdict
-    fsetdict = None
-    formdict = None
-
-
 class Formation():
     def __init__(self, formid):
         self.formid = formid

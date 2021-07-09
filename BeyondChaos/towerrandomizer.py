@@ -12,7 +12,6 @@ from utils import (ANCIENT_CHECKPOINTS_TABLE, TOWER_CHECKPOINTS_TABLE,
                    ENTRANCE_REACHABILITY_TABLE,
                    utilrandom as random)
 
-
 SIMPLE, OPTIONAL, DIRECTIONAL = 's', 'o', 'd'
 MAX_NEW_EXITS = 1000
 MAX_NEW_MAPS = None  # 23: 6 more for fanatics tower, 1 more for bonus
@@ -45,14 +44,6 @@ map_bans = []
 newfsets = {}
 clusters = None
 
-def cleanup():
-    global locexchange, old_entrances, towerlocids, map_bans, newfsets, clusters
-    locexchange = {}
-    old_entrances = {}
-    towerlocids = [int(line.strip(), 0x10) for line in open(TOWER_LOCATIONS_TABLE)]
-    map_bans = []
-    newfsets = {}
-    clusters = None
 
 def get_new_formations(areaname, supplement=True):
     from randomizer import get_namelocdict
@@ -76,7 +67,7 @@ def get_new_formations(areaname, supplement=True):
         supplemental = sorted(supplemental, key=lambda f: f.rank())
         formations |= {f for f in supplemental
                        if f.ambusher or f.inescapable}
-        supplemental = supplemental[len(supplemental)//2:]
+        supplemental = supplemental[len(supplemental) // 2:]
         formations |= set(supplemental)
 
     return sorted(formations, key=lambda f: f.formid)
@@ -132,7 +123,8 @@ def remap_maps(routes):
         try:
             unused_maps.remove(newlocid)
         except:
-            import pdb; pdb.set_trace()
+            import pdb;
+            pdb.set_trace()
 
     for cluster in conclusters:
         if isinstance(cluster, RestStop):
@@ -491,6 +483,7 @@ def get_cluster(locid, entid):
             return c
     return None
 
+
 class Segment:
     def __init__(self, checkpoints):
         self.clusters = []
@@ -579,7 +572,7 @@ class Segment:
             segment.interconnect()
         for i, (a, b) in enumerate(zip(self.clusters, self.clusters[1:])):
             aid = self.entids[i]
-            bid = self.entids[i+1]
+            bid = self.entids[i + 1]
             if a.singleton:
                 acands = a.entrances
             elif i == 0:
@@ -591,15 +584,15 @@ class Segment:
             bent = bcands[0]
             inter = self.intersegments[i]
             if a.singleton:
-                previnter = self.intersegments[i-1] if i > 0 else None
+                previnter = self.intersegments[i - 1] if i > 0 else None
                 thresh = 3
                 for j in range(thresh):
-                    k = thresh-j
+                    k = thresh - j
                     intercands = []
                     excands = inter.get_external_candidates(num=k, test=True)
                     if excands:
                         intercands.append(inter)
-                    k = max(1, k-1)
+                    k = max(1, k - 1)
                     if previnter is not None:
                         excands = previnter.get_external_candidates(num=k,
                                                                     test=True)
@@ -645,7 +638,7 @@ class Segment:
                 a.exiting = True
                 b.entering = True
             elif (inter.empty and b.singleton):
-                inter2 = self.intersegments[i+1]
+                inter2 = self.intersegments[i + 1]
                 assert not inter2.empty
                 excands = inter2.get_external_candidates(num=1)
                 links.append((aent, excands[0]))
@@ -664,7 +657,7 @@ class Segment:
                     acands = [e for e in a.entrances if e.entid == aid]
                     aent = acands[0]
                 while i > 0:
-                    inter = self.intersegments[i-1]
+                    inter = self.intersegments[i - 1]
                     if not inter.empty:
                         break
                     i += -1
@@ -726,7 +719,7 @@ class Segment:
             segment.need = 0
         for index, cluster in enumerate(self.clusters):
             if len(cluster.entrances) == 1:
-                indexes = [i for i in [index-1, index]
+                indexes = [i for i in [index - 1, index]
                            if 0 <= i < len(self.intersegments)]
                 for i in indexes:
                     self.intersegments[i].need += 1
@@ -833,7 +826,7 @@ class InterSegment(Segment):
 
         for _ in range(num):
             candclusts = [c for c in self.clusters
-                          if set(c.entrances)-done_ents]
+                          if set(c.entrances) - done_ents]
             tempclusts = [c for c in candclusts if c not in done_clusts]
             if tempclusts:
                 candclusts = tempclusts
@@ -842,7 +835,7 @@ class InterSegment(Segment):
             if tempclusts:
                 candclusts = tempclusts
             try:
-                #chosen = self.get_max_edge_distance(candclusts)
+                # chosen = self.get_max_edge_distance(candclusts)
                 chosen = random.choice(candclusts)
             except IndexError:
                 return None
@@ -871,12 +864,12 @@ class InterSegment(Segment):
                 if c in done_clusts:
                     continue
                 prelim = max(done_clusts,
-                             key=lambda c2: len(set(c2.entrances)-done_ents))
+                             key=lambda c2: len(set(c2.entrances) - done_ents))
                 numents = len(set(prelim.entrances) - done_ents)
                 if numents == 0:
                     break
                 candidates = [c2 for c2 in done_clusts if
-                              len(set(c2.entrances)-done_ents) == numents]
+                              len(set(c2.entrances) - done_ents) == numents]
                 chosen = random.choice(candidates)
                 acands = [e for e in c.entrances if e not in done_ents]
                 bcands = [e for e in chosen.entrances if e not in done_ents]
@@ -1089,7 +1082,7 @@ def parse_checkpoints():
             for subroute in route:
                 if first in subroute:
                     index = subroute.index(first)
-                    index = random.randint(1, index+1)
+                    index = random.randint(1, index + 1)
                     subroute.insert(index, second)
                     done = True
         if not done:
@@ -1260,7 +1253,7 @@ def randomize_fanatics(unused_locids):
         stop.copy(random.choice(pitstops[1:]))
         add_location_map("Fanatics Tower", stair.locid)
         add_location_map("Fanatics Tower", stop.locid)
-        index = random.randint(1, len(stairs)-1)
+        index = random.randint(1, len(stairs) - 1)
         stairs.insert(index, stair)
         pitstops.insert(index, stop)
 
@@ -1326,7 +1319,7 @@ def randomize_tower(filename, ancient=False, nummaps=None):
         randomize_fanatics(unused_maps)
 
     for route in routes:
-        #print route
+        # print route
         route.claim_reststops()
 
     return routes
@@ -1391,6 +1384,7 @@ def make_secret_treasure_room(mapid, beltroom):
 
 if __name__ == "__main__":
     from randomizer import get_monsters
+
     get_monsters(filename="program.rom")
     get_formations(filename="program.rom")
     get_fsets(filename="program.rom")
@@ -1401,4 +1395,3 @@ if __name__ == "__main__":
         print(route)
         print()
         print()
-
