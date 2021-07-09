@@ -5158,9 +5158,6 @@ def randomize(args: List[str]) -> str:
 
 if __name__ == "__main__":
     args = list(argv)
-    if len(argv) > 3 and argv[3].strip().lower() == "test" or TEST_ON:
-        randomize(args=args)
-        sys.exit()
     try:
         randomize(args=args)
         input("Press enter to close this program. ")

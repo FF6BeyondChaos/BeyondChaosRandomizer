@@ -3,13 +3,18 @@ import os
 import re
 import sys
 import traceback
-import music.musicrandomizer
 
 from collections import Counter
 from operator import itemgetter
 
-from music.mfvitools.insertmfvi import byte_insert, int_insert
-from music.mfvitools.mml2mfvi import mml_to_akao
+try:
+    from .musicrandomizer import *
+    from .mfvitools.insertmfvi import byte_insert, int_insert
+    from .mfvitools.mml2mfvi import mml_to_akao
+except ImportError:
+    from musicrandomizer import *
+    from mfvitools.insertmfvi import byte_insert, int_insert
+    from mfvitools.mml2mfvi import mml_to_akao
 
     
 ## TO DO LIST (* = essentially complete)

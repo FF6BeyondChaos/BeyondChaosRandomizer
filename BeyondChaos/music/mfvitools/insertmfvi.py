@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 import configparser, argparse, sys, shlex, re, os
-from music.mfvitools.mml2mfvi import (get_variant_list, get_brr_imports, mml_to_akao, get_echo_delay, parse_brr_loop, 
-                                      parse_brr_tuning, parse_brr_env)
 from copy import copy
+
+try:
+    from music.mfvitools.mml2mfvi import (get_variant_list, get_brr_imports, mml_to_akao, get_echo_delay, parse_brr_loop, 
+                                          parse_brr_tuning, parse_brr_env)
+except ImportError:
+    from . import mml2mfvi
 
 DEBUG = False
 VERBOSE = False

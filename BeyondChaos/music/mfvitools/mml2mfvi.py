@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 
 import sys, os, re, traceback, copy, math
-from music.mfvitools.mmltbl import (byte_tbl, equiv_tbl, byte_tbl, r_length_tbl, length_tbl, note_tbl, command_tbl)
+
+try:
+    from music.mfvitools.mmltbl import (byte_tbl, equiv_tbl, byte_tbl, r_length_tbl, length_tbl, note_tbl, command_tbl)
+except ImportError:
+    from .mmltbl import *
 
 mml_log = "\n" if __name__ == "__main__" else None
 
