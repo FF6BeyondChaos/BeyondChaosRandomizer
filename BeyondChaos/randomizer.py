@@ -74,9 +74,9 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from importlib import reload
 
 
-use_emberling_johnnydmad = False
+use_emberling_johnnydmad = True
 if use_emberling_johnnydmad:
-    import music.musicinterface as musicrandomizer
+    import musicinterface as musicrandomizer
 else:
     import oldmusicrandomizer as musicrandomizer
 

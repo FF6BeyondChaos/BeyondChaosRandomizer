@@ -1,0 +1,22 @@
+FF6 music randomizer
+
+This is basically a testbed for a full-ish rewrite of the Beyond Chaos music randomizer code, adding some features:
+- custom sample import from MML
+- only the samples used by a seed are inserted
+- randomized inn and wipe music
+- ingame music player (courtesy of madsiur, tsushiy, and Lenophis)
+
+This update comes alongside a revamp of existing tracks (including the original FF6 tracks) to use new samples.
+
+This project is being built standalone for now; eventually it will be incorporated into the main Beyond Chaos release, but hopefully this will allow for some flexibility for such things as using with BC Gaiden or Worlds Collide.
+
+Q&A
+Q: Why did you change the soundfont in the classic perfect FF6 songs?
+A: There are no soundfonts in any version or hack of FF6. The SoundFont technology was not available to the public until well into FF6's development, and it represents a fundamentally different approach to a sampler vs. the SNES's SPC700.
+
+Q: Well, how do I get my perfection back then?
+A: One of the goals for final release -- though it may come somewhat after release, depending on scheduling -- is an external pack (akin to the old sprite packs) that can be dropped in that will restore the original tracks to their exact original sound.
+
+Q: Why change them anyway though?
+A: It's always been my approach to randomization that we're not here to just make a bunch of noise and try to find a signal in it. I aim toward an alternate universe FF6, one that could have been. That means trying for a certain level of cohesion in the music -- a distinctive Beyond Chaos sound, like every game has its own distinctive sound. Think how Lufia 2 had several tracks from Lufia 1, but you can easily tell them apart. Building just on the FF6 sound is far too limiting for the scope I'm after, so I put together my own set of sounds. It's still heavily based on FF6's sound set and has a lot in common with it, but there will be some new touchstones.
+Or, somewhat less pretentiously: All the songs from other games were being molded by the engine, the available samples, and my own sensibilities and sensory-processing-disorders. I felt like it was sort of jarring when a vanilla FF6 song came on and it was missing all of that. This way, everything gets the same uncanny valley treatment.
