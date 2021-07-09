@@ -85,8 +85,8 @@ BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
-TEST_SEED = "4.normal.bcdefgijklmnopqrstuwyzcapslockoffmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosseseasymodocanttouchthis.1625797275"
+TEST_ON = True
+TEST_SEED = "4.normal.bcdefgijklmnopqrstuwyzalasdracojohnnydmadcapslockoffmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosseseasymodocanttouchthis.1625797275"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -4643,6 +4643,7 @@ def randomize(args: List[str]) -> str:
     read_dialogue(fout)
     read_location_names(fout)
 
+
     if Options_.shuffle_commands or Options_.replace_commands or Options_.random_treasure:
         auto_recruit_gau(stays_in_wor=not Options_.shuffle_wor and not Options_.is_code_active('mimetime'))
         if Options_.shuffle_commands or Options_.replace_commands:
@@ -4692,6 +4693,30 @@ def randomize(args: List[str]) -> str:
         FreeBlock(0xFFF47, 0xFFF47 + 87),
         FreeBlock(0xFFFBE, 0xFFFBE + 66)
     ]
+
+    has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
+    if has_music or Options_.is_code_active('alasdraco'):
+        if use_emberling_johnnydmad:
+            musicrandomizer.music_init()
+        else:
+            musicrandomizer.insert_instruments(fout, 0x310000)
+            opera = None
+        
+    if Options_.is_code_active('alasdraco'):
+        opera = musicrandomizer.manage_opera(fout, has_music)
+    else:
+        opera = None
+    reseed()
+
+    form_music = {}
+    if has_music:
+        if use_emberling_johnnydmad:
+            musicrandomizer.randomize_music(fout, Options_, opera=opera, form_music_overrides=form_music)
+            log(musicrandomizer.get_music_spoiler(), section="music")
+        else:
+            music_log = musicrandomizer.randomize_music(fout, Options_=Options_, opera=opera, form_music_overrides=form_music)
+            log(music_log, section="music")
+    reseed()
 
     if Options_.random_final_dungeon or Options_.is_code_active('ancientcave'):
         # do this before treasure
@@ -4859,7 +4884,6 @@ def randomize(args: List[str]) -> str:
     if Options_.random_formations or Options_.random_treasure:
         assign_unused_enemy_formations()
 
-    form_music = {}
     if Options_.random_formations:
         no_special_events = not Options_.is_code_active('bsiab')
         manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music, no_special_events=no_special_events)
@@ -4975,31 +4999,7 @@ def randomize(args: List[str]) -> str:
             improve_dance_menu(fout)
     reseed()
 
-    has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
-    if has_music or Options_.is_code_active('alasdraco'):
-        if use_emberling_johnnydmad:
-            musicrandomizer.music_init()
-        else:
-            musicrandomizer.insert_instruments(fout, 0x310000)
-            opera = None
-        
-    if Options_.is_code_active('alasdraco'):
-        #if use_emberling_johnnydmad:
-        #    opera = musicinterface.manage_opera(fout, has_music)
-        #else:
-        opera = musicrandomizer.manage_opera(fout, has_music)
-    else:
-        opera = None
-    reseed()
-
-    if has_music:
-        if use_emberling_johnnydmad:
-            musicrandomizer.randomize_music(fout, Options_, opera=opera, form_music_overrides=form_music)
-            log(musicrandomizer.get_music_spoiler(), section="music")
-        else:
-            music_log = musicrandomizer.randomize_music(fout, Options_=Options_, opera=opera, form_music_overrides=form_music)
-            log(music_log, section="music")
-    reseed()
+    
 
     if Options_.mode.name == "katn":
         start_with_random_espers()
