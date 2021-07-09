@@ -19,7 +19,6 @@ import formationrandomizer
 import itemrandomizer
 import locationrandomizer
 import monsterrandomizer
-import music.musicrandomizer
 import options
 import towerrandomizer
 from monsterrandomizer import MonsterBlock
@@ -51,7 +50,6 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
                                shuffle_monsters, get_monster, read_ai_table,
                                change_enemy_name, randomize_enemy_name,
                                get_collapsing_house_help_skill)
-from music.musicinterface import randomize_music, manage_opera, get_music_spoiler, music_init
 from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
@@ -76,12 +74,18 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from importlib import reload
 
 
+use_emberling_johnnydmad = False
+if use_emberling_johnnydmad:
+    import music.musicinterface as musicrandomizer
+else:
+    import oldmusicrandomizer as musicrandomizer
+
 VERSION = "4"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = True
+TEST_ON = False
 TEST_SEED = "4.normal.bcdefgijklmnopqrstuwyzcapslockoffmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosseseasymodocanttouchthis.1625797275"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
@@ -221,7 +225,9 @@ def Reset():
     reload(character)
     reload(esperrandomizer)
     reload(locationrandomizer)
-    reload(music.musicrandomizer)
+    reload(musicrandomizer)
+    #if use_emberling_johnnydmad:
+    #    reload(musicinterface)
     reload(towerrandomizer)
     reload(chestrandomizer)
 
@@ -4970,18 +4976,29 @@ def randomize(args: List[str]) -> str:
     reseed()
 
     has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
-    if has_music:
-        music_init()
+    if has_music or Options_.is_code_active('alasdraco'):
+        if use_emberling_johnnydmad:
+            musicrandomizer.music_init()
+        else:
+            musicrandomizer.insert_instruments(fout, 0x310000)
+            opera = None
         
     if Options_.is_code_active('alasdraco'):
-        opera = manage_opera(fout, has_music)
+        #if use_emberling_johnnydmad:
+        #    opera = musicinterface.manage_opera(fout, has_music)
+        #else:
+        opera = musicrandomizer.manage_opera(fout, has_music)
     else:
         opera = None
     reseed()
 
     if has_music:
-        randomize_music(fout, Options_, opera=opera, form_music_overrides=form_music)
-        log(get_music_spoiler(), section="music")
+        if use_emberling_johnnydmad:
+            musicrandomizer.randomize_music(fout, Options_, opera=opera, form_music_overrides=form_music)
+            log(musicrandomizer.get_music_spoiler(), section="music")
+        else:
+            music_log = musicrandomizer.randomize_music(fout, Options_=Options_, opera=opera, form_music_overrides=form_music)
+            log(music_log, section="music")
     reseed()
 
     if Options_.mode.name == "katn":

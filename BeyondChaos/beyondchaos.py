@@ -2,7 +2,6 @@ import sys
 import time
 import traceback
 
-import music.musicrandomizer
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel, QGroupBox, \
@@ -816,7 +815,6 @@ class Window(QWidget):
                     reload(character)
                     reload(esperrandomizer)
                     reload(locationrandomizer)
-                    reload(music.musicrandomizer)
                     reload(towerrandomizer)
                     reload(chestrandomizer)
                 #sys.exit() Lets no longer sysexit anymore so we don't have to
