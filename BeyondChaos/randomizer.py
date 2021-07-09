@@ -81,8 +81,8 @@ BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
-TEST_SEED = "4.normal.bcdefgijklmnopqrstuwyzmakeoverpartypartycanttouchthisdearestmolulueasymodo.1111111111"
+TEST_ON = True
+TEST_SEED = "4.normal.bcdefgijklmnopqrstuwyzcapslockoffmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosseseasymodocanttouchthis.1625797275"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -1577,6 +1577,24 @@ def manage_sprint():
     autosprint.set_location(0x4E2D)
     autosprint.bytestring = bytes([0x80, 0x00])
     autosprint.write(fout)
+
+def name_swd_techs(fout):
+    swd_tech_sub = Substitution()
+    swd_tech_sub.set_location(0x26F7E1)
+    swd_tech_sub.bytestring = bytes(
+        [0x83, 0xa2, 0xac, 0xa9, 0x9a, 0xad, 0x9c,
+         0xa1, 0xff, 0xff, 0x91, 0x9e, 0xad, 0xa8,
+         0xab, 0xad, 0xff, 0xff, 0xff, 0xff, 0x92,
+         0xa5, 0x9a, 0xac, 0xa1, 0xff, 0xff, 0xff,
+         0xff, 0xff, 0x90, 0xae, 0x9a, 0x9d, 0xab,
+         0x9a, 0x92, 0xa5, 0x9a, 0xa6, 0x84, 0xa6,
+         0xa9, 0xa8, 0xb0, 0x9e, 0xab, 0x9e, 0xab,
+         0xff, 0x92, 0xad, 0xae, 0xa7, 0xa7, 0x9e,
+         0xab, 0xff, 0xff, 0xff, 0x90, 0xae, 0x9a,
+         0x9d, 0xfe, 0x92, 0xa5, 0xa2, 0x9c, 0x9e,
+         0x82, 0xa5, 0x9e, 0x9a, 0xaf, 0x9e, 0xff,
+         0xff, 0xff, 0xff,])
+    swd_tech_sub.write(fout)
 
 
 def manage_skips():
@@ -5061,6 +5079,7 @@ def randomize(args: List[str]) -> str:
     y_equip_relics(fout)
     fix_gogo_portrait(fout)
     cycle_statuses(fout)
+    name_swd_techs(fout)
     #add_esper_bonuses(fout) #Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
 
     if not Options_.is_code_active('fightclub'):
