@@ -76,13 +76,13 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from importlib import reload
 
 
-VERSION = "4"
-BETA = False
-VERSION_ROMAN = "IV"
+VERSION = "5"
+BETA = True
+VERSION_ROMAN = "V"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = True
-TEST_SEED = "4.normal.bcdefgijklmnopqrstuwyzcapslockoffmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosseseasymodocanttouchthis.1625797275"
+TEST_ON = False
+TEST_SEED = "4.normal.bcdefgijklmnopqrstuwyzcapslockoffmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosseseasymodocanttouchthisjohnnydmad.1625797275"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1

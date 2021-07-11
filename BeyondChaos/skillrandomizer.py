@@ -499,7 +499,7 @@ class RandomSpellSub(Substitution):
         if self.wild:
             return self.bytestring
 
-        pointer = self.location + len(self.bytestring)
+        pointer = self.location + len(self.bytestring) + 0xC00000
         self.bytestring[4] = len(self.spells) - 1
         assert self.bytestring[4] in [(2**i)-1 for i in range(1, 8)]
         a, b, c = pointer >> 16, (pointer >> 8) & 0xFF, pointer & 0xFF
