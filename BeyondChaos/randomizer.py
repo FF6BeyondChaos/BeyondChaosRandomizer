@@ -53,7 +53,7 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
 from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
-                     cycle_statuses)
+                     cycle_statuses, no_dance_stumbles)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -5090,7 +5090,9 @@ def randomize(args: List[str]) -> str:
         manage_santa()
     elif Options_.is_code_active('halloween') and not Options_.is_code_active('ancientcave'):
         manage_spookiness()
-        
+    
+    if Options_.is_code_active('dancelessons'):
+        no_dance_stumbles(fout)
     banon_life3(fout)
     allergic_dog(fout)
     y_equip_relics(fout)
