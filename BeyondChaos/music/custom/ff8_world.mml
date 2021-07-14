@@ -51,7 +51,7 @@
 #def 14= p80
 #def 15= p45
 
-#def init= t80 %x255 %v50 %b0,70 %f0,0
+#def init= t80 %x200 %v50 %b0,70 %f0,0
 
 
 {1} %e1

@@ -14,7 +14,7 @@
 #def lateTempo= t136
 #def maxTempo=  t144
 
-#def init= 'mainTempo' %x180 %v30 %b0,100 %f0,0
+#def init= 'mainTempo' %x240 %v30 %b0,100 %f0,0
 
 ## It seems like all tracks and all instruments have the same echo and vibrato, so we'll just do it once to start off each track.
 ## Keeping vibrato depth low both because it sounds low in the original and because we need to fend off vibrato-induced lag.

@@ -14,19 +14,25 @@
 #WAVE 0x2B 0x3C ~ was 0x68 hihat
 #WAVE 0x2C 0x2C ~ was 0x50 cymbal
 
-#def global= t114 %v50 %b0,100 %x224 %f0,0
+#def global= t114 %x236 %v50 %b0,100 %f0,0
 
-#def hst= |0 o5 p60 %r14 v40 m16,18,207
-#def lst= |0 o2 p70 v48 m96,18,223
+#def hst= |0 o5 p60 %r14 'lstv*v.833' m16,18,207
+#def lst= |0 o2 p70 'lstv' m96,18,223
 #def hrp= |3 o6 p56 %r18 
-#def ld= |1 o4 p50 %a8 %r9 v64 m48,18,239
-#def lds= |0 o4 p50 %r7 v64 m48,18,239
-#def ldo= |2 o5 p50 %a12 %r9 v52 m48,18,239
-#def bas= |4 o4 p64 v48
-#def bas2= |5 o5 p64 v48
+#def ld= |1 o4 p50 %a8 %r9 v96 m48,18,239
+#def lds= |0 o4 p50 %r7 'lstv*v1.33' m48,18,239
+#def ldo= |2 o5 p50 %a12 %r9 v78 m48,18,239
+#def bas= |4 o4 p64 v72
+#def bas2= |5 o5 p64 v72
 
-#def hv= v36
-#def hvf= v1,36
+## bass hi/lo vol
+#def bh=v84
+#def bl=v66
+
+#def lstv= v80
+
+#def hv= v54
+#def hvf= v1,54
 #def he= 'hv*v.45'
 #def hvl= 'hv*v.8'
 #def hel= 'hv*v.36'
@@ -35,12 +41,12 @@
 #def hrpe= 'he''hvf*v192,.36'
 #def hrpq= 'hv*v1.2''hvf*v48,.9'
 #def hreq= 'hv*v.5''hvf*v48,.405'
-#def hh= v40 %r
-#def hm= v24 %r16
-#def hl= v32 %r19
+#def hh= v60 %r
+#def hm= v36 %r16
+#def hl= v48 %r19
 
-#drum "c"=5a |C v56 p64 %r17
-#drum "h"=5g |B v32 p85 %r26
+#drum "c"=5a |C v84 p64 %r17
+#drum "h"=5g |B v48 p85 %r26
 #drum "r"=5g+ |8 'sv*v.77' p64  %y4%s3%r21
 #drum "s"=5g+ |8 'sv*v.87' p64  %y4%s3%r21
 #drum "t"=5g+ |8 'sv*v.92' p64  %y4%s3%r21
@@ -50,7 +56,8 @@
 #drum "y"=5g+ |8 'sv*v1.22' p64 %y4%s3%r21
 #drum "z"=5g+ |8 'sv*v1.27' p64 %y4%s3%r21
 
-#def sv= v36
+#def sv= v54
+#def drumFadeout= v72,39
 
 {1}
 $'global' %e1
@@ -76,8 +83,6 @@ a1 f2.f g1 a2.a     a1 f2..f8 g1 <c2..c8>
 d2.d e1 e2.e a1     <d2..d8> e2.e d1 e1
 ##17
 'bas2'
-#def bh=v56
-#def bl=v44
 l8 [[4'bh'a'bl'a] [4'bh'b'bl'b] <[4'bh'c'bl'c] [4'bh'd'bl'd]
 [4'bh'c'bl'c] >[4'bh'b'bl'b] <[4'bh'c'bl'c] >[['bh'e'bl'e]<]>>]
 ##33
@@ -91,9 +96,9 @@ l8 [[4'bh'a'bl'a] [4'bh'b'bl'b] <[4'bh'c'bl'c] [4'bh'd'bl'd]
 $ 'lst' %e1 l1
 afga afg<c> deea <dede>
 ##17
-<<v28[ab<c>a fg<c>b]
+<<'lstv*v.6'[ab<c>a fg<c>b]
 ##33
->v38  [fgea2g2  fgee]
+>'lstv*v.8'  [fgea2g2  fgee]
 ##49
 %r11 [3a1]<d1>[3a1]g2e2[4a1]
 ;
@@ -150,7 +155,7 @@ $
 [4"z8ss"["x8ss"] "xwxy"   "z8ss z8"j4l48"stwz^32wx^32"l16"xx8 z8wu"]
 "zrzzzrzwxy"
 ##49
-[12"z8zxz8zxz8"j12"zxzxxw"]v72,26[6"\z"]
+[12"z8zxz8zxz8"j12"zxzxxw"]'drumFadeout'[6"\z"]
 ;
 
 {7}

@@ -124,6 +124,7 @@ ff7_aerith:         prelude, omen3, celes*2, daryl, coin, rachel, awakening
 ff7_battle:         metamorphosis, grandfinale, unforgiven, savethem
 ff7_battle_ff6:     grandfinale, unforgiven, magitek, engine
 ff7_bronco:         setzer, assault, savethem, blackjack
+ff7_corel:          shadow, gau*2, zozo, narshe, strago, martiallaw, ruintown, ruin
 ff7_electric:       chocobo*2, johnny
 ff7_mako:           omen3, empire, catastrophe, espers, zozo, ruin, train, ancient, magitek*2, fanatics, ktower
 ff7_rebirth:        grandfinale, floating, ktower
@@ -131,6 +132,7 @@ ff7_sadbar:         prelude, gau, zozo, narshe, martiallaw*2, ruintown, ruin
 ff7_temple:         omen3, espers, ruin, cave, forest, tomb, gate, dream
 ff8_laguna:         grandfinale, unforgiven, chocobo, blackjack, johnny, magitek, ktower
 ff8_world:          prelude, what, narshe, ruin, balance*2, forest
+ff8_battle:         grandfinale, assault, savethem, engine, floating
 ff9_battle:         grandfinale
 ff9_blackwaltz:     empire, kefka, owzer, train*2
 ff9_dragons:        metamorphosis*2, catastrophe, grandfinale, assault, savethem, floating, phoenix, ktower
@@ -140,6 +142,7 @@ ff9_hunt:           grandfinale, assault, savethem*2, johnny, umaro, phoenix
 ff9_siege:          metamorphosis*2, catastrophe, grandfinale, assault, savethem
 ff9_notalone:       prelude, grandfinale, rachel, falcon, dream
 ff9_treno:          prelude, johnny, spinach*2
+ff9_vivi:           spinach, what, moogles, gogo, strago*2, martiallaw
 ff10_via:           prelude, espers, zozo, owzer, tomb*2, dream
 ff10_zanarkand:     prelude, omen3, celes, daryl, coin, awakening, ruin, tomb
 ff12_crystal:       omen3, espers*2, narshe, ruin, cave, forest, train, tomb, gate, ancient, dream, phoenix
@@ -197,6 +200,7 @@ top_world1:         omen3, falcon, balance*2, mountain, forest
 totr_battle:        grandfinale, unforgiven, umaro, serpent, ancient, magitek, engine
 totr_downfall:      prelude, omen3, espers, shadow*2, zozo, ruin, cave, train, tomb, dream
 totr_sboss:         grandfinale, unforgiven, magitek, floating, engine
+totr_underworld:    grandfinale, metamorphosis, zozo, train, gate, magitek, engine, floating*2, phoenix, ktower
 wa2_dungeon2:       setzer, gogo, zozo, martiallaw, mountain, mount2, gate*2, ancient, dream, phoenix
 wa2_heimdal:        metamorphosis, unforgiven, setzer, locke, assault, savethem, falcon, mount2, serpent, gate, engine, phoenix
 xcx_sylvan:         omen3, espers, zozo, narshe, ruin*2, cave, forest, train, tomb, ancient, dream, phoenix
@@ -325,5 +329,6 @@ sd2_ally:       sleep
 [death]
 ff5_death:      death
 ff6_death:      death
+sd2_death:      death
 
 [tierboss]

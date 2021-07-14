@@ -12,7 +12,8 @@
 #WAVE 0x2B 0x1D - was 0x7e - snare
 #WAVE 0x2C 0x6C - was 0x55 - tambourine
 
-#def global= t120 %v50 %x224 %b0,70 %f0,0
+#def global= t120 %v50 %x190 %b0,70 %f0,0
+
 #def str= |0 o6  %e1
 #def flt= |1 o5  %e1
 #def xyl= |2 o5  %e1
@@ -20,7 +21,7 @@
 #def bass= |4 o4 %e0
 
 #def s= v70
-#def f= v150
+#def f= v167
 #def m= v90
 #def v= v200
 #def b= v100

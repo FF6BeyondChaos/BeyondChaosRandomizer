@@ -24,35 +24,35 @@
 #def chord= |6 'k' o5 %y3%s4%r15 m
 #def timp= |8 'd' o6 m
 
-#def s= v32
-#def b= v96
-#def f= v52
-#def c= v56
-#def h= v40
-#def t= v28
-#def k= v48
-#def d= v72
+#def s= v40
+#def b= v120
+#def f= v65
+#def c= v70
+#def h= v50
+#def t= v35
+#def k= v60
+#def d= v90
 
 #def sf= v1,32
-#def kf= v1,72
-#def ff= v1,52
+#def kf= v1,60
+#def ff= v1,65
 
-#def init= t105 %x255 %v40 %b0,85 %f0,0
+#def init= t105 %v40 %b0,85 %f0,0
 
-#drum "y"=5a |C v90 p48 %a15%r17
-#drum "y-"=5a |C v50 p48 %a15%r17
-#drum "z"=5a |C v90 p48 %a3%r17
-#drum "z-"=5a |C v50 p48 %a3%r17
-#def y= %a15 v50 ":y-"
+#drum "y"=5a |C v113 p48 %a15%r17
+#drum "y-"=5a |C v63 p48 %a15%r17
+#drum "z"=5a |C v113 p48 %a3%r17
+#drum "z-"=5a |C v63 p48 %a3%r17
+#def y= %a15 v63 ":y-"
 
-#drum "t"=5a |F v40 p96 %e1
-#drum "t-"=5a |F v37 p96 %e1
-#drum "u+"=5a |F v33 p96 %e1
-#drum "u"=5a |F v30 p96 %e1
-#drum "u-"=5a |F v27 p96 %e1
-#drum "v"=5a |F v20 p96 %e1
-#drum "w"=5a |F v10 p96 %e1
-#drum "w-"=5a |F v7 p96 %e1
+#drum "t"=5a |F v50 p96 %e1
+#drum "t-"=5a |F v46 p96 %e1
+#drum "u+"=5a |F v41 p96 %e1
+#drum "u"=5a |F v38 p96 %e1
+#drum "u-"=5a |F v34 p96 %e1
+#drum "v"=5a |F v25 p96 %e1
+#drum "w"=5a |F v13 p96 %e1
+#drum "w-"=5a |F v9 p96 %e1
 
 #def fr8= %r19^8%r8
 #def fr16= %r19^16%r8

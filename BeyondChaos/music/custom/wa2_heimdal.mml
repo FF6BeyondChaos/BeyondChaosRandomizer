@@ -18,7 +18,7 @@
 #WAVE 0x2B 0x3D ## HiHat (open/closed)
 #WAVE 0x2C 0x4C ## Tom
 
-#def init= t140 %x255 %v40 %b0,85 %f0,0
+#def init= t140 %v40 %b0,85 %f0,0
 
 #def bassVol=               v60
 #def timpaniVol=            v55

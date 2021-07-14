@@ -16,7 +16,7 @@
 #WAVE 0x2C 0x0A ## Kick
 #WAVE 0x2D 0x1C ## Snare
 
-#def init= t144 %x224 %v40 %b0,85 %f0,0
+#def init= t144 %x236 %v40 %b0,85 %f0,0
 
 ## The lead strings get a release rate halfway through.... %r8
 #def strings=        |0 o5 %e1

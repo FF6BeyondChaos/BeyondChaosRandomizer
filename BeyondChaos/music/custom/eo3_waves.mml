@@ -20,7 +20,7 @@
 #WAVE 0x2B  0x3C Hi-Hat
 #WAVE 0x2C  0x2D  Cymbal
 
-#def global= t188 %v36 %x232 %b0,85 %f0,0
+#def global= t188 %v36 %x200 %b0,85 %f0,0
 
 #def organ= |1 p48 v18 o6 %a6 
 #def organ2= |1 p48 v22 o6 %r10

@@ -43,8 +43,8 @@
 
 #def 5i=   |5
 #def 5o=   o5
-#def 5v=   v120
-#def 5f= v1,120
+#def 5v=   v133
+#def 5f= v1,133
 
 #def 6i=   |6
 #def 6o=   o5
@@ -62,9 +62,9 @@
 ## auto percussion  0x27
 #drum "k"= 5a
 
+#def init= t92 %x208 %v50 %b0,70 %f0,0
 
-{1}
-t92%b0,70%f0,0%v50%x180
+{1}'init'
 $101'7v*v.75'p50
 '7i' %e1'7o'%r12"k1^2"%a2"k2"%a%r12"k1^1"'0v*v.85'p50
 '0i' m12,20,195%e1['0o'd4>a4e4<f4d4>a4f4d4]['0o'e4>b4f+4<g4e4>b4g4e4][

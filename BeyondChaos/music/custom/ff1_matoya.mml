@@ -32,15 +32,15 @@
 
 #def tbl= |9 o5 't' %k-16
 
-#def p=v60
-#def r=v36
-#def w=v48
-#def b=v28
-#def v=v40
-#def e=v88
-#def a=v64
-#def c=v28
-#def h=v48
+#def p=v77
+#def r=v40
+#def w=v59
+#def b=v31
+#def v=v44
+#def e=v110
+#def a=v70
+#def c=v31
+#def h=v53
 
 #def t='vtimb'
 
@@ -130,10 +130,10 @@
 #drum "w+"=4b  |A 'pan-14' 'vtom*v.5'
 #drum "x+"=5d  |A 'pan-14' 'vtom*v.5'
 
-#def vsnare= v54 %e0
-#def vtom= v64 %e1
-#def vtimb= v40 %e1
-#def vkick= v64 %y3%s2%r14 %e0
+#def vsnare= v59 %e0
+#def vtom= v70 %e1
+#def vtimb= v44 %e1
+#def vkick= v70 %y3%s2%r14 %e0
 
 {1}
 'init' %e1 $
@@ -203,10 +203,11 @@ a1^4.r24(g+24a24)a+f+16r16c+16r16>a+16r16
 
 {3}
 $ %e0
-'ebs-o2' 'pan+26' m
+'ebs-o2*v.85' 'pan+26' m
 b2<e2 (g4..f+32g32)ag(f+e)
 d2>g2 (b4..a+32b32) a<e12r24c+12r24>a12r24
 ##6
+'e'
 rf+<c+f+r>f+16r16<c+>f+    rb<f+br>b16r16<f+>b
 rg<dgr>g16r16<d>g          ra<ea>a4g4
 rf+<c+f+r>f+16r16<c+>f+    rb<f+bbagf+

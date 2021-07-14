@@ -13,7 +13,7 @@
 #WAVE 0x28 0x1F - was 0x56 snare
 #WAVE 0x29 0x5B - was 0x16 timpani
 
-#def init= t90 %x255 %v64 %b0,84 %f0,0
+#def init= t90 %x208 %v64 %b0,84 %f0,0
 
 #def cel= |0 'c' o4 m %a14%y1%s0%r31
 #def hrp= |1 'h' o5 m %r12
@@ -24,18 +24,18 @@
 #def pi2= |6 'q' o5 m %r27
 #def tmp= |9 't' o5 m %y3%s6%r13
 
-#def c= v36
-#def h= v56
-#def v= v72
-#def n= v76
-#def o= v40
-#def p= v64
-#def q= v52
-#def t= v80
+#def c= v48
+#def h= v74
+#def v= v96
+#def n= v101
+#def o= v53
+#def p= v85
+#def q= v69
+#def t= v106
 
-#def he= v30
+#def he= v53
 
-#def snare= |8 %y5%s0 v40 %e0
+#def snare= |8 %y5%s0 v53 %e0
 
 #drum "t"=5g 'snare*v1.20'
 #drum "s"=5g 'snare*v1.00'

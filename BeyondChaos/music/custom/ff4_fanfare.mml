@@ -33,9 +33,10 @@
 ## auto percussion  0x23
 #drum "i"= 5f+
 
+#def init= t141 %x172 %v40 %b0,85 %f0,0
 
 {1}
-t141%v40%b0,85%f0,0'0v*v1.10'p75
+'init''0v*v1.10'p75
 '0i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e1m96,36,193'0o-o1'c24e24g24
 <c24e24g24<c24e24g24c24r24c24r24c24r24c4>g+4a+4<c12r12>a+12<c2.
 $101>g4f4g4f16r16a+8^8a+16r16a4a+16r16a4a16r16g4f4e4f8d8^1g4f4g4f16r16

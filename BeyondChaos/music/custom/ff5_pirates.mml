@@ -17,31 +17,31 @@
 #WAVE 0x2C 0x93 oboe C+6 (A+5 - D6)
 #WAVE 0x2D 0x94 oboe A5 (A5-)
 
-#def o1= |D
-#def o2= |C
-#def o3= |B
-#def o4= |A
-#def o2u= |C
-#def o3u= |B>
-#def o4u= |A
-#def o1d= |D
-#def o2d= |C<
-#def o3d= |B
+#def o1= |D   %r1
+#def o2= |C   %r1
+#def o3= |B   %r1
+#def o4= |A   %r1
+#def o2u= |C  %r1
+#def o3u= |B> %r1
+#def o4u= |A  %r1
+#def o1d= |D  %r1
+#def o2d= |C< %r1
+#def o3d= |B  %r1
 
 #def 0i=   |0
 #def 0o=   o5
 #def 0v=   v100
 #def 0f= v1,100
 
-#def 1i=   |1
+#def 1i=   |1 %r1
 #def 1o=   o5
-#def 1v=   v80
-#def 1f= v1,80
+#def 1v=   v70
+#def 1f= v1,70
 
-#def 2i=   |2
+#def 2i=   |2 %y1%s6%r1
 #def 2o=   o6
-#def 2v=   v85
-#def 2f= v1,85
+#def 2v=   v70
+#def 2f= v1,70
 
 #def 3i=   |3
 #def 3o=   o5
@@ -58,16 +58,15 @@
 #def 5v=   v133
 #def 5f= v1,133
 
+#def init= t84 %x144 %v50 %b0,85 %f0,0
 
 {1}
-t84%b0,85%f0,0%v50m12,20,199%x190p70%e1r1r1
+'init'm12,20,199p70%e1r1r1
 $101'0v*v1.10'
 '0i' '0o+o1''o2u''o3u'f16r16>'o2d''o1d'a16r16<'o2u''o3u''o4u'a16r16'o3d'e16r16f4'o2d'd16r16'o3u'f16r16e8'o2d'c16r16c2r8'o3u''o4u'a+24a24
 'o3d'g24f16r16>'o2d''o1d'a16r16<'o2u''o3u''o4u'a16r16'o3d'e16r16f4'o2d'd8'o3u'f16g16'o4u'a4<c4.>b8'o3d'g16r16'o4u'b16r16a1r2.r8a+24
 a24'o3d'g24f16r16>'o2d''o1d'a16r16<'o2u''o3u''o4u'a16r16'o3d'e16r16f4'o2d'd16r16'o3u'f16r16e8'o2d'c16r16c2r8'o3u''o4u'a+24a24'o3d'g24f16
 r16>'o2d''o1d'a16r16<'o2u''o3u''o4u'a16r16'o3d'e16r16f4'o2d'd8'o3u'f16g16'o4u'a4<c4.>b8'o3d'g16r16'o4u'b16r16a1
-
-
 '2v*v1.27'p60
 '2i'm12,20,197
 ['2o'g8f+16a16g16r16e16r16>b16r16<b4a16b16<c16r16d16r16c8>a16
@@ -84,9 +83,7 @@ $201'1o'd16r16>f16r16<f16r16c16r16d4>a16r16<d16r16c8>g16r16g2r4<d16r16
 >f16r16<f16r16c16r16d4>a8<d16e16f4a4.g8e16r16g16r16f1r1d16r16>f16r16<f16
 r16c16r16d4>a16r16<d16r16c8>g16r16g2r4<d16r16>f16r16<f16r16c16r16d4>a8
 <d16e16f4a4.g8e16r16g16r16f1
-
-
-'1i' '1o''1v*v.75'm12,20,199p70
+'1i' '1o''1v*v.67'm12,20,199p70
 [g16r16a16r16b4.g4a16b16a16r16<c16r16f16r16c16r16>a16
 r16<c16r16f16r16c16r16>][3g16a16b16<c+16d16e16f+16g16b16a16g16f+16e16d16
 c16>a16]g1
@@ -97,8 +94,7 @@ c16>a16]g1
 {8}
 %e1r1r1
 $301[11r1]
-
-'1v*v.75'p50'1o'
+'1v*v.67'p50'1o'
 '1i'm12,20,199
 [e16r16f+16r16g4.e4f+16g16f16r16g16r16a16r16
 g16r16f16r16g16r16a16r16g16r16][3e16f+16g16a16b16<c+16d16e16g16f+16e16
