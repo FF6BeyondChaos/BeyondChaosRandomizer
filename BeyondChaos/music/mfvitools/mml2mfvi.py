@@ -1,7 +1,36 @@
 #!/usr/bin/env python3
 
+# MML2MFVI - convert human-writable / macro-enabled MML files to
+# BGM sequence data formatted for Final Fantasy VI
+
+# *** READ THIS BEFORE EDITING THIS FILE ***
+
+# This file is part of the mfvitools project.
+# ( https://github.com/emberling/mfvitools )
+# mfvitools is designed to be used inside larger projects, e.g.
+# johnnydmad, Beyond Chaos, Beyond Chaos Gaiden, or potentially
+# others in the future.
+# If you are editing this file as part of "johnnydmad," "Beyond Chaos,"
+# or any other container project, please respect the independence
+# of these projects:
+# - Keep mfvitools project files in a subdirectory, and do not modify
+#   the directory structure or mix in arbitrary code files specific to
+#   your project.
+# - Keep changes to mfvitools files in this repository to a minimum.
+#   Don't make style changes to code based on the standards of your
+#   containing project. Don't remove functionality that you feel your
+#   containing project won't need. Keep it simple so that code and
+#   changes can be easily shared across projects.
+# - Major changes and improvements should be handled through, or at
+#   minimum shared with, the mfvitools project, whether through
+#   submitting changes or through creating a fork that other mfvitools
+#   maintainers can easily see and pull from.
+
 import sys, os, re, traceback, copy, math
-from music.mfvitools.mmltbl import (byte_tbl, equiv_tbl, byte_tbl, r_length_tbl, length_tbl, note_tbl, command_tbl)
+try:
+    from mmltbl import *
+except ImportError:
+    from .mmltbl import *
 
 mml_log = "\n" if __name__ == "__main__" else None
 

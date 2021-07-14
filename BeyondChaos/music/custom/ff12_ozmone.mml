@@ -19,7 +19,7 @@
 #WAVE 0x2D  0x5C  ~ was 0x16 ~ timpani
 #WAVE 0x2E  0x8C  ~ was 0x5E ~ woodblock
 
-#def global= t120 %x232 %v30 %b0,85 %f0,0
+#def global= t120 %x248 %v30 %b0,85 %f0,0
 
 #WAVE 0x27 0x91 oboe B6 (G+6+)
 #WAVE 0x28 0x92 oboe F6 (D+6 - G6)

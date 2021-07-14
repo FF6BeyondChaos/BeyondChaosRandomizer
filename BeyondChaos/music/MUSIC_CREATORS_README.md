@@ -34,7 +34,11 @@ Legacy music hasn't generally maintained any sort of standard for loudness and t
 
 Moving forward, I'm going to tentatively try measuring each new track with standard loudness measurements (peak and RMS) and adjusting these to fit within vanilla music ranges for similar songs. I'll include a table of vanilla music loudness values here for reference.
 
-It seems like a solid general target is **-25 dB** RMS and **-8 dB** peak, ranging to a maximum around **-23 dB** RMS and **-6.5 dB** peak and a minimum around **-28 dB** RMS and **-12 dB** peak. Aside from battle music, it actually seems like the grand brassy and martial themes that sound like they *should* be loud (e.g. Edgar and Sabin, Save Them! etc.) are more on the average side, while naturally subtler or lower-impact timbres (Kids Run Through the City, Spinach Rag) sometimes get some extra loudness to compensate for their nature.
+It seems like a solid general target is **-25 dB** RMS and **-8 dB** peak, ranging to a soft maximum around **-22 dB** RMS and **-6.5 dB** peak and a soft minimum around **-28 dB** RMS and **-10 dB** peak.
+
+Aside from battle music, it actually seems like the grand brassy and martial themes that sound like they *should* be loud (e.g. Edgar and Sabin, Save Them! etc.) are more on the average side, while naturally subtler or lower-impact timbres (Kids Run Through the City, Spinach Rag) sometimes get some extra loudness to compensate for their nature.
+
+The maximum volumes above should be treated as a much harder limit than the minimum. If you have a choice between being too loud by one measure, too quiet by the other measure, or a little of both, it should usually be best to avoid being too loud, as long as subjective listening doesn't sound noticeably too quiet. The most important measurement is keeping the peak from being too high. The highest peak in vanilla is **-5.789 dB** with no possibility of overlapping sound effects, or **-6.206 dB** with sound effects. Do everything you can to stay below these numbers; if the song is still too subjectively quiet, try re-balancing the volumes in the track so that there is less contrast between the quieter and loudest parts.
 
 Method: Convert SPC to WAV using SNES SPC700 Player's "save" function. Player volume must be at 100%. Open resulting WAV file in Audacity, select the whole thing, `"Tracks->Mix->Mix Stereo Down to Mono"` and then  use `"Analyze->Contrast" -> Measure selection` for RMS and `"Effect->Amplify" -> Set Amplification to 0 -> "New Peak Amplitude"` for peak.
 

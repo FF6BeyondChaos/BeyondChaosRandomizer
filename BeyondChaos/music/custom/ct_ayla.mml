@@ -6,7 +6,7 @@
 ##created with sqspcmml beta 1.1.5
 
 #VARIANT / vic
-#VARIANT ~ a
+#VARIANT ~ 
 
 #WAVE 0x20 ~0x66~/0x67/ strings
 #WAVE 0x21 ~0x81~/0x81/ trumpet 
@@ -23,8 +23,8 @@
 
 #def 1i=   |1 %e1
 #def 1o=   o5
-#def 1v=   v100
-#def 1f= v1,100
+#def 1v=   v90
+#def 1f= v1,90
 
 #def 2i=   |2 %e1
 #def 2v=   v80
@@ -53,9 +53,10 @@
 #drum "f+"= 4a |4 %e0 p40
 #drum "g"= 5g |3 %e0 p80
 
+#def init= t171 %x224 %v40 %b0,80 %f0,0
 
 {1}
-t171%v40%b0,80%f0,0
+'init'
 ~'4v*v.94'{P+}r4." !!!o f+4."^4{P-}~
 $101[8r1]'6v*v.94'%e1
 '6i' '6v*v.94'p64'6o'm24,24,201a4.<c4.g4^8f+4.e8f+24e12d4c4.d4.e4^8>a8

@@ -14,30 +14,30 @@
 
 ## The original uses a tempo of 66 bpm, but that gives a weird 2/4 time signature,
 ## with a signature change halfway through measure 10. So we'll work in 4/4 with 132 bpm
-#def init= t132 %x255 %v40 %b0,85 %f0,0
+#def init= t132 %v40 %b0,85 %f0,0
 
-#def hornVol=            v58
-#def hornFade=         v1,58 ## Keep this volume in line with hornVol
+#def hornVol=            v77
+#def hornFade=         v1,77 ## Keep this volume in line with hornVol
 #def contrabassVol=      v127
 #def contrabassHi=       'contrabassVol*v1'
-#def contrabassMed=      'contrabassVol*v.73'
-#def contrabassLo=       'contrabassVol*v.56'
-#def contrabassQuickLo=  'contrabassVol*v.95'
-#def stringsVol=         v33
-#def backingStringsVol=  v28
-#def timpaniVol=         v95
-#def timpaniLow1=        'timpaniVol*v.15'
-#def timpaniLow2=        'timpaniVol*v.25'
-#def timpaniLow3=        'timpaniVol*v.35'
-#def timpaniV1=          'timpaniVol*v.55'
-#def timpaniV2=          'timpaniVol*v.7'
-#def timpaniV3=          'timpaniVol*v.85'
+#def contrabassMed=      'contrabassVol*v.78'
+#def contrabassLo=       'contrabassVol*v.65'
+#def contrabassQuickLo=  'contrabassVol*v.96'
+#def stringsVol=         v47
+#def backingStringsVol=  v40
+#def timpaniVol=         v108
+#def timpaniLow1=        'timpaniVol*v.20'
+#def timpaniLow2=        'timpaniVol*v.33'
+#def timpaniLow3=        'timpaniVol*v.46'
+#def timpaniV1=          'timpaniVol*v.64'
+#def timpaniV2=          'timpaniVol*v.76'
+#def timpaniV3=          'timpaniVol*v.88'
 #def timpaniV4=          'timpaniVol*v1'
-#def timpaniV5=          'timpaniVol*v1.15'
-#def timpaniV6=          'timpaniVol*v1.3'
-#def timpaniV7=          'timpaniVol*v1.45'
-#def orchestraVol=       v40
-#def harpVol=            v31
+#def timpaniV5=          'timpaniVol*v1.075'
+#def timpaniV6=          'timpaniVol*v1.15'
+#def timpaniV7=          'timpaniVol*v1.225'
+#def orchestraVol=       v48
+#def harpVol=            v36
 
 #def harpLeft=  p30
 #def harpRight= p98

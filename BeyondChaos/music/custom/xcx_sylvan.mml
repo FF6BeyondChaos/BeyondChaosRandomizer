@@ -23,7 +23,7 @@
 #WAVE 0x2E 0x3D - was 0x8F hihats
 #WAVE 0x2F 0x6A - was 0x0F shaker
 
-#def init= t69 %x255 %v50 %b0,100 %f0,0
+#def init= t69 %v50 %b0,100 %f0,0
 
 #cdef ( %l1
 #cdef ) %l0
@@ -40,32 +40,32 @@
 ##def ep2= |7 o4 'e'
 #def org= @6 o4 'o'
 
-#def a= v16
-#def e= v24
-#def i= v16
-#def c= v24
-#def s= v34
-#def v= v48
-#def h= v32
-#def p= v96
-#def b= v12
-#def g= v18
-#def o= v12
+#def a= v20
+#def e= v30
+#def i= v20
+#def c= v30
+#def s= v43
+#def v= v60
+#def h= v40
+#def p= v120
+#def b= v15
+#def g= v23
+#def o= v15
 
-#def vf= v24,48
-#def hf= v24,32
+#def vf= v24,60
+#def hf= v24,40
 
 ##kick
-#drum "k"=5c |8 v64 p50
-#drum "k-"=5c |8 v40 p50
+#drum "k"=5c |8 v80 p50
+#drum "k-"=5c |8 v50 p50
 ##taiko layer1
-#drum "t"=4c |9 v80 p30
+#drum "t"=4c |9 v100 p30
 ##taiko layer2
-#drum "u"=4e |9 v80 p90
+#drum "u"=4e |9 v100 p90
 ##esnare
-#drum "n"=3a @4 v48 p50 %r20
+#drum "n"=3a @4 v60 p50 %r20
 ##congas
-#def congvol= v115
+#def congvol= v144
 #drum "c"= 6d+ |B 'congvol*v.16' p80
 #drum "c+"=6d+ |B 'congvol*v.32' p80
 #drum "d-"=5g  |B 'congvol*v.12' p80
@@ -85,24 +85,24 @@
 #drum *g-*=4e  |B 'congvol*v.08' p80
 #drum *g*= 4e  |B 'congvol*v.16' p80
 ##bells
-#def bellvol= v125
+#def bellvol= v156
 #drum "b"=5g |A 'bellvol*v.64' p40
 #drum "a"=5a |A 'bellvol*v.56' p40
 ##shaker
-#drum "q"=5g |F v16 %a11
-#drum "r"=5d+ |F v10 %a11
-#drum "s"=5c |F v10 %a11
+#drum "q"=5g |F v20 %a11
+#drum "r"=5d+ |F v13 %a11
+#drum "s"=5c |F v13 %a11
 ##hihats
-#def hatvol= v90
+#def hatvol= v113
 #drum "h"=6c |E 'hatvol*v.50' p85 %y6%s0
 #drum "i"=6c |E 'hatvol*v.33' p85 %y6%s0
 #drum "o"=5a |E 'hatvol*v.50' p85 %y2%s0
 #drum "p"=6c |E 'hatvol*v.50' p85 %y3%s0
 ##cymbal
-#drum "z"=5e |D v32 %a%a3
-#drum "y"=5e |D v56 %y%y17
+#drum "z"=5e |D v40 %a%a3
+#drum "y"=5e |D v70 %y%y17
 
-#def x=v16
+#def x=v20
 
 {1}
 'init' %e1

@@ -22,20 +22,20 @@
 #WAVE 0x2C 0x6F         was 0x85 Conga slap
 #WAVE 0x2D 0x9B         was 0x2D Guiro
 
-#def global= t110 %v50 %x240 %b0,70 %f0,0
+#def global= t110 %v50 %b0,70 %f0,0
 
-#def ebass= |0 v96 o4 %e0 %y3%s3 ##midi 000
-#def abass= |7 v48 o3 %e1 ##midi 001
+#def ebass= |0 v125 o4 %e0 %y3%s3 ##midi 000
+#def abass= |7 v62 o3 %e1 ##midi 001
 #def pizza= |4 o5 %e1 ##midi 002 + 003
 #def guitar= |3 'vg' o5 %e1 ##midi 004 + 005
-#def choir= |6 v64 o4 %e1 ##midi 006 + 061
+#def choir= |6 v83 o4 %e1 ##midi 006 + 061
 #def vibe= |1 'vv' o4 %y5%s1%r16 %e1 ##midi 007
-#def crystal= |2 v96 o4  %e1 ##midi 062 + 064
-#def flute= |5 v40 o4 %e1 ##midi 090
+#def crystal= |2 v125 o4  %e1 ##midi 062 + 064
+#def flute= |5 v52 o4 %e1 ##midi 090
 
-#def vg= v40
-#def vv= v32
-#def fv= v192,32
+#def vg= v52
+#def vv= v42
+#def fv= v192,42
 
 ##midi channels
 #def 01='flute' p64
@@ -64,35 +64,35 @@
 #def 24='ebass' p64
 
 ##shakers, midi c7/d7
-#drum "p"=5f+  |8 v48 p96 %r %e0
-#drum "q"=5f+  |8 v48 p96 %r29 %e0
-#drum "r"=5a   |8 v48 p96 %r29 %e0
-#drum "s"=5a   |8 v48 p96 %r29 %e0
-#drum "q+"=5a  |8 v28 p96 %r28 %e0
-#drum "r-"=5f+ |8 v48 p96 %r24 %e0
+#drum "p"=5f+  |8 v62 p96 %r %e0
+#drum "q"=5f+  |8 v62 p96 %r29 %e0
+#drum "r"=5a   |8 v62 p96 %r29 %e0
+#drum "s"=5a   |8 v62 p96 %r29 %e0
+#drum "q+"=5a  |8 v36 p96 %r28 %e0
+#drum "r-"=5f+ |8 v62 p96 %r24 %e0
 ##kick midi c3
-#drum "k"=5c |A v64 p64 %r %e0
+#drum "k"=5c |A v83 p64 %r %e0
 ##tom-tom, midi c5d5
-#drum "j"=4a |9 v12 p64 %r28 %e0
-#drum "t"=5d+ |9 v28 p64 %r29 %e1
-#drum "u"=5f |9 v28 p64 %r25 %e1
+#drum "j"=4a |9 v16 p64 %r28 %e0
+#drum "t"=5d+ |9 v36 p64 %r29 %e1
+#drum "u"=5f |9 v36 p64 %r25 %e1
 ##conga, midi e6f+6g+6/a6
-#drum "a"=5g+ |B v56 p28 %r %e0
-#drum "b"=6c |B v40 p28 %a12 %e0
-#drum "c"=5a+ |C v56 p28 %a %e0
-#drum "d"=5f+ |C v56 p28 %s30 %e0
-#drum "e"=5a+ |C v64 p28 %a %e1
-#drum "f"=5f+ |C v64 p28 %s30 %e1
-#drum "e-"=5a |C v48 p28 %a %e1
+#drum "a"=5g+ |B v73 p28 %r %e0
+#drum "b"=6c |B v52 p28 %a12 %e0
+#drum "c"=5a+ |C v73 p28 %a %e0
+#drum "d"=5f+ |C v73 p28 %s30 %e0
+#drum "e"=5a+ |C v83 p28 %a %e1
+#drum "f"=5f+ |C v83 p28 %s30 %e1
+#drum "e-"=5a |C v63 p28 %a %e1
 ##guiro, midi a3/a+3
-#drum "g"=4c |D v64 p64 %e1
+#drum "g"=4c |D v83 p64 %e1
 #drum "h"=4^ m18,244
-#drum "i"=4f |D v32 p16 %e0
+#drum "i"=4f |D v42 p16 %e0
 ##tom-tom loop @ midi e5
-#drum "v"=4g |9 v16 p64 %e1 %y%r23
-#drum "w"=4b |9 v16 p64 %e1 %a%y5%s2%r23
-#drum "x"=4f |9 v16 p64 %e1 %y%r23
-#drum "y"=4c |9 v16 p64 %e1 %y%a12%r23
+#drum "v"=4g |9 v21 p64 %e1 %y%r23
+#drum "w"=4b |9 v21 p64 %e1 %a%y5%s2%r23
+#drum "x"=4f |9 v21 p64 %e1 %y%r23
+#drum "y"=4c |9 v21 p64 %e1 %y%a12%r23
 
 ## Drum pattern |.8.4.8.2.8.4.8.|.8.4.8.2.8.4.8.|.8.4.8.2.8.4.8.|.8.4.8.2.8.4.8.
 ## SHAKER       p  qr s p  qr s p  qr s p  qr s p  qr s p  qr s p  qr s pQ Rs s 
@@ -113,7 +113,7 @@
 
 #def bend= m12,2^32m12,-2^32
 #def bend1= m12,1^32m12,-1^32
-#def pv= v48
+#def pv= v62
 #def pe1='pv*v.86'
 #def pe2='pv*v.72'
 #def pe3='pv*v.58'
@@ -168,7 +168,7 @@ d1...r d1...
 [%r12d4%r22d+c %r9g4%r22d+d %r9f4%r22d+d %r12d+d24d+24d24%r20c>a+<
  %r9d4%r22d+c %r9g4%r22g+%r7a2%r12a+2^] m
 l16 [3 "k8a8bcd8efe8dcf8 k8a8bcd8"]
-'09'<%e1m48,18,223 v40 c4 m255,-3 ^4^1 m
+'09*v.625'<%e1m48,18,223 c4 m255,-3 ^4^1 m
 ;
 
 {4}
@@ -178,12 +178,12 @@ $
 l16 [6 "!!!o k8a8bcd8efe8dcf8 k8a8bcd8e24e-24e24cdefe8" ]
 ##17
 l8 '14'da'11''pv'a'14'af'11''pv'<c4'14'f  d+'11''pv'a+4'14'd+d'11''pv'a4'14'd
-'16'%a3< v24 m48,18,207 d+1[7^1] m
+'16*v.375'%a3< m48,18,207 d+1[7^1] m
 l16 ["!!!o p8.qr8s8"]
 ##28
 l16 [4 "!!!o k8a8bcd8efe8dcf8 k8a8bcd8e24e-24e24cdefe8" ]
 '07'%e1%r11> 'vg*v1.43' a+4.<a+4.>g+4.<g+4.>f+4.<f+4.>[3f4.a+4.]
-'08'<%e1m48,18,223 v40 g4 m255,-3 ^4^1 m
+'08*v.625'<%e1m48,18,223 g4 m255,-3 ^4^1 m
 ;
 
 {5}
@@ -194,7 +194,7 @@ r1r1r1r1
 '15'%y2%s0%r15< [16^4g4]
 ##17
 '12''pv' r4f4.g+2f+2f2
-'15'%a4< v24 l1 g+2..^ %a6 g^ g+^ g^
+'15*v.375'%a4< l1 g+2..^ %a6 g^ g+^ g^
 ^1
 ##28
 l16 [[3"!!!op8.qr8x8 p8.qr8y8"]"p8.qr8x8pq+kr-s8y8"]
@@ -210,7 +210,7 @@ r1r1r1r1
 '16'%y2%s0%r15%e1< [16^4d4]
 ##17
 '13''pv' r4e4.g2f2e2
-'19'%a4 v24 l1 c+2..^ %a6 c^ c+^ c^
+'19*v.375'%a4 l1 c+2..^ %a6 c^ c+^ c^
 ^1
 ##28
 [4"!!!o v4g8h8k8w8!m0,0g8h8 v4!m0,0g8h4w8!m0,0g8h8"]

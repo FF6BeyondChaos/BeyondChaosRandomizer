@@ -14,7 +14,7 @@
 #WAVE 0x2C 0x4B conga
 #WAVE 0x2D 0xBB hard bass hit
 
-#def global= t121 %v72 %b0,56 %f0,0 %x224
+#def global= t121 %v72 %b0,56 %f0,0 %x192
 
 #def fl1= |0 v80 p80 %e1 %r6 o5 m48,18,239
 #def fl2= |5 v24 p80 %e1 %a11%r15 o5 m48,18,239
@@ -30,25 +30,27 @@
 #drum "d"=4d |D v67 p64 %e1
 #drum "e"=4d |D v47 p64 %e1
 
-#drum "f"=4b |B v23 p96 %e0
-#drum "g"=4b |B v32 p96 %e0
-#drum "h"=4b |B v41 p96 %e0
-#drum "i"=4b |B v50 p96 %e0
-#drum "j"=4b |B v60 p96 %e0
-#drum "k"=4b |B v68 p96 %e0
-#drum "l"=4b |B v76 p96 %e0
-#drum "m"=4b |B v84 p96 %e0
-#drum "m+"=4b |B v100 p96 %e0
-#drum "n"=4d+ |B v115 p96 %e0
-#drum "o"=4a+ |B v115 p96 %e0
-#drum "p"=5g |B v115 p96 %e0
+#def tk= v75
 
-#drum "q"=3g |C v70 p32 %e0 %r24
-#drum "r"=4d |C v70 p32 %e0 %r24
-#drum "s"=4g |C v70 p32 %e0 %r24
-#drum "q+"=4a |C v70 p32 %e0 %r24
-#drum "r+"=4b |C v70 p32 %e0 %r24
-#drum "s+"=5c+ |C v70 p32 %e0 %r24
+#drum "f"=4b  |B 'tk*v.23'  p96 %e0
+#drum "g"=4b  |B 'tk*v.32'  p96 %e0
+#drum "h"=4b  |B 'tk*v.41'  p96 %e0
+#drum "i"=4b  |B 'tk*v.50'  p96 %e0
+#drum "j"=4b  |B 'tk*v.60'  p96 %e0
+#drum "k"=4b  |B 'tk*v.68'  p96 %e0
+#drum "l"=4b  |B 'tk*v.76'  p96 %e0
+#drum "m"=4b  |B 'tk*v.84'  p96 %e0
+#drum "m+"=4b |B 'tk*v1.00' p96 %e0
+#drum "n"=4d+ |B 'tk*v1.15' p96 %e0
+#drum "o"=4a+ |B 'tk*v1.15' p96 %e0
+#drum "p"=5g  |B 'tk*v1.15' p96 %e0
+
+#drum "q"=3g   |C v56 p32 %e0 %r24
+#drum "r"=4d   |C v56 p32 %e0 %r24
+#drum "s"=4g   |C v56 p32 %e0 %r24
+#drum "q+"=4a  |C v56 p32 %e0 %r24
+#drum "r+"=4b  |C v56 p32 %e0 %r24
+#drum "s+"=5c+ |C v56 p32 %e0 %r24
 
 #drum "t-"=5a |A v20 p48 %e1
 #drum "t"=5a |A v25 p48 %e1

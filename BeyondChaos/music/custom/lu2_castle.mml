@@ -5,7 +5,7 @@
 
 #SHORTNAME LU2 Castle Theme
 
-#def init= t90 %x180 %v40 %b0,70 %f0,0
+#def init= t90 %x216 %v40 %b0,70 %f0,0
 
 #WAVE 0x20 0x81 ## Trumpet
 #WAVE 0x21 0xA3 ## Bottle Blow
@@ -41,7 +41,7 @@
 #def earlyBellVol=        'bellVol*v.8'
 #def oboeVol=             v60
 #def dulcimerVol=         v75
-#def snareVol=            v80
+#def snareVol=            v62
 
 #def trumpet=    |0 o5 p64 %r0 %e1 m
 #def bottle=     |1 o4 p45 %r8 %e1 m
@@ -67,10 +67,10 @@
 
 
 #drum "c"=5g+ |9 v127             p80 %r17
-#drum "o"=5g  |8 'snareVol*v.25'  p64 %r15 %e0
-#drum "p"=5g  |8 'snareVol*v.375' p64 %r15 %e0
-#drum "q"=5g  |8 'snareVol*v.5'   p64 %r15 %e0
-#drum "r"=5g  |8 'snareVol*v.75'  p64 %r15 %e0
+#drum "o"=5g  |8 'snareVol*v.323' p64 %r15 %e0
+#drum "p"=5g  |8 'snareVol*v.435' p64 %r15 %e0
+#drum "q"=5g  |8 'snareVol*v.548' p64 %r15 %e0
+#drum "r"=5g  |8 'snareVol*v.774' p64 %r15 %e0
 #drum "s"=5g  |8 'snareVol'       p64 %r15 %e0
 
 

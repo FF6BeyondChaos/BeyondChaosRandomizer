@@ -18,7 +18,7 @@
 #WAVE 0x2B 0x2A - was 0x88 ride
 #WAVE 0x2C 0x2D - was 0x12 crash
 
-#def init= t160 %x255 %b0,85 %v40 %f0,0
+#def init= t160 %x248 %b0,85 %v40 %f0,0
 
 #def organ= |0 %e1 'o' p64 o5 m48,18,223 v0,18,151
 #def clean= |1 %e1 'c' p10 o6 mv ##%y1%s4%r12
@@ -26,28 +26,28 @@
 #def bass=  |3 %e0 'b' p64 o7 mv %y1%s4%r14
 #def organa=|4 %e1 'r' p64 o5 mv
 
-#def o= v72
-#def c= v44
-#def m= v88
-#def b= v64
-#def r= v48
+#def o= v86
+#def c= v53
+#def m= v106
+#def b= v77
+#def r= v58
 
 #def ov33= 'o*v.5'
 #def ov17= 'o*v.1'
 #def ov08= v0
 
-#drum "k"=5a %e0mv |8 v72 p60
-#drum "s+"=5e %e0mv |9 v80 p60 %y4%s4
-#drum "s"=5e %e0mv |9 v72 p60 %y4%s4
-#drum "t"=5e %e0mv |9 v65 p60 %y4%s4
-#drum "u"=5e %e0mv |9 v58 p60 %y4%s4
-#drum "v"=5e %e0mv |9 v43 p60 %y4%s4
-#drum "w"=5e %e0mv |9 v29 p60 %y4%s4
-#drum "c"=5d+ %e1mv |A v72 p75
-#drum "a"=4a %e1mv |A v72 p55
-#drum "a+"=4a %e1mv |A v96 p55
-#drum "r"=5a %e1mv |B v40 p70 ##%y4%s0%r17
-#drum "y"=5a %e1mv |C p100 %r20
+#drum "k"=5a %e0mv |8 v86 p60
+#drum "s+"=5e %e0mv |9 v96 p60 %y4%s4
+#drum "s"=5e %e0mv |9 v86 p60 %y4%s4
+#drum "t"=5e %e0mv |9 v78 p60 %y4%s4
+#drum "u"=5e %e0mv |9 v70 p60 %y4%s4
+#drum "v"=5e %e0mv |9 v52 p60 %y4%s4
+#drum "w"=5e %e0mv |9 v35 p60 %y4%s4
+#drum "c"=5d+ %e1mv |A v86 p75
+#drum "a"=4a %e1mv |A v86 p55
+#drum "a+"=4a %e1mv |A v115 p55
+#drum "r"=5a %e1mv |B v48 p70 ##%y4%s0%r17
+#drum "y"=5f+ %e1mv |C v96 p100 %r20
  
 {1} 'init'
 'mute-o1' l16 
@@ -284,6 +284,6 @@ $[##10
 ;
 
 $9001 ## Chocobo sfx layer 1
-l16%e0p20@4vmv24v6,0%n1%c27[5c48]%n0 ]
+l16%e0p20@4vmv29v6,0%n1%c27[5c48]%n0 ]
 $9002 ## Chocobo sfx layer 2
-l16%e0p20m%p1@3v32o12m255,+3v0,1,191&21c12v%p0 ]
+l16%e0p20m%p1@3v38o12m255,+3v0,1,191&21c12v%p0 ]

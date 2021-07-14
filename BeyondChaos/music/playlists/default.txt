@@ -119,11 +119,13 @@ ff7_aerith:         celes*2, daryl, coin, rachel, awakening
 ff7_battle:         grandfinale, unforgiven, savethem
 ff7_battle_ff6:     grandfinale, unforgiven
 ff7_bronco:             chaos
+ff7_corel:          gau*2, narshe, martiallaw, ruintown
 ff7_electric:       chocobo*2, johnny
 ff7_mako:           omen3, zozo, ruin, train, magitek*2
 ff7_rebirth:        grandfinale, floating
 ff7_sadbar:         gau, martiallaw*2, ruintown
 ff7_temple:         omen3, espers, forest, tomb, dream
+ff8_battle:         grandfinale, assault, savethem
 ff8_laguna:         grandfinale, magitek
 ff8_world:          prelude, ruin, balance, forest
 ff9_battle:         grandfinale
@@ -134,6 +136,7 @@ ff9_gargan:         spinach, what*2, gogo, umaro
 ff9_hunt:           grandfinale, assault, savethem*2
 ff9_siege:          metamorphosis*2, grandfinale, assault, savethem
 ff9_treno:          spinach*2
+ff9_vivi:           spinach, strago*2, martiallaw
 ff10_via:           prelude, owzer, ruin, tomb*2, dream
 ff10_zanarkand:     prelude, celes, coin, ruin
 ff12_crystal:       omen3, espers*2, ruin, gate, ancient, phoenix
@@ -191,6 +194,7 @@ top_world1:         omen3, falcon, balance*2
 totr_battle:        grandfinale, unforgiven, serpent, magitek, engine
 totr_downfall:      omen3, shadow*2, zozo, tomb
 totr_sboss:         grandfinale, engine
+totr_underworld:    grandfinale, gate, magitek, floating*2, phoenix, ktower
 wa2_dungeon2:       zozo, martiallaw, mount2, gate*2, phoenix
 wa2_heimdal:        setzer, assault*2, savethem, gate
 xcx_sylvan:         omen3, espers, narshe, ruin*2, cave, ancient, dream, phoenix
@@ -325,7 +329,6 @@ ff5_world3:     omen3, celes, espers, awakening, gau, town_ruin, ruin, balance, 
 ff6_town2:      relm*2, johnny, moogles, strago, town, village
 ff7_5years:     omen3, empire*2, celes, daryl, zozo, narshe, ruin*2, train, forest, tomb
 ff7_boss:       I80, G60, boss*2, atma, grandfinale, unforgiven, magitek
-ff7_corel:      shadow, gau*2, zozo, narshe, martiallaw, town_ruin, ruin, dream
 ff7_costa:      prelude, spinachrag*2, town, veldt, moogles, village
 ff7_desert:     prelude, omen3, gau, ruin*2, train, tomb, zozo, cave
 ff7_gun:        I15, G70, grandfinale, troops, assault, savethem*2, floating, bat3, bat4
@@ -339,7 +342,6 @@ ff7_reunion:    omen3, owzer, strago, ruin, train, espers, serpent, forest, drea
 ff7_snow:       W4, narshe, ruin*2, espers, serpent, forest, W:prelude*2, W:omen3, W:daryl, W:coin, W:gau, W:what, W:zozo, W:town_ruin, W:mountain, W:train
 ff7_tifa:       prelude, rachel, relm*2, awakening*2, town_ruin
 ff7_weapon:     I85, G80, boss, atma, metamorphosis, catastrophe*2, assault*2, savethem, ktower, bat3, bat4
-ff8_battle:     I15, G40, battle*2, metamorphosis, grandfinale, catastrophe, assault, bat2, bat3
 ff8_boss:       I85, G65, boss*2, grandfinale, floating
 ff8_heresy:     H2, empire, kefka, catastrophe, owzer, ruin, fanatics*2
 ff8_horizon:    prelude, coin, gau, town*2, town_ruin, village
@@ -514,7 +516,6 @@ totr_ruins:     H2, shadow, gogo, zozo, serpent, train, tomb, gate, ancient, eng
 totr_ship:      setzer, figaro, returners*2
 totr_sion:      prelude, awakening, forest, train, dream*2, cyan, gau
 totr_spirit:    I99, G75, atma*2, grandfinale, dmad5
-totr_underworld: H2, zozo, train, gate, ancient, magitek, engine, floating*2, phoenix, ktower
 totr_wind:      prelude, relm, awakening, strago, village, mountain, moogles
 totr_worlds:    omen3, celes, rachel*2, awakening, ruin, serpent, tomb, dream, phoenix, balance
 tyr_theme:      omen3, assault, magitek, floating, dream, ktower
@@ -554,6 +555,7 @@ ff9_battle:         E25, battle, bat2, bat3
 top_battle:         E27, battle, bat2, bat3
 7th_darkness:       E30,         bat2, bat3
 ff7_battle:         E30, battle, bat2, bat3, bat4
+ff8_battle:         E30, battle, bat2, bat3
 totr_battle:        E35, battle, bat2, bat3
 arc_battle:         E38, battle, bat2, bat3, bat4
 sf2_balrog:         E40,         bat2, bat3
@@ -568,6 +570,7 @@ sd1s_courage:       E75,               bat3, bat4
 ff9_hunt:           E75,               bat3, bat4
 ot_treasure:        E77,         bat2, bat3, bat4
 bof2_battle2:       E80,         bat2, bat3
+totr_underworld:    E80,                     bat4    
 sd2_fortress:       E82,                     bat4
 totr_sboss:         E85,               bat3, bat4
 lu2_savior:         E85,                     bat4
@@ -588,6 +591,7 @@ ff7_battle_ff6:     I00, mboss
 ff5_hurry:          I02, mboss
 ct_tension:         I05, mboss
 ff7_battle:         I15, mboss
+ff8_battle:         I15, mboss
 ff9_siege:          I15, mboss
 pw_cornered:        I25, mboss
 ff8_laguna:         I25, mboss, boss, atma

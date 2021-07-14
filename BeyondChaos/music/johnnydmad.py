@@ -1,22 +1,51 @@
+# JOHNNYDMAD - developer tool/test interface for FF6 music randomization
+
+# *** READ THIS BEFORE EDITING THIS FILE ***
+
+# This file is part of the johnnydmad project.
+# ( https://github.com/emberling/johnnydmad )
+# johnnydmad is designed to be used inside larger projects, e.g.
+# Beyond Chaos, Beyond Chaos Gaiden, or potentially others in the future.
+# If you are editing this file as part of "Beyond Chaos" or any other
+# container project, please respect the independence of these projects:
+# - Keep johnnydmad project files in a subdirectory, and do not modify
+#   the directory structure or mix in arbitrary code files specific to
+#   your project.
+# - Keep changes to johnnydmad files in this repository to a minimum.
+#   Don't make style changes to code based on the standards of your
+#   containing project. Don't remove functionality that you feel your
+#   containing project won't need. Keep it simple so that code and
+#   changes can be easily shared across projects.
+# - Major changes and improvements should be handled through, or at
+#   minimum shared with, the johnnydmad project, whether through
+#   submitting changes or through creating a fork that other johnnydmad
+#   maintainers can easily see and pull from.
+
 import configparser
 import os
 import re
 import sys
 import traceback
-import music.musicrandomizer
 
 from collections import Counter
 from operator import itemgetter
 
-from music.mfvitools.insertmfvi import byte_insert, int_insert
-from music.mfvitools.mml2mfvi import mml_to_akao
+# This construction is required for devtool functionality. Do not remove.
+try:
+    from .musicrandomizer import *
+    from .mfvitools.insertmfvi import byte_insert, int_insert
+    from .mfvitools.mml2mfvi import mml_to_akao
+except ImportError:
+    from musicrandomizer import *
+    from mfvitools.insertmfvi import byte_insert, int_insert
+    from mfvitools.mml2mfvi import mml_to_akao
 
     
 ## TO DO LIST (* = essentially complete)
 # * finish ripping FF6 vanilla songs
 # * opera mode - johnnydmad side
 # * tierboss - coding
-# - tierboss - mml setup
+# * tierboss - mml setup
 # * tierboss insertion devtool
 # - sfx insertion devtool
 # * write metadata to spoiler
@@ -29,8 +58,8 @@ from music.mfvitools.mml2mfvi import mml_to_akao
 # - external ignorelist for songs and/or sources
 # * ensure function with pyinstaller
 # - reconcile music player w/ Myria disable sound hack
-# - integration with BC randomizer
-# - opera mode - beyondchaos side
+# * integration with BC randomizer
+# * opera mode - beyondchaos side
 # - allow music sourced from ROM, if specified by host / integrate mfvi2mml
 # - allow selection of less intrusive mode(s) in jdm launcher (no event edits, e.g.)
 #       NOTE: the existing event edits remove the save point tutorial event!
@@ -47,11 +76,22 @@ def print_progress_bar(cur, max):
     print(f"\r[{boxtext:<50}] {cur}/{max}", end="", flush=True)
     
 def johnnydmad():
-    print("johnnydmad EX5 early test")
+    print("johnnydmad EX5 test console")
     
-    print("using ff6_plus.smc as source")
-    with open("ff6_plus.smc", "rb") as f:
-        inrom = f.read()
+    try:
+        print("using ff6.smc as source")
+        with open("ff6.smc", "rb") as f:
+            inrom = f.read()
+    except IOError:
+        while True:
+            print("File not found. Enter source ROM filename:")
+            fn = input()
+            try:
+                with open(fn, "rb") as f:
+                    inrom = f.read()
+            except:
+                continue
+            break
         
     f_chaos = False
     kw = {}

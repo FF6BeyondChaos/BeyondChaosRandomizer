@@ -16,7 +16,7 @@
 #WAVE 0x2D 0x94 ## Oboe A5
 
 
-#def init= t135 %x180 %v40 %b0,85 %f0,0
+#def init= t135 %x208 %v40 %b0,85 %f0,0
 
 #def harpVol=    v95
 #def oboeVol=    v80

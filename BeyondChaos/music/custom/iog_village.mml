@@ -16,13 +16,13 @@
 ## Original tempo is 36.6, but it essentially treats a beat as a measure.
 ## It's impossible to get the chocobo sound to come out at a decent speed then.
 ## So we'll multiply original tempo by 4 and adjust note durations.
-#def init= t146 %x220 %v20 %b0,70 %f0,0
+#def init= t146 %v20 %b0,70 %f0,0
 
 ## This always gets multiplied by no more than 0.63
-#def flute_v= v140
+#def flute_v= v161
 ## This never gets multiplied by more than 1, and the calculation macro will roll it down to 127 if needed
-#def guit_v= v130
-#def vibra_v= v20
+#def guit_v= v150
+#def vibra_v= v23
 ## This factor is multiplied by 3 and 4 respectively, for the two chocobo channels
 #def kwehVolFactor=v6
 
@@ -41,10 +41,10 @@
 #def guit_92=   'guit_v*v.53'
 #def guit_75=   'guit_v*v.35'
 
-#def guit=  |0 o5 'guit_v*v1'      %e1 %r16 %s4 m
+#def guit=  |0 o5     %e1 %r16 %s4     m
 
-#def flute= |1 o6 'flute_v' p64 %e1 %r10 %s2 %y2 m48,40,222
-#def vibra= |2 o6 'vibra_v' p64 %e1 %r10 %s2 %y3 m48,40,222
+#def flute= |1 o6 p64 %e1 %r10 %s2 %y2 m48,40,222
+#def vibra= |2 o6 p64 %e1 %r10 %s2 %y3 m48,40,222
 #def guit1= 'guit' p85
 #def guit2= 'guit' p75
 #def guit3= 'guit' p64
@@ -59,14 +59,14 @@
 #def kwehL2= p17  ~[j1,9002]~ r8 `r8`
 
 ## #drum "k"=5a  |8 v120 p75  %r0  %e0 m
-#drum  "s"=5b- |8 v40 p43 %r0 %e0 m
+#drum  "s"=5b- |8 v46 p43 %r0 %e0 m
 ## 3 different conga notes, with various volumes.
 ## We'll use c, k and q for the notes, with adjacent letters for higher volumes
-#drum  "c"=5d  |9 v40 p85 %r20 %e0 m
-#drum  "k"=5e- |9 v40 p85 %r20 %e0 m
-#drum  "l"=5e- |9 v56 p85 %r20 %e0 m
-#drum  "q"=5e  |9 v56 p85 %r20 %e0 m
-#drum  "r"=5e  |9 v75 p85 %r20 %e0 m
+#drum  "c"=5d  |9 v46 p85 %r20 %e0 m
+#drum  "k"=5e- |9 v46 p85 %r20 %e0 m
+#drum  "l"=5e- |9 v64 p85 %r20 %e0 m
+#drum  "q"=5e  |9 v64 p85 %r20 %e0 m
+#drum  "r"=5e  |9 v86 p85 %r20 %e0 m
 ## volumes are gonna be 20v30v50
 
 {1}
@@ -196,7 +196,7 @@ r4
 $
 ## Guitar 4, originally track 4
 'guit4'
-l2
+l2 'guit_100'
 rg2.r4>b<f+>a1ar4 eg2.<gr4c>g<a
 ## 9
 ^4r4>gg2.<g>r4f+f+2.<d rcf+g>r4gg2.<c>r4 f+f+2.<dr'guit_92'cf+g r'guit_75'>b2.<c

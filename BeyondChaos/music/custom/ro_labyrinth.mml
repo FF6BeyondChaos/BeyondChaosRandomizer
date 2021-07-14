@@ -23,7 +23,7 @@
 #WAVE 0x2D 0xBA ## Reverse Cymbal
 
 ## This sets the initial tempo, but it will change during the song
-#def init= t113 %x255 %v40 %b0,70 %f0,0
+#def init= t113 %v40 %b0,70 %f0,0
 
 #def melodyStringsVol=            v66
 #def supportStringsVol=           'melodyStringsVol*v1'

@@ -24,44 +24,55 @@
 #def okey= o5
 #def oodr= o5
 
-#def 1str1= v35p32|9%a10m144,18,223 'ostr'
-#def 1hrn2= v65p64|A%a15m48,18,207 'ohrn' %s5
-#def 1str3= v35p96|9%a13m24,30,201 'ostr'
-#def 1hrn4= v65p64|A%r17m48,18,207 'ohrn' %s5
-#def 1bas6= v80p64|6 'obas'
-#def 1str7= v45p64|9m144,18,223 'ostr'
-#def 8key1= v32p48|2%r14m 'okey'
-#def 8str1= v50p48|9m 'ostr'
-#def 8str2= v70p64|9m48,18,207 'ostr'
-#def 8pet3= v90p96|7m24,18,223 'opet'
-#def 8key4= v32p32|2%r14m 'okey'
-#def 8pet4= v100p96|7m24,18,223 'opet'
-#def 8key5= v32p32|2%r14m 'okey'
-#def 8dis7= v80p64|8m 'odis'
-#def 10str1= v55p48|9m 'ostr'
-#def 12str1= v80p64|9%a10m48,18,207 'ostr'
-#def 12str2= v70p64|9m48,18,207 'ostr'
-#def 12pet3= v90p96|7m48,18,223 'opet'
-#def 12dis7= v80p64|8m 'odis'
-#def 16str1= v30p96|9%a10m48,18,207 'ostr'
-#def 16str2= v70p64|9m48,18,207 'ostr' 
-#def 16key3= v48p32|2%r14m 'okey'
-#def 16hrn4= v70p64|Am48,18,207 'ohrn' %s5
-#def 16key5= v32p32|2%r14m 'okey'
-#def 16dis7= v80p64|8m 'odis'
-#def 19str1= v45p64|9%a10m48,18,207 'ostr'
-#def 23str1= v65p64|9%a10m48,18,207 'ostr'
-#def 23str2= v40p96|9m48,18,207 'ostr'
-#def 23str3= v80p64|9%a15m48,18,207 'ostr'
-#def 23str4= v45p96|9m48,18,207 'ostr'
-#def 23key5= v32p32|2%r14m 'okey'
-#def 23odr7= v90|5m48,18,207p64 'oodr'
+#def str= v95
+#def hrn= v95
+#def bas= v100
+#def key= v112
+#def dis= v100
+#def odr= v100
+#def pet= v95
+
+#def 1str1=  'str*v.35'p32|9%a10m144,18,223 'ostr'
+#def 1hrn2=  'hrn*v.65'p64|A%a15m48,18,207 'ohrn' %s5
+#def 1str3=  'str*v.35'p96|9%a13m24,30,201 'ostr'
+#def 1hrn4=  'hrn*v.65'p64|A%r17m48,18,207 'ohrn' %s5
+#def 1bas6=  'bas*v.80'p64|6 'obas'
+#def 1str7=  'str*v.45'p64|9m144,18,223 'ostr'
+#def 8key1=  'key*v.32'p48|2%r14m 'okey'
+#def 8str1=  'str*v.50'p48|9m 'ostr'
+#def 8str2=  'str*v.70'p64|9m48,18,207 'ostr'
+#def 8pet3=  'pet*v.72'p96|7m24,18,223 'opet'
+#def 8key4=  'key*v.32'p32|2%r14m 'okey'
+#def 8pet4=  'pet*v.80'p96|7m24,18,223 'opet'
+#def 8key5=  'key*v.32'p32|2%r14m 'okey'
+#def 8dis7=  'dis*v.80'p64|8m 'odis'
+#def 10str1= 'str*v.55'p48|9m 'ostr'
+#def 12str1= 'str*v.80'p64|9%a10m48,18,207 'ostr'
+#def 12str2= 'str*v.70'p64|9m48,18,207 'ostr'
+#def 12pet3= 'pet*v.72'p96|7m48,18,223 'opet'
+#def 12dis7= 'dis*v.80'p64|8m 'odis'
+#def 16str1= 'str*v.30'p96|9%a10m48,18,207 'ostr'
+#def 16str2= 'str*v.70'p64|9m48,18,207 'ostr' 
+#def 16key3= 'key*v.48'p32|2%r14m 'okey'
+#def 16hrn4= 'hrn*v.70'p64|Am48,18,207 'ohrn' %s5
+#def 16key5= 'key*v.32'p32|2%r14m 'okey'
+#def 16dis7= 'dis*v.80'p64|8m 'odis'
+#def 19str1= 'str*v.45'p64|9%a10m48,18,207 'ostr'
+#def 23str1= 'str*v.65'p64|9%a10m48,18,207 'ostr'
+#def 23str2= 'str*v.40'p96|9m48,18,207 'ostr'
+#def 23str3= 'str*v.80'p64|9%a15m48,18,207 'ostr'
+#def 23str4= 'str*v.45'p96|9m48,18,207 'ostr'
+#def 23key5= 'key*v.32'p32|2%r14m 'okey'
+#def 23odr7= 'odr*v.90'|5m48,18,207p64 'oodr'
+
+#def master= %x76
 
 {1}
-l16t110%b0,60%v70%x255%f0,0
+l16 t110 'master*%x2.55' %v70 %b0,60 %f0,0
 %e1 '1str7' r24r24r24e2  b4a+4^2  e2b4a2  f4g2d4  
 a+4^1  ^1
-$ %x245
+'master*%x2.45'
+$
 ##
 '8str2'>  d8.g8a+<dfe4c4  d8>a+g8. '8pet3' a32b32<c32d32e8.e8.e8
 '8str2'>  d8.g8a+<dfg4e4  f8d>a+8.  '8pet3' a32b32<c32d32e8.e8.e8

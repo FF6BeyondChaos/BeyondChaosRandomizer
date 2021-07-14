@@ -13,7 +13,7 @@
 #WAVE 0x29 0x5C ## Timpani
 #WAVE 0x2A 0x28 ## Tubular Bell
 
-#def init= t130 %x255 %v40 %b0,70 %f0,0
+#def init= t130 %x240 %v40 %b0,70 %f0,0
 
 #def leadViolinVol=    v127
 #def supportViolinVol= v94

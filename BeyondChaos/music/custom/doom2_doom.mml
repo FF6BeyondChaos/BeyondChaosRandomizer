@@ -20,7 +20,7 @@
 #WAVE 0x2E 0x6b - was 0x5F Maracas
 #WAVE 0x2D 0x8c - was 0x5E Claves
 
-#def init= t76 %x240 %f0,0 ? %v50 %b0,58 ? _ %v40 %b0,100 _
+#def init= t76 %x232 %f0,0 ? %v50 %b0,58 ? _ %v40 %b0,100 _
 
 #def moan1a= o2 |1 p32 v127 %r14 f2
 #def moan2a= o2 |2 p96 v127 %r14 f2
@@ -28,7 +28,7 @@
 #def moan2b= o2 |2 p32 v127 %a4%r12 f8. m48,-4 ^16^4
 
 #def ts= o5 's' |0 p64 m48,18,207 v0,32,207 %a3
-#def bs= o7 'b' |4 p64 m %r5 ##%y0%s2%r5
+#def bs= o7 'b' |4 p64 m %a10%r5 ##%y0%s2%r5
 #def or= o4 'o' |2 m48,18,223
 #def ep= o5 'p' @3 m48,18,199 %y3%s3%r1
 #def sw= o5 'y' |3 m48,18,239 %y0%s5%r9

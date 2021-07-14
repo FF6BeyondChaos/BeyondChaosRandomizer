@@ -16,22 +16,22 @@
 #WAVE 0x2E 0x3B - was 0x5A - hihat open
 #WAVE 0x2F 0x3A - was 0x0F - hihat closed
 
-#def global= t75 %x240 %v40 %b0,85 %f0,0
+#def global= t75 %x192 %v40 %b0,85 %f0,0
 
-#def saw= |0 o5 v56 m24,18,239
-#def dlc= |1 o6 v64 %y3%s2 m24,18,223
-#def cho= |2 o5 v60 m24,18,203 %a10%r12
-#def cim= |3 o5 v64 m %y3%s2
-#def bas= |4 o7 v48 m %y0%s3%r11
-#def fid= |5 o5 v64 m24,18,239
+#def saw= |0 o5 v84 m24,18,239
+#def dlc= |1 o6 v96 %y3%s2 m24,18,223
+#def cho= |2 o5 v90 m24,18,203 %a10%r12
+#def cim= |3 o5 v96 m %y3%s2
+#def bas= |4 o7 v72 m %y0%s3%r11
+#def fid= |5 o5 v96 m24,18,239
 
-#drum "k"=5f |8 v64 p64 m %e0
-#drum "s"=5f |9 v64 p64 m %e1 
-#drum "t"=5a |9 v64 p74 m %e1 
-#drum "h"=5a |F v48 p74 m %e1
-#drum "i"=5g |E v48 p74 m %e0
-#drum "o"=5e |E v48 p94 m %e0
-#drum "r"=5b |E v64 p74 m %e1
+#drum "k"=5f |8 v96 p64 m %e0
+#drum "s"=5f |9 v96 p64 m %e1 
+#drum "t"=5a |9 v96 p74 m %e1 
+#drum "h"=5a |F v72 p74 m %e1
+#drum "i"=5g |E v72 p74 m %e0
+#drum "o"=5e |E v72 p94 m %e0
+#drum "r"=5b |E v96 p74 m %e1
  
 {1}$
 'global' %e1

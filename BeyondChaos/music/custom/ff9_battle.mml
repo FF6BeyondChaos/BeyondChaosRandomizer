@@ -20,7 +20,7 @@
 #WAVE 0x2D  0x3C      -- was 0x8F hihat
 #WAVE 0x2E  0x2D      -- was 0x8E crash
 
-#def global= t160 %x240 %v40 %b0,85 %f0,0
+#def global= t160 %v40 %b0,85 %f0,0
 
 #def syb= |0 o5 %a13%y2%s5%r5
 #def pet= |1 o5 ~%y3%s3~

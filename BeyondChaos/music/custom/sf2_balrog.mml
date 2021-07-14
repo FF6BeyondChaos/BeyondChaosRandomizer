@@ -18,16 +18,16 @@
 #def global=t139 %v50 %b0,70 %x224 %f0,0
 
 #def lead=|0 o5 v56 m0,48,239 v0,18,180 %y2%s4%r1
-#def pad=|1 o5 v77 m0,48,207v %y2%s3
-#def pet=|2 o5 v56 m
+#def pad=|1 o5 v80 m0,48,207v %y2%s3
+#def pet=|2 o5 v58 m
 #def bell=|3 o5 v56 m %y3%s3
-#def bass=|4 o4 v80 m
+#def bass=|4 o4 v64 m
 
 #drum "k"=5g |8 v96 p64
 #drum "s"=5b |9 v96 p64
-#drum "t"=5a |D v96 p96
-#drum "u"=5d |D v96 p64
-#drum "v"=4a |D v96 p32
+#drum "t"=5a |D v64 p96
+#drum "u"=5d |D v64 p64
+#drum "v"=4a |D v64 p32
 #drum "h"=5f |A v64 p96 %r29
 #drum "o"=5g |A v64 p96 %r
 #drum "y"=5g+ |B v96 p16 %r17

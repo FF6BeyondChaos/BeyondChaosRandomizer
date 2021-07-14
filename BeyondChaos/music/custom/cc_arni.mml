@@ -17,26 +17,26 @@
 #def piccolo= |2 o3
 #def bass= |3 o6 %y0%s3 %r10
 
-#def gv= v68
-#def fv= v52
-#def sv= v20
-#def bv= v96
-#def sf= v100,20
+#def gv= v88
+#def fv= v68
+#def sv= v26
+#def bv= v125
+#def sf= v100,26
 #def sa= 'sv*v.4''sf'
 
 #cdef ( %l1
 #cdef ) %l0
 
-#drum "b"=5d+ |4 v43 p63 %r25 m18,9
-#drum "c"=5g+ |4 v43 p63 %r26 m12,7
-#drum "d"=6d+ |4 v43 p63 %r26
-#drum "b-"=5d+ |4 v43 p63 %r25 m18,9
-#drum "c-"=5g+ |4 v43 p63 %r26 m12,7
-#drum "d-"=6d+ |4 v43 p63 %r26
+#drum "b"= 5d+ |4 v56 p63 %r25 m18,9
+#drum "c"= 5g+ |4 v56 p63 %r26 m12,7
+#drum "d"= 6d+ |4 v56 p63 %r26
+#drum "b-"=5d+ |4 v56 p63 %r25 m18,9
+#drum "c-"=5g+ |4 v56 p63 %r26 m12,7
+#drum "d-"=6d+ |4 v56 p63 %r26
 
 
 {1}
-l16t120%v50%x255%b0,100%f0,0%e1
+l16t120%v50%b0,100%f0,0%e1
 'gv'p63'guitar-o1' a+4<
 $1 g4^8g32g+g32f8d+8f2  
 d+4g4^8g32g+g32f8d+8  f4a+4^8g+8g4  ^8g32g+g32f8d+8f2  d+4f2^8r2  
