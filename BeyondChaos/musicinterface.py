@@ -11,7 +11,7 @@ from locationrandomizer import get_locations, get_location
 from dialoguemanager import set_dialogue_var, set_pronoun, patch_dialogue, load_patch_file
 from utils import utilrandom as random, open_mei_fallback as open
 
-from music.johnnydmad import add_music_player
+from music.jukebox import add_music_player
 from music.musicrandomizer import process_music, process_formation_music_by_table, process_map_music, get_legacy_import, get_spc_memory_usage, get_music_spoiler as get_spoiler, initialize as johnnydmad_initialize
 
 from music.mfvitools.insertmfvi import byte_insert
@@ -41,7 +41,7 @@ def randomize_music(fout, options_, opera=None, form_music_overrides={}):
         data = process_map_music(data)
     data = process_formation_music_by_table(data, form_music_overrides=form_music_overrides, kan_mode=kan_mode)
     
-    data = add_music_player(data, metadata)
+    data = add_music_player(data, metadata, jukebox_title="BEYOND CHAOS JUKEBOX")
     
     fout.seek(0)
     fout.write(data)
