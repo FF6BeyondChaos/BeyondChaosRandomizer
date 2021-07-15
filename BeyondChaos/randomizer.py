@@ -246,16 +246,30 @@ def rewrite_title(text: str):
 
 
 def rewrite_checksum(filename: str = None):
+    # This assumes the file is 32, 40, 48, or 64 Mbit.
     if filename is None:
         filename = outfile
     MEGABIT = 0x20000
     f = open(filename, 'r+b')
-    subsums = [sum(f.read(MEGABIT)) for _ in range(32)]
+    f.seek(0, 2)
+    file_mbits = f.tell() // MEGABIT
+    f.seek(0)
+    subsums = [sum(f.read(MEGABIT)) for _ in range(file_mbits)]
+    while len(subsums) % 32:
+        subsums.extend(subsums[32:file_mbits])
+        if len(subsums) > 64:
+            subsums = subsums[:64]
     checksum = sum(subsums) & 0xFFFF
     f.seek(0xFFDE)
     write_multi(f, checksum, length=2)
     f.seek(0xFFDC)
     write_multi(f, checksum ^ 0xFFFF, length=2)
+    if file_mbits > 32:
+        f.seek(0x40FFDE)
+        write_multi(f, checksum, length=2)
+        f.seek(0x40FFDC)
+        write_multi(f, checksum ^ 0xFFFF, length=2)
+        
     f.close()
 
 
@@ -4339,6 +4353,26 @@ def expand_rom():
         expand_sub.bytestring = bytes([0x00] * (0x400000 - fout.tell()))
         expand_sub.write(fout)
 
+def validate_rom_expansion():
+    # Some randomizer functions may expand the ROM past 32mbit. (ExHIROM)
+    # Per abyssonym's testing, this needs bank 00 to be mirrored in bank 40.
+    # While the modules that may use this extra space already handle this,
+    # BC may make further changes to bank 00 afterward, so we need to mirror
+    # the final version.
+    fout.seek(0, 2)
+    romsize = fout.tell()
+    if romsize > 0x400000:
+        # Standardize on 48mbit for ExHIROM, for now
+        if romsize < 0x600000:
+            expand_sub = Substitution()
+            expand_sub.set_location(romsize)
+            expand_sub.bytestring = bytes([0x00] * (0x600000 - romsize))
+            expand_sub.write(fout)
+            
+        fout.seek(0)
+        bank = fout.read(0x10000)
+        fout.seek(0x400000)
+        fout.write(bank)
 
 def diverge(fout: BinaryIO):
     for line in open(DIVERGENT_TABLE):
@@ -5102,6 +5136,7 @@ def randomize(args: List[str]) -> str:
     write_location_names(fout)
 
     rewrite_title(text="FF6 BCEX %s" % seed)
+    validate_rom_expansion()
     fout.close()
     rewrite_checksum()
 
