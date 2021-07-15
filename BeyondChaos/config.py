@@ -27,7 +27,6 @@ def readFlags():
         return
     return flags
 
-
 def readConfig():
     config.read(Path(os.getcwd()+"/config.ini"))
     CoreVersion = config.get('Version', 'Core') # -> "value1"

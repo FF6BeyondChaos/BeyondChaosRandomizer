@@ -247,16 +247,16 @@ NORMAL_CODES = [
     Code('supernatural', "SUPER NATURAL MAGIC MODE", "Makes it so that any character with the Magic command will have natural magic.", "battle"),
     Code('canttouchthis', "INVINCIBILITY", "All characters have 255 Defense and 255 Magic Defense, as well as 128 Evasion and Magic Evasion.", "battle"),
     Code('naturalstats', "NATURAL STATS MODE", "No Espers will grant stat bonuses upon leveling up.", "battle"),
-    Code('exp', "3 Times Exp", "All battles will award 3 times exp", "battle"),
-    Code('gp', "3 Times gp", "All battles will award 3 times gp", "battle"),
-    Code('mps', "3 Times magic points", "All battles will award 3 times magic points", "battle"),
+    Code('exp', "3 Times Exp", "All battles will award 3 times exp", "beta"),
+    Code('gp', "3 Times gp", "All battles will award 3 times gp", "beta"),
+    Code('mps', "3 Times magic points", "All battles will award 3 times magic points", "beta"),
 
     Code('airship', "AIRSHIP MODE", "The party will have access to the airship immediately after leaving Narshe. Chocobo stables can also be used to acquire the airship. Doing events out of order can cause softlocks.", "gamebreaking"),
     
     Code('bsiab', "UNBALANCED MONSTER CHESTS MODE", "Reverts the monster-in-a-box selection algorithm to be (mostly) the same as versions prior to EX v3.", "major"),
     Code('llg', "LOW LEVEL GAME MODE", "Stands for Low Level Game. No encounters will yield any Experience Points.", "major"),
     Code('mimetime', 'ALTERNATE GOGO MODE', "Gogo will be hidden somewhere in the world of ruin disguised as another character. Bring that character to him to recruit him.", "major"),
-    Code('nomiabs', 'NO MIAB MODE', "Chests will never have monster encounters in them", "major"),
+    Code('nomiabs', 'NO MIAB MODE', "Chests will never have monster encounters in them", "beta"),
 
     Code('dancingmaduin', "RESTRICTED ESPERS MODE", "Restricts Esper usage such that most Espers can only be equipped by one character. Also usually changes what spell the Paladin Shld teaches.", "major"),
     Code('darkworld', "SLASHER'S DELIGHT MODE", "Drastically increases the difficulty of the seed, akin to a hard mode. Mostly meant to be used in conjunction with the madworld code.", "major"),
@@ -289,7 +289,7 @@ NORMAL_CODES = [
     Code('thescenarionottaken', 'DIVERGENT PATHS MODE', "Changes the way the 3 scenarios are split up.", "experimental"),
     Code('worringtriad', "START IN WOR", "The player will start in the World of Ruin, with all of the World of Balance treasure chests, along with a guaranteed set of items, and more Lores.", "major"),
     
-    Code('desperation', "When all options fail", "When the adventurer back is up against the wall. Break the wall.", "major"),
+    Code('desperation', "When all options fail", "When the adventurer back is up against the wall. Break the wall.", "beta"),
     #Code('sixtytwoqd', "version 62 randomizer", "For quickdraw only, run version 62 of the randomizer", "beta"),
 ]
 
