@@ -1031,7 +1031,7 @@ def process_formation_music_by_table(data, form_music_overrides={}, kan_mode=Fal
     o_epacks = 0xF5000
     
     tablefile = "formationmusic_kan.txt" if kan_mode else "formationmusic.txt"
-    with open_resource(os.path.join(TABLE_PATH,"formationmusic_kan.txt"), "r") as f:
+    with open_resource(os.path.join(TABLE_PATH, tablefile), "r") as f:
         tbl = f.readlines()
     
     table = []

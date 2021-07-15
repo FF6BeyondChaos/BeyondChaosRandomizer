@@ -56,7 +56,7 @@ class Window(QWidget):
 
         # values to be sent to Randomizer
         self.romText = ""
-        self.version = "4"
+        self.version = "5"
         self.mode = "normal" # default
         self.seed = ""
         self.flags = []
@@ -84,7 +84,7 @@ class Window(QWidget):
 
         # array of preset flags and codes
         self.supportedPresets = ["newplayer", "intermediateplayer", "advancedplayer", "raceeasy", "racemedium", "raceinsane"]
-        # dictionay of game presets from drop down
+        # dictionary of game presets from drop down
         self.GamePresets = {}
 
         #tabs names for the tabs in flags box
@@ -269,18 +269,18 @@ class Window(QWidget):
         topHBox.addWidget(self.presetBox,alignment = QtCore.Qt.AlignLeft)
         
         # ---- Update Button ---- #
-        updateButton = QPushButton("Check for Updates")
-        updateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
-        width = 250
-        height = 60
-        updateButton.setMaximumWidth(width)
-        updateButton.setMaximumHeight(height)
-        updateButton.clicked.connect(lambda: self.update())
-        updateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-        effect = QGraphicsDropShadowEffect()
-        effect.setBlurRadius(3)
-        updateButton.setGraphicsEffect(effect)
-        topHBox.addWidget(updateButton,alignment = QtCore.Qt.AlignLeft)
+        #updateButton = QPushButton("Check for Updates")
+        #updateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
+        #width = 250
+        #height = 60
+        #updateButton.setMaximumWidth(width)
+        #updateButton.setMaximumHeight(height)
+        #updateButton.clicked.connect(lambda: self.update())
+        #updateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+        #effect = QGraphicsDropShadowEffect()
+        #effect.setBlurRadius(3)
+        #updateButton.setGraphicsEffect(effect)
+        #topHBox.addWidget(updateButton,alignment = QtCore.Qt.AlignLeft)
 
         # ---- Mode Description ---- #
         gameModeDescriptionLabel = QLabel("Game Mode Description:")
@@ -556,11 +556,11 @@ class Window(QWidget):
     def saveFlags(self):
         text, okPressed = QInputDialog.getText(self, "Save Seed", "Enter a name for this flagset", QLineEdit.Normal, "")
         if okPressed and text != '':
-            self.GamePresets[text] = self.flagString.text()
+            self.GamePresets[text] = (self.flagString.text() + "|" + self.mode)
             #flagString = self.flagString.text()
             #for flag in self.flags:
             #    flagString += flag + " "
-            config.Writeflags(text, self.flagString.text())
+            config.Writeflags(text, (self.flagString.text() + "|" + self.mode))
             index = self.presetBox.findText(text)
             if index == -1:
                 self.presetBox.addItem(text)
@@ -577,7 +577,6 @@ class Window(QWidget):
             for text, flags in flagset.items():
                 self.GamePresets[text] = flags
 
-
     # delete preset.  Dialog box confirms users choice to delete.  check is
     # done to ensure file
     #   exists before deletion is attempted.
@@ -593,69 +592,64 @@ class Window(QWidget):
 
     def updateGameDescription(self):
         self.modeDescription.clear()
+        modes = {0: ("Normal", "normal"), 1: ("Race - Kefka @ Narshe", "katn"),
+                 2: ("Ancient Cave", "ancientcave"),
+                 3: ("Speed Cave", "speedcave"), 4: ("Race - Randomized Cave", "racecave"),
+                 5: ("Race - Dragon Hunt", "dragonhunt")}
         index = self.modeBox.currentIndex()
-        for item in self.GameModes.items():
-            if index == 0:
-                if item[0] == "Normal":
-                    self.modeDescription.setText(item[1])
-                    self.mode = "normal"
-            elif index == 1:
-                if item[0] == "Race - Kefka @ Narshe":
-                    self.modeDescription.setText(item[1])
-                    self.mode = "katn"
-            elif index == 2:
-                if item[0] == "Ancient Cave":
-                    self.modeDescription.setText(item[1])
-                    self.mode = "ancientcave"
-            elif index == 3:
-                if item[0] == "Speed Cave":
-                    self.modeDescription.setText(item[1])
-                    self.mode = "speedcave"
-            elif index == 4:
-                if item[0] == "Race - Randomized Cave":
-                    self.modeDescription.setText(item[1])
-                    self.mode = "racecave"
-            elif index == 5:
-                if item[0] == "Race - Dragon Hunt":
-                    self.modeDescription.setText(item[1])
-                    self.mode = "dragonhunt"
-            else:
-                self.modeDescription.setText("Pick a Game Mode!")
+        self.modeDescription.setText(modes.get(index, "Pick a Game Mode!")[0])
+        self.mode = [x[1] for x in modes.values() if x[1] == modes.get(index)[1]][0]
 
+    def updatePresetDropdown(self, index=-1):
 
-    def updatePresetDropdown(self, index = -1):
-        
-        
+        modes = {0: ("Normal", "normal"), 1: ("Race - Kefka @ Narshe", "katn"),
+                 2: ("Ancient Cave", "ancientcave"),
+                 3: ("Speed Cave", "speedcave"), 4: ("Race - Randomized Cave", "racecave"),
+                 5: ("Race - Dragon Hunt", "dragonhunt")}
         text = self.presetBox.currentText()
         index = self.presetBox.findText(text)
         flags = self.GamePresets.get(text)
-        if index ==0:
+        if index == 0:
             self.clearUI()
             self.flagDescription.clear()
             self.flagDescription.setText("Pick a flag set!")            
         elif index == 1:
             self.flagDescription.setText("Flags designed for a new player")
             self.flagString.setText(flags)
+            self.mode = "normal"
+            self.modeBox.setCurrentIndex(0)
         elif index == 2:
             self.flagDescription.setText("Flags designed for an intermediate player")
             self.flagString.setText(flags)
+            self.mode = "normal"
+            self.modeBox.setCurrentIndex(0)
         elif index == 3:
             self.flagDescription.setText("Flags designed for an advanced player")
             self.flagString.setText(flags)
+            self.mode = "normal"
+            self.modeBox.setCurrentIndex(0)
         elif index == 4:
-            self.flagDescription.setText("Flags designed for easy difficulty races")
+            self.flagDescription.setText("Flags designed for KaN easy difficulty races")
             self.flagString.setText(flags)
+            self.mode = "katn"
+            self.modeBox.setCurrentIndex(1)
         elif index == 5:
-            self.flagDescription.setText("Flags designed for medium difficulty races")
+            self.flagDescription.setText("Flags designed for KaN medium difficulty races")
             self.flagString.setText(flags)
+            self.mode = "katn"
+            self.modeBox.setCurrentIndex(1)
         elif index == 6:
-            self.flagDescription.setText("Flags designed for insane difficulty races")
+            self.flagDescription.setText("Flags designed for KaN insane difficulty races")
             self.flagString.setText(flags)
+            self.mode = "katn"
+            self.modeBox.setCurrentIndex(1)
         else:
+            customflags = flags.split("|")[0]
+            mode = flags.split("|")[1]
             self.flagDescription.setText("Custom saved flags")
-            self.flagString.setText(flags)
-                
-                
+            self.flagString.setText(customflags)
+            self.mode = mode
+            self.modeBox.setCurrentIndex([k for k, v in modes.items() if v[1] == mode][0])
          
     def clearUI(self):
         self.seed = ""
@@ -727,11 +721,14 @@ class Window(QWidget):
             elif mode == "advancedplayer":
                 self.GamePresets['Advanced Player'] = "b c d e f g i j k l m n o p q r s t u w y z alasdraco capslockoff johnnydmad makeover notawaiter partyparty dancingmaduin bsiab mimetime randombosses"
             elif mode == "raceeasy":
-                self.GamePresets['Race - Easy'] = "b c d e f g i j k m n o p q r s t w y z capslockoff johnnydmad makeover notawaiter partyparty madworld"
+                self.GamePresets['KaN Race - Easy'] = "b c d e f g i j k m n o p q r s t w y z capslockoff johnnydmad makeover notawaiter partyparty madworld"
+                self.mode == "katn"
             elif mode == "racemedium":
-                self.GamePresets['Race - Medium'] = "b c d e f g i j k m n o p q r s t u w y z capslockoff johnnydmad makeover notawaiter partyparty electricboogaloo randombosses madworld"
+                self.GamePresets['KaN Race - Medium'] = "b c d e f g i j k m n o p q r s t u w y z capslockoff johnnydmad makeover notawaiter partyparty electricboogaloo randombosses madworld"
+                self.mode == "katn"
             elif mode == "raceinsane":
-                self.GamePresets['Race - Insane'] = "b c d e f g i j k m n o p q r s t u w y z capslockoff johnnydmad makeover notawaiter partyparty darkworld madworld bsiab electricboogaloo randombosses"
+                self.GamePresets['KaN Race - Insane'] = "b c d e f g i j k m n o p q r s t u w y z capslockoff johnnydmad makeover notawaiter partyparty darkworld madworld bsiab electricboogaloo randombosses"
+                self.mode == "katn"
 
     # Get seed generation parameters from UI to prepare for seed generation
     # This will show a confirmation dialog, and call the local Randomizer.py

@@ -7,8 +7,8 @@
 ########## ------------------
 #SHORTNAME CT Undergrd. Sewer
 
-#VARIANT ! enh
 #VARIANT _ tr
+#VARIANT ! 
 
 #WAVE 0x21 0x12 - was 0x7B - "harpsichord"
 #WAVE 0x22 0x59 - was 0x90 - pizza cat
@@ -115,7 +115,7 @@ v24v144,70%l1a4a+4b4.v12,10^r  r1  v24v144,70%l1a4a+4b4.v12,10^r
 _@4%s0 v80p64 %n1%c22 %e1%g1_
 _v216,60 [c32.c4.c32.c16.] v216,40 [c32.c4.c32.c16.]_
 _v216,20 [c32.c4.c32.c16.] v216,0 [c32.c4.c32.c16.]_
-_%n0%g0 [71r4]_ &2r $ l16
+_%n0%g0 [31r2]_ &2r $ l16
 |0v32p74%e1'0o'ergrbr4r<c8>brgr  
 d+rf+rbr2r8.  d+rf+rbr4ra8grf+r  ergrbr2r8.  ergrbr4r<d8cr>br  
 erar<cr4re8d8c8  >b4f+8g8a8bag8f+8  e2^4r4  
@@ -126,7 +126,7 @@ erar<cr4re8d8c8  >b4f+8g8a8bag8f+8  e2^4r4
 _@4%s0 v80p64 %p1 %e1%g1_
 _v216,60 [d32.d4.d32.d16.] v216,40 [d32.d4.d32.d16.]_
 _v216,20 [d32.d4.d32.d16.] v216,0 [d32.d4.d32.d16.]_
-_%p0%g0 [71r4]_ &2r $ l16
+_%p0%g0 [31r2]_ &2r $ l16
 |0v32p54%e1'0o-o1'grbr<er2r8.  >f+rbr<d+r2r8.  >f+rbr<d+r2r8.  
 >grbr<er2r8.  >grbr<er2r8.  >ar<crer2r8.  r8d+4e4c+4d+8  
 e8>b8g8b8e4r4

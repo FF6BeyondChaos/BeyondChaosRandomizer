@@ -26,7 +26,9 @@ def randomize_music(fout, options_, opera=None, form_music_overrides={}):
     if options_.is_code_active('halloween'):
         events += "H"
     f_chaos = options_.is_code_active('johnnyachaotic')
-    
+
+    kan_mode = Options_.mode.name == 'katn'
+
     fout.seek(0)
     data = fout.read()
     metadata = {}
@@ -35,7 +37,7 @@ def randomize_music(fout, options_, opera=None, form_music_overrides={}):
     data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath="music", freespace=BC_MUSIC_FREESPACE, ext_rng=random)
     if not options_.is_any_code_active(['ancientcave', 'speedcave', 'racecave']):
         data = process_map_music(data)
-    data = process_formation_music_by_table(data, form_music_overrides=form_music_overrides)
+    data = process_formation_music_by_table(data, form_music_overrides=form_music_overrides, kan_mode=kan_mode)
     
     data = add_music_player(data, metadata)
     
