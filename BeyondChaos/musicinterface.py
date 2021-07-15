@@ -1,5 +1,7 @@
 # Beyond Chaos - functions to interface with johnnydmad module
 #                (music randomizer)
+# Interactions between beyondchaos and johnnydmad should ideally be contained
+# to this file
 
 import configparser
 import os
@@ -14,7 +16,7 @@ from music.musicrandomizer import process_music, process_formation_music_by_tabl
 
 from music.mfvitools.insertmfvi import byte_insert
 
-BC_MUSIC_FREESPACE = ["53C5F-9FDFF", "310000-37FFFF", "410000-5FFFFF"]
+BC_MUSIC_FREESPACE = ["53C5F-9FDFF", "310000-37FFFF", "410000-4FFFFF"]
 
 def music_init():
     johnnydmad_initialize(rng=random)
