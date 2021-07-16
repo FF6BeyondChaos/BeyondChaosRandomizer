@@ -1,9 +1,10 @@
 # BeyondChaos
 
-FF6 Beyond Chaos EX Randomizer
+FF6 Beyond Chaos CE Randomizer
+a fork of SubtractionSoup's FF6 Beyond Chaos EX Randomizer
 a fork of Abyssonym's FF6 Beyond Chaos Randomizer
-Version:    5.0.0
-Date:       2021-07-15
+Version:    1.0.0
+Date:       2021-07-16
 URL:        https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest
 Beyond Chaos Discord:    https://discord.gg/S3G3UXy
 
@@ -189,18 +190,18 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
     CtrlxZ - created or modified a bunch of sprites for the randomizer
 	ATinySpook - ported over sprites and music for the randomizer
 	HoxNorf - ported over sprites and music for the randomizer
-    DarkSlash - madworld, darkworld, randombosses codes and some other things for KatN mode; current maintainer of Beyond Chaos EX (send help)
+    DarkSlash - madworld, darkworld, randombosses codes and some other things for KatN mode; current maintainer of Beyond Chaos CE (send help)
     emberling - speeddial, randomized music, alasdraco, dialoguemanager, converted a ton of music, and reworked palettes and sprite replacement, FF6 music player patch
 	Rushlight - made music arrangements for the randomizer
     Lockirby2 - The worringtriad and notawaiter codes
     myself086 - new menu features and natural magic expansion
     Dracovious - Created new GUI and R-Limit, and some other codes
 	GreenKnight5 - First GUI, Cecilbot
-	DrInsanoPHD - Refactoring code, character stats randomizer, bug fixes, lots of help with EX V5 release
-	Crimdahl - Rotating status patch, dancelessons code lots of help with EX V5 release
-	fusoyeahhh - lots of help with EX V5 release
-	RazzleStorm - refactoring some code, adding type hints, lots of help with EX V5 release
-	CDude - lots of help with event code for EX V5 release
+	DrInsanoPHD - Refactoring code, character stats randomizer, bug fixes, lots of help with CE v1 release
+	Crimdahl - Rotating status patch, dancelessons code lots of help with CE v1 release
+	fusoyeahhh - lots of help with CE v1 release
+	RazzleStorm - refactoring some code, adding type hints, lots of help with CE v1 release
+	CDude - lots of help with event code for CE v1 release
 	Cecil188 - ported over music, owner of the Discord, and overall helper with everything
 	
 
