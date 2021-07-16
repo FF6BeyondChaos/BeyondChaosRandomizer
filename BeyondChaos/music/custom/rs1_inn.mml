@@ -1,0 +1,33 @@
+#TITLE Good Night!
+#ALBUM Romancing SaGa
+#COMPOSER Kenji Ito
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0xD1
+
+#def 8@i=   |0 %r16
+#def 8@o=   o5
+#def 8@v=   v100
+#def 8@f= v1,100
+
+
+{1}
+t168%v60%b0,70%f0,0
+'8@i' '8@v*v.25'p20{'VolEnvMode 0'}%e1'8@o+o1'g+4>b4<e4g+4f+4>a+4<d+4f+4
+e2f+2>b1^1;
+
+{2}
+
+'8@i' '8@v*v.60'p50{'VolEnvMode 0'}%e1'8@o+o1'd+2>b4<d+4c+2>b4a+4g+4b4
+a+4<c+4>b1^1;
+
+{3}
+
+'8@i' '8@v*v.25'p105{'VolEnvMode 0'}%e1r4'8@o-o1'b4<e4g+4r4>a+4<d+4f+4
+e2c+4f+4d+1^1;
+
+{4}
+
+'8@i' '8@v*v.50'p78{'VolEnvMode 0'}%e1'8@o-o1'e1d+1c+2f+2b4f+4>b2^1;
+;

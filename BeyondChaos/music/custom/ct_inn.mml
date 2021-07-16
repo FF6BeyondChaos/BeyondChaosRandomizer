@@ -1,0 +1,40 @@
+#TITLE Goodnight
+#ALBUM Chrono Trigger
+#COMPOSER Yasunori Mitsuda
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x19
+
+#def 0i=   |0 %r13
+#def 0o=   o4
+#def 0v=   v100
+#def 0f= v1,100
+
+
+{1}
+t95%v40%b0,80%f0,0%e1
+'0i' '0v*v.62'p64'0o+o1'p0,48,40m12,24,199r24a+24^24g+8g8f4d+8d4r24d+24
+^2^4.^24r1;
+
+{2}
+%e1
+'0i' '0v*v.31'p64'0o+o1'p0,48,40m12,24,199d+2r2>a+1r1;
+
+{3}
+%e1
+'0i' '0v*v.44'p64'0o+o1'p0,48,40m12,24,199r48f4^16^24r2r8r48c2^4.^16^24
+r1;
+
+{4}
+%e1
+'0i' '0v*v.50'p64'0o'p0,48,40m12,24,199d+2>a+2g+1r1;
+
+{5}
+%e1
+'0i' '0v*v.50'p64'0o'p0,48,40m12,24,199r8a+4.r8f4.r1r1;
+
+{6}
+%e1
+'0i' '0v*v.50'p64'0o+o1'p0,48,40m12,24,199r4d+4r4>a+4r1r1;
+;

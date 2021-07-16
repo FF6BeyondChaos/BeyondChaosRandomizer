@@ -636,10 +636,25 @@ ff6_inn: sleep
 lu2_sleep: sleep
 sd2_ally: sleep
 
+# Temporarily adding these, they haven't been checked/edited yet
+ct_inn: sleep
+ct_prayer: sleep
+rs1_inn: sleep
+rs2_inn: sleep
+
 [death]
 ff5_death: death
 ff6_death: death
+ff7_death: death
 sd2_death: death
+
+# Temporarily adding these, they haven't been checked/edited yet
+wa2_gameover: death
+dkc_gameover: death
+fft_gameover: death
+uwnh_gameover: death
+hm_badend: death
+ct_magusintro: death
 
 [tierboss]
 #lb: cc_flame, ct_lavos, ff3_eureka, ff6_fanatics_chorus, ff6_fanatics_dm, ff6_tier1_chorus, ff6_tier1_dm, ff6_tier2_chorus, ff6_tier2_dm, ff6_tier3, ff7_final_part1, ff8_witches, ff9_blackwaltz, ffmq_lava, xg_weltall
