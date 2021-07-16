@@ -4432,7 +4432,7 @@ def randomize(args: List[str]) -> str:
 
         if len(args) > 4:
             #If a directory was supplied by the GUI, use that directory
-            previous_output_directory = args[4]
+            output_directory = args[4]
         else:
             #If no previous directory or an invalid directory was obtained from bcex.cfg, default to the ROM's directory
             if not previous_output_directory or not os.path.isdir(previous_output_directory):
