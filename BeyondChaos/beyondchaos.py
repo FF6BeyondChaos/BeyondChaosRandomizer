@@ -1,13 +1,15 @@
 import sys
 import time
 import traceback
+import os
 
 import music.musicrandomizer
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel, QGroupBox, \
     QHBoxLayout, QLineEdit, QComboBox, QFileDialog, QApplication, \
-    QTabWidget, QInputDialog, QScrollArea, QMessageBox, QGraphicsDropShadowEffect
+    QTabWidget, QInputDialog, QScrollArea, QMessageBox, QGraphicsDropShadowEffect, QGridLayout
+
 
 import character
 import config
@@ -56,6 +58,7 @@ class Window(QWidget):
 
         # values to be sent to Randomizer
         self.romText = ""
+        self.romOutputDirectory = ""
         self.version = "5"
         self.mode = "normal" # default
         self.seed = ""
@@ -125,6 +128,7 @@ class Window(QWidget):
         self.InitWindow()
 
         self.romInput.setText(self.romText)
+        self.romOutput.setText(self.romOutputDirectory)
         self.updateFlagString()
         self.updateFlagCheckboxes()
         self.flagButtonClicked()
@@ -138,17 +142,20 @@ class Window(QWidget):
         # build the UI
         self.CreateLayout()
 
-        previous_rom_path = ""
+        previousRomPath = ""
+        previousOutputDirectory = ""
 
         try:
             config = configparser.ConfigParser()
             config.read('bcex.cfg')
             if 'ROM' in config:
-                previous_rom_path = config['ROM']['Path']
-        except IOError:
+                previousRomPath = config['ROM']['Path']
+                previousOutputDirectory = config['ROM']['Output']
+        except (IOError, KeyError):
             pass
 
-        self.romText = previous_rom_path
+        self.romText = previousRomPath
+        self.romOutputDirectory = previousOutputDirectory
 
         # show program onscreen
         self.show()    #maximize the randomizer
@@ -186,51 +193,158 @@ class Window(QWidget):
 
     # Top groupbox consisting of ROM selection, and Seed number input
     def GroupBoxOneLayout(self):
-        topGroupBox = QGroupBox()
-        TopHBox = QHBoxLayout()
-        width = 250
-        height = 60
-       
+        groupLayout = QGroupBox("Input and Output")
+        #groupLayout.setStyleSheet("QGroupBox{border: 1px solid gray;}")
+        
+        gridLayout = QGridLayout()
 
-        romLabel = QLabel("ROM:")
-        TopHBox.addWidget(romLabel)
+        #ROM INPUT
+        labelRomInput = QLabel("ROM File:")
+        #labelRomInput.setStyleSheet("font-size:14px;")
+        labelRomInput.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        gridLayout.addWidget(labelRomInput, 1, 1)
+
         self.romInput = QLineEdit()
         self.romInput.setPlaceholderText("Required")
         self.romInput.setReadOnly(True)
-        TopHBox.addWidget(self.romInput)
+        gridLayout.addWidget(self.romInput, 1, 2)
 
-        browseButton = QPushButton("Browse")
-        browseButton.setMaximumWidth(width)
-        browseButton.setMaximumHeight(height)        
-        browseButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
-        browseButton.clicked.connect(lambda: self.openFileChooser())
-        browseButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))   
-        browseEffect = QGraphicsDropShadowEffect()
-        browseEffect.setBlurRadius(3)
-        browseButton.setGraphicsEffect(browseEffect)
-        TopHBox.addWidget(browseButton)
+        buttonBrowseRomInput = QPushButton("Browse")
+        buttonBrowseRomInput.setMaximumWidth(self.width)
+        buttonBrowseRomInput.setMaximumHeight(self.height)        
+        buttonBrowseRomInput.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
+        buttonBrowseRomInput.clicked.connect(lambda: self.openFileChooser())
+        buttonBrowseRomInput.setCursor(QCursor(QtCore.Qt.PointingHandCursor))   
+        buttonBrowseRomInputEffect = QGraphicsDropShadowEffect()
+        buttonBrowseRomInputEffect.setBlurRadius(3)
+        buttonBrowseRomInputEffect.setOffset(3,3)
+        buttonBrowseRomInput.setGraphicsEffect(buttonBrowseRomInputEffect)
+        gridLayout.addWidget(buttonBrowseRomInput, 1, 3)
 
-        # space is a small hack so the S isn't in shadow.
-        seedLabel = QLabel(" Seed:")
-        TopHBox.addWidget(seedLabel)
+        #ROM OUTPUT
+        label_rom_output = QLabel("Output Directory:")
+        #label_rom_output.setStyleSheet("font-size:14px;")
+        label_rom_output.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        gridLayout.addWidget(label_rom_output, 2, 1)
+
+        self.romOutput = QLineEdit()
+        #self.romOutput.setPlaceholderText()
+        #self.romOutput.setReadOnly(True)
+
+        self.romInput.textChanged[str].connect(self.updateRomOutputPlaceholder)
+        gridLayout.addWidget(self.romOutput, 2, 2)
+
+        buttonBrowseRomOutput = QPushButton("Browse")
+        buttonBrowseRomOutput.setMaximumWidth(self.width)
+        buttonBrowseRomOutput.setMaximumHeight(self.height)        
+        buttonBrowseRomOutput.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
+        buttonBrowseRomOutput.clicked.connect(lambda: self.openDirectoryChooser())
+        buttonBrowseRomOutput.setCursor(QCursor(QtCore.Qt.PointingHandCursor))   
+        buttonBrowseRomOutputEffect = QGraphicsDropShadowEffect()
+        buttonBrowseRomOutputEffect.setBlurRadius(3)
+        buttonBrowseRomOutputEffect.setOffset(3,3)
+        buttonBrowseRomOutput.setGraphicsEffect(buttonBrowseRomOutputEffect)
+        gridLayout.addWidget(buttonBrowseRomOutput, 2, 3)
+
+        #SEED INPUT
+        labelSeedInput = QLabel("Seed Number:")
+        #labelSeedInput.setStyleSheet("font-size:14px;")
+        labelSeedInput.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
+        gridLayout.addWidget(labelSeedInput, 3, 1)
+
         self.seedInput = QLineEdit()
         self.seedInput.setPlaceholderText("Optional")
-        TopHBox.addWidget(self.seedInput)
+        gridLayout.addWidget(self.seedInput, 3, 2)
 
-        generateButton = QPushButton("Generate Seed")       
-        generateButton.setMaximumWidth(width)
-        generateButton.setMaximumHeight(height)        
-        generateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
-        generateButton.clicked.connect(lambda: self.generateSeed())
-        generateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-        generateEffect = QGraphicsDropShadowEffect()
-        generateEffect.setBlurRadius(3)
-        generateButton.setGraphicsEffect(generateEffect)
-        TopHBox.addWidget(generateButton)
+        buttonGenerateSeed = QPushButton("Generate Seed")       
+        buttonGenerateSeed.setMaximumWidth(self.width)
+        buttonGenerateSeed.setMaximumHeight(self.height)        
+        buttonGenerateSeed.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
+        buttonGenerateSeed.clicked.connect(lambda: self.generateSeed())
+        buttonGenerateSeed.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+        buttonGenerateSeed_effect = QGraphicsDropShadowEffect()
+        buttonGenerateSeed_effect.setBlurRadius(3)
+        buttonGenerateSeed_effect.setOffset(3,3)
+        buttonGenerateSeed.setGraphicsEffect(buttonGenerateSeed_effect)
+        gridLayout.addWidget(buttonGenerateSeed, 3, 3)
 
-        topGroupBox.setLayout(TopHBox)
+        groupLayout.setLayout(gridLayout)
+        return groupLayout
+        #topGroupBox = QGroupBox()
+        #vertical_box = QVBoxLayout()
+        #top_horizontal_group = QGroupBox()
+        #bottom_horizontal_group = QGroupBox()
+        #TopHBox = QHBoxLayout()
+        #BottomHBox = QHBoxLayout()
+        #width = 250
+        #height = 60
+       
 
-        return topGroupBox
+        #romLabel = QLabel("ROM:")
+        #TopHBox.addWidget(romLabel)
+        #self.romInput = QLineEdit()
+        #self.romInput.setPlaceholderText("Required")
+        #self.romInput.setReadOnly(True)
+        #TopHBox.addWidget(self.romInput)
+
+        #browseButton = QPushButton("Browse")
+        #browseButton.setMaximumWidth(width)
+        #browseButton.setMaximumHeight(height)        
+        #browseButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
+        #browseButton.clicked.connect(lambda: self.openFileChooser())
+        #browseButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))   
+        #browseEffect = QGraphicsDropShadowEffect()
+        #browseEffect.setBlurRadius(3)
+        #browseEffect.setOffset(3,3)
+        #browseButton.setGraphicsEffect(browseEffect)
+        #TopHBox.addWidget(browseButton)
+
+        ## Box to designate a ROM output directory
+        #outputLabel = QLabel("Generate to:")
+        #TopHBox.addWidget(outputLabel)
+        #self.romOutput = QLineEdit()
+        #self.romOutput.setPlaceholderText("The same directory as the ROM")
+        #self.romOutput.setReadOnly(True)
+        #TopHBox.addWidget(self.romOutput)
+
+        #browseButton2 = QPushButton("Browse")
+        #browseButton2.setMaximumWidth(width)
+        #browseButton2.setMaximumHeight(height)        
+        #browseButton2.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
+        #browseButton2.clicked.connect(lambda: self.openFileChooser())
+        #browseButton2.setCursor(QCursor(QtCore.Qt.PointingHandCursor))   
+        #browseEffect2 = QGraphicsDropShadowEffect()
+        #browseEffect2.setBlurRadius(3)
+        #browseEffect2.setOffset(3,3)
+        #browseButton2.setGraphicsEffect(browseEffect)
+        #TopHBox.addWidget(browseButton2)
+
+
+        ## space is a small hack so the S isn't in shadow.
+        #seedLabel = QLabel(" Seed:")
+        #TopHBox.addWidget(seedLabel)
+        #self.seedInput = QLineEdit()
+        #self.seedInput.setPlaceholderText("Optional")
+        #BottomHBox.addWidget(self.seedInput)
+
+        #generateButton = QPushButton("Generate Seed")       
+        #generateButton.setMaximumWidth(width)
+        #generateButton.setMaximumHeight(height)        
+        #generateButton.setStyleSheet("font:bold; font-size:18px; height:24px; background-color: #5A8DBE; color: #E4E4E4;")
+        #generateButton.clicked.connect(lambda: self.generateSeed())
+        #generateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
+        #generateEffect = QGraphicsDropShadowEffect()
+        #generateEffect.setBlurRadius(3)
+        #generateEffect.setOffset(3,3)
+        #generateButton.setGraphicsEffect(generateEffect)
+        #BottomHBox.addWidget(generateButton)
+
+        #top_horizontal_group.setLayout(TopHBox)
+        #bottom_horizontal_group.setLayout(BottomHBox)
+        #vertical_box.addWidget(top_horizontal_group)
+        #vertical_box.addWidget(bottom_horizontal_group)
+        #topGroupBox.setLayout(vertical_box)
+        #return topGroupBox
 
     def GroupBoxTwoLayout(self):
 
@@ -460,6 +574,7 @@ class Window(QWidget):
         clearUiButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
         effect = QGraphicsDropShadowEffect()
         effect.setBlurRadius(3)
+        effect.setOffset(3,3)
         clearUiButton.setGraphicsEffect(effect)
         flagTextHBox.addWidget(clearUiButton)
         flagTextWidget.setLayout(flagTextHBox)
@@ -696,6 +811,11 @@ class Window(QWidget):
         # display file location in text input field
         self.romInput.setText(str(file_path[0]))
 
+    def openDirectoryChooser(self):
+        file_path = QFileDialog.getExistingDirectory(self, 'Open File', './')
+
+        # display file location in text input field
+        self.romOutput.setText(str(file_path))
 
     def compileModes(self):
         for mode in self.supportedGameModes:
@@ -737,6 +857,19 @@ class Window(QWidget):
     def generateSeed(self):
 
         self.romText = self.romInput.text()
+
+        #Check to see if the supplied output directory exists.
+        if os.path.isdir(self.romOutput.text()):
+            #It does, use that directory.
+            self.romOutputDirectory = self.romOutput.text()
+        elif self.romOutput.text() == '':
+            #It does not, but the text box is blank. Use the directory that the ROM file is in.
+            self.romOutputDirectory = self.romOutput.placeholderText()
+        else:
+            #The supplied path is invalid. Raise an error.
+            QMessageBox.about(self, "Error", "That output directory does not exist.")
+            return
+
         if self.romText == "":  # Checks if user ROM is blank
             QMessageBox.about(self, "Error", "You need to select a FFVI rom!")
         else:
@@ -775,6 +908,7 @@ class Window(QWidget):
 
             # This makes the flag string more readable in the confirm dialog
             message = ((f"Rom: {self.romText}\n"
+                        f"Output: {self.romOutputDirectory}\n"
                         f"Seed: {displaySeed}\n"
                         f"Mode: {self.mode}\n"
                         f"Flags: \n----{flagMsg}\n"
@@ -794,7 +928,7 @@ class Window(QWidget):
                 QtCore.pyqtRemoveInputHook()
                 # TODO: put this in a new thread
                 try:
-                    result_file = randomizer.randomize(args=['beyondchaos.py', self.romText, bundle, "test"])
+                    result_file = randomizer.randomize(args=['beyondchaos.py', self.romText, bundle, "test", self.romOutputDirectory])
                 # call(["py", "Randomizer.py", self.romText, bundle, "test"])
                 # Running the Randomizer twice in one session doesn't work
                 # because of global state.
@@ -848,6 +982,12 @@ class Window(QWidget):
                     c.setProperty('checked', True)
                 else:
                     c.setProperty('checked', False)
+
+    def updateRomOutputPlaceholder(self, value):
+        try:
+            self.romOutput.setPlaceholderText(value[:str(value).rindex('/')])
+        except ValueError:
+            pass
 
 
 
