@@ -250,6 +250,7 @@ NORMAL_CODES = [
     Code('exp', "3 Times Exp", "All battles will award 3 times exp", "beta"),
     Code('gp', "3 Times gp", "All battles will award 3 times gp", "beta"),
     Code('mps', "3 Times magic points", "All battles will award 3 times magic points", "beta"),
+    Code('dancelessons', "NO DANCE FAILURES", "Removes the 50% chance that dances will fail when used on a different terrain.", "battle"),
 
     Code('airship', "AIRSHIP MODE", "The party will have access to the airship immediately after leaving Narshe. Chocobo stables can also be used to acquire the airship. Doing events out of order can cause softlocks.", "gamebreaking"),
     

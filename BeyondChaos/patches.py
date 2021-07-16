@@ -273,3 +273,9 @@ def cycle_statuses(fout):
         0xAA                    #30BA                   TAX			    Move to X
     ]) 
     cycles_sub.write(fout)
+
+def no_dance_stumbles(fout):
+    nds_sub = Substitution()
+    nds_sub.set_location(0x0217A0) #C217A0
+    nds_sub.bytestring = bytes([0xEA, 0xEA])            #No Op x2
+    nds_sub.write(fout)
