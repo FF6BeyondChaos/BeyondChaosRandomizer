@@ -19,7 +19,7 @@
 #WAVE 0x29 0x1C snare
 #WAVE 0x2A 0x4B toms
 
-#def init= t151 %v40 %b0,85 %f0,0
+#def init= t151 %x224 %v40 %b0,85 %f0,0
 
 #def strings=   |0 's' o5 %r1
 #def overdrive= |1 'o' o5

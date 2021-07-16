@@ -8,7 +8,7 @@
 #WAVE 0x22 0x22 ## Vibraphone
 #WAVE 0x23 0x71 ## Violin
 
-#def init= t85 %x170 %v40 %b0,85 %f0,0
+#def init= t85 %x208 %v40 %b0,85 %f0,0
 
 #def vibraphoneVol=      v40
 #def vibraphoneLayerVol= 'vibraphoneVol*v.8'

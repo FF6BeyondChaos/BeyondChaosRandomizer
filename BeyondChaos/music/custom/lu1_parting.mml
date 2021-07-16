@@ -9,7 +9,7 @@
 #WAVE 0x23 0x35 acoustic bass guitar
 #WAVE 0x28 0xAD fret
 
-#def init= t80 %x160 %v40 %b0,85 %f0,0
+#def init= t80 %x208 %v40 %b0,85 %f0,0
 
 #def violin= |0 'v' p80 o5 m24,9,215 %r8
 #def flute= |1 'f' p88 o5 m48,18,239 %r10

@@ -3,10 +3,10 @@
 #COMPOSER Noriko Matsueda
 #ARRANGED emberling
 
-#VARIANT ~_
 #VARIANT /_ vic
 #VARIANT ~ nointro
 #VARIANT ~ tr
+#VARIANT ~_
 #SFXV ` *
 
 #WAVE 0x2F 0x00 c.hihat
@@ -37,28 +37,28 @@
 #def Do= ~o4~/o5/
 #def Eo= o5
 
-#def 0v=   v67
-#def 0f= v1,67
-#def 1v=   v67
-#def 1f= v1,67
-#def 2v=   v100
-#def 2f= v1,100
-#def 8v=   v75
-#def 8f= v1,75
-#def 9v= ~  v175~/  v120/
-#def 9f= ~v1,175~/v1,120/
-#def Av=   v133
-#def Af= v1,133
-#def Bv=   v100
-#def Bf= v1,100
-#def Cv=   v150
-#def Cf= v1,150
-#def Dv=   v150
-#def Df= v1,150
-#def Ev=   v100
-#def Ef= v1,100
-#def Fv=   v100
-#def Ff= v1,100
+#def 0v=   v77
+#def 0f= v1,77
+#def 1v=   v77
+#def 1f= v1,77
+#def 2v=   v86
+#def 2f= v1,86
+#def 8v=   v86
+#def 8f= v1,86
+#def 9v= ~  v201~/  v138/
+#def 9f= ~v1,201~/v1,138/
+#def Av=   v153
+#def Af= v1,153
+#def Bv=   v115
+#def Bf= v1,115
+#def Cv=   v144
+#def Cf= v1,144
+#def Dv=   v173
+#def Df= v1,173
+#def Ev=   v115
+#def Ef= v1,115
+#def Fv=   v98
+#def Ff= v1,98
 
 #drum "a"= 5g |1 p120 %r
 #drum "b"= 5a |3 p64
@@ -80,7 +80,7 @@
 #drum "u"= 5a |3 p64 'Fv*v.56'
 
 {1}
-t135 %x255 %v40 %b0,70 %f0,0
+t135 %v40 %b0,70 %f0,0
 %e1 _ 'Bi' p64 'Bo-o2' 'Bv*v.6'[e1^2 %r15 ^2 %r]
 t133 d1 t129 <c+2> t123 a2 t129 b2. f+4>b2 %r13 ^8 t120 ^8 t125 ^8 t131 ^8
 _ $ t135
@@ -251,7 +251,7 @@ r32d32^48r32g32^48r32b32^48r32g32^48r32b32^48r32 j2 a+2a4 %r18 ^8.r16 %r]
 <c+4 %r17 ^4 %r >e6a6<c+6d+1 %r16 ^2 %r
 'Bv*v.16''Bf*v48,.41'd+16r48d+24d+24 [4d+32r32r48]
 _ $
-'Ai' p34 'Av*.23''Ao-o1'
+'Ai' p34 'Av*v.23''Ao-o1'
 e1^1e2 e2e1 e1e1^1^2 e2
 p49 %a9
 b1a1g+1^2. %r17 ^4 %r0

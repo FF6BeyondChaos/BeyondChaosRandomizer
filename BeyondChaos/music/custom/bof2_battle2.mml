@@ -25,7 +25,7 @@
 #WAVE 0x2E 0x3B hihat open
 #WAVE 0x2F 0x3A hihat closed
 
-#def init= t208 %x255 %v50 %b0,50 %f0,0
+#def init= t208 %x240 %v50 %b0,50 %f0,0
 
 #def lead=  |0 'l' o5 m24,18,239 v6,36,255
 #def saw=   |1 'y' o5 m48,18,223 v6,18,15
@@ -43,13 +43,13 @@
 
 #drum "k"=5a |8 p64 v96 %e0
 #drum "s"=5b |9 p64 v112 %e1 %y3%s3
-#drum "t"=5g+ |A p93 v80 %e1
-#drum "u"=5f  |A p59 v80 %e1
-#drum "v"=5c  |A p28 v80 %e1
+#drum "t"=5g+ |A p93 v64 %e1
+#drum "u"=5f  |A p59 v64 %e1
+#drum "v"=5c  |A p28 v64 %e1
 
-#drum "y+"=5a |C p14 v80 %e1 %r17
-#drum "y"=5a  |C p14 v80 %e1 %r20
-#drum "y-"=5a |C p14 v80 %e1 %r22
+#drum "y+"=5a |C p14 v100 %e1 %r17
+#drum "y"=5a  |C p14 v100 %e1 %r20
+#drum "y-"=5a |C p14 v100 %e1 %r22
 
 #drum "o"=5f+ |E p93 v64 %e1
 #drum "h"=5a |F p93 v40 %e1 %r22

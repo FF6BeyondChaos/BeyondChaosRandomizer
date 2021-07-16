@@ -4,7 +4,7 @@
 #ARRANGED Rushlight
 
 #VARIANT ! vic
-#VARIANT ~
+#VARIANT ~ 
 
 #WAVE 0x20 ~0x39~ !0x40! ## Solo Electric Guitar
 #WAVE 0x21 ~0x45~ !0x45! ## Distorsion Guitar
@@ -16,7 +16,7 @@
 #WAVE 0x2A ~0x2D~ !0x2D! ## Crash
 #WAVE 0x2B ~0x4D~ !0x4D! ## Toms
 
-#def init= t122 %x255%v40 %b0,55 %f0,0
+#def init= t122 %v40 %b0,55 %f0,0
 
 #def generalSustain=             %r0
 #def generalRelease=             %r18
@@ -26,7 +26,7 @@
 #def rhythmDistorsionRelease=    %r23
 
 
-#def leadGuitarVol=                  v37
+#def leadGuitarVol=                  v49
 #def leadGuitarPartialQuietVol=      'leadGuitarVol*v.58'
 #def leadGuitarQuietVol=             'leadGuitarVol*v.47'
 #def leadGuitarFadeVol1=             'leadGuitarVol*v.73'
@@ -41,7 +41,7 @@
 #def layerGuitarFadeVol2=            'leadGuitarVol*v.37'
 #def layerGuitarFadeVol3=            'leadGuitarVol*v.12'
 
-#def distorsionGuitarVol=            v41
+#def distorsionGuitarVol=            v55
 #def distorsionGuitarQuietVol=       'distorsionGuitarVol*v.6'
 #def distorsionGuitarMainVol=        'distorsionGuitarVol*v.75'
 #def distorsionGuitarFadeVol1=       'distorsionGuitarVol*v.75'
@@ -50,8 +50,8 @@
 #def introRhythmDistorsionGuitarVol= 'distorsionGuitarVol*v.6'
 #def rhythmDistorsionGuitarQuietVol= 'distorsionGuitarVol*v.28'
 
-#def supportGuitarVol=               ~v48~ !v24!
-#def bassVol=                        v35
+#def supportGuitarVol=               ~v64~ !v32!
+#def bassVol=                        v47
 
 #def overdrive=     |0 ~o5~ !o4!
 #def distorsion=    |1 ~o7~ !o7!
@@ -75,11 +75,11 @@
 #def supportGuitarRight=                       'supportGuitar' 'supportGuitarVol'               p99 'generalSustain' %e0 m
 #def bass=                                     |3 o7           'bassVol'                        p64 %r15             %e0 m
 
-#drum "k"=5f  |8                                               v73                              p64                  %e0 m
-#drum "s"=5g+ |9                                               v81                              p64                  %e0 m
+#drum "k"=5f  |8                                               v97                              p64                  %e0 m
+#drum "s"=5g+ |9                                               v108                             p64                  %e0 m
 #drum "c"=5f+ |A                                               v127                             p64 %r17             %e0 m
 
-#def tomVol=                                                   v80
+#def tomVol=                                                   v106
 #drum "t"=4e  |B                                               'tomVol'                         p64                  %e0 m
 #drum "u"=4g  |B                                               'tomVol'                         p64                  %e0 m
 #drum "v"=4g+ |B                                               'tomVol'                         p64                  %e0 m

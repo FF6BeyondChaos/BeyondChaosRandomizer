@@ -35,24 +35,24 @@
 #def o= |1
 #def m= |2
 
-#drum "e"= 5b  |9 p64 v96  %e1
-#drum "d"= 5g  |9 p56 v96  %e1
+#drum "e"= 5b  |9 p64 v80  %e1
+#drum "d"= 5g  |9 p56 v80  %e1
 #drum "c"= 5a  |8 p64 v80  %e0
-#drum "c-"=5a  |A p64 v96  %e0
+#drum "c-"=5a  |A p64 v88  %e0
                               
-#drum "f"= 3a+ |B p18 v96  %e1
-#drum "g"= 4e  |B p36 v96  %e1
-#drum "a"= 4g+ |B p54 v96  %e1
-#drum "b"= 5c  |B p72 v96  %e1
-#drum "h"= 5d+ |B p90 v96  %e1
-#drum "i"= 5f+ |B p108 v96 %e1
-#drum "x"= 5a+ |C p24 v52  %e1
-#drum "y"= 5a  |C p72 v112 %e1
-#drum "z"= 5g+ |C p112 v64 %e1
-#drum "y-"= 5a |C p72 v54  %e1 %r20
+#drum "f"= 3a+ |B p18  v76  %e1
+#drum "g"= 4e  |B p36  v76  %e1
+#drum "a"= 4g+ |B p54  v76  %e1
+#drum "b"= 5c  |B p72  v76  %e1
+#drum "h"= 5d+ |B p90  v76  %e1
+#drum "i"= 5f+ |B p108 v76  %e1
+#drum "x"= 5a+ |C p24  v52  %e1
+#drum "y"= 5a  |C p72  v112 %e1
+#drum "z"= 5g+ |C p112 v64  %e1
+#drum "y-"= 5a |C p72  v54  %e1 %r20
                               
-#drum "a+"= 5a |D p96 v64  %e1
-#drum "r"= 5g+ |E p32 v64  %e1 %y3%s5%r17
+#drum "a+"= 5a |D p96 v56  %e1
+#drum "r"= 5g+ |E p32 v72  %e1 %y3%s5%r17
 
 {1} 'init' %e1 $
 'clear-o2' p104 l16 m12,18,239

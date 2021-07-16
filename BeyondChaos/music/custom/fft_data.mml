@@ -8,7 +8,7 @@
 #WAVE 0x22 0x22 ## Vibraphone
 #WAVE 0x23 0x15 ## Santur
 
-#def init= t90 %x240 %v40 %b0,85 %f0,0
+#def init= t90 %v40 %b0,85 %f0,0
 
 #def bassSanturVol=  v95
 #def layerSanturVol= v75

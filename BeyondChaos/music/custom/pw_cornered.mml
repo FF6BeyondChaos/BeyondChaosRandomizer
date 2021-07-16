@@ -5,15 +5,15 @@
 #ARRANGED Cecil188
 ##with reference to sheet music arranged by KKslida2
 
-#WAVE 0x20 0x63
-#WAVE 0x21 0x51
-#WAVE 0x22 0x82
-#WAVE 0x23 0x3C
-#WAVE 0x24 0x0A
-#WAVE 0x25 0x1D
-#WAVE 0x26 0x0D
-#WAVE 0x27 0x69
-#WAVE 0x28 0x80
+#WAVE 0x20 0x63 (strings - oct)
+#WAVE 0x21 0x51 (bass)
+#WAVE 0x22 0x82 (trumpet)
+#WAVE 0x23 0x3C (hihat - open)
+#WAVE 0x24 0x0A (kick - dry)
+#WAVE 0x25 0x1D (snare - hard)
+#WAVE 0x26 0x0D (kick - synth)
+#WAVE 0x27 0x69 (orch hit)
+#WAVE 0x28 0x80 (trumpet - oct)
 
 #cdef ( %l1
 #cdef ) %l0
@@ -23,19 +23,20 @@
 #def ga= [3 fr16] f16f fg-
 #def de= [3 fr16] f16f fe
 
-#def s= v90
-#def t= v90
-#def b= v85
+#def s= v81
+#def t= v81
+#def b= v76
+#def o= v115
 
-#drum "h"=5b- |3 v48 p16 %e1
-#drum "q"=5b- |3 v24 p16 %e1
-#drum "s"=5b- |4 v127 p64 %e1
-#drum "p"=6d  |5 v127 p64 %e1 %r22
-#drum "o"=6d  |5 v80 p64 %e1  %r27
-#drum "b"=5b- |6 v72 p64 %e0
+#drum "h"=5b- |3 v43 p16 %e1
+#drum "q"=5b- |3 v22 p16 %e1
+#drum "s"=5b- |4 v101 p64 %e1
+#drum "p"=6c  |5 v127 p64 %e1 %r22
+#drum "o"=6c  |5 v108 p64 %e1 %r27
+#drum "b"=5b- |6 v65 p64 %e0
 
 {1}
-t151 %x224 %v50 %b0,85 %f0,0
+t151 %x208 %v50 %b0,85 %f0,0
 |0 's*v.96' p64 %e1 o6
 #1
 l8 'al' 'be' 'ga' 'de'
@@ -58,7 +59,7 @@ $ l16 |8 't*v.45' p64 o6 m48,18,207
 <ce-4.>a-16b-16 a-2..b-16<c16> b-1 ge- fc d-e-4g4 a-f b-g4e-4
 #25
 f4r2.
-|7 v127 p64 %e1 o5 l8
+|7 'o*v1' p64 %e1 o5 l8
 r2..e- fr2.e- e-r4e-e-8.e-8.e
 ;
 
@@ -75,7 +76,6 @@ $ [[4 ff16]ff [4 a-a-16]a-a- [4 d-d-16]d-d- [4 e-e-16]e-e-] [4 ff16]ff [4 cc16]c
 ;
 
 {4}
-|4 v48 p64 %e1 o5
 #1
 [4 "^1"]
 #5
@@ -87,7 +87,6 @@ l8 [8 "s^ps^sp^"]
 ;
 
 {6}
-|3 v127 p16 %e1 o5
 #1
 l8 [16 "^h"]
 #5
@@ -99,13 +98,12 @@ $ [12 "qhqqhqhqqhqqqhqq"]
 ;
 
 {8}
-|6 v127 p64 %e1 o5
 #1
 l16 r1 r2.."bb" [8 "b^^^"]
 #5
 "!!!o" [14 "b^^^"] "b8b8b8^^"
 $      [14 "b^^^"] "b8b8b8^^" [14 "b^^^"]
-|7 v127 p64 %e1 o5 c6e-6e6
+|7 'o*v1' p64 %e1 o5 c6e-6e6
 #17
 f6r2^6^6 [r1] l8 r2..e- fr2.. r2e-8.e-8.e fr2.. r2c4e-4
 #25
@@ -130,7 +128,7 @@ f4r2. [3 r1]<
 #1
 l16 [3 r1] r2c2
 #5
-$ f2..e-f c2fe-f<c>>a-<cga- l8 b-d-fb-a-d-fa- g>b-<e-ge->cb-<e- l16 't*v.35' f>f<cfg>g<cga-cfa-<c8>c8 <d-8>f8a-8<d-8c>cg<c>a-cfa- l8 b->b-<fb-<e->fb-<e- c>cf<c>b-ca-c g>a-<e-ga->a-<fa- <c2r2 [r1]
+$ f2..e-f c2fe-f<c>>a-<cga- l8 b-d-fb-a-d-fa- g>b-<e-ge->cb-<e- l16 't*v.45' f>f<cfg>g<cga-cfa-<c8>c8 <d-8>f8a-8<d-8c>cg<c>a-cfa- l8 b->b-<fb-<e->fb-<e- c>cf<c>b-ca-c g>a-<e-ga->a-<fa- <c2r2 [r1]
 #17
 't*v1.1' >f2a-2 c1 e-1 't*v.8' c>b-<e-g>b-e-gb- <f>a-<cfc>fa-<c d->fa-<d-e->a-<g>b- <a-ce-a-f>a-<cf b-d-fb-g>b-<f>b- 
 #25

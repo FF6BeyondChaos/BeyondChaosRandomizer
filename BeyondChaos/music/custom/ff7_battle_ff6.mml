@@ -22,10 +22,10 @@
 #def 0v=   v100
 #def 0f= v1,100
 
-#def 1i=   |1
+#def 1i=   |1 %y1%s5
 #def 1o=   o5
-#def 1v=   v100
-#def 1f= v1,100
+#def 1v=   v127
+#def 1f= v1,127
 
 #def 2i=   |2
 #def 2o=   o5
@@ -79,7 +79,7 @@
 ## auto percussion  0x28
 #drum "l"= 5a '8i''8v*v1.2'
 
-#def init= t170%b0,70%f0,0%v50
+#def init= t170 %x224 %v50 %b0,70 %f0,0
 
 {1} 'init'
 ##intro
@@ -135,7 +135,7 @@ $##end intro
 'pet*v.65'p74 m48,18,239 f.g.g+.a+.<cd+>
 '1v*v.6'a+.g.g+. '1v*v.22''1f*v180,.6' [7g16r16]
 g+4.f8 r2r1r8
-'1v*v.3''1f*v180,65' < [7f16r16] f4.f+16r8.f+16r16d+4]
+'1v*v.3''1f*v180,.65' < [7f16r16] f4.f+16r8.f+16r16d+4]
 r1r1r1 c4f4e4d+4
 ##
 c+1> '1v*v.6'r4 c+4d+4f4
@@ -164,7 +164,7 @@ $##end intro
 'pet*v.65'p74 m48,18,239  c.d+.f.g.g+a+
 'str*v.7+o1'mp44 c.d+.f.g.g+2
 'pet*v.6'p74 m48,18,239 c4.>b8< r2r1r8
-'1v*v.3''1f*v180,65'[7b16r16] b4.<c16r8.c16r16>b4]
+'1v*v.3''1f*v180,.65'[7b16r16] b4.<c16r8.c16r16>b4]
 r1r1r1r4 g+4a+4<c4>
 ##
 f1 r4 '1v*v.6' > f4g+4<c+4
@@ -240,7 +240,7 @@ $ ^1^1^1
 "j1^1^1^1"
 ##
 ["j1^1" %e1'str*v.7-o1'p44 f1..r4
-'pet*v.6'p74 m48,18,239 c+4.c4.>a+4. '1v*v.22''1f*v180,6'[7a+16r16] m
+'pet*v.6'p74 m48,18,239 c+4.c4.>a+4. '1v*v.22''1f*v180,.6'[7a+16r16] m
 '6v*v.80''6i'%e0"!o j1^1^1^1"]
 %e1'str*v.9'p44 r1r1r8 f8r8f2^4.f4e4d+4
 ##

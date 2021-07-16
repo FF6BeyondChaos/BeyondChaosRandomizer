@@ -12,24 +12,34 @@
 #WAVE 0x25 0x3B
 #WAVE 0x26 0x4B
 #WAVE 0x27 0x7B
+#WAVE 0x28 0x34
 
-#def guitar=    |0 o5
-#def piano=     |1 o4
-#def bass=      |2 o6 %y2
-#def accordion= |3 o5
-#def strings=   |4 o5
+#def guitar=    |0 o5 p60
+#def piano=     |1 o4 p70
+#def bass=      |2 o6 p60 'bassOpen'
+#def accordion= |3 o5 p80
+#def strings=   |4 o5 p65
+#def lpiano=    |8 o5 p32 %y0%s0
 
 #def g=    v56
 #def gf= v1,56
 #def a=    v80
 #def af= v1,80
+#def p=    v64
+#def b=   v127
+#def l=   v64
 
-#drum "s"=5a |5 v12 p64 %e1
-#drum "h"=5a |5 v26 p64 %e1
-#drum "c"=5a |5 v64 p64 %e1
-#drum "t"=4a |6 v12 p64 %e1
-#drum "u"=4a |6 v96 p64 %e1
-#drum "z"=6g |7 v48 p64 %e1
+#def bassMute= %y5%s1
+#def bassOpen= %y1%s4
+
+#drum "s"=5a |5 v15 p96 %e1
+#drum "h"=5a |5 v26 p96 %e1
+#drum "c"=5a |5 v52 p96 %e1
+#drum "t"=4b |6 v32 p60 %e1
+#drum "u"=4b |6 v88 p60 %e1
+#drum "v"=4b |6 v64 p60 %e1
+#drum "w"=4g |6 v32 p60 %e1
+#drum "z"=6e |7 v80 p70 %e1
 
 #cdef ( %l1
 #cdef ) %l0
@@ -37,61 +47,92 @@
 
 {2}
 t80 %x224 %v50 %b0,85 %f0,0
-'guitar' 'g*v2' p64 %e1
+'guitar' 'g*v2' %e1
 #1
-l8 [2 d>babagg-g<] $ 'guitar' 'g*v2' p64 %e1 [7 d>babagg-g<] d>bab<d2
+l8 [2 'g*v2'd>'g*v1.8'b'g*v1.7'ab'g*v1.85'a'g*v1.75'g'g*v1.7'g-g<]
+$ 'guitar' 'g*v2' %e1
+[8 'g*v2'd>'g*v1.8'b'g*v1.7'ab j8 'g*v1.85'a'g*v1.75'g'g*v1.7'g-g<]
+'g*v2' <d2
 #11
-[8 d>babagg-g<]
+[8 'g*v2'd>'g*v1.8'b'g*v1.7'ab'g*v1.85'a'g*v1.75'g'g*v1.7'g-g<]
 #19
-l16 'g' >[8 [5 g-g8]g-] 'strings' v96 p64 %e1 (v0v196,48d1 v48v196,16d1 d1 v16v96,32d2v32v48,40e4v40v48,48g-4 v48v196,64g1 c2.d4 v64v196,48e1  v48v196,0d1)
+l16 > [8
+         'g'g-     'g*v1.10'g8  
+         'g*v.9'g- 'g*v1.15'g8  
+         'g*v.95'g-'g*v1.00'g8  
+         'g'g-     'g*v1.10'g8  
+         'g*v.9'g- 'g*v1.05'g8  
+       g-]
+'strings' v96 %e1 (v0v196,48d1 v48v196,16d1 d1 v16v96,32d2v32v48,40e4v40v48,48g-4 v48v96,64g2v96,32^2) (v16v48,40d4v48,24^4v32v48,48>b4<v40v48,72d4 v64v196,48e1  v48v196,0d1)
 ;
 
 {6}
-'guitar-o1' v'g' p64 %e1
+'guitar-o1' %e1
 #1
-l16 [16 rd] $ 'guitar-o1' [60 rd] [8 r]
+l16 [4 'g'rd'g*v.9'rd'g*v.8'rd'g*v.7'rd]
+$ 'guitar-o1'
+[15 'g'rd'g*v.9'rd'g*v.8'rd'g*v.7'rd]
+[8 r]
 #11
-[64 rd]
+[16 'g'rd'g*v.9'rd'g*v.8'rd'g*v.7'rd]
 #19
-l16 'g' [15 [5 rd8]r] rd8rd8rdr2
+l16 [16 'g*v.9'rd8 'g'rd8 j16 'g*v.85'rd8 'g*v.95'rd8 'g*v.85'rd8  r] rdr2
 ;
 
 {4}
-'piano+o1' v80 p64 %e1
+'piano+o1' 'p*v1.25' %e1
 #1
-l16 r1 r2...d32g-32 $ 'piano+o2' [7 d>rbrarbrargrg-rgr<] d>rbrarbr<d2
+l16 r1 r2...d32g-32 $
+'piano+o2'
+[8 'p*v1.25'd>r'p*v1.1'brar'p*v1.15'br j8 'p*v1.2'ar'p*v1.1'grg-r'p*v1'gr<]
+'p*v1.25' <d2
 #11
-[8 d>rbrarbrargrg-rgr<]
+[8 'p*v1.25'd>r'p*v1.1'brar'p*v1.15'br 'p*v1.2'ar'p*v1.1'grg-r'p*v1'gr<]
 #19
-v64 >[15 [5 g-g8]g-] g-g8g-g8g-ga2
+>[16
+     'p*v1.00'g- 'p*v0.95'g8
+     'p*v0.85'g- 'p*v1.15'g8  
+     'p*v0.95'g- 'p*v1.00'g j16 ^
+     'p*v1.00'g- 'p*v1.15'g8
+     'p*v0.90'g- 'p*v1.05'g8
+  g-] a2
 ;
 
 {5}
-'piano' v48 p64 %e1
+'piano' 'p*v.75' %e1
 #1
-l16 r1 r2...d32g-32 $ 'piano+o1' [60 rd] [8 r]
+l16 r1 r2...d32g-32 $
+'piano+o1'
+[15 'p*v.75'rd'p*v.67'rd'p*v.8'rd'p*v.7'rd] [8 r]
 #11
-[64 rd]
+[16 'p*v.75'rd'p*v.67'rd'p*v.8'rd'p*v.7'rd]
 #19
-v64 [15 [5 rd8]r] rd8rd8rdr2
+[16 'p*v.95'rd8 'p*v.80'rd8 'p'rd j16 ^ 'p*v.95'rd8 'p*v.85'rd8  r] r2
 ;
 
 {3}
-v127 p64 %e1
+'b' %e1
 #1
-l8 [2 r1] $ 'bass-o2' g2..g g2..g e2..e e2..e c2..c c2..c d2..d d2..r
+l8 [2 r1] $
+'bass-o2'
+g2..g  e1  c1  'bassMute'c2'bassOpen'd2
+e2..e  >b2..b<  c1  d1
 #11
-l8 g1 g1 g2..<d> g2..<d> e2..<e> e1 g2..g g2..g
+g1  e1  c1.d2
+e2..e  >b2..b<  c1  c2d2
 #19
-l1 [e e c c2d2 e d j2 c c2d2] c d
+e2..e  >b4.b2'bassMute'b<  'bassOpen'c2..'bassMute'c  'bassOpen'c2d4.d
+e2..'bassMute'e  >'bassOpen'b2..'bassMute'b< 'bassOpen'c2..'bassMute'c  'bassOpen'd2..'bassMute'd
+'bassOpen'e2..e  >b4.b^2<  c1  c4.'bassMute'c'bassOpen'd4.d
+e2..e  >b4.'b*v.8'b2'b'b<  c2..c  d2  'b*v.25' <d8.d16d8> 'b*v.75' g-8 'b'
 ;
 
 {1}
-p64 %e1
+%e1
 #1
-[2 r1] $ 'accordion+o1' [8 r1] 'a'
+[2 r1] $ 'accordion+o1' [8 r1] 'a' m6,24,192
 #11
-l16 %a6 r4d4 %a g4..g- 'a''af*v144,.67'd2.^c>b<c ('a*v.67''af*v96,1'd2  'a'v144,0d2. r2.)  'a' %a6 r4d4 %a g4.a4 'a''af*v144,.67'd2^^^c>b<c ('a*v.67''af*v96,1'd2 'a'v144,0d2. r2.) 'a'
+l16 %a6 r4d4 %a g4..g- 'a''af*v144,.67'd2.^c>b<c ('a*v.67''af*v96,1'd2  'a'v144,0^2. r2.)  'a' %a6 r4d4 %a g4.a4 'a''af*v144,.67'd2^^^c>b<c ('a*v.67''af*v96,1'd2 'a'v144,0^2. r2.) 'a'
 #19
 [>>r4^b<eg-%a5g4^%ab-b<e d4>'a''af*v96,.5''a'b2a4 a^.a-32'a'v144,0g2.^ 'a' r1 >r4^b<eg-g4^b-b<e g-8.e32e-32'a''af*v96,.5''a'd2 j2 g-8..f32  'a'v196,0e1 r1 'a'] g-4 'a''af*v196,1.33'g2....a-32 'a*v1.33'v196,0a1
 ;
@@ -111,5 +152,14 @@ l16 [2 r1] $ [7 r1] r2."^tu^"
 #11
 "^2.z^^^" [7 "^2.z^^^"]
 #19
-["^2.z^^^" [6 "^2.z^^^"] r1]
+[4
+'lpiano-o2''l' e2. "!!!o z4"
+'lpiano-o3''l' b2. "!!!o z4"
+'lpiano-o2''l' c2. "!!!o z4"
+'lpiano-o2''l' j2,826 j3,830 j4,834
+               c2'l*v.75'd4 "!!!o z4"
+]
+$826           d2 "!!!o t8.v8.w8" ]
+$830           c2'l*v.75'd4 "!!!o z8" 'lpiano-o2''l*v.67'd8 ]
+$834           d2 "!!!o ^8.tu4"
 ;

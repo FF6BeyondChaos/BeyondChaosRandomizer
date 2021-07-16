@@ -16,7 +16,7 @@
 #WAVE 0x2D 0x4D ## Tom
 
 
-#def init= t179 %x220 %v40 %b0,70 %f0,0
+#def init= t179 %x232 %v40 %b0,70 %f0,0
 
 #def synthSustain=      %r0
 #def synthRelease=      %r24
@@ -27,12 +27,12 @@
 #def distorsionSustain= %r0
 #def distorsionRelease= %r26
 
-#def leadSynthVol=  v80
+#def leadSynthVol=  v88
 #def layerSynthVol= 'leadSynthVol*v.92'
 #def echoSynthVol=  'leadSynthVol*v.5'
-#def bassVol=       v65
-#def stringsVol=    v65
-#def distorsionVol= v55
+#def bassVol=       v75
+#def stringsVol=    v75
+#def distorsionVol= v63
 
 
 #def synth= |0 o4
@@ -44,15 +44,15 @@
 #def strings=    |2 o5   'stringsVol'    p27  'stringsSustain'    m0,18,231  %e1
 #def distorsion= |1 o7   'distorsionVol' p100 'distorsionSustain' m48,18,231 %e1
 
-#drum "k"=5g  |8  v60  p64  %e0
-#drum "s"=6d  |9  v80  p64  %e1
-#drum "t"=4g  |D  v80  p10  %e1
-#drum "u"=5c+ |D  v80  p64  %e1
-#drum "v"=5g  |D  v80  p117 %e1
+#drum "k"=5g  |8  v69  p64  %e0
+#drum "s"=6d  |9  v92  p64  %e1
+#drum "t"=4g  |D  v92  p10  %e1
+#drum "u"=5c+ |D  v92  p64  %e1
+#drum "v"=5g  |D  v92  p117 %e1
 
-#drum "h"=5a  |B  v50  p107 %e1
-#drum "o"=5f- |C  v70  p107 %e1
-#drum "c"=5g  |A  v110 p15  %e1 %r14
+#drum "h"=5a  |B  v58  p107 %e1
+#drum "o"=5f- |C  v81  p107 %e1
+#drum "c"=5g  |A  v127 p15  %e1 %r14
 #drum "r"=5^                    %r18
 
 {1}

@@ -6,7 +6,7 @@
 ########## ------------------
 #SHORTNAME FF9 Hunters Chance
 
-#VARIANT _*~ enh
+#VARIANT _*~ 
 #VARIANT \`~ sfx
 #VARIANT _`/ tr
 
@@ -28,15 +28,15 @@
 
 #WAVE 0x2E 0x04  lower piano
 
-#def global= t220 %v50 %b0,70 %x224 %f0,0
+#def global= t220 %x180 %v50 %b0,70 %f0,0
 
 #def str= %e1 |0 v40 o5 
 #def bas= %e1 |1 v96 o7
 #def pan= %e1 |2 v104 o5
-#def pet= %e1 |4 v72 o5
-#def bone= %e1 |5 v48 o6
+#def pet= %e1 |4 v68 o5
+#def bone= %e1 |5 v54 o6
 #def boe= %e1 |6 v80 o5 
-#def flt= %e1 |8 v64 o4 
+#def flt= %e1 |8 v54 o4 
 #def saw= %e1 |9 v104 o5 %a10%y4%s4%r7
 #def hrn= %e1 |B v72 o5 
 #def pan2= %e1 |E v92 o5
@@ -71,26 +71,30 @@
 #def 24= 'pan2' p44 
 #def 25= 'bas' p64
 
-#drum "t"=4b |D %e0 v60
-#drum "u"=4g+ |D %e0 v60
-#drum "v"=4f |D %e0 v60
-#drum "w"=4d |D %e0 v60
-#drum "x"=4c |D %e0 v60
-#drum "z"=3g |D %e0 v72
+#def vtom= v55
+#def ftom= v1,55
+
+#drum "t"=4b |D %e0  'vtom'
+#drum "u"=4g+ |D %e0 'vtom'
+#drum "v"=4f |D %e0  'vtom'
+#drum "w"=4d |D %e0  'vtom'
+#drum "x"=4c |D %e0  'vtom'
+#drum "z"=3g |D %e0  'vtom*v1.2'
+#drum "z-"=3g |D
 
 #drum "y"=5g |3 %e0 v127 p64 %r16
 
-#def tr= |D %e0 v24v48,72 o3 p64 [6g24]
+#def tr= |D %e0 'vtom*v0.4''ftom*v48,1.2' p64 [6"!o z-24"]
 #def br= |7 %e0 v25v24,50 o5 p100 c24c24c24
 
-#drum "a"=5a |7 v50 p100 %r
-#drum "b"=6d |7 v50 p100 %r31
-#drum "c"=6d |7 v50 p100 %r
+#drum "a"=5a |7 v50 p100 %r    %e0
+#drum "b"=6d |7 v50 p100 %r31  %e0
+#drum "c"=6d |7 v50 p100 %r    %e0
 
-#drum "h"=5g |F p64 %y ~v64~ /v50/
-#drum "o"=~5a |F v64 p64 %y2~ /5b |3 v50 p64 %a11%r28/
-#drum "k"=5g |A v96
-#drum "s"=5b |C v96
+#drum "h"=5g |F p64 %y ~v64~ /v50/                       %e0
+#drum "o"=~5a |F v64 p64 %y2~ /5b |3 v50 p64 %a11%r28/   %e0
+#drum "k"=5g |A v96                                      %e0
+#drum "s"=5b |C v96                                      %e0
 
 $513 d+c+r>a+r<fr4 >a+<c+cc+fd+rcrg+r4.
        f+fd+c+>b<c+>ba+g+f+r4 <ed+c+>ba+ba+g+f+e ]

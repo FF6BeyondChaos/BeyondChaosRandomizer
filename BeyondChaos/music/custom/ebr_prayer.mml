@@ -23,23 +23,23 @@
 #def piano= |3 o4 'p' m
 #def bass= |4 o7 'b' %r15 m
 
-#def s= v48
+#def s= v55
 #def v= v96
 #def l= v56
 #def p= v127
-#def b= v64
+#def b= v75
 
 #def v0= m0,18,239
 #def v4= m48,18,239
 #def v8= m24,18,239
 #def v16= m12,18,239
 
-#def init= t135 %x255 %v25 %b0,80 %f0,0
+#def init= t135 %v25 %b0,80 %f0,0
 
 #cdef ( %l1
 #cdef ) %l0
 
-#def kvol= v200
+#def kvol= v233
 #def svol= v233
 #def tvol= v160
 #def hvol= v200

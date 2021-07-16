@@ -1,0 +1,290 @@
+#TITLE Game Over
+#ALBUM Final Fantasy Tactics
+#COMPOSER Hitoshi Sakimoto
+#ARRANGED Rushlight
+
+#WAVE 0x20 0x65 ## Strings
+#WAVE 0x21 0x64 ## Contrabass
+#WAVE 0x22 0x61 ## Harp
+#WAVE 0x23 0x15 ## Santur
+
+#WAVE 0x29 0xA4 ## Piccolo
+#WAVE 0x2A 0x91 ## Oboe B6
+#WAVE 0x2B 0x92 ## Oboe F6
+#WAVE 0x2C 0x93 ## Oboe C+6
+#WAVE 0x2D 0x94 ## Oboe A5
+
+#def init=t99 %x220 %v40 %b0,70 %f0,0
+
+#def stringsBaseVol=  v210
+#def earlyStringsVol= 'stringsBaseVol*v.42'
+#def stringsChordVol= 'stringsBaseVol*v.28'
+#def lateStringsVol=  'stringsBaseVol*v.31'
+#def contrabassVol=   v72
+#def contrabassUpVol= 'contrabassVol*v1.2'
+#def oboeBaseVol=     v59
+#def oboeVol1=        'oboeBaseVol'
+#def oboeVol2=        'oboeBaseVol'
+#def oboeVol3=        'oboeBaseVol*v1.3'
+#def oboeVol4=        'oboeBaseVol*v1.15'
+#def piccoloVol=      'oboeBaseVol*v.57'
+#def piccoloLowVol=   'oboeBaseVol*v.26'
+#def harpVol=         v78
+#def santurVol=       'harpVol*v.67'
+
+#def stringsSustain=         %r0
+#def stringsRelease=         %r24
+#def stringChordLateRelease= %r10
+#def contrabassSustain=      %r0
+#def contrabassRelease=      %r22
+#def contrabassLateRelease=  %r10
+#def oboeSustain=            %r0
+#def oboeRelease=            %r18
+#def oboeSlowRelease=        %r8
+#def oboeAttack=             %a11
+#def wrapUpRelease=          %r20
+
+#def strings=    |0 o5
+
+#def earlyStrings= 'strings' 'earlyStringsVol' p64               'stringsSustain'    %e1 m
+#def stringsChord= 'strings' 'stringsChordVol' p74               'stringsSustain'    %e1 m
+#def lateStrings=  'strings' 'lateStringsVol'  p44               'stringsSustain'    %e1 m
+#def contrabass=   |1 o7     'contrabassVol'   p64               'contrabassSustain' %e1 m
+#def oboe=         |D o5     'oboeVol'         p44                                   %e1 m48,24,213
+## Configure the piccolo kind of like the oboe since it's just a complement to the oboe sample
+#def piccolo=      |9 o3     'piccoloVol'      p44  'oboeAttack' 'oboeSustain'       %e1 m48,24,213
+#def harp=         |2 o5     'harpVol'         p74               %r16                %e1 m
+#def santur=       |3 o5     'santurVol'       p74               %r16                %e1 m
+
+#def oboe1= |A 'oboeAttack' 'oboeSustain' 'oboeVol1'
+#def oboe2= |B 'oboeAttack' 'oboeSustain' 'oboeVol2'
+#def oboe3= |C 'oboeAttack' 'oboeSustain' 'oboeVol3'
+#def oboe4= |D 'oboeAttack' 'oboeSustain' 'oboeVol4'
+
+#def upToOboe1=   'oboe1'>
+#def upToOboe2=   'oboe2'>
+#def downToOboe3= 'oboe3'<
+#def downToOboe4= 'oboe4'<
+
+
+{1}
+'init'
+## Early Strings, originally channel 3
+'earlyStrings-o1'
+l8
+rg+'stringsRelease'^8<'stringsSustain'e- t84 'stringsRelease'^8 t68 'stringsSustain'e-'stringsRelease'^8 t37 'stringsSustain'g+8
+## Time signature becomes 3/4 here
+## 2
+t68 'stringsRelease'^4
+## Contrabass, originally channel 2
+'contrabass-o2'g+4.^48'contrabassRelease'^24^16
+## Time signature becomes 4/4 here
+## 3
+^4'contrabassSustain'g+2.
+## Time signature becomes 3/4 here
+## 4
+t90 'contrabassRelease' ^2.
+## 5
+r2 t78 r4
+## 6
+t57
+## String Chord High, originally channel 11
+'stringsChord-o1'
+'stringChordLateRelease'g+2.
+## 7
+'wrapUpRelease'^2
+;
+
+
+{2}
+## Early Strings, originally channel 4
+'earlyStrings'
+l8
+r4c+'stringsRelease'^8'stringsSustain'e'stringsRelease'^8'stringsSustain'e'stringsRelease'^8
+## Time signature becomes 3/4 here
+## 2
+## Contrabass, originally channel 1
+'contrabass-o2'
+a4'contrabassRelease'^2
+## Time signature becomes 4/4 here
+## 3
+'contrabassSustain'a4'contrabassRelease'^2.
+## Time signature becomes 3/4 here
+## 4 / 5
+'contrabassUpVol'[2 'contrabassSustain'c+4^24'contrabassRelease'^12^8^4'contrabassSustain']
+## 6
+'contrabassLateRelease'c+2.
+## 7
+'wrapUpRelease'^2
+;
+
+
+{3}
+## Oboe, originally channels 5 and 6
+'oboe+o2'
+'upToOboe1'
+l8
+c+>g+g+ 'oboe2' e
+ee-e-'downToOboe3'c+16.'oboeRelease'^32'oboeSustain'
+## Time signature becomes 3/4 here
+## 2
+'upToOboe2'e'oboe1'g+b-4.'oboeRelease'^8'oboeSustain'
+## Time signature becomes 4/4 here
+## 3
+>'downToOboe4'eg+b-4f+4 <'oboe3''oboeSlowRelease'c+4
+## Time signature becomes 3/4 here
+## 4
+c+2.
+## 5
+^+2.
+## 6
+## String Chord Low, originally channel 12
+'stringsChord-o1'
+'stringChordLateRelease'e2.
+## 7
+'wrapUpRelease'^2
+;
+
+
+{4}
+## Piccolo, complementing the oboe found originally channels 5 and 6
+'piccolo+o3'
+l8
+c+>g+g+  e
+ee-e- r
+## Time signature becomes 3/4 here
+## 2
+eg+b-4.'oboeRelease'^8'oboeSustain'
+## Time signature becomes 4/4 here
+## 3
+>'piccoloLowVol'eg+b-4f+4 <
+r4
+## Time signature becomes 3/4 here
+## 4
+r2.
+## 5
+^2.
+## 6
+## Late Strings, originally channel 8
+'lateStrings'
+c+2.
+## 7
+'wrapUpRelease'^2
+;
+
+
+{5}
+## Strings Chord High, Playing a portion of notes found originally on channels 10 through 15
+'stringsChord-o1'
+l4
+rg+<c+>f+
+## Time signature becomes 3/4 here
+## 2
+<ef+4.'stringsRelease'^8'stringsSustain'
+## Time signature becomes 4/4 here
+## 3
+>b<c+2.
+## Time signature becomes 3/4 here
+## 4
+'stringsRelease'^4
+## Late Strings, playing a portion of notes found originally on channels 7 through 9.
+'lateStrings-o1'
+l8
+c+'stringsRelease'^8'stringsSustain'a'stringsRelease'^8
+## 5
+^8'stringsSustain'>g+'stringsRelease'^8'stringsSustain'<f+'stringsRelease'^8'stringsSustain'<e-
+## 6
+## Harp, originally channel 16
+'harp'
+c+2.
+## 7
+'wrapUpRelease'^2
+;
+
+
+{6}
+## Strings Chord Low, Playing a portion of notes found originally on channels 10 through 15
+'stringsChord-o1'
+l4
+r2g+e-
+## Time signature becomes 3/4 here
+## 2
+bb-4.'stringsRelease'^8'stringsSustain'
+## Time signature becomes 4/4 here
+## 3
+ef+2'stringsRelease'^4
+## Time signature becomes 3/4 here
+## 4
+^8
+## Late Strings, playing a portion of notes found originally on channels 7 through 9.
+'lateStrings-o2'
+l8
+g+'stringsRelease'^8'stringsSustain'<g+'stringsRelease'^8'stringsSustain'<e
+## 5
+'stringsRelease'^4'stringsSustain'>c+'stringsRelease'^8'stringsSustain'g+'stringsRelease'^8'stringsSustain'
+## 6
+## Harp, originally channel 16
+'harp'
+## Delay by 2 ticks before playing
+&2r64 &142e2
+## 7
+'wrapUpRelease'^2
+;
+
+
+{7}
+## Harp, playing a portion of notes found originally on channels 16 through 21
+'harp+o2'
+l4
+c+>g+ee-
+## Time signature becomes 3/4 here
+## 2
+^4.c+4.
+## Time signature becomes 4/4 here
+## 3
+^4.c+2^8
+## Time signature becomes 3/4 here
+## 4
+## Same channels, but use the santur for the harp's lower sample
+'santur-o2'c+4<c+4
+'harp'a4
+## 5
+'santur-o2'
+c+4<c+4
+'harp'g+4
+## 6
+## Harp, originally channel 17
+'harp'
+## Delay by 4 ticks before playing
+&4r64 &140g+2
+## 7
+'wrapUpRelease'^2
+;
+
+
+{8}
+## Harp, playing a portion of notes found originally on channels 16 through 21
+'harp+o1'
+l4
+r8g+ee-c+8
+## Time signature becomes 3/4 here
+## 2
+^2<c+4
+## Time signature becomes 4/4 here
+## 3
+^2c+2
+## Time signature becomes 3/4 here
+## 4
+^8
+## Same channels, but use the santur for the harp's lower sample
+'santur-o2'g+4'harp'g+4<e8
+## 5
+^8'santur-o2'g+4'harp'f+4<e-8
+## 6
+## Harp, originally channel 18
+'harp+o1'
+## Delay by 6 ticks before playing
+&6r64 &138c+2
+## 7
+'wrapUpRelease'^2
+;
