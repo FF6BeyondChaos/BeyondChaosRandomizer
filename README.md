@@ -3,7 +3,7 @@
 FF6 Beyond Chaos EX Randomizer
 a fork of Abyssonym's FF6 Beyond Chaos Randomizer
 Version:    5.0.0
-Date:       2021-07-21
+Date:       2021-07-15
 URL:        https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest
 Beyond Chaos Discord:    https://discord.gg/S3G3UXy
 
