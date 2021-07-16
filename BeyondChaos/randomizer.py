@@ -5074,6 +5074,8 @@ def randomize(args: List[str]) -> str:
     elif Options_.is_code_active('halloween') and not Options_.is_code_active('ancientcave'):
         manage_spookiness()
         
+    if Options_.is_code_active('dancelessons'):
+        no_dance_stumbles(fout)
     banon_life3(fout)
     allergic_dog(fout)
     y_equip_relics(fout)
