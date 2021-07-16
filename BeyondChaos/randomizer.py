@@ -55,7 +55,7 @@ from musicinterface import randomize_music, manage_opera, get_music_spoiler, mus
 from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
-                     cycle_statuses)
+                     cycle_statuses, no_dance_stumbles)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
