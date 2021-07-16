@@ -76,9 +76,9 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from importlib import reload
 
 
-VERSION = "5"
+VERSION = "1"
 BETA = True
-VERSION_ROMAN = "V"
+VERSION_ROMAN = "I"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
@@ -3704,9 +3704,9 @@ def manage_opening():
     codestatus = "CODES ON" if Options_.active_codes else "CODES OFF"
     display_flags = "".join(display_flags).upper()
     replace_credits_text(0x659C, "ffvi")
-    replace_credits_text(0x65A9, "BEYOND CHAOS EX")
+    replace_credits_text(0x65A9, "BEYOND CHAOS CE")
     replace_credits_text(0x65C0, "by")
-    replace_credits_text(0x65CD, "SubtractionSoup")
+    replace_credits_text(0x65CD, "DarkSlash")
     replace_credits_text(0x65F1, "Based on")
     replace_credits_text(0x6605, "Beyond Chaos by Abyssonym", split=True)
     replace_credits_text(0x6625, "flags")
@@ -4400,7 +4400,7 @@ def randomize(args: List[str]) -> str:
         args[1] = TEST_FILE
         args[2] = TEST_SEED
     sleep(0.5)
-    print('You are using Beyond Chaos EX Randomizer version "%s".' % VERSION)
+    print('You are using Beyond Chaos CE Randomizer version "%s".' % VERSION)
     if BETA:
         print("WARNING: This version is a beta! Things may not work correctly.")
 
@@ -4620,9 +4620,9 @@ def randomize(args: List[str]) -> str:
     s = "Using seed: %s.%s.%s.%s" % (VERSION, Options_.mode.name, flags, seed)
     print(s)
     log(s, section=None)
-    log("This is a game guide generated for the Beyond Chaos EX FF6 Randomizer.",
+    log("This is a game guide generated for the Beyond Chaos CE FF6 Randomizer.",
         section=None)
-    log("For more information, visit https://github.com/subtractionsoup/beyondchaos",
+    log("For more information, visit https://github.com/FF6BeyondChaos/BeyondChaosRandomizer",
         section=None)
 
     commands = commands_from_table(COMMAND_TABLE)
