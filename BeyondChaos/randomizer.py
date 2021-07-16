@@ -4405,6 +4405,7 @@ def randomize(args: List[str]) -> str:
         print("WARNING: This version is a beta! Things may not work correctly.")
 
     previous_rom_path = ''
+    previous_output_directory = ''
     if len(args) > 2:
         sourcefile = args[1].strip()
     else:
@@ -4413,20 +4414,44 @@ def randomize(args: List[str]) -> str:
             config.read('bcex.cfg')
             if 'ROM' in config:
                 previous_rom_path = config['ROM']['Path']
-        except IOError:
+                previous_output_directory = config['ROM']['Output']
+        except (IOError, KeyError):
             pass
 
-        previous = f" (blank for previous: {previous_rom_path})" if previous_rom_path else ""
+        previous_input = f" (blank for previous: {previous_rom_path})" if previous_rom_path else ""
         sourcefile = input(f"Please input the file name of your copy of "
-                           f"the FF3 US 1.0 rom{previous}:\n> ").strip()
+                           f"the FF3 US 1.0 rom{previous_input}:\n> ").strip()
         print()
-
+        
     if previous_rom_path and not sourcefile:
         sourcefile = previous_rom_path
     try:
         f = open(sourcefile, 'rb')
         data = f.read()
         f.close()
+
+        if len(args) > 4:
+            #If a directory was supplied by the GUI, use that directory
+            previous_output_directory = args[4]
+        else:
+            #If no previous directory or an invalid directory was obtained from bcex.cfg, default to the ROM's directory
+            if not previous_output_directory or not os.path.isdir(previous_output_directory):
+                previous_output_directory = sourcefile[:sourcefile.rindex('/')]
+
+            while True:
+                #Input loop to make sure we get a valid directory
+                previous_output = f" (blank for previous: {previous_output_directory})"
+                output_directory = input(f"Please input the directory to place randomized the ROM file. {previous_output}:\n> ").strip().replace('\\', '/')
+                print()
+
+                if previous_output_directory and not output_directory:
+                    output_directory = previous_output_directory
+
+                if os.path.isdir(output_directory):
+                    #Valid directory received. Break out of the loop.
+                    break
+                else:
+                    print("That output directory does not exist. Please try again.")
     except IOError:
         response = input("File not found. Would you like to search the current directory \n"
             "for a valid FF3 1.0 rom? (y/n) ")
@@ -4458,7 +4483,7 @@ def randomize(args: List[str]) -> str:
     del f
 
     saveflags = False
-    if sourcefile != previous_rom_path:
+    if sourcefile != previous_rom_path or output_directory != previous_output_directory:
         saveflags = True
 
     flaghelptext = '''0-9 Shorthand for the text saved under that digit, if any
@@ -4556,6 +4581,16 @@ def randomize(args: List[str]) -> str:
     seed = seed % (10 ** 10)
     reseed()
 
+    original_rom_location = sourcefile
+
+    if '.' in sourcefile:
+        tempname = sourcefile.rsplit('.', 1)
+    else:
+        tempname = [sourcefile, 'smc']
+    
+    outfile = output_directory + '.'.join([tempname[0][tempname[0].rindex('/'):], str(seed), tempname[1]])
+    outlog = output_directory + '.'.join([tempname[0][tempname[0].rindex('/'):], str(seed), 'txt'])
+
     if saveflags:
         try:
             config = configparser.ConfigParser()
@@ -4565,6 +4600,13 @@ def randomize(args: List[str]) -> str:
             if 'speeddial' not in config:
                 config['speeddial'] = {}
             config['ROM']['Path'] = sourcefile
+
+            #Save the output directory
+            if str(output_directory).lower() == str(sourcefile[:str(sourcefile).rindex('/')]).lower():
+                #If the output directory is the same as the ROM directory, save an empty string
+                config['ROM']['Output'] = ''
+            else:
+                config['ROM']['Output'] = output_directory
             config['speeddial'].update({k:v for k, v in speeddial_opts.items() if k != '!'})
             with open('bcex.cfg', 'w') as cfg_file:
                 config.write(cfg_file)
@@ -4575,15 +4617,6 @@ def randomize(args: List[str]) -> str:
                 os.remove('savedflags.txt')
             except OSError:
                 pass
-
-    original_rom_location = sourcefile
-
-    if '.' in sourcefile:
-        tempname = sourcefile.rsplit('.', 1)
-    else:
-        tempname = [sourcefile, 'smc']
-    outfile = '.'.join([tempname[0], str(seed), tempname[1]])
-    outlog = '.'.join([tempname[0], str(seed), 'txt'])
 
     if len(data) % 0x400 == 0x200:
         print("NOTICE: Headered ROM detected. Output file will have no header.")
