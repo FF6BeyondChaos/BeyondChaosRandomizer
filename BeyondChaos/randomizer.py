@@ -4441,7 +4441,7 @@ def randomize(args: List[str]) -> str:
             while True:
                 #Input loop to make sure we get a valid directory
                 previous_output = f" (blank for previous: {previous_output_directory})"
-                output_directory = input(f"Please input the directory to place randomized the ROM file. {previous_output}:\n> ").strip().replace('\\', '/')
+                output_directory = input(f"Please input the directory to place the randomized ROM file. {previous_output}:\n> ").strip().replace('\\', '/')
                 print()
 
                 if previous_output_directory and not output_directory:
