@@ -27,7 +27,7 @@ def randomize_music(fout, options_, opera=None, form_music_overrides={}):
         events += "H"
     f_chaos = options_.is_code_active('johnnyachaotic')
 
-    kan_mode = Options_.mode.name == 'katn'
+    kan_mode = options_.mode.name == 'katn'
 
     fout.seek(0)
     data = fout.read()

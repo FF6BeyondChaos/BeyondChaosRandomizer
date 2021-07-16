@@ -197,7 +197,7 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
     Dracovious - Created new GUI and R-Limit, and some other codes
 	GreenKnight5 - First GUI, Cecilbot
 	DrInsanoPHD - Refactoring code, character stats randomizer, bug fixes, lots of help with EX V5 release
-	Crimdahl - Rotating status patch, lots of help with EX V5 release
+	Crimdahl - Rotating status patch, dancelessons code lots of help with EX V5 release
 	fusoyeahhh - lots of help with EX V5 release
 	RazzleStorm - refactoring some code, adding type hints, lots of help with EX V5 release
 	CDude - lots of help with event code for EX V5 release
