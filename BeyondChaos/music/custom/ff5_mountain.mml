@@ -20,15 +20,15 @@
 #WAVE 0x29 0x1C snare
 #BRR  0x2A 0x79; brr/ff5_19_synth_chord, 8403, 0000, FFEA,  {646}
 
-#def 0i=   |0
+#def 0i=   |0 %y1%s5
 #def 0o=   o5
-#def 0v=   v60
-#def 0f= v1,60
+#def 0v=   v67
+#def 0f= v1,67
 
 #def 1i=   |1
 #def 1o=   o5
-#def 1v=   v88
-#def 1f= v1,88
+#def 1v=   v72
+#def 1f= v1,72
 
 #def 2i=   |2
 #def 2o=   o5
@@ -37,8 +37,8 @@
 
 #def 3i=   |3
 #def 3o=   o4
-#def 3v=   v67
-#def 3f= v1,67
+#def 3v=   v50
+#def 3f= v1,50
 
 #def 4i=   |4
 #def 4o=   o3
@@ -86,9 +86,10 @@
 ## auto percussion  0x29
 #drum "l"= 5a
 
+#def init= t141 %x224 %v40 %b0,85 %f0,0
 
 {1}
-t141%b0,85%f0,0%v40%x255'0v*v1.25'p67
+'init''0v*v1.25'p67
 '0i' m12,20,195%e1r1r2.'0o-o1'b24r24<e24r24f+24r24
 $101b2.e24r24a24r24b24r24<e2c+2d4>b12r2r6r2.>b24r24<e24r24f+24r24b2.e24
 r24a24r24b24r24<e2c+4e4f+4e12d12c+12d4>b4<c+4>a4f+4a4b1^2r4>b24r24<e24

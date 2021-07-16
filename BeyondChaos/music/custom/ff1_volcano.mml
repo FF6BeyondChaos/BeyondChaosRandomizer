@@ -16,7 +16,7 @@
 #WAVE 0x2A 0x3C - was 0x11 - hihat
 #WAVE 0x2F 0x3A - was 0x0F - hihat
 
-#def init= t150 %x255 %v50 %b0,70 %f0,0
+#def init= t150 %x220 %v50 %b0,70 %f0,0
 
 #def strings= |0 's' p70 o5 m %e1
 #def cembalo= |1 'p' p50 o5 m %e1
@@ -27,21 +27,21 @@
 #def harp= |5 'h' p20 o5 m %e1
 #def tpet= |6 't' p76 o5 m48,18,231 %e1
 
-#def s= v64
-#def p= v48
-#def c= v88
-#def b= v40
-#def o= v56
-#def of= v1,56
-#def v= v48
-#def h= v32
-#def t= v44
-#def tf= v1,44
+#def s= v85
+#def p= v64
+#def c= v117
+#def b= v53
+#def o= v74
+#def of= v1,74
+#def v= v64
+#def h= v43
+#def t= v59
+#def tf= v1,59
 
-#drum "k"=5a |8 v64 p55 %e0
-#drum "s"=5a |9 v88 p75 %e1
-#drum "h"=5a |F v32 p100 %e0
-#drum "o"=5a |A v24 p100 %e0 %r17
+#drum "k"=5a |8 v85  p55  %e0
+#drum "s"=5a |9 v117 p75  %e1
+#drum "h"=5a |F v43  p100 %e0
+#drum "o"=5a |A v32  p100 %e0 %r17
 
 #cdef ( %l1
 #cdef ) %l0

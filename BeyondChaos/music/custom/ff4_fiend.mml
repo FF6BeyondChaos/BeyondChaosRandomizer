@@ -19,15 +19,15 @@
 #def 0v=   v100
 #def 0f= v1,100
 
-#def 1i=   |1
+#def 1i=   |1 %s6
 #def 1o=   o5
-#def 1v=   v110
-#def 1f= v1,110
+#def 1v=   v126
+#def 1f= v1,126
 
-#def 2i=   |2
+#def 2i=   |2 %a13
 #def 2o=   o5
-#def 2v=   v100
-#def 2f= v1,100
+#def 2v=   v90
+#def 2f= v1,90
 
 #def 3i=   |3
 #def 3v=   v150
@@ -35,8 +35,8 @@
 
 #def 4i=   |4
 #def 4o=   o6
-#def 4v=   v95
-#def 4f= v1,95
+#def 4v=   v90
+#def 4f= v1,90
 
 #def 5i=   |5
 #def 5v=   v100
@@ -47,20 +47,10 @@
 ## auto percussion  0x25
 #drum "i"= 6c %r26
 
+#def init= t170 %x224 %v50 %b0,70 %f0,0
 
-{4}
-t170%v50%b0,70%f0,0'0v*v1.15'p35
-'0i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e1r1r1r1'0o'[4a4e8]a4e24e24e24
-e24e24e24
-$102[e8e8e8e8a4e8e8a4e8e4e8]e4[[3^2a16a16e8]^2e16e16e16e16e4][4a2e2a4e2
-e24e24e24e24e24e24][e8a8a8e8a8a8e8a8a1][6r1]r2.e24e24e24e24e24e24a4e4a4
-e4[[a1r2.e24e24e24e24e24e24j2,101a2e24e24e24e24e24e24a4]
-$101a4a2e24e24e24e24e24e24[a8a8a8e8e8e8][a8a8e8e8]a8e8^2.r1]r1r1r1r1r4
-a2e2a2e1r4r1
-;102
-
-{4}
-t170%v50%b0,70%f0,0'0v*v1.15'p35'0i' %e1
+{6}
+'init''0v*v1.15'p35'0i' %e1
 r1r1r1
 '0o'[4e4>b8<]e4>[6b24]
 $
@@ -90,7 +80,7 @@ f+8a8f8g+8e8<c8>a8r2.r1]<[f2e2d+2e2f2g4f4e1]
 ;202
 
 
-{5}
+{4}
 '1v*v.70'p80
 '1i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e1m50,18,207'1o-o2'g+8a8b8<c4
 >b8<c8d8e4d+8f4e8a8g+8<c8>g+8a8<f8e8a8g+8<c8d1^1
@@ -146,7 +136,7 @@ d+48f48g4>g+8a48b48<c48d48e48f48g+4a8g8f8e8d8c8>b8a8g+16<e16>b16g+16f16
 ;501
 
 
-{6}
+{5}
 '4v*v1.00'p64
 '4i' {'VolEnvMode 13'}%r3{'Duration 95%'}%e1m50,18,207'4o-o3'g+8a8b8<c4
 >b8<c8d8e4d+8f4e8a8g+8<c8>g+8a8<f8e8a8g+8<c8>g+1^1

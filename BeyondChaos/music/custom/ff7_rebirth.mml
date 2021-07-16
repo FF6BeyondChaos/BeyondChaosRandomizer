@@ -21,17 +21,17 @@
 
 #BRR 0x22; brr/ff7-d-37, @0103bl, *1.393, FFE0, {141}  [-12] Ff7 kbass       ----   
 
-#def global= t180 %x224 %v50 %b0,70 %f0,0
+#def global= t180 %x212 %v50 %b0,70 %f0,0
 
-#def str= %e1 |0 o5 v48 m48,18,215
-#def org= %e1 |1 o5 v64 m48,18,223
+#def str= %e1 |0 o5 v38 m48,18,215
+#def org= %e1 |1 o5 v51 m48,18,223
 #def syn= %e1 |5 o5 'synvol' m12,18,239
-#def syb= %e1 |3 o4 v127 m
+#def syb= %e1 |3 o4 v102 m
 #def acb= %e1 |2 o5 'kbassvol' m
 #def pia= %e1 |4 o3 'ph' %y4%s3%r13
 
-#def synvol= v28
-#def kbassvol= v112
+#def synvol= v26
+#def kbassvol= v90
 
 #def 02= 'str' p0
 #def 03= 'str' p30
@@ -45,33 +45,36 @@
 #def 11= 'acb' p100
 #def 12= 'pia' p127
 #def 13= 'syb' p65
-#def 18= %e1 |6 o5 v104 m p65 %y1%s2%r10
-#def 19= %e1 |7 o3 v127 m p65
+#def 18= %e1 |6 o5 v83 m p65 %y1%s2%r10
+#def 19= %e1 |7 o3 v104 m p65
 #def 21= 'syn' p63
 #def 22= 'syn' p127 'synvol*v.5'
 
-#def ridevol= v112
+#def ridevol= v90
+#def hatvol= v42
+#def tomvol= v38
+#def drumvol= v85
 
-#drum "o"=5f |D %e0 v48 %r p100
-#drum "h"=5e |D %e0 v48 %r29 p100
-#drum "h+"=5e |D %e0 v80 %r29 p100
-#drum "k"=5a |A %e0 v127 p65
+#drum "o"=5f |D %e0 'hatvol*v.6' %r p100
+#drum "h"=5e |D %e0 'hatvol*v.6' %r29 p100
+#drum "h+"=5e |D %e0 'hatvol' %r29 p100
+#drum "k"=5a |A %e0 'drumvol*v1.27' p65
 #drum "r"=5g |9 %e0 'ridevol' p50
 #drum "r-"=5g |9 %e0 'ridevol*v.75' p50
-#drum "s"=5a |B %e0 v127 p65
-#drum "s-"=5a |B %e0 v80 p65
-#drum "t"=5e |C %e0 v64 p110
-#drum "u"=5c+ |C %e0 v64 p70
-#drum "v"=4a |C %e0 v64 p30
-#drum "y"=5a |E %e0 v127 %r p65
-#drum "z"=5a |E %e0 v127 %r17 p65
+#drum "s"=5a |B %e0 'drumvol*v1.27' p65
+#drum "s-"=5a |B %e0 v64 p65
+#drum "t"=5e |C %e0  'tomvol' p110
+#drum "u"=5c+ |C %e0 'tomvol' p70
+#drum "v"=4a |C %e0  'tomvol' p30
+#drum "y"=5a |E %e1 v102 %y0%s6%r19 p65
+#drum "z"=5a |E %e1 v102 %y0%s6%r19 p65
 
-#drum "b"=5e |3 %e1 v127
+#drum "b"=5e |3 %e1 v102
 
-#def ph= v104
-#def pl= v50
+#def ph= v83
+#def pl= v40
 
-#def timps= v70a+16v80a+16v90a+16v100a+16 v110a+16v120a+16v127a+16v127a+16
+#def timps= v56a+16v64a+16v72a+16v80a+16 v88a+16v96a+16v104a+16v104a+16
 
 {1}
 'global'
@@ -198,7 +201,8 @@ l8 "r4r4r-r4r4tttuuvv r4r4r-r4r4r4r-t16u16v16v16s4"
 ##81
 [28"!!!ok4"] l8 "sk4k4ksk"
 ##89
-"skskr-r4r4tttuuvv k4.k4.k4.s-" v90"\s"v100"\s"v110"\s"v120"\s" "ss" r2
+"skskr-r4r4tttuuvv k4.k4.k4.s-"
+'drumvol*v.9'"\s"'drumvol*v1'"\s"'drumvol*v1.1'"\s"'drumvol*v1.2'"\s" "ss" r2
 ##93
 l8 [4"!!!o k4s4kks4 k4sk4ksb"]
 ;

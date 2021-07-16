@@ -23,8 +23,10 @@
 #def ob= |5 p84
 #def oo= o5
 
+#def init= t110 %x232 %v50 %b0,100 %f0,0
+
 {1}
-l16t110%v50%x192%b0,100%f0,0%e1 $1 v104p62@32o3e8o4e8g8b8o3e8o4e8g8o5c8  
+l16'init'%e1 $1 v104p62@32o3e8o4e8g8b8o3e8o4e8g8o5c8  
 o3e8o4e8g8o5c+8o3e8o4e8g8o5c8  o3e8o4e8g8b8o3e8o4e8g8o5c8  o3e8o4e8g8o5c+8o3e8o4e8g8o5c8  
 o3a8o4e8a8o5c8o3a8o4f8a8o5c8  o3a8o4f+8a8o5c8o3a8o4f8a8o5c8  o3a8o4e8a8o5c8o3a8o4f8a8o5c8  
 o3a8o4f+8a8o5c8o3a8o4f8a8o5c8  o3a8o4e8a8o5c8o3a8o4f8a8o5c8  o3a8o4f+8a8o5c8o3a8o4f8a8o5c8  

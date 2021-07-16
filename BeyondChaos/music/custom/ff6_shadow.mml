@@ -22,16 +22,16 @@
 
 #def 1i=   |1
 #def 1o=   o6
-#def 1v=   v100
-#def 1f= v1,100
+#def 1v=   v33
+#def 1f= v1,33
 
 #def 2i=   |2
 #def 2o=   o5
 #def 2v=   v100
 #def 2f= v1,100
 
-#def 3i=   |3
-#def 3o=   o4 %y4%s5%r12
+#def 3i=   |3 %y0%s2%r12
+#def 3o=   o4 
 #def 3v=   v100
 #def 3f= v1,100
 
@@ -57,8 +57,8 @@
 
 #def 8i=   |8
 #def 8o=   o5
-#def 8v=   v100
-#def 8f= v1,100
+#def 8v=   v65
+#def 8f= v1,65
 
 ## auto percussion  0x24
 #drum "h"= 5a %y6%s0
@@ -69,7 +69,7 @@
 ## auto percussion  0x27
 #drum "k"= 5a %r22
 ## auto percussion  0x28
-#drum "l"= 6d+ %r24
+#drum "l"= 6g %a14%y6%s2%r24
 
 #def wh= |4> %a10
 #def wl= |1<

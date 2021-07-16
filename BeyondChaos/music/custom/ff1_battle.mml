@@ -21,7 +21,7 @@
 #WAVE 0x2C 0x2C clash
 #WAVE 0x2D !0x2E! _0x00_ crash
 
-#def init= t150 %x255 %v40 %b0,85 %f0,0
+#def init= t150 %x216 %v40 %b0,85 %f0,0
 
 #def lead= |0 o4 'l' m24,18,199
 #def harm= |1 o5 'h' m

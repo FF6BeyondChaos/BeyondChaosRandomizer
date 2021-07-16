@@ -1,3 +1,26 @@
+# MUSICRANDOMIZER - functions to randomize & insert music into FF6
+
+# *** READ THIS BEFORE EDITING THIS FILE ***
+
+# This file is part of the johnnydmad project.
+# ( https://github.com/emberling/johnnydmad )
+# johnnydmad is designed to be used inside larger projects, e.g.
+# Beyond Chaos, Beyond Chaos Gaiden, or potentially others in the future.
+# If you are editing this file as part of "Beyond Chaos" or any other
+# container project, please respect the independence of these projects:
+# - Keep johnnydmad project files in a subdirectory, and do not modify
+#   the directory structure or mix in arbitrary code files specific to
+#   your project.
+# - Keep changes to johnnydmad files in this repository to a minimum.
+#   Don't make style changes to code based on the standards of your
+#   containing project. Don't remove functionality that you feel your
+#   containing project won't need. Keep it simple so that code and
+#   changes can be easily shared across projects.
+# - Major changes and improvements should be handled through, or at
+#   minimum shared with, the johnnydmad project, whether through
+#   submitting changes or through creating a fork that other johnnydmad
+#   maintainers can easily see and pull from.
+
 import configparser
 import copy
 import os
@@ -5,8 +28,13 @@ import random as pyrandom
 import re
 import sys
 
-from music.mfvitools.mml2mfvi import mml_to_akao, get_variant_list, get_brr_imports
-from music.mfvitools.insertmfvi import insertmfvi, byte_insert, int_insert, SampleIDError, FreeSpaceError
+# This construction is required for devtool functionality. Do not remove.
+try:
+    from .mfvitools.mml2mfvi import mml_to_akao, get_variant_list, get_brr_imports
+    from .mfvitools.insertmfvi import insertmfvi, byte_insert, int_insert, SampleIDError, FreeSpaceError
+except ImportError:
+    from mfvitools.mml2mfvi import mml_to_akao, get_variant_list, get_brr_imports
+    from mfvitools.insertmfvi import insertmfvi, byte_insert, int_insert, SampleIDError, FreeSpaceError
 
 JOHNNYDMAD_FREESPACE = ["53C5F-9FDFF", "310000-37FFFF", "410000-4FFFFF"]
 TRAIN_SAMPLE_ID = 0x3A

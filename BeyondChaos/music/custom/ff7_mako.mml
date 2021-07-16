@@ -13,7 +13,7 @@
 #WAVE 0x28 0x5A Timpani
 #WAVE 0x2C 0xBA Rev.Cymbal
 
-#def init= t80 %x255 %v50 %b0,100 %f0,0
+#def init= t80 %v50 %b0,100 %f0,0
 
 #def piano= |0 'p' o7 m
 #def vox= |1 'v' o5 m40,18,175
@@ -26,18 +26,18 @@
 
 #def revc= |C p64 o3 'c' m %a1%r5 'cf*v87,1.27' g1 'cf*v192,.72' ^1 'fc*v122,.37' ^1
 
-#def p= v57
-#def v= v52
-#def vf= v1,52
-#def s= v40
-#def y= v64
-#def b= v32
-#def bf= v1,32
-#def m= v48
-#def l= v80
-#def t= v96
-#def c= v64
-#def cf= v1,64
+#def p= v58
+#def v= v57
+#def vf= v1,57
+#def s= v44
+#def y= v70
+#def b= v35
+#def bf= v1,35
+#def m= v53
+#def l= v88
+#def t= v106
+#def c= v70
+#def cf= v1,70
 
 #cdef ( %l1
 #cdef ) %l0

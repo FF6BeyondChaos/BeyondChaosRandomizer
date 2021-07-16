@@ -13,7 +13,7 @@
 #WAVE 0x28 0x0A ## Kick
 #WAVE 0x29 0x1D ## Snare
 
-#def init=t141 %x220 %v40 %b0,70 %f0,0
+#def init=t141 %x240 %v40 %b0,70 %f0,0
 
 #def introOboeVol=       v50
 #def leadOboeVol=        v90

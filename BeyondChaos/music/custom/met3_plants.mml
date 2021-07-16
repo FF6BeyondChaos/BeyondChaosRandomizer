@@ -19,7 +19,7 @@
 #WAVE 0x2A 0x68 orch stab
 #WAVE 0x2F 0x3A hihat (closed)
 
-#def init= t132 %x255 %v70 %b0,30 %f0,0
+#def init= t132 %x248 %v70 %b0,30 %f0,0
 
 #def bsp= |0 'b' o7 %r0
 #def bsy= |1 'y' o6 %a15%y7%s1%r0
@@ -45,10 +45,10 @@
 #def mf=v1,80
 #def d= v96
 #def df=v1,96
-#def t= v80
-#def tf=v1,80
-#def o= v80
-#def of=v1,80
+#def t= v64
+#def tf=v1,64
+#def o= v64
+#def of=v1,64
 
 #def h= v50
 #def hf=v1,50

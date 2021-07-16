@@ -32,7 +32,7 @@
 #drum "f+"=3f |C v127 p64 %e1
 #drum "d"=5d+ |E v127 p64 %e1
 #drum "d+"=5d+ |D v108 p64 %e1
-#drum "a+"=4a |C v127 p64 %e1
+#drum "a+"=3a |C v127 p64 %e1
 #drum "y"=5f |D v108 p64 %e1
 #drum "z"=5a |9 v80 p64 %e1 %y3%s4%r14
 

@@ -19,7 +19,7 @@
 #WAVE 0x2B 0x3B hihat
 #WAVE 0x2C 0x2D crash
 
-#def init= t158 %x255 %v40 %b0,100 %f0,0
+#def init= t158 %x216 %v40 %b0,100 %f0,0
 
 #def clari= |0 o5 'c' %e1 m48,18,215 %r4
 #def tpet=  |1 o5 't' %e1 m %y3%s5%r5
@@ -35,15 +35,15 @@
 #def v= v48
 #def w= v56
 #def h= v64
-#def b= v80
+#def b= v72
 
 #def vf= v1,48
 #def hf= v1,64
 
-#def vtom= v56
+#def vtom= v52
 #def vkick= v88
 #def fkick= v1,88
-#def vsnare= v88
+#def vsnare= v80
 #def vhat= v88
 
 #drum "j"= 5a |8 p64 %e0

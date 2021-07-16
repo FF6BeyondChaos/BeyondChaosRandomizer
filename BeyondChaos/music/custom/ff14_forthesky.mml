@@ -18,7 +18,7 @@
 #WAVE 0x2E 0x9D triangle
 #WAVE 0x2F 0x6C tambourine (anvil)
 
-#def init= t111 %x240 %v40 %b0,100 %f0,0
+#def init= t111 %v40 %b0,100 %f0,0
 
 #def str= |0 's' p52 o5 m24,18,192
 #def ost= |1 's' p32 o5 m

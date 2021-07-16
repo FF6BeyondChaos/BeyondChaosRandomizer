@@ -1,0 +1,72 @@
+#TITLE Magus' Castle
+#ALBUM Chrono Trigger
+#COMPOSER Yasunori Mitsuda
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x62 strings
+#WAVE 0x21 0x74 vox
+#WAVE 0x22 0x86 horn
+#WAVE 0x23 0x5C timpani
+
+#def 0i=   |0
+#def 0o=   o6
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v100
+#def 2f= v1,100
+
+#def 3i=   |3
+#def 3o=   o6
+#def 3v=   v100
+#def 3f= v1,100
+
+
+{1}
+t75%v40%b0,100%f0,0%e1r2r4
+'0i' '0v*v.39'p64'0o'%a6b2^4a2^4g2^4a2^4b2^4a2^4%a8b4<e4>a4b4<e4>a4%a7
+'0v*v.39''0f*v144,.86'b2^4r2r4;
+
+{2}
+%e1
+'0i' '0v*v.66'p64'0o-o3'%a6e2^4^2^4[3f2^4e2^4]^2^4'0v*v.16'g+12^2^4r2
+r4;
+
+{3}
+%e1r2r4
+'0i' '0v*v.50'p64'0o+o1'%a6e2^4d2c4>b2^4a4g4.f8e2^4d2c4>b2^4^2^4'0f*v144,.86'
+^2^4r2r4;
+
+{4}
+%e1
+'0i' '0v*v.78'p64'0o-o4'%a6e2^4^2^4[3f2^4e2^4]^2^4'0f*v144,1.00'^2^4r2
+r4;
+
+{5}
+%e1
+'0i' '0v*v.31'p27'0o+o2'%a6%r8e2^4^2^4^2^4
+'2i' '2v*v.55''2o'm24,24,195r4e2r4a2b2^4a2^4b2^4^2^4'2f*v144,.94'^2^4r2
+r4;
+
+{6}
+%e1r2r4r2r4r2r4
+'2i' '2v*v.47'p100'2o'm24,24,195r2g4f4r4<c4>g2^4f2^4g2^4^2^4'2f*v144,.86'
+^2^4r2r4;
+
+{7}
+%e1[7r2r4]
+'1i' '1v*v.62'p20'1o'e2^4^2^4'1f*v80,.94'^2^4r2r4;
+
+{8}
+%e1[3r2r4]
+'3i' '3v*v1.10'p64'3o-o2'[e2^4f2^4]e2^4e2^4'3v*v.10''3f*v144,1.27'[36e48
+]^2^4;
+;

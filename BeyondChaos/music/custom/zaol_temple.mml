@@ -13,7 +13,7 @@
 #WAVE 0x28 0x1A snare
 #WAVE 0x2C 0x2C clash cymbal
 
-#def init= t75 %x255 %v40 %b0,70 %f0,0
+#def init= t75 %x224 %v40 %b0,70 %f0,0
 
 #def stld= |0 's' o5 p48 %a11%r15 m6,11,255
 #def stbg= |0 's' o5 p32 %a7%r15 m6,11,207

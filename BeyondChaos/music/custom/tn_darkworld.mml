@@ -27,25 +27,25 @@
 #def bell=     |7 o4  'l'         
 #def oboe=     |8 o4  'r'         %a12%r10
 
-#def s=  v64
-#def o=  v48
-#def c= *v24* `v0`
-#def t=  v64
-#def f=  v48
-#def h=  v56
-#def b= *v24* `v64`
-#def l=  v64
-#def r=  v32
+#def s=  v77
+#def o=  v58
+#def c= *v29* `v0`
+#def t=  v77
+#def f=  v58
+#def h=  v67
+#def b= *v29* `v77`
+#def l=  v77
+#def r=  v38
 
-#def sf=  v1,64
-#def of=  v1,48
-#def cf= *v1,24* `v0`
-#def tf=  v1,64
-#def ff=  v1,48
-#def hf=  v1,56
-#def bf= *v1,24* `v1,64`
-#def lf=  v1,64
-#def rf=  v1,32
+#def sf=  v1,77
+#def of=  v1,58
+#def cf= *v1,29* `v0`
+#def tf=  v1,77
+#def ff=  v1,58
+#def hf=  v1,67
+#def bf= *v1,29* `v1,77`
+#def lf=  v1,77
+#def rf=  v1,38
 
 #def flutevib= m30,50,215
 #def flutevib2= m24,28,251

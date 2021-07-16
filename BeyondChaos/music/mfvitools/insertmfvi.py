@@ -1,8 +1,38 @@
 #!/usr/bin/env python3
+
+# INSERTMFVI - module and command line tool for inserting music and
+# music-related data into Final Fantasy VI ROMs
+
+# *** READ THIS BEFORE EDITING THIS FILE ***
+
+# This file is part of the mfvitools project.
+# ( https://github.com/emberling/mfvitools )
+# mfvitools is designed to be used inside larger projects, e.g.
+# johnnydmad, Beyond Chaos, Beyond Chaos Gaiden, or potentially
+# others in the future.
+# If you are editing this file as part of "johnnydmad," "Beyond Chaos,"
+# or any other container project, please respect the independence
+# of these projects:
+# - Keep mfvitools project files in a subdirectory, and do not modify
+#   the directory structure or mix in arbitrary code files specific to
+#   your project.
+# - Keep changes to mfvitools files in this repository to a minimum.
+#   Don't make style changes to code based on the standards of your
+#   containing project. Don't remove functionality that you feel your
+#   containing project won't need. Keep it simple so that code and
+#   changes can be easily shared across projects.
+# - Major changes and improvements should be handled through, or at
+#   minimum shared with, the mfvitools project, whether through
+#   submitting changes or through creating a fork that other mfvitools
+#   maintainers can easily see and pull from.
+
 import configparser, argparse, sys, shlex, re, os
-from music.mfvitools.mml2mfvi import (get_variant_list, get_brr_imports, mml_to_akao, get_echo_delay, parse_brr_loop, 
-                                      parse_brr_tuning, parse_brr_env)
 from copy import copy
+
+try:
+    import mml2mfvi
+except ImportError:
+    from . import mml2mfvi
 
 DEBUG = False
 VERBOSE = False
@@ -177,7 +207,7 @@ class Sequence():
                         warning(f"LOADMML: couldn't open file {self.filename}")
                         self.filetype = None
             if self.filetype:
-                variants = get_variant_list(self.mml)
+                variants = mml2mfvi.get_variant_list(self.mml)
                 if self.variant in variants:
                     v = self.variant
                 else:
@@ -185,11 +215,11 @@ class Sequence():
                     if self.variant:
                         warning(f"LOADMML: variant '{self.variant}' not found in {self.filename}, using default")
                         self.variant = None
-                self.imports = get_brr_imports(self.mml, variant=v)
+                self.imports = mml2mfvi.get_brr_imports(self.mml, variant=v)
                 if self.imports:
                     ifprint(f"DEBUG: got imports {self.imports} for {self.filename}", DEBUG)
-                self.sequence, self.inst = mml_to_akao(self.mml, self.filename, variant=v, sfxmode=self.is_sfx)
-                self.edl = get_echo_delay(self.mml, variant=v)
+                self.sequence, self.inst = mml2mfvi.mml_to_akao(self.mml, self.filename, variant=v, sfxmode=self.is_sfx)
+                self.edl = mml2mfvi.get_echo_delay(self.mml, variant=v)
                 if self.edl is None:
                     self.edl = edl
             
@@ -235,9 +265,9 @@ class Sample():
             envtext = "ffe0"
             warning(f"SAMPLEINIT: no envelope data specified for sample {text[0]}, using 15/7/7/0")
             
-        self.loop = parse_brr_loop(looptext)
-        self.tuning = parse_brr_tuning(pitchtext)
-        self.adsr = parse_brr_env(envtext)
+        self.loop = mml2mfvi.parse_brr_loop(looptext)
+        self.tuning = mml2mfvi.parse_brr_tuning(pitchtext)
+        self.adsr = mml2mfvi.parse_brr_env(envtext)
             
     def init_internal(self, inrom, id):
         self.internalid = id
@@ -261,9 +291,9 @@ class Sample():
         
     def init_from_import(self, importinfo, basepath=""):
         self.filename = os.path.join(basepath, sanitize_path(importinfo[0]))
-        self.loop = parse_brr_loop(importinfo[1])
-        self.tuning = parse_brr_tuning(importinfo[2])
-        self.adsr = parse_brr_env(importinfo[3])
+        self.loop = mml2mfvi.parse_brr_loop(importinfo[1])
+        self.tuning = mml2mfvi.parse_brr_tuning(importinfo[2])
+        self.adsr = mml2mfvi.parse_brr_env(importinfo[3])
         
     def load(self):
         if not self.internalid and not self.brr:

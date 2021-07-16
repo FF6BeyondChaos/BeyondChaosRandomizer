@@ -1,0 +1,372 @@
+#TITLE Defeated
+#ALBUM Uncharted Waters: New Horizons
+#COMPOSER Yoko Kanno
+#ARRANGED Rushlight
+
+#WAVE 0x20 0xA5 ## Flute
+
+## NOTE: Time signature is 3/4
+#def init=t87 %x110 %v40 %b0,70 %f0,0
+
+## This is a base volume, multipliers must be applied to it
+#def fluteBaseVol= v175
+#def fluteFade=  v1,175 ## Keep in line with fluteBaseVol
+
+#def fluteSustain= %r5
+#def fluteRelease= %r20
+
+#def flute= |0 o4 %a11 %s5 'fluteSustain' %e1
+
+## Volumes vary so frequently that we'll just apply multipliers as needed outside the instrument macro.
+#def melodyFlute=      'flute' p55
+#def melodyEcho1Flute= 'flute' p73
+#def melodyEcho2Flute= 'flute' p64
+#def supportFlute=     'flute' p80
+#def supportEchoFlute= 'flute' p41
+#def lowFlute=         'flute' p41
+#def lowFluteEcho=     'flute' p80
+#def bassFlute=        'flute' p64
+
+
+{1}
+'init'
+## Melody Flute, originally channel 4 (but also a few notes on channel 8 and then on channel 6 beforehand)
+'melodyFlute+o1'
+l8
+## Measure 1 lasts one beat
+v0'fluteFade*v24,.09'g+ 'fluteBaseVol*v.07''fluteFade*v24,.15'g+
+## 2
+'fluteBaseVol*v.24''fluteFade*v24,.32'<e'fluteBaseVol*v.24''fluteFade*v24,.32'e'fluteBaseVol*v.18''fluteFade*v24,.22'e'fluteBaseVol*v.16'e'fluteBaseVol*v.68'>g+'fluteBaseVol*v.3'g+
+## 3
+'fluteBaseVol*v.6'<e-'fluteBaseVol*v.3'e-'fluteBaseVol*v.18'e-'fluteBaseVol*v.06'e-'fluteBaseVol*v.6'>g+'fluteBaseVol*v.3'g+
+## 4
+'fluteBaseVol*v.68'<c+'fluteBaseVol*v.3'c+'fluteBaseVol*v.24'c+'fluteBaseVol*v.18'c+'fluteBaseVol*v.12'c+'fluteBaseVol*v.06'c+
+## 5
+'fluteBaseVol*v.05'c+'fluteBaseVol*v.04'c+'fluteBaseVol*v.03'c+c+'fluteBaseVol*v.72'>g+'fluteBaseVol*v.36'g+
+## 6
+'fluteBaseVol*v.68'<e'fluteBaseVol*v.3'e'fluteBaseVol*v.24'e'fluteBaseVol*v.18'e'fluteBaseVol*v.6'>g+'fluteBaseVol*v.3'g+
+## 7
+'fluteBaseVol*v.72'<e-'fluteBaseVol*v.36'e-'fluteBaseVol*v.24'e-'fluteBaseVol*v.12'e-'fluteBaseVol*v.68'>g+'fluteBaseVol*v.3'g+
+## 8
+'fluteBaseVol*v.6'<c+'fluteBaseVol*v.36'c+'fluteBaseVol*v.3'c+'fluteBaseVol*v.24'c+'fluteBaseVol*v.18'c+'fluteBaseVol*v.12'c+
+## 9
+'fluteBaseVol*v.06'c+'fluteBaseVol*v.05'c+'fluteBaseVol*v.04'c+v0c+'fluteBaseVol*v.6'c+'fluteBaseVol*v.3'c+
+## 10
+'fluteBaseVol*v.68'g+'fluteBaseVol*v.3'g+'fluteBaseVol*v.24'g+'fluteBaseVol*v.12'g+'fluteBaseVol*v.6'c+'fluteBaseVol*v.3'c+
+## 11
+'fluteBaseVol*v.68'f+'fluteBaseVol*v.3'f+'fluteBaseVol*v.24'f+'fluteBaseVol*v.12'f+'fluteBaseVol*v.68'c+'fluteBaseVol*v.3'c+
+## 12
+'fluteBaseVol*v.6'e'fluteBaseVol*v.3'e'fluteBaseVol*v.6'e-'fluteBaseVol*v.3'e-'fluteBaseVol*v.56'c+'fluteBaseVol*v.24'c+
+## 13
+'fluteBaseVol*v.6'>b'fluteBaseVol*v.3'b'fluteBaseVol*v.24'b'fluteBaseVol*v.12'b'fluteBaseVol*v.56'g+'fluteBaseVol*v.24'g+
+## 14
+'fluteBaseVol*v.6'<e'fluteBaseVol*v.3'e'fluteBaseVol*v.24'e'fluteBaseVol*v.12'e'fluteBaseVol*v.56'>g+'fluteBaseVol*v.24'g+
+## 15
+'fluteBaseVol*v.6'<e-'fluteBaseVol*v.3'e-'fluteBaseVol*v.24'e-'fluteBaseVol*v.12'e-'fluteBaseVol*v.6'>g+'fluteBaseVol*v.3'g+
+## 16
+'fluteBaseVol*v.68'<c+'fluteBaseVol*v.36'c+'fluteBaseVol*v.3'c+'fluteBaseVol*v.24'c+'fluteBaseVol*v.18'c+'fluteBaseVol*v.12'c+
+## 17
+'fluteBaseVol*v.06'c+'fluteBaseVol*v.05'c+'fluteBaseVol*v.04'c+c+'fluteBaseVol*v.03'c+c+
+;
+
+
+{2}
+## Melody Echo 1 Flute, originally channel 2 (but also a few notes on channel 7 beforehand)
+'melodyEcho1Flute+o1'
+l8
+## It's behind by one and a half 8th notes, but we'll base the measure comments on the melody notes' timing
+r8.
+## Measure 1 lasts one beat
+'fluteBaseVol*v.07''fluteFade*v24,.12'g+'fluteBaseVol*v.06''fluteFade*v24,.09'g+
+## 2
+'fluteBaseVol*v.18''fluteFade*v24,.24'<e'fluteBaseVol*v.14''fluteFade*v24,.18'e'fluteBaseVol*v.12'e'fluteBaseVol*v.06'e'fluteBaseVol*v.34'>g+'fluteBaseVol*v.14'g+
+## 3
+'fluteBaseVol*v.28'<e-'fluteBaseVol*v.14'e-'fluteBaseVol*v.07'e-'fluteBaseVol*v.05'e-'fluteBaseVol*v.28'>g+'fluteBaseVol*v.14'g+
+## 4
+'fluteBaseVol*v.28'<c+'fluteBaseVol*v.14'c+'fluteBaseVol*v.12'c+'fluteBaseVol*v.07'c+'fluteBaseVol*v.05'c+'fluteBaseVol*v.04'c+
+## 5
+'fluteBaseVol*v.03'c+c+c+c+'fluteBaseVol*v.34'>g+'fluteBaseVol*v.17'g+
+## 6
+'fluteBaseVol*v.34'<e'fluteBaseVol*v.14'e'fluteBaseVol*v.11'e'fluteBaseVol*v.07'e'fluteBaseVol*v.28'>g+'fluteBaseVol*v.14'g+
+## 7
+'fluteBaseVol*v.34'<e-'fluteBaseVol*v.17'e-'fluteBaseVol*v.11'e-'fluteBaseVol*v.05'e-'fluteBaseVol*v.34'>g+'fluteBaseVol*v.14'g+
+## 8
+'fluteBaseVol*v.28'<c+'fluteBaseVol*v.17'c+'fluteBaseVol*v.14'c+'fluteBaseVol*v.11'c+'fluteBaseVol*v.07'c+'fluteBaseVol*v.05'c+
+## 9
+'fluteBaseVol*v.04'c+'fluteBaseVol*v.03'c+c+c+'fluteBaseVol*v.28'c+'fluteBaseVol*v.14'c+
+## 10
+'fluteBaseVol*v.34'g+'fluteBaseVol*v.14'g+'fluteBaseVol*v.11'g+'fluteBaseVol*v.05'g+'fluteBaseVol*v.28'c+'fluteBaseVol*v.14'c+
+## 11
+'fluteBaseVol*v.34'f+'fluteBaseVol*v.14'f+'fluteBaseVol*v.11'f+'fluteBaseVol*v.05'f+'fluteBaseVol*v.34'c+'fluteBaseVol*v.14'c+
+## 12
+'fluteBaseVol*v.28'e'fluteBaseVol*v.14'e'fluteBaseVol*v.28'e-'fluteBaseVol*v.14'e-'fluteBaseVol*v.26'c+'fluteBaseVol*v.11'c+
+## 13
+'fluteBaseVol*v.28'>b'fluteBaseVol*v.14'b'fluteBaseVol*v.11'b'fluteBaseVol*v.05'b'fluteBaseVol*v.26'g+'fluteBaseVol*v.23'g+
+## 14
+'fluteBaseVol*v.28'<e'fluteBaseVol*v.14'e'fluteBaseVol*v.11'e'fluteBaseVol*v.05'e'fluteBaseVol*v.26'>g+'fluteBaseVol*v.11'g+
+## 15
+'fluteBaseVol*v.28'<e-'fluteBaseVol*v.14'e-'fluteBaseVol*v.11'e-'fluteBaseVol*v.05'e-'fluteBaseVol*v.28'>g+'fluteBaseVol*v.14'g+
+## 16
+'fluteBaseVol*v.28'<c+'fluteBaseVol*v.18'c+'fluteBaseVol*v.14'c+'fluteBaseVol*v.12'c+'fluteBaseVol*v.11'c+'fluteBaseVol*v.09'c+
+## 17
+'fluteBaseVol*v.07'c+c+'fluteBaseVol*v.05'c+'fluteBaseVol*v.04'c+'fluteBaseVol*v.03'c+c+
+;
+
+
+{3}
+## Melody Echo 2 Flute, originally channel 3 (but also a note on channel 5 beforehand)
+'melodyEcho2Flute+o1'
+l8
+## It's behind by one and a half quarter notes, but we'll base the measure comments on the melody notes' timing
+r4.
+## Measure 1 lasts one beat
+'fluteBaseVol*v.08''fluteFade*v24,.11'g+'fluteBaseVol*v.06'g+
+## 2
+'fluteBaseVol*v.16'<e'fluteBaseVol*v.08'e'fluteBaseVol*v.06'e'fluteBaseVol*v.04'e'fluteBaseVol*v.18'>g+'fluteBaseVol*v.08'g+
+## 3
+'fluteBaseVol*v.16'<e-'fluteBaseVol*v.08'e-'fluteBaseVol*v.04'e-'fluteBaseVol*v.03'e-'fluteBaseVol*v.16'>g+'fluteBaseVol*v.08'g+
+## 4
+'fluteBaseVol*v.18'<c+'fluteBaseVol*v.1'c+'fluteBaseVol*v.06'c+'fluteBaseVol*v.04'c+c+c+
+## 5
+c+c+'fluteBaseVol*v.03'c+c+'fluteBaseVol*v.2'>g+'fluteBaseVol*v.08'g+
+## 6
+'fluteBaseVol*v.18'<e'fluteBaseVol*v.08'e'fluteBaseVol*v.06'e'fluteBaseVol*v.08'e'fluteBaseVol*v.16'>g+'fluteBaseVol*v.08'g+
+## 7
+'fluteBaseVol*v.2'<e-'fluteBaseVol*v.08'e-'fluteBaseVol*v.06'e-'fluteBaseVol*v.06'e-'fluteBaseVol*v.16'>g+'fluteBaseVol*v.08'g+
+## 8
+'fluteBaseVol*v.16'<c+'fluteBaseVol*v.08'c+c+'fluteBaseVol*v.06'c+'fluteBaseVol*v.04'c+c+
+## 9
+c+c+'fluteBaseVol*v.03'c+c+'fluteBaseVol*v.16'c+'fluteBaseVol*v.06'c+
+## 10
+'fluteBaseVol*v.18'g+'fluteBaseVol*v.06'g+g+'fluteBaseVol*v.03'g+'fluteBaseVol*v.16'c+'fluteBaseVol*v.06'c+
+## 11
+'fluteBaseVol*v.18'f+'fluteBaseVol*v.06'f+f+'fluteBaseVol*v.03'f+'fluteBaseVol*v.18'c+'fluteBaseVol*v.06'c+
+## 12
+'fluteBaseVol*v.16'e'fluteBaseVol*v.08'e'fluteBaseVol*v.16'e-'fluteBaseVol*v.08'e-'fluteBaseVol*v.14'c+'fluteBaseVol*v.06'c+
+## 13
+'fluteBaseVol*v.16'>b'fluteBaseVol*v.06'bb'fluteBaseVol*v.03'b'fluteBaseVol*v.14'g+'fluteBaseVol*v.12'g+
+## 14
+'fluteBaseVol*v.16'<e'fluteBaseVol*v.06'ee'fluteBaseVol*v.03'e'fluteBaseVol*v.14'>g+'fluteBaseVol*v.06'g+
+## 15
+'fluteBaseVol*v.16'<e-'fluteBaseVol*v.06'e-e-'fluteBaseVol*v.03'e-'fluteBaseVol*v.16'>g+'fluteBaseVol*v.08'g+
+## 16
+'fluteBaseVol*v.18'<c+'fluteBaseVol*v.08'c+'fluteBaseVol*v.06'c+c+c+'fluteBaseVol*v.04'c+
+## 17
+c+c+c+c+c+
+;
+
+
+{4}
+## Support Flute, originally channel 6 (after the melody moves out of there)
+'supportFlute+o1'
+l8
+## Measure 1 lasts one beat
+r4
+## 2
+r4'fluteBaseVol*v.36''fluteFade*v24,.56'e'fluteBaseVol*v.24''fluteFade*v24,.28'e'fluteBaseVol*v.22'e'fluteBaseVol*v.16'e
+## 3
+'fluteBaseVol*v.1'e'fluteBaseVol*v.05'e'fluteBaseVol*v.44'f+'fluteBaseVol*v.28'f+'fluteBaseVol*v.22'f+'fluteBaseVol*v.16'f+
+## 4
+'fluteBaseVol*v.1'f+'fluteBaseVol*v.05'f+'fluteBaseVol*v.48'c+'fluteBaseVol*v.28'c+'fluteBaseVol*v.22'c+'fluteBaseVol*v.16'c+
+## 5
+'fluteBaseVol*v.1'c+'fluteBaseVol*v.05'c+'fluteBaseVol*v.44'c+'fluteBaseVol*v.22'c+'fluteBaseVol*v.54'<c+'fluteBaseVol*v.27'c+
+## 6
+'fluteBaseVol*v.22'c+'fluteBaseVol*v.1'c+'fluteBaseVol*v.44'>e'fluteBaseVol*v.28'e'fluteBaseVol*v.22'e'fluteBaseVol*v.16'e
+## 7
+'fluteBaseVol*v.1'e'fluteBaseVol*v.05'e'fluteBaseVol*v.54'f+'fluteBaseVol*v.27'f+'fluteBaseVol*v.22'f+'fluteBaseVol*v.16'f+
+## 8
+'fluteBaseVol*v.1'f+'fluteBaseVol*v.05'f+'fluteBaseVol*v.44'>g+'fluteBaseVol*v.22'g+'fluteBaseVol*v.44'<e-'fluteBaseVol*v.22'e-
+## 9
+'fluteBaseVol*v.44'e'fluteBaseVol*v.22'e'fluteBaseVol*v.38'e-'fluteBaseVol*v.27'e-'fluteBaseVol*v.22'e-'fluteBaseVol*v.11'e-
+## 10
+'fluteBaseVol*v.1'e-'fluteBaseVol*v.05'e-'fluteBaseVol*v.48'e'fluteBaseVol*v.27'e'fluteBaseVol*v.22'e'fluteBaseVol*v.16'e
+## 11
+'fluteBaseVol*v.1'e'fluteBaseVol*v.05'e'fluteBaseVol*v.38'f+'fluteBaseVol*v.27'f+'fluteBaseVol*v.22'f+'fluteBaseVol*v.16'f+
+## 12
+'fluteBaseVol*v.1'f+'fluteBaseVol*v.05'f+'fluteBaseVol*v.44'c+'fluteBaseVol*v.22'c+'fluteBaseVol*v.16'c+'fluteBaseVol*v.1'c+
+## 13
+'fluteBaseVol*v.05'c+'fluteBaseVol*v.03'c+'fluteBaseVol*v.44'e'fluteBaseVol*v.27'e'fluteBaseVol*v.22'e'fluteBaseVol*v.16'e
+## 14
+'fluteBaseVol*v.1'e'fluteBaseVol*v.05'e'fluteBaseVol*v.48'e'fluteBaseVol*v.27'e'fluteBaseVol*v.22'e'fluteBaseVol*v.16'e
+## 15
+'fluteBaseVol*v.1'e'fluteBaseVol*v.05'e'fluteBaseVol*v.54'g+'fluteBaseVol*v.27'g+'fluteBaseVol*v.22'g+'fluteBaseVol*v.16'g+
+## 16
+'fluteBaseVol*v.1'g+'fluteBaseVol*v.05'g+'fluteBaseVol*v.54'g+'fluteBaseVol*v.27'g+'fluteBaseVol*v.22'g+'fluteBaseVol*v.16'g+
+## 17
+'fluteBaseVol*v.54'>c+'fluteBaseVol*v.48'c+'fluteBaseVol*v.32'c+'fluteBaseVol*v.27'c+'fluteBaseVol*v.22'c+'fluteBaseVol*v.16'c+
+## 18
+'fluteBaseVol*v.1'c+'fluteBaseVol*v.05'c+
+;
+
+
+{5}
+## Support Flute Echo, originally channel 1
+'supportEchoFlute+o1'
+l8
+## It's behind by one and a half 8th notes, but we'll base the measure comments on the support flute notes' timing
+r8.
+## Measure 1 lasts one beat
+r4
+## 2
+r4'fluteBaseVol*v.22'e'fluteBaseVol*v.11'e'fluteBaseVol*v.09'e'fluteBaseVol*v.06'e
+## 3
+'fluteBaseVol*v.04'e'fluteBaseVol*v.03'e'fluteBaseVol*v.18'f+'fluteBaseVol*v.11'f+'fluteBaseVol*v.09'f+'fluteBaseVol*v.06'f+
+## 4
+'fluteBaseVol*v.04'f+'fluteBaseVol*v.03'f+'fluteBaseVol*v.22'c+'fluteBaseVol*v.11'c+'fluteBaseVol*v.09'c+'fluteBaseVol*v.06'c+
+## 5
+'fluteBaseVol*v.04'c+'fluteBaseVol*v.03'c+'fluteBaseVol*v.18'c+'fluteBaseVol*v.09'c+'fluteBaseVol*v.25'<c+'fluteBaseVol*v.11'c+
+## 6
+'fluteBaseVol*v.09'c+'fluteBaseVol*v.04'c+'fluteBaseVol*v.18'>e'fluteBaseVol*v.11'e'fluteBaseVol*v.09'e'fluteBaseVol*v.06'e
+## 7
+'fluteBaseVol*v.04'e'fluteBaseVol*v.03'e'fluteBaseVol*v.25'f+'fluteBaseVol*v.11'f+'fluteBaseVol*v.09'f+'fluteBaseVol*v.06'f+
+## 8
+'fluteBaseVol*v.04'f+'fluteBaseVol*v.03'f+'fluteBaseVol*v.18'>g+'fluteBaseVol*v.09'g+'fluteBaseVol*v.18'<e-'fluteBaseVol*v.09'e-
+## 9
+'fluteBaseVol*v.18'e'fluteBaseVol*v.09'e'fluteBaseVol*v.18'e-'fluteBaseVol*v.11'e-'fluteBaseVol*v.09'e-'fluteBaseVol*v.06'e-
+## 10
+'fluteBaseVol*v.04'e-'fluteBaseVol*v.03'e-'fluteBaseVol*v.22'e'fluteBaseVol*v.11'e'fluteBaseVol*v.09'e'fluteBaseVol*v.06'e
+## 11
+'fluteBaseVol*v.04'e'fluteBaseVol*v.03'e'fluteBaseVol*v.18'f+'fluteBaseVol*v.11'f+'fluteBaseVol*v.09'f+'fluteBaseVol*v.06'f+
+## 12
+'fluteBaseVol*v.04'f+'fluteBaseVol*v.03'f+'fluteBaseVol*v.18'c+'fluteBaseVol*v.09'c+'fluteBaseVol*v.06'c+'fluteBaseVol*v.04'c+
+## 13
+c+'fluteBaseVol*v.03'c+'fluteBaseVol*v.18'e'fluteBaseVol*v.11'e'fluteBaseVol*v.09'e'fluteBaseVol*v.06'e
+## 14
+'fluteBaseVol*v.04'e'fluteBaseVol*v.03'e'fluteBaseVol*v.22'e'fluteBaseVol*v.11'e'fluteBaseVol*v.09'e'fluteBaseVol*v.06'e
+## 15
+'fluteBaseVol*v.04'e'fluteBaseVol*v.03'e'fluteBaseVol*v.25'g+'fluteBaseVol*v.11'g+'fluteBaseVol*v.09'g+'fluteBaseVol*v.06'g+
+## 16
+'fluteBaseVol*v.04'g+'fluteBaseVol*v.03'g+'fluteBaseVol*v.25'g+'fluteBaseVol*v.11'g+'fluteBaseVol*v.09'g+'fluteBaseVol*v.06'g+
+## 17
+'fluteBaseVol*v.25'>c+'fluteBaseVol*v.18'c+'fluteBaseVol*v.14'c+'fluteBaseVol*v.11'c+'fluteBaseVol*v.09'c+'fluteBaseVol*v.06'c+
+## 18
+;
+
+
+{6}
+## Low Flute, originally channel 8 (after the melody and then the bass flute move out of there)
+'lowFlute'
+l8
+## Measure 1 lasts one beat
+r4
+## 2
+r4'fluteBaseVol*v.34''fluteFade*v24,.42'c+'fluteBaseVol*v.24''fluteFade*v12,.25'c+'fluteBaseVol*v.18'c+'fluteBaseVol*v.14'c+
+## 3
+'fluteBaseVol*v.09'c+'fluteBaseVol*v.04'c+'fluteBaseVol*v.5'>b'fluteBaseVol*v.25'b'fluteBaseVol*v.18'b'fluteBaseVol*v.14'b
+## 4
+'fluteBaseVol*v.09'b'fluteBaseVol*v.04'b'fluteBaseVol*v.5'a'fluteBaseVol*v.25'a'fluteBaseVol*v.18'a'fluteBaseVol*v.14'
+## 5
+a'fluteBaseVol*v.09'a'fluteBaseVol*v.04'a'fluteBaseVol*v.5'g+'fluteBaseVol*v.25'g+'fluteBaseVol*v.5'<c+'fluteBaseVol*v.25'c+
+## 6
+'fluteBaseVol*v.18'c+'fluteBaseVol*v.14'c+'fluteBaseVol*v.5'c+'fluteBaseVol*v.25'c+'fluteBaseVol*v.18'c+'fluteBaseVol*v.14'c+
+## 7
+'fluteBaseVol*v.09'c+'fluteBaseVol*v.04'c+'fluteBaseVol*v.46'>b'fluteBaseVol*v.25'b'fluteBaseVol*v.18'b'fluteBaseVol*v.14'b
+## 8
+'fluteBaseVol*v.09'b'fluteBaseVol*v.04'b'fluteBaseVol*v.5'e'fluteBaseVol*v.25'e'fluteBaseVol*v.46'f+'fluteBaseVol*v.25'f+
+## 9
+'fluteBaseVol*v.42'g+'fluteBaseVol*v.18'g+'fluteBaseVol*v.5'b'fluteBaseVol*v.25'b'fluteBaseVol*v.18'b'fluteBaseVol*v.14'b
+## 10
+'fluteBaseVol*v.09'b'fluteBaseVol*v.04'b'fluteBaseVol*v.5'<c+'fluteBaseVol*v.25'c+'fluteBaseVol*v.18'c+'fluteBaseVol*v.14'c+
+## 11
+'fluteBaseVol*v.09'c+'fluteBaseVol*v.04'c+'fluteBaseVol*v.5'>b'fluteBaseVol*v.25'b'fluteBaseVol*v.18'b'fluteBaseVol*v.14'b
+## 12
+'fluteBaseVol*v.09'b'fluteBaseVol*v.04'b'fluteBaseVol*v.5'a'fluteBaseVol*v.25'a'fluteBaseVol*v.18'a'fluteBaseVol*v.14'a
+## 13
+'fluteBaseVol*v.09'a'fluteBaseVol*v.04'a'fluteBaseVol*v.46'b'fluteBaseVol*v.25'b'fluteBaseVol*v.18'b'fluteBaseVol*v.14'b
+## 14
+'fluteBaseVol*v.09'b'fluteBaseVol*v.04'b'fluteBaseVol*v.5'<c+'fluteBaseVol*v.25'c+'fluteBaseVol*v.18'c+'fluteBaseVol*v.14'c+
+## 15
+'fluteBaseVol*v.09'c+'fluteBaseVol*v.04'c+'fluteBaseVol*v.5'e-'fluteBaseVol*v.25'e-'fluteBaseVol*v.18'e-'fluteBaseVol*v.14'e-
+## 16
+'fluteBaseVol*v.09'e-'fluteBaseVol*v.04'e-'fluteBaseVol*v.46'e-'fluteBaseVol*v.25'e-'fluteBaseVol*v.18'e-'fluteBaseVol*v.14'e-
+## 17
+'fluteBaseVol*v.5'>c+'fluteBaseVol*v.36'c+'fluteBaseVol*v.3'c+'fluteBaseVol*v.25'c+'fluteBaseVol*v.18'c+'fluteBaseVol*v.14'c+
+## 18
+'fluteBaseVol*v.09'c+'fluteBaseVol*v.04'c+
+;
+
+
+{7}
+## Low Flute Echo, originally channel 7 (after melody echo 1 moves out of there)
+'lowFluteEcho-o1'
+l8
+## It's behind by one and a half 8th notes, but we'll base the measure comments on the low flute notes' timing
+r8.
+## Measure 1 lasts one beat
+r4
+## 2
+r4'fluteBaseVol*v.24'<c+'fluteBaseVol*v.12'c+'fluteBaseVol*v.1'c+'fluteBaseVol*v.06'c+
+## 3
+'fluteBaseVol*v.05'c+'fluteBaseVol*v.03'c+'fluteBaseVol*v.28'>b'fluteBaseVol*v.12'b'fluteBaseVol*v.1'b'fluteBaseVol*v.06'b
+## 4
+'fluteBaseVol*v.05'b'fluteBaseVol*v.03'b'fluteBaseVol*v.28'a'fluteBaseVol*v.12'a'fluteBaseVol*v.1'a'fluteBaseVol*v.06'a
+## 5
+'fluteBaseVol*v.05'a'fluteBaseVol*v.03'a'fluteBaseVol*v.28'g+'fluteBaseVol*v.12'g+'fluteBaseVol*v.28'<c+'fluteBaseVol*v.12'c+
+## 6
+'fluteBaseVol*v.1'c+'fluteBaseVol*v.06'c+'fluteBaseVol*v.28'c+'fluteBaseVol*v.12'c+'fluteBaseVol*v.1'c+'fluteBaseVol*v.06'c+
+## 7
+'fluteBaseVol*v.05'c+'fluteBaseVol*v.03'c+'fluteBaseVol*v.24'>b'fluteBaseVol*v.12'b'fluteBaseVol*v.1'b'fluteBaseVol*v.06'b
+## 8
+'fluteBaseVol*v.05'b'fluteBaseVol*v.03'b'fluteBaseVol*v.28'e'fluteBaseVol*v.12'e'fluteBaseVol*v.24'f+'fluteBaseVol*v.12'f+
+## 9
+'fluteBaseVol*v.2'g+'fluteBaseVol*v.1'g+'fluteBaseVol*v.28'b'fluteBaseVol*v.12'b'fluteBaseVol*v.1'b'fluteBaseVol*v.06'b
+## 10
+'fluteBaseVol*v.05'b'fluteBaseVol*v.03'b'fluteBaseVol*v.25'<c+'fluteBaseVol*v.12'c+'fluteBaseVol*v.1'c+'fluteBaseVol*v.06'c+
+## 11
+'fluteBaseVol*v.05'c+'fluteBaseVol*v.03'c+'fluteBaseVol*v.28'>b'fluteBaseVol*v.12'b'fluteBaseVol*v.1'b'fluteBaseVol*v.06'b
+## 12
+'fluteBaseVol*v.05'b'fluteBaseVol*v.03'b'fluteBaseVol*v.28'a'fluteBaseVol*v.12'a'fluteBaseVol*v.1'a'fluteBaseVol*v.06'a
+## 13
+'fluteBaseVol*v.05'a'fluteBaseVol*v.03'a'fluteBaseVol*v.24'b'fluteBaseVol*v.12'b'fluteBaseVol*v.1'b'fluteBaseVol*v.06'b
+## 14
+'fluteBaseVol*v.05'b'fluteBaseVol*v.03'b'fluteBaseVol*v.28'<c+'fluteBaseVol*v.12'c+'fluteBaseVol*v.1'c+'fluteBaseVol*v.06'c+
+## 15
+'fluteBaseVol*v.05'c+'fluteBaseVol*v.03'c+'fluteBaseVol*v.28'e-'fluteBaseVol*v.12'e-'fluteBaseVol*v.1'e-'fluteBaseVol*v.06'e-
+## 16
+'fluteBaseVol*v.05'e-'fluteBaseVol*v.03'e-'fluteBaseVol*v.24'e-'fluteBaseVol*v.12'e-'fluteBaseVol*v.1'e-'fluteBaseVol*v.06'e-
+## 17
+'fluteBaseVol*v.28'>c+'fluteBaseVol*v.18'c+'fluteBaseVol*v.16'c+'fluteBaseVol*v.12'c+'fluteBaseVol*v.1'c+'fluteBaseVol*v.06'c+
+;
+
+
+{8}
+## Bass Flute, originally channel 5 (after melody echo 2 moves out of there), but also a few notes in channel 8 beforehand
+'bassFlute-o1'
+l8
+## Measure 1 lasts one beat
+r4
+## 2
+'fluteBaseVol*v.26''fluteFade*v24,.36'a'fluteBaseVol*v.18''fluteFade*v24,.24'a'fluteBaseVol*v.2''fluteFade*v24,.24'a'fluteBaseVol*v.18''fluteFade*v12,.2'a'fluteBaseVol*v.12'a'fluteBaseVol*v.06'a
+## 3
+'fluteBaseVol*v.68'a'fluteBaseVol*v.34'a'fluteBaseVol*v.26'a'fluteBaseVol*v.2'a'fluteBaseVol*v.12'a'fluteBaseVol*v.06'a
+## 4
+'fluteBaseVol*v.76'f+'fluteBaseVol*v.34'f+'fluteBaseVol*v.26'f+'fluteBaseVol*v.2'f+'fluteBaseVol*v.12'f+'fluteBaseVol*v.06'f+
+## 5
+'fluteBaseVol*v.68'f+'fluteBaseVol*v.34'f+'fluteBaseVol*v.26'f+'fluteBaseVol*v.2'f+'fluteBaseVol*v.12'f+'fluteBaseVol*v.06'f+
+## 6
+'fluteBaseVol*v.76'a'fluteBaseVol*v.34'a'fluteBaseVol*v.26'a'fluteBaseVol*v.2'a'fluteBaseVol*v.12'a'fluteBaseVol*v.06'a
+## 7
+'fluteBaseVol*v.68'a'fluteBaseVol*v.34'a'fluteBaseVol*v.26'a'fluteBaseVol*v.2'a'fluteBaseVol*v.12'a'fluteBaseVol*v.06'a
+## 8
+'fluteBaseVol*v.62'c+'fluteBaseVol*v.34'c+'fluteBaseVol*v.26'c+'fluteBaseVol*v.2'c+'fluteBaseVol*v.12'c+'fluteBaseVol*v.06'c+
+## 9
+'fluteBaseVol*v.04'c+c+c+'fluteBaseVol*v.03'c+c+v0c+
+## 10
+'fluteBaseVol*v.68'a'fluteBaseVol*v.34'a'fluteBaseVol*v.26'a'fluteBaseVol*v.2'a'fluteBaseVol*v.12'a'fluteBaseVol*v.06'a
+## 11
+'fluteBaseVol*v.62'a'fluteBaseVol*v.34'a'fluteBaseVol*v.26'a'fluteBaseVol*v.2'a'fluteBaseVol*v.12'a'fluteBaseVol*v.06'a
+## 12
+'fluteBaseVol*v.68'f+'fluteBaseVol*v.34'f+'fluteBaseVol*v.26'f+'fluteBaseVol*v.2'f+'fluteBaseVol*v.12'f+'fluteBaseVol*v.06'f+
+## 13
+'fluteBaseVol*v.62'b'fluteBaseVol*v.34'br4'fluteBaseVol*v.56'<e-'fluteBaseVol*v.26'e-
+## 14
+'fluteBaseVol*v.68'>b-'fluteBaseVol*v.34'b-'fluteBaseVol*v.26'b-'fluteBaseVol*v.2'b-'fluteBaseVol*v.12'b-'fluteBaseVol*v.06'b-
+## 15
+'fluteBaseVol*v.68'<c'fluteBaseVol*v.34'c'fluteBaseVol*v.26'c'fluteBaseVol*v.2'c'fluteBaseVol*v.12'c'fluteBaseVol*v.06'c
+## 16
+'fluteBaseVol*v.62'c+'fluteBaseVol*v.34'c+'fluteBaseVol*v.26'c+'fluteBaseVol*v.2'c+'fluteBaseVol*v.56'>g+'fluteBaseVol*v.26'g+
+## 17
+'fluteBaseVol*v.68'c+'fluteBaseVol*v.48'c+'fluteBaseVol*v.4'c+'fluteBaseVol*v.34'c+'fluteBaseVol*v.26'c+'fluteBaseVol*v.2'c+
+## 18
+'fluteBaseVol*v.12'c+'fluteBaseVol*v.06'c+
+;
