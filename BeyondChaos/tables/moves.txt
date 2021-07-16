@@ -325,6 +325,7 @@ Fuma
 Fury
 Fusion
 Future
+Fuzzy
 G
 GP
 Gale
@@ -773,7 +774,6 @@ Smog
 Smoke
 Snap
 Snarl
-Snatch
 Sneak
 Sneeze
 Snore

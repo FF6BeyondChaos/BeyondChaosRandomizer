@@ -74,6 +74,7 @@ Output rom file:
     Beyond Chaos EX is also customizable. Using the flags in the above section, you can choose to only randomize certain parts of the game. Every flag you select will make the game a little more random, and also a little more difficult. Therefore, even experienced players should be able to find some challenge in the resulting game. As the game progresses, enemies may become more and more difficult, so that it becomes necessary to develop specialized strategies for individual formations.
 
 --- FAQ/KNOWN ISSUES ---
+
 Q: How do I play Beyond Chaos Bingo?
 A: The code is "bingoboingo". Use the code in the flags and the randomizer will ask you some more questions when the randomization is complete.
 
@@ -99,7 +100,7 @@ Q: How do I learn new Rages if I don't have Leap?
 A: You learn new Rages by winning any battle with the monster, regardless of whether you're not on the Veldt or anyone with Rage is in your party.
 
 Q: I'm at Vargas but I don't have Blitz. How do I beat him?
-A: You can defeat him normally without Blitz. His HP was lowered to make him beatable without much (if any) grinding.
+A: You can defeat him normally without Blitz. His HP was lowered to make him beatable without much (if any) grinding. Also, if you can Pummel him, that still works.
 
 Q: How do I defeat TunnelArmr without Runic?
 A: Just kill it.
@@ -184,27 +185,37 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
 
 --- CONTRIBUTORS ---
     Abyssonym - original Beyond Chaos creator
-    subtractionsoup - maintainer of Beyond Chaos EX
+    subtractionsoup - former maintainer of Beyond Chaos EX 
     CtrlxZ - created or modified a bunch of sprites for the randomizer
-    DarkSlash - madworld, darkworld, randombosses codes and some other things for KatN mode.
-    emberling - speeddial, randomized music, converted a ton of music, and reworked palettes and sprite replacement
-    glennmatthews - Command descriptions in logfile
+	ATinySpook - ported over sprites and music for the randomizer
+	HoxNorf - ported over sprites and music for the randomizer
+    DarkSlash - madworld, darkworld, randombosses codes and some other things for KatN mode; current maintainer of Beyond Chaos EX (send help)
+    emberling - speeddial, randomized music, alasdraco, dialoguemanager, converted a ton of music, and reworked palettes and sprite replacement, FF6 music player patch
+	Rushlight - ported over lots of music for the randomizer
     Lockirby2 - The worringtriad and notawaiter codes
     myself086 - new menu features and natural magic expansion
-    Dracovious - maintainer of Beyond Chaos 4.1 and above
-	GreenKnight5 - GUI
+    Dracovious - Created new GUI and R-Limit, and some other codes
+	GreenKnight5 - First GUI, Cecilbot
+	DrInsanoPHD - Refactoring code, character stats randomizer, bug fixes, lots of help with EX V5 release
+	Crimdahl - Rotating status patch, lots of help with EX V5 release
+	fusoyeahhh - lots of help with EX V5 release
+	Razzle_Storm - lots of help with EX V5 release
+	CDude - lots of help with event code for EX V5 release
+	Cecil188 - ported over music, owner of the Discord, and overall helper with everything
+	
 
 --- EXTERNAL PATCHES USED ---
 	Synchysi - esper restriction
 	Lenophis - unhardcoded tintinabar
     Novalia Spirit - "Allergic Dog" bug fix, Selective Reequip
-    Leet Sketcher - Y Equip Relics
+    Leet Sketcher - Y Equip Relics, rotating statuses patch
     Assassin - That Damn Yellow Streak fix, sketch fix
 	Power Panda - Divergent Paths: The 3 Scenarios
 	HatZen08 - Coliseum Rewards Display
+	madsiur, tsushiy, Lenophis - FF6 Music Player
 
 --- SPECIAL THANKS ---
-    cecil188 - OG beyond chaos fan
+    Cecil188 - OG beyond chaos fan
     fathlo23 - RPG speedrunner and BC challenge runner
     ffmasterfoobar - twitch broadcaster who did a lot of initial playtesting for my entertainment
     greenknight5 - bc_cecilbot programmer
