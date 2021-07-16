@@ -2,9 +2,9 @@
 
 FF6 Beyond Chaos EX Randomizer
 a fork of Abyssonym's FF6 Beyond Chaos Randomizer
-Version:    4.1.1
-Date:       2021-04-07
-URL:        https://github.com/subtractionsoup/beyondchaos/releases/latest
+Version:    5.0.0
+Date:       2021-07-21
+URL:        https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest
 Beyond Chaos Discord:    https://discord.gg/S3G3UXy
 
 --- QUICKSTART ---
@@ -191,7 +191,7 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
 	HoxNorf - ported over sprites and music for the randomizer
     DarkSlash - madworld, darkworld, randombosses codes and some other things for KatN mode; current maintainer of Beyond Chaos EX (send help)
     emberling - speeddial, randomized music, alasdraco, dialoguemanager, converted a ton of music, and reworked palettes and sprite replacement, FF6 music player patch
-	Rushlight - ported over lots of music for the randomizer
+	Rushlight - made music arrangements for the randomizer
     Lockirby2 - The worringtriad and notawaiter codes
     myself086 - new menu features and natural magic expansion
     Dracovious - Created new GUI and R-Limit, and some other codes
@@ -199,7 +199,7 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
 	DrInsanoPHD - Refactoring code, character stats randomizer, bug fixes, lots of help with EX V5 release
 	Crimdahl - Rotating status patch, lots of help with EX V5 release
 	fusoyeahhh - lots of help with EX V5 release
-	Razzle_Storm - lots of help with EX V5 release
+	RazzleStorm - refactoring some code, adding type hints, lots of help with EX V5 release
 	CDude - lots of help with event code for EX V5 release
 	Cecil188 - ported over music, owner of the Discord, and overall helper with everything
 	
@@ -216,9 +216,9 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
 
 --- SPECIAL THANKS ---
     Cecil188 - OG beyond chaos fan
-    fathlo23 - RPG speedrunner and BC challenge runner
+    Fathlo23 - RPG speedrunner and BC challenge runner
     ffmasterfoobar - twitch broadcaster who did a lot of initial playtesting for my entertainment
-    greenknight5 - bc_cecilbot programmer
+    GreenKnight5 - bc_cecilbot programmer
     kupofasa - original permadeath runner
     quikdraw7777 - permadeath community leader and pioneer
     tenkarider - romhacker who gave me lots of early feedback, and creator of the Ultimate Czar Dragon hack, FF6 Curse of the Gods, and many other challenges

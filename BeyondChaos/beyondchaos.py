@@ -854,10 +854,10 @@ class Window(QWidget):
 if __name__ == "__main__":
     print("Loading GUI, checking for config file, updater file and updates please wait.")
     try:
-        #update.configExists()
-        App = QApplication(sys.argv)
-        window = Window()
-        time.sleep(3)
-        sys.exit(App.exec())
+        if update.configExists():
+            App = QApplication(sys.argv)
+            window = Window()
+            time.sleep(3)
+            sys.exit(App.exec())
     except Exception:
         traceback.print_exc()

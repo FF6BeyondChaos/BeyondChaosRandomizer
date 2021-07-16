@@ -86,8 +86,8 @@ def updaterExists():
         # file exists
         return
     else:
-        x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaosUpdater/releases/latest').json() 
-        #download the latest package
+        x = requests.get('https://api.github.com/repos/FF6BeyondChaos/BeyondChaosUpdater/releases/latest').json()
+        download the latest package
         downloadlink = x['assets'][0]['browser_download_url']
         download_file(downloadlink)
         loop = True
@@ -104,9 +104,10 @@ def configExists():
     if exists:
         #make sure our updater exists
         updaterExists()
-        return
+        return True
     else:
         runFirstTimeSetup()
+        return False
 
 def runFirstTimeSetup():
     #check for the updater
