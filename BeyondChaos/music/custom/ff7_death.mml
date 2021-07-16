@@ -1,0 +1,151 @@
+#TITLE Continue
+#ALBUM Final Fantasy VII
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x21 0x60 harp
+#WAVE 0x22 0x19 rhodes
+#WAVE 0x23 0x50 ac.bass
+#WAVE 0x24 0xD1 triangle wave
+#WAVE 0x25 0xD0 sine wave
+
+#def init= t81 %v50 %b0,100 %f0,0
+
+#def strings= |0 's' o5 m96,18,195
+#def harp=    |1 'h' o5 m96,18,195
+#def rhodes=  |2 'r' o5 m96,18,195
+#def bass=    |3 'b' o6 m96,18,195 %y0%s2
+#def synth=   |4 'y' o5 m96,18,195 %a14%y3%s3%r15
+
+#def hisyn= |5 'z'                 %a14%y3%s3%r15
+#def losyn= |4 'y'                 %a14%y3%s3%r15
+
+#def s=    v120
+#def sf= v1,120
+#def h=    v120
+#def r=    v160
+#def b=    v120
+#def y=    v120
+#def yf= v1,120
+#def z=    v150
+#def zf= v1,150
+
+{1} %e1 'init'
+'harp*v.48' p10
+a4b4<c4 t96,77 d4 p70 d4 p10 < d2.
+## 3
+'rhodes*v.48+o2' l8 p64
+c>afe d+4ba  gef+g a+4ag  f>ag+a< e4>b4<
+## 6
+c1
+'synth+o2*v.37''yf*v192,.26' l16
+rr  p40 e^^^^  p115 > d2 >> d
+'yf*v192,.13' ^4.. < e2 << e
+v192,0 ^4.. >> b2 >> b
+;
+
+{2} %e1 
+'harp*v.48' p55
+r8. a4b4<c4>b4 p115 <&154b>
+## 3 (2 early)
+p10  e32  p55 <c4...>
+p10 >b32< p55  b4... 
+p10  d32  p55  b4... 
+p10  c+32 p55  a+4... 
+p10  c32  p55  a4... 
+p10 >b32< p55  &92g+
+## 6
+'synth-o1*v.37' l8 r
+p40 e. p85 <d. p10 <c. p55 g. p100 <e
+'yf*v192,.26' l16 ^ p25 g^^^^
+l8 p100 > e2 >> e  'yf*v192,.13' ^4. < c2 << c  v192,0 ^4. > c2 >> c
+;
+
+{3} %e1
+'harp*v.48' p40
+r8 e4g4a4g+4 p100 <g+8^2.>
+## 3
+&2r p40
+a2 g2 a2 g2 f2 f2
+## 6 (2 late)
+'synth-o1*v.37' r32r48 l8
+p25 d. p70 <c. p115 g. p40 <e. p85 <d.
+l16 p10 'hisyn*v.37''zf*v192,.26'c^^^^
+'losyn*v.34''yf*v108,.26'> p85 g2 >> g8.  'yf*v192,.13' ^^^^^ b2 << b8.  v192,0 ^^^^^ e2 >> e8.
+;
+
+{4} %e1
+'harp*v.48' p25
+r16 c4d4f4e4 p85 <e8.^2.>
+## 3
+p25
+g2 d+2 f+2 e2 e2 d2
+## 6
+'synth-o1*v.37' l8
+p10 c. p55 g. p100 <e. p25 <d. p70 <c. p115 l16 g
+'yf*v192,.26' l16
+^^^^ p70 c2 >> c4  'yf*v192,.13' ^4 > a2 << a4  v192,0 ^4 a2 >> a4
+;
+
+{5} %e1
+'strings*v.07+o1' p50
+'sf*v96,.45' e1. 'sf*v96,.15' ^2
+## 3
+'sf*v48,.45' e4...  'sf*v6,.15' ^32
+'sf*v48,.45' d+4... 'sf*v6,.15' ^32
+'sf*v48,.45' d4...  'sf*v6,.15' ^32
+'sf*v48,.45' c+4... 'sf*v6,.15' ^32
+'sf*v48,.45' c4...  'sf*v6,.15' ^32 >
+'sf*v48,.45' b4...  'sf*v6,.15' ^32
+## 6
+'sf*v96,.45' ^2 'sf*v192,.07' ^1
+'synth*v.33''yf*v96,.26' p55 l8
+r. d.^  'yf*v192,.13' ^. > e2 << e.^  v192,0 ^. b2 >> b.^
+;
+
+{6} %e1
+'strings+o1*v.07' p80
+'sf*v24,.18' c8..  'sf*v6,.15' ^32 >
+'sf*v24,.30' b8..  'sf*v6,.18' ^32
+'sf*v24,.37' a8..  'sf*v6,.22' ^32
+'sf*v24,.45' g+2.  'sf*v96,.15' ^2
+## 3
+'sf*v96,.45' &186a 'sf*v6,.15' ^32
+'sf*v96,.45' &186g 'sf*v6,.15' ^32
+'sf*v96,.45' &186f 'sf*v6,.15' ^32
+## 6
+'sf*v96,.45' e2 'sf*v192,.07' ^1
+'synth*v.33''yf*v96,.26' p40 l8 
+r e4.  'yf*v192,.13' ^ > c2 << c4.  v192,0 ^ < c2 >> c4.
+;
+
+{7} %e1
+'strings*v.07' p110
+'sf*v24,.18' a8..  'sf*v6,.15' ^32
+'sf*v24,.30' g8..  'sf*v6,.18' ^32 k1
+'sf*v24,.37' a8..  'sf*v6,.22' ^32 k0
+'sf*v24,.45' e2.   'sf*v96,.15' ^2
+## 3
+'sf*v48,.45' c4...  'sf*v6,.15' ^32 >
+'sf*v48,.45' b2.... 'sf*v6,.15' ^32
+'sf*v48,.45' a+4... 'sf*v6,.15' ^32
+'sf*v48,.45' a4...  'sf*v6,.15' ^32
+'sf*v48,.45' g+4... 'sf*v6,.15' ^32
+## 6
+'sf*v96,.45' g2 'sf*v192,.07' ^1
+'synth*v.33''yf*v96,.26' p25 l16
+r  g4..  'yf*v192,.13' ^ >> b2 << b4..  v192,0 ^ << e2 >> e4..
+;
+
+{8} %e1
+'bass*v.75-o2' p64 l8
+a4g4f4e2<e2.
+## 3
+f4.c >b4.<d+  e4>b4a4<c+4  d4.d>g4b4<
+## 6
+c1
+'synth*v.37+o2''yf*v192,.26' l16
+rrr  p55 d^^^^  p10 > c2  'yf*v192,.13' >>> a2 << a2  v192,0 << a2 >> a2
+;
+

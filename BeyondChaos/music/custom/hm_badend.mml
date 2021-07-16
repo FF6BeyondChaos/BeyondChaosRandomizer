@@ -1,0 +1,185 @@
+#TITLE Bad Ending
+#ALBUM Harvest Moon
+#COMPOSER Tsuyoshi Tanaka
+#ARRANGED Rushlight
+
+#WAVE 0x20 0x85 ## Horn
+#WAVE 0x21 0x03 ## Piano 4
+#WAVE 0x22 0x02 ## Piano 5
+#WAVE 0x23 0x01 ## Piano 6
+
+#def init=t88 %x200 %v40 %b0,70 %f0,0
+
+#def pianoBaseVol= v140
+#def pianoFade=  v1,140 ## Keep in line with pianoBaseVol
+#def hornVol=    v60
+#def hornFade= v1,60 ## Keep in line with hornVol
+#def wrapUpRelease= %r20
+
+
+#def pianoConfig= %r11 %e1
+#def supportPianoConfig=     'pianoConfig' 'pianoBaseVol*v.75' p15 m
+#def melodyPianoConfig=      'pianoConfig' 'pianoBaseVol*v.84' p64 m
+#def melodyEchoPianoConfig=  'pianoConfig' 'pianoBaseVol*v.48' p64 m
+#def backingPianoHighConfig= 'pianoConfig' 'pianoBaseVol*v.87' p109 m0,18,213
+#def backingPianoLowConfig=  'pianoConfig' 'pianoBaseVol*v.9'  p102 m0,18,213
+
+#def horn= |0 o5 'hornVol' p64 %r3 %e1 m0,12,213
+#def piano4= |1 o5
+#def piano5= |2 o5
+#def piano6= |3 o4
+
+
+{1}
+## If I want to do the fade, do a master volume fade starting after one 8th and lasting 96
+'init'
+'melodyPianoConfig'
+'piano5'
+v0
+## Play the first section twice before playing the last section
+l8
+[2
+  ## 1 / 5
+  a 'pianoFade*v96,.84' g+f+g+ag+bf+
+  ## 2 / 6
+  <c+>f+af+g+f+g+a
+  ## 3 / 7
+  f+2.e4
+  ## 4 / 8
+  f+1
+]
+## 9
+r4<c+2^8>c+8
+## 10
+f+2.'wrapUpRelease'^4
+## 11
+^2
+;
+
+
+{2}
+'horn-o1'
+v0
+## Play the first section twice before playing the last section
+[3
+  ## 1 / 5 / 9
+  f+8'hornFade*v96,1'^8^2^16r16f8
+  ## 2 / 6 / 10
+  f+2. j3 ^16r16g+8
+  ## 3 / 7
+  f+2.^16r16a8
+  ## 4 / 8
+  f+2.^16r16f+16r16
+]
+## Remainder of measure 10
+'wrapUpRelease'^4
+## 11
+^2
+;
+
+
+{3}
+'supportPianoConfig'
+'piano6+o1'
+v0
+## Play the first section twice before playing the last section
+[2
+  ## 1 / 5
+  c+8 'pianoFade*v96,.75' ^8^2f+4
+  ## 2 / 6
+  e1
+  ## 3 / 7
+  d2e8c+8b8g+8
+  ## 4 / 8
+  f+1
+]
+## 9
+f+2g+8f+8g+8a8
+## 10
+a16g+16f+2^8'wrapUpRelease'^4
+## 11
+^2
+;
+
+
+{4}
+'backingPianoHighConfig'
+'piano5'
+v0
+[2
+  ## 1 / 5
+  c+8 'pianoFade*v96,.87' ^2..
+  ## 2 / 6
+  e1
+  ## 3 / 7
+  d1
+  ## 4 / 8
+  c+1
+]
+## 9
+e1
+## 10
+c+2.'wrapUpRelease'^4
+## 11
+^2
+;
+
+
+{5}
+'backingPianoLowConfig'
+'piano4-o1'
+v0
+[2
+  ## 1 / 5
+  f+8 'pianoFade*v96,.9' ^2..
+  ## 2 / 6
+  b1
+  ## 3 / 7
+  a1
+  ## 4 / 8
+  f+1
+]
+## 9
+b1
+## 10
+f+2.'wrapUpRelease'^4
+## 11
+^2
+;
+
+
+{6}
+'melodyEchoPianoConfig'
+'piano5'
+v0
+## Play the same as the melody, but delay it all by one 16th note,
+r16
+## Play the first section twice before playing the last section
+l8
+[2
+  ## 1 / 5
+  a 'pianoFade*v96,.48' g+f+g+ag+bf+
+  ## 2 / 6
+  <c+>f+af+g+f+g+a
+  ## 3 / 7
+  f+2.e4
+  ## 4 / 8
+  f+1
+]
+## 9
+r4<c+2^8>c+8
+## 10
+f+2.'wrapUpRelease'^4
+## 11
+^4..
+;
+
+
+{7}
+
+;
+
+
+{8}
+
+;

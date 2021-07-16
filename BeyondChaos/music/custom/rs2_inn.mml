@@ -1,0 +1,44 @@
+#TITLE Rest Theme
+#ALBUM Romancing SaGa 2
+#COMPOSER Kenji Ito
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0xA5
+#WAVE 0x21 0x19
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v100
+#def 1f= v1,100
+
+
+{1}
+t73%v110%b0,85%f0,0'0v*v.50'p64%e1
+'0i' r8'0o'a8g8f8g4<c4>a+8a8t69g4t65f2;
+
+{2}
+'1v*v.50'p59%e1
+'1i' %r16r4'1o'd4r4c4>a+4g4r4<f4;
+
+{3}
+'1v*v.50'p69%e1
+'1i' %r16r4'1o-o1'a4r4g4f4c4r4a4;
+
+{4}
+'1v*v.50'p64%e1
+'1i' %r16r1r2r4'1o-o1'f4;
+
+{5}
+'1v*v.50'p65%e1
+'1i' %r16r8'1o-o1'f8r8f8r8e8r8e8d4>a+4r8<c4.;
+
+{6}
+'1v*v.56'p62%e1
+'1i' %r16'1o-o2'a+2a2g4e4f2;
+;

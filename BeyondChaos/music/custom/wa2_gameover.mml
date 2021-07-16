@@ -1,0 +1,176 @@
+#TITLE Game Over
+#ALBUM Wild Arms 2
+#COMPOSER Michiko Naruke
+#ARRANGED Rushlight
+
+#WAVE 0x20 0xD0 ## Whistling
+#WAVE 0x21 0x04 ## Piano 3
+#WAVE 0x22 0x03 ## Piano 4
+#WAVE 0x23 0x02 ## Piano 5
+#WAVE 0x24 0x01 ## Piano 6
+
+#def init=t76 %x255 %v40 %b0,70 %f0,0
+
+#def whistlingVol=      v61
+#def rightHandPianoVol= v47
+#def leftHand4PianoVol= v127
+#def leftHand3PianoVol= 'leftHand4PianoVol*v.6'
+
+#def whistlingSustain=      %r12
+#def whistlingRelease=      %r20
+#def wrapUpRelease=         %r20
+#def rightPianoLateRelease= %r10
+
+#def piano3= |1 o5
+#def piano4= |2 o5
+#def piano5= |3 o5
+#def piano6= |4 o4
+
+#def whistling=              |0 o4    'whistlingVol'      p64 %a8          'whistlingSustain' %e1 m12,9,202
+#def pianoLeftHand=                                       p45                                 %e1 m12,24,205
+#def pianoRightHand=                  'rightHandPianoVol'                  %r0                %e1 m12,24,205
+#def pianoRightHandF1=       'piano5' 'rightHandPianoVol' p64              %r0                %e1 m12,24,205
+#def pianoRightHandF2=       'piano5' 'rightHandPianoVol' p74              %r0                %e1 m12,24,205
+#def pianoRightHandF3=       'piano5' 'rightHandPianoVol' p82              %r0                %e1 m12,24,205
+#def pianoRightHandF4=       'piano5' 'rightHandPianoVol' p102             %r0                %e1 m12,24,205
+#def pianoRightHandF4Piano6= 'piano6' 'rightHandPianoVol' p102             %r0                %e1 m12,24,205
+
+#def piano4LeftHand=         'piano4' 'leftHand4PianoVol'  'pianoLeftHand' %y0 %s5 %r0
+#def piano3LeftHand=         'piano3' 'leftHand3PianoVol'  'pianoLeftHand' %y2 %s4 %r12
+
+{1}
+'init'
+## Whistled melody
+'whistling+o2'
+l8
+## Repeat the loop twice, with a decelerando at the end
+[2
+  ## 1 / 5
+  r f+16r16 b16r16 <d16r16 c+8^32m12,-2^16r32 >a8..r32
+  ## 2 / 6
+  f+8.e16 f+2^8'whistlingRelease'^8'whistlingSustain'
+  ## 3 / 7
+  r e16r16 a16r16 <f+16r16 e8^32m12,-2^16r32 j2 >a8..r32
+  ## 4
+  <d8.c+16>b2^8'whistlingRelease'^8'whistlingSustain'
+]
+## Remainder of measure 7... same thing but with a decelerando
+t240,38 >a8..r32
+## 8
+<d8.c+16>b2.
+## 9
+'whistlingRelease'^4
+;
+
+
+{2}
+## Piano Left Hand
+'piano4LeftHand-o1'
+[2
+  ## 1 / 5
+  g1
+  ## 2 / 6
+  g1
+  ## 3 / 7
+  f+1
+  ## 4 / 8
+  b4.f+8> 'piano3LeftHand-o3'b4 j2 ^16 'piano4LeftHand-o1' e-16a8
+]
+## Remainder of measure 8
+^4
+## 9
+'wrapUpRelease'^4
+;
+
+
+{3}
+l4
+[2
+  ## 1 / 5
+  ## Piano Right Hand, highest finger
+  'pianoRightHandF4Piano6+o1'
+  dddd
+  ## 2 / 6
+  c+c+c+c+
+  ## 3 / 7
+  'pianoRightHandF4'
+  aaaa
+  ## 4 / 8
+  a j2 aaa
+]
+## Remainder of measure 8
+a'rightPianoLateRelease'b2
+## 9
+'wrapUpRelease'^4
+;
+
+
+{4}
+l4
+[2
+  ## 1 / 5
+  ## Piano Right Hand, second highest finger
+  'pianoRightHandF3'
+  bbbb
+  ## 2 / 6
+  aaaa
+  ## 3 / 7
+  f+f+f+f+
+  ## 4 / 8
+  f+ j2 f+f+f+
+]
+## Remainder of measure 8
+f+8^12^48'rightPianoLateRelease'f+48^2
+## 9
+'wrapUpRelease'^4
+;
+
+
+{5}
+l4
+[2
+  ## 1 / 2 / 5 / 6
+  ## Piano Right Hand, second lowest finger
+  'pianoRightHandF2'
+  [8 g]
+  ## 3 / 7
+  eeee
+  ## 4 / 8
+  e-j2 e-e-e-
+]
+## Remainder of measure 8
+e-8.^48'rightPianoLateRelease'e-24^2
+## 9
+'wrapUpRelease'^4
+;
+
+
+{6}
+l4
+[2
+  ## 1 / 5
+  ## Piano Right Hand, lowest finger
+  'pianoRightHandF1'
+  f+f+f+f+
+  ## 2 / 6
+  eeee
+  ## 3 / 7
+  c+c+c+c+
+  ## 4 / 8
+  r j2 rrr
+]
+## Remainder of measure 8
+rrr
+## 9
+'wrapUpRelease'^4
+;
+
+
+{7}
+
+;
+
+
+{8}
+
+;
