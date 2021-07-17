@@ -59,7 +59,7 @@ class Window(QWidget):
         # values to be sent to Randomizer
         self.romText = ""
         self.romOutputDirectory = ""
-        self.version = "5"
+        self.version = "1"
         self.mode = "normal" # default
         self.seed = ""
         self.flags = []
@@ -950,6 +950,8 @@ class Window(QWidget):
                     reload(music.musicrandomizer)
                     reload(towerrandomizer)
                     reload(chestrandomizer)
+                    reload(randomizer)
+
                 #sys.exit() Lets no longer sysexit anymore so we don't have to
                 #reopen each time.  The user can close the gui.
 
