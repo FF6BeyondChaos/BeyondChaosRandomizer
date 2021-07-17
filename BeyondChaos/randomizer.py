@@ -4426,6 +4426,10 @@ def randomize(args: List[str]) -> str:
     if previous_rom_path and not sourcefile:
         sourcefile = previous_rom_path
         
+    # Correct for Windows paths given with surrounding quotes
+    # (e.g. drag & drop onto console when path includes a space)
+    if sourcefile.startswith('"') and sourcefile.endswith('"'):
+        sourcefile = sourcefile.strip('"')
     sourcefile = os.path.abspath(sourcefile)
     
     try:
@@ -4449,7 +4453,9 @@ def randomize(args: List[str]) -> str:
 
                 if previous_output_directory and not output_directory:
                     output_directory = previous_output_directory
-
+                if output_directory.startswith('"') and output_directory.endswith('"'):
+                    output_directory = output_directory.strip('"')
+                    
                 if os.path.isdir(output_directory):
                     #Valid directory received. Break out of the loop.
                     break
