@@ -103,6 +103,7 @@ def open_resource(fn, *args, **kwargs):
         print(f"warning: {fn}: resource paths should be relative")
     else:
         fn = resource_path(fn)
+    add_encoding_if_text(args, kwargs)
     return open(fn, *args, **kwargs)
     
 def asset_path(rel):
@@ -111,6 +112,7 @@ def asset_path(rel):
 def open_asset(fn, *args, **kwargs):
     if not os.path.isabs(fn):
         fn = asset_path(fn)
+    add_encoding_if_text(args, kwargs)
     return open(fn, *args, **kwargs)
     
 def fallback_path(rel, ext=""):
@@ -124,8 +126,13 @@ def fallback_path(rel, ext=""):
 def open_fallback(fn, *args, **kwargs):
     if not os.path.isabs(fn):
         fn = fallback_path(fn)
+    add_encoding_if_text(args, kwargs)
     return open(fn, *args, **kwargs)
     
+def add_encoding_if_text(args, kwargs):
+    if len(args) and 'b' not in args[0]:
+        kwargs["encoding"] = "utf-8"
+        
 class TrackMetadata:
     def __init__(self, file="", title="", album="", composer="", arranged="", menuname=""):
         self.file, self.title, self.album, self.composer, self.arranged, self.menuname = title, album, composer, arranged, menuname
