@@ -6,7 +6,7 @@ config = ConfigParser()
 CoreVersion = ""
 SpriteVersion = ""
 
-def Writeflags(name, flags):
+def writeFlags(name, flags):
     config.read(Path(os.getcwd()+"/config.ini"))
     try:
         config.add_section('Flags')    
