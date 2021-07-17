@@ -17,7 +17,6 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
 #Local application imports
 from config import (readFlags, writeFlags)
 from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES)
-#from randomizer import (randomize)
 from update import (update, configExists)
 import randomizer
 
@@ -28,8 +27,9 @@ import esperrandomizer
 import formationrandomizer
 import itemrandomizer
 import locationrandomizer
-import music.musicrandomizer
+import menufeatures
 import monsterrandomizer
+import music.musicrandomizer
 import towerrandomizer
 
 if sys.version_info[0] < 3:
@@ -840,7 +840,10 @@ class Window(QWidget):
     # Opens file dialog to select rom file and assigns it to value in
     # parent/Window class
     def openFileChooser(self):
-        file_path = QFileDialog.getOpenFileName(self, 'Open File', './',
+        file_path = QFileDialog.getOpenFileName(
+            self, 
+            'Open File', 
+            './',
             filter="ROMs (*.smc *.sfc *.fig);;All Files(*.*)"
         )
 
@@ -1026,11 +1029,12 @@ class Window(QWidget):
                 # TODO: put this in a new thread
                 try:
                     result_file = randomizer.randomize(
-                        args=['beyondchaos.py', 
-                              self.romText, 
-                              bundle, 
-                              "test", 
-                              self.romOutputDirectory
+                            args=[
+                                'beyondchaos.py', 
+                                self.romText, 
+                                bundle, 
+                                "test", 
+                                self.romOutputDirectory
                             ]
                         )
                 except Exception as e:
@@ -1050,6 +1054,7 @@ class Window(QWidget):
                     )
                     return
                 finally:
+                    #Do not change the order of these reload statements
                     reload(itemrandomizer)
                     reload(monsterrandomizer)
                     reload(formationrandomizer)
@@ -1060,6 +1065,7 @@ class Window(QWidget):
                     reload(towerrandomizer)
                     reload(chestrandomizer)
                     reload(randomizer)
+                    reload(menufeatures)
 
     # Read each dictionary and update text field 
     # showing flag codes based upon
