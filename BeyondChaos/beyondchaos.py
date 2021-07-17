@@ -12,7 +12,7 @@ from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout, 
     QLabel, QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QFileDialog, 
     QApplication, QTabWidget, QInputDialog, QScrollArea, QMessageBox, 
-    QGraphicsDropShadowEffect, QGridLayout)
+    QGraphicsDropShadowEffect, QGridLayout, QSpinBox)
 
 #Local application imports
 from config import (readFlags, writeFlags)
@@ -227,7 +227,7 @@ class Window(QWidget):
         self.romInput = QLineEdit()
         self.romInput.setPlaceholderText("Required")
         self.romInput.setReadOnly(True)
-        gridLayout.addWidget(self.romInput, 1, 2)
+        gridLayout.addWidget(self.romInput, 1, 2, 1, 3)
 
         btnRomInput = QPushButton("Browse")
         btnRomInput.setMaximumWidth(self.width)
@@ -245,7 +245,7 @@ class Window(QWidget):
         btnRomInputStyle.setBlurRadius(3)
         btnRomInputStyle.setOffset(3,3)
         btnRomInput.setGraphicsEffect(btnRomInputStyle)
-        gridLayout.addWidget(btnRomInput, 1, 3)
+        gridLayout.addWidget(btnRomInput, 1, 5)
 
         #ROM OUTPUT
         lblRomOutput = QLabel("Output Directory:")
@@ -255,7 +255,7 @@ class Window(QWidget):
         self.romOutput = QLineEdit()
 
         self.romInput.textChanged[str].connect(self.updateRomOutputPlaceholder)
-        gridLayout.addWidget(self.romOutput, 2, 2)
+        gridLayout.addWidget(self.romOutput, 2, 2, 1, 3)
 
         btnRomOutput = QPushButton("Browse")
         btnRomOutput.setMaximumWidth(self.width)
@@ -273,7 +273,7 @@ class Window(QWidget):
         btnRomOutputStyle.setBlurRadius(3)
         btnRomOutputStyle.setOffset(3,3)
         btnRomOutput.setGraphicsEffect(btnRomOutputStyle)
-        gridLayout.addWidget(btnRomOutput, 2, 3)
+        gridLayout.addWidget(btnRomOutput, 2, 5)
 
         #SEED INPUT
         lblSeedInput = QLabel("Seed Number:")
@@ -285,7 +285,20 @@ class Window(QWidget):
         self.seedInput.setPlaceholderText("Optional")
         gridLayout.addWidget(self.seedInput, 3, 2)
 
-        btnGenerate = QPushButton("Generate Seed")       
+        lblSeedCount = QLabel("Number to Generate:")
+        lblSeedCount.setAlignment(QtCore.Qt.AlignRight | 
+                                    QtCore.Qt.AlignVCenter)
+        gridLayout.addWidget(lblSeedCount, 3, 3)
+
+        self.seedCount = QSpinBox()
+        self.seedCount.setValue(1)
+        self.seedCount.setMinimum(1)
+        self.seedCount.setMaximum(99)
+        self.seedCount.setFixedWidth(40)
+        gridLayout.addWidget(self.seedCount, 3, 4)
+
+        btnGenerate = QPushButton("Generate")
+        btnGenerate.setMinimumWidth(125)
         btnGenerate.setMaximumWidth(self.width)
         btnGenerate.setMaximumHeight(self.height)        
         btnGenerate.setStyleSheet(
@@ -301,7 +314,7 @@ class Window(QWidget):
         btnGenerateStyle.setBlurRadius(3)
         btnGenerateStyle.setOffset(3,3)
         btnGenerate.setGraphicsEffect(btnGenerateStyle)
-        gridLayout.addWidget(btnGenerate, 3, 3)
+        gridLayout.addWidget(btnGenerate, 3, 5)
 
         groupLayout.setLayout(gridLayout)
         return groupLayout
@@ -997,12 +1010,13 @@ class Window(QWidget):
                     "You need to select a flag and/or code!"
                 )
                 return
-
+            
             # This makes the flag string more readable in 
             # the confirm dialog
             message = (f"Rom: {self.romText}\n"
                        f"Output: {self.romOutputDirectory}\n"
                        f"Seed: {displaySeed}\n"
+                       f"Number of seeds: {self.seedCount.text()}\n"
                        f"Mode: {self.mode}\n"
                        f"Flags: \n----{flagMsg}\n"
                        f"(Hyphens are not actually used in seed generation)"
@@ -1014,21 +1028,26 @@ class Window(QWidget):
                 QMessageBox.Yes | QMessageBox.Cancel
             )
             if messBox == 16384:  
-                # User selects confirm/accept/yes option
-                bundle = f"{self.version}.{self.mode}.{flagMode}.{self.seed}"
-                # remove spam if the Randomizer asks for input
-                # TODO: guify that stuff
-                # Hash check can be moved out to when you pick 
-                # the file. If you delete the file between picking 
-                # it and running, just spit out an error, no need 
-                # to prompt. 
-                # Randomboost could send a signal ask for a number 
-                # or whatever, but maybe it's better to just remove 
-                # it or pick a fixed number?
-                QtCore.pyqtRemoveInputHook()
-                # TODO: put this in a new thread
-                try:
-                    result_file = randomizer.randomize(
+                self.clearConsole()
+                seedsToGenerate = int(self.seedCount.text())
+                resultFiles = []
+                for currentSeed in range(seedsToGenerate):
+                    print("Rolling seed " + str(currentSeed + 1) + " of " + str(seedsToGenerate) + ".")
+                    # User selects confirm/accept/yes option
+                    bundle = f"{self.version}.{self.mode}.{flagMode}.{self.seed}"
+                    # remove spam if the Randomizer asks for input
+                    # TODO: guify that stuff
+                    # Hash check can be moved out to when you pick 
+                    # the file. If you delete the file between picking 
+                    # it and running, just spit out an error, no need 
+                    # to prompt. 
+                    # Randomboost could send a signal ask for a number 
+                    # or whatever, but maybe it's better to just remove 
+                    # it or pick a fixed number?
+                    QtCore.pyqtRemoveInputHook()
+                    # TODO: put this in a new thread
+                    try:
+                        resultFile = randomizer.randomize(
                             args=[
                                 'beyondchaos.py', 
                                 self.romText, 
@@ -1037,35 +1056,58 @@ class Window(QWidget):
                                 self.romOutputDirectory
                             ]
                         )
-                except Exception as e:
-                    traceback.print_exc()
-                    QMessageBox.critical(
-                        self, 
-                        "Error creating ROM", 
-                        str(e), 
-                        QMessageBox.Ok
-                    )
-                else:
-                    QMessageBox.information(
-                        self, 
-                        "Successfully created ROM", 
-                        f"Result file: {result_file}", 
-                        QMessageBox.Ok
-                    )
-                    return
-                finally:
-                    #Do not change the order of these reload statements
-                    reload(itemrandomizer)
-                    reload(monsterrandomizer)
-                    reload(formationrandomizer)
-                    reload(character)
-                    reload(esperrandomizer)
-                    reload(locationrandomizer)
-                    reload(music.musicrandomizer)
-                    reload(towerrandomizer)
-                    reload(chestrandomizer)
-                    reload(randomizer)
-                    reload(menufeatures)
+                        if self.seed:
+                            self.seed = str(int(self.seed) + 1)
+                    except Exception as e:
+                        traceback.print_exc()
+                        QMessageBox.critical(
+                            self, 
+                            "Error creating ROM", 
+                            str(e), 
+                            QMessageBox.Ok
+                        )
+                    else:
+                        resultFiles.append(resultFile)
+                        if currentSeed + 1 == seedsToGenerate:
+                            if seedsToGenerate == 1:
+                                QMessageBox.information(
+                                    self, 
+                                    "Successfully created ROM", 
+                                    "Result file\n------------\n" + f"{resultFile}", 
+                                    QMessageBox.Ok
+                                )
+                            elif seedsToGenerate > 10:
+                                QMessageBox.information(
+                                    self, 
+                                    f"Successfully created {seedsToGenerate} ROMs", 
+                                    f"{seedsToGenerate} ROMs have been created in {self.romOutputDirectory}.", 
+                                    QMessageBox.Ok
+                                )
+                            else:
+                                resultFilesString = "\n------------\n".join(resultFiles)
+                                QMessageBox.information(
+                                    self, 
+                                    f"Successfully created {seedsToGenerate} ROMs", 
+                                    "Result files\n------------\n" + f"{resultFilesString}", 
+                                    QMessageBox.Ok
+                                )
+                        else:
+                            self.clearConsole()
+
+                    finally:
+                        #Do not change the order of these reload statements
+                        reload(itemrandomizer)
+                        reload(monsterrandomizer)
+                        reload(formationrandomizer)
+                        reload(character)
+                        reload(esperrandomizer)
+                        reload(locationrandomizer)
+                        reload(music.musicrandomizer)
+                        reload(towerrandomizer)
+                        reload(chestrandomizer)
+                        reload(randomizer)
+                        reload(menufeatures)
+                        currentSeed += 1
 
     # Read each dictionary and update text field 
     # showing flag codes based upon
@@ -1104,6 +1146,9 @@ class Window(QWidget):
             self.romOutput.setPlaceholderText(value[:str(value).rindex('/')])
         except ValueError:
             pass
+
+    def clearConsole(self):
+        os.system('cls' if os.name=='nt' else 'clear')
 
 
 
