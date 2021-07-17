@@ -4425,6 +4425,9 @@ def randomize(args: List[str]) -> str:
         
     if previous_rom_path and not sourcefile:
         sourcefile = previous_rom_path
+        
+    sourcefile = os.path.abspath(sourcefile)
+    
     try:
         f = open(sourcefile, 'rb')
         data = f.read()
@@ -4436,7 +4439,7 @@ def randomize(args: List[str]) -> str:
         else:
             #If no previous directory or an invalid directory was obtained from bcex.cfg, default to the ROM's directory
             if not previous_output_directory or not os.path.isdir(previous_output_directory):
-                previous_output_directory = sourcefile[:sourcefile.rindex('/')]
+                previous_output_directory = os.path.dirname(sourcefile)
 
             while True:
                 #Input loop to make sure we get a valid directory
@@ -4584,13 +4587,17 @@ def randomize(args: List[str]) -> str:
     original_rom_location = sourcefile
 
     if '.' in sourcefile:
-        tempname = sourcefile.rsplit('.', 1)
+        tempname = os.path.basename(sourcefile).rsplit('.', 1)
     else:
-        tempname = [sourcefile, 'smc']
+        tempname = [os.path.basename(sourcefile), 'smc']
     
-    outfile = output_directory + '.'.join([tempname[0][tempname[0].rindex('/'):], str(seed), tempname[1]])
-    outlog = output_directory + '.'.join([tempname[0][tempname[0].rindex('/'):], str(seed), 'txt'])
-
+    outfile = os.path.join(output_directory,
+                           '.'.join([os.path.basename(tempname[0]),
+                                     str(seed), tempname[1]]))
+    outlog = os.path.join(output_directory,
+                          '.'.join([os.path.basename(tempname[0]),
+                                    str(seed), 'txt']))
+                                     
     if saveflags:
         try:
             config = configparser.ConfigParser()
