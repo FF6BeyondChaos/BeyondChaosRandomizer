@@ -4448,7 +4448,7 @@ def randomize(args: List[str]) -> str:
             while True:
                 #Input loop to make sure we get a valid directory
                 previous_output = f" (blank for previous: {previous_output_directory})"
-                output_directory = input(f"Please input the directory to place the randomized ROM file. {previous_output}:\n> ").strip().replace('\\', '/')
+                output_directory = input(f"Please input the directory to place the randomized ROM file. {previous_output}:\n> ").strip()
                 print()
 
                 if previous_output_directory and not output_directory:
@@ -4615,7 +4615,7 @@ def randomize(args: List[str]) -> str:
             config['ROM']['Path'] = sourcefile
 
             #Save the output directory
-            if str(output_directory).lower() == str(sourcefile[:str(sourcefile).rindex('/')]).lower():
+            if str(output_directory).lower() == str(os.path.dirname(sourcefile)).lower():
                 #If the output directory is the same as the ROM directory, save an empty string
                 config['ROM']['Output'] = ''
             else:

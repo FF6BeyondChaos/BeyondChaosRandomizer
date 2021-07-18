@@ -1143,7 +1143,7 @@ class Window(QWidget):
 
     def updateRomOutputPlaceholder(self, value):
         try:
-            self.romOutput.setPlaceholderText(value[:str(value).rindex('/')])
+            self.romOutput.setPlaceholderText(os.path.dirname(value))
         except ValueError:
             pass
 
