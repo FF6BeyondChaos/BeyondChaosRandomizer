@@ -253,13 +253,12 @@ class Window(QWidget):
         gridLayout.addWidget(lblRomOutput, 2, 1)
 
         self.romOutput = QLineEdit()
-
         self.romInput.textChanged[str].connect(self.updateRomOutputPlaceholder)
         gridLayout.addWidget(self.romOutput, 2, 2, 1, 3)
 
         btnRomOutput = QPushButton("Browse")
         btnRomOutput.setMaximumWidth(self.width)
-        btnRomOutput.setMaximumHeight(self.height)        
+        btnRomOutput.setMaximumHeight(self.height)
         btnRomOutput.setStyleSheet(
             "font:bold;"
             "font-size:18px;"
@@ -1047,14 +1046,19 @@ class Window(QWidget):
                     QtCore.pyqtRemoveInputHook()
                     # TODO: put this in a new thread
                     try:
+                        #resultFile = randomizer.randomize(
+                        #    args=[
+                        #        'beyondchaos.py', 
+                        #        self.romText, 
+                        #        bundle, 
+                        #        "test", 
+                        #        self.romOutputDirectory
+                        #    ]
+                        #)
                         resultFile = randomizer.randomize(
-                            args=[
-                                'beyondchaos.py', 
-                                self.romText, 
-                                bundle, 
-                                "test", 
-                                self.romOutputDirectory
-                            ]
+                            sourcefile=self.romText,
+                            seed=bundle,
+                            output_directory=self.romOutputDirectory
                         )
                         if self.seed:
                             self.seed = str(int(self.seed) + 1)
@@ -1143,7 +1147,7 @@ class Window(QWidget):
 
     def updateRomOutputPlaceholder(self, value):
         try:
-            self.romOutput.setPlaceholderText(value[:str(value).rindex('/')])
+            self.romOutput.setPlaceholderText(os.path.dirname(value))
         except ValueError:
             pass
 
