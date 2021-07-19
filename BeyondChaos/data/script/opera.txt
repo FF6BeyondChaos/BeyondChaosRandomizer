@@ -1,4 +1,4 @@
-474:impresario->{impresario}|the->impresariotitle
+474:impresario->{impresario}|the->{impresariotitle}
 1032:maria->{Maria}
 1156:maria->{Maria}|her->{mariaEm}|she's->{MariaEyIs}
 1157:impresario->{IMPRESARIO}|maria->{Maria}
