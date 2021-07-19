@@ -72,6 +72,7 @@ class Window(QWidget):
         self.xpMultiplier = 1
         self.gpMultiplier = 1
         self.mpMultiplier = 1
+        self.randomboost = 1
 
 
         # dictionaries to hold flag data
@@ -474,7 +475,7 @@ class Window(QWidget):
                     nbox.setSpecialValueText('Off')
                     nbox.setFixedWidth(50)
                     nbox.setMinimum(1)
-                    nbox.setMaximum(100)
+                    nbox.setMaximum(50)
                     nbox.text = flagname
                     flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
                     tablayout.addWidget(nbox, currentRow, 1)
@@ -873,6 +874,8 @@ class Window(QWidget):
                     self.gpMultiplier = c.value()
                 elif c.text == 'mps':
                     self.mpMultiplier = c.value()
+                elif c.text == 'randomboost':
+                    self.randomboost = c.value()
                 if not c.value() == 1:
                     flagset = False
                     for flag in self.flags:
@@ -1095,7 +1098,10 @@ class Window(QWidget):
                         resultFile = randomizer.randomize(
                             sourcefile=self.romText,
                             seed=bundle,
-                            output_directory=self.romOutputDirectory
+                            output_directory=self.romOutputDirectory,
+                            xpMultiplier=self.xpMultiplier,
+                            gpMultiplier=self.gpMultiplier,
+                            randomboost=self.randomboost
                         )
                         if self.seed:
                             self.seed = str(int(self.seed) + 1)

@@ -26,7 +26,6 @@ from monsterrandomizer import MonsterBlock
 from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance
-from beyondchaos import xpMultiplier, gpMultiplier, mpMultiplier
 from character import get_characters, get_character, equip_offsets
 from chestrandomizer import mutate_event_items, get_event_items
 from decompress import Decompressor
@@ -4703,8 +4702,11 @@ def randomize(**kwargs) -> str:
     print(activation_string)
 
     if Options_.is_code_active('randomboost'):
-        x = input("Please enter a randomness "
-                  "multiplier value (blank for tierless): ")
+        if 'randomboost' in kwargs:
+            x = kwargs.get('randomboost')
+        else:
+            x = input("Please enter a randomness "
+                    "multiplier value (blank for tierless): ")
         try:
             multiplier = float(x)
             if multiplier <= 0:
@@ -5109,20 +5111,25 @@ def randomize(**kwargs) -> str:
         manage_equip_umaro(event_freespaces)
         
     if Options_.is_code_active('easymodo') or Options_.is_code_active('llg') or Options_.is_code_active('exp'):
-        print(str(xpMultiplier))
         for m in monsters:
             if Options_.is_code_active('easymodo'):
                 m.stats['hp'] = 1
             if Options_.is_code_active('llg'):
                 m.stats['xp'] = 0
             if Options_.is_code_active('exp'):
-                m.stats['xp'] = min(0xFFFF, xpMultiplier * m.stats['xp'])
+                if 'xpMultiplier' in kwargs:
+                    m.stats['xp'] = min(0xFFFF, kwargs.get('xpMultiplier') * m.stats['xp'])
+                else:
+                    m.stats['xp'] = min(0xFFFF, 3 * m.stats['xp'])
             m.write_stats(fout)
 
     if Options_.is_code_active('gp'):
         print(str(gpMultiplier))
         for m in monsters:
-                m.stats['gp'] = min(0xFFFF, gpMultiplier * m.stats['gp'])
+            if 'gpMultiplier' in kwargs:
+                m.stats['gp'] = min(0xFFFF, kwargs.get('gpMultiplier') * m.stats['gp'])
+            else:
+                m.stats['gp'] = min(0xFFFF, 3 * m.stats['gp'])
 
     if Options_.is_code_active('naturalmagic') or Options_.is_code_active('naturalstats'):
         espers = get_espers(sourcefile)
