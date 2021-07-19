@@ -50,7 +50,6 @@ class FlagCheckBox(QCheckBox):
         self.setText(text)
         self.value = value
 
-
 class Window(QWidget):
 
     def __init__(self):
@@ -70,6 +69,9 @@ class Window(QWidget):
         self.mode = "normal"
         self.seed = ""
         self.flags = []
+        self.xpMultiplier = 1
+        self.gpMultiplier = 1
+        self.mpMultiplier = 1
 
 
         # dictionaries to hold flag data
@@ -457,15 +459,30 @@ class Window(QWidget):
                                self.tabNames):
             tabObj = QScrollArea()
             tabs.addTab(tabObj, names)
-            tablayout = QVBoxLayout()
+            tablayout = QGridLayout()
+            currentRow = 0
             for flagname, flagdesc in d.items():
-                cbox = FlagCheckBox(
-                    f"{flagname}  -  {flagdesc['explanation']}", 
-                    flagname
-                )
-                self.checkBoxes.append(cbox)
-                tablayout.addWidget(cbox)
-                cbox.clicked.connect(lambda checked: self.flagButtonClicked())
+                if flagdesc['inputtype'] == 'checkbox':
+                    cbox = FlagCheckBox(
+                        f"{flagname}  -  {flagdesc['explanation']}", 
+                        flagname
+                    )
+                    self.checkBoxes.append(cbox)
+                    tablayout.addWidget(cbox, currentRow, 1, 1, 2)
+                    cbox.clicked.connect(lambda checked: self.flagButtonClicked())
+                elif  flagdesc['inputtype'] == 'numberbox':
+                    nbox = QSpinBox()
+                    nbox.setSpecialValueText('Off')
+                    nbox.setFixedWidth(50)
+                    nbox.setMinimum(1)
+                    nbox.setMaximum(100)
+                    nbox.text = flagname
+                    flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
+                    tablayout.addWidget(nbox, currentRow, 1)
+                    tablayout.addWidget(flaglbl, currentRow, 2)
+                    nbox.valueChanged.connect(lambda: self.flagButtonClicked())
+                currentRow += 1
+
             t.setLayout(tablayout)
             tabObj.setWidgetResizable(True)
             tabObj.setWidget(t)
@@ -691,12 +708,14 @@ class Window(QWidget):
 
             d[code.name] = {
                 'explanation': code.long_description, 
+                'inputtype': code.inputtype,
                 'checked': False
             }
 
         for flag in sorted(ALL_FLAGS):
             self.flag[flag.name] = {
                 'explanation': flag.description, 
+                'inputtype': flag.inputtype,
                 'checked': True
             }
 
@@ -847,8 +866,26 @@ class Window(QWidget):
                         self.flags.append(c.value)
                 else:
                     d[c.value]['checked'] = False
+            children = t.findChildren(QSpinBox)
+            for c in children:
+                if c.text == 'exp':
+                    self.xpMultiplier = c.value()
+                elif c.text == 'gp':
+                    self.gpMultiplier = c.value()
+                elif c.text == 'mps':
+                    self.mpMultiplier = c.value()
+                if not c.value() == 1:
+                    flagset = False
+                    for flag in self.flags:
+                        if flag == c.text:
+                            flagset = True
+                    if flagset == False:
+                        self.flags.append(c.text)
+
+            
         self.updateFlagString()
 
+            
 
     # Opens file dialog to select rom file and assigns it to value in
     # parent/Window class
