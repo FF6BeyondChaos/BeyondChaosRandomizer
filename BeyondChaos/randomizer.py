@@ -5256,6 +5256,9 @@ if __name__ == "__main__":
             '\t\tsource=<file path to your unrandomized Final Fantasy 3 v1.0 ROM file>\n',
             '\t\tdestination=<directory path where you want the randomized ROM and spoiler log created>\n',
             '\t\tseed=<flag and seed information in the format version.mode.flags.seed>\n'
+            '\t\txpMultplier=<The desired XP multiplier, if you are using the xp code>\n',
+            '\t\txpMultplier=<The desired GP multiplier, if you are using the gp code>\n',
+            '\t\trandomboost=<The desired randomboost amount, if you are using the randomboost code>\n',
         )
         sys.exit()
     try:
