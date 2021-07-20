@@ -322,6 +322,7 @@ def read_multi(f, length=2, reverse=True):
 def write_multi(f, value, length=2, reverse=True):
     vals = []
     while value:
+        value = int(value)
         vals.append(value & 0xFF)
         value = value >> 8
     if len(vals) > length:
