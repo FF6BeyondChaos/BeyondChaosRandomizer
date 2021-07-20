@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 import monsterrandomizer
 from options import Options_
-from math import log
+from math import log, floor
 
 from monsterrandomizer import monsterdict, get_monsters
 from utils import read_multi, write_multi, utilrandom as random
@@ -247,7 +247,7 @@ class Formation():
 
         if self.ap is not None:
             fout.seek(0x1fb400 + self.formid)
-            fout.write(bytes([self.ap]))
+            fout.write(bytes([min(self.ap, 256)]))
 
     def lookup_enemies(self):
         self.enemies = []
@@ -326,15 +326,15 @@ class Formation():
     def exp(self):
         return sum(e.stats['xp'] for e in self.present_enemies)
 
-    def mutate(self, ap=False):
+    def mutate(self, ap=False, apMultiplier=None):
         if ap and self.ap is not None and 0 < self.ap < 100:
             factor = self.levelrank() / 100
             self.ap += int(round(self.ap * factor))
             while random.choice([True, False]):
                 self.ap += random.randint(-1, 1)
                 self.ap = min(100, max(self.ap, 0))
-            if Options_.is_code_active("mps"):
-                self.ap = self.ap * 3
+            if apMultiplier:
+                self.ap = floor(self.ap * apMultiplier)
         if self.ambusher:
             if not (self.pincer_prohibited and self.back_prohibited):
                 self.misc1 |= 0x90

@@ -2786,7 +2786,7 @@ def manage_dragons():
         fout.write(bytes([dragon]))
 
 
-def manage_formations(formations: List[Formation], fsets: List[FormationSet]) -> List[Formation]:
+def manage_formations(formations: List[Formation], fsets: List[FormationSet], apMultiplier: float=None) -> List[Formation]:
     for fset in fsets:
         if len(fset.formations) == 4:
             for formation in fset.formations:
@@ -2847,7 +2847,15 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet]) ->
                            0x1E0, 0x1E6]}
 
     for formation in formations:
-        formation.mutate(ap=False)
+        if Options_.is_code_active('mps'):
+            if apMultiplier:
+                formation.mutate(ap=False, apMultiplier=apMultiplier)
+            else:
+                print("apMultiplier does not exist.")
+                formation.mutate(ap=False, apMultiplier=3)
+        else:
+            print("mps code is not on")
+            formation.mutate(ap=False)
         if formation.formid == 0x1e2:
             formation.set_music(2)  # change music for Atma fight
         if formation.formid == 0x162:
@@ -2862,11 +2870,12 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet]) ->
 def manage_formations_hidden(formations: List[Formation],
                              freespaces: List[FreeBlock],
                              form_music_overrides: dict=None,
-                             no_special_events=True):
+                             no_special_events=True,
+                             apMultiplier: float=None):
     if not form_music_overrides:
         form_music_overrides = {}
     for f in formations:
-        f.mutate(ap=True)
+        f.mutate(ap=True, apMultiplier=apMultiplier)
 
     unused_enemies = [u for u in get_monsters() if u.id in REPLACE_ENEMIES]
 
@@ -4702,7 +4711,7 @@ def randomize(**kwargs) -> str:
     print(activation_string)
 
     if Options_.is_code_active('randomboost'):
-        if 'randomboost' in kwargs and kwargs.get('randomboost'):
+        if 'randomboost' in kwargs and kwargs.get('randomboost') is not None:
             x = kwargs.get('randomboost')
         else:
             x = input("Please enter a randomness "
@@ -4928,7 +4937,10 @@ def randomize(**kwargs) -> str:
     if Options_.random_formations:
         formations = get_formations()
         fsets = get_fsets()
-        manage_formations(formations, fsets)
+        if Options_.is_code_active('mps'):
+            manage_formations(formations, fsets, kwargs.get('mpMultiplier'))
+        else:
+            manage_formations(formations, fsets)
         for fset in fsets:
             fset.write_data(fout)
 
@@ -4951,7 +4963,10 @@ def randomize(**kwargs) -> str:
     form_music = {}
     if Options_.random_formations:
         no_special_events = not Options_.is_code_active('bsiab')
-        manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music, no_special_events=no_special_events)
+        if Options_.is_code_active('mps'):
+            manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music, no_special_events=no_special_events, apMultiplier=kwargs.get('mpMultiplier'))
+        else:
+            manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music, no_special_events=no_special_events)
         for m in get_monsters():
             m.write_stats(fout)
     reseed()
@@ -5124,7 +5139,6 @@ def randomize(**kwargs) -> str:
             m.write_stats(fout)
 
     if Options_.is_code_active('gp'):
-        print(str(gpMultiplier))
         for m in monsters:
             if 'gpMultiplier' in kwargs:
                 m.stats['gp'] = min(0xFFFF, kwargs.get('gpMultiplier') * m.stats['gp'])
@@ -5267,6 +5281,7 @@ if __name__ == "__main__":
         destination_arg = None
         expMultiplier = 3
         gpMultiplier = 3
+        mpMultiplier = 3
         randomboost = None
         for argument in args[1:]:
             if 'source=' in argument:
@@ -5277,15 +5292,21 @@ if __name__ == "__main__":
                 destination_arg = argument[argument.index('=') + 1:]
             elif 'expmultiplier=' in argument:
                 try:
-                    expMultiplier = int(argument[argument.index('=') + 1:])
+                    expMultiplier = float(argument[argument.index('=') + 1:])
                 except ValueError:
                     print("The supplied value for the exp multiplier was not a number.")
                     sys.exit()
             elif 'gpmultiplier=' in argument:
                 try:
-                    gpMultiplier = int(argument[argument.index('=') + 1:])
+                    gpMultiplier = float(argument[argument.index('=') + 1:])
                 except ValueError:
                     print("The supplied value for the gp multiplier was not a number.")
+                    sys.exit()
+            elif 'gpmultiplier=' in argument:
+                try:
+                    mpMultiplier = float(argument[argument.index('=') + 1:])
+                except ValueError:
+                    print("The supplied value for the mp multiplier was not a number.")
                     sys.exit()
             elif 'randomboost=' in argument:
                 try:
@@ -5296,7 +5317,15 @@ if __name__ == "__main__":
             else:
                 print('Keyword unrecognized or missing: ' + str(argument) + '.\nUse "python randomizer.py ?" to view a list of valid keyword arguments.')
 
-        randomize(sourcefile=source_arg, seed=seed_arg, output_directory=destination_arg, expMultiplier=expMultiplier, gpMultiplier=gpMultiplier, randomboost=randomboost)
+        randomize(
+            sourcefile=source_arg, 
+            seed=seed_arg, 
+            output_directory=destination_arg, 
+            expMultiplier=expMultiplier, 
+            gpMultiplier=gpMultiplier, 
+            mpMultiplier=mpMultiplier, 
+            randomboost=randomboost
+        )
         input('Press enter to close this program.')
     except Exception as e:
         print('ERROR: %s' % e, '\nTo view valid keyword arguments, use "python randomizer.py ?"')

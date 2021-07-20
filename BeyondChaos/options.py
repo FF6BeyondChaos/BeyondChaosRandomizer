@@ -251,13 +251,13 @@ NORMAL_CODES = [
     Code('naturalstats', "NATURAL STATS MODE", "No Espers will grant stat bonuses upon leveling up.", "battle", "checkbox"),
     Code('exp', "Multiplied Exp", "All battles will award multiplied exp", "beta", "numberbox"),
     Code('gp', "multiplied gp", "All battles will award multiplied gp", "beta", "numberbox"),
-    #Code('mps', "multiplied magic points", "All battles will award multiplied magic points. Does not do anything?", "beta", "numberbox"),
+    Code('mps', "multiplied magic points", "All battles will award multiplied magic points.", "beta", "numberbox"),
     Code('dancelessons', "NO DANCE FAILURES", "Removes the 50% chance that dances will fail when used on a different terrain.", "beta", "checkbox"),
 
     Code('airship', "AIRSHIP MODE", "The party will have access to the airship immediately after leaving Narshe. Chocobo stables can also be used to acquire the airship. Doing events out of order can cause softlocks.", "gamebreaking", "checkbox"),
     
     Code('bsiab', "UNBALANCED MONSTER CHESTS MODE", "Reverts the monster-in-a-box selection algorithm to be (mostly) the same as versions prior to EX v3.", "major", "checkbox"),
-    Code('llg', "LOW LEVEL GAME MODE", "Stands for Low Level Game. No encounters will yield any Experience Points.", "major", "checkbox"),
+    #Code('llg', "LOW LEVEL GAME MODE", "Stands for Low Level Game. No encounters will yield any Experience Points.", "major", "checkbox"),
     Code('mimetime', 'ALTERNATE GOGO MODE', "Gogo will be hidden somewhere in the world of ruin disguised as another character. Bring that character to him to recruit him.", "major", "checkbox"),
     Code('nomiabs', 'NO MIAB MODE', "Chests will never have monster encounters in them", "beta", "checkbox"),
 
