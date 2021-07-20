@@ -12,7 +12,7 @@ from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout, 
     QLabel, QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QFileDialog, 
     QApplication, QTabWidget, QInputDialog, QScrollArea, QMessageBox, 
-    QGraphicsDropShadowEffect, QGridLayout, QSpinBox)
+    QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox)
 
 #Local application imports
 from config import (readFlags, writeFlags)
@@ -471,11 +471,21 @@ class Window(QWidget):
                     tablayout.addWidget(cbox, currentRow, 1, 1, 2)
                     cbox.clicked.connect(lambda checked: self.flagButtonClicked())
                 elif  flagdesc['inputtype'] == 'numberbox':
-                    nbox = QSpinBox()
+                    if flagname in ['exp','gp', 'mps']:
+                        nbox = QDoubleSpinBox()
+                    else:
+                        nbox = QSpinBox()
                     nbox.setSpecialValueText('Off')
                     nbox.setFixedWidth(50)
-                    nbox.setMinimum(1)
+                    nbox.setMinimum(-1)
+                    nbox.setValue(nbox.minimum())
                     nbox.setMaximum(50)
+                    if flagname in ['exp','gp', 'mps']:
+                        nbox.setFixedWidth(70)
+                        nbox.setMinimum(-0.1)
+                        nbox.setValue(-0.1)
+                        nbox.setSingleStep(.1)
+                        nbox.setSuffix("x")
                     nbox.text = flagname
                     flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
                     tablayout.addWidget(nbox, currentRow, 1)
@@ -866,7 +876,7 @@ class Window(QWidget):
                         self.flags.append(c.value)
                 else:
                     d[c.value]['checked'] = False
-            children = t.findChildren(QSpinBox)
+            children = t.findChildren(QSpinBox) + t.findChildren(QDoubleSpinBox)
             for c in children:
                 if c.text == 'exp':
                     self.expMultiplier = c.value()
@@ -876,7 +886,7 @@ class Window(QWidget):
                     self.mpMultiplier = c.value()
                 elif c.text == 'randomboost':
                     self.randomboost = c.value()
-                if not c.value() == 1:
+                if not c.value() == c.minimum():
                     flagset = False
                     for flag in self.flags:
                         if flag == c.text:
@@ -1101,6 +1111,7 @@ class Window(QWidget):
                             output_directory=self.romOutputDirectory,
                             expMultiplier=self.expMultiplier,
                             gpMultiplier=self.gpMultiplier,
+                            mpMultiplier=self.mpMultiplier,
                             randomboost=self.randomboost
                         )
                         if self.seed:
