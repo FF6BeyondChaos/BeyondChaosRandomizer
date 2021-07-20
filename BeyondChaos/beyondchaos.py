@@ -69,7 +69,7 @@ class Window(QWidget):
         self.mode = "normal"
         self.seed = ""
         self.flags = []
-        self.xpMultiplier = 1
+        self.expMultiplier = 1
         self.gpMultiplier = 1
         self.mpMultiplier = 1
         self.randomboost = 1
@@ -869,7 +869,7 @@ class Window(QWidget):
             children = t.findChildren(QSpinBox)
             for c in children:
                 if c.text == 'exp':
-                    self.xpMultiplier = c.value()
+                    self.expMultiplier = c.value()
                 elif c.text == 'gp':
                     self.gpMultiplier = c.value()
                 elif c.text == 'mps':
@@ -1099,7 +1099,7 @@ class Window(QWidget):
                             sourcefile=self.romText,
                             seed=bundle,
                             output_directory=self.romOutputDirectory,
-                            xpMultiplier=self.xpMultiplier,
+                            expMultiplier=self.expMultiplier,
                             gpMultiplier=self.gpMultiplier,
                             randomboost=self.randomboost
                         )

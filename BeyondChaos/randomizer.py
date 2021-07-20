@@ -4702,7 +4702,7 @@ def randomize(**kwargs) -> str:
     print(activation_string)
 
     if Options_.is_code_active('randomboost'):
-        if 'randomboost' in kwargs:
+        if 'randomboost' in kwargs and kwargs.get('randomboost'):
             x = kwargs.get('randomboost')
         else:
             x = input("Please enter a randomness "
@@ -5117,8 +5117,8 @@ def randomize(**kwargs) -> str:
             if Options_.is_code_active('llg'):
                 m.stats['xp'] = 0
             if Options_.is_code_active('exp'):
-                if 'xpMultiplier' in kwargs:
-                    m.stats['xp'] = min(0xFFFF, kwargs.get('xpMultiplier') * m.stats['xp'])
+                if 'expMultiplier' in kwargs:
+                    m.stats['xp'] = min(0xFFFF, kwargs.get('expMultiplier') * m.stats['xp'])
                 else:
                     m.stats['xp'] = min(0xFFFF, 3 * m.stats['xp'])
             m.write_stats(fout)
@@ -5256,15 +5256,18 @@ if __name__ == "__main__":
             '\t\tsource=<file path to your unrandomized Final Fantasy 3 v1.0 ROM file>\n',
             '\t\tdestination=<directory path where you want the randomized ROM and spoiler log created>\n',
             '\t\tseed=<flag and seed information in the format version.mode.flags.seed>\n'
-            '\t\txpMultplier=<The desired XP multiplier, if you are using the xp code>\n',
-            '\t\txpMultplier=<The desired GP multiplier, if you are using the gp code>\n',
-            '\t\trandomboost=<The desired randomboost amount, if you are using the randomboost code>\n',
+            '\t\texpmultplier=<The desired positive integer EXP multiplier, if you are using the exp code>\n',
+            '\t\tgpmultplier=<The desired positive integer GP multiplier, if you are using the gp code>\n',
+            '\t\trandomboost=<The desired positive integer randomboost amount, if you are using the randomboost code>\n',
         )
         sys.exit()
     try:
         source_arg = None
         seed_arg = None
         destination_arg = None
+        expMultiplier = 3
+        gpMultiplier = 3
+        randomboost = None
         for argument in args[1:]:
             if 'source=' in argument:
                 source_arg = argument[argument.index('=') + 1:]
@@ -5272,10 +5275,28 @@ if __name__ == "__main__":
                 seed_arg = argument[argument.index('=') + 1:]
             elif 'destination=' in argument:
                 destination_arg = argument[argument.index('=') + 1:]
+            elif 'expmultiplier=' in argument:
+                try:
+                    expMultiplier = int(argument[argument.index('=') + 1:])
+                except ValueError:
+                    print("The supplied value for the exp multiplier was not a number.")
+                    sys.exit()
+            elif 'gpmultiplier=' in argument:
+                try:
+                    gpMultiplier = int(argument[argument.index('=') + 1:])
+                except ValueError:
+                    print("The supplied value for the gp multiplier was not a number.")
+                    sys.exit()
+            elif 'randomboost=' in argument:
+                try:
+                    randomboost = int(argument[argument.index('=') + 1:])
+                except ValueError:
+                    print("The supplied value for randomboost was not a number.")
+                    sys.exit()
             else:
                 print('Keyword unrecognized or missing: ' + str(argument) + '.\nUse "python randomizer.py ?" to view a list of valid keyword arguments.')
 
-        randomize(sourcefile=source_arg, seed=seed_arg, output_directory=destination_arg)
+        randomize(sourcefile=source_arg, seed=seed_arg, output_directory=destination_arg, expMultiplier=expMultiplier, gpMultiplier=gpMultiplier, randomboost=randomboost)
         input('Press enter to close this program.')
     except Exception as e:
         print('ERROR: %s' % e, '\nTo view valid keyword arguments, use "python randomizer.py ?"')
