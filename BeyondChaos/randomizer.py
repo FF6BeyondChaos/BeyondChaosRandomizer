@@ -2851,10 +2851,8 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet], ap
             if apMultiplier:
                 formation.mutate(ap=False, apMultiplier=apMultiplier)
             else:
-                print("apMultiplier does not exist.")
                 formation.mutate(ap=False, apMultiplier=3)
         else:
-            print("mps code is not on")
             formation.mutate(ap=False)
         if formation.formid == 0x1e2:
             formation.set_music(2)  # change music for Atma fight
