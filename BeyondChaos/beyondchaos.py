@@ -12,7 +12,7 @@ from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout, 
     QLabel, QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QFileDialog, 
     QApplication, QTabWidget, QInputDialog, QScrollArea, QMessageBox, 
-    QGraphicsDropShadowEffect, QGridLayout, QSpinBox)
+    QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox)
 
 #Local application imports
 from config import (readFlags, writeFlags)
@@ -50,7 +50,6 @@ class FlagCheckBox(QCheckBox):
         self.setText(text)
         self.value = value
 
-
 class Window(QWidget):
 
     def __init__(self):
@@ -70,6 +69,10 @@ class Window(QWidget):
         self.mode = "normal"
         self.seed = ""
         self.flags = []
+        self.expMultiplier = 1
+        self.gpMultiplier = 1
+        self.mpMultiplier = 1
+        self.randomboost = 1
 
 
         # dictionaries to hold flag data
@@ -253,13 +256,12 @@ class Window(QWidget):
         gridLayout.addWidget(lblRomOutput, 2, 1)
 
         self.romOutput = QLineEdit()
-
         self.romInput.textChanged[str].connect(self.updateRomOutputPlaceholder)
         gridLayout.addWidget(self.romOutput, 2, 2, 1, 3)
 
         btnRomOutput = QPushButton("Browse")
         btnRomOutput.setMaximumWidth(self.width)
-        btnRomOutput.setMaximumHeight(self.height)        
+        btnRomOutput.setMaximumHeight(self.height)
         btnRomOutput.setStyleSheet(
             "font:bold;"
             "font-size:18px;"
@@ -457,15 +459,40 @@ class Window(QWidget):
                                self.tabNames):
             tabObj = QScrollArea()
             tabs.addTab(tabObj, names)
-            tablayout = QVBoxLayout()
+            tablayout = QGridLayout()
+            currentRow = 0
             for flagname, flagdesc in d.items():
-                cbox = FlagCheckBox(
-                    f"{flagname}  -  {flagdesc['explanation']}", 
-                    flagname
-                )
-                self.checkBoxes.append(cbox)
-                tablayout.addWidget(cbox)
-                cbox.clicked.connect(lambda checked: self.flagButtonClicked())
+                if flagdesc['inputtype'] == 'checkbox':
+                    cbox = FlagCheckBox(
+                        f"{flagname}  -  {flagdesc['explanation']}", 
+                        flagname
+                    )
+                    self.checkBoxes.append(cbox)
+                    tablayout.addWidget(cbox, currentRow, 1, 1, 2)
+                    cbox.clicked.connect(lambda checked: self.flagButtonClicked())
+                elif  flagdesc['inputtype'] == 'numberbox':
+                    if flagname in ['exp','gp', 'mps']:
+                        nbox = QDoubleSpinBox()
+                    else:
+                        nbox = QSpinBox()
+                    nbox.setSpecialValueText('Off')
+                    nbox.setFixedWidth(50)
+                    nbox.setMinimum(-1)
+                    nbox.setValue(nbox.minimum())
+                    nbox.setMaximum(50)
+                    if flagname in ['exp','gp', 'mps']:
+                        nbox.setFixedWidth(70)
+                        nbox.setMinimum(-0.1)
+                        nbox.setValue(-0.1)
+                        nbox.setSingleStep(.1)
+                        nbox.setSuffix("x")
+                    nbox.text = flagname
+                    flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
+                    tablayout.addWidget(nbox, currentRow, 1)
+                    tablayout.addWidget(flaglbl, currentRow, 2)
+                    nbox.valueChanged.connect(lambda: self.flagButtonClicked())
+                currentRow += 1
+
             t.setLayout(tablayout)
             tabObj.setWidgetResizable(True)
             tabObj.setWidget(t)
@@ -691,12 +718,14 @@ class Window(QWidget):
 
             d[code.name] = {
                 'explanation': code.long_description, 
+                'inputtype': code.inputtype,
                 'checked': False
             }
 
         for flag in sorted(ALL_FLAGS):
             self.flag[flag.name] = {
                 'explanation': flag.description, 
+                'inputtype': flag.inputtype,
                 'checked': True
             }
 
@@ -847,8 +876,28 @@ class Window(QWidget):
                         self.flags.append(c.value)
                 else:
                     d[c.value]['checked'] = False
+            children = t.findChildren(QSpinBox) + t.findChildren(QDoubleSpinBox)
+            for c in children:
+                if c.text == 'exp':
+                    self.expMultiplier = c.value()
+                elif c.text == 'gp':
+                    self.gpMultiplier = c.value()
+                elif c.text == 'mps':
+                    self.mpMultiplier = c.value()
+                elif c.text == 'randomboost':
+                    self.randomboost = c.value()
+                if not c.value() == c.minimum():
+                    flagset = False
+                    for flag in self.flags:
+                        if flag == c.text:
+                            flagset = True
+                    if flagset == False:
+                        self.flags.append(c.text)
+
+            
         self.updateFlagString()
 
+            
 
     # Opens file dialog to select rom file and assigns it to value in
     # parent/Window class
@@ -1047,14 +1096,23 @@ class Window(QWidget):
                     QtCore.pyqtRemoveInputHook()
                     # TODO: put this in a new thread
                     try:
+                        #resultFile = randomizer.randomize(
+                        #    args=[
+                        #        'beyondchaos.py', 
+                        #        self.romText, 
+                        #        bundle, 
+                        #        "test", 
+                        #        self.romOutputDirectory
+                        #    ]
+                        #)
                         resultFile = randomizer.randomize(
-                            args=[
-                                'beyondchaos.py', 
-                                self.romText, 
-                                bundle, 
-                                "test", 
-                                self.romOutputDirectory
-                            ]
+                            sourcefile=self.romText,
+                            seed=bundle,
+                            output_directory=self.romOutputDirectory,
+                            expMultiplier=self.expMultiplier,
+                            gpMultiplier=self.gpMultiplier,
+                            mpMultiplier=self.mpMultiplier,
+                            randomboost=self.randomboost
                         )
                         if self.seed:
                             self.seed = str(int(self.seed) + 1)
@@ -1143,7 +1201,7 @@ class Window(QWidget):
 
     def updateRomOutputPlaceholder(self, value):
         try:
-            self.romOutput.setPlaceholderText(value[:str(value).rindex('/')])
+            self.romOutput.setPlaceholderText(os.path.dirname(value))
         except ValueError:
             pass
 

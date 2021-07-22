@@ -82,7 +82,7 @@ VERSION_ROMAN = "I"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "4.normal.bcdefgijklmnopqrstuwyzcapslockoffmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosseseasymodocanttouchthisjohnnydmad.1625797275"
+TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzcapslockoffmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosseseasymodocanttouchthisjohnnydmad.1625797275"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -2786,7 +2786,7 @@ def manage_dragons():
         fout.write(bytes([dragon]))
 
 
-def manage_formations(formations: List[Formation], fsets: List[FormationSet]) -> List[Formation]:
+def manage_formations(formations: List[Formation], fsets: List[FormationSet], apMultiplier: float=None) -> List[Formation]:
     for fset in fsets:
         if len(fset.formations) == 4:
             for formation in fset.formations:
@@ -2847,7 +2847,13 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet]) ->
                            0x1E0, 0x1E6]}
 
     for formation in formations:
-        formation.mutate(ap=False)
+        if Options_.is_code_active('mps'):
+            if apMultiplier:
+                formation.mutate(ap=False, apMultiplier=apMultiplier)
+            else:
+                formation.mutate(ap=False, apMultiplier=3)
+        else:
+            formation.mutate(ap=False)
         if formation.formid == 0x1e2:
             formation.set_music(2)  # change music for Atma fight
         if formation.formid == 0x162:
@@ -2862,11 +2868,12 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet]) ->
 def manage_formations_hidden(formations: List[Formation],
                              freespaces: List[FreeBlock],
                              form_music_overrides: dict=None,
-                             no_special_events=True):
+                             no_special_events=True,
+                             apMultiplier: float=None):
     if not form_music_overrides:
         form_music_overrides = {}
     for f in formations:
-        f.mutate(ap=True)
+        f.mutate(ap=True, apMultiplier=apMultiplier)
 
     unused_enemies = [u for u in get_monsters() if u.id in REPLACE_ENEMIES]
 
@@ -4386,7 +4393,8 @@ def diverge(fout: BinaryIO):
         fout.write(data)
 
 
-def randomize(args: List[str]) -> str:
+#def randomize(args: List[str]) -> str:
+def randomize(**kwargs) -> str:
     """
     The main function which takes in user arguments and creates a log
     and outfile. Returns a path (as str) to the output file.
@@ -4395,10 +4403,12 @@ def randomize(args: List[str]) -> str:
     global outfile, sourcefile, flags, seed, fout, ALWAYS_REPLACE, NEVER_REPLACE
 
     if TEST_ON:
-        while len(args) < 3:
-            args.append(None)
-        args[1] = TEST_FILE
-        args[2] = TEST_SEED
+        #while len(args) < 3:
+        #    args.append(None)
+        #args[1] = TEST_FILE
+        #args[2] = TEST_SEED
+        kwargs['sourcefile'] = TEST_FILE
+        kwargs['seed'] = TEST_SEED
     sleep(0.5)
     print('You are using Beyond Chaos CE Randomizer version "%s".' % VERSION)
     if BETA:
@@ -4406,19 +4416,23 @@ def randomize(args: List[str]) -> str:
 
     previous_rom_path = ''
     previous_output_directory = ''
-    if len(args) > 2:
-        sourcefile = args[1].strip()
-    else:
+
+    sourcefile = kwargs.get('sourcefile')
+    #if len(args) > 2:
+        #sourcefile = args[1].strip()
+    #else:
+    if not sourcefile:
         try:
             config = configparser.ConfigParser()
             config.read('bcex.cfg')
             if 'ROM' in config:
                 previous_rom_path = config['ROM']['Path']
                 previous_output_directory = config['ROM']['Output']
-        except (IOError, KeyError):
+        except (IOError, KeyError) as e:
+            print(str(e))
             pass
 
-        previous_input = f" (blank for previous: {previous_rom_path})" if previous_rom_path else ""
+        previous_input = f" (blank for default: {previous_rom_path})" if previous_rom_path else ""
         sourcefile = input(f"Please input the file name of your copy of "
                            f"the FF3 US 1.0 rom{previous_input}:\n> ").strip()
         print()
@@ -4436,19 +4450,21 @@ def randomize(args: List[str]) -> str:
         f = open(sourcefile, 'rb')
         data = f.read()
         f.close()
-
-        if len(args) > 4:
+        
+        output_directory = kwargs.get('output_directory')
+        #if len(args) > 4:
             #If a directory was supplied by the GUI, use that directory
-            output_directory = args[4]
-        else:
+            #output_directory = args[4]
+        #else:
+        if not output_directory:
             #If no previous directory or an invalid directory was obtained from bcex.cfg, default to the ROM's directory
             if not previous_output_directory or not os.path.isdir(previous_output_directory):
                 previous_output_directory = os.path.dirname(sourcefile)
 
             while True:
                 #Input loop to make sure we get a valid directory
-                previous_output = f" (blank for previous: {previous_output_directory})"
-                output_directory = input(f"Please input the directory to place the randomized ROM file. {previous_output}:\n> ").strip().replace('\\', '/')
+                previous_output = f" (blank for default: {previous_output_directory})"
+                output_directory = input(f"Please input the directory to place the randomized ROM file. {previous_output}:\n> ").strip()
                 print()
 
                 if previous_output_directory and not output_directory:
@@ -4500,9 +4516,12 @@ def randomize(args: List[str]) -> str:
 -   Use all flags EXCEPT the ones listed'''
 
     speeddial_opts = {}
-
-    if len(args) > 2:
-        fullseed = args[2].strip()
+    
+    fullseed = kwargs.get('seed')
+    #if len(args) > 2:
+        #fullseed = args[2].strip()
+    if fullseed:
+        fullseed = str(fullseed).strip()
     else:
         fullseed = input("Please input a seed value (blank for a random "
                          "seed):\n> ").strip()
@@ -4615,7 +4634,7 @@ def randomize(args: List[str]) -> str:
             config['ROM']['Path'] = sourcefile
 
             #Save the output directory
-            if str(output_directory).lower() == str(sourcefile[:str(sourcefile).rindex('/')]).lower():
+            if str(output_directory).lower() == str(os.path.dirname(sourcefile)).lower():
                 #If the output directory is the same as the ROM directory, save an empty string
                 config['ROM']['Output'] = ''
             else:
@@ -4690,8 +4709,11 @@ def randomize(args: List[str]) -> str:
     print(activation_string)
 
     if Options_.is_code_active('randomboost'):
-        x = input("Please enter a randomness "
-                  "multiplier value (blank for tierless): ")
+        if 'randomboost' in kwargs and kwargs.get('randomboost') is not None:
+            x = kwargs.get('randomboost')
+        else:
+            x = input("Please enter a randomness "
+                    "multiplier value (blank for tierless): ")
         try:
             multiplier = float(x)
             if multiplier <= 0:
@@ -4913,7 +4935,10 @@ def randomize(args: List[str]) -> str:
     if Options_.random_formations:
         formations = get_formations()
         fsets = get_fsets()
-        manage_formations(formations, fsets)
+        if Options_.is_code_active('mps'):
+            manage_formations(formations, fsets, kwargs.get('mpMultiplier'))
+        else:
+            manage_formations(formations, fsets)
         for fset in fsets:
             fset.write_data(fout)
 
@@ -4936,7 +4961,10 @@ def randomize(args: List[str]) -> str:
     form_music = {}
     if Options_.random_formations:
         no_special_events = not Options_.is_code_active('bsiab')
-        manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music, no_special_events=no_special_events)
+        if Options_.is_code_active('mps'):
+            manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music, no_special_events=no_special_events, apMultiplier=kwargs.get('mpMultiplier'))
+        else:
+            manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music, no_special_events=no_special_events)
         for m in get_monsters():
             m.write_stats(fout)
     reseed()
@@ -5102,11 +5130,17 @@ def randomize(args: List[str]) -> str:
             if Options_.is_code_active('llg'):
                 m.stats['xp'] = 0
             if Options_.is_code_active('exp'):
-                m.stats['xp'] = min(0xFFFF, 3 * m.stats['xp'])
+                if 'expMultiplier' in kwargs:
+                    m.stats['xp'] = min(0xFFFF, kwargs.get('expMultiplier') * m.stats['xp'])
+                else:
+                    m.stats['xp'] = min(0xFFFF, 3 * m.stats['xp'])
             m.write_stats(fout)
 
     if Options_.is_code_active('gp'):
         for m in monsters:
+            if 'gpMultiplier' in kwargs:
+                m.stats['gp'] = min(0xFFFF, kwargs.get('gpMultiplier') * m.stats['gp'])
+            else:
                 m.stats['gp'] = min(0xFFFF, 3 * m.stats['gp'])
 
     if Options_.is_code_active('naturalmagic') or Options_.is_code_active('naturalstats'):
@@ -5224,21 +5258,82 @@ def randomize(args: List[str]) -> str:
 
 if __name__ == "__main__":
     args = list(argv)
-    if len(argv) > 3 and argv[3].strip().lower() == "test" or TEST_ON:
-        randomize(args=args)
+    #if len(argv) > 3 and argv[3].strip().lower() == "test" or TEST_ON:
+    #    randomize(args=args)
+    #    sys.exit()
+    if len(args) > 1 and args[1] == '?':
+        print(
+            '\tBeyond Chaos Randomizer Community Edition, version ' + VERSION + '\n',
+            '\t\tOptional Keyword Arguments:\n',
+            '\t\tsource=<file path to your unrandomized Final Fantasy 3 v1.0 ROM file>\n',
+            '\t\tdestination=<directory path where you want the randomized ROM and spoiler log created>\n',
+            '\t\tseed=<flag and seed information in the format version.mode.flags.seed>\n'
+            '\t\texpmultplier=<The desired positive integer EXP multiplier, if you are using the exp code>\n',
+            '\t\tgpmultplier=<The desired positive integer GP multiplier, if you are using the gp code>\n',
+            '\t\trandomboost=<The desired positive integer randomboost amount, if you are using the randomboost code>\n',
+        )
         sys.exit()
     try:
-        randomize(args=args)
-        input("Press enter to close this program. ")
+        source_arg = None
+        seed_arg = None
+        destination_arg = None
+        expMultiplier = 3
+        gpMultiplier = 3
+        mpMultiplier = 3
+        randomboost = None
+        for argument in args[1:]:
+            if 'source=' in argument:
+                source_arg = argument[argument.index('=') + 1:]
+            elif 'seed=' in argument:
+                seed_arg = argument[argument.index('=') + 1:]
+            elif 'destination=' in argument:
+                destination_arg = argument[argument.index('=') + 1:]
+            elif 'expmultiplier=' in argument:
+                try:
+                    expMultiplier = float(argument[argument.index('=') + 1:])
+                except ValueError:
+                    print("The supplied value for the exp multiplier was not a number.")
+                    sys.exit()
+            elif 'gpmultiplier=' in argument:
+                try:
+                    gpMultiplier = float(argument[argument.index('=') + 1:])
+                except ValueError:
+                    print("The supplied value for the gp multiplier was not a number.")
+                    sys.exit()
+            elif 'gpmultiplier=' in argument:
+                try:
+                    mpMultiplier = float(argument[argument.index('=') + 1:])
+                except ValueError:
+                    print("The supplied value for the mp multiplier was not a number.")
+                    sys.exit()
+            elif 'randomboost=' in argument:
+                try:
+                    randomboost = int(argument[argument.index('=') + 1:])
+                except ValueError:
+                    print("The supplied value for randomboost was not a number.")
+                    sys.exit()
+            else:
+                print('Keyword unrecognized or missing: ' + str(argument) + '.\nUse "python randomizer.py ?" to view a list of valid keyword arguments.')
+
+        randomize(
+            sourcefile=source_arg, 
+            seed=seed_arg, 
+            output_directory=destination_arg, 
+            expMultiplier=expMultiplier, 
+            gpMultiplier=gpMultiplier, 
+            mpMultiplier=mpMultiplier, 
+            randomboost=randomboost
+        )
+        input('Press enter to close this program.')
     except Exception as e:
-        print("ERROR: %s" % e)
+        print('ERROR: %s' % e, '\nTo view valid keyword arguments, use "python randomizer.py ?"')
         import traceback
         traceback.print_exc()
         if fout:
             fout.close()
         if outfile is not None:
-            print("Please try again with a different seed.")
-            input("Press enter to delete %s and quit. " % outfile)
+            print('Please try again with a different seed.')
+            input('Press enter to delete %s and quit. ' % outfile)
             os.remove(outfile)
         else:
-            input("Press enter to quit. ")
+            input('Press enter to quit.')
