@@ -630,7 +630,7 @@ class MonsterBlock:
         fout.seek(self.specialeffectpointer)
         fout.write(bytes(random.randint(0, 0x21)))
 
-        candidates = list(range(0, 68))
+        candidates = list(range(0, 33))
         self.attackanimation = random.choice(candidates)
 
     def mutate_graphics_swap(self, candidates):
