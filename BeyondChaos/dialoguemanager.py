@@ -303,7 +303,7 @@ def split_line(line):
 def patch(text, token):
     if text is None:
         return None
-    #print(f"patching {text}", end="")
+    #print(f'patching "{token}" by {text}', end="")
     while True:
         match = re.search("\{(.+)\}", text)
         if not match:
@@ -328,7 +328,7 @@ def patch(text, token):
 
             if match[1].upper() == token:
                 var = var.upper()
-            elif token[0] in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+            elif match[1][0] in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
                 try:
                     var = var[0].upper() + var[1:]
                 except IndexError:
@@ -336,7 +336,7 @@ def patch(text, token):
 
         text = text[0:match.start()] + var + text[match.end():]
 
-    #print(f" to {text}")
+    #print(f' to "{text}"')
     return text
 
 def read_location_names(f):

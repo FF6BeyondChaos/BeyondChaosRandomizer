@@ -99,6 +99,7 @@ def manage_opera(fout, affect_music):
     
     singer_options = []
     opera_config = configparser.ConfigParser(interpolation=None)
+    opera_config.optionxform = lambda option: option
     try:
         with open(os.path.join('custom','opera.txt'), "r") as f:
             opera_config.read_file(f)
