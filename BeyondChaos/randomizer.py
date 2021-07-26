@@ -82,7 +82,7 @@ VERSION_ROMAN = "I"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzcapslockoffmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosseseasymodocanttouchthisjohnnydmad.1625797275"
+TEST_SEED = "1.normal.bcdefgijkmnopqrstuwyzpartypartyfrenchvanillaelectricboogaloorandombossesalasdracocapslockoffjohnnydmadnotawaiterexpgpdancelessonsnomiabs.1626543745"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -3675,6 +3675,7 @@ def manage_opening():
     def replace_credits_text(address: int, text: str, split=False):
         original = d.get_bytestring(address, 0x40)
         length = original.index(0)
+        #print("Length of line: " + str(length) + ". Length of credit:  " + str(len(text)) + ".")
         original = original[:length]
         if 0xFE in original and not split:
             linebreak = original.index(0xFE)
@@ -3716,21 +3717,30 @@ def manage_opening():
     replace_credits_text(0x65CD, "DarkSlash")
     replace_credits_text(0x65F1, "Based on")
     replace_credits_text(0x6605, "Beyond Chaos by Abyssonym", split=True)
-    replace_credits_text(0x6625, "flags")
-    replace_credits_text(0x663A, display_flags, split=True)
-    replace_credits_text(0x6661, codestatus)
-    replace_credits_text(0x6682, "seed")
-    replace_credits_text(0x668C, text.upper())
-    replace_credits_text(0x669E, "ver.")
-    replace_credits_text(0x66B1, VERSION_ROMAN)
-    replace_credits_text(0x66C5, "")
-    replace_credits_text(0x66D8, "")
+    replace_credits_text(0x6625, "")
+    replace_credits_text(0x663A, "and Beyond Chaos EX by", split=True)
+    replace_credits_text(0x6661, "SubtractionSoup        ", split=True)
+    replace_credits_text(0x6682, "")
+    replace_credits_text(0x668C, "")
+    replace_credits_text(0x669E, "")
+    replace_credits_text(0x66B1, "")
+    replace_credits_text(0x66C5, "flags")
+    replace_credits_text(0x66D8, display_flags, split=True)
     replace_credits_text(0x66FB, "")
     replace_credits_text(0x670D, "")
-    replace_credits_text(0x6732, "")
+    replace_credits_text(0x6732, codestatus)
+    replace_credits_text(0x6758, "seed")
+    replace_credits_text(0x676A, text.upper())
+    replace_credits_text(0x6791, "ver.")
+    replace_credits_text(0x67A7, VERSION_ROMAN)
+    replace_credits_text(0x67C8, "")
+    replace_credits_text(0x67DE, "")
+    replace_credits_text(0x67F4, "")
+    replace_credits_text(0x6809, "")
+    replace_credits_text(0x6819, "")
 
-    for address in [0x6758, 0x676A, 0x6791, 0x67A7, 0x67C8, 0x67DE, 0x67F4,
-            0x6809, 0x6819, 0x6835, 0x684A, 0x6865, 0x6898, 0x68CE,
+
+    for address in [0x6835, 0x684A, 0x6865, 0x6898, 0x68CE,
             0x68F9, 0x6916, 0x6929, 0x6945, 0x6959, 0x696C, 0x697E,
             0x6991, 0x69A9, 0x69B8]:
         replace_credits_text(address, "")
