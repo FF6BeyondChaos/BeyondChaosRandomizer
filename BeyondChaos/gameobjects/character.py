@@ -58,6 +58,10 @@ class Character(GameObject):
             s += blurb + os.linesep
         return s.strip()
 
+    @property
+    def is_guest(self):
+        return self.id > 14
+
     def get_bytes(self):
         substitution = {}
         for stat in self.stats_mutated:
@@ -65,4 +69,7 @@ class Character(GameObject):
             substitution[address] = self.stats_mutated[stat].to_bytes(1, byteorder="big")
         level_and_run = (self.level_modifier_mutated << 2) | self.run_chance_mutated
         substitution[self.address + level_and_run_offset] = level_and_run.to_bytes(1, byteorder="big")
+        if self.is_guest:
+            # magic value to make items unequippable in battle
+            substitution[self.address + 21] = 0x15.to_bytes(1, byteorder="big")
         return substitution

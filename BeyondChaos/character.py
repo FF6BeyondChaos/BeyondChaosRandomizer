@@ -24,7 +24,8 @@ def load_characters(rom_file_name, force_reload=False):
 
     rom = open(rom_file_name, "rb")
     character_byte_block_length = 22
-    for i, line in enumerate(open(CHAR_TABLE)):
+    character_id = 1
+    for line in open(CHAR_TABLE):
         line = line.strip()
         if line[0] == '#':
             continue
@@ -34,7 +35,8 @@ def load_characters(rom_file_name, force_reload=False):
         character_address = int(character_address_and_name[0], 16)
         rom.seek(character_address)
         character_data = rom.read(character_byte_block_length)
-        character = Character(i, character_address, character_address_and_name[1], character_data)
+        character = Character(character_id, character_address, character_address_and_name[1], character_data)
+        character_id += 1
         character_list.append(character)
     return
 
