@@ -115,39 +115,46 @@ def manage_opera(fout, affect_music):
         singer_options.append([l.strip() for l in line])
     singer_options = [OperaSinger(*s) for s in singer_options]
     
-    #categorize by voice sample
-    voices = {}
-    for s in singer_options:
-        if s.sid in voices:
-            voices[s.sid].append(s)
-        else:
-            voices[s.sid] = [s]
-    
-    #find a set of voices that doesn't overflow SPC RAM
-    sample_sizes = {}
-    while True:
-        vchoices = random.sample(list(voices.values()), 3)
-        test_mml = read_opera_mml('duel')
-        for i, c in enumerate(vchoices):
-            test_mml += c[0].get_sample_text(i + 0x2A)
-        if affect_music:
+    #categorize by voice sample (unless not changing music)
+    if affect_music:
+        voices = {}
+        for s in singer_options:
+            if s.sid in voices:
+                voices[s.sid].append(s)
+            else:
+                voices[s.sid] = [s]
+        
+        #find a set of voices that doesn't overflow SPC RAM
+        while True:
+            vchoices = random.sample(list(voices.values()), 3)
+            test_mml = read_opera_mml('duel')
+            for i, c in enumerate(vchoices):
+                test_mml += c[0].get_sample_text(i + 0x2A)
             memusage = get_spc_memory_usage(test_mml, subpath="music")
             if memusage <= SAMPLE_MAX_SIZE:
                 break
 
-    #select characters
-    charpool = []
-    char = {}
-    #by voice, for singers
-    for v in vchoices:
-        charpool.append(random.choice(v))
-    random.shuffle(charpool)
-    for c in ["Maria", "Draco", "Ralse"]:
-        char[c] = charpool.pop()
-    #by sprite/name, for impresario
-    charpool = [c for c in singer_options if c not in char.values()]
-    char["Impresario"] = random.choice(charpool)
-    
+        #select characters
+        charpool = []
+        char = {}
+        #by voice, for singers
+        for v in vchoices:
+            charpool.append(random.choice(v))
+        random.shuffle(charpool)
+        for c in ["Maria", "Draco", "Ralse"]:
+            char[c] = charpool.pop()
+        #by sprite/name, for impresario
+        charpool = [c for c in singer_options if c not in char.values()]
+        char["Impresario"] = random.choice(charpool)
+    else:
+        print("\nalasdraco -- note: opera voices will not be changed unless a" +
+                " random music code (johnnydmad/johnnyachaotic) is also used." +
+                " Sprites and text will still be affected.")
+        cchoices = random.sample(singer_options, 4)
+        char = {}
+        for c in ["Maria", "Draco", "Ralse", "Impresario"]:
+            char[c] = cchoices.pop()
+            
     #reassign sprites in npc data
     locations = get_locations()
     #first, free up space for a unique Ralse
