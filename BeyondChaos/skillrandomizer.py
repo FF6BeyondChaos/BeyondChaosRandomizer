@@ -509,7 +509,7 @@ class RandomSpellSub(Substitution):
     def write(self, fout):
         super(RandomSpellSub, self).write(fout)
 
-    def set_spells(self, valid_spells, spellclass=None, spellsets=None ):
+    def set_spells(self, valid_spells, spellclass=None, spellsets=None):
         spellsets = spellsets or get_spellsets(spells=valid_spells)
         spellclass = spellclass or random.choice(list(spellsets.keys()))
 
@@ -631,12 +631,12 @@ class MultiSpellSubMixin(Substitution):
     def size(self):
         return self.spellsub.size + self.get_overhead()
 
-    def set_spells(self, spells):
+    def set_spells(self, spells, spellclass=None, spellsets=None):
         if isinstance(spells, int):
             self.spellsub = SpellSub(spellid=spells)
         elif isinstance(spells, list) or isinstance(spells, set):
             self.spellsub = RandomSpellSub()
-            self.spellsub.set_spells(spells)
+            self.spellsub.set_spells(spells, spellclass, spellsets)
             self.name = self.spellsub.name
             self.spells = self.spellsub.spells
         else:
