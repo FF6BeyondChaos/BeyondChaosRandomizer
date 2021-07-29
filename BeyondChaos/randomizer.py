@@ -10,8 +10,6 @@ from time import time, sleep, gmtime
 import traceback
 from typing import BinaryIO, Callable, Dict, List, Set, Tuple
 
-from numpy import random as numpyrandom
-
 import character
 import chestrandomizer
 import esperrandomizer
@@ -74,7 +72,7 @@ from utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    AutoLearnRageSub)
 from wor import manage_wor_recruitment, manage_wor_skip
 from importlib import reload
-
+from random import Random
 
 VERSION = "1"
 BETA = True
@@ -4741,7 +4739,7 @@ def randomize(**kwargs) -> str:
         "The randomization is very thorough, so it may take some time.\n"
         'Please be patient and wait for "randomization successful" to appear.')
 
-    rng = numpyrandom.default_rng(seed)
+    rng = Random(seed)
 
     if Options_.is_code_active("thescenarionottaken"):
         diverge(fout)
