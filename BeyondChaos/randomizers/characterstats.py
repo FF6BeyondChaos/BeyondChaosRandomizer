@@ -1,7 +1,5 @@
 import random
 
-from numpy.random import Generator
-
 from gameobjects.character import Character
 from randomizers.baserandomizer import Randomizer
 from options import Options
@@ -10,7 +8,7 @@ from typing import List
 
 class CharacterStats(Randomizer):
 
-    def __init__(self, rng: Generator, options: Options, characters: List[Character]):
+    def __init__(self, rng: random.Random, options: Options, characters: List[Character]):
         super().__init__(options)
         self._randomize_level = not self._Options.is_code_active('worringtriad')
         self._characters = characters
@@ -34,9 +32,9 @@ class CharacterStats(Randomizer):
                     character.stats_mutated[stat] += 1
                 new_stat = character.stats_mutated[stat]
                 while not mutation_check:
-                    multiplier = max(.5, min(self._rng.normal(loc=1, scale=0.17), 1.5))
+                    multiplier = max(.5, min(self._rng.gauss(1, 0.17), 1.5))
                     new_stat *= multiplier
-                    mutation_check = random.choice(list(range(10)))
+                    mutation_check = self._rng.choice(list(range(10)))
                     # berserker character should not have stats reduced.
                     mutation_check = mutation_check or (character.berserk and new_stat < character.stats_original[stat])
                 new_stat = max(1, min(round(new_stat), 254))
@@ -59,7 +57,7 @@ class CharacterStats(Randomizer):
             2: [9, 20, 70, 1],  # avg. level + 5
             3: [20, 9, 1, 70]  # avg. level - 3
         }
-        run_roll = random.randint(0, 99)
+        run_roll = self._rng.randint(0, 99)
         run_chance_array = run_map[character.run_chance]
         new_run_chance = 0
         while run_roll >= 0:
@@ -69,7 +67,7 @@ class CharacterStats(Randomizer):
         # Don't randomize Terra's level because it gets added for
         # every loop through the title screen, apparently.
         if self._randomize_level and character.id != 0:
-            level_roll = random.randint(0, 99)
+            level_roll = self._rng.randint(0, 99)
             level_chance_array = level_map[character.level_modifier]
             new_level_modifier = 0
             while level_roll >= 0:
