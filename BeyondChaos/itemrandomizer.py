@@ -610,7 +610,7 @@ class ItemBlock:
                 self.mutate_feature()
 
     def mutate_name(self):
-        if Options_.is_code_active("questionablecontent") and '?' not in self.name:
+        if Options_.is_code_active("questionablecontent") and not self.is_consumable and '?' not in self.name:
             self.name = self.name[:11] + '?'
             # Index on self.dataname is [1:] because the first character determines the
             #   equipment symbol (helmet/shield/etc).
