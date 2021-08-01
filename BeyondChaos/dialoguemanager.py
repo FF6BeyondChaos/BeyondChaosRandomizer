@@ -246,7 +246,7 @@ def load_custom_words():
         with open(filepath, "r", encoding="utf-8") as f:
             lines = f.readlines()
     except IOError:
-        print(f"failed to open data/script/{fn}.txt")
+        print(f"failed to open custom/words.txt")
         return
         
     pos = 0
