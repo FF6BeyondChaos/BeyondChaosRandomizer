@@ -339,8 +339,8 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
         is_replaced = [True] * num_to_replace + [False]*(len(char_ids)-num_to_replace)
         random.shuffle(is_replaced)
         for i, t in enumerate(is_replaced):
-            if i in vuids and not t:
-                blacklist.update([s.strip() for s in vuids[i].split('|')])
+            if vswaps[i] in vuids and not t:
+                blacklist.update([s.strip() for s in vuids[vswaps[i]].split('|')])
 
     if external_vanillas:
         #include vanilla characters, but using the same system/chances as all others
