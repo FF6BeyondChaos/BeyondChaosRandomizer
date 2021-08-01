@@ -1,0 +1,77 @@
+define Figaro:          ruler       rulerSalutation         domain      throne
+    not edgarEy=she|    king      \ {edgarEir} highness   \ kingdom   \ throne
+    not edgarEy=he |    queen     \ {edgarEir} highness   \ kingdom   \ throne
+    not edgarEy=she|    duke      \ {edgarEir} grace      \ duchy     \ title
+    not edgarEy=he |    duchess   \ {edgarEir} grace      \ duchy     \ title
+    not edgarEy=she|    count     \ {edgarEir} lordship   \ county    \ title
+    not edgarEy=he |    countess  \ {edgarEir} ladyship   \ county    \ title
+    not edgarEy=she|    baron     \ {edgarEir} lordship   \ barony    \ title
+    not edgarEy=he |    baroness  \ {edgarEir} ladyship   \ barony    \ title
+                        president \ the President         \ republic  \ presidency
+                        chief     \ the chief             \ nation    \ chiefdom
+                        guru      \ the enlightened one   \ commune   \ holy calling
+end
+define submariner:
+    submariner
+    sandworm
+    sin eater
+    sabotender
+    sahagin
+    subligar
+    sandwich
+    sinspawn
+    samurai
+    sorceress
+    summoner
+    Sinistral
+    sphere grid
+    save point
+    superboss
+    SwdTech
+    scimitar
+    supernova
+end
+define edgarIsCharming:
+    dashing
+    charming
+    interesting
+    enticing
+    attractive
+    sexy
+    hot
+    flustering
+    … like, OMG
+    stylish
+    dapper
+    flattering
+    childish
+    amusing
+    annoying
+    obnoxious
+    irritating
+end
+define edgarAttention:
+    terraEy=she | women
+    terraEy=she | ladies
+    terraEy=she | girls
+                  men and women alike
+                  just about anyone
+                  everyone
+                  anything that moves
+end
+define bothTwins:
+    edgarEy=he  | sabinEy=he  | brothers
+    edgarEy=he  | sabinEy=he  | brothers
+    edgarEy=he  | sabinEy=he  | brothers
+    edgarEy=he  | sabinEy=he  | brothers
+    edgarEy=he  | sabinEy=he  | brothers
+    edgarEy=she | sabinEy=she | sisters
+    edgarEy=she | sabinEy=she | sisters
+    edgarEy=she | sabinEy=she | sisters
+    edgarEy=she | sabinEy=she | sisters
+    edgarEy=she | sabinEy=she | sisters
+                                twins
+                                twins
+                                Figaro twins
+                                dynamic duo
+end

@@ -3,6 +3,7 @@ import os
 
 from character import get_characters
 from options import Options_
+from dialoguemanager import set_pronoun
 from locationrandomizer import get_npcs
 from monsterrandomizer import change_enemy_name
 from utils import (CHARACTER_PALETTE_TABLE, EVENT_PALETTE_TABLE, FEMALE_NAMES_TABLE, MALE_NAMES_TABLE,
@@ -423,6 +424,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
         if final_candidates:
             weights = [c.weight for c in final_candidates]
             swap_to[char_id] = random.choices(final_candidates, weights)[0]
+            set_pronoun(char_id, swap_to[char_id].gender, force=False)
             blacklist.update(swap_to[char_id].uniqueids)
             candidates.remove(swap_to[char_id])
         else:
@@ -510,6 +512,14 @@ def manage_character_appearance(fout, preserve_graphics=False):
             random.shuffle(male)
             change_to = dict(list(zip(sorted(male), male)) +
                              list(zip(sorted(female), female)))
+
+    for charid, spriteid in change_to.items():
+        if spriteid in [0, 0x06, 0x08, 0x12]:
+            set_pronoun(charid, 'female')
+        elif spriteid in [0x03, 0x0A, 0x0C, 0x0D, 0x0E, 0x0F, 0x13, 0x14]:
+            set_pronoun(charid, 'neutral', force=False) # 47.5%/47.5%/5% chance
+        else:
+            set_pronoun(charid, 'male')
 
     manage_character_names(fout, change_to, male)
 

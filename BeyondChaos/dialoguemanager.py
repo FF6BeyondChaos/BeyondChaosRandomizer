@@ -17,6 +17,9 @@ try:
 except ImportError:
     MEI = False
 
+SCRIPT_DEBUG = False
+SCRIPT_DEBUG_VERBOSE = False
+
 textdialoguetable = {v:k for k, v in dialoguetexttable.items()}
 for i in range(0xFF):
     if f"{i:02X}" not in textdialoguetable:
@@ -32,6 +35,7 @@ dialoguebytetable["'"] = dialoguebytetable["’"]
 
 dialogue_vars = {}
 dialogue_flags = set()
+dialogue_vals = {}
 dialogue_patches = {}
 dialogue_patches_battle = {}
 script_ptrs = {}
@@ -53,6 +57,14 @@ def safepath(vpath):
         return vpath
     return [vpath, os.path.join(_MEIPASS, vpath)]
 
+def dprint(text, *args, **kwargs):
+    if SCRIPT_DEBUG:
+        print(text, *args, **kwargs)
+
+def vprint(text, *args, **kwargs):
+    if SCRIPT_DEBUG_VERBOSE:
+        print(text, *args, **kwargs)
+        
 #need to use a different table here, so redefined
 def dialogue_to_bytes(text, null_terminate=True):
     bs = []
@@ -92,6 +104,17 @@ def dialogue_to_bytes(text, null_terminate=True):
 
     return bytes(bs)
 
+ID_NAMES = ['terra','locke','cyan','shadow','edgar','sabin','celes','strago','relm','setzer','mog','gau','gogo','umaro','trooper','kappa','leo','banon','trance','merchant','ghost','kefka']
+VANILLA_GENDER = ["female", "male", "male", "male", "male", "male", "female", "male", "female", "male", "male", "male", "neutral", "male", "male", "object", "male", "male", "female", "male", "neutral", "male"]
+
+# Dialogue variables - a placeholder is replaced by text set elsewhere in the randomizer
+#                      The function call defines the actual text written to ROM output.
+# Dialogue flags - allows script placeholders that check a TRUE or FALSE value
+#                  The function call defines only the boolean value;
+#                  output text options are defined in the script file.
+# Dialogue values - allows script placeholders that check a numeric value (index)
+#                   The function call defines only the numeric value;
+#                   output text options are defined in the script file.
 
 def set_dialogue_var(k, v):
     dialogue_vars[k.lower()] = v
@@ -102,35 +125,55 @@ def set_dialogue_flag(f, v=True):
     elif f in dialogue_flags:
         dialogue_flags.remove(f)
 
-def set_pronoun(name, gender, force=True):
+def set_dialogue_value(k, v):
+    dialogue_vals[k.lower()] = v
+    
+def initialize_pronouns():
+    for i, gender in enumerate(VANILLA_GENDER):
+        set_pronoun(ID_NAMES[i], gender)
+        
+        
+def set_pronoun(character, gender, force=True):
+    # Allow using either char.id or name string
+    if character in range(0,len(ID_NAMES)):
+        name = ID_NAMES[character]
+    else:
+        name = character
+                
     gender = gender.lower()
     name = name.lower().capitalize()
 
+    dprint(f"{name} is {gender}")
+    
     if "random" in gender:
         force = True
-        opts = ["male"]*9+["female"]*9+["neutral"]*2 if "truerandom" not in gender else ["male", "female", "neutral"]
+        opts = ["male"]*19+["female"]*19+["neutral"]*2 if "truerandom" not in gender else ["male", "female", "neutral"]
         if gender == "orandom":
-            opts += ["object"]*20
+            opts += ["object"]*40
         gender = random.choice(opts)
 
     if not force:
         if gender == "neutral":
-            gender = random.choice(["male"]*9 + ["female"]*9 + ["neutral"]*2)
+            gender = random.choice(["male"]*19 + ["female"]*19 + ["neutral"]*2)
         elif gender != "object":
             gender = random.choice([gender]*19 + ["neutral"])
 
     if gender == "male":
         pset = ("he", "him", "his", "his", "he's")
         set_dialogue_flag(name + "Plu", False)
+        set_dialogue_value(name + "Gen", 0)
     elif gender == "female":
         pset = ("she", "her", "her", "hers", "she's")
         set_dialogue_flag(name + "Plu", False)
+        set_dialogue_value(name + "Gen", 1)
     elif gender == "object":
         pset = ("it", "it", "its", "its", "it's")
         set_dialogue_flag(name + "Plu", False)
+        set_dialogue_value(name + "Gen", 3)
     else:
         pset = ("they", "them", "their", "theirs", "they're")
         set_dialogue_flag(name + "Plu")
+        set_dialogue_value(name + "Gen", 2)
         gender = "neutral"
 
     pmap = ("Ey", "Em", "Eir", "Eirs", "EyIs")
@@ -165,7 +208,7 @@ def load_patch_file(fn):
     filepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), filepath)
 
     try:
-        with open(filepath, "r") as f:
+        with open(filepath, "r", encoding="utf-8") as f:
             lines = f.readlines()
     except IOError:
         print(f"failed to open data/script/{fn}.txt")
@@ -195,7 +238,88 @@ def load_patch_file(fn):
                 chgto = None
             patch_dialogue(script_idx, chgfrom, chgto, index=match_idx)
 
-
+def load_custom_words():
+    filepath = os.path.join('custom', "words.txt")
+    filepath = os.path.join(os.path.dirname(os.path.abspath(__file__)), filepath)
+    
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+    except IOError:
+        print(f"failed to open data/script/{fn}.txt")
+        return
+        
+    pos = 0
+    while pos < len(lines):
+        line = lines[pos]
+        # Ignore comments
+        line = line.split('#')[0]
+        
+        if line.startswith("define"):
+            options = []
+            line = line[6:]
+            name, fields = line.split(':', 1)
+            name = name.strip()
+            fields = [f.strip() for f in fields.split()]
+            if not fields:
+                fields.append("")
+                
+            while pos < len(lines):
+                pos += 1
+                line = lines[pos].strip()
+                if not line:
+                    continue
+                if line.lower() == "end":
+                    break
+                if '|' in line:
+                    conditions, words = line.rsplit('|', 1)
+                else:
+                    conditions = []
+                    words = line
+                
+                if conditions:
+                    conditions = conditions.split('|')
+                no_conditions_failed = True
+                for condition in conditions:
+                    passed = False
+                    if condition.lower().startswith('not'):
+                        reverse = True
+                        condition = condition[3:].strip()
+                    else:
+                        reverse = False
+                    if '=' not in condition:
+                        if condition.strip().lower() in dialogue_flags:
+                            passed = True
+                    else:
+                        var, test = condition.split('=')
+                        var = var.lower()
+                        if var in dialogue_vars:
+                            if dialogue_vars[var] == test.strip():
+                                passed = True
+                    if reverse:
+                        passed = False if passed else True
+                    if not passed:
+                        no_conditions_failed = False
+                        break
+                if no_conditions_failed:
+                    words = [w.strip() for w in words.split('\\')]
+                    if len(words) == len(fields):
+                        options.append(words)
+                        dprint(f"added {words} to options for {name}")
+                    else:
+                        print(f"warning: words.txt: wrong number of words in line {pos} ({len(words)} words for {len(fields)} fields)")
+            if not options:
+                print(f"warning: words.txt: no valid options for {name}")
+            else:
+                words = random.choice(options)
+                dprint(f"chose option {words} for {name}")
+                for i, word in enumerate(words):
+                    varname = name + fields[i]
+                    while '{' in word:
+                        word = patch(word, varname)
+                    set_dialogue_var(varname, word) 
+        pos += 1
+                    
 def read_dialogue(fout):
     #load existing script & pointer table
     fout.seek(0xD0000)
@@ -224,14 +348,12 @@ def manage_dialogue_patches(fout):
 
     #TODO battle pointers
 
-    #print(f"original script size is ${len(script_bin):X} bytes")
-
     #apply changes to dialogue
     for idx, patches in dialogue_patches.items():
         line = split_line(script[idx])
 
-        #print(f"patching line {idx}")
-        #print(f"  original: {script[idx]}")
+        vprint(f"patching line {idx}")
+        vprint(f"  original: {script[idx]}")
         token_counter = {}
         for i, token in enumerate(line):
             if token.lower() not in token_counter:
@@ -251,7 +373,7 @@ def manage_dialogue_patches(fout):
                 except IndexError:
                     pass
         new_text = "".join(line)
-        #print(f"  new: {new_text}")
+        vprint(f"  new: {new_text}")
         script[idx] = new_text
 
     new_script = b""
@@ -270,10 +392,10 @@ def manage_dialogue_patches(fout):
                 raise IndexError
             offset -= 0x10000
             first_high_index = idx
-            #print(f"first high index at {first_high_index}")
+            dprint(f"first high index at {first_high_index}")
         new_script += dialogue_to_bytes(text)
         new_ptrs += bytes([offset & 0xFF, (offset >> 8) & 0xFF])
-    #print(f"new script: ${len(new_script):X} bytes")
+    dprint(f"new script: ${len(new_script):X} bytes")
 
     #write to file
     fout.seek(0xD0000)
@@ -303,7 +425,7 @@ def split_line(line):
 def patch(text, token):
     if text is None:
         return None
-    #print(f'patching "{token}" by {text}', end="")
+    vprint(f'patching "{token}" by {text}', end="")
     while True:
         match = re.search("\{(.+)\}", text)
         if not match:
@@ -312,12 +434,28 @@ def patch(text, token):
         # handle conditionals/flags
         if "?" in match[1]:
             flag, opts = match[1].split('?', 1)
-            try:
-                textiftrue, textiffalse = opts.split(':', 1)
-            except ValueError:
-                textiftrue = opts
-                textiffalse = ""
-            var = textiftrue if flag.lower() in dialogue_flags else textiffalse
+            opts = opts.split(':')
+            if len(opts) > 2:
+                try:
+                    opt_idx = dialogue_vals[flag.lower()]
+                except KeyError:
+                    print(f"warning: dialogue value {flag} not defined")
+                    opt_idx = 0
+                # Silently use final option if index is too high.
+                # This will allow distinguishing Object (3) from Neutral (2)
+                # genders while allowing Object to cleanly fall back to
+                # Neutral when undefined.
+                try:
+                    var = opts[opt_idx]
+                except IndexError:
+                    var = opts[-1]
+            else:
+                try:
+                    textiftrue, textiffalse = opts
+                except ValueError:
+                    textiftrue = opts
+                    textiffalse = ""
+                var = textiftrue if flag.lower() in dialogue_flags else textiffalse
         # handle variables
         else:
             if match[1].lower() not in dialogue_vars:
@@ -326,7 +464,7 @@ def patch(text, token):
             else:
                 var = dialogue_vars[match[1].lower()]
 
-            if match[1].upper() == token:
+            if match[1].upper() == match[1]:
                 var = var.upper()
             elif match[1][0] in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
                 try:
@@ -336,7 +474,7 @@ def patch(text, token):
 
         text = text[0:match.start()] + var + text[match.end():]
 
-    #print(f' to "{text}"')
+    vprint(f' to "{text}"')
     return text
 
 def read_location_names(f):
@@ -366,7 +504,7 @@ def write_location_names(fout):
             raise IndexError
         new_location_names += dialogue_to_bytes(text)
         new_ptrs += bytes([offset & 0xFF, (offset >> 8) & 0xFF])
-    #print(f"new script: ${len(new_script):X} bytes")
+    dprint(f"new location names: ${len(new_location_names):X} bytes")
 
     #write to file
     fout.seek(0xEF100)
