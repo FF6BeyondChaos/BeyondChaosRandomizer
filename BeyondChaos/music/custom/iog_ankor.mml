@@ -16,28 +16,27 @@
 ## with a signature change halfway through measure 10. So we'll work in 4/4 with 132 bpm
 #def init= t132 %v40 %b0,85 %f0,0
 
-#def hornVol=            v77
-#def hornFade=         v1,77 ## Keep this volume in line with hornVol
-#def contrabassVol=      v127
-#def contrabassHi=       'contrabassVol*v1'
-#def contrabassMed=      'contrabassVol*v.78'
-#def contrabassLo=       'contrabassVol*v.65'
-#def contrabassQuickLo=  'contrabassVol*v.96'
-#def stringsVol=         v47
-#def backingStringsVol=  v40
-#def timpaniVol=         v108
-#def timpaniLow1=        'timpaniVol*v.20'
-#def timpaniLow2=        'timpaniVol*v.33'
-#def timpaniLow3=        'timpaniVol*v.46'
-#def timpaniV1=          'timpaniVol*v.64'
-#def timpaniV2=          'timpaniVol*v.76'
-#def timpaniV3=          'timpaniVol*v.88'
+#def hornVol=            v73
+#def hornFade=         v1,73 ## Keep this volume in line with hornVol
+#def contrabassVol=      v119
+#def contrabassHi=       v127
+#def contrabassMed=      'contrabassVol'
+#def contrabassLo=       'contrabassVol*v.76'
+#def stringsVol=         v41
+#def backingStringsVol=  v35
+#def timpaniVol=         v95
+#def timpaniLow1=        'timpaniVol*v.15'
+#def timpaniLow2=        'timpaniVol*v.25'
+#def timpaniLow3=        'timpaniVol*v.35'
+#def timpaniV1=          'timpaniVol*v.55'
+#def timpaniV2=          'timpaniVol*v.7'
+#def timpaniV3=          'timpaniVol*v.85'
 #def timpaniV4=          'timpaniVol*v1'
-#def timpaniV5=          'timpaniVol*v1.075'
-#def timpaniV6=          'timpaniVol*v1.15'
-#def timpaniV7=          'timpaniVol*v1.225'
-#def orchestraVol=       v48
-#def harpVol=            v36
+#def timpaniV5=          'timpaniVol*v1.15'
+#def timpaniV6=          'timpaniVol*v1.3'
+#def timpaniV7=          'timpaniVol*v1.45'
+#def orchestraVol=       v50
+#def harpVol=            v39
 
 #def harpLeft=  p30
 #def harpRight= p98
@@ -45,8 +44,6 @@
 ## Use a little bit of attack to accentuate the staccato of the 48th notes, and to help synchronize with the contrabass
 #def horn=            |1 o6 'hornVol*v.9'       p64        %r10 %e1 %a10 %s5 %y7 m48,24,244
 #def contrabass=      |2 o7 'contrabassLo'      p78        %r0  %e1 %a15 %s7 %y7 m
-## Use higher volume, with a decay and sustain level, to try and counteract the sample's built-in attack and synchronize with the trumpet
-#def quickContrabass= |2 o7 'contrabassQuickLo' p78        %r0  %e1 %a15 %s4 %y0 m
 #def strings1=        |0 o6 'stringsVol'        p39        %r0  %e1              m
 #def strings2=        |0 o6 'stringsVol'        p89        %r0  %e1              m
 ## This Strings sample sounds better for the intro, but doesn't work so well when it's at the forefront. So we'll use both at times.
@@ -60,6 +57,8 @@
 
 {1}
 'init'
+## Delay by one 64th note to allow the contrabass to start earlier (to counteract its attack)
+r64
 $
 ## Time signature starts at 4/4
 ## Horn, originally track 3
@@ -135,7 +134,8 @@ $156
 $
 ## Time signature starts at 4/4
 ## Contrabass, originally track 1
-'quickContrabass-o2'
+## We should currently be one 64th note ahead, so that the contrabass can play just a bit sooner and compensate for its attack
+'contrabass-o2''contrabassMed'
 l8
 dag+a<c>bag+fefg+a<c>ba
 ## 3
@@ -144,6 +144,8 @@ fefg+afg+abg+abg+gfe
 fgg+b<c>bg+gfde-dfg+gf
 ## 7
 e-fe-fg+gfgbg+gg+<c>gg+b
+## Hold for an additional 64th note to bring us back in line with the measures
+^64
 ## 9
 ## Still contrabass, originally track 1
 'contrabass-o2' 'contrabassMed' d2.a1^4
@@ -191,15 +193,18 @@ r4g+8.r16b1^4r4
 r4g8.r16b1^4r4
 [2
   ## 50 / 54
-  r4g8.r16<c1^4r4>
-  j2
+  r4g8.r16<c1^4 j2 r4>
   ## 52
   r4g8.r16b1^4r4
 ]
+## Last beat of measure 52. Don't do a full beat, since we need to be one 64th note ahead for the contrabass when we start the next loop
+r8...
 ;
 
 
 {3}
+## Delay by one 64th note to allow the contrabass to start earlier (to counteract its attack)
+r64
 $
 ## Time signature starts at 4/4
 ## Strings 1, originally track 4
@@ -265,6 +270,8 @@ r4e8.r16g1^4r4
 ;
 
 {4}
+## Delay by one 64th note to allow the contrabass to start earlier (to counteract its attack)
+r64
 $
 ## Time signature starts at 4/4
 ## Strings 2, originally track 5
@@ -333,7 +340,7 @@ g+b-<c4.>f2.
 e2^8e-2.
 ## 38
 ## Time signature changes to 4/4
-## This note holds for another 8th note duration, so hold it before wi switch to Timpani.
+## This note holds for another 8th note duration, so hold it before we switch to Timpani.
 ## We'll hold it 6 ticks less though, so the contrabass can play notes early in the other channel to counteract the sample's built-in attack.
 ^16.
 ## Timpani, originally track 2
@@ -346,7 +353,7 @@ l8 >
   g4<d>g4<d16d16>g<
   d>g4<d>g4<d>g<
   j2
-  ## This is actually the forst note of measure 40. It's here because the first note of 38 can't be in the loop due to being in another channel.
+  ## This is actually the first note of measure 40. It's here because the first note of 38 can't be in the loop due to being in another channel.
   d>
 ]
 ## 42
@@ -364,6 +371,8 @@ e 'timpaniV3' de 'timpaniV4' d 'timpaniV5' eded 'timpaniV6' eded
 
 
 {5}
+## Delay by one 64th note to allow the contrabass to start earlier (to counteract its attack)
+r64
 $
 ## Time signature starts at 4/4
 ## Timpani, originally track 2
@@ -452,6 +461,8 @@ l8
 
 
 {6}
+## Delay by one 64th note to allow the contrabass to start earlier (to counteract its attack)
+r64
 $
 ## Time signature starts at 4/4
 ## Orchestra, originally track 6
@@ -563,6 +574,8 @@ l24
 
 
 {7}
+## Delay by one 64th note to allow the contrabass to start earlier (to counteract its attack)
+r64
 $
 ## Time signature starts at 4/4
 ## Only the orchestra (originally track 6) ever plays here, when it gets bumped to channel 7 by the harp

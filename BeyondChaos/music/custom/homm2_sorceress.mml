@@ -1,0 +1,1795 @@
+#TITLE Sorceress Castle
+#ALBUM Heroes of Might and Magic II: The Succession Wars
+#COMPOSER Paul Romero
+#ARRANGED Rushlight
+
+#SHORTNAME HOMM2 Sorceress
+
+#VARIANT ~
+#VARIANT ` tr
+
+#WAVE 0x20 0x61 ## Harp
+#WAVE 0x21 0x99 ## Bagpipe
+#WAVE 0x22 0xA2 ## Pan Flute
+#WAVE 0x23 0xF2 ## Vox
+#WAVE 0x24 0x95 ## Clarinet
+
+#WAVE 0x26 0x07 ## Piano 4
+#WAVE 0x27 0x09 ## Piano 6
+
+#WAVE 0x28 0x62 ## Strings
+#WAVE 0x29 0x35 ## Guitar
+#WAVE 0x2A 0x86 ## Horn
+#WAVE 0x2B 0x72 ## Fiddle
+#WAVE 0x2C 0x5A ## Timpani
+#WAVE 0x2D 0x6C ## Tambourine
+#WAVE 0x2E 0xB3 ## Organ
+~
+#WAVE 0x2F 0xBA ## Reverse Cymbal
+~
+
+#def init= t149 %x210 %v40 %b0,70 %f0,0
+
+
+#def harpVol=                  v90
+#def harpQuietVol=             'harpVol*v.75'
+#def harpQuieterVol=           'harpVol*v.55'
+#def panFluteVol=              v80
+#def panFluteFade=           v1,80 ## Keep this in line with panFluteVol
+#def panFluteQuietVol=         'panFluteVol*v.7'
+#def melodyPanFluteVol=        'panFluteVol*v1.25'
+#def bagpipeBaseVol=           v70
+#def baseBagpipeHighNoteVol=   'bagpipeBaseVol*v.3'
+#def baseBagpipeLowNoteVol=    'bagpipeBaseVol*v.63'
+#def leadBagpipeVol=           'bagpipeBaseVol*v.9'
+#def supportBagpipeVol=        'bagpipeBaseVol*v.7'
+#def supportBagpipeQuietVol=   'bagpipeBaseVol*v.35'
+#def timpaniVol=               v80
+#def timpaniFade=            v1,80 ## Keep this in line with timpaniVol
+#def voxVol=                   v110
+#def voxMedVol=                'voxVol*v.85'
+#def voxQuietVol=              'voxVol*v.70'
+#def baseFiddleVol=            v90
+#def baseFiddleQuietVol=       'baseFiddleVol*v.4'
+#def baseFiddleMidHighVol=     'baseFiddleVol*v.8'
+#def baseFiddleMidVol=         'baseFiddleVol*v.7'
+#def highBaseFiddleVol=        'baseFiddleVol*v.35'
+#def tambourineVol=            v50
+#def cymbalVol=                v64
+#def supportStringsVol=        v25
+#def supportStringsQuietVol=   'supportStringsVol*v.5'
+#def supportStringsLateVol=    'supportStringsVol*v.8'
+#def guitarVol=                v60
+#def guitarQuietVol=           'guitarVol*v.85'
+#def hornVol=                  v50
+#def hornQuietVol=             'hornVol*v.5'
+#def organVol=                 v60
+#def clarinetVol=              v80
+#def baseClarinetHighNoteVol=  'clarinetVol*v.65'
+#def baseClarinetLowNoteVol=   'clarinetVol*v.65'
+#def rightPiano4Vol=           v130
+#def leftPiano4Vol=            v85
+#def leftPiano4Fade=         v1,85 ## Keep in line with leftPiano4Vol
+#def piano6Vol=                v130
+
+#def rmp4=  'rightPiano4Vol*v1'
+#def rp4=   'rightPiano4Vol*v.85'
+#def rpp4=  'rightPiano4Vol*v.75'
+#def rppp4= 'rightPiano4Vol*v.45'
+
+#def lmp4=                 'leftPiano4Vol*v1'
+#def lp4=                  'leftPiano4Vol*v.85'
+#def lpp4=                 'leftPiano4Vol*v.75'
+#def lppp4=                'leftPiano4Vol*v.45'
+#def ultraQuietLeftPiano4= 'leftPiano4Vol*v.25'
+
+#def mp6=  'piano6Vol*v1'
+#def p6=   'piano6Vol*v.85'
+#def pp6=  'piano6Vol*v.75'
+#def ppp6= 'piano6Vol*v.45'
+
+#def timpaniStrike=        %a15
+#def timpaniPartialStrike= %a12
+#def timpaniRumble=        %a8 
+
+## NOTE: Because this is the default release rate for the pan flute, it's not included in the instrument macro. If it's changed, it must be added to that macro.
+#def melodyPanFluteSustain= %r0
+#def panFluteLateSustain=   %r4
+#def panFluteLateRelease=   %r16
+#def panFluteSustain=       %r10
+#def panFluteRelease=       %r20
+#def panFluteFastRelease=   %r24
+#def panFluteAttack=        %a15
+#def panFluteQuietAttack=   %a8
+
+## NOTE: Because this is the default release rate for the bagpipe, it's not included in some instrument macros that use this release rate. If it's changed, it must be added to those macros.
+#def baseBagpipeSustain=    %r0
+#def baseBagpipeRelease=    %r16
+#def leadBagpipeSustain=    %r10
+#def leadBagpipeRelease=    %r24
+#def lateBagpipeSustain=    %r4
+#def lateBagpipeRelease=    %r10
+#def lateLowBagpipeRelease= %r10
+
+## NOTE: Because this is the default release rate for the vox, it's not included in the instrument macro. If it's changed, it must be added to that macro.
+#def voxSustain=     %r0
+#def voxSlowRelease= %r16
+#def voxRelease=     %r22
+#def bagpipe= |1 o5
+
+## NOTE: Because this is the default release rate for the horn, it's not included in the instrument macro. If it's changed, it must be added to that macro.
+#def hornSustain= %r0
+#def hornSlowRelease= %r14
+#def hornRelease= %r20
+
+#def stringsSlowAttack=  %a5
+#def stringsAttack=      %a7
+#def stringsQuickAttack= %a15
+## NOTE: Because this is the default release rate for the strings, it's not included in the instrument macro. If it's changed, it must be added to that macro.
+#def stringsSustain=     %r0
+#def stringsSlowRelease= %r16
+#def stringsLateRelease= %r16
+
+## NOTE: Because this is the default release rate for the organ, it's not included in the instrument macro. If it's changed, it must be added to that macro.
+#def organSustain= %r0
+#def organRelease= %r20
+
+## NOTE: Because this is the default release rate for the fiddle, it's not included in the instrument macro. If it's changed, it must be added to that macro.
+#def fiddleSustain= %r0
+#def fiddleRelease= %r20
+
+## NOTE: Because this is the default release rate for the clarinet, it's not included in the instrument macro. If it's changed, it must be added to that macro.
+#def clarinetSustain= %r0
+#def clarinetRelease= %r20
+
+#def leftPianoSustain= %r16
+#def bassPianoSustain= %r10
+
+#def panFlute= |2 o4
+#def fiddle=   |B o5
+#def clarinet= |4 o5
+#def piano4=   |6 o5
+
+
+## Note: No instruments use vibrato and all instruments use echo, so those are omitted from the instrument macros
+#def harp=                |0 o5         'harpVol'                 p54                                  
+## Volume and release rate not included with this macro to save a couple bytes in a few exceptions, so set it manually instead.
+#def panFluteAccents=     'panFlute'                              p74
+#def melodyPanFlute=      'panFlute'    'melodyPanFluteVol'       p64 %s0 %y3
+#def baseBagpipe=         'bagpipe'                               p64 %a7
+## Volume not included with this macro to save a couple bytes in a few exceptions, so set it manually instead.
+#def baseBagpipeRight=    'baseBagpipe'                           p74                                  
+#def baseBagpipeLeft=     'baseBagpipe' 'baseBagpipeLowNoteVol'   p54                                  
+#def leadBagpipe=         'bagpipe'     'leadBagpipeVol'          p64 %a8 'leadBagpipeSustain'         
+#def lateBagpipe=         'bagpipe'     'leadBagpipeVol'          p64 %a8 'lateBagpipeSustain'         
+#def supportBagpipe=      'bagpipe'     'supportBagpipeVol'       p64 %a8 %r8                          
+#def supportBagpipeQuiet= 'bagpipe'     'supportBagpipeQuietVol'  p64 %a8 %r8                          
+## Timpani volume/attack varies, so the macro will have no initial volume/attack to save space
+#def timpani=             |C o6                                      p84
+## Vox vocal varies, so the macro will have no initial volume to save space
+#def vox=                 |3 o4                                      p64
+#def baseFiddle=          'fiddle'         'baseFiddleVol'           p54                                  
+#def baseFiddleQuiet=     'fiddle'         'baseFiddleQuietVol'      p54                                  
+#def highBaseFiddle=      'fiddle'         'highBaseFiddleVol'       p64                                  
+#def supportStrings=      |8 o5            'supportStringsVol'       p74 'stringsAttack'
+#def supportStringsLate=  |8 o5            'supportStringsLateVol'   p74 'stringsAttack'
+#def guitar=              |9 o6            'guitarVol'               p85 %r22                             
+#def guitarQuiet=         |9 o6            'guitarQuietVol'          p85 %r22                             
+#def horn=                |A o5            'hornVol'                 p45                                  
+#def hornQuiet=           |A o5            'hornQuietVol'            p45                                  
+#def organ=               |E o5            'organVol'                p64 %a8
+#def leadClarinet=        'clarinet'       'clarinetVol'             p54                                  
+#def baseClarinetRight=   'clarinet'       'baseClarinetHighNoteVol' p74                                  
+#def baseClarinetLeft=    'clarinet'       'baseClarinetLowNoteVol'  p54                                  
+#def rightPiano4=         'piano4'         'rmp4'                    p64 %r18                             
+#def leftPiano4=          'piano4'         'lmp4'                    p64                                  
+#def piano6=              |7 o4            'mp6'                     p64                                  
+
+
+#drum "c"=5g  |F 'cymbalVol'       p64  %a5 %y0 %s5 %r16
+#drum "t"=5b- |D 'tambourineVol'   p107 %a8
+
+#cdef ( %l1
+#cdef ) %l0
+
+
+
+
+{1}
+'init'
+%e1
+$
+[3
+  'harp'
+  j2,104
+  j3
+  ## Measure 1 lasts 1 beat
+  >&20g<&28d
+  ## 2
+  g1
+  ## 3
+  $106
+  'timpani-o3'
+  l8
+  'timpaniVol*v.3' 'timpaniRumble' 'timpaniFade*v72,1' ggg'timpaniPartialStrike'g'timpaniVol*v1.5''timpaniStrike'g
+  j2,107
+  'timpaniVol''timpaniFade*v72,.5''timpaniPartialStrike'gg'timpaniRumble'g
+  ## 4
+  ^2
+]
+## Remainder of 107 (we're at beat 3)
+r16c8e-16
+'leadBagpipe+o1'
+[3
+  ## Remainder of measure 7 / 11 / 15 (we're at the last beat of the measure)
+  >(f+48g8.^24)
+  ## Time signature becomes 3/4
+  ## 8 / 12 / 16
+  (b48<c4..^24)(f+48g8.^24)
+  ## 9 / 13 / 17
+  (f+48g4^16^24)(e48f16^24)(d48e-8.^24)
+  ## 10 / 14 / 18 - measure 14's jump goes to code that's after channel 1's main loop
+  (e48f4..^24) j2,114 (f+48g8.^24)
+  ## 11 / 19
+  (d48e-8.^24)(>b48<c16^24'leadBagpipeRelease'^8'leadBagpipeSustain')
+]
+## Remainder of measure 19
+(>b48<c16^24)(c+48d16^24)
+## 20
+(d48e-4..^24)(e48f8.^24)
+## 21
+(c+48d4^16^24)(>b48<c16^24)>(a48b-8.^24)
+## 22
+(b48<c2^8.^24)
+## 23
+^2
+'vox+o1''voxVol'
+[3
+  ## Remainder of 23 / 27 / 31
+  >g8.'voxRelease'^16'voxSustain'
+  ## 24 / 28 / 32
+  <c2g8.'voxRelease'^16'voxSustain'
+  ## 25 / 29 / 33
+  g4.f8e-8.'voxRelease'^16'voxSustain'
+  ## 26 / 30 / 34
+  f2 j2,130 g8.'voxRelease'^16'voxSustain'
+  ## 27 / 35
+  e-8.'voxRelease'^16'voxSustain'c8'voxRelease'^8'voxSustain'
+]
+## Remainder of measure 35
+c8d8
+## 36
+e-4..'voxRelease'^16'voxSustain' f8.'voxRelease'^16'voxSustain'
+## 37
+d4..'voxRelease'^16'voxSustain'>b-4
+## 38
+<c2.
+## 39
+^2
+[3
+  'organ+o1'
+  [3
+    ## Remainder of 39 / 43 / 47 / 91 / 95 / 99 / 139 / 143 / 147 (we are at beat 3)
+    >g4
+    ## 40 / 44 / 48 / 92 / 96 / 100 / 140 / 144 / 148
+    <c2g8.'organRelease'^16'organSustain'
+    ## 41 / 45 / 49 / 93 / 97 / 101 / 141 / 145 / 149
+    g4.f8e-4
+    ## 42 / 46 / 50 / 94 / 98 / 102 / 142 / 146 / 150
+    f2 j2,146 g4
+    ## 43 / 51 / 95 / 103 / 143 / 151
+    e-4c8.'organRelease'^16'organSustain'
+  ]
+  ## Remainder of measure 51 / 103 / 151
+  c8d8
+  ## 52 / 104 / 152
+  e-4..'organRelease'^16'organSustain' f8.'organRelease'^16'organSustain'
+  ## 53 / 105 / 153
+  d4^16'organRelease'^16'organSustain'c8>b-4
+  ## 54 / 106 / 154
+  <c1
+  ## 55 / 107 / 155 (at beat 2)
+  'organRelease'^4'organSustain'
+  j2,1107
+  'harp+o1'
+  l4
+  g
+  ## 56 / 156
+  b-2b-
+  ## 57 / 157
+  ^4.g4.
+  ## 58 / 158
+  g1
+  ## 59 / 159 (at beat 2)
+  ^4g
+  ## 60 / 160
+  b-2<c
+  ## 61 / 161
+  ^4.>g4.
+  ## 62 / 162
+  gg1
+  ## 63 / 163 (at beat 3)
+  g
+  ## 64 / 164
+  b-2b-
+  ## 65 / 165
+  ^4.g4.
+  ## 66 / 166
+  ag1
+  ## 67 / 167 (at beat 3)
+  f
+  ## 68 / 168
+  ^2'harpQuietVol'f
+  ## 69 / 169
+  ^4.'harpQuieterVol'c4.
+  ## 70 / 170
+  c1
+  ## 71 / 171 (at beat 2)
+  ^4
+  'leadClarinet'
+  [3
+    ## Remainder of 71 / 75 / 79 / 171 / 175 / 179
+    g8a8
+    ## 72 / 76 / 80 / 172 / 176 / 180
+    b-4. j2 'clarinetRelease'^8'clarinetSustain'b-4
+    ## 73 / 81 / 173 / 181
+    a4.g8f4
+    j3,182
+    ## 74 / 174
+    g1
+    ## 75 / 175 (at beat 2)
+    'clarinetRelease'^4'clarinetSustain'
+  ]
+  ## Remainder of 76 / 176
+  ^8<c4
+  ## 77 / 177
+  >a4.g8f4
+  ## 78 / 178
+  g8f8g2
+  ## 79 / 179 then back to the loop
+  ^4'clarinetRelease'^4'clarinetSustain']
+  $182
+  ## 82 / 182
+  a8b-8g2
+  ## 83 / 183
+  ^4'clarinetRelease'^4'clarinetSustain'
+  'harp+o1'l4
+  [2
+    ## Remainder of 83 / 87 / 183 / 187
+    g
+    ## 84 / 88 / 184 / 188
+    f2e-
+    ## 85 / 89 / 185 / 189
+    d4.c8>b-4
+    ## 86 / 90 / 186 / 190
+    <c1
+    ## 87 / 91 / 187 / 191 (at beat 2)
+    j2^4'leadClarinet'l4
+  ]
+  ## Remainder of 91 / 191 (we are at beat 2)
+  'clarinetRelease'^4
+]
+## 191 (at beat 3)
+'lateBagpipe+o1'
+(f+48g8.^24)
+## 192
+(e48f8.^24^1)
+## 193 (at beat 3)
+(d48e-8.^24)
+## 194
+(c+48d8.^24^2.)
+## 195 (at beat 2)
+(>b48<c8.^24) (>a48b-8.^24)
+## 196-199
+(b48<c8.^24^1^1^2.)
+## 200-203
+'lateBagpipeRelease'
+[11 ^4]
+## Now at 203, beat 3. Loop back to the very start.
+;
+
+
+## ** Alternate loop variations for channel 1 **
+
+$104
+## Remainder of measure 104 (we're at beat 3)
+r16c8e-8r8.
+## 5 then jump back to measure 6
+r1 ;106
+
+$107
+## Remainder of measure 106 (we're at beat 3.5)
+g'timpaniPartialStrike''timpaniFade*v48,.5'g'timpaniRumble'g
+## 7 - play 2 beats then back to the loop
+^2]
+
+$114
+## Remainder of measure 14
+(d48e-8.^24)
+## 15 - play 2 beats then go back into the loop
+(f+48g4^16^24'leadBagpipeRelease'^8'leadBagpipeSustain')]
+
+$130
+## Remainder of measure 30
+e-4
+## 31 - play 2 beats then go back into the loop
+g4.'voxRelease'^8'voxSustain']
+
+$146
+## Remainder of measure 46 / 98 / 146
+e-4
+## 47 / 99 / 147 - play 2 beats then go back into the loop
+g4..'organRelease'^16'organSustain']
+
+$1107
+## Remainder of 107 + 108
+'rightPiano4-o1'
+l4
+g1
+## 109
+'rpp4'<e2g4
+## 110
+g1
+## 111 (at beat 2)
+^4b4
+## 112
+^2b4
+## 113
+^4.g4.
+## 114
+b1
+## 115 (at beat 2)
+^2
+## 116
+'rmp4'c1
+## 117 (at beat 2)
+^8'rpp4'f+8^8.'rppp4'd8.
+## 118 (at beat 1.5)
+^2a4.
+## 119 (at beat 2)
+^2
+## 120
+f2.
+## 121
+'rpp4'd4.'rmp4'c4.
+## 122
+'rpp4'e4e1
+## 123 (at beat 3) + 124
+'piano6'
+g1
+## 125
+<e2'pp6'g4
+## 126
+g1
+## 127 (at beat 2)
+^4b4
+## 128
+<c2.
+## 129-130
+>a2'mp6'a1
+## 131
+'ppp6'g2.
+## 132
+'pp6'f2.
+## 133
+d2d4
+## 134
+e1
+## 135 (at beat 2) + 136
+^4e1
+## 137
+^2'ppp6'c4
+## 138
+c2
+'timpani-o3'l8'timpaniVol*v.1''timpaniRumble''timpaniFade*v132,1.2'r16gg
+## 139 (one 16th note in)
+g'timpaniPartialStrike'gg8.
+## Now at measure 139 beat 3, go back to the big loop again
+]
+
+
+{2}
+%e1
+$
+[3
+  'harp-o1'
+  j2,204
+  j3
+  ## Measure 1 lasts 1 beat
+  <&10r&20c&18e-
+  ## 2
+  r1
+  ## 3
+  $206
+  'timpani-o3'
+  l8
+  'timpaniVol*v.3' 'timpaniRumble' 'timpaniFade*v82,1' r16 ggg'timpaniPartialStrike'g
+  j2,207
+  'timpaniStrike''timpaniVol*v1.8'g 'timpaniVol''timpaniFade*v60,.5''timpaniPartialStrike'gg.
+  ## 4
+  ^2
+]
+## 7 (beat 3)
+a8<d8f4
+## Time signature becomes 3/4
+## 8
+g4
+[3
+  ## Remainder of 8 / 12 / 16 (we're at beat 2)
+  r1
+  ## 9 / 13 / 17 (at beat 3)
+  r4
+  ## 10 / 14 / 18
+  r2 'panFluteAccentTrio' r2
+  ## Now at measure 12 / 16 (beat 2)
+]
+## Remainder of 20 (we're at beat 2)
+r1
+## 21 (at beat 3)
+r4
+## 22
+r2 b-16'panFluteFastRelease'^16'panFluteSustain'a16'panFluteFastRelease'^16'panFluteSustain'
+## 23
+b-8... v0 ^64
+'supportBagpipe-o1'
+l4
+e-f
+[4
+  'horn'
+  [3
+    ## 24 / 28 / 32 / 40 / 44 / 48 / 92 / 96 / 100 / 140 / 144 / 148
+    <c2.
+    ## 25 / 29 / 33 / 41 / 45 / 49 / 93 / 97 / 101 / 141 / 145 / 149
+    >b-2.
+    ## 26 / 30 / 34 / 42 / 46 / 50 / 94 / 98 / 102 / 142 / 146 / 150
+    g+2.
+    ## 27 / 31 / 35 / 43 / 47 / 51 / 95 / 99 / 103 / 143 / 147 / 151
+    g2'hornRelease'^4'hornSustain'
+  ]
+  ## 36 / 52 / 104 / 152
+  f2.
+  ## 37 / 53 / 105 / 153
+  g2.<
+  j1,238
+  ## 54 / 106 / 154
+  c1
+  ## 55 / 107 / 155 (at beat 2)
+  ^4'hornSlowRelease'^4
+  j3,2108
+  ## 56 / 156
+  ^2.
+  ## 57-58 / 157-158
+  'harp+o1'
+  l4
+  a2f1
+  ## 59 / 159
+  ^2
+  [2
+    ## Remainder of 59 / 63 / 159 / 163 (we're at beat 3)
+    ^8a4.
+    ## 60 / 64 / 160 / 164 (at beat 2)
+    ^2
+    ## 61 / 65 / 161 / 165
+    a2f4.
+    ## 62 / 66 / 162 / 166 (at beat 1.5)
+    'harpQuietVol' j2 f1
+    ## 63 / 163 (at beat 2.5)
+    ^8'harpVol'
+  ]
+  ## Remainder of 66 / 166 (we're at beat 1.5)
+  b-1
+  ## 67 / 167 (at beat 2.5)
+  ^4.
+  ## 68 / 168
+  'harpQuietVol'e-2.
+  ## 69 / 169
+  d2>'harpQuieterVol'b-2
+  ## 70 (at beat 2) through 83 (at beat 2) / 170 (at beat 2) through 183 (at beat 2)
+  [10 ^1]
+  ## 83 / 183 (at beat 2)
+  'vox+o1''voxMedVol'l4g
+  j4,2184
+  ## 84
+  f4..'voxRelease'^16'voxSustain'e-
+  ## 85
+  d4..'voxRelease'^16'voxSustain'>b-
+  ## 86-87
+  <'voxQuietVol'c1.
+  ## 88
+  'voxSlowRelease'^1
+  ## 89 (at beat 2)
+  ^1
+  ## 90 (at beat 3)
+  ^16'timpani-o3'l8 'timpaniRumble' 'timpaniVol*v.3' 'timpaniFade*v132,1'gg
+  ## 91 (one 16th note in)
+  'timpaniStrike'gggg'timpaniVol*v1.5'g8.
+]
+$2108
+## 108
+'rightPiano4'
+l4
+c1
+## 109 (at beat 2)
+^8'rpp4'f+1
+## 110 (at beat 3)
+^2
+## 111 (at beat 2)
+'rmp4'a4.
+## 112
+<'rpp4'c2.
+## 113
+>a2a2
+## 114 (at beat 2)
+^1
+## 115 (at beat 3) - 116
+>'rmp4'g1
+## 117
+<'rpp4'e2g4
+## 118
+g1
+## 119 (at beat 2)
+^4'rmp4'g4
+## 120
+^2'rpp4'e2
+## 121 (at beat 2)
+'rppp4'd4'rmp4'd4.
+## 122 (at beat 1.5)
+'rpp4'f1
+## 123 (at beat 2.5)
+^4.
+## 124
+'piano6+o1'
+c1
+## 125 (at beat 2)
+^8'pp6'f+8^8.'mp6'd8.
+## 126 (at beat 1.5)
+^1
+## 127 (at beat 2.5)
+'pp6'a4'ppp6'e8
+## 128
+^2'pp6'b4
+## 129
+^4.g4.
+## 130
+b1
+## 131 (at beat 2)
+^4g4
+## 132
+^2e4
+## 133
+^4.'mp6'c4.
+## 134
+'ppp6'a1
+## 135 (at beat 2)
+^8'pp6'f4.
+## 136
+'ppp6'd1
+## 137 (at beat 2)
+^4.>b8
+## 138
+^2
+'timpani-o3'l8'timpaniVol*v.1''timpaniRumble''timpaniFade*v132,1.2'gg
+## 139 then back to the big loop again
+g'timpaniPartialStrike'ggg'timpaniFade*v48,.3'g'timpaniRumble'g]
+$2184
+## 184
+f2.
+## 185
+d2.
+## 186-189
+'voxQuietVol'c1^1^1
+## 190-191
+'voxSlowRelease'^1.
+## 192-193
+^4'supportStringsLate+o2'c1.
+## 194 (at beat 2) + 195
+'stringsQuickAttack'd1.
+## 196 (at beat 2)
+e-1
+## 197 (at beat 3)
+^1
+## 199
+^2.
+## 200
+'stringsLateRelease' [11 ^4]
+## Now at 203, beat 3. Loop back to the very start.
+;
+
+
+## ** Alternate loop variations for channel 2 **
+
+$204
+## Remainder of measure 4 (we're at beat 3)
+a8<d8f4
+## 5 then jump back to measure 6
+g1
+;206
+
+$207
+## Remainder of measure 6 (we're at beat 3.25)
+^8'timpaniVol''timpaniFade*v60,.5'gg.
+## 7 - play 2 beats then back to the loop
+^2]
+
+$238
+## 38-39 then back to the loop
+c1.]
+
+
+{3}
+%e1
+## Measure 1 lasts 1 beat
+r4
+$
+## 2
+'baseBagpipeLeft-o2'
+c1^1^2..'baseBagpipeRelease'^8'baseBagpipeSustain'
+## 5 through 15 (at beat 3.5). Take note that Time signature becomes 3/4 at measure 8
+c2^4. [8 ^1]
+## 15 (at beat 3.5)
+'baseBagpipeRelease'^8'baseBagpipeSustain'
+## 16 through 23 (minus one 64th note)
+&189c [5 ^1]
+## At this point we are one 64th note early, which will be used to offset the delay in the low fiddle notes and help them land on time
+[4
+  ## At this point we expect to be one 64th note early
+  'baseFiddle-o2'
+  [4
+    ## 24 / 28 / 32 / 36 / 40 / 44 / 48 / 52 / 92 / 96 / 100 / 104 / 140 / 144 / 148 / 152
+    c1
+    ## 25 / 29 / 33 / 37 / 41 / 45 / 49 / 53 / 93 / 97 / 101 / 105 / 141 / 145 / 149 / 153 (at beat 2)
+    ^1
+    ## 26 / 20 / 34 / 38 / 42 / 46 / 50 / 54 / 94 / 98 / 102 / 106 / 142 / 146 / 150 / 154 (at beat 3)
+    ^4
+    ## 27 / 31 / 35 / 39 / 43 / 47 / 51 / 55 / 95 / 99 / 103 / 107 / 143 / 147 / 151 / 155
+    'baseFiddleMidVol'^2.'baseFiddleVol'
+  ]
+  ## Jump to the very end of this loop to start iteration #2 immediately
+  j1,340
+  ## Remainder of measure 55 / 107 / 155 (last remaining 64th note)
+  r64
+  ## No longer one 64th note early
+  j3,3108
+  'highBaseFiddle-o1'
+  [3
+    ## 56 / 60 / 64 / 156 / 160 / 164
+    e-2.
+    ## 57 / 61 / 65 / 157 / 161 / 165
+    f2.
+    j2,362
+    ## 58 / 66 / 158 / 166
+    c2.
+    ## 59 / 63 / 67 / 159 / 163 / 167
+    ^2'fiddleRelease'^4'fiddleSustain'
+  ]
+  ## 68 / 168
+  f2.
+  ## 69 / 169
+  g2.
+  ## 70 / 170
+  c1
+  ## 71 / 171 (at beat 2)
+  ^4'fiddleRelease'^4'fiddleSustain'
+  'baseClarinetLeft-o1'
+  [3
+    ## 72 / 76 / 80 / 172 / 176 / 180
+    e-2.
+    ## 73 / 77 / 81 / 173 / 177 / 181
+    f2.
+    ## 74 / 82 / 174 / 182
+    j2,378
+    c1
+    ## 75 / 79 / 83 / 175 / 179 / 183 (at beat 2)
+    $379
+    ^4 'clarinetRelease'^4'clarinetSustain'
+  ]
+  'highBaseFiddle-o1'
+  ## 84 / 184
+  f2.
+  ## 85 / 185
+  g2.
+  ## 86 / 186
+  c1
+  ## 87 / 187 (at beat 2)
+  ^4'fiddleRelease'^4'fiddleSustain'
+  ## 88 / 188
+  'baseClarinetLeft-o1'
+  c2.
+  ## 89 / 189
+  >g2.
+  ## 90 / 190
+  <c1
+  ## 91 / 191 (at beat 2)
+  ^4....
+  $340
+  ## We are now one 64th note early, which is necessary as we go start the second loop
+]
+^64
+## 192-193
+'baseBagpipeLeft-o3'
+g+1.
+## 194-195
+b-1.
+## 196-199
+<c1^1^1
+## 200-203
+'lateLowBagpipeRelease'
+^1^1^1
+;
+
+
+## ** Alternate loop variations for channel 3 **
+
+$362
+## 62-63 / 162-163 then back to the loop
+g1^4'fiddleRelease'^4'fiddleSustain']
+
+$378
+## 78 / 178 then jump back to 79 / 179
+d1 ;379
+
+$3108
+## 108, no longer on a one 64th note early
+'leftPiano4-o1'
+l8
+'bassPianoSustain'c8..v6,0^32'lmp4''leftPianoSustain'deg2
+## 109 (at beat 2)
+e2
+## 110
+>b4<dgab4.
+## 111 (at beat 2)
+^2
+## 112
+>a<'bassPianoSustain'e16.v6,0^32'lmp4''leftPianoSustain'b<c'lpp4'e2
+## 113 (at beat 2)
+>'lmp4'a2
+## 114
+e>'bassPianoSustain'b16.v6,0^32'lmp4''leftPianoSustain'<ef+g'lpp4'b
+## 115
+<'lmp4'e2.
+## 116
+>>'bassPianoSustain'g16.v6,0^32'lmp4''leftPianoSustain'<cd'lpp4'eg2
+## 117 (at beat 2)
+'lppp4'e4g4
+## 118-119
+>b4<'lpp4'dgb1
+## 120
+^4'lmp4''bassPianoSustain'd16.v6,0^32'lmp4''leftPianoSustain'>a<de
+## 121
+fa<d2
+## 122
+>>'bassPianoSustain'a4^16.v6,0^32'lmp4''leftPianoSustain'<eb<c4.
+## 123 (at beat 2)
+c2
+## 124
+>c'bassPianoSustain'g16.v6,0^32'leftPianoSustain'<'lpp4'dege
+## 125
+c2.
+## 126
+>>b<d'lmp4''bassPianoSustain'g16.v6,0^32'leftPianoSustain'<'lpp4'ddg
+## 127
+>b4<d2
+## 128
+>>'lmp4'a<'bassPianoSustain'e16.v6,0^32'lmp4''leftPianoSustain'a<'lpp4'c'lppp4'e4
+## 129
+'lpp4'a4e2
+## 130
+>>'lmp4''bassPianoSustain'e16.v6,0^32'leftPianoSustain'<'ultraQuietLeftPiano4'e'lpp4'f+gb<'ultraQuietLeftPiano4'e
+## 131
+f+4'lpp4'g2
+## 132
+>'lmp4''bassPianoSustain'd16.v6,0^32'leftPianoSustain''lpp4'fa<d4.
+## 133
+'ultraQuietLeftPiano4'f4'lpp4'd2
+## 134
+^8>'lmp4''bassPianoSustain'e16.v6,0^32'leftPianoSustain''lpp4'b<c'ultraQuietLeftPiano4'e4
+## 135
+a4'lppp4'c4>a4
+## 136-137
+>'lmp4''bassPianoSustain'g16.v6,0^32'leftPianoSustain''lpp4'<dg<d'lppp4'g1
+## 138
+>>'lmp4''bassPianoSustain'c16.v6,0^32'lmp4''leftPianoSustain'g<ce'lpp4'g<c
+## 139
+e4..
+'timpani-o3'l8'timpaniVol*v1.2''timpaniPartialStrike'g16'timpaniFade*v48,.3'^16'timpaniRumble'gg32.
+## Now one 64th note before measure 140, go back in the big loop
+]
+
+
+{4}
+%e1
+## Measure 1 lasts 1 beat
+r4
+$
+[2
+  ## 2 / 5
+  r1
+  ## 3 / 6
+  r1
+  ## 4 / 7
+  'panFluteAccentTrio'r4
+]
+## Time signature becomes 3/4
+## 8 through 22
+[11 r1]
+## Remainder of 22 (we're at beat 3)
+'timpani-o3'
+l8
+'timpaniVol*v.2' 'timpaniRumble' 'timpaniFade*v120,1.4' gg
+## 23
+g'timpaniPartialStrike'gg g'timpaniFade*v48,.7'g'timpaniRumble'g
+## 24 through 39
+"t4.t8t2" [6 "t4.t8t4.t8t2"] "t4.t8t2t4.t8t16"
+'harp'
+l16
+de-g<cde-g<
+[3
+  ## 40 through 53 / 92 through 105 / 140 through 153
+  'harp+o2'l16
+  c4 "!!!o" [14 "t8t8t2"]
+  ## 54 / 106 / 154 (at beat 2)
+  "t4.t8"
+  ## 55 / 107 / 155
+  "t2^8"
+  j2,4108
+  ## Remainder of 55 / 155 (at beat 3.5)
+  ## Squeeze one melody harp note here as we transition, then this channel will play half of the low harp
+  'harp+o1'a8
+  l4
+  >>
+  [3
+    ## 56 / 60 / 64 / 156 / 160 / 164
+    ^8e-<c2
+    ## 57 / 61 / 65 / 157 / 161 / 165 (at beat 1.5)
+    >f<c2
+    j2,462
+    ## 58 / 66 / 158 / 166 (at beat 1.5)
+    >cg4.
+    ## 59 / 67 / 159 / 167
+    c2.
+  ]
+  ## 68 / 168
+  ^8f<c2
+  ## 69 / 169 (at beat 1.5)
+  >g<d2
+  ## 70 / 170 (at beat 1.5)
+  >cg4.
+  ## 71 / 171
+  c2.
+  'guitar-o1'
+  l8
+  [2
+    ## 72 / 80 / 172 / 180
+    gb-<gfe-4
+    ## 73 / 81 / 173 / 181
+    >fa<fe-d4
+    ## 74-75 / 82-83 / 174-175 / 182-183
+    >e-g<e-dc1>
+    j2
+    ## 76 / 176
+    gb-<gfg4
+    ## 77 / 177
+    >fa<fe-f4
+    ## 78-79 / 178-179
+    >gb-<de-d1>
+  ]
+  ## 84 / 184
+  'harp-o1'
+  l8
+  r fg+<cf4.
+  ## 85 / 185 (at beat 1.5)
+  >gb-<dg4.
+  ## 86 / 186 (at beat 1.5)
+  >ce-g<c4
+  ## 87 / 187
+  >c2.
+  ## 88 / 188
+  'guitar-o1'
+  l8
+  fb-<fe-f4
+  ## 89 / 189
+  >gb-< de-d4
+  ## 90 / 190
+  >e-g<e-dc j3,4190 'timpani-o3' l8 'timpaniRumble' 'timpaniVol*v.3' 'timpaniFade*v120,1'g
+  ## 91
+  'timpaniStrike'gggg'timpaniVol*v1.5'g4
+]
+$4190
+## Remainder of measure 190 (we're at beat 3.5) + 191
+[7 r8]
+## 192
+'harp-o1'
+l8
+rg+<cde-f
+## 193
+g+2^4.
+## 194 (at beat 1.5)
+>b-<de-fg+
+## 195
+b-8.
+'timpani-o3''timpaniVol*v.3''timpaniRumble''timpaniFade*v84,1'
+g8g8g8g16 'timpaniFade*v48,.3' ^16g8.
+## 196 (at beat 1.5)
+'harp'cde-g<c
+## 197
+d2.
+## 198
+e-2.
+## 199
+g2.
+## 200
+<c2.
+## 201-203
+^1^1^4
+;
+
+
+## ** Alternate loop variations for channel 4 **
+
+$462
+## 62 / 162 (at beat 1.5)
+>g4<d4.
+## 63 / 163 then back to the loop
+>g2.]
+
+$4108
+## Remainder of measure 107 (at beat 3.5)
+^8
+'hornQuiet'
+[2
+  ## 108-109 / 116-117
+  e1.
+  ## 110 / 118
+  d1
+  ## 111 / 119 (at beat 2)
+  ^4.'hornRelease'^8'hornSustain' j2 
+  ## 112
+  e1
+  ## 113 (at beat 2) + 114
+  ^4.g1.
+  ## 115 (at beat 3.5)
+  'hornRelease'^8'hornSustain'
+]
+## 120
+f2.
+## 121
+d2.
+## 122-123
+c1.
+## 124-125
+e1.
+## 126
+d1
+## 127 (at beat 2)
+^4.'hornRelease'^8'hornSustain'
+## 128-129
+c1.
+## 130-131
+e1.
+## 132
+f2.
+## 133
+d2.
+## 134
+e2.
+## 135
+a2.
+## 136
+>b1
+## 137 (at beat 2)
+^4<g4
+## 138
+e1
+## 139 (at beat 2) then bacl to the big loop
+^4.'hornRelease'^8]
+
+
+{5}
+%e1
+## Measure 1 lasts 1 beat
+r4
+$
+## 2
+'baseBagpipeRight-o1''baseBagpipeHighNoteVol'
+c1^1^2..'baseBagpipeRelease'^8'baseBagpipeSustain'
+## 5 through 15 (at beat 3.5). Take note that Time signature becomes 3/4 at measure 8
+c2^4. [8 ^1]
+## 15 (at beat 3.5)
+'baseBagpipeRelease'^8'baseBagpipeSustain'
+## 16 through 23
+c1 [5 ^1]
+## 24
+'supportStrings+o1'
+r4
+[2
+  ## Remainder of 24 / 32
+  e-2
+  ## 25 / 33
+  ^4d2
+  ## 26 / 34
+  ^4c1
+  ## 27 / 35 (at beat 3)
+  ^4
+  j2
+  ## 28
+  ^4 e-2
+  ## 29
+  ^4f2
+  ## 30-31
+  ^4g1.
+  ## Now at measure 32 beat 2
+]
+## 36-37
+d1.
+## 38
+^4e-1
+## 39 (at beat 2)
+^4
+[3
+  ## 40 / 92 / 140
+  'supportStrings+o2'
+  c1
+  ## 41 / 93 / 141 (at beat 2)
+  ^1
+  ## 42 / 94 / 142 (at beat 3)
+  ^4
+  ## 43 / 95 / 143
+  d2.
+  ## 44 / 96 / 144
+  e-1
+  ## 45 / 97 / 145 (at beat 2)
+  ^1
+  ## 46 / 98 / 146 (at beat 3)
+  ^4
+  ## 47 / 99 / 147
+  f2.
+  ## 48-51 / 100-103 / 148-151
+  g1^1^1
+  ## 52-53 / 104-105 / 152-153
+  ^4 
+  'stringsQuickAttack' g+1.
+  ## 54 / 106 / 154 (at beat 2)
+  g1
+  ## 55 / 107 / 155 (at beat 3)
+  'stringsSlowRelease'^4
+  j2,5108
+  ## 56 / 156
+  ^4
+  'harp-o1'
+  l4
+  [3
+    ## Remainder of 56 / 60 / 64 / 156 / 160 / 164 (we're at beat 2)
+    g<e-2
+    ## 57 / 61 / 65 / 157 / 161 / 165 (at beat 2)
+    >a<f2
+    j2,562
+    ## 58-59 / 66-67 / 158-159 / 166-167 (at beat 2)
+    >e-<c1
+    ## 60 / 68 / 160 / 168
+    ^4>
+  ]
+  ## Remainder of 68 / 168 (we're at beat 2)
+  a<f2
+  ## 69 / 169 (at beat 2)
+  >b<g2
+  ## 70 (at beat 2) + 71 / 170 (at beat 2) + 171
+  >e-<c1
+  'baseClarinetRight-o1'
+  [3
+    ## 72 / 76 / 80 / 172 / 176 / 180
+    b-2.
+    ## 73 / 77 / 81 / 173 / 177 / 181
+    a2.
+    ## 74 / 78 / 82 / 174 / 178 / 182
+    g1
+    ## 75 / 79 / 83 / 175 / 179 / 183 (at beat 2)
+    ^4 'clarinetRelease'j3^4'clarinetSustain'
+  ]
+  ## Remainder of 83 / 183
+  ^8...
+  ## Now one 64th note ahead
+  ## 84 / 184
+  'baseFiddleQuiet-o2'
+  f2.
+  ## 85 / 185
+  g2.
+  ## 86 / 186
+  c1
+  ## 87 / 187 (at beat 2)
+  ^4'fiddleRelease'^4^64
+  ## 88 / 188 (No longer one 64th note ahead)
+  'baseClarinetRight-o1'
+  f2.
+  ## 89 / 189
+  d2.
+  ## 90 / 190
+  e-2.
+  ## 91 / 191
+  ^8'clarinetRelease'^8
+  j3,5191
+  'harpClimb'
+]
+$5108
+## 108 through 123
+[12 ^1]
+## 124-125
+>'stringsSustain''stringsSlowAttack'r4e1.
+## 126 (at beat 2) + 127
+'stringsQuickAttack'd1.
+## 128 (at beat 2) + 129
+c1.
+## 130 (at beat 2) + 131
+>b1.
+## 132 (at beat 2) + 133
+<d1.
+## 134 (at beat 2) + 135
+c1.
+## 136 (at beat 2) + 137
+d1.
+## 138 (at beat 2)
+e1
+## 139 (at beat 3) then back to the big loop
+'stringsRelease'^4]
+$5191
+## Remainder of measure 191 (we're at beat 2)
+^2
+## 192-193
+'baseBagpipeRight-o2''baseBagpipeHighNoteVol'
+g+1.
+## 194-195
+b-1.
+## 196-199
+<c1^1^1
+## 200-203
+'lateLowBagpipeRelease'
+^1^1^1
+;
+
+
+## ** Alternate loop variations for channel 5 **
+
+$562
+## 62 (at beat 2) + 63 / 162 (at beat 2) + 163
+>b4<g1
+## 64 / 164 then back to the loop
+^4>]
+
+
+{6}
+%e1
+## Measure 1 lasts 1 beat
+r4
+$
+## 2 through 22. Time signature becomes 3/4 at measure 8.
+[17 r1]
+## Remainder of 22 (we're at beat 3)
+'timpani-o3'
+l8
+'timpaniVol*v.2' 'timpaniRumble' 'timpaniFade*v130,1.4' r16 gg
+## 23 (at beat 1.5)
+g'timpaniPartialStrike'ggg'timpaniFade*v36,.7'g'timpaniRumble'g16
+'supportBagpipe-o1'
+l4
+[3
+  ## 24-25 / 28-29 / 32-33
+  [2 g8b-8gr]
+  ## 26 / 30 / 34
+  g8g+8gr
+  j2,631
+  ## 27 / 35
+  g8f8gr
+]
+## 36-37
+[2 g8f8gr]
+## 38-39
+<c1.
+[3
+  'supportBagpipeQuiet'
+  ## 40 / 92 / 140
+  r2e-8d8
+  ## 41 / 93 / 141
+  >g1
+  ## 42 / 94 / 142 (at beat 2)
+  ^1
+  ## 43 / 95 / 143 (at beat 3)
+  ^4
+  ## 44 / 96 / 144
+  r4<e-8d8 'supportBagpipeVol' e-8d8
+  ## 45 / 97 / 145
+  >g1
+  ## 46 / 98 / 146 (at beat 2)
+  ^1
+  ## 47 / 99 / 147 (at beat 3)
+  ^4
+  ## 48 / 100 / 148
+  r4b-8g+8g8f8
+  ## 49 / 101 / 149
+  g1
+  ## 50 / 102 / 150 (at beat 2)
+  ^1
+  ## 51 / 103 / 151 (at beat 3)
+  ^4
+  ## 52 / 104 / 152
+  r4<e-8d8c8>g8
+  ## 53 / 105 / 153
+  g+2.
+  ## 54 / 106 / 154
+  g2.
+  ## 55 / 107 / 155
+  <c2^8...
+  j2,6107
+  ## Now one 64th note early
+  'baseFiddleQuiet-o2'
+  [3
+    ## 56 / 60 / 64 / 156 / 160 / 164
+    e-2.
+    ## 57 / 61 / 65 / 157 / 161 / 165
+    f2.
+    j2,662
+    ## 58 / 66 / 158 / 166
+    c1
+    ## 59 / 63 / 67 / 159 / 163 / 167 (at beat 2)
+    ^4'fiddleRelease'^4'fiddleSustain'
+  ]
+  ## 68 / 168
+  f2.
+  ## 69 / 169
+  g2.
+  ## 70 / 170
+  c1
+  ## 71 / 171 (at beat 2)
+  ^4'fiddleRelease'^4^64
+  ## (No longer one 64th note early)
+  ## 72 through 79 / 172 through 179
+  [6 r1]
+  ## 80 through 87 / 180 through / 187
+  'panFluteHalfVerse'
+  ## 88 through 91 / 188 through 191
+  [3 r1]
+]
+## 192-193
+"!!!o"
+r4"t4t1"
+## 194
+r4"t4t4"
+## 195
+r4
+'timpani-o3''timpaniVol*v.3''timpaniRumble''timpaniFade*v84,1'
+g8g8g8g8 'timpaniFade*v48,.3' g4
+## 196 (at beat 2)
+"!!!ot4t4"
+## 197-198
+r1.
+## 199
+r4[5 "t8"]
+## 200(at beat 1.5)-201
+'timpani-o3''timpaniPartialStrike''timpaniVol*v.25''timpaniFade*v48,.35'
+[10 b-12]   'timpaniFade*v128,.15' [8 b-12]
+## 202(at beat 1.5)-203
+[11 ^8]
+
+
+;
+
+
+## ** Alternate loop variations for channel 6 **
+
+$631
+## 31 then go back to the loop
+r4e-4f4]
+
+$662
+## 62-63 / 162-163 then back to the loop
+g1^4'fiddleRelease'^4'fiddleSustain']
+
+$6107
+## Remainder of 107
+^64
+## 108 through 123
+[12 r1]
+## 124-125
+r4'panFluteAccentTrioExtended2Semitones'
+## 126-127
+%k-2r4'panFluteAccentTrioExtended2Semitones'
+## 128-129
+%k0r4'panFluteAccentTrioExtended2Semitones'
+## 130-131
+r4'panFluteAccentTrioExtended2Semitones'
+## 132-133
+%k-2r4'panFluteAccentTrioExtended2Semitones'
+## 134-135
+%k5r4'panFluteAccentTrioExtended2Semitones'
+## 136-137
+%k7r4'panFluteAccentTrioExtended2Semitones'
+## 138-139, then back to the big loop
+%k0
+r4<c16'panFluteFastRelease'^16'panFluteSustain'>b16'panFluteFastRelease'^16'panFluteSustain'<c2 'panFluteRelease' m24,-1 ^2 'panFluteSustain']
+
+
+{7}
+%e1
+$
+## 1 through 22. Measure 1 lasts 1 beat. Time signature becomes 3/4 at measure 8.
+[17 r1] r2
+## 23
+## Play the last note of the pan flute accent, at 0 vol, bringing up volume later to keep the note going while channel 2 has to switch to something else
+'panFluteAccents''panFluteSustain'
+v0
+b-8... 'panFluteVol'^64^8 'panFluteRelease' m24,-1 ^8 'panFluteSustain' r4
+'baseBagpipeRight-o2'
+'baseBagpipeLowNoteVol'
+[4
+  ## 24 / 28 / 32 / 36
+  c2.
+  ## 25 / 29 / 33 / 37
+  ^1
+  ## 26 / 30 / 34 / 38 (at beat 2)
+  ^1
+  j4
+  ## Remainder of 27 / 31 / 35 (we're at beat 3)
+  ^4
+]
+[4
+  j4,7191
+  'melodyPanFlute+o1'
+  j2,791
+  j3,7139
+  [3
+    ## Remainder of 39 / 43 / 47 (we're at beat 3)
+    >g4
+    ## 40 / 44 / 48
+    <c2g4
+    ## 41 / 45 / 49
+    g4.f8e-4
+    ## 42 / 46 / 50
+    f2 j2,746 g4
+    ## 43 / 51
+    e-4c4
+  ]
+  ## Remainder of measure 51
+  c8d8
+  ## 52
+  e-2
+  $7104
+  f4
+  ## 53 / 105 / 153
+  d4.c8>b-4
+  ## 54 / 106 / 154
+  <c2.
+  ## 55 / 107 / 155
+  'guitarQuiet' b-4r2
+  j2,7108
+  ## 56 through 63 / 156 through 163
+  [6 r1]
+  ## 64 through 71 / 164 through 171
+  'panFluteHalfVerse'
+  ## 72 through 90 / 172 through 190
+  [19 r2.]
+  ## 91 / 191
+  r2
+]
+$7191
+## Remainder of measure 191 (we're at beat 3)
+r2
+## 192 (at beat 2)
+'panFluteAccents+o1''panFluteVol'
+g+16'panFluteFastRelease'^16'panFluteLateSustain'g16'panFluteFastRelease'^16'panFluteLateSustain'g+1
+## 194
+'panFluteRelease'^4 b-16'panFluteFastRelease'^16'panFluteLateSustain'g+16'panFluteFastRelease'^16'panFluteLateSustain'b-1
+## 196
+'panFluteRelease'^4 <c16'panFluteFastRelease'^16'panFluteLateSustain'>b-16'panFluteFastRelease'^16'panFluteLateSustain'<c1
+## 198
+^2^4.
+## 199 (at beat 1.5)
+'panFluteLateRelease' m24,-1 ^4^8.
+## 199(beat3.25)-203
+## Can't afford the cymbal sample on the train, just hold last note instead
+~"!!!oc1"~ `^1`
+[31 ^16]
+## Now at measure 203 beat 3. Because of the way the start is structured, we'll stop here and loop to the start rather than to measure 2.
+;
+
+
+## ** Alternate loop variations for channel 7 **
+
+$746
+## Remainder of measure 46
+e-4
+## 47 - play 2 beats then go back into the loop
+g2]
+
+$791
+## Remainder of 91  (we're at beat 3)
+>g4
+## 92
+<c2
+[4
+  'melodyPanFlute+o1'
+  j4,7104
+  ## 92 / 96 / 100 (at beat 3)
+  g4
+  ## 93 / 97 / 101
+  g4.f8e-4
+  ## 94 / 98 / 102
+  f2 j2,798 g4
+  ## 95 / 103
+  e-4c4
+  $7103
+  'timpani-o3''timpaniVol''timpaniPartialStrike'g8g8
+  ## 96 / 100 / 104
+  g2
+]
+
+$798
+## Remainder of measure 98 (we're at beat 3)
+e-4
+## 99 - play 2 beats then go back inside the loop to play 3 more timpani notes
+g2 ;7103
+
+$7108
+## 108
+'leftPiano4-o1'
+'bassPianoSustain'
+v0c8.. 'leftPiano4Fade*v6,1'^32^2
+## 109
+^1
+## 110 (at beat 2)
+^1
+## 111 (at beat 3)
+^4.
+## 112 (at beat 1.5)
+v0e16. 'leftPiano4Fade*v6,1'^32^1
+## 113 (at beat 3)
+^4.
+## 114 (at beat 1.5)
+>v0b16.'leftPiano4Fade*v6,1'^32^1
+## 115 (at beat 3)
+^4
+## 116
+v0g16.'leftPiano4Fade*v6,1'^32^8^1
+## 117 (at beat 2) + 118 + 119
+^1^1
+## 120 (at beat 2)
+<v0d16.'leftPiano4Fade*v6,1'^32^1
+## 121 (at beat 3.5)
+^8
+## 122
+>v0a4^16.'leftPiano4Fade*v6,1'^32^1
+## 123 (at beat 3.5)
+^4
+## 124 (at beat 1.5)
+<v0g16.'leftPiano4Fade*v6,1'^32^2
+## 125
+^1
+## 126 (at beat 2)
+v0g16.'leftPiano4Fade*v6,1'^32^1
+## 127 (at beat 3.5)
+^4
+## 128 (at beat 1.5)
+v0e16.'leftPiano4Fade*v6,1'^32^1
+## 129 (at beat 3)
+^4
+## 130
+>v0e16.'leftPiano4Fade*v6,1'^32^1
+## 131 (at beat 2.5)
+^4.
+## 132
+<v0d16.'leftPiano4Fade*v6,1'^32^1
+## 133 (at beat 2.5)
+^2
+## 134 (at beat 1.5)
+v0e16.'leftPiano4Fade*v6,1'^32^1
+## 135 (at beat 3)
+^4
+## 136
+>v0g16.'leftPiano4Fade*v6,1'^32^1
+## 137 (at beat 2.5)
+^4.
+## 138
+v0c16.'leftPiano4Fade*v6,1'^32^1
+## 139 (at beat 2.5)
+^8
+## Now at measure 3 beat 3, so time to go back to the big loop
+]
+
+$7139
+## Remainder of 139 (we're at beat 3)
+>g4
+## 140
+<c2
+[4
+  'melodyPanFlute+o1'
+  j4,7104
+  ## 140 / 144 / 148 (at beat 3)
+  g4
+  ## 141 / 145 / 149
+  g4.f8e-4
+  ## 142 / 146 / 150
+  f2 j2,7146 g4
+  ## 143 / 151
+  e-4
+  'timpani-o3''timpaniVol''timpaniPartialStrike'g4g4
+  ## 144 / 148 / 152
+  $7148
+  g2
+  
+]
+
+$7146
+## Remainder of measure 146 (we're at beat 3)
+e-4
+## 147
+'timpani-o3''timpaniVol''timpaniPartialStrike'
+g4
+'timpaniVol*v.5''timpaniFade*v60,.8'%g1[5 g16]^8.%g0'timpaniVol'
+## Then go abck to measure 148 in the loop
+;7148
+
+
+{8}
+%e1
+## Measure 1 lasts 1 beat
+r4
+$
+## 2 through 23. Time signature becomes 3/4 at measure 8.
+[18 r1]
+## 24
+'timpani-o3''timpaniRumble''timpaniVol*v.7'
+g4
+'guitar'
+[3
+  [2
+    ## Remainder of 24 / 25 / 28 / 29 / 32 / 33 (we're at beat 2), + 1 beat of 25 / 26 / 29 / 30 / 33 / 34
+    g8f8g2
+  ]
+  ## Remainder of 26 / 30 / 34
+  f8e-8f4
+  j2,831
+  ## 27 / 35, + 1 beat of 38/36
+  r4g8f8g2
+]
+## 36 (at beat 2)
+f8e-8f2
+## 37 (at beat 2)
+f8e-8f2
+## 38 (at beat 2)
+e-8d8e-2
+## 39 (at beat 2)
+## We want to play this harp arpeggio on the tambourine channel, but the first note clashes with the last tambourine hit so play it here.
+'harp'
+c8
+## Then immediately switch back to a quiet timpani slow roll
+'timpani-o3'
+l8
+'timpaniVol*v.6' 'timpaniPartialStrike' g16g16gg
+## 40
+g
+[3
+  ## Remainder of 40 / 92 / 140 (we're at beat 1.5)
+  r2r4.
+  ## 41 / 93 / 141 (at beat 2)
+  r1
+  ## 42 / 94 / 142 (at beat 3)
+  'panFluteAccentTrio'
+  ## Measure 43 / 95 / 143 (at beat 3)
+  'guitar'g8f8
+  ## 44 / 96 / 144
+  g1
+  ## 45 / 97 / 145 (at beat 2)
+  ^1
+  ## 46 / 98 / 146 (at beat 3)
+  'panFluteAccentTrioTruncated'
+  ## 47 / 99 / 147 (at beat 2)
+  'guitar'b-8g+8g8f8
+  ## 48 / 100 / 148
+  g16f16g1
+  ## 49 / 101 / 149 (at beat 2.5)
+  ^2^4.
+  ## 50 / 102 / 150 (at beat 3)
+  'panFluteAccentTrioTruncated'
+  ## 51 / 103 / 151 (at beat 2)
+  'guitar'g4f8g8
+  ## 52 / 104 / 152
+  g+4^2
+  ## 53 / 105 / 153
+  ^1
+  ## 54-55 / 106-107 / 154-155 (at beat 2)
+  b-4'panFluteAccentTrio'r4
+  j2,8108
+  ## 56 through 91 / 156 through 191
+  [27 r1]
+  ## 92 / 192
+  r8
+]
+## 192 (at beat 1.5)
+^8'supportStringsLate+o2'e-1.
+## 194 (at beat 2) + 195
+'stringsQuickAttack'f1.
+## 196 (at beat 2)
+g1
+## 197 (at beat 3)
+^1
+## 199
+^2.
+## 200-203
+'stringsLateRelease'^1^1^1
+;
+
+## ** Alternate loop variations for channel 8 **
+
+$831
+## 31
+'guitarQuietVol'g2.'guitarVol'
+## 32 - one beat then jump back to the loop
+r4]
+
+$8108
+## 108 through 139
+[47 r2]
+## 139 (at beat 2)
+'harpClimb'
+## 140, then back to the big loop
+r8
+]
+
+
+## ** Jump functions **
+
+
+## Plays a three-note series of pan flute accents with the most common notes (5b- 5a 5b-). The sequence lasts 3 beats.
+## This switches the current instrument to pan flute as well.
+#def panFluteAccentTrio= [j1,9000]
+$9000
+'panFluteAccents''panFluteVol''panFluteSustain'
+b-16'panFluteFastRelease'^16'panFluteSustain'a16'panFluteFastRelease'^16'panFluteSustain'b-4. 'panFluteRelease' m24,-1 ^8 'panFluteSustain'
+## Then go back to wherever we came from
+]
+
+## Plays a three-note series of pan flute accents with the standard notes, but without extending the last note with a pitch slide. The sequence lasts 2 beats.
+## This switches the current instrument to pan flute as well.
+#def panFluteAccentTrioTruncated= [j1,9001]
+$9001
+'panFluteAccents''panFluteVol''panFluteSustain'
+b-16'panFluteFastRelease'^16'panFluteSustain'a16'panFluteFastRelease'^16'panFluteSustain'b-4
+## Then go back to wherever we came from
+]
+
+## Plays a three-note series of pan flute accents where the notes are 2 semitones apart. The notes played are (6e 6d 6e).
+## The last note is held 2 beats longer than in panFluteAccentTrio (though it finishes releasing before then). The sequence lasts 5 beats.
+## This switches the current instrument to pan flute as well.
+#def panFluteAccentTrioExtended2Semitones= [j1,9002]
+$9002
+'panFluteAccents+o1''panFluteVol''panFluteSustain'
+e16'panFluteFastRelease'^16'panFluteSustain'd16'panFluteFastRelease'^16'panFluteSustain'e2 'panFluteRelease' m24,-1 ^2 'panFluteSustain'
+## Then go back to wherever we came from
+]
+
+## Switches to pan flute and plays 8 measures of pan flute accents, for the verses in the song (usable both during the harp verse and the clarinet verse)
+#def panFluteHalfVerse= [j1,9003]
+$9003
+## 1
+'panFluteAccents+o1' 'panFluteQuietVol''panFluteSustain''panFluteQuietAttack'r4g16'panFluteFastRelease'^16'panFluteSustain'f16'panFluteFastRelease'^16'panFluteSustain'g4.
+## 2 (at beat 1.5)
+'panFluteRelease'^8'panFluteSustain''panFluteVol''panFluteAttack'f16'panFluteFastRelease'^16'panFluteSustain'e-16'panFluteFastRelease'^16'panFluteSustain'f4.
+## 3 (at beat 1.5) + 4
+'panFluteRelease'^8'panFluteSustain'e-16'panFluteFastRelease'^16'panFluteSustain'd16'panFluteFastRelease'^16'panFluteSustain'e-1
+## 5
+^8'panFluteRelease'^8'panFluteSustain'd16'panFluteFastRelease'^16'panFluteSustain'c16'panFluteFastRelease'^16'panFluteSustain'd4.
+## 6 (at beat 1.5)
+'panFluteRelease'^8'panFluteSustain'c16'panFluteFastRelease'^16'panFluteSustain'>b-16'panFluteFastRelease'^16'panFluteSustain'<c4.
+## 7 (at beat 1.5)
+'panFluteRelease'^8'panFluteSustain''panFluteQuietVol''panFluteQuietAttack'd16'panFluteFastRelease'^16'panFluteSustain'e-16'panFluteFastRelease'^16'panFluteSustain'c4.
+## 8 (at beat 1.5)
+^2'panFluteRelease'^8'panFluteSustain'
+## Then go back to wherever we came from
+]
+
+## Switches to harp and plays 8 notes of the recurring harp climb. The last note isn't played because it tends to land on a different channel.
+## Lasts one beat.
+#def harpClimb= [j1,9006]
+$9006
+'harp'
+l16
+cde-g<cde-g<
+## Then go back to wherever we came from
+]

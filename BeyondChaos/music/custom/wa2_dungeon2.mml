@@ -12,7 +12,7 @@
 #WAVE 0x21 !0x86!~0x7F~ ## Horn
 #WAVE 0x22 0x82 ## Trumpet
 #WAVE 0x23 0xB5 ## Hammond Organ
-#WAVE 0x24 0x67 ## Strings
+#WAVE 0x24 0x66 ## Strings
 #WAVE 0x25 0x75 ## Choir
 #WAVE 0x26 0x52 ## Bass
 #WAVE 0x27 0x88 ## Brass
@@ -23,8 +23,7 @@
 #WAVE 0x2B 0x69 ## Orchestra Hit
 #WAVE 0x2C 0x2D ## Crash
 ##WAVE 0x2D 0x4D ## Toms
-#BRR 0x2D; ../samples/legacy/sm2f_x20_tom,   0000, 8000, F 7 7  0
-#WAVE 0x2E 0xC4 ## Backup Strings
+#BRR 0x2D; brr/top20_tom_tom,   D401, -11.226, FFF1
 
 #def init= t130 %x255 %v40 %b0,70 %f0,0
 
@@ -52,15 +51,13 @@
 #def lowAccentTrumpetLoVol=  'soloAccentTrumpetVol*v.4'
 #def leadTrumpetVol=         v64
 
-#def leadStringsVol=         v50
-#def accentStringsHiVol=     v77
-#def accentStringsLowVol=    v8 ## accentStringsHiVol * .1
-#def accentStringsFadeUp=    v120,77 ## Over 120 ticks, move to accentStringsHiVol
-#def accentStringsFadeDown=  v120,8  ## Over 120 ticks, move to accentStringsLowVol
+#def leadStringsVol=         v75
+#def accentStringsHiVol=     v103
+#def accentStringsLowVol=    v10 ## accentStringsHiVol * .1
+#def accentStringsFadeUp=    v120,102 ## Over 120 ticks, move to accentStringsHiVol
+#def accentStringsFadeDown=  v120,10 ## Over 120 ticks, move to accentStringsLowVol
 #def supportStringsPairVol=  'leadStringsVol*v.4'
 #def supportStringsTrioVol=  'leadStringsVol*v.33'
-
-#def leadStrings2Vol=         v75
 
 #def baseOrganVol=           v47
 #def highOrganSoloVol=      'baseOrganVol*v1.3'
@@ -98,10 +95,10 @@
 #def lowAccentTrumpetQuiet=  |7 o6 'lowAccentTrumpetLoVol'  p43  %r0           %e1 m
 #def leadTrumpet=            |2 o5 'leadTrumpetVol'         p64  'leadSustain' %e1 m
 
-#def accentStrings=          |4 o6 'accentStringsHiVol'     p114 %r0%s7        %e1 m24,18,192
-#def leadStrings=            |E o6 'leadStrings2Vol'        p64  %r6           %e1 m24,18,199v0,12,180
-#def supportStringsPair=     |4 o5 'supportStringsPairVol'  p100 %r0%a9%s7     %e1 m24,18,192
-#def supportStringsTrio=     |4 o5 'supportStringsTrioVol'  p100 %r0%a9%s7     %e1 m24,18,192
+#def accentStrings=          |4 o6 'accentStringsHiVol'     p114 %r0           %e1 m
+#def leadStrings=            |4 o6 'leadStringsVol'         p64  %r6           %e1 m
+#def supportStringsPair=     |4 o5 'supportStringsPairVol'  p100 %r0           %e1 m
+#def supportStringsTrio=     |4 o5 'supportStringsTrioVol'  p100 %r0           %e1 m
 
 #def highOrgan=              |3 o6 'organDuoVol'            p93  %r0           %e1 m
 #def lowOrgan=               |3 o6 'organDuoVol'            p93  %r0           %e1 m
@@ -113,24 +110,24 @@
 #def orchestraLeft=          |B o5 'orchestraLeftVol'       p21                %e1 m   
 #def orchestraCenter=        |B o5 'orchestraCenterVol'     p64                %e1 m   
 
-#### toms - pitched for EX5
-##drum "t"=5e  |D v100 p64       %e0 m
-##drum "u"=5f+ |D v100 p64       %e0 m
-##drum "v"=5g+ |D v100 p64       %e0 m
+## ## toms - pitched for EX5
+## #drum "t"=5e  |D v100 p64       %e0 m
+## #drum "u"=5f+ |D v100 p64       %e0 m
+## #drum "v"=5g+ |D v100 p64       %e0 m
 
-#### toms - pitched for external legacy
-#drum "t"=5g+ |D v100 p64       %e0 m
-#drum "u"=5b- |D v100 p64       %e0 m
-#drum "v"=6c  |D v100 p64       %e0 m
+## toms - pitched for external legacy
+#drum "t"=4e  |D v120 p64  %s5 %r22 %e0 m
+#drum "u"=4f+ |D v120 p64  %s5 %r22 %e0 m
+#drum "v"=4g+ |D v120 p64  %s5 %r22 %e0 m
 
-#drum "k"=5a  |8 v92  p75       %e0 m
-#drum "s"=6c+ |9 v108 p72       %e0 m
+#drum "k"=5a  |8 v92  p75           %e0 m
+#drum "s"=6c+ |9 v108 p72           %e0 m
 
-#drum "h"=6c+ |A v40  p75       %e0 m %y5
-#drum "o"=6c+ |A v40  p75       %e0 m %y2
-#drum "b"=6c+ |C v70  p21  %r16 %e0 m
-#drum "c"=6c+ |C v70  p64  %r16 %e0 m
-#drum "d"=6e  |C v70  p107 %r16 %e0 m
+#drum "h"=6c+ |A v40  p75           %e0 m %y5
+#drum "o"=6c+ |A v40  p75           %e0 m %y2
+#drum "b"=6c+ |C v70  p21      %r16 %e0 m
+#drum "c"=6c+ |C v70  p64      %r16 %e0 m
+#drum "d"=6e  |C v70  p107     %r16 %e0 m
 
 {1}
 'init'
@@ -170,7 +167,7 @@ g+4.f+1^4^8e-4
 ## 23
 f+4.f4.e-4.d4.>b-8^32 m18,4 ^16. <b-4
 ## 25
-g+4.f+2^8 f4.e-2^8 v
+g+4.f+2^8 f4.e-2^8
 ;
 
 

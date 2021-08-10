@@ -29,58 +29,62 @@
 #def init= t134 %x255 %v40 %b0,70 %f0,0
 
 ## Note that the use of "solo", "duo" and "trio" usually reference the number of channels playing the same layer, though volume adjustments in this arrangement are just a bit of a mess
-#def stringsBaseVol=          v70
+#def stringsBaseVol=          v63
 #def baseStringsVol=          'stringsBaseVol*v1.7'
-#def quietBaseStringsVol=     'stringsBaseVol*v1.2'
+#def quietBaseStringsVol=     'stringsBaseVol*v1.3'
 #def regularStringsVol=       'stringsBaseVol*v.7'
+#def stringsLateAssemblyVol=  'stringsBaseVol*v.6'
 #def regularStringsQuietVol=  'stringsBaseVol*v.5'
-#def melodyStringsDuoVol=     'stringsBaseVol*v.8'
+#def melodyStringsDuoVol=     'stringsBaseVol*v.7'
+#def melodyStringsDuoLateVol= 'stringsBaseVol*v.9'
 #def regularStringAccentVol=  'stringsBaseVol*v.55'
 #def stringAccentVol=         'buriedOctaveStringsVol*v1.45'
 #def stringAccentDuoVol=      'buriedOctaveStringsVol*v.75'
-#def buriedOctaveStringsVol=  v33
-#def normalOctaveStringsVol=  'buriedOctaveStringsVol*v1.3'
-#def baseOctaveStringsVol=    v127
-#def fluteVol=                v53
-#def fluteFade=             v1,53 ## Keep this in line with fluteVol
+#def buriedOctaveStringsVol=  v30
+#def normalOctaveStringsVol=  'buriedOctaveStringsVol*v1.2'
+#def baseOctaveStringsVol=    v117
+#def fluteVol=                v48
+#def fluteFade=             v1,48 ## Keep this in line with fluteVol
 #def soloFluteVol=            'fluteVol*v1.8'
-#def fluteDuoVol=             'fluteVol*v1.1'
-#def fluteQuietVol=           'fluteVol*v.8'
+#def fluteDuoVol=             'fluteVol*v1'
+#def fluteQuietVol=           'fluteVol*v.7'
 #def fluteTrioVol=            'fluteVol*v.65'
-#def piccoloVol=              v50
+#def piccoloVol=              v41
+#def piccoloLoudVol=          'piccoloVol*v1.2'
 #def piccoloQuietVol=         'piccoloVol*v.8'
 #def piccoloAccentVol=        'piccoloVol*v.8'
-#def mildClarinetVol=         v77
+#def mildClarinetVol=         v70
 #def mildClarinetLoudVol=     'mildClarinetVol*v1.3'
-#def mildClarinetLouderVol=   'mildClarinetVol*v1.7'
+#def mildClarinetLouderVol=   'mildClarinetVol*v1.5'
 #def mildClarinetDuoVol=      'mildClarinetVol*v.9'
 #def mildClarinetTrioVol=     'mildClarinetVol*v.9'
-#def harshClarinetVol=        v75
+#def harshClarinetVol=        v68
 #def harshClarinetTrioVol=    'harshClarinetVol*v.9'
-#def oboeVol=                 v70
-#def lowBrassVol=             v53
+#def oboeVol=                 v63
+#def lowBrassVol=             v48
 #def lowBrassLoudVol=         'lowBrassVol*v1.8'
-#def timpaniVol=              v105
-#def timpaniFade=           v1,105 ## Keep this in line with timpaniVol
+#def timpaniVol=              v95
+#def timpaniFade=           v1,95 ## Keep this in line with timpaniVol
 #def altTimpaniVol=           'timpaniVol*v.75'
 #def altTimpaniMidVol=        'timpaniVol*v.65'
 #def altTimpaniQuietVol=      'timpaniVol*v.5'
-#def trumpetTrioVol=          v49
-#def trumpetTrioFade=       v1,49 ## Keep this in line with trumpetTrioVol
+#def trumpetTrioVol=          v45
+#def trumpetTrioFade=       v1,45 ## Keep this in line with trumpetTrioVol
 #def trumpetDuoVol=           'trumpetTrioVol*v1.5'
-#def trumpetSoloVol=          'trumpetTrioVol*v1.4'
-#def octaveTrumpetHighVol=    v30
+#def trumpetMelodyDuoVol=     'trumpetTrioVol*v1.3'
+#def trumpetSoloVol=          'trumpetTrioVol*v1.6'
+#def octaveTrumpetHighVol=    v32
 #def octaveTrumpetLowVol=     'octaveTrumpetHighVol*v.7'
-#def hornVol=                 v49
+#def hornVol=                 v44
 #def hornTrioVol=             'hornVol*v0.95'
-#def hornDuoVol=              'hornVol*v1.3'
-#def hornSoloVol=             'hornVol*v1.8'
+#def hornDuoVol=              'hornVol*v1.2'
+#def hornSoloVol=             'hornVol*v1.6'
 #def hornSoloAccentsVol=      'hornVol*v2.6'
-#def hornSoloQuietVol=        'hornVol*v1.4'
-#def hornSoloQuieterVol=      'hornVol*v1'
+#def hornSoloQuietVol=        'hornVol*v1.6'
+#def hornSoloQuieterVol=      'hornVol*v1.1'
 ## This is just a base vol, it shouldn't be used directly. Multiplications will be applied on it, with the highest factor being 0.6.
-#def snareBaseVol=            v130
-#def tambourineBaseVol=       v57
+#def snareBaseVol=            v117
+#def tambourineBaseVol=       v52
 #def tambourineLowVol=        'tambourineBaseVol*v.71'
 
 #def stringsNormalAttack= %a8
@@ -125,30 +129,30 @@
 #def octaveTrumpet=        |D o5           'octaveTrumpetHighVol'    p34                 'trumpetAttack'      
 #def horn=                 |2 o5           'hornVol'                 p79                                      
 
-#drum "b"= 5b  |A v127                p64 %r17 ## Shorter version for when channels are really short. Should be used when only 2 beats are available.
-#drum "c"= 5b  |A v127                p64
+#drum "b"= 5b  |A v120                p64 %r17 ## Shorter version for when channels are really short. Should be used when only 2 beats are available.
+#drum "c"= 5b  |A v120                p64
 #drum "x"= 4d  |C v127                p64
 #drum "y"= 5g+ |C 'tambourineLowVol'  p64
 #drum "z"= 5g+ |C 'tambourineBaseVol' p64
 ## Bunch of snares with different volumes...
-#drum "d"= 5g+ |B ~'snareBaseVol*v.1' ~ `'snareBaseVol*v.15' p64`
-#drum "e"= 5g+ |B ~'snareBaseVol*v.12'~ `'snareBaseVol*v.15' p64`
-#drum "f"= 5g+ |B ~'snareBaseVol*v.13'~ `'snareBaseVol*v.15' p64`
-#drum "g"= 5g+ |B ~'snareBaseVol*v.15'~ `'snareBaseVol*v.15' p64`
-#drum "h"= 5g+ |B ~'snareBaseVol*v.16'~ `'snareBaseVol*v.15' p64`
-#drum "i"= 5g+ |B ~'snareBaseVol*v.2' ~ `'snareBaseVol*v.25' p64`
-#drum "j"= 5g+ |B ~'snareBaseVol*v.21'~ `'snareBaseVol*v.25' p64`
-#drum "k"= 5g+ |B ~'snareBaseVol*v.24'~ `'snareBaseVol*v.25' p64`
-#drum "l"= 5g+ |B ~'snareBaseVol*v.25'~ `'snareBaseVol*v.25' p64`
-#drum "m"= 5g+ |B ~'snareBaseVol*v.3' ~ `'snareBaseVol*v.35' p64`
-#drum "n"= 5g+ |B ~'snareBaseVol*v.33'~ `'snareBaseVol*v.35' p64`
-#drum "o"= 5g+ |B ~'snareBaseVol*v.36'~ `'snareBaseVol*v.35' p64`
-#drum "p"= 5g+ |B ~'snareBaseVol*v.38'~ `'snareBaseVol*v.35' p64`
-#drum "q"= 5g+ |B ~'snareBaseVol*v.39'~ `'snareBaseVol*v.35' p64`
-#drum "r"= 5g+ |B ~'snareBaseVol*v.49'~ `'snareBaseVol*v.50' p64`
-#drum "s"= 5g+ |B ~'snareBaseVol*v.5' ~ `'snareBaseVol*v.50' p64`
-#drum "t"= 5g+ |B ~'snareBaseVol*v.52'~ `'snareBaseVol*v.50' p64`
-#drum "u"= 5g+ |B ~'snareBaseVol*v.6' ~ `'snareBaseVol*v.60' p64`
+#drum "d"= 5g+ |B ~'snareBaseVol*v.1' ~ `'snareBaseVol*v.15'` p64
+#drum "e"= 5g+ |B ~'snareBaseVol*v.12'~ `'snareBaseVol*v.15'` p64
+#drum "f"= 5g+ |B ~'snareBaseVol*v.13'~ `'snareBaseVol*v.15'` p64
+#drum "g"= 5g+ |B ~'snareBaseVol*v.15'~ `'snareBaseVol*v.15'` p64
+#drum "h"= 5g+ |B ~'snareBaseVol*v.16'~ `'snareBaseVol*v.15'` p64
+#drum "i"= 5g+ |B ~'snareBaseVol*v.2' ~ `'snareBaseVol*v.25'` p64
+#drum "j"= 5g+ |B ~'snareBaseVol*v.21'~ `'snareBaseVol*v.25'` p64
+#drum "k"= 5g+ |B ~'snareBaseVol*v.24'~ `'snareBaseVol*v.25'` p64
+#drum "l"= 5g+ |B ~'snareBaseVol*v.25'~ `'snareBaseVol*v.25'` p64
+#drum "m"= 5g+ |B ~'snareBaseVol*v.3' ~ `'snareBaseVol*v.35'` p64
+#drum "n"= 5g+ |B ~'snareBaseVol*v.33'~ `'snareBaseVol*v.35'` p64
+#drum "o"= 5g+ |B ~'snareBaseVol*v.36'~ `'snareBaseVol*v.35'` p64
+#drum "p"= 5g+ |B ~'snareBaseVol*v.38'~ `'snareBaseVol*v.35'` p64
+#drum "q"= 5g+ |B ~'snareBaseVol*v.39'~ `'snareBaseVol*v.35'` p64
+#drum "r"= 5g+ |B ~'snareBaseVol*v.49'~ `'snareBaseVol*v.50'` p64
+#drum "s"= 5g+ |B ~'snareBaseVol*v.5' ~ `'snareBaseVol*v.50'` p64
+#drum "t"= 5g+ |B ~'snareBaseVol*v.52'~ `'snareBaseVol*v.50'` p64
+#drum "u"= 5g+ |B ~'snareBaseVol*v.6' ~ `'snareBaseVol*v.60'` p64
 
 {1}
 'init'%e1
@@ -245,7 +249,7 @@ b<e-f+b-b
 [2
   ## 65 / 73
   ## High Upper Strings, A mix of notes from channels 21 and 22 in VGMTrans output
-  'regularStrings+o2''melodyStringsDuoVol'
+  'regularStrings+o2''melodyStringsDuoLateVol'
   e1
   ## 66 / 74
   e-2g+2
@@ -395,7 +399,7 @@ r1
 ## 45
 ## High Trumpet, channel 11 in VGMTrans output
 'trumpet+o1'
-'trumpetDuoVol'
+'trumpetMelodyDuoVol'
 'trumpetQuickAttack'
 l24
 r2.c+8e-eg+
@@ -817,7 +821,7 @@ r1
 ## 45
 ## Low Trumpet, channel 14 in VGMTrans output
 'trumpet'
-'trumpetDuoVol'
+'trumpetMelodyDuoVol'
 'trumpetQuickAttack'
 l24
 r2.c+8e-eg+
@@ -863,7 +867,7 @@ r1
 [2
   ## 65 / 73
   ## Middle Strings High, a mix of notes from channels 25 and 26 in VGMTrans output
-  'regularStrings+o1'
+  'regularStrings+o1''stringsLateAssemblyVol'
   c+1
   ## 66 / 74
   >b1
@@ -897,7 +901,7 @@ g+2e2
 l8
 r4ag+f+er4
 ## 78
-'mildClarinetVol'
+'mildClarinetDuoVol'
 r4<c+>bag+f+e
 ## 79
 r4bag+f+r4
@@ -997,7 +1001,7 @@ b<e-f+b-b
 [2
   ## 65 / 73
   ## Middle Strings Low, a mix of notes from channels 25 and 26 in VGMTrans output
-  'regularStrings''regularStringsQuietVol'
+  'regularStrings''stringsLateAssemblyVol'
   g+1
   ## 66 / 74
   ^1
@@ -1012,7 +1016,7 @@ b<e-f+b-b
   ^1
   ## 71
   ## High Strings, channel 25 in VGMTrans output
-  'regularStrings'
+  'regularStrings''stringsMidAttack''melodyStringsDuoLateVol'
   rc+g+f+bg+<e-e
   ## 72
   f+g+c+e->bf+ee-
@@ -1176,7 +1180,7 @@ b-4.b-4b-8<f4
   "!!!oc1"
   ## 66 / 74
   ## Low Upper Strings, A mix of notes from channels 21 and 22 in VGMTrans output
-  'regularStrings+o1''melodyStringsDuoVol'
+  'regularStrings+o1''melodyStringsDuoLateVol'
   e-2g+2
   ## 67 / 75
   c+1

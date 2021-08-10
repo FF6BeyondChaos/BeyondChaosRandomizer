@@ -134,7 +134,7 @@ b-2. 'lateDcy' ^2 'lateSst'
 ## Late Alt Support 1
 'lateAltSupport1+o1'
 l8
-p0 gdg p127 ada p0 b-d p127 <c>a
+p0 gdg p127 ada p0 b-d p127 <c>d
 ## Late Support 1
 'lateSupport1+o1'
 ## 31

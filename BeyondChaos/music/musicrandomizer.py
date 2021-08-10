@@ -457,7 +457,7 @@ def get_spc_memory_usage(mml, subpath=None, custompath=CUSTOM_MUSIC_PATH, varian
 
 ############ variant processing
 
-def apply_variant(mml, type, name="", variant="_default_", check_size=False):
+def apply_variant(mml, vartype, name="", variant="_default_", check_size=False):
     
     def wind_increment(m):
         val = int(m.group(1))
@@ -472,17 +472,17 @@ def apply_variant(mml, type, name="", variant="_default_", check_size=False):
     append_mml = None
     orig_mml = mml
     
-    if type == "rain":
+    if vartype == "rain":
         use_sfxv = True
         append_mml = "append_rain.mml"
-    elif type == "wind":
+    elif vartype == "wind":
         use_sfxv = True
         append_mml = "append_wind.mml"
         try:
             mml = re.sub("\{[^}']*?([0-9]+)[^}]*?\}", wind_increment, mml)
         except ValueError:
             print("WARNING: failed to add wind sounds ({})".format(name))
-    elif type == "train":
+    elif vartype == "train":
         append_mml = "append_train.mml"
         mml = re.sub("#BRR 0x2F", "#### 0x2F", mml)
         mml = re.sub("\{[^}]*?([0-9]+)[^}]*?\}", "$888\g<1>", mml)
@@ -497,9 +497,9 @@ def apply_variant(mml, type, name="", variant="_default_", check_size=False):
             print("couldn't open {}".format(sfx))
     if check_size:
         if not name:
-            name = type
+            name = vartype
         seq = mml_to_akao(mml, name, use_sfxv, variant=variant)
-        if len(seq) > 0x1002:
+        if len(seq[0]) > 0x1002:
             mml = orig_mml
     return mml
     
