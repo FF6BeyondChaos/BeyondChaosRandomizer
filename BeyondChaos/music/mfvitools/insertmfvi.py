@@ -597,6 +597,7 @@ def insertmfvi(inrom, argparam=None, virt_sample_list=None, virt_seq_list=None, 
     else:
         initialize()
         args = argparse.Namespace()
+        args.dump_brr = False
         args.quiet = quiet
         args.mmlfiles = None
         args.binfiles = None
