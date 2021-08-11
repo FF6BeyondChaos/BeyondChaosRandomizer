@@ -5,8 +5,9 @@
 
 #SHORTNAME HOMM2 Sorceress
 
-#VARIANT ~
+#VARIANT ~_ 
 #VARIANT ` tr
+#VARIANT ~ sfx
 
 #WAVE 0x20 0x61 ## Harp
 #WAVE 0x21 0x99 ## Bagpipe
@@ -1405,7 +1406,6 @@ r4'panFluteAccentTrioExtended2Semitones'
 %k0
 r4<c16'panFluteFastRelease'^16'panFluteSustain'>b16'panFluteFastRelease'^16'panFluteSustain'<c2 'panFluteRelease' m24,-1 ^2 'panFluteSustain']
 
-
 {7}
 %e1
 $
@@ -1626,7 +1626,7 @@ g4
 ;7148
 
 
-{8}
+{8} `r;` _
 %e1
 ## Measure 1 lasts 1 beat
 r4
@@ -1731,7 +1731,7 @@ $8108
 ## 140, then back to the big loop
 r8
 ]
-
+_
 
 ## ** Jump functions **
 
