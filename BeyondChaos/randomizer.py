@@ -79,8 +79,8 @@ BETA = True
 VERSION_ROMAN = "I"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
-TEST_SEED = "1.normal.bcdefgijkmnopqrstuwyzpartypartyfrenchvanillaelectricboogaloorandombossesalasdracocapslockoffjohnnydmadnotawaiterexpgpdancelessonsnomiabs.1626543745"
+TEST_ON = True
+TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosses.1628211779"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -1607,6 +1607,11 @@ def name_swd_techs(fout):
          0x82, 0xa5, 0x9e, 0x9a, 0xaf, 0x9e, 0xff,
          0xff, 0xff, 0xff,])
     swd_tech_sub.write(fout)
+
+    repoint_jokerdoom_sub = Substitution()
+    repoint_jokerdoom_sub.set_location(0x0236B9)
+    repoint_jokerdoom_sub.bytestring = bytes([0x94])
+    repoint_jokerdoom_sub.write(fout)
 
 
 def manage_skips():
