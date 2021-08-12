@@ -12,6 +12,7 @@ from typing import BinaryIO, Callable, Dict, List, Set, Tuple
 
 import character
 import chestrandomizer
+import dialoguemanager
 import esperrandomizer
 import formationrandomizer
 import itemrandomizer
@@ -29,7 +30,9 @@ from chestrandomizer import mutate_event_items, get_event_items
 from decompress import Decompressor
 from dialoguemanager import (manage_dialogue_patches, get_dialogue,
                              set_dialogue, read_dialogue,
-                             read_location_names, write_location_names)
+                             read_location_names, write_location_names,
+                             load_custom_words, load_patch_file,
+                             initialize_pronouns)
 from esperrandomizer import (get_espers, allocate_espers, randomize_magicite)
 from formationrandomizer import (REPLACE_FORMATIONS, KEFKA_EXTRA_FORMATION,
                                  NOREPLACE_FORMATIONS, get_formations,
@@ -222,7 +225,7 @@ def Reset():
     reload(music.musicrandomizer)
     reload(towerrandomizer)
     reload(chestrandomizer)
-
+    reload(dialoguemanager)
 
 def reseed():
     global seedcounter
@@ -4751,7 +4754,8 @@ def randomize(**kwargs) -> str:
 
     read_dialogue(fout)
     read_location_names(fout)
-
+    initialize_pronouns()
+    
     if Options_.shuffle_commands or Options_.replace_commands or Options_.random_treasure:
         auto_recruit_gau(stays_in_wor=not Options_.shuffle_wor and not Options_.is_code_active('mimetime'))
         if Options_.shuffle_commands or Options_.replace_commands:
@@ -5117,6 +5121,9 @@ def randomize(**kwargs) -> str:
 
     randomize_poem(fout)
     randomize_passwords()
+    if Options_.is_code_active('shouldweask'):
+        load_custom_words()
+        load_patch_file('dialogue')
     reseed()
 
     # ----- NO MORE RANDOMNESS PAST THIS LINE -----

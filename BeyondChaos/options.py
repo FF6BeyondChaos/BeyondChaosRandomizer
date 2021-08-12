@@ -287,6 +287,7 @@ NORMAL_CODES = [
     
     Code('rushforpower', "OLD VARGAS FIGHT MODE", "Reverts the Vargas fight to the way it was before Beyond Chaos EX.", "major", "checkbox"),
     Code('strangejourney', "BIZARRE ADVENTURE", "A prototype entrance Randomizer, similar to the ancientcave mode. Includes all maps and event tiles, and is usually extremely hard to beat by itself.", "experimental", "checkbox"),
+    Code('shouldweask', "SCRIPT MANGLING MODE", "(Very incomplete) Applies edits to the script to match dialogue with character appearance changes (mostly pronouns and such), and randomizes a few other bits of dialogue.", "experimental", "checkbox"),
     
     Code('suplexwrecks', "SUPLEX MODE", "All characters use the Sabin sprite, as well as having a name similar to Sabin. All characters have the Blitz and Suplex commands, and every enemy can be hit by Suplex.", "major", "checkbox"),
     Code('thescenarionottaken', 'DIVERGENT PATHS MODE', "Changes the way the 3 scenarios are split up.", "experimental", "checkbox"),
