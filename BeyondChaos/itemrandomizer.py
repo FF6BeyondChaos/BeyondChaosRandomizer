@@ -4,6 +4,7 @@ from utils import (hex2int, write_multi, read_multi, ITEM_TABLE,
                    name_to_bytes, utilrandom as random,
                    Substitution)
 from skillrandomizer import get_ranked_spells
+from options import Options_
 
 # future blocks: chests, morphs, shops
 
@@ -359,6 +360,8 @@ class ItemBlock:
                 nochange |= 0x10
         self.features[feature] = bit_mutate(self.features[feature], op="on",
                                             nochange=nochange)
+        self.mutate_name()
+
 
     def mutate_break_effect(self, always_break=False, wild_breaks=False):
         global effects_used
@@ -404,6 +407,7 @@ class ItemBlock:
             self.features['otherproperties'] &= 0xFB
 
         self.features['targeting'] = spell.targeting & 0xef
+        self.mutate_name()
 
     def mutate_elements(self):
         if self.is_consumable or self.is_tool:
@@ -417,6 +421,7 @@ class ItemBlock:
             elements = 0
             while elemcount > 0:
                 elements = elements | (1 << random.randint(0, 7))
+                self.mutate_name()
                 elemcount += -1
             return elements
 
@@ -460,6 +465,7 @@ class ItemBlock:
             return
 
         self.features['specialaction'] = (new_action << 4) | (self.features['specialaction'] & 0x0f)
+        self.mutate_name()
 
     def mutate_stats(self):
         if self.is_consumable:
@@ -583,6 +589,7 @@ class ItemBlock:
                 self.mutate_special_action()
             if 10 <= x < 20 and not learned:
                 self.mutate_learning()
+                self.mutate_name()
             if 20 <= x < 50 and not broken:
                 self.mutate_break_effect(wild_breaks=wild_breaks)
                 broken = True
@@ -601,6 +608,13 @@ class ItemBlock:
                 self.mutate_feature()
             while random.randint(1, 3) == 3:
                 self.mutate_feature()
+
+    def mutate_name(self):
+        if Options_.is_code_active("questionablecontent") and not self.is_consumable and '?' not in self.name:
+            self.name = self.name[:11] + '?'
+            # Index on self.dataname is [1:] because the first character determines the
+            #   equipment symbol (helmet/shield/etc).
+            self.dataname[1:] = name_to_bytes(self.name, len(self.name))
 
     def rank(self):
         if self._rank:
