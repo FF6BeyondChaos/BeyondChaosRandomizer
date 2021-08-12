@@ -3,19 +3,19 @@
 #COMPOSER Nobuo Uematsu
 #ARRANGED emberling
 
-#WAVE 0x20 0x0D
-#WAVE 0x21 0x07
-#WAVE 0x22 0x1B
+#WAVE 0x20 0x65
+#WAVE 0x21 0xA5
+#WAVE 0x22 0x61
 
-#def init= t76 %x240 %v50 %b0,85 %f0,0
+#def init= t76 %x184 %v50 %b0,85 %f0,0
 
 #def str= |0 o5 's' m48,18,199
 #def flt= |1 o4 'f' m48,18,239 %r10
 #def hrp= |2 o5 'h' m
 
-#def s= v32
-#def f= v56
-#def h= v40
+#def s= v48
+#def f= v84
+#def h= v96
 
 #def slow= %a6%r3
 #def fast= %a12%r7
@@ -117,11 +117,12 @@ $##10
 ra2.. rg2.. rb2.. ra2..
 ra4.ra4. rb2<g4.> ra2<a4.> ra4.^24'hold'e8a12^32<c16.<c16.a32
 ##18
-'hrp-o2''decay' l8
-f<f<ca <f>ac>f>    f<g<db <g>bd>g>
-e<eb<g <e>g>be>    a<a<e<c ac>e>a>
-f<f<ca <f>ac>f>    f+<d+<cf+ <c>f+c>f+>
-e<eb<g+ <e>g+>be>  g<g<db <g>bd>g
+^16
+'hrp-o1''decay' l8
+   ca<f<cc>f>ac16     r16db<g<dd>g>bd16
+r16>b<g<ebbe>g>b16<   r16e<ca<ee>ac>e16
+r16ca<f<cc>f>ac16     r16ca<d+aad+>ad+16
+r16>b<g+<ebbe>g+>b16< r16db<g<dd>g>bd16
 ;
 
 {8}
@@ -133,9 +134,9 @@ $##10
 rd2. rd2. re2. re2.
 rdrc re2e re2e re^12'hold'>a8<c24^16e16.<e16.
 ##18
-'hrp-o1''decay' l8
-r16ca<f<cc>f>ac16     r16db<g<dd>g>bd16
-r16>b<g<ebbe>g>b16<   r16e<ca<ee>ac>e16
-r16ca<f<cc>f>ac16     r16ca<d+aad+>ad+16
-r16>b<g+<ebbe>g+>b16< r16db<g<dd>g>bd16
+'hrp-o2''decay' l8
+f<f<ca <f>ac>f>    f<g<db <g>bd>g>
+e<eb<g <e>g>be>    a<a<e<c ac>e>a>
+f<f<ca <f>ac>f>    f+<d+<cf+ <c>f+c>f+>
+e<eb<g+ <e>g+>be>  g<g<db <g>bd>g
 ;

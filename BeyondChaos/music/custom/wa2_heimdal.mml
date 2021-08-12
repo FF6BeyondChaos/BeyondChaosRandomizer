@@ -28,11 +28,11 @@
 #def trumpetVol=            v60
 #def trumpetFade=         v1,60 ## Keep this in synch with trumpetVol
 
-#def melodyStringsVol=      v75
-#def melodyStringsDuoVol=   v60
-#def melodyStringsDuoFade=v1,60 ## Keep this in synch with melodyStringsDuoVol
-#def supportStringsVol=     v70
-#def melodyStringsFade=   v1,70 ## Keep this in synch with melodyStringsVol
+#def melodyStringsVol=      v60
+#def melodyStringsFade=   v1,60 ## Keep this in synch with melodyStringsVol
+#def melodyStringsDuoVol=   v48
+#def melodyStringsDuoFade=v1,48 ## Keep this in synch with melodyStringsDuoVol
+#def supportStringsVol=     v56
 #def backingStringsVol=     v32
 #def backingStringsDuoVol=  v25
 
@@ -43,7 +43,7 @@
 #def hornRelease= %r26
 
 #def trumpetSustain=        %r0
-#def trumpetPartialSustain= %r12
+#def trumpetPartialSustain= %r10
 #def trumpetPartialRelease= %r16
 #def trumpetRelease= %r26
 
@@ -54,21 +54,21 @@
 
 #def bass=           |4 o7     'bassVol'           p70  'bassSustain'           %e0 m
 #def timpani=        |5 o6     'timpaniVol'        p95                          %e1 m
-#def guitar=         |1 o5     'guitarVol'         p10  %r14                    %e1 m
-#def horn=           |3 o5     'hornVol'           p100 'hornSustain'           %e1 m
+#def guitar=         |1 o5     'guitarVol'         p14  %r14                    %e1 m
+#def horn=           |3 o5     'hornVol'           p90  'hornSustain'           %e1 m
 #def melodyStrings=  'strings' 'melodyStringsVol'  p64  'stringsSustain'        %e1 m
 #def supportStrings= 'strings' 'supportStringsVol' p64  'stringsSustain'        %e1 m
-#def backingStrings= 'strings' 'backingStringsVol' p114 'stringsSustain'        %e1 m
+#def backingStrings= 'strings' 'backingStringsVol' p110 'stringsSustain'        %e1 m
 #def trumpet=        |2 o5     'trumpetVol'        p64  'trumpetPartialSustain' %e1 m
 
-#drum "k"=5a  |8 v70  p75       %e0 m
-#drum "u"=5d  |C v80  p100      %e0 m
-#drum "t"=5c  |C v80  p107      %e0 m
-#drum "s"=6c+ |9 v80  p73       %e0 m
+#drum "k"=5a  |8 v80  p75       %e0 m
+#drum "u"=5d  |C v70  p85       %e0 m
+#drum "t"=5c  |C v70  p107      %e0 m
+#drum "s"=6c+ |9 v90  p73       %e0 m
 
 #drum "h"=6c+ |B v50  p47       %e0 m %y5
 #drum "o"=6c+ |B v50  p47       %e0 m %y2
-#drum "c"=6c+ |A v127 p64  %r18 %e0 m
+#drum "c"=6c+ |A v127 p55  %r18 %e0 m
 
 {1}
 'init'
@@ -78,11 +78,11 @@ $
 ## Melody Horn
 'horn'
 ## 2
-f4 'hornRelease'  ^4 'hornSustain' f16.'hornRelease'^16.> 'hornSustain'b-16.'hornRelease'^16.<'hornSustain'f16 'hornRelease'^16 'hornSustain'
+f4.r8f16.r16.>b-16.r16.<f16.r32
 ## 3
-f+4 'hornRelease' ^4 'hornSustain' f+16.'hornRelease'^16. 'hornSustain'c+16.'hornRelease'^16. 'hornSustain'f+16'hornRelease'^16'hornSustain'
+f+4.r8f+16.r16.c+16.r16.f+16.r32
 ## 4
-g+4 'hornRelease' ^4 'hornSustain' g+16.'hornRelease'^16. 'hornSustain'e-16.'hornRelease'^16. 'hornSustain'g+16'hornRelease'^16'hornSustain'
+g+4.r8g+16.r16.e-16.r16.g+16.r32
 ## 5
 b-1
 ## Melody Strings
@@ -143,13 +143,14 @@ l4
 f+g+b-<c
 ## Melody Strumpet
 'trumpet+o1'
+'trumpetSustain'
 [2
   ## 6 / 10
-  'trumpetSustain'f2f16.'trumpetRelease'^16.> 'trumpetSustain'b-16.'trumpetRelease'^16.<'trumpetSustain'f16 'trumpetRelease'^16 'trumpetSustain'
+  f2f16.r16.>b-16.r16.<f16.r32
   ## 7 / 11
-  f+2f+16.'trumpetRelease'^16. 'trumpetSustain'c+16.'trumpetRelease'^16. 'trumpetSustain'f+16'trumpetRelease'^16'trumpetSustain'
+  f+2f+16.r16.c+16.r16.f+16.r32
   ## 8 / 12
-  g+2 j2 g+16.'trumpetRelease'^16. 'trumpetSustain'e-16.'trumpetRelease'^16. 'trumpetSustain'g+16'trumpetRelease'^16'trumpetSustain'
+  g+2 j2 g+16.r16.e-16.r16.g+16.r32
   ## 9
   b-1
 ]
@@ -225,7 +226,7 @@ r2..b16b16
 ## 4
 br2.
 ## 5
-br 'timpaniVol*v.6''timpaniFade*v96,1'[10 b24]b12
+'timpaniVol*v1.4'br 'timpaniVol*v.6''timpaniFade*v96,1'[10 b24]b12
 [4
   ## 6 / 8 / 10 / 12
   b
@@ -365,11 +366,33 @@ c+1^1
 ## 4
 cc+2%l1e-4.g+8%l0
 ## 6
-c+1.r2
+c+1.r4.
+## Squeeze a timpani note here
+'timpani-o2'
+b16r16
+## Backing Strings Low Note
+'backingStrings'
 ## 8
-cc+2e-2
+cc+2e-4.
+## Squeeze a timpani note here
+'timpani-o2'
+b16r16
+## Backing Strings Low Note
+'backingStrings'
 ## 10
-c+1^1cc+2e-2
+c+1...
+## Squeeze a timpani note here
+'timpani-o2'
+b16r16
+## Backing Strings Low Note
+'backingStrings'
+## 12
+cc+2e-4.
+## Squeeze a timpani note here
+'timpani-o2'
+b16r16
+## Backing Strings Low Note
+'backingStrings'
 ## 14
 'backingStringsDuoVol'
 c+1^1
@@ -382,5 +405,5 @@ c+
 ## 21
 ## Abandon the Strings to play the timpani
 'timpani-o2'
-'timpaniVol*v.5'r6'timpaniFade*v144,1'[18 b-24]b-12
+'timpaniVol*v.5'r6'timpaniFade*v144,1'[18 a24]a12
 ;

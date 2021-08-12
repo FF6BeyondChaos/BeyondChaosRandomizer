@@ -1,0 +1,109 @@
+#TITLE Ceremony
+#ALBUM Secret of Mana
+#COMPOSER Hiroki Kikuta
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.5
+
+#WAVE 0x20 0x73
+#BRR 0x21; brr/sd2_21_gamelan, A00E, 0000, FFEC, {674}
+#WAVE 0x22 0xA5
+#WAVE 0x23 0x28
+#WAVE 0x25 0x2D
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v100
+#def 2f= v1,100
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |0
+#def 4o=   o5
+#def 4v=   v100
+#def 4f= v1,100
+
+#def 5i=   |5
+#def 5o=   o5
+#def 5v=   v200
+#def 5f= v1,200
+
+## auto percussion  0x25
+##drum "h"= 3f+
+##drum "i"= 4c+
+##drum "h"= 3g+ %y0%s3
+##drum "i"= 4d+ %y0%s3
+#drum "h"= 3c %y0%s5
+#drum "i"= 3g %y0%s5
+
+
+{1}
+
+$101t86%f0,0%v64%b0,74p104'0v*v.80'
+'0i' %e1%a5%r3m12,18,197'0o-o2'a1^1^1^1^1a1^1^1^1a1^1^1^1a1^1^1^1
+;101
+
+
+{2}
+
+$201p24'0v*v.80'
+'0i' %e1%a5%r3%p1m12,18,197'0o-o2'd+1^1^1^1^1d1^1^1^1d1^1^1^1d1^1^1^1
+;201
+
+
+{3}
+
+$301p80'1v*v.75'
+'1i' %e1r1'1o'f4e4c4f4b4g4f4b4f4e4c4f4b4g4<c4>b4f4e4c4f4b4g4f4b4f4e4c4
+f4b4g4<c4>b4f4e4c4f4b4g4f4b4f4e4c4f4b4g4<c4>b4f4e4c4f4b4g4f4b4f4e4c4f4
+b4g4<c4>b4
+;301
+
+
+{4}
+
+$401p48'1v*v.75'
+'1i' %e1r1'1o-o1'e8f16g16b8f8e8b8g8f8e8f16g16b8f8e8b8g16b16g16f16e8f16
+g16b8f8e8b8g8f8e8f16g16b8f8e8b8g16b16g16f16e8f16g16b8f8e8b8g8f8e8f16g16
+b8f8e8b8g16b16g16f16e8f16g16b8f8e8b8g8f8e8f16g16b8f8e8b8g16b16g16f16p88
+'4v*v.50'
+'4i' %a5%r4m63,2m15,16,200'4o'b1^1^1^1m63,2b1^1^1^1m
+;401
+
+
+{5}
+
+$501p64'2v*v.45'
+'2i' %e1m0,15,200%a6r1r8'2o-o1'g4d4f+4g8^8<d4c+4>a4g8^8f+4g4d4f+8^8g4<
+c+4>a4g8r8g4d4f+4g8^8<d4c+4>a4g8^8f+4g4d4f+8^8g4<c+4>a4g8p72'4v*v.50'
+'4i' %a5%r4m63,2m15,16,200'4o'e1^1^1^1m63,2e1^1^1^1m
+;501
+
+
+{6}
+
+$601p56'3v*v1.27'
+'3i' %e1%a15%y0%s6%r11'3o-o3'a+1r1r1r1r1r1r1r1r1p56
+'5i' %r3m15,16,200['5v*v.74''5f*v255,.37'm63,2"!!!o i1"^1^1^1]m
+;601
+
+
+{7}
+
+$701p72'3v*v1.27'
+'3i' %e1%p1%a15%y2%s4%r11k-83'3o-o3'a+1r1r1r1r1r1r1r1r1p40
+'5i' %p0%r3m15,16,200['5v*v.7''5f*v255,.35'm63,2"!!!o h1"^1^1^1]m
+;701
+

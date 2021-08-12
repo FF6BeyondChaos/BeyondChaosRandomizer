@@ -11,7 +11,7 @@
 #WAVE 0x20 0x65 strings
 #WAVE 0x21 0x50 acbass
 #WAVE 0x22 0x60 harp
-#BRR 0x23; brr/ff6_15, 0000, 0000, FFE0, {212} FF6 JazzPats
+#BRR 0x23; ../samples/legacy/15_snapping_fingers, 0000, 0000, FFE0, {212} FF6 JazzPats
 #WAVE 0x24 0x01 hipiano
 #WAVE 0x26 0xAA air wrench
 ##WAVE 0x2A 0x91 oboe B6 (G+6+)
