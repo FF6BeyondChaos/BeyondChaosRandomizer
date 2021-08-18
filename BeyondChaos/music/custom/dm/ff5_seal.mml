@@ -1,0 +1,177 @@
+#TITLE Sealed Away
+#ALBUM Final Fantasy V
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.5
+
+#VARIANT ~_ 
+#VARIANT ~` tier1
+#VARIANT ?` tier2
+#VARIANT ?_ tier3
+
+#WAVE 0x20 0xB0 oboe -> organ
+#WAVE 0x21 0x1B wood block -> snare
+#WAVE 0x22 0x75 strings -> soprano vox
+#WAVE 0x23 0xD1 bass
+#WAVE 0x24 0x5A timpani
+#WAVE 0x25 0xB7 clavi -> alto vox
+#WAVE 0x26 0x06 harp
+#WAVE 0x27 0x73 clavi lo -> tenor vox
+#WAVE 0x28 0x28 tbell
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v50
+#def 0f= v1,50
+
+#def 1i=   |1
+#def 1o=   
+#def 1v=   v50
+#def 1f= v1,50
+
+#def 2i=   |2
+#def 2o=   o4
+#def 2v=   v113
+#def 2f= v1,113
+
+#def 3i=   |3 %r10
+#def 3o=   o2
+#def 3v=   v53
+#def 3f= v1,53
+
+#def 4i=   |4
+#def 4o=   o6
+#def 4v=   v83
+#def 4f= v1,83
+
+#def 5i=   |5
+#def 5o=   o3
+#def 5v=   v56
+#def 5f= v1,56
+
+#def 6i=   |6
+#def 6o=   o3
+#def 6v=   v150
+#def 6f= v1,150
+
+#def 7i=   |7
+#def 7o=   o5
+#def 7v=   v75
+#def 7f= v1,75
+
+#def 8i=   |8
+#def 8o=   o5
+#def 8v=   v75
+#def 8f= v1,75
+
+## auto percussion  0x21
+#drum "h"= 5f+ '1v*v1.00'
+#drum "i"= 5f+ '1v*v0.50'
+#drum "j"= 5f+ '1v*v0.37'
+#drum "k"= 5f+ '1v*v0.25'
+
+#def init= t119 %v40 %b0,85 %f0,0 %x224
+
+{1}
+$4441
+'init'r1r1
+$101'0v*v1.15'p70
+'0i' m24,20,203%e1['0o+o1''o3'd+4'o2d'd4>b2^2<'o3u'd+4'o2d'd4>b4<c4>a+2'o1d'g+4.'o2u'a+16g+16'o1d'g1r1
+]g4g+4f4.<'o3u'd+8'o2d'd4'o3u'd+4>'o2d'b8<c8'o3u'd+8'o4u'g+8'o3d'g2.f4'o2d'c+1>'o1d'g4g+4f4.<'o3u'd+8'o2d'd4'o3u'd+4>'o2d'b8<c8'o3u'd+8'o4u'g+8'o3d'g4.
+f8d+8'o2d'c+8>'o1d'a8'o2u'a+8<c+1p70
+'1i' '1o-o1'
+[4 "!!!o" "h8i8h8k24j24i24" ["!v h8k16i16"]]
+`m:4441`
+;101
+
+
+{5}
+$4445
+r1r1
+$201p55'2i' m12,20,195%e1%r6
+%e1[%a15'2v*v.75''2o-o1'[10g8<g16r16>][4g+8<g+16r16>][[3g8<g16r16>]f8
+<g+16r16>]<]%a5'2v*v.60'<c1^1c+2d+2f1c1^1c+2d+2f1
+'5i''5v*v1.00'p50m
+[r16r32r64'5o+o1''5v*v.50'f+64'5v*v1.00'
+g8r16g32r16r32g+32r8r32g32r16r32f4g8.g32r16r32g32r16r32g+32r8r32g32r16
+r32g+8.g+16]
+`:4445`
+;201
+
+
+{7}
+$4447
+p65
+'2i' %e1%r8r1r1
+$301m12,20,195[%a15'2v*v.75''2o-o1'[10c8<c16r16>][4c+8<c+16r16>][[3c8<c16r16>]>a+8
+<<c+16r16>]<]%a7'2v*v.75'd+2f2g2g+2f2d+2c+1d+2f2g2g+2f2d+2c+1[r1r1]
+`m:4447`
+;301
+
+
+{3}
+$4443
+'3v*v1.15'p60%e0
+'3i' '3o+o1'[16c8]
+$401m12,20,195['3o+o1'[20c8][8c+8][c8c8c8c8c8c8>a+8a+8<]>][16g+8]<[16c+8]>f8f8f8
+f8f8f8f8f8g+8g+8g+8g+8g+8g+8g+8g+8<c+8c+8c+8c+8c+8c+8c+8c+8>>a+8<a+8>a+8
+<a+8>a+8<a+8>a+8<a+8[<c2.c+4c2.>a+4]
+`m:4443`
+;401
+
+{8}
+$4448
+'8v*v1.15'p68%e1'8i''8o' l1
+rc
+$
+[^c^c+^2c] >g+g+<c+c+>f
+g+<c+>a+<
+>[4c]<
+`:4448`
+;
+
+{4}
+$4444
+'4v*v1.25'p75
+'4i' %e1'4o-o1'c4c4c4c4c4c4c4c4
+$501[c4c4c4c4c4c4c4c4c4c4c+4c+4c+4c+4c4c4c4>a+4<c4c4c4>a+4<]>g+4g+4g+4
+g+4g+4g+4g+4g+4<c+4c+4c+4c+4c+4c+4c+4c+4>f4f4f4f4g+4g+4g+4g+4<c+4c+4c+4
+c+4>a+4a+4a+4a+4[<c2.c+4c2.>a+4]<
+`:4444`
+;501
+
+{2}
+$4442
+r1r1
+$601'6v*v.60'p52
+'6i' %e1['6o-o1'[5c16d+16g16<c16d+16g16<c16d+16>>][c+16f16g+16<c+16f16
+g+16<c+16f16>>][c16d+16g16<c16d+16g16<c16d+16>>c16d+16g16<c16c+16f16a+16
+<c+16>>]]>'6v*v.80'[4g+16<c16d+16g+16<c16d+16g+16<c16>>>][4g+16<c+16f16g+16<c+16
+f16g+16<c+16>>>][g+16<c16f16g+16<c16f16g+16<c16>>>][g+16<c16d+16g+16<c16
+d+16g+16<c16>>>][g+16<c+16f16g+16<c+16f16g+16<c+16>>>][a+16<c+16f16a+16
+<c+16f16a+16<c+16>>>]<<<'5v*v1.00'p52
+'5i' ['5o+o2'r8c8r16c32r16r32c+32r8r32c32r16r32>a+4<c8.c32r16r32c32
+r16r32c+32r8r32c32r16r32d+8.d+16]
+`:4442`
+;601
+
+{6}
+$4446
+'7v*v1.25'p47%e1
+'7i' '7o-o1'c8<c32r16r32>c8<c32r16r32>c8<c32r16r32>c+8<c+32r16r32>c8<c32
+r16r32>c8<c32r16r32>c8<c32r16r32>>a+8<a+32r16r32
+$801['7o-o1'c8<c32r16r32>c8<c32r16r32>c8<c32r16r32>c8<c32r16r32>c8<c32
+r16r32>c8<c32r16r32>c8<c32r16r32>c8<c32r16r32>c8<c32r16r32>c8<c32r16r32
+>c+8<c+32r16r32>c+8<c+32r16r32>c+8<c+32r16r32>c+8<c+32r16r32>c8<c32r16
+r32>c8<c32r16r32>c8<c32r16r32>>a+8<a+32r16r32c8<c32r16r32>c8<c32r16r32
+>c8<c32r16r32>>a+8<a+32r16r32]>g+8<g+32r16r32>g+8<g+32r16r32>g+8<g+32r16
+r32>g+8<g+32r16r32>g+8<g+32r16r32>g+8<g+32r16r32>g+8<g+32r16r32>g+8<g+32
+r16r32c+8<c+32r16r32>c+8<c+32r16r32>c+8<c+32r16r32>c+8<c+32r16r32>c+8<
+c+32r16r32>c+8<c+32r16r32>c+8<c+32r16r32>c+8<c+32r16r32>f8<f32r16r32>f8
+<f32r16r32>f8<f32r16r32>f8<f32r16r32>>g+8<g+32r16r32>g+8<g+32r16r32>g+8
+<g+32r16r32>g+8<g+32r16r32c+8<c+32r16r32>c+8<c+32r16r32>c+8<c+32r16r32
+>c+8<c+32r16r32>>a+8<a+32r16r32>a+8<a+32r16r32>a+8<a+32r16r32>a+8<a+32
+r16r32[c4<c16r16>a+16r16c8<c16r16>c+8<c+16r16>c8<c16r16c16r16>a+16r16c8
+<c16r16>>a+8<a+16r16]
+`:4446`
+;801

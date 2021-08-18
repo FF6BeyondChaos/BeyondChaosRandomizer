@@ -3,40 +3,41 @@
 #COMPOSER Hiroki Kikuta
 #ARRANGED emberling
 
-#WAVE 0x20 0x46
-#WAVE 0x21 0x82
-#WAVE 0x22 0x8C
-#WAVE 0x23 0x6B
-#WAVE 0x24 0x55
-#WAVE 0x25 0x65
-#WAVE 0x26 0x21
+#WAVE 0x20 0x67 - was 0x46
+#WAVE 0x21 0x89 - was 0x82
+#WAVE 0x22 0x01 - was 0x8C
+#WAVE 0x23 0x51 - was 0x6B
+#WAVE 0x24 0x6C - was 0x55
+#WAVE 0x25 0x0B - was 0x65
+#WAVE 0x26 0x1D - was 0x21
 
-#def init= t147 %x240 %v60 %b0,56 %f0,0
+#def init= t147 %x224 %v60 %b0,56 %f0,0
 
 #def strings= |0 's' o6 %s7%r10
 #def brass= |1 't' o6 %r8
 #def piano= |2 'p' 'po'
-#def bass= |3 'b' o5
+#def bass= |3 'b' o4
 
-#def po= o6
+#def po= o5
 
-#def s= v100
-#def t= v90
-#def p= v112
-#def b= v127
+#def s= v67
+#def t= v78
+#def p= v89
+#def b= v92
 
 #def d= v127
-#def c= v80
+#def k= v100
+#def c= v60
 
-#drum "g"=5a |5 p64 'd*v.78'
-#drum "h"=5a |5 p64 'd*v.78'
-#drum "i"=5a |5 p64 'd*v.84'
-#drum "j"=5a |5 p64 'd*v.91'
-#drum "k"=5a |5 p64 'd*v.98'
-#drum "p"=5b |6 p64 'd*v.78'
-#drum "q"=5b |6 p64 'd*v.84'
-#drum "r"=5b |6 p64 'd*v.91'
-#drum "s"=5b |6 p64 'd*v.98'
+#drum "g"=6e |5 p64 'k*v.78' %e0
+#drum "h"=6e |5 p64 'k*v.78' %e0
+#drum "i"=6e |5 p64 'k*v.84' %e0
+#drum "j"=6e |5 p64 'k*v.91' %e0
+#drum "k"=6e |5 p64 'k*v.98' %e0
+#drum "p"=6c |6 p64 'd*v.78' %e1
+#drum "q"=6c |6 p64 'd*v.84' %e1
+#drum "r"=6c |6 p64 'd*v.91' %e1
+#drum "s"=6c |6 p64 'd*v.98' %e1
 #drum "t"=5a |4 p64 'c*v.98'
 #drum "u"=5a |4 p64 'c*v.78'
 
@@ -236,7 +237,7 @@ e2..ee e2e8g+8a8<c+8  d2..dd d2e2
 
 {4} $
 ## 1-4 -- kick/snare (ch1)
-l16 %e0 [15"khhh"]"k24j24i24sr"
+l16 [15"khhh"]"k24j24i24sr"
 ## 5-12 -- 
 [["k4s8.hk4s4" "k4s8.hk"j2"^8.s8ih"]j2
 ":k:^h8s8k24i24h24"]":k:"r"s"r"srki"
@@ -254,7 +255,7 @@ l16 %e0 [15"khhh"]"k24j24i24sr"
 ## 45-52 -- 
 #^^
 ## 53-60 -- switch to kick/tambourine
-%e1 [31 ":u:k8uu t8uu"]
+%e1 [31 ":u: !o k8uu t8uu"]
 ## 61-68 -- switch to kick/tambourine
 #^
 j2 "k24k24k24s"r"shss"

@@ -80,7 +80,7 @@ VERSION_ROMAN = "I"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "1.normal.bcdefgijkmnopqrstuwyzpartypartyfrenchvanillaelectricboogaloorandombossesalasdracocapslockoffjohnnydmadnotawaiterexpgpdancelessonsnomiabs.1626543745"
+TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosses.1628211779"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -1608,6 +1608,11 @@ def name_swd_techs(fout):
          0xff, 0xff, 0xff,])
     swd_tech_sub.write(fout)
 
+    repoint_jokerdoom_sub = Substitution()
+    repoint_jokerdoom_sub.set_location(0x0236B9)
+    repoint_jokerdoom_sub.bytestring = bytes([0x94])
+    repoint_jokerdoom_sub.write(fout)
+
 
 def manage_skips():
     # To identify if this cutscene skip is active in a ROM, look for the
@@ -2178,6 +2183,8 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int]=None) -> Lis
         i.write_stats(fout)
         if i.features['special2'] & 0x38 and i.is_relic:
             auto_equip_relics.append(i.itemid)
+        if i.mutation_log != {}:
+            log(str(i.get_mutation_log()), section="Item Effects")
 
     assert(auto_equip_relics)
 

@@ -134,6 +134,8 @@ class ItemBlock:
         self.dataname = bytes()
         self.heavy = False
 
+        self.mutation_log = {}
+
     @property
     def is_tool(self):
         return self.itemtype & 0x0f == 0x00
@@ -324,6 +326,16 @@ class ItemBlock:
         mblock = (mblockevade & 0xf0) >> 4
         return mblock
 
+    def get_mutation_log(self):
+        if not self.mutation_log:
+            return None
+        s = self.name + ": \n"
+        for k, v in self.mutation_log.items():
+            s += f"    {k}: {v}\n"
+        return s
+
+
+
     def pick_a_spell(self, magic_only=False, custom=None):
         if magic_only:
             spells = [s for s in all_spells if s.spellid in range(0, 36)]
@@ -360,6 +372,7 @@ class ItemBlock:
                 nochange |= 0x10
         self.features[feature] = bit_mutate(self.features[feature], op="on",
                                             nochange=nochange)
+        #self.mutation_log["Special Feature"] = str(feature)
         self.mutate_name()
 
 
@@ -409,6 +422,13 @@ class ItemBlock:
         self.features['targeting'] = spell.targeting & 0xef
         self.mutate_name()
 
+    def get_element(self, elem_byte):
+        ELEM_FLAGS = {e: 1 << i for i, e in
+                      enumerate(["fire", "ice", "lightning", "poison", "wind", "pearl", "earth", "water"])}
+        s = ", ".join([e for e, v in ELEM_FLAGS.items() if v & elem_byte == v])
+
+        return s
+
     def mutate_elements(self):
         if self.is_consumable or self.is_tool:
             return
@@ -426,13 +446,25 @@ class ItemBlock:
             return elements
 
         self.features['elements'] = elemshuffle(self.features['elements'])
+        if self.is_weapon:
+            if self.features['elements']:
+                self.mutation_log["Elemental damage"] = self.get_element(self.features['elements'])
+        else:
+            if self.features['elements']:
+                self.mutation_log["Halves elemental damage"] = str(self.features['elements'])
 
         if self.is_weapon:
             return
 
         self.features['elemabsorbs'] = elemshuffle(self.features['elemabsorbs'])
+        if self.features['elemabsorbs']:
+            self.mutation_log["Absorbs elemental damage"] = self.get_element(self.features['elemabsorbs'])
         self.features['elemnulls'] = elemshuffle(self.features['elemnulls'])
+        if self.features['elemnulls']:
+            self.mutation_log["Nulls elemental damage"] = self.get_element(self.features['elemnulls'])
         self.features['elemweaks'] = elemshuffle(self.features['elemweaks'])
+        if self.features['elemweaks']:
+            self.mutation_log["Weak to elemental damage"] = self.get_element(self.features['elemweaks'])
 
     def mutate_learning(self):
         if not self.is_armor and not self.is_relic:
@@ -453,6 +485,14 @@ class ItemBlock:
         self.features['learnrate'] = learnrate
         self.features['learnspell'] = spell.spellid
 
+    def get_specialaction(self, new_action):
+
+        special_descriptions = ["Can steal", "Atma", "X-kill", "Man eater", "Drain HP", "Drain MP", "Uses some MP", "Random throw",
+                                "Dice", "Valiant", "Wind Attack", "Heals Target", "Slice Kill", "Fragile wpn", "Uses more MP", ]
+        s = special_descriptions[new_action-1]
+
+        return s
+
     def mutate_special_action(self):
         if self.features['specialaction'] & 0xf0 != 0 or not self.is_weapon:
             return
@@ -463,6 +503,8 @@ class ItemBlock:
 
         if new_action == 9:  # no random dice effect
             return
+
+        self.mutation_log["Special Effect"] = self.get_specialaction(new_action)
 
         self.features['specialaction'] = (new_action << 4) | (self.features['specialaction'] & 0x0f)
         self.mutate_name()

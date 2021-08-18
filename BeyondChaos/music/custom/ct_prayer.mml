@@ -4,6 +4,9 @@
 #ARRANGED emberling
 ##created with sqspcmml beta 1.1.5
 
+########## ------------------
+#SHORTNAME CT Prayer_Wayfarer
+
 #WAVE 0x20 0xD1
 
 #def 0i=   |0 %a12%y1%s1%r6
