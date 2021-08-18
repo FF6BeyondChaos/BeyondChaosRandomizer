@@ -79,7 +79,7 @@ BETA = True
 VERSION_ROMAN = "I"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = True
+TEST_ON = False
 TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosses.1628211779"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
@@ -2183,6 +2183,8 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int]=None) -> Lis
         i.write_stats(fout)
         if i.features['special2'] & 0x38 and i.is_relic:
             auto_equip_relics.append(i.itemid)
+        if i.mutation_log != {}:
+            log(str(i.get_mutation_log()), section="Item Effects")
 
     assert(auto_equip_relics)
 
