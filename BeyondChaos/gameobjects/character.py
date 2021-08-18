@@ -38,6 +38,7 @@ class Character(GameObject):
         self.command_objs = []
         self.stats_original = {}
         self.stats_mutated = {}
+        self.initial_level_override = None
         for stat in char_stat_names_with_offsets:
             self.stats_original[stat] = byte_block[char_stat_names_with_offsets[stat]]
             self.stats_mutated[stat] = byte_block[char_stat_names_with_offsets[stat]]
@@ -53,6 +54,8 @@ class Character(GameObject):
 
     def __repr__(self):
         s = "{0:02d}. {1}".format(self.id + 1, self.newname) + os.linesep
+        if self.initial_level_override:
+            s += "Initial Level: {0}".format(self.initial_level_override) + os.linesep
         for name in char_stat_names_with_offsets:
             blurb = "{0:8} {1}".format(name.upper() + ":", self.stats_mutated[name])
             s += blurb + os.linesep
@@ -72,4 +75,6 @@ class Character(GameObject):
         if self.is_guest:
             # magic value to make items unequippable in battle
             substitution[self.address + 21] = 0x15.to_bytes(1, byteorder="big")
+        if self.initial_level_override:
+            substitution[0x9FC6] = self.initial_level_override.to_bytes(1, byteorder="big")
         return substitution

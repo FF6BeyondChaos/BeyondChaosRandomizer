@@ -26,6 +26,8 @@ class CharacterStats(Randomizer):
         if not self.is_active:
             return
         for character in self._characters:
+            if character.id == 1:
+                character.initial_level_override = self._rng.choice([1, 2, 3, 4, 5, 6, 7, 8])
             for stat in character.stats_mutated:
                 mutation_check = 0
                 if character.berserk:
