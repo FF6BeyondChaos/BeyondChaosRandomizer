@@ -678,7 +678,7 @@ def generate_tierboss_mml(pool, force_include=None):
                         tier.mml = re.sub(f"\${prefix[v]}444([0-9])", f"${prev[v]}\g<1>", tier.mml)
                         tier.mml = re.sub("{.*?}", "", tier.mml)
                     else:
-                        # BCEX 4 discards {1} type entry points entirely and uses the $4441
+                        # BCCE 4 discards {1} type entry points entirely and uses the $4441
                         # style for both with and without intro. I can't currently remember
                         # why I did it this way? I'm going to try using the {1} style from
                         # here on out; if this causes issues the old regex is commented here
