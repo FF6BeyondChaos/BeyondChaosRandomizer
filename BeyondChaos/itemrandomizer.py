@@ -352,7 +352,53 @@ class ItemBlock:
         index = mutate_index(index, len(spells), [False, True, True],
                              (-5, 4), (-3, 3))
         spell = spells[index]
+
         return spell, index / float(len(spells))
+
+    def get_feature(self, feature, feature_byte):
+
+        FEATURE_FLAGS = None
+
+        if feature == "statboost1":
+            FEATURE_FLAGS = {e: 1 << i for i, e in
+                      enumerate(["Bat. Pwr +1/4", "Mag. Pwr +1/2", "+1/4 HP", "+1/2 HP", "+1/8 HP", "+1/4 MP", "+1/2 MP", "+1/8 MP"])}
+        if feature == "statboost2":
+            FEATURE_FLAGS = {e: 1 << i for i, e in
+                      enumerate(["Better Steal", "Mag. Pwr +1/4", "Better Sketch","Better Control", "100% Hit Rate", "1/2 MP Cost", "MP cost = 1", "Vigor +50%"])}
+        if feature == "special1":
+            FEATURE_FLAGS= {e: 1 << i for i, e in
+                      enumerate(["Initiative", "Vigilance", "Command Changer", "Command Changer", "Command Changer", "Command Changer", "Command Changer", "Super Jump"])}
+        if feature == "special2":
+            FEATURE_FLAGS= {e: 1 << i for i, e in
+                      enumerate(["Fight -> X-Fight", "Can counter", "Random Evade", "Use weapon 2-handed", "Can equip 2 weapons", "Can equip anything", "Cover", "Step regen"])}
+        if feature == "special3":
+            FEATURE_FLAGS= {e: 1 << i for i, e in
+                      enumerate(["Low HP Shell", "Low HP Safe", "Low HP Reflect", "Double EXP", "Double GP", "o", "p", "Reverses cures"])}
+        if feature == "statusprotect1":
+            FEATURE_FLAGS = {e: 1 << i for i, e in
+                      enumerate(["No dark", "No zombie", "No poison", "No magitek", "No clear", "No imp", "No petrify", "Death protection"])}
+        if feature == "statusprotect2":
+            FEATURE_FLAGS = {e: 1 << i for i, e in
+                      enumerate(["No condemned", "Near fatal always", "No image", "No mute", "No berserk", "No muddle", "No seizure", "No sleep"])}
+        if feature == "statusacquire2":
+            FEATURE_FLAGS = {e: 1 << i for i, e in
+                      enumerate(["Condemned", "Near fatal", "Image", "Mute", "Berserk", "Muddle", "Seizure", "Sleep"])}
+        if feature == "statusacquire3":
+            FEATURE_FLAGS = {e: 1 << i for i, e in
+                      enumerate(["Auto float", "Auto regen", "Auto slow", "Auto haste", "Auto stop", "Auto shell", "Auto safe", "Auto reflect"])}
+        if feature == "fieldeffect":
+            FEATURE_FLAGS = {e: 1 << i for i, e in
+                      enumerate(["1/2 enc.", "No enc.", "i", "j", "k", "Sprint", "m", "n"])}
+        if feature == "otherproperties":
+            FEATURE_FLAGS = {e: 1 << i for i, e in
+                      enumerate(["a", "", "c", "d", "e", "", "", ""])}
+
+        if FEATURE_FLAGS:
+            s = ", ".join([e for e, v in FEATURE_FLAGS.items() if v & feature_byte == v])
+        #if "Procs: " in s:
+          #  s += str(self.features['breakeffect'])
+
+        return s
 
     def mutate_feature(self, feature=None):
         if self.is_consumable or self.is_tool:
@@ -372,7 +418,15 @@ class ItemBlock:
                 nochange |= 0x10
         self.features[feature] = bit_mutate(self.features[feature], op="on",
                                             nochange=nochange)
-        #self.mutation_log["Special Feature"] = str(feature)
+
+        new_feature = self.get_feature(feature, self.features[feature])
+
+        if new_feature != "":
+            if "Special Feature" in self.mutation_log.keys():
+                if new_feature not in self.mutation_log["Special Feature"]:
+                    self.mutation_log.update({"Special Feature": self.mutation_log["Special Feature"] + ", " + new_feature})
+            else:
+                self.mutation_log["Special Feature"] = str(self.get_feature(feature, self.features[feature]))
         self.mutate_name()
 
 
