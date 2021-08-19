@@ -79,7 +79,7 @@ BETA = True
 VERSION_ROMAN = "I"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
+TEST_ON = True
 TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosses.1628211779"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
@@ -4439,7 +4439,7 @@ def randomize(**kwargs) -> str:
     if not sourcefile:
         try:
             config = configparser.ConfigParser()
-            config.read('bcex.cfg')
+            config.read('bcce.cfg')
             if 'ROM' in config:
                 previous_rom_path = config['ROM']['Path']
                 previous_output_directory = config['ROM']['Output']
@@ -4472,7 +4472,7 @@ def randomize(**kwargs) -> str:
             #output_directory = args[4]
         #else:
         if not output_directory:
-            #If no previous directory or an invalid directory was obtained from bcex.cfg, default to the ROM's directory
+            #If no previous directory or an invalid directory was obtained from bcce.cfg, default to the ROM's directory
             if not previous_output_directory or not os.path.isdir(previous_output_directory):
                 previous_output_directory = os.path.dirname(sourcefile)
 
@@ -4544,7 +4544,7 @@ def randomize(**kwargs) -> str:
 
         if '.' not in fullseed:
             config = configparser.ConfigParser()
-            config.read('bcex.cfg')
+            config.read('bcce.cfg')
             if 'speeddial' in config:
                 speeddial_opts = config['speeddial']
             else:
@@ -4641,7 +4641,7 @@ def randomize(**kwargs) -> str:
     if saveflags:
         try:
             config = configparser.ConfigParser()
-            config.read('bcex.cfg')
+            config.read('bcce.cfg')
             if 'ROM' not in config:
                 config['ROM'] = {}
             if 'speeddial' not in config:
@@ -4655,7 +4655,7 @@ def randomize(**kwargs) -> str:
             else:
                 config['ROM']['Output'] = output_directory
             config['speeddial'].update({k:v for k, v in speeddial_opts.items() if k != '!'})
-            with open('bcex.cfg', 'w') as cfg_file:
+            with open('bcce.cfg', 'w') as cfg_file:
                 config.write(cfg_file)
         except:
             print("Couldn't save flag string\n")
@@ -5230,7 +5230,7 @@ def randomize(**kwargs) -> str:
     manage_dialogue_patches(fout)
     write_location_names(fout)
 
-    rewrite_title(text="FF6 BCEX %s" % seed)
+    rewrite_title(text="FF6 BCCE %s" % seed)
     validate_rom_expansion()
     fout.close()
     rewrite_checksum()

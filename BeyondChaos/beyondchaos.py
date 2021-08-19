@@ -168,7 +168,7 @@ class Window(QWidget):
 
         try:
             config = configparser.ConfigParser()
-            config.read('bcex.cfg')
+            config.read('bcce.cfg')
             if 'ROM' in config:
                 previousRomPath = config['ROM']['Path']
                 previousOutputDirectory = config['ROM']['Output']
