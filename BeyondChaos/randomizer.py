@@ -80,7 +80,8 @@ VERSION_ROMAN = "I"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = True
-TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosses.1628211779"
+#TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosses.1629077097"
+TEST_SEED = "1.normal.bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaiterdancingmaduin.1629135591"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -123,7 +124,6 @@ def log(text: str, section: str):
     text = text.strip()
     randlog[section].append(text)
 
-
 def get_logstring(ordering: List = None) -> str:
     global randlog
     s = ""
@@ -135,17 +135,17 @@ def get_logstring(ordering: List = None) -> str:
         s += d + "\n"
 
     s += "\n"
-    for sectnum, section in enumerate(ordering):
-        sectnum += 1
-        s += "-{0:02d}- {1}\n".format(sectnum, " ".join([word.capitalize()
-                                      for word in section.split()]))
-
-    for sectnum, section in enumerate(ordering):
-        sectnum += 1
-        s += "\n" + "=" * 60 + "\n"
-        s += "-{0:02d}- {1}\n".format(sectnum, section.upper())
-        s += "-" * 60 + "\n"
+    sections_with_content = []
+    for section in ordering:
+        if section in randlog:
+            sections_with_content.append(section)
+            s += "-{0:02d}- {1}\n".format(len(sections_with_content), " ".join([word.capitalize()
+                                        for word in section.split()]))
+    for sectnum, section in enumerate(sections_with_content):
         datas = sorted(randlog[section])
+        s += "\n" + "=" * 60 + "\n"
+        s += "-{0:02d}- {1}\n".format(sectnum + 1, section.upper())
+        s += "-" * 60 + "\n"
         newlines = False
         if any("\n" in d for d in datas):
             s += "\n"
@@ -155,7 +155,6 @@ def get_logstring(ordering: List = None) -> str:
             if newlines:
                 s += "\n"
     return s.strip()
-
 
 def log_chests():
     """
@@ -2184,7 +2183,7 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int]=None) -> Lis
         if i.features['special2'] & 0x38 and i.is_relic:
             auto_equip_relics.append(i.itemid)
         if i.mutation_log != {}:
-            log(str(i.get_mutation_log()), section="Item Effects")
+            log(str(i.get_mutation_log()), section="item effects")
 
     assert(auto_equip_relics)
 
@@ -5244,7 +5243,7 @@ def randomize(**kwargs) -> str:
 
     if options.Use_new_randomizer:
         for c in sorted(character.character_list, key=lambda c: c.id):
-            if c.id <= 13:
+            if c.id <= 14:
                 log(str(c), section="stats")
 
     for m in sorted(get_monsters(), key=lambda m: m.display_name):
@@ -5257,7 +5256,9 @@ def randomize(**kwargs) -> str:
     log_break_learn_items()
 
     f = open(outlog, 'w+')
-    f.write(get_logstring())
+    f.write(get_logstring(["characters", "stats", "commands", "blitz inputs", "slots", "dances", "espers", "item magic",
+                           "item effects", "command-change relics", "colosseum", "monsters", "music", "shops",
+                           "treasure chests", "zozo clock"]))
     f.close()
 
     print("Randomization successful. Output filename: %s\n" % outfile)
