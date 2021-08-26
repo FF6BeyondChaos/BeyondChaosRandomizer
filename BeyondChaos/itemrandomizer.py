@@ -393,7 +393,7 @@ class ItemBlock:
             FEATURE_FLAGS = {e: 1 << i for i, e in
                       enumerate(["a", "", "Procs", "Breaks", "e", "", "", ""])}
 
-        # Comparing feature_byte to (v & nochange) appears to detect if the feature is a vanilla feature.
+        # Comparing (v & feature_byte) to (v & nochange) appears to detect if the feature is a vanilla feature.
         # TODO: Adjust the string composition below so that procs and breaks can be handled differently.
         #  Procs and breaks need to check the spell used to determine if they are different than vanilla,
         #  otherwise items that break and proc in vanilla will not show up in the log even if they proc/break
