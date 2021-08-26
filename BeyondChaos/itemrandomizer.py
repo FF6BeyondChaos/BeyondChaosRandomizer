@@ -355,7 +355,7 @@ class ItemBlock:
 
         return spell, index / float(len(spells))
 
-    def get_feature(self, feature, feature_byte):
+    def get_feature(self, feature, feature_byte, nochange):
 
         FEATURE_FLAGS = None
 
@@ -391,12 +391,15 @@ class ItemBlock:
                       enumerate(["1/2 enc.", "No enc.", "i", "j", "k", "Sprint", "m", "n"])}
         if feature == "otherproperties":
             FEATURE_FLAGS = {e: 1 << i for i, e in
-                      enumerate(["a", "", "c", "d", "e", "", "", ""])}
+                      enumerate(["a", "", "Procs", "Breaks", "e", "", "", ""])}
 
+        # Comparing (v & feature_byte) to (v & nochange) appears to detect if the feature is a vanilla feature.
+        # TODO: Adjust the string composition below so that procs and breaks can be handled differently.
+        #  Procs and breaks need to check the spell used to determine if they are different than vanilla,
+        #  otherwise items that break and proc in vanilla will not show up in the log even if they proc/break
+        #  a different spell than in vanilla.
         if FEATURE_FLAGS:
-            s = ", ".join([e for e, v in FEATURE_FLAGS.items() if v & feature_byte == v])
-        #if "Procs: " in s:
-          #  s += str(self.features['breakeffect'])
+            s = ", ".join([e for e, v in FEATURE_FLAGS.items() if v & feature_byte == v and v & feature_byte != v & nochange])
 
         return s
 
@@ -419,14 +422,15 @@ class ItemBlock:
         self.features[feature] = bit_mutate(self.features[feature], op="on",
                                             nochange=nochange)
 
-        new_feature = self.get_feature(feature, self.features[feature])
+        new_features = self.get_feature(feature, self.features[feature], nochange)
 
-        if new_feature != "":
+        if new_features != "":
             if "Special Feature" in self.mutation_log.keys():
-                if new_feature not in self.mutation_log["Special Feature"]:
-                    self.mutation_log.update({"Special Feature": self.mutation_log["Special Feature"] + ", " + new_feature})
+                for new_feature in new_features.split(", "):
+                    if new_feature not in self.mutation_log["Special Feature"]:
+                        self.mutation_log.update({"Special Feature": self.mutation_log["Special Feature"] + ", " + new_feature})
             else:
-                self.mutation_log["Special Feature"] = str(self.get_feature(feature, self.features[feature]))
+                self.mutation_log["Special Feature"] = new_features
         self.mutate_name()
 
 
