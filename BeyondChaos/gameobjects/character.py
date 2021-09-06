@@ -53,7 +53,7 @@ class Character(GameObject):
         self.run_chance_mutated = level_and_run & 0b00000011
 
     def __repr__(self):
-        s = "{0:02d}. {1}".format(self.id + 1, self.newname) + os.linesep
+        s = "{0:02d}. {1}".format(self.id, self.newname) + os.linesep
         if self.initial_level_override:
             s += "Initial Level: {0}".format(self.initial_level_override) + os.linesep
         for name in char_stat_names_with_offsets:

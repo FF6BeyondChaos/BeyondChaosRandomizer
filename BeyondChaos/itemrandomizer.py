@@ -509,7 +509,7 @@ class ItemBlock:
                 self.mutation_log["Elemental damage"] = self.get_element(self.features['elements'])
         else:
             if self.features['elements']:
-                self.mutation_log["Halves elemental damage"] = str(self.features['elements'])
+                self.mutation_log["Halves elemental damage"] = self.get_element(self.features['elements'])
 
         if self.is_weapon:
             return
