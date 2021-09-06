@@ -38,7 +38,7 @@ class CharacterStats(Randomizer):
                     new_stat *= multiplier
                     continue_mutating = self._rng.choice(list(range(10))) == 0
                     # berserker character should not have stats reduced.
-                    if character.berserk and new_stat < character.stats_original[stat]:
+                    if character.berserk and int(new_stat) <= character.stats_original[stat]:
                         new_stat = character.stats_mutated[stat]
                         continue_mutating = True
                 new_stat = max(1, min(round(new_stat), 254))
