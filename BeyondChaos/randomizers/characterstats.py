@@ -29,16 +29,18 @@ class CharacterStats(Randomizer):
             if character.id == 1:
                 character.initial_level_override = self._rng.choice([1, 2, 3, 4, 5, 6, 7, 8])
             for stat in character.stats_mutated:
-                mutation_check = 0
+                continue_mutating = True
                 if character.berserk:
                     character.stats_mutated[stat] += 1
                 new_stat = character.stats_mutated[stat]
-                while not mutation_check:
+                while continue_mutating:
                     multiplier = max(.5, min(self._rng.gauss(1, 0.17), 1.5))
                     new_stat *= multiplier
-                    mutation_check = self._rng.choice(list(range(10)))
+                    continue_mutating = self._rng.choice(list(range(10))) == 0
                     # berserker character should not have stats reduced.
-                    mutation_check = mutation_check or (character.berserk and new_stat < character.stats_original[stat])
+                    if character.berserk and new_stat < character.stats_original[stat]:
+                        new_stat = character.stats_mutated[stat]
+                        continue_mutating = True
                 new_stat = max(1, min(round(new_stat), 254))
                 character.stats_mutated[stat] = new_stat
             self.modify_level_and_run_modifiers(character)

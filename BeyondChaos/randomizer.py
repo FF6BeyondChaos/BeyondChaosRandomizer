@@ -14,6 +14,7 @@ import character
 import chestrandomizer
 import esperrandomizer
 import formationrandomizer
+import gameobjects.character
 import itemrandomizer
 import locationrandomizer
 import monsterrandomizer
@@ -1523,6 +1524,10 @@ def manage_umaro(commands: Dict[str, CommandBlock]):
     if not candidates:
         candidates = [c for c in characters if c.id <= 13 and c.id != 12]
     umaro_risk = random.choice(candidates)
+    # character stats have a special case for the berserker, so set this case now until the berserker handler
+    # is refactored.
+    if umaro_risk and options.Use_new_randomizer:
+        next((x for x in character.character_list if x.id == umaro_risk.id), None).berserk = True
     if 0xFF in umaro_risk.battle_commands:
         battle_commands = []
         battle_commands.append(0)
