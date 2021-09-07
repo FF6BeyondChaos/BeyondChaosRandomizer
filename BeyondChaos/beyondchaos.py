@@ -471,7 +471,7 @@ class Window(QWidget):
                     tablayout.addWidget(cbox, currentRow, 1, 1, 2)
                     cbox.clicked.connect(lambda checked: self.flagButtonClicked())
                 elif  flagdesc['inputtype'] == 'numberbox':
-                    if flagname in ['exp','gp', 'mps']:
+                    if flagname in ['exp', 'gp', 'mps']:
                         nbox = QDoubleSpinBox()
                     else:
                         nbox = QSpinBox()
@@ -480,7 +480,7 @@ class Window(QWidget):
                     nbox.setMinimum(-1)
                     nbox.setValue(nbox.minimum())
                     nbox.setMaximum(50)
-                    if flagname in ['exp','gp', 'mps']:
+                    if flagname in ['exp', 'gp', 'mps']:
                         nbox.setFixedWidth(70)
                         nbox.setMinimum(-0.1)
                         nbox.setValue(-0.1)
@@ -879,14 +879,14 @@ class Window(QWidget):
             children = t.findChildren(QSpinBox) + t.findChildren(QDoubleSpinBox)
             for c in children:
                 if c.text == 'exp':
-                    self.expMultiplier = c.value()
+                    self.expMultiplier = round(c.value(), 1)
                 elif c.text == 'gp':
-                    self.gpMultiplier = c.value()
+                    self.gpMultiplier = round(c.value(), 1)
                 elif c.text == 'mps':
-                    self.mpMultiplier = c.value()
+                    self.mpMultiplier = round(c.value(), 1)
                 elif c.text == 'randomboost':
-                    self.randomboost = c.value()
-                if not c.value() == c.minimum():
+                    self.randomboost = round(c.value(), 1)
+                if not round(c.value(), 1) == c.minimum():
                     flagset = False
                     for flag in self.flags:
                         if flag == c.text:
