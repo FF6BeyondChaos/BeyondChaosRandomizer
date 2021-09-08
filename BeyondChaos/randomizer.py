@@ -4941,13 +4941,12 @@ def randomize(**kwargs) -> str:
     reseed()
 
     if Options_.is_code_active('mp'):
-        if 'mpMultiplier' in kwargs and kwargs.get('mpMultipler') is not None:
+        if 'mpMultiplier' in kwargs and kwargs.get('mpMultiplier') is not None:
             mpValue = kwargs.get('mpMultiplier')
         else:
             while True:
                 try:
-                    mpValue = float(input("Please enter an MP "
-                            "multiplier value (0.0-50.0): "))
+                    mpValue = float(input("Please enter an MP multiplier value (0.0-50.0): "))
                     if mpValue < 0:
                         raise ValueError
                     break
@@ -5146,13 +5145,12 @@ def randomize(**kwargs) -> str:
         manage_equip_umaro(event_freespaces)
         
     if Options_.is_code_active('easymodo') or Options_.is_code_active('exp'):
-        if 'expMultiplier' in kwargs and kwargs.get('expMultipler') is not None:
+        if 'expMultiplier' in kwargs and kwargs.get('expMultiplier') is not None:
             expValue = kwargs.get('expMultiplier')
         else:
             while True:
                 try:
-                    expValue = float(input("Please enter an EXP "
-                            "multiplier value (0.0-50.0): "))
+                    expValue = float(input("Please enter an EXP multiplier value (0.0-50.0): "))
                     if expValue < 0:
                         raise ValueError
                     break
@@ -5166,13 +5164,12 @@ def randomize(**kwargs) -> str:
             m.write_stats(fout)
 
     if Options_.is_code_active('gp'):
-        if 'gpMultiplier' in kwargs and kwargs.get('gpMultipler') is not None:
-            gpValue = kwargs.get('gpMultipler')
+        if 'gpMultiplier' in kwargs and kwargs.get('gpMultiplier') is not None:
+            gpValue = kwargs.get('gpMultiplier')
         else:
             while True:
                 try:
-                    gpValue = float(input("Please enter an GP "
-                            "multiplier value (0.0-50.0): "))
+                    gpValue = float(input("Please enter a GP multiplier value (0.0-50.0): "))
                     if gpValue < 0:
                         raise ValueError
                     break
@@ -5314,9 +5311,6 @@ if __name__ == "__main__":
         source_arg = None
         seed_arg = None
         destination_arg = None
-        expMultiplier = 3
-        gpMultiplier = 3
-        mpMultiplier = 3
         randomboost = None
         for argument in args[1:]:
             if 'source=' in argument:
@@ -5325,19 +5319,19 @@ if __name__ == "__main__":
                 seed_arg = argument[argument.index('=') + 1:]
             elif 'destination=' in argument:
                 destination_arg = argument[argument.index('=') + 1:]
-            elif 'expmultiplier=' in argument:
+            elif 'expMultiplier=' in argument:
                 try:
                     expMultiplier = float(argument[argument.index('=') + 1:])
                 except ValueError:
                     print("The supplied value for the exp multiplier was not a number.")
                     sys.exit()
-            elif 'gpmultiplier=' in argument:
+            elif 'gpMultiplier=' in argument:
                 try:
                     gpMultiplier = float(argument[argument.index('=') + 1:])
                 except ValueError:
                     print("The supplied value for the gp multiplier was not a number.")
                     sys.exit()
-            elif 'mpmultiplier=' in argument:
+            elif 'mpMultiplier=' in argument:
                 try:
                     mpMultiplier = float(argument[argument.index('=') + 1:])
                 except ValueError:

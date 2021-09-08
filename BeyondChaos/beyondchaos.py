@@ -1087,9 +1087,9 @@ class Window(QWidget):
                             "source={0}".format(self.romText),
                             "seed={0}".format(bundle),
                             "destination={0}".format(self.romOutputDirectory),
-                            "expmultiplier={0}".format(self.expMultiplier),
-                            "gpmultiplier={0}".format(self.gpMultiplier),
-                            "mpmultiplier={0}".format(self.mpMultiplier),
+                            "expMultiplier={0}".format(self.expMultiplier),
+                            "gpMultiplier={0}".format(self.gpMultiplier),
+                            "mpMultiplier={0}".format(self.mpMultiplier),
                             "randomboost={0}".format(self.randomboost)
                         ], stdin=subprocess.PIPE, text=True)
                         randomizer_process.communicate(os.linesep)
