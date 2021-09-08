@@ -31,7 +31,7 @@ class Formation():
         self.eventscript = None
         self.misc3 = None
 
-        self.ap = 0
+        self.mp = 0
         self.enemies = []
         self.big_enemy_ids = []
 
@@ -131,9 +131,9 @@ class Formation():
         appointer = 0x1fb400 + self.formid
         if appointer < 0x1fb600:
             f.seek(0x1fb400 + self.formid)
-            self.ap = ord(f.read(1))
+            self.mp = ord(f.read(1))
         else:
-            self.ap = None
+            self.mp = None
 
         f.close()
 
@@ -245,9 +245,9 @@ class Formation():
         fout.write(bytes([self.eventscript]))
         fout.write(bytes([self.misc3]))
 
-        if self.ap is not None:
+        if self.mp is not None:
             fout.seek(0x1fb400 + self.formid)
-            fout.write(bytes([min(self.ap, 256)]))
+            fout.write(bytes([min(self.mp, 256)]))
 
     def lookup_enemies(self):
         self.enemies = []
@@ -326,26 +326,26 @@ class Formation():
     def exp(self):
         return sum(e.stats['xp'] for e in self.present_enemies)
 
-    def mutate(self, ap=False, apMultiplier=None):
-        if ap and self.ap is not None and 0 < self.ap < 100:
+    def mutate(self, mp=False, mpMultiplier=None):
+        if mp and self.mp is not None and 0 < self.mp < 100:
             factor = self.levelrank() / 100
-            self.ap += int(round(self.ap * factor))
+            self.mp += int(round(self.mp * factor))
             while random.choice([True, False]):
-                self.ap += random.randint(-1, 1)
-                self.ap = min(100, max(self.ap, 0))
-            if apMultiplier:
-                self.ap = floor(self.ap * apMultiplier)
+                self.mp += random.randint(-1, 1)
+                self.mp = min(100, max(self.mp, 0))
+            if mpMultiplier:
+                self.mp = min(255, floor(self.mp * float(mpMultiplier)))
         if self.ambusher:
             if not (self.pincer_prohibited and self.back_prohibited):
                 self.misc1 |= 0x90
 
-    def get_special_ap(self):
+    def get_special_mp(self):
         levels = [e.stats['level'] for e in self.present_enemies if e]
-        ap = int(sum(levels) // len(levels))
-        low = ap // 2
-        ap = low + random.randint(0, low) + random.randint(0, low)
-        ap = random.randint(0, ap)
-        self.ap = min(100, max(ap, 0))
+        mp = int(sum(levels) // len(levels))
+        low = mp // 2
+        mp = low + random.randint(0, low) + random.randint(0, low)
+        mp = random.randint(0, mp)
+        self.mp = min(100, max(mp, 0))
 
 
 class FormationSet():
@@ -539,7 +539,7 @@ if __name__ == "__main__":
     formations = get_formations(filename=filename)
     fsets = get_fsets(filename=filename)
     for f in formations:
-        print(f, f.ap)
+        print(f, f.mp)
 
     # for f in fsets:
     #    print f
