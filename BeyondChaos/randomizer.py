@@ -5161,6 +5161,7 @@ def randomize(**kwargs) -> str:
                 m.stats['gp'] = min(0xFFFF, kwargs.get('gpMultiplier') * m.stats['gp'])
             else:
                 m.stats['gp'] = min(0xFFFF, 3 * m.stats['gp'])
+            m.write_stats(fout)
 
     if Options_.is_code_active('naturalmagic') or Options_.is_code_active('naturalstats'):
         espers = get_espers(sourcefile)
