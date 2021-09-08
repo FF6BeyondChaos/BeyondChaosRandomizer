@@ -251,8 +251,8 @@ NORMAL_CODES = [
     Code('canttouchthis', "INVINCIBILITY", "All characters have 255 Defense and 255 Magic Defense, as well as 128 Evasion and Magic Evasion.", "battle", "checkbox"),
     Code('naturalstats', "NATURAL STATS MODE", "No Espers will grant stat bonuses upon leveling up.", "battle", "checkbox"),
     Code('exp', "MULTIPLIED EXP MODE", "All battles will award multiplied exp", "beta", "numberbox"),
-    Code('gp', "MULTIPLED GP MODE", "All battles will award multiplied gp", "beta", "numberbox"),
-    Code('mps', "MULTIPLED MP MODE", "All battles will award multiplied magic points.", "beta", "numberbox"),
+    Code('gp', "MULTIPLIED GP MODE", "All battles will award multiplied gp", "beta", "numberbox"),
+    Code('mp', "MULTIPLIED MP MODE", "All battles will award multiplied magic points.", "beta", "numberbox"),
     Code('dancelessons', "NO DANCE FAILURES", "Removes the 50% chance that dances will fail when used on a different terrain.", "beta", "checkbox"),
 
     Code('airship', "AIRSHIP MODE", "The party will have access to the airship immediately after leaving Narshe. Chocobo stables can also be used to acquire the airship. Doing events out of order can cause softlocks.", "gamebreaking", "checkbox"),

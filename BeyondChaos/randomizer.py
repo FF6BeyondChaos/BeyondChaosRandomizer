@@ -79,7 +79,7 @@ BETA = True
 VERSION_ROMAN = "I"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = True
+TEST_ON = False
 #TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosses.1629077097"
 TEST_SEED = "1.normal.bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaiterdancingmaduin.1629135591"
 TEST_FILE = "FF3.smc"
@@ -1517,7 +1517,9 @@ def manage_umaro(commands: Dict[str, CommandBlock]):
     # character stats have a special case for the berserker, so set this case now until the berserker handler
     # is refactored.
     if umaro_risk and options.Use_new_randomizer:
-        next((x for x in character.character_list if x.id == umaro_risk.id), None).berserk = True
+        for char in character.character_list:
+            if char.id == umaro_risk.id:
+                char.berserk = True
     if 0xFF in umaro_risk.battle_commands:
         battle_commands = []
         battle_commands.append(0)
@@ -2785,7 +2787,7 @@ def manage_dragons():
         fout.write(bytes([dragon]))
 
 
-def manage_formations(formations: List[Formation], fsets: List[FormationSet], apMultiplier: float=None) -> List[Formation]:
+def manage_formations(formations: List[Formation], fsets: List[FormationSet], mpMultiplier: float=None) -> List[Formation]:
     for fset in fsets:
         if len(fset.formations) == 4:
             for formation in fset.formations:
@@ -2846,13 +2848,10 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet], ap
                            0x1E0, 0x1E6]}
 
     for formation in formations:
-        if Options_.is_code_active('mps'):
-            if apMultiplier:
-                formation.mutate(ap=False, apMultiplier=apMultiplier)
-            else:
-                formation.mutate(ap=False, apMultiplier=3)
+        if Options_.is_code_active('mp'):
+            formation.mutate(mp=False, mpMultiplier=mpMultiplier)
         else:
-            formation.mutate(ap=False)
+            formation.mutate(mp=False)
         if formation.formid == 0x1e2:
             formation.set_music(2)  # change music for Atma fight
         if formation.formid == 0x162:
@@ -2868,11 +2867,11 @@ def manage_formations_hidden(formations: List[Formation],
                              freespaces: List[FreeBlock],
                              form_music_overrides: dict=None,
                              no_special_events=True,
-                             apMultiplier: float=None):
+                             mpMultiplier: float=None):
     if not form_music_overrides:
         form_music_overrides = {}
     for f in formations:
-        f.mutate(ap=True, apMultiplier=apMultiplier)
+        f.mutate(mp=True, mpMultiplier=mpMultiplier)
 
     unused_enemies = [u for u in get_monsters() if u.id in REPLACE_ENEMIES]
 
@@ -3017,7 +3016,7 @@ def manage_formations_hidden(formations: List[Formation],
         if ue.stats['level'] > 50:
             appearances += [15]
         uf.set_appearing(random.choice(appearances))
-        uf.get_special_ap()
+        uf.get_special_mp()
         uf.mouldbyte = 0x60
         ue.graphics.write_data(fout)
         uf.misc1 &= 0xCF  # allow front and back attacks
@@ -4941,11 +4940,25 @@ def randomize(**kwargs) -> str:
             c.mutate_stats(fout, start_in_wor, read_only=True)
     reseed()
 
+    if Options_.is_code_active('mp'):
+        if 'mpMultiplier' in kwargs and kwargs.get('mpMultipler') is not None:
+            mpValue = kwargs.get('mpMultiplier')
+        else:
+            while True:
+                try:
+                    mpValue = float(input("Please enter an MP "
+                            "multiplier value (0.0-50.0): "))
+                    if mpValue < 0:
+                        raise ValueError
+                    break
+                except ValueError:
+                    print("The supplied value for the mp multiplier was not a positive number.")
+
     if Options_.random_formations:
         formations = get_formations()
         fsets = get_fsets()
-        if Options_.is_code_active('mps'):
-            manage_formations(formations, fsets, kwargs.get('mpMultiplier'))
+        if Options_.is_code_active('mp'):
+            manage_formations(formations, fsets, mpValue)
         else:
             manage_formations(formations, fsets)
         for fset in fsets:
@@ -4970,8 +4983,8 @@ def randomize(**kwargs) -> str:
     form_music = {}
     if Options_.random_formations:
         no_special_events = not Options_.is_code_active('bsiab')
-        if Options_.is_code_active('mps'):
-            manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music, no_special_events=no_special_events, apMultiplier=kwargs.get('mpMultiplier'))
+        if Options_.is_code_active('mp'):
+            manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music, no_special_events=no_special_events, mpMultiplier=mpValue)
         else:
             manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music, no_special_events=no_special_events)
         for m in get_monsters():
@@ -5132,25 +5145,41 @@ def randomize(**kwargs) -> str:
     if Options_.random_zerker or Options_.random_character_stats:
         manage_equip_umaro(event_freespaces)
         
-    if Options_.is_code_active('easymodo') or Options_.is_code_active('llg') or Options_.is_code_active('exp'):
+    if Options_.is_code_active('easymodo') or Options_.is_code_active('exp'):
+        if 'expMultiplier' in kwargs and kwargs.get('expMultipler') is not None:
+            expValue = kwargs.get('expMultiplier')
+        else:
+            while True:
+                try:
+                    expValue = float(input("Please enter an EXP "
+                            "multiplier value (0.0-50.0): "))
+                    if expValue < 0:
+                        raise ValueError
+                    break
+                except ValueError:
+                    print("The supplied value for the EXP multiplier was not a positive number.")
         for m in monsters:
             if Options_.is_code_active('easymodo'):
                 m.stats['hp'] = 1
-            if Options_.is_code_active('llg'):
-                m.stats['xp'] = 0
             if Options_.is_code_active('exp'):
-                if 'expMultiplier' in kwargs:
-                    m.stats['xp'] = min(0xFFFF, kwargs.get('expMultiplier') * m.stats['xp'])
-                else:
-                    m.stats['xp'] = min(0xFFFF, 3 * m.stats['xp'])
+                m.stats['xp'] = int(min(0xFFFF, float(expValue) * m.stats['xp']))
             m.write_stats(fout)
 
     if Options_.is_code_active('gp'):
+        if 'gpMultiplier' in kwargs and kwargs.get('gpMultipler') is not None:
+            gpValue = kwargs.get('gpMultipler')
+        else:
+            while True:
+                try:
+                    gpValue = float(input("Please enter an GP "
+                            "multiplier value (0.0-50.0): "))
+                    if gpValue < 0:
+                        raise ValueError
+                    break
+                except ValueError:
+                    print("The supplied value for the gp multiplier was not a positive number.")
         for m in monsters:
-            if 'gpMultiplier' in kwargs:
-                m.stats['gp'] = min(0xFFFF, kwargs.get('gpMultiplier') * m.stats['gp'])
-            else:
-                m.stats['gp'] = min(0xFFFF, 3 * m.stats['gp'])
+            m.stats['gp'] = int(min(0xFFFF, float(gpValue) * m.stats['gp']))
             m.write_stats(fout)
 
     if Options_.is_code_active('naturalmagic') or Options_.is_code_active('naturalstats'):

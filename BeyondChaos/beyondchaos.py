@@ -458,7 +458,7 @@ class Window(QWidget):
                     tablayout.addWidget(cbox, currentRow, 1, 1, 2)
                     cbox.clicked.connect(lambda checked: self.flagButtonClicked())
                 elif  flagdesc['inputtype'] == 'numberbox':
-                    if flagname in ['exp', 'gp', 'mps']:
+                    if flagname in ['exp', 'gp', 'mp']:
                         nbox = QDoubleSpinBox()
                     else:
                         nbox = QSpinBox()
@@ -467,7 +467,7 @@ class Window(QWidget):
                     nbox.setMinimum(-1)
                     nbox.setValue(nbox.minimum())
                     nbox.setMaximum(50)
-                    if flagname in ['exp', 'gp', 'mps']:
+                    if flagname in ['exp', 'gp', 'mp']:
                         nbox.setFixedWidth(70)
                         nbox.setMinimum(-0.1)
                         nbox.setValue(-0.1)
@@ -869,7 +869,7 @@ class Window(QWidget):
                     self.expMultiplier = round(c.value(), 1)
                 elif c.text == 'gp':
                     self.gpMultiplier = round(c.value(), 1)
-                elif c.text == 'mps':
+                elif c.text == 'mp':
                     self.mpMultiplier = round(c.value(), 1)
                 elif c.text == 'randomboost':
                     self.randomboost = round(c.value(), 1)
@@ -1100,7 +1100,6 @@ class Window(QWidget):
                         else:
                             tempname = [os.path.basename(self.romText), 'smc']
                         seed = bundle.split(".")[-1]
-                        print(bundle, seed)
                         resultFile = os.path.join(self.romOutputDirectory,
                                                   '.'.join([os.path.basename(tempname[0]),
                                                             str(seed), tempname[1]]))
