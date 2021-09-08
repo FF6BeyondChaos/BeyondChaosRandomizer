@@ -72,7 +72,6 @@ from utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    mutate_index, utilrandom as random, open_mei_fallback,
                    AutoLearnRageSub)
 from wor import manage_wor_recruitment, manage_wor_skip
-from importlib import reload
 from random import Random
 
 VERSION = "1"
@@ -213,15 +212,6 @@ def rngstate() -> int:
 def Reset():
     global seedcounter
     seedcounter = 0
-    reload(itemrandomizer)
-    reload(monsterrandomizer)
-    reload(formationrandomizer)
-    reload(character)
-    reload(esperrandomizer)
-    reload(locationrandomizer)
-    reload(music.musicrandomizer)
-    reload(towerrandomizer)
-    reload(chestrandomizer)
 
 
 def reseed():
@@ -5271,10 +5261,6 @@ def randomize(**kwargs) -> str:
 
     if Options_.is_code_active('bingoboingo'):
         manage_bingo()
-    try:
-        Reset()
-    except Exception as e:
-        traceback.print_exc()
     return outfile
 
 
@@ -5322,7 +5308,7 @@ if __name__ == "__main__":
                 except ValueError:
                     print("The supplied value for the gp multiplier was not a number.")
                     sys.exit()
-            elif 'gpmultiplier=' in argument:
+            elif 'mpmultiplier=' in argument:
                 try:
                     mpMultiplier = float(argument[argument.index('=') + 1:])
                 except ValueError:
