@@ -5311,6 +5311,9 @@ if __name__ == "__main__":
         source_arg = None
         seed_arg = None
         destination_arg = None
+        expMultiplier = 1
+        gpMultiplier = 1
+        mpMultiplier = 1
         randomboost = None
         for argument in args[1:]:
             if 'source=' in argument:
