@@ -904,30 +904,15 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
 
                 valid_spells = list(filter(spell_is_valid, all_spells))
                 
+                desperations = {
+                    "Sabre Soul", "Star Prism", "Mirager", "TigerBreak",
+                    "Back Blade", "Riot Blade", "RoyalShock", "Spin Edge",
+                    "X-Meteo", "Red Card", "MoogleRush"
+                }
                 if Options_.is_code_active('desperation'):
                     for spell in all_spells:
-                        if spell.name == "Sabre Soul":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "Star Prism":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "Mirager":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "TigerBreak":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "Back Blade":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "Riot Blade":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "RoyalShock":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "Spin Edge":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "X-Meteo":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "Red Card":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "MoogleRush":
-                            if spell not in valid_spells: valid_spells.append(spell)
+                        if spell.name in desperations and spell not in valid_spells:
+                            valid_spells.append(spell)
                         elif spell.name == "ShadowFang":
                             valid_spells.append(spell)
 
