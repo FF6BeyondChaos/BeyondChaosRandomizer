@@ -80,8 +80,7 @@ VERSION_ROMAN = "I"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-#TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosses.1629077097"
-TEST_SEED = "1.normal.bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaiterdancingmaduin.1629135591"
+TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosseseasymodocanttouchthisdearestmolulu.1629077097"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -4969,6 +4968,13 @@ def randomize(**kwargs) -> str:
 
     if Options_.randomize_forest and not Options_.is_code_active('ancientcave') and not Options_.is_code_active('strangejourney'):
         randomize_forest()
+
+        #remove forced healing event tile with randomized forest
+        remove_forest_event_sub = Substitution()
+        remove_forest_event_sub.set_location(0xBA3D1)
+        remove_forest_event_sub.bytestring = bytes([0xFE])
+        remove_forest_event_sub.write(fout)
+
     reseed()
 
     if Options_.random_final_dungeon and not Options_.is_code_active('ancientcave'):
