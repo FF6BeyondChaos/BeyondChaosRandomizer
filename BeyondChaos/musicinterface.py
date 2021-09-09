@@ -228,11 +228,13 @@ def manage_opera(fout, affect_music):
     for npc in get_location(0xEB).npcs:
         if npc.graphics == 97:
             item = random.choice([
-                (58, 0x11), #fish (????)
-                (87, 0x44), #mini statue
-                (93, 0x54), #ultros is allowed to try to throw the baby (STOP HIM)
-                (97, 0x54), #4ton weight
-                (112, 0x43), #fire
+                (89, 0x00),  # letter
+                (92, 0x44),  # book
+                (108, 0x00),  # rat
+                (87, 0x44), # mini statue
+                (93, 0x54), # ultros is allowed to try to throw the baby (STOP HIM)
+                (97, 0x54), # 4ton weight
+                (112, 0x43), # fire
                 ###(118, 0x10), #rock (didn't work)
                 ###(138, 0x12) #leo's sword (didn't work)
                 ])
