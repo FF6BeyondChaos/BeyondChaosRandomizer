@@ -904,12 +904,12 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
 
                 valid_spells = list(filter(spell_is_valid, all_spells))
                 
-                desperations = {
-                    "Sabre Soul", "Star Prism", "Mirager", "TigerBreak",
-                    "Back Blade", "Riot Blade", "RoyalShock", "Spin Edge",
-                    "X-Meteo", "Red Card", "MoogleRush"
-                }
                 if Options_.is_code_active('desperation'):
+                    desperations = {
+                        "Sabre Soul", "Star Prism", "Mirager", "TigerBreak",
+                        "Back Blade", "Riot Blade", "RoyalShock", "Spin Edge",
+                        "X-Meteo", "Red Card", "MoogleRush"
+                    }
                     for spell in all_spells:
                         if spell.name in desperations and spell not in valid_spells:
                             valid_spells.append(spell)
