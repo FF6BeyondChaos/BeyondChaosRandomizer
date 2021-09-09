@@ -761,11 +761,11 @@ class MonsterBlock:
             return a and b and c and d and e and f
 
         if Options_.mode.name == "katn":
-            restricted = [0xEA, 0xC8]
-        elif Options_.is_code_active("madworld"):
-            restricted = []
+            restricted = [0xEA, 0xC8] #restrict Baba Breath and Seize
+        if Options_.is_code_active("darkworld"):
+            restricted = [] #All skills are fair game sucka
         else:
-            restricted = [0x13, 0x14]
+            restricted = [0x13, 0x14] #restrict Meteor and Ultima for normal playthroughs
 
         banned = restricted
         # No blizzard, mega volt, or tek laser in solo terra

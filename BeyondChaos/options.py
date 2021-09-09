@@ -184,8 +184,7 @@ ALL_MODES = [
          prohibited_codes=ANCIENT_CAVE_PROHIBITED_CODES,
          prohibited_flags=ANCIENT_CAVE_PROHIBITED_FLAGS),
     Mode(name="katn",
-         description="Play the normal story up to Kefka at Narshe, with extra wackiness. Intended for racing.",
-         forced_codes=["madworld"],
+         description="Play the normal story up to Kefka at Narshe. Intended for racing.", # Static number of encounters on Lete River, No charm drops, Start with random Espers, Curated enemy specials, Banned Baba Breath & Seize
          prohibited_codes=["airship", "alasdraco", "worringtriad", "mimetime"],
          prohibited_flags={"d", "k", "r"}),
     Mode(name="dragonhunt",
@@ -305,12 +304,14 @@ MAKEOVER_MODIFIER_CODES = [
 ]
 RESTRICTED_VANILLA_SPRITE_CODES = []
 
-#this is used for the no codes and only codes for sprites
+#this is used for the makeover variation codes for sprites
 makeover_groups = ["anime", "boys", "generic", "girls", "kids", "pets", "potato", "custom"]
 for mg in makeover_groups:
     no = Code('no'+mg, f"NO {mg.upper()} ALLOWED MODE", f"Do not select {mg} sprites.", "spriteCategories", "checkbox")
     MAKEOVER_MODIFIER_CODES.extend([
         no,
+        Code('hate' + mg, f"RARE {mg.upper()} MODE", f"Reduce probability of selecting {mg} sprites.", "spriteCategories", "checkbox"),
+        Code('like' + mg, f"COMMON {mg.upper()} MODE", f"Increase probability of selecting {mg} sprites.", "spriteCategories", "checkbox"),
         Code('only'+mg, f"{mg.upper()} WORLD MODE", f"Select only {mg} sprites.", "spriteCategories", "checkbox")])
     RESTRICTED_VANILLA_SPRITE_CODES.append(no)
 

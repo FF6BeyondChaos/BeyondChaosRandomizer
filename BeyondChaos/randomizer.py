@@ -80,8 +80,7 @@ VERSION_ROMAN = "I"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-#TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosses.1629077097"
-TEST_SEED = "1.normal.bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaiterdancingmaduin.1629135591"
+TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosseseasymodocanttouchthisdearestmolulu.1629077097"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -905,29 +904,14 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
                 valid_spells = list(filter(spell_is_valid, all_spells))
                 
                 if Options_.is_code_active('desperation'):
+                    desperations = {
+                        "Sabre Soul", "Star Prism", "Mirager", "TigerBreak",
+                        "Back Blade", "Riot Blade", "RoyalShock", "Spin Edge",
+                        "X-Meteo", "Red Card", "MoogleRush"
+                    }
                     for spell in all_spells:
-                        if spell.name == "Sabre Soul":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "Star Prism":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "Mirager":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "TigerBreak":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "Back Blade":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "Riot Blade":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "RoyalShock":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "Spin Edge":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "X-Meteo":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "Red Card":
-                            if spell not in valid_spells: valid_spells.append(spell)
-                        elif spell.name == "MoogleRush":
-                            if spell not in valid_spells: valid_spells.append(spell)
+                        if spell.name in desperations and spell not in valid_spells:
+                            valid_spells.append(spell)
                         elif spell.name == "ShadowFang":
                             valid_spells.append(spell)
 
@@ -4969,6 +4953,13 @@ def randomize(**kwargs) -> str:
 
     if Options_.randomize_forest and not Options_.is_code_active('ancientcave') and not Options_.is_code_active('strangejourney'):
         randomize_forest()
+
+        #remove forced healing event tile with randomized forest
+        remove_forest_event_sub = Substitution()
+        remove_forest_event_sub.set_location(0xBA3D1)
+        remove_forest_event_sub.bytestring = bytes([0xFE])
+        remove_forest_event_sub.write(fout)
+
     reseed()
 
     if Options_.random_final_dungeon and not Options_.is_code_active('ancientcave'):
@@ -5311,6 +5302,9 @@ if __name__ == "__main__":
         source_arg = None
         seed_arg = None
         destination_arg = None
+        expMultiplier = 1
+        gpMultiplier = 1
+        mpMultiplier = 1
         randomboost = None
         for argument in args[1:]:
             if 'source=' in argument:
