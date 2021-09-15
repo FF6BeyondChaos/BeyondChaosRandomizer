@@ -220,19 +220,14 @@ zaol_temple:        train, gate, floating*2, phoenix, ktower
 
 [legacy]
 # songs that still use legacy sample set and have not gone through editing to meet EX5 standards
-ar_sacrifices:      awakening, ruintown, forest, tomb
-bof2_wings:         blackjack, falcon
-dt_skullbone:       shadow*2, zozo, martiallaw*2, train
 ff5_void2:          setzer, returners, troops, savethem, mountain, ktower
 
 [draft]
 # filing songs here that are not legacy but nevertheless have not gone through editing to meet EX5 standards
 # mostly, such songs will not be included in this playlist but some are worthwhile despite major issues in channel priority, accuracy, etc
-ff9_notalone:       grandfinale
 
 ## TO DO LIST for songs not listed above that could be listed after editing/replacement:
 # lal_master
-# kq6_bookworm
 # saga2_aspiration
 
 [legacysongstxtcopypasta]
