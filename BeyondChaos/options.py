@@ -236,6 +236,7 @@ NORMAL_CODES = [
     Code('notawaiter', "CUTSCENE SKIPS", "Up to Kefka at Narshe, the vast majority of mandatory cutscenes are completely removed. Optional cutscenes are not removed.", "aesthetic", "checkbox"),
     Code('fightclub', "MORE LIKE COLI-DON'T-SEE-'EM", "Does not allow you to see the coliseum rewards before betting, but you can often run from the coliseum battles to keep your item.", "aesthetic", "checkbox"),
     Code('questionablecontent', "RIDDLER MODE", "When items have significant differences from vanilla, appends a question mark to the item's name to allow at-a-glance identification. Beware: Affects items sold in shops.", "beta", "checkbox"),
+    Code('epilepsysafer', "NOT SO FLASHY MODE", "Removes some flash effects from the game, such as Bum Rush.", "beta", "checkbox"),
 
     #battle codes
     Code('electricboogaloo', "WILD ITEM BREAK MODE", "Increases the list of spells that items can break and proc for. Items can break for potentially any spell, and weapons can potentially proc any spell excluding SwdTechs, Blitzes, Slots, and a couple other skills.", "battle", "checkbox"),

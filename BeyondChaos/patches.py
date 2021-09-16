@@ -279,3 +279,340 @@ def no_dance_stumbles(fout):
     nds_sub.set_location(0x0217A0) #C217A0
     nds_sub.bytestring = bytes([0xEA, 0xEA])            #No Op x2
     nds_sub.write(fout)
+
+def fewer_flashes(fout):
+    anti_seizure_sub = Substitution()
+
+    #
+    # Removing Bum Rush Flashes
+    #
+    # Flash 1
+    anti_seizure_sub.set_location(0x106C7F)  # D06C7F
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x106C88)  # D06C88
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    # Flash 2
+    anti_seizure_sub.set_location(0x106C96)  # D06C96
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x106C9F)  # D06C9F
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    # Other Bum Rush Background Sets - possibly unnecessary
+    anti_seizure_sub.set_location(0x106C3F)  # D06C3F
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x106C48)  # D06C48
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x106C54)  # D06C54
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x106C88)  # D06C87
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Tiger Break Flash
+    #
+    anti_seizure_sub.set_location(0x10240E)  # D0240E
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x102412)  # D02412
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x102416)  # D02416
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Royal Shock Flash
+    #
+    anti_seizure_sub.set_location(0x102968)  # D02968
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10299C)  # D0299C
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x102974)  # D02974
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Sabre Soul Flash
+    #
+    anti_seizure_sub.set_location(0x1027D4)  # D027D4
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1027DB)  # D027DB
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Reverse Polarity Flash
+    #
+    anti_seizure_sub.set_location(0x10328C)  # D0328C
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x103293)  # D03293
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Rippler Flash
+    #
+    anti_seizure_sub.set_location(0x1033C7)  # D033C7
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1033CB)  # D033CB
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Step Mine Flash
+    #
+    anti_seizure_sub.set_location(0x1034DA)  # D034DA
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1034E1)  # D034E1
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Schiller Flash
+    #
+    anti_seizure_sub.set_location(0x10381A)  # D0381A
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10381E)  # D0381E
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Wall Change Flash
+    #
+    anti_seizure_sub.set_location(0x10399F)  # D0399F
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1039A4)  # D039A4
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1039AA)  # D039AA
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1039B0)  # D039B0
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1039B6)  # D039B6
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1039BC)  # D039BC
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1039C2)  # D039C2
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1039C8)  # D039C8
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1039CE)  # D039CE
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1039D5)  # D039D5
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Ultima Flash
+    #
+    anti_seizure_sub.set_location(0x1056EE)  # D056EE
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1056F6)  # D056F6
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Bolt 3/Giga Volt Flash
+    #
+    anti_seizure_sub.set_location(0x10588F)  # D0588F
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x105894)  # D05894
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x105897)  # D05897
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10589A)  # D0589A
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10589D)  # D0589D
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1058A2)  # D058A2
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1058A7)  # D058A7
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1058AC)  # D058AC
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1058B1)  # D058B1
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing X-Zone Flash
+    #
+    anti_seizure_sub.set_location(0x105A5E)  # D05A5E
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x105A6B)  # D05A6B
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x105A78)  # D05A78
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Shock Flash
+    #
+    anti_seizure_sub.set_location(0x1068BF)  # D068BF
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1068D1)  # D068D1
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Quadra Slam/Slice Flash
+    #
+    # White Flash
+    anti_seizure_sub.set_location(0x1073DD)  # D073DD
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1073EF)  # D073EF
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1073F4)  # D073F4
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    # Green Flash
+    anti_seizure_sub.set_location(0x107403)  # D07403
+    anti_seizure_sub.bytestring = bytes([0x40])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x107425)  # D07425
+    anti_seizure_sub.bytestring = bytes([0x50])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10742A)  # D0742A
+    anti_seizure_sub.bytestring = bytes([0x50])
+    anti_seizure_sub.write(fout)
+
+    # Blue Flash
+    anti_seizure_sub.set_location(0x107437)  # D07437
+    anti_seizure_sub.bytestring = bytes([0x20])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x107459)  # D07459
+    anti_seizure_sub.bytestring = bytes([0x30])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10745E)  # D0745E
+    anti_seizure_sub.bytestring = bytes([0x30])
+    anti_seizure_sub.write(fout)
+
+    # Red Flash
+    anti_seizure_sub.set_location(0x107491)  # D07491
+    anti_seizure_sub.bytestring = bytes([0x80])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1074B3)  # D074B3
+    anti_seizure_sub.bytestring = bytes([0x90])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1074B8)  # D074B8
+    anti_seizure_sub.bytestring = bytes([0x90])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Slash Flash
+    #
+    anti_seizure_sub.set_location(0x1074F5)  # D074F5
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1074FE)  # D074FE
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1074F8)  # D074F8
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Flash Flash
+    #
+    anti_seizure_sub.set_location(0x107851)  # D07851
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10785D)  # D0785D
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Back Blade Flash
+    #
+    anti_seizure_sub.set_location(0x1028D4)  # D028D4
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1028E0)  # D028E0
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
