@@ -45,7 +45,7 @@ from musicinterface import randomize_music, manage_opera, get_music_spoiler, mus
 from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
-                     cycle_statuses, no_dance_stumbles, fewer_flashes)
+                     cycle_statuses, no_dance_stumbles)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -71,7 +71,7 @@ VERSION_ROMAN = "I"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosseseasymodocanttouchthisdearestmolulu.1630973998"
+TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosseseasymodocanttouchthissuplexwrecks.1630973998"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -4284,6 +4284,31 @@ def nerf_paladin_shield():
     paladin_shield.mutate_learning()
     paladin_shield.write_stats(fout)
 
+def fix_flash_and_bioblaster(fout):
+
+    fix_flash_sub = Substitution()
+
+    fix_flash_sub.set_location(0x103803) #Change Schiller animation to a single Flash
+    fix_flash_sub.bytestring = ([0x00, 0x20, 0xD1, 0x01, 0xC9, 0x00, 0x85, 0xB0, 0xFF, 0xBA, 0xC0, 0x89, 0x10, 0xBB, 0xC2, 0x00, 0x8A, 0x89, 0x20, 0xB5, 0xF1, 0xBB, 0xD2, 0x00, 0x8A, 0xD1, 0x00, 0x81, 0x00, 0x00, 0xFF])
+    fix_flash_sub.write(fout)
+
+    fix_flash_sub.set_location(0x108696) #Make Flash have Schiller animation when used outside of Tools
+    fix_flash_sub.bytestring = ([0x24, 0x81, 0xFF, 0xFF, 0xFF, 0xFF, 0x51, 0x00, 0x00, 0x9F, 0x10, 0x76, 0x81, 0x10])
+    fix_flash_sub.write(fout)
+
+    fix_flash_sub.set_location(0x1088D4) #Change Schiller animation data to look better with one flash
+    fix_flash_sub.bytestring = [0x24, 0x81, 0xFF, 0xFF, 0xFF, 0xFF, 0x51, 0x00, 0x00, 0x6D, 0x10, 0x76, 0x81, 0x10]
+    fix_flash_sub.write(fout)
+
+    fix_bio_blaster_sub = Substitution() #Make Bio Blaster have correct animation when used outside of Tools
+    fix_bio_blaster_sub.set_location(0x108688)
+    fix_bio_blaster_sub.bytestring = ([0x7E, 0x02, 0xFF, 0xFF, 0x4A, 0x00, 0x00, 0x00, 0xEE, 0x63, 0x03, 0xFF, 0xFF, 0x10])
+    fix_bio_blaster_sub.write(fout)
+
+    fix_bio_blaster_name_sub = Substitution() #Change Spell Name to BioBlaster
+    fix_bio_blaster_name_sub.set_location(0x26F971)
+    fix_bio_blaster_name_sub.bytestring = ([0x81, 0xa2, 0xa8, 0x81, 0xa5, 0x9a, 0xac, 0xad, 0x9e, 0xab])
+    fix_bio_blaster_name_sub.write(fout)
 
 def sprint_shoes_hint():
     sprint_shoes = get_item(0xE6)
@@ -5245,8 +5270,7 @@ def randomize(**kwargs) -> str:
     fix_gogo_portrait(fout)
     cycle_statuses(fout)
     name_swd_techs(fout)
-    if Options_.is_code_active("epilepsysafer"):
-        fewer_flashes(fout)
+    fix_flash_and_bioblaster(fout)
     #add_esper_bonuses(fout) #Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
 
     if not Options_.is_code_active('fightclub'):

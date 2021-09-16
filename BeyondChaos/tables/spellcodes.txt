@@ -123,7 +123,7 @@
 7A,strong,Wild Bear
 7B,medium,Pois. Frog
 7C,weak,Ice Rabbit
-7D,weak,Super Ball
+7D,weak,Bio Blaster
 7E,medium,Flash
 7F,medium,Chocobop
 80,strong,H-Bomb
