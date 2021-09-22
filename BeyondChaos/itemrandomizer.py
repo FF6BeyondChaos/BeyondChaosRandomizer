@@ -3,7 +3,7 @@ from utils import (hex2int, write_multi, read_multi, ITEM_TABLE,
                    CUSTOM_ITEMS_TABLE, mutate_index,
                    name_to_bytes, utilrandom as random,
                    Substitution)
-from skillrandomizer import get_ranked_spells
+from skillrandomizer import get_ranked_spells, get_spell
 from options import Options_
 
 # future blocks: chests, morphs, shops
@@ -394,10 +394,10 @@ class ItemBlock:
                       "Auto haste", "Auto stop", "Auto shell",
                       "Auto safe", "Auto reflect"])},
             "fieldeffect": {e: 1 << i for i, e in
-                      enumerate(["1/2 enc.", "No enc.", "i", "j", "k",
-                      "Sprint", "m", "n"])},
+                      enumerate(["1/2 enc.", "No enc.", "", "", "",
+                      "Sprint", "", ""])},
             "otherproperties": {e: 1 << i for i, e in
-                      enumerate(["a", "", "Procs", "Breaks", "e", "", "", ""])}
+                      enumerate(["", "", "Procs", "Breaks", "", "", "", ""])}
         }
 
         try:
@@ -487,6 +487,7 @@ class ItemBlock:
         if self.is_weapon and spell.spellid not in no_proc_ids and (
                 not self.itemtype & 0x20 or random.randint(1, 2) == 2):
             self.features['otherproperties'] |= 0x04
+            self.mutation_log["Proc"] = get_spell(self.features['breakeffect']).name
         else:
             self.features['otherproperties'] &= 0xFB
 
