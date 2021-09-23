@@ -54,7 +54,7 @@ Flags:
     
     * If this is your first seed, I recommend going down to bottom where it says "Saved flag selection", and picking "Recommend new player flags" from the dropdown menu.
     
-    This will give you a good taste of Beyond Chaos EX while leaving out a few things that can sometimes be frustrating for new players.
+    This will give you a good taste of Beyond Chaos CE while leaving out a few things that can sometimes be frustrating for new players.
     
     * If you find that too hard, try also unchecking the 'm' flag.
     
@@ -71,8 +71,8 @@ Output rom file:
 
 --- OVERVIEW ---
 
-    Beyond Chaos EX is a randomizer, a program that remixes game content randomly, for FF6. It is a fork of Abyssonym's Beyond Chaos randomizer with even more features. Every time you run Beyond Chaos EX, it will generate a completely unique, brand-new mod of FF6 for you to challenge and explore. There are over 10 billion different possible randomizations! Nearly everything is randomized, including treasure, enemies, colors, graphics, character abilities, and more.
-    Beyond Chaos EX is also customizable. Using the flags in the above section, you can choose to only randomize certain parts of the game. Every flag you select will make the game a little more random, and also a little more difficult. Therefore, even experienced players should be able to find some challenge in the resulting game. As the game progresses, enemies may become more and more difficult, so that it becomes necessary to develop specialized strategies for individual formations.
+    Beyond Chaos CE is a randomizer, a program that remixes game content randomly, for FF6. It is a fork of Abyssonym's Beyond Chaos randomizer with even more features. Every time you run Beyond Chaos CE, it will generate a completely unique, brand-new mod of FF6 for you to challenge and explore. There are over 10 billion different possible randomizations! Nearly everything is randomized, including treasure, enemies, colors, graphics, character abilities, and more.
+    Beyond Chaos CE is also customizable. Using the flags in the above section, you can choose to only randomize certain parts of the game. Every flag you select will make the game a little more random, and also a little more difficult. Therefore, even experienced players should be able to find some challenge in the resulting game. As the game progresses, enemies may become more and more difficult, so that it becomes necessary to develop specialized strategies for individual formations.
 
 --- FAQ/KNOWN ISSUES ---
 
@@ -175,10 +175,10 @@ A: Maybe. I'm open to suggestions, but things that require a lot of effort proba
 Q: Can I add X feature?
 A: Possibly! Even if I don't think it's a good idea for the standard settings, it could be a flag. Send me a pull request to the project's Github.
 
-Q: Does Beyond Chaos EX work with X mod?
+Q: Does Beyond Chaos CE work with X mod?
 A: Probably not, especially if the mod makes large changes. But try Beyond Chaos Gaiden, which does work with Brave New World.
 
-Q: Does Beyond Chaos EX work on a real Super Nintendo?
+Q: Does Beyond Chaos CE work on a real Super Nintendo?
 A: Absolutely! Beyond Chaos has been tested on both Super Everdrive and SD2SNES, and it works 100% perfectly.
 
 Q: I found a bug!
