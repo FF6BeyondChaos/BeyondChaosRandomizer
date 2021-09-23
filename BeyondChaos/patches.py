@@ -403,6 +403,8 @@ def fewer_flashes(fout):
     anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
+    #This commented out code is for vanilla Schiller, which BC is no longer using
+
     #anti_seizure_sub.set_location(0x10381A)  # D0381A
     #anti_seizure_sub.bytestring = bytes([0xE0])
     #anti_seizure_sub.write(fout)
