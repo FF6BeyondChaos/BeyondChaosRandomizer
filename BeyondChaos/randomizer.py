@@ -45,7 +45,7 @@ from musicinterface import randomize_music, manage_opera, get_music_spoiler, mus
 from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
-                     cycle_statuses, no_dance_stumbles)
+                     cycle_statuses, no_dance_stumbles, fewer_flashes)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -65,13 +65,13 @@ from utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
 from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 
-VERSION = "1"
-BETA = True
-VERSION_ROMAN = "I"
+VERSION = "2"
+BETA = False
+VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiabmimetimerandombosseseasymodocanttouchthissuplexwrecks.1630973998"
+TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiaberandombossesmimetimeeasymodocanttouchthissuplexwrecksremoveflashing.1630973998"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -2074,7 +2074,7 @@ def manage_monsters() -> List[MonsterBlock]:
         m.tweak_fanatics()
         m.relevel_specifics()
 
-    change_enemy_name(fout, 0x166, "L.255Magic")
+    #change_enemy_name(fout, 0x166, "L.255Magic") #Commenting out to revert back to MagiMaster so Chaotic AI works with it
 
     shuffle_monsters(monsters, safe_solo_terra=safe_solo_terra)
     for m in monsters:
@@ -4286,6 +4286,10 @@ def nerf_paladin_shield():
 
 def fix_flash_and_bioblaster(fout):
 
+    #Function to make Flash and Bio Blaster have correct names and animations when used outside of Tools
+    #Because of FF6 jank, need to modify Schiller animation and share with Flash, and then modify Bomblet to share
+    #with X-Kill. Not a perfect fix, but better than it was
+
     fix_flash_sub = Substitution()
 
     fix_flash_sub.set_location(0x103803) #Change Schiller animation to a single Flash
@@ -4297,12 +4301,28 @@ def fix_flash_and_bioblaster(fout):
     fix_flash_sub.write(fout)
 
     fix_flash_sub.set_location(0x1088D4) #Change Schiller animation data to look better with one flash
-    fix_flash_sub.bytestring = [0x24, 0x81, 0xFF, 0xFF, 0xFF, 0xFF, 0x51, 0x00, 0x00, 0x6D, 0x10, 0x76, 0x81, 0x10]
+    fix_flash_sub.bytestring = [0x24, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xE3, 0x00, 0x00, 0x6D, 0x10, 0x76, 0x81, 0x10]
+    fix_flash_sub.write(fout)
+
+    fix_flash_sub.set_location(0x023D45) #Tell X-Kill to point to Bomblet for animation, instead of Flash
+    fix_flash_sub.bytestring = ([0xD8])
+    fix_flash_sub.write(fout)
+
+    fix_flash_sub.set_location(0x108B82) #Make Bomblet have X-Kill animation instead of nothing
+    fix_flash_sub.bytestring = ([0xFF, 0xFF, 0x7F, 0x02, 0xFF, 0xFF, 0x35, 0x35, 0x00, 0xCC, 0x1B, 0xFF, 0xFF, 0x10])
     fix_flash_sub.write(fout)
 
     fix_bio_blaster_sub = Substitution() #Make Bio Blaster have correct animation when used outside of Tools
     fix_bio_blaster_sub.set_location(0x108688)
     fix_bio_blaster_sub.bytestring = ([0x7E, 0x02, 0xFF, 0xFF, 0x4A, 0x00, 0x00, 0x00, 0xEE, 0x63, 0x03, 0xFF, 0xFF, 0x10])
+    fix_bio_blaster_sub.write(fout)
+
+    fix_bio_blaster_sub.set_location(0x02402D) #Change Super Ball Item Animatino to point to 0xFFFF (No spell) animation
+    fix_bio_blaster_sub.bytestring = ([0xFF])
+    fix_bio_blaster_sub.write(fout)
+
+    fix_bio_blaster_sub.set_location(0x108DA4) # Tell 0xFFFF (No spell) to have Super Ball animation
+    fix_bio_blaster_sub.bytestring = ([0x0E, 0x02, 0xFF, 0xFF, 0xFF, 0xFF, 0xD1, 0x00, 0x00, 0xCA, 0x10, 0x85, 0x02, 0x03])
     fix_bio_blaster_sub.write(fout)
 
     fix_bio_blaster_name_sub = Substitution() #Change Spell Name to BioBlaster
@@ -5261,7 +5281,7 @@ def randomize(**kwargs) -> str:
         manage_santa()
     elif Options_.is_code_active('halloween') and not Options_.is_code_active('ancientcave'):
         manage_spookiness()
-        
+
     if Options_.is_code_active('dancelessons'):
         no_dance_stumbles(fout)
     banon_life3(fout)
@@ -5272,6 +5292,9 @@ def randomize(**kwargs) -> str:
     name_swd_techs(fout)
     fix_flash_and_bioblaster(fout)
     #add_esper_bonuses(fout) #Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
+
+    if Options_.is_code_active('removeflashing'):
+        fewer_flashes(fout)
 
     if not Options_.is_code_active('fightclub'):
         show_coliseum_rewards(fout)

@@ -3,7 +3,7 @@
 FF6 Beyond Chaos CE Randomizer
 a fork of SubtractionSoup's FF6 Beyond Chaos EX Randomizer
 a fork of Abyssonym's FF6 Beyond Chaos Randomizer
-Version:    1.0.0
+Version:    2.0.0
 Date:       2021-07-16
 URL:        https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest
 Beyond Chaos Discord:    https://discord.gg/S3G3UXy
@@ -188,7 +188,6 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
     Abyssonym - original Beyond Chaos creator
     subtractionsoup - former maintainer of Beyond Chaos EX 
     CtrlxZ - created or modified a bunch of sprites for the randomizer
-	ATinySpook - ported over sprites and music for the randomizer
 	HoxNorf - ported over sprites and music for the randomizer
     DarkSlash - madworld, darkworld, randombosses codes and some other things for KatN mode; current maintainer of Beyond Chaos CE (send help)
     emberling - speeddial, randomized music, alasdraco, dialoguemanager, converted a ton of music, and reworked palettes and sprite replacement, FF6 music player patch
@@ -201,7 +200,7 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
 	Crimdahl - Rotating status patch, dancelessons code lots of help with CE v1 release
 	fusoyeahhh - lots of help with CE v1 release
 	RazzleStorm - refactoring some code, adding type hints, lots of help with CE v1 release
-	CDude - lots of help with event code for CE v1 release
+	CDude - lots of help with event code for CE v1 and v2 release
 	Cecil188 - ported over music, owner of the Discord, and overall helper with everything
 	
 

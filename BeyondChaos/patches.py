@@ -398,13 +398,18 @@ def fewer_flashes(fout):
     #
     # Removing Schiller Flash
     #
-    anti_seizure_sub.set_location(0x10381A)  # D0381A
+
+    anti_seizure_sub.set_location(0x10380B)
     anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
-    anti_seizure_sub.set_location(0x10381E)  # D0381E
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(fout)
+    #anti_seizure_sub.set_location(0x10381A)  # D0381A
+    #anti_seizure_sub.bytestring = bytes([0xE0])
+    #anti_seizure_sub.write(fout)
+
+    #anti_seizure_sub.set_location(0x10381E)  # D0381E
+    #anti_seizure_sub.bytestring = bytes([0xF0])
+    #anti_seizure_sub.write(fout)
 
     #
     # Removing Wall Change Flash
