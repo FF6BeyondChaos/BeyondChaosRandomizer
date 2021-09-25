@@ -105,7 +105,7 @@ def allocate_espers(ancient_cave, espers, characters, fout, replacements=None):
     ]
 
     for e in espers:
-        e.chars = ", ".join([c.newname for c in characters if c.id in chars_for_esper[e.id]])
+        e.chars = ", ".join([c.name for c in characters if c.id in chars_for_esper[e.id]])
 
     # do substitution
     esper_allocator_sub = Substitution()

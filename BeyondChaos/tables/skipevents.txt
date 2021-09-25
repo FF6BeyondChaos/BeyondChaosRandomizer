@@ -220,7 +220,7 @@ Normal A91C7 FD FD FD
 # Gerad Nikeah
 Normal A91E6 F4 1B FD
 Normal A920A F4 1B FD
-Normal A9222 F4 1B 1A 03 92 D1 FF D7 76 D6 78 FE
+Normal A921A F4 1B 1A 03 92 D1 FF D7 76 D6 78 FE
 # Boat to South Figaro
 Normal A928A 6A 5B 00 0E 0C 80 6C 01 00 71 5F 00 31 82 09 FF D0 AC D7 FE D7 77 D7 78 D6 7E FE FD FD
 # Gerad South Figaro Case of mistaken identity, my dear.

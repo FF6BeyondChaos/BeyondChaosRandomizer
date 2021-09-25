@@ -3,7 +3,7 @@ from utils import (hex2int, write_multi, read_multi, ITEM_TABLE,
                    CUSTOM_ITEMS_TABLE, mutate_index,
                    name_to_bytes, utilrandom as random,
                    Substitution)
-from skillrandomizer import get_ranked_spells
+from skillrandomizer import get_ranked_spells, get_spell
 from options import Options_
 
 # future blocks: chests, morphs, shops
@@ -357,41 +357,53 @@ class ItemBlock:
 
     def get_feature(self, feature, feature_byte, nochange):
 
-        FEATURE_FLAGS = None
+        features = {
+            "statboost1": {e: 1 << i for i, e in
+                      enumerate(["Bat. Pwr +1/4", "Mag. Pwr +1/2", "+1/4 HP",
+                      "+1/2 HP", "+1/8 HP", "+1/4 MP", "+1/2 MP", "+1/8 MP"])},
+            "statboost2": {e: 1 << i for i, e in
+                      enumerate(["Better Steal", "Mag. Pwr +1/4",
+                      "Better Sketch","Better Control", "100% Hit Rate",
+                      "1/2 MP Cost", "MP cost = 1", "Vigor +50%"])},
+            "special1": {e: 1 << i for i, e in
+                      enumerate(["Initiative", "Vigilance", "Command Changer",
+                      "Command Changer", "Command Changer", "Command Changer",
+                      "Command Changer", "Super Jump"])},
+            "special2": {e: 1 << i for i, e in
+                      enumerate(["Fight -> X-Fight", "Can counter",
+                      "Random Evade", "Use weapon 2-handed",
+                      "Can equip 2 weapons", "Can equip anything",
+                      "Cover", "Step regen"])},
+            "special3": {e: 1 << i for i, e in
+                      enumerate(["Fight -> X-Fight", "Can counter", "Random Evade",
+                      "Use weapon 2-handed", "Can equip 2 weapons",
+                      "Can equip anything", "Cover", "Step regen"])},
+            "statusprotect1": {e: 1 << i for i, e in
+                      enumerate(["No dark", "No zombie", "No poison",
+                      "No magitek", "No clear", "No imp",
+                      "No petrify", "Death protection"])},
+            "statusprotect2": {e: 1 << i for i, e in
+                      enumerate(["No condemned", "Near fatal always",
+                      "No image", "No mute", "No berserk", "No muddle",
+                      "No seizure", "No sleep"])},
+            "statusacquire2": {e: 1 << i for i, e in
+                      enumerate(["Condemned", "Near fatal", "Image", "Mute",
+                      "Berserk", "Muddle", "Seizure", "Sleep"])},
+            "statusacquire3": {e: 1 << i for i, e in
+                      enumerate(["Auto float", "Auto regen", "Auto slow",
+                      "Auto haste", "Auto stop", "Auto shell",
+                      "Auto safe", "Auto reflect"])},
+            "fieldeffect": {e: 1 << i for i, e in
+                      enumerate(["1/2 enc.", "No enc.", "", "", "",
+                      "Sprint", "", ""])},
+            "otherproperties": {e: 1 << i for i, e in
+                      enumerate(["", "", "Procs", "Breaks", "", "", "", ""])}
+        }
 
-        if feature == "statboost1":
-            FEATURE_FLAGS = {e: 1 << i for i, e in
-                      enumerate(["Bat. Pwr +1/4", "Mag. Pwr +1/2", "+1/4 HP", "+1/2 HP", "+1/8 HP", "+1/4 MP", "+1/2 MP", "+1/8 MP"])}
-        if feature == "statboost2":
-            FEATURE_FLAGS = {e: 1 << i for i, e in
-                      enumerate(["Better Steal", "Mag. Pwr +1/4", "Better Sketch","Better Control", "100% Hit Rate", "1/2 MP Cost", "MP cost = 1", "Vigor +50%"])}
-        if feature == "special1":
-            FEATURE_FLAGS= {e: 1 << i for i, e in
-                      enumerate(["Initiative", "Vigilance", "Command Changer", "Command Changer", "Command Changer", "Command Changer", "Command Changer", "Super Jump"])}
-        if feature == "special2":
-            FEATURE_FLAGS= {e: 1 << i for i, e in
-                      enumerate(["Fight -> X-Fight", "Can counter", "Random Evade", "Use weapon 2-handed", "Can equip 2 weapons", "Can equip anything", "Cover", "Step regen"])}
-        if feature == "special3":
-            FEATURE_FLAGS= {e: 1 << i for i, e in
-                      enumerate(["Low HP Shell", "Low HP Safe", "Low HP Reflect", "Double EXP", "Double GP", "o", "p", "Reverses cures"])}
-        if feature == "statusprotect1":
-            FEATURE_FLAGS = {e: 1 << i for i, e in
-                      enumerate(["No dark", "No zombie", "No poison", "No magitek", "No clear", "No imp", "No petrify", "Death protection"])}
-        if feature == "statusprotect2":
-            FEATURE_FLAGS = {e: 1 << i for i, e in
-                      enumerate(["No condemned", "Near fatal always", "No image", "No mute", "No berserk", "No muddle", "No seizure", "No sleep"])}
-        if feature == "statusacquire2":
-            FEATURE_FLAGS = {e: 1 << i for i, e in
-                      enumerate(["Condemned", "Near fatal", "Image", "Mute", "Berserk", "Muddle", "Seizure", "Sleep"])}
-        if feature == "statusacquire3":
-            FEATURE_FLAGS = {e: 1 << i for i, e in
-                      enumerate(["Auto float", "Auto regen", "Auto slow", "Auto haste", "Auto stop", "Auto shell", "Auto safe", "Auto reflect"])}
-        if feature == "fieldeffect":
-            FEATURE_FLAGS = {e: 1 << i for i, e in
-                      enumerate(["1/2 enc.", "No enc.", "i", "j", "k", "Sprint", "m", "n"])}
-        if feature == "otherproperties":
-            FEATURE_FLAGS = {e: 1 << i for i, e in
-                      enumerate(["a", "", "Procs", "Breaks", "e", "", "", ""])}
+        try:
+            FEATURE_FLAGS = features[feature]
+        except KeyError:
+            FEATURE_FLAGS = None
 
         # Comparing (v & feature_byte) to (v & nochange) appears to detect if the feature is a vanilla feature.
         # TODO: Adjust the string composition below so that procs and breaks can be handled differently.
@@ -401,6 +413,7 @@ class ItemBlock:
         if FEATURE_FLAGS:
             s = ", ".join([e for e, v in FEATURE_FLAGS.items() if v & feature_byte == v and v & feature_byte != v & nochange])
 
+        # Note that this doesn't catch an error if s is not defined.
         return s
 
     def mutate_feature(self, feature=None):
@@ -474,6 +487,7 @@ class ItemBlock:
         if self.is_weapon and spell.spellid not in no_proc_ids and (
                 not self.itemtype & 0x20 or random.randint(1, 2) == 2):
             self.features['otherproperties'] |= 0x04
+            self.mutation_log["Proc"] = get_spell(self.features['breakeffect']).name
         else:
             self.features['otherproperties'] &= 0xFB
 

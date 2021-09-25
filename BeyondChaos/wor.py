@@ -227,9 +227,9 @@ def recruit_umaro_insert(fout, recruit_info):
         0x7F, 0x0D, 0x0D, # change umaro's name to umaro
         0x98, 0x0D, # name change screen for umaro
         0x41, 0x31, # show party
-        0x41, 0x32, # show party
-        0x41, 0x33, # show party
-        0x41, 0x34, # show party
+        #0x41, 0x32, # show party
+        #0x41, 0x33, # show party
+        #0x41, 0x34, # show party ##commented out to fix ghosting when recruiting Umaro in other locations than his cave
     ] + show_npcs + recruit_info.name_extra + [
         0x45, # refresh objects
         0x96, # unfade
