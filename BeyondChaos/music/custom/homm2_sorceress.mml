@@ -833,7 +833,7 @@ $3108
 ## 108, no longer on a one 64th note early
 'leftPiano4-o1'
 l8
-'bassPianoSustain'c8..v6,0^32'lmp4''leftPianoSustain'deg2
+'bassPianoSustain'`c4` _c8..v6,0^32'lmp4'_ 'leftPianoSustain'deg2
 ## 109 (at beat 2)
 e2
 ## 110
@@ -841,55 +841,55 @@ e2
 ## 111 (at beat 2)
 ^2
 ## 112
->a<'bassPianoSustain'e16.v6,0^32'lmp4''leftPianoSustain'b<c'lpp4'e2
+>a<'bassPianoSustain'`e8` _e16.v6,0^32'lmp4'_ 'leftPianoSustain'b<c'lpp4'e2
 ## 113 (at beat 2)
 >'lmp4'a2
 ## 114
-e>'bassPianoSustain'b16.v6,0^32'lmp4''leftPianoSustain'<ef+g'lpp4'b
+e>'bassPianoSustain'`b8`_b16.v6,0^32'lmp4'_ 'leftPianoSustain'<ef+g'lpp4'b
 ## 115
 <'lmp4'e2.
 ## 116
->>'bassPianoSustain'g16.v6,0^32'lmp4''leftPianoSustain'<cd'lpp4'eg2
+>>'bassPianoSustain'`g8` _g16.v6,0^32'lmp4'_ 'leftPianoSustain'<cd'lpp4'eg2
 ## 117 (at beat 2)
 'lppp4'e4g4
 ## 118-119
 >b4<'lpp4'dgb1
 ## 120
-^4'lmp4''bassPianoSustain'd16.v6,0^32'lmp4''leftPianoSustain'>a<de
+^4'lmp4''bassPianoSustain'`d8` _d16.v6,0^32'lmp4'_ 'leftPianoSustain'>a<de
 ## 121
 fa<d2
 ## 122
->>'bassPianoSustain'a4^16.v6,0^32'lmp4''leftPianoSustain'<eb<c4.
+>>'bassPianoSustain'`a4.` _a4^16.v6,0^32'lmp4'_ 'leftPianoSustain'<eb<c4.
 ## 123 (at beat 2)
 c2
 ## 124
->c'bassPianoSustain'g16.v6,0^32'leftPianoSustain'<'lpp4'dege
+>c'bassPianoSustain'`g8`_g16.v6,0^32_ 'leftPianoSustain'<'lpp4'dege
 ## 125
 c2.
 ## 126
->>b<d'lmp4''bassPianoSustain'g16.v6,0^32'leftPianoSustain'<'lpp4'ddg
+>>b<d'lmp4''bassPianoSustain'`g8` _g16.v6,0^32_ 'leftPianoSustain'<'lpp4'ddg
 ## 127
 >b4<d2
 ## 128
->>'lmp4'a<'bassPianoSustain'e16.v6,0^32'lmp4''leftPianoSustain'a<'lpp4'c'lppp4'e4
+>>'lmp4'a<'bassPianoSustain'`e8` _e16.v6,0^32'lmp4'_ 'leftPianoSustain'a<'lpp4'c'lppp4'e4
 ## 129
 'lpp4'a4e2
 ## 130
->>'lmp4''bassPianoSustain'e16.v6,0^32'leftPianoSustain'<'ultraQuietLeftPiano4'e'lpp4'f+gb<'ultraQuietLeftPiano4'e
+>>'lmp4''bassPianoSustain'`e8` _e16.v6,0^32_ 'leftPianoSustain'<'ultraQuietLeftPiano4'e'lpp4'f+gb<'ultraQuietLeftPiano4'e
 ## 131
 f+4'lpp4'g2
 ## 132
->'lmp4''bassPianoSustain'd16.v6,0^32'leftPianoSustain''lpp4'fa<d4.
+>'lmp4''bassPianoSustain'`d8` _d16.v6,0^32_ 'leftPianoSustain''lpp4'fa<d4.
 ## 133
 'ultraQuietLeftPiano4'f4'lpp4'd2
 ## 134
-^8>'lmp4''bassPianoSustain'e16.v6,0^32'leftPianoSustain''lpp4'b<c'ultraQuietLeftPiano4'e4
+^8>'lmp4''bassPianoSustain'`e8` _e16.v6,0^32_ 'leftPianoSustain''lpp4'b<c'ultraQuietLeftPiano4'e4
 ## 135
 a4'lppp4'c4>a4
 ## 136-137
->'lmp4''bassPianoSustain'g16.v6,0^32'leftPianoSustain''lpp4'<dg<d'lppp4'g1
+>'lmp4''bassPianoSustain'`g8` _g16.v6,0^32_ 'leftPianoSustain''lpp4'<dg<d'lppp4'g1
 ## 138
->>'lmp4''bassPianoSustain'c16.v6,0^32'lmp4''leftPianoSustain'g<ce'lpp4'g<c
+>>'lmp4''bassPianoSustain'`c8` _c16.v6,0^32'lmp4'_ 'leftPianoSustain'g<ce'lpp4'g<c
 ## 139
 e4..
 'timpani-o3'l8'timpaniVol*v1.2''timpaniPartialStrike'g16'timpaniFade*v48,.3'^16'timpaniRumble'gg32.
@@ -1528,6 +1528,8 @@ g2 ;7103
 
 $7108
 ## 108
+`[190 r8]`
+_
 'leftPiano4-o1'
 'bassPianoSustain'
 v0c8.. 'leftPiano4Fade*v6,1'^32^2
@@ -1589,6 +1591,7 @@ v0e16.'leftPiano4Fade*v6,1'^32^1
 v0c16.'leftPiano4Fade*v6,1'^32^1
 ## 139 (at beat 2.5)
 ^8
+_
 ## Now at measure 3 beat 3, so time to go back to the big loop
 ]
 
@@ -1626,7 +1629,7 @@ g4
 ;7148
 
 
-{8} `r;` _
+{8}
 %e1
 ## Measure 1 lasts 1 beat
 r4
@@ -1731,7 +1734,6 @@ $8108
 ## 140, then back to the big loop
 r8
 ]
-_
 
 ## ** Jump functions **
 
