@@ -1,0 +1,181 @@
+#TITLE Wh-What? (Zed's Theme)
+#ALBUM Wild Arms
+#COMPOSER Michiko Naruke
+#ARRANGED Gi Nattak, emberling
+# Converted from binary by mfvitools
+
+#WAVE 0x20 0x50 ac.bass
+#WAVE 0x21 0x19 rhodes
+#WAVE 0x22 0xA5 flute
+#WAVE 0x23 0x5A timpani
+#WAVE 0x24 0x81 trumpet
+#WAVE 0x25 0x65 strings
+#WAVE 0x26 0x0A kick
+#WAVE 0x27 0x2A ride
+#WAVE 0x28 0x1A snare
+#WAVE 0x29 0x4A toms
+
+#WAVE 0x2A 0x36 guitar
+#WAVE 0x2F 0x8E castanet
+
+#def s=v80
+#def t=v48
+
+#def gtr= |A #%y1%s3%r14
+#def gvol= v120
+#def gfade = v60v180,83
+
+#def o= o5
+#def 0o= o4
+#def 1o= o4
+#def 3o= o6
+#def 4o= o5
+#def Ao= o4
+
+#def 2v= v50
+#def 7v= v167
+
+##castanet
+#drum "a+"= 6f
+#drum "f+"= 6c+
+##ride
+#drum "d+"= 5f+ %e1
+##kick/snare
+#drum "k"= 5a |6 %e0
+#drum "s"= 5g+ |8 %e0
+##toms
+#drum "d"= 5d %e1
+#drum "c"= 5c %e1
+#drum "a"= 4a %e1
+
+{1}
+l16t150%v32%x200%b0,100%f0,0
+%e0|F p52
+'s*v1'   "a+32^48" 't*v1'   "f+32^48"
+'s*v.30' "a+32^48" 't*v.30' "f+32^48"
+'s*v.36' "a+32^48" 't*v.36' "f+32^48"
+'s*v.42' "a+32^48" 't*v.42' "f+32^48"
+'s*v.48' "a+32^48" 't*v.48' "f+32^48"
+'s*v.54' "a+32^48" 't*v.54' "f+32^48"
+'s*v.60' "a+32^48" 't*v.60' "f+32^48"
+'s*v.66' "a+32^48" 't*v.66' "f+32^48"
+'s*v.72' "a+32^48" 't*v.72' "f+32^48"
+'s*v.78' "a+32^48" 't*v.78' "f+32^48"
+'s*v.94' "a+32^48" 't*v.94' "f+32^48"
+'s*v1'   "a+32^48"
+&34^ t120 ^2.
+%e1|3 '3o-o2' p80 v120 l12 f+ v80v176,120 [11f+] t150 ^16
+v120p64 |8 "!o s8." v80"s16"v120"s16" |9 "c16a8" l16
+ $1 v120p64|0'0o'b4<d8f+^32r32>b4<d8f+^32r32  
+>b4<d8f+^32r32>b4<d8f+^32r32  >b4<d8f+^32r32>b4<d8f+^32r32  >b4<d8f+^32r32>b4<d8f+^32r32  
+>b4<d8f+^32r32>b4<d8f+^32r32  >b4<d8f+^32r32>b4<d8f+^32r32  >b4<d8f+^32r32>b4<d8f+^32r32  
+>b4<d8f+^32r32>b4<d8f+^32r32  e4>b8g^32r32a4<c+8e^32r32  d4>a8<d^32r32>b4f+8b^32r32  
+e4g8b^32r32f+4a+8<f+^32r32  >b4<d8f+^32r32>b2  f+rf+4f+rgrg4gr  
+a4g4f+rf+4f+r  b4<d8f+^32r32>b4<d8f+^32r32  >a4<c+8e^32r32d4f+8a^32r32  
+e4>b8g^32r32a4<c+8e^32r32  d4>a8<d^32r32c+4>f+4  b4<d8f+^32r32>b4<d8f+^32r32  
+e4>b8<e^32r32>b4<d8f+^32r32  >f+4a+8<c+^32r32>f+4a+8<c+^32r32  >b4<d8f+^32r32>b2  
+b8r8b8r8b8r4^8  
+;1
+
+l16
+{6}
+l16%e1
+'gtr' 'gvol' p40 'Ao+o1' r12 b16^24 'gfade' [9b16^24] 'gvol' b1
+|5 'o' v80p45 v12,48 a+16 v96,72 ^2 v96,127 ^2 %r18 ^2
+ $2   r1  r1r1r1r1
+^1  ^1  ^1  v80p45|5>e2e2  
+a4a4f+2  d2c+2  f+1  r1  
+^1  b1  a2f+2  g2a2  
+f+2c+2  d1  d2d2  c+1  
+d1  <b8r8b8r8b8r4^8  
+;2
+
+l16
+{3}
+l16%e1
+'gtr' 'gvol' p40 'Ao' r48 f+16^24 'gfade' [9f+16^24] 'gvol' f+1^24.
+|5 'o-o1' v80p50 v12,48 f+16 v96,72 ^2 v96,127 ^2 %r18 ^2
+ $3 '2v*v.80'p60|2r1  ^1  
+^8'o+o1'dddrdrd8c+8>b8<c+8  r8dddrdrd8c+8%g1f+32e32d32c+32>b32a32%g0g  f+r1  
+^1  ^2^4^8^<f+8  ^edrer %g1f+32g32f+32g32f+32g32f+32g32f+32g32f+32g32f+32g32f+32g32%g0
+v80p50|5'o-o1'b2  
+<c+2f+4e4  d2>b2  a+2<d1  %a11%r24>c+>a+f+a+<c+>a+f+a+<d>bgb<d>bgb  
+<ec+>a<c+gd>b<gf+gab<c+def+%r  f+1  e2d2  e2e2  
+d2>a+2  b1  b2b2  a+1  
+b1  <d8r8d8r8d8r4^8  
+;3
+
+l16
+{7}
+l16%e1
+'gtr' 'gvol' p40 'Ao-o1' b16^24 'gfade' [9b16^24] 'gvol' b1^12
+|5 'o+o2' v40p55 v12,24 f+16 v96,48 ^2 v96,64 ^2 %r18 ^2
+ $4 v120p80|3'3o-o2'b4r1  
+^2^8f+8<c4  r1  ^2^8>f+8<c4  r1  
+^1  ^1  ^1  ^1  
+^1  ^1  ^1  ^1  
+^2^4v80p55|5<d1  c+2>a2  b2<c+2  >a2r2  
+f+1  g2f+2  f+1  f+1  
+<b8r8b8r8b8r4
+v120p80|3'3o-o2'f+8  
+;4
+
+l16
+{2}
+l16%e1
+v127p72|4'4o+o1' m24,18,231
+f+16e16f+1 r4 e4d12r12>b12r12<d12r12
+v12,72 f+16 v192,127 ^1 %r19 ^2
+ $5 v127p72|4'4o' m24,18,231r1  ^1  ^1  
+^1  f+4^rf+8b4<c+4  d4c+4>b4r4  <f+8^edrerf+4^8
+##r1  ^8
+|1'1o+o2'p35v120 %y3%s3  r8f+8^edrerf+2
+v127p72|4'4o+o1'
+e4^8f+8g4e4  d4e4f+4^8r8  c+8^rc+4f+4^8f+8  >b2^4r1  
+^1  ^4<d4^8drc+4  >b4a4g4f+4  ^8r8e8r8e4a4  
+^8g8f+2^4  r4>b4^8<c+8d4  f+4erg4b8f+4  ^8r8<c+4^8>f+rf+rf+8  
+g8f+8b1  b8r8b8r8b8r4^8  
+;5
+
+l16
+{4}
+l16%e1
+'gtr' 'gvol' p40 'Ao+o1' r24. f+16^24 'gfade' [9f+16^24] 'gvol' f+1^48
+|5 'o+o2' v40p60 v12,24 a+16 v96,48 ^2 v96,64 ^2 %r18 ^2
+ $6 v80p75|1'1o'r8<bbbrb8b8a8f+8a8  
+r8bbbrb8b8a8f+8a8  r8bbbrb8b8a8f+8a8  r8bbbrb8b8a8f+8a8
+ v80p60|5'o'  ^1  
+^1  ^1  <f+8^edrerf+4d4  >g2a2  
+<d4c+4>b2  g2f+2  b1  %g1 c+>a+f+a+<c+>a+f+a+<d>bgb<d>bgb  
+<ec+>a<c+gd>b<gf+gab<c+def+ %g0 <d4^8drc+4>b4  a4g4f+4^8r8  e8r8e4a4^8g8  
+f+2>f+2  b4^8<c+8d4f+4  erg4b8f+4^8r8  <c+4^8>f+rf+rf+8g8f+8  
+b1  <b8r8b8r8b8r4^8  
+;6
+
+l16
+{5}
+l16%e1
+'gtr' 'gvol' p40 'Ao' r24 b16^24 'gfade' [9b16^24] 'gvol' b1^24
+|3 '3o-o2' p80 v120 l12 r24 f+ v80v168,120 [11f+] ^48^2 l16
+ $7 v120p64 l8
+[2 "k4ssk4s4
+k4ssk4s4 k4ssk4s4 k4ssk4s4
+k4ssk4s4"] "k4ssk4s4 k4ss^2
+s4s4s4s4 s4s4ssss" [2"k4ssk4s4 k4ssk4s4
+k4ssk4s4 k4ssk4s4"] "s4s4s2"
+
+;7
+
+
+l16
+{8}
+l16%e1
+r8r1r1
+|5 'o-o1' p65 v80 v12,48 f+16 v96,72 ^2 v96,127 ^2 %r18 ^2
+ $8 '7v*v.24'p32|7[4"d+8d+8d+8d+8d+8d+8d+8d+8  
+d+8d+8d+8d+8d+8d+8d+8d+8  d+8d+8d+8d+8d+8d+8d+8"]r8  ^v120p60|9"dc"r"a"r'7v*v.50'p32|7[3"!o d+8d+8d+8d+8d+8  
+d+8d+8d+8d+8d+8d+8d+8d+8  d+8d+8d+8d+8d+8d+8d+8d+8  d+8d+8"]"d+8d+8d+8d+8d+8d+8  
+d+8d+8d+8d+8d+8"r2  ^8^v120p60|9"dc"r"a"r
+;8
+
+l16

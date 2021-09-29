@@ -59,6 +59,7 @@ ff4_fiend:          catastrophe, grandfinale, savethem
 ff4_moon:           zozo, ruin*2, train
 ff4_mysidia:        what, strago*2
 ff4_rosa:           celes, rachel*2, awakening
+ff5_airship:        setzer, blackjack*2, mount2
 ff5_book:           zozo, owzer, ruin, train*2, tomb, gate, ancient
 ff5_boss:           catastrophe, grandfinale, savethem
 ff5_decisive:       catastrophe*2, grandfinale, floating, ktower
@@ -67,6 +68,7 @@ ff5_mountain:       setzer, mountain*2, mount2
 ff5_pirates:        returners*2, umaro, veldt, mountain, engine
 ff5_seal:           umaro, zozo, owzer, train, gate*2, ancient
 ff5_village:        village
+ff5_void2:          setzer, returners, troops, savethem, mountain, ktower
 ff6_atma:           metamorphosis, catastrophe, grandfinale, floating
 ff6_awakening:      prelude, celes, awakening*2
 ff6_balance:        omen3, balance*2, forest
@@ -163,6 +165,7 @@ fz_silence:         chocobo*2, blackjack, johnny
 fz_white1:          chocobo*2, blackjack, johnny
 grad3_desert:       magitek
 grad3_moai:         catastrophe*2, phoenix, ktower
+gs_venus:           setzer, mountain, mount2*2, gate, floating
 homm2_sorceress:    owzer, strago, dream*2
 iog_ankor:          ancient, dream
 iog_larai:          umaro, train, ancient*2
@@ -179,6 +182,7 @@ lu2_fortress:       grandfinale, assault, floating*2, ktower
 lu2_iris:           prelude, awakening*2, ruin
 lu2_peace:          prelude, relm, awakening*2
 lu2_savior:         metamorphosis*2, grandfinale, savethem, floating
+lu2_submarine:      prelude*2, espers, ruin, cave, tomb
 lu2_town:           village*2, town
 lu2_turret:         savethem*2, mount2, floating
 met3_plants:        umaro, magitek, engine*2, dream
@@ -197,9 +201,11 @@ sd2_fortress:       falcon, mount2*2, serpent, floating
 sd2_thanatos:       owzer, train, dream, fanatics*2
 sd2_matango:        what, veldt*2
 sd3_counterpoint:   umaro, veldt*2
+sd3_faith:          metamorphosis, grandfinale, floating, ktower
 sd3_final3:         grandfinale, unforgiven, falcon*2, floating, ktower
 sd3_flight:         setzer, blackjack*2, falcon, serpent
 sf2_balrog:         grandfinale, johnny
+smrpg_road2:        johnny, spinach*2, moogles, gogo, mountain
 sots_boss:          grandfinale, dream
 sots_boss_nointro:  cyan*2, mountain, cave
 sth1_spring:        johnny*2, moogles
@@ -207,10 +213,12 @@ tn_darkworld:       omen3, espers, ruin*2, falcon, cave
 top_battle:         grandfinale, mount2, gate
 top_sylphs:         omen3, ruin*2, forest, tomb
 top_world1:         omen3, falcon, balance*2
+totr_aquarians:     empire, umaro*2, ruin, train, gate, ancient
 totr_battle:        grandfinale, unforgiven, serpent, magitek, engine
 totr_downfall:      omen3, shadow*2, zozo, tomb
 totr_sboss:         grandfinale, engine
 totr_underworld:    grandfinale, gate, magitek, floating*2, phoenix, ktower
+wa_zed:             grandfinale, shadow, setzer, gogo*2
 wa2_dungeon2:       zozo, martiallaw, mount2, gate*2, phoenix
 wa2_heimdal:        setzer, assault*2, savethem, gate
 xcx_sylvan:         omen3, espers, narshe, ruin*2, cave, ancient, dream, phoenix
@@ -220,15 +228,11 @@ zaol_temple:        train, gate, floating*2, phoenix, ktower
 
 [legacy]
 # songs that still use legacy sample set and have not gone through editing to meet EX5 standards
-ff5_void2:          setzer, returners, troops, savethem, mountain, ktower
 
 [draft]
 # filing songs here that are not legacy but nevertheless have not gone through editing to meet EX5 standards
 # mostly, such songs will not be included in this playlist but some are worthwhile despite major issues in channel priority, accuracy, etc
-
-## TO DO LIST for songs not listed above that could be listed after editing/replacement:
-# lal_master
-# saga2_aspiration
+ff9_notalone:       grandfinale
 
 [legacysongstxtcopypasta]
 # temporarily filling in the rest of the legacy song set here without reviewing the track selections (will be more permissive than desired)
@@ -393,7 +397,6 @@ fft_apoplexy_part1: I15, G50, battle, savethem*2, bat2, bat3, bat4, mboss
 fft_apoplexy_part2: empire, catastrophe, umaro, train, gate, fanatics
 fz_port:        I35, G40, grandfinale, falcon*2, serpent, magitek, floating, mount2
 gs_tunnel:      H4, ancient*2, dream, floating, fanatics*2, phoenix*2, ktower, H:omen3, H:grandfinale, H:espers, H:shadow, H:umaro, H:zozo, H:owzer, H:serpent, H:train, H:cave
-gs_venus:       I10, G75, battle, locke, mount2*2, gate, mountain
 iog_boss:       I95, G55, boss, metamorphosis*2, catastrophe, unforgiven
 iog_whispers:   H2, zozo, owzer*2, ruin*2, forest*2, cave*2, tomb*2, dream, train, espers, gate, phoenix, H:prelude, H:daryl, H:shadow
 iog_womb:       W2, prelude, daryl, coin, rachel, awakening, ruin, forest, tomb, espers
@@ -477,7 +480,6 @@ sd3_angels:     omen3, espers*2, awakening, gate, phoenix
 sd3_blackmarket: shadow*2, moogles, umaro, gogo, zozo, owzer, martiallaw, train, dream
 sd3_charlotte:  prelude, relm, spinachrag, what*2, moogles, strago
 sd3_faith:      I55, G70, boss, atma, grandfinale, umaro
-sd3_flight:     setzer, chocobo, blackjack*2, mountain
 sd3_intolerance: empire*2, train, ruin
 sd3_mana:       I80, G45, boss*2, atma, metamorphosis*2, catastrophe, grandfinale, unforgiven, ancient, magitek, dream, floating*2, phoenix, ktower
 sd3_paths:      gogo, mountain*2, serpent, mount2, cave, forest
@@ -520,7 +522,6 @@ totr_spirit:    I99, G75, atma*2, grandfinale, dmad5
 totr_wind:      prelude, relm, awakening, strago, village, mountain, moogles
 totr_worlds:    omen3, celes, rachel*2, awakening, ruin, serpent, tomb, dream, phoenix, balance
 tyr_theme:      omen3, assault, magitek, floating, dream, ktower
-wa_zed:         grandfinale, shadow, setzer, moogles, umaro, gogo*2
 wc2_human1:     empire, troops, assault*2, savethem, umaro
 wc2_orc1:       I20, G95, catastrophe, grandfinale, savethem, umaro, veldt, floating, ktower, assault*2, bat3, bat4
 xc1_valakn:     W4, omen3, celes, daryl, narshe, ruin*2, cave*2, tomb*2, W:prelude, W:coin, W:shadow, W:zozo, W:town_ruin, W:falcon, W:balance, W:mountain, W:espers, W:forest, W:ancient
@@ -607,6 +608,7 @@ totr_sboss:         I50,        boss
 ff9_hunt:           I52, mboss, boss
 ff5_boss:           I60,        boss, atma
 lu2_savior:         I60, mboss,             dmad5
+sd3_faith:          I60,        boss, atma
 bof2_barubary:      I67, mboss
 lal_boss:           I70, mboss, boss, atma, dmad5
 ff4_fiend:          I75,              atma, dmad5
