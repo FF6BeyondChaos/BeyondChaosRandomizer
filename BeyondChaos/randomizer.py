@@ -87,6 +87,7 @@ FORBIDDEN_COMMANDS = ["leap", "possess"]
 
 MD5HASHNORMAL = "e986575b98300f721ce27c180264d890"
 MD5HASHTEXTLESS = "f08bf13a6819c421eee33ee29e640a1d"
+MD5HASHTEXTLESS2 = "e0984abc9e5dd99e4bc54e8f9e0ff8d0"
 
 
 TEK_SKILLS = (  # [0x18, 0x6E, 0x70, 0x7D, 0x7E] +
@@ -4556,7 +4557,7 @@ def randomize(**kwargs) -> str:
                 if size == 3145728 + 0x200:
                     data = data[0x200:]
                 h = md5(data).hexdigest()
-                if h == MD5HASHNORMAL or h == MD5HASHTEXTLESS:
+                if h == MD5HASHNORMAL or h == MD5HASHTEXTLESS or h == MD5HASHTEXTLESS2:
                     sourcefile = filename
                     break
             else:
@@ -4718,7 +4719,7 @@ def randomize(**kwargs) -> str:
         f.close()
 
     h = md5(data).hexdigest()
-    if h != MD5HASHNORMAL and h != MD5HASHTEXTLESS:
+    if h != MD5HASHNORMAL and h != MD5HASHTEXTLESS and h!= MD5HASHTEXTLESS2:
         print("WARNING! The md5 hash of this file does not match the known "
               "hashes of the english FF6 1.0 rom!")
         x = input("Continue? y/n ")
