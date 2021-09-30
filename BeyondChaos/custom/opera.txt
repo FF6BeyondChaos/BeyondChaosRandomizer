@@ -22,7 +22,7 @@ Celes:      General | ogceles | female | nolegato | legacy | 3A | 4444444 | 100 
 Aerith:     Miss | aerith | female | default | legacy | 64 | 4444444 | 100 | m48,18,239
 Yuna:       Lady | yuna | female | default | legacy | 64 | 5555555 | 100 | m48,18,239
 Edward:     Prince | edward | male | nolegato | legacy | 54 | 5555555 | 100 | m48,18,207
-ghost:      a | ghost | random | default | legacy | 7D | 5555555 | 72 | m%r5%a7
+Ghost:      a | ghost | random | default | legacy | 7D | 5555555 | 72 | m%r5%a7
 Ultros:     Master | ultros | male | nolegato | legacy | 10 | 6666666 | 100 | m
 Nadia:      Princess | marle | female | default | legacy | 99 | 5554555 | 100 | m48,18,239
 

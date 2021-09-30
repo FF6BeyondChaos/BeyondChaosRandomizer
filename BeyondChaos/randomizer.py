@@ -41,7 +41,7 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
                                shuffle_monsters, get_monster, read_ai_table,
                                change_enemy_name, randomize_enemy_name,
                                get_collapsing_house_help_skill)
-from musicinterface import randomize_music, manage_opera, get_music_spoiler, music_init
+from musicinterface import randomize_music, manage_opera, get_music_spoiler, music_init, get_opera_log
 from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
@@ -71,7 +71,7 @@ VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiaberandombossesmimetimeeasymodocanttouchthissuplexwrecksremoveflashing.1630973998"
+TEST_SEED = "2.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydpartypartymakeovernotawaiterdancingmaduinbsiaberandombossesmimetimeeasymodocanttouchthis.1630973998"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -4279,7 +4279,6 @@ def manage_dances():
     fout.seek(0x2D8E79)
     fout.write(bytes([3]))
 
-
 def nerf_paladin_shield():
     paladin_shield = get_item(0x67)
     paladin_shield.mutate_learning()
@@ -4909,7 +4908,8 @@ def randomize(**kwargs) -> str:
 
     if Options_.random_palettes_and_names or Options_.swap_sprites or Options_.is_any_code_active(['partyparty', 'bravenudeworld', 'suplexwrecks',
              'christmas', 'halloween', 'kupokupo', 'quikdraw', 'makeover']):
-        manage_character_appearance(fout, preserve_graphics=preserve_graphics)
+        s = manage_character_appearance(fout, preserve_graphics=preserve_graphics)
+        log(s, "aesthetics")
         show_original_names(fout)
     reseed()
 
@@ -5163,6 +5163,7 @@ def randomize(**kwargs) -> str:
         
     if Options_.is_code_active('alasdraco'):
         opera = manage_opera(fout, has_music)
+        log(get_opera_log(), section="aesthetics")
     else:
         opera = None
     reseed()
@@ -5341,7 +5342,7 @@ def randomize(**kwargs) -> str:
     log_break_learn_items()
 
     f = open(outlog, 'w+')
-    f.write(get_logstring(["characters", "stats", "commands", "blitz inputs", "slots", "dances", "espers", "item magic",
+    f.write(get_logstring(["characters", "stats", "aesthetics", "commands", "blitz inputs", "slots", "dances", "espers", "item magic",
                            "item effects", "command-change relics", "colosseum", "monsters", "music", "shops",
                            "treasure chests", "zozo clock"]))
     f.close()
