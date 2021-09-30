@@ -283,42 +283,123 @@ def no_dance_stumbles(fout):
 def fewer_flashes(fout):
     anti_seizure_sub = Substitution()
 
+    # ------------- Attack Animations -------------
     #
-    # Removing Bum Rush Flashes
+    # Removing Final Kefka Death Flashing
     #
-    # Flash 1
-    anti_seizure_sub.set_location(0x106C7F)  # D06C7F
+    anti_seizure_sub.set_location(0x10023B)  # D0023B
     anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
-    anti_seizure_sub.set_location(0x106C88)  # D06C88
+    anti_seizure_sub.set_location(0x100241)  # D00241
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x100249)  # D00249
     anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
-    # Flash 2
-    anti_seizure_sub.set_location(0x106C96)  # D06C96
+    anti_seizure_sub.set_location(0x10024F)  # D0024F
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Boss Death Flashing
+    #
+    anti_seizure_sub.set_location(0x100477)  # D00477
     anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
-    anti_seizure_sub.set_location(0x106C9F)  # D06C9F
+    anti_seizure_sub.set_location(0x10047D)  # D0047D
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x100485)  # D00485
     anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
-    # Other Bum Rush Background Sets - possibly unnecessary
-    anti_seizure_sub.set_location(0x106C3F)  # D06C3F
+    anti_seizure_sub.set_location(0x100498)  # D00498
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Magicite Transformation Flash
+    #
+    anti_seizure_sub.set_location(0x100F31)  # D00F31
     anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
-    anti_seizure_sub.set_location(0x106C48)  # D06C48
+    anti_seizure_sub.set_location(0x100F40)  # D00F40
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Ice 3 Flash
+    #
+    anti_seizure_sub.set_location(0x101979)  # D01979
     anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
-    anti_seizure_sub.set_location(0x106C54)  # D06C54
+    anti_seizure_sub.set_location(0x10197C)  # D0197C
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10197F)  # D0197F
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x101982)  # D01982
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x101985)  # D01985
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x101988)  # D01988
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10198B)  # D0198B
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10198E)  # D0198E
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x101991)  # D01991
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Fire 3 Flash
+    #
+    anti_seizure_sub.set_location(0x1019FB)  # D019FB
     anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
-    anti_seizure_sub.set_location(0x106C88)  # D06C87
+    anti_seizure_sub.set_location(0x101A1D)  # D01A1D
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Phantasm Flash
+    #
+    anti_seizure_sub.set_location(0x101E08)  # D01E08
     anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x101E0E)  # D01E0E
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x101E20)  # D01E20
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x101E28)  # D01E28
+    anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
     #
@@ -333,6 +414,61 @@ def fewer_flashes(fout):
     anti_seizure_sub.write(fout)
 
     anti_seizure_sub.set_location(0x102416)  # D02416
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Cat Rain Flash
+    #
+    anti_seizure_sub.set_location(0x102678)  # D02678
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10267C)  # D0267C
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Unknown Script 1's Flash
+    #
+    anti_seizure_sub.set_location(0x1026EF)  # D026EF
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1026FB)  # D026FB
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Mirager Flash
+    #
+    anti_seizure_sub.set_location(0x102792)  # D02792
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x102796)  # D02796
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Sabre Soul Flash
+    #
+    anti_seizure_sub.set_location(0x1027D4)  # D027D4
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1027DB)  # D027DB
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Back Blade Flash
+    #
+    anti_seizure_sub.set_location(0x1028D4)  # D028D4
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1028E0)  # D028E0
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
@@ -352,13 +488,35 @@ def fewer_flashes(fout):
     anti_seizure_sub.write(fout)
 
     #
-    # Removing Sabre Soul Flash
+    # Removing Unknown Script 2's Flash
     #
-    anti_seizure_sub.set_location(0x1027D4)  # D027D4
+    anti_seizure_sub.set_location(0x102AAE)  # D02AAE
     anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
-    anti_seizure_sub.set_location(0x1027DB)  # D027DB
+    anti_seizure_sub.set_location(0x102AB2)  # D02AB2
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Absolute Zero Flash
+    #
+    anti_seizure_sub.set_location(0x102BFF)  # D02BFF
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x102C03)  # D02C03
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Unknown Script 3's Flash
+    #
+    anti_seizure_sub.set_location(0x1030CB)  # D030CB
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1030CF)  # D030CF
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
@@ -396,22 +554,31 @@ def fewer_flashes(fout):
     anti_seizure_sub.write(fout)
 
     #
+    # Removing Unknown Script 4's Flash
+    #
+    anti_seizure_sub.set_location(0x1035E7)  # D035E7
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1035F7)  # D035F7
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
     # Removing Schiller Flash
     #
-
     anti_seizure_sub.set_location(0x10380B)
     anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
-    #This commented out code is for vanilla Schiller, which BC is no longer using
+    # This commented out code is for vanilla Schiller, which BC is no longer using
+    # anti_seizure_sub.set_location(0x10381A)  # D0381A
+    # anti_seizure_sub.bytestring = bytes([0xE0])
+    # anti_seizure_sub.write(fout)
 
-    #anti_seizure_sub.set_location(0x10381A)  # D0381A
-    #anti_seizure_sub.bytestring = bytes([0xE0])
-    #anti_seizure_sub.write(fout)
-
-    #anti_seizure_sub.set_location(0x10381E)  # D0381E
-    #anti_seizure_sub.bytestring = bytes([0xF0])
-    #anti_seizure_sub.write(fout)
+    # anti_seizure_sub.set_location(0x10381E)  # D0381E
+    # anti_seizure_sub.bytestring = bytes([0xF0])
+    # anti_seizure_sub.write(fout)
 
     #
     # Removing Wall Change Flash
@@ -522,6 +689,44 @@ def fewer_flashes(fout):
     anti_seizure_sub.write(fout)
 
     #
+    # Removing Dispel Flash
+    #
+    anti_seizure_sub.set_location(0x105DC3)  # D05DC3
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x105DCA)  # D05DCA
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x105DD3)  # D05DD3
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x105DDC)  # D05DDC
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x105DE5)  # D05DE5
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x105DEE)  # D05DEE
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Pep Up/Break Flash
+    #
+    anti_seizure_sub.set_location(0x1060EB)  # D060EB
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1060EF)  # D060EF
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
     # Removing Shock Flash
     #
     anti_seizure_sub.set_location(0x1068BF)  # D068BF
@@ -530,6 +735,44 @@ def fewer_flashes(fout):
 
     anti_seizure_sub.set_location(0x1068D1)  # D068D1
     anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Bum Rush Flashes
+    #
+    # Flash 1
+    anti_seizure_sub.set_location(0x106C7F)  # D06C7F
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x106C88)  # D06C88
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    # Flash 2
+    anti_seizure_sub.set_location(0x106C96)  # D06C96
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x106C9F)  # D06C9F
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    # Other Bum Rush Background Sets - possibly unnecessary
+    anti_seizure_sub.set_location(0x106C3F)  # D06C3F
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x106C48)  # D06C48
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x106C54)  # D06C54
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x106C88)  # D06C87
+    anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
     #
@@ -613,13 +856,291 @@ def fewer_flashes(fout):
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
+    # ------------- Battle Event Scripts -------------
     #
-    # Removing Back Blade Flash
+    # Battle Event Script $15
     #
-    anti_seizure_sub.set_location(0x1028D4)  # D028D4
+    anti_seizure_sub.set_location(0x10B887)  # D0B887
     anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
-    anti_seizure_sub.set_location(0x1028E0)  # D028E0
+    anti_seizure_sub.set_location(0x10B88D)  # D0B88D
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10B894)  # D0B894
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10B89A)  # D0B89A
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10B8A1)  # D0B8A1
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10B8A7)  # D0B8A7
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10B8AE)  # D0B8AE
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10B8B4)  # D0B8B4
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10BCF5)  # D0BCF5
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10BCF9)  # D0BCF9
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Battle Event Script $19
+    #
+    anti_seizure_sub.set_location(0x10C7A4)  # D0C7A4
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10C7AA)  # D0C7AA
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10C7B1)  # D0C7B1
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10C7B7)  # D0C7B7
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10C7BE)  # D0C7BE
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10C7C4)  # D0C7C4
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10C7CB)  # D0C7CB
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x10C7D1)  # D0C7D1
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    # ------------- Event Scripts -------------
+    # CA/00D6 - White Flash
+    # CA/0A35 - White Flash
+    # CA/0E98 - End Color Effects
+    # CA/0F6C - End Color Effects
+    # CA/144F - White Flash
+    # CA/15F7 - White Flash
+    # CA/49D3 - White Flash
+    # CA/49F1 - White Flash
+    # CA/49FA - White Flash
+    # CA/4AEC - White Flash
+    # CA/4E3F - White Flash
+    # CA/4FB3 - Blue Flash
+    # CA/5BF9 - White Flash
+    # CA/5C19 - White Flash
+    # CA/74AE - End Color Effects
+    # CA/9A2A - White Flash
+    # CA/A393 - White Flash
+    # CA/D033 - White Flash
+    # CA/E020 - White Flash
+    # CA/E023 - White Flash
+    # CA/E442 - White Flash
+    # CA/E45E - White Flash
+    # CB/1277 - End Color Effects
+    # CB/225E - Blue Flash
+    # CB/2DC7 - Red Flash
+    # CB/2DDE - Red Flash
+    # CB/2DEF - Red Flash
+    # CB/3E0E - White Flash
+    # CB/3E59 - White Flash
+    # CB/47D3 - Red Flash
+    # CB/481F - Red Flash
+    # CB/4C55 - Red Flash
+    # CB/4D10 - White Flash
+    # CB/6904 - Red Flash
+    # CB/7DA1 - Blue Flash
+    # CB/8BA2 - Blue Flash
+    # CB/8BA7 - Blue Flash
+    # CB/8BB8 - Yellow Flash
+    # CB/8BBB - Yellow Flash
+    # CB/8BD7 - Red Flash
+    # CB/8BDA - Red Flash
+    # CB/9552 - Red Flash
+    # CB/955A - Red Flash
+    # CB/9567 - Red Flash
+    # CB/956D - Red Flash
+    # CB/9865 - Red Flash
+    # CB/9888 - Red Flash
+    # CB/9939 - White Flash
+    # CB/9944 - White Flash
+    # CB/9952 - White Flash
+    # CB/9975 - White Flash
+    # CB/99A9 - White Flash
+    # CB/9A47 - White Flash
+    # CB/A3EE - White Flash
+    # CB/B14C - Blue Flash
+    # CB/F6CD - Blue Flash
+    # CB/F6D3 - Blue Flash
+    # CB/F6D9 - End Color Effects
+    # CB/F6EC - End Color Effects
+    # CB/F6F3 - End Color Effects
+    # CB/F700 - End Color Effects
+    # CB/FBFE - Red Flash
+    # CB/FC02 - Red Flash
+    # CB/FC18 - Red Flash
+    # CB/FC49 - Red Flash
+    # CB/FC4D - Red Flash
+    # CB/FC7B - Red Flash
+    # CB/FCE2 - Yellow Flash
+    # CB/FCE5 - Yellow Flash
+    # CB/FCE8 - Yellow Flash
+    # CB/FCF1 - Yellow Flash
+    # CB/FCF8 - Yellow Flash
+    # CB/FD01 - Yellow Flash
+    # CB/FD06 - Yellow Flash
+    # CB/FD75 - Blue Flash
+    # CB/FD78 - Blue Flash
+    # CB/FD7B - Blue Flash
+    # CB/FD84 - Blue Flash
+    # CB/FD91 - Blue Flash
+    # CB/FD9A - Blue Flash
+    # CB/FD9D - Blue Flash
+    # CB/FDF5 - Red Flash
+    # CB/FDF8 - Red Flash
+    # CB/FDFB - Red Flash
+    # CB/FE04 - Red Flash
+    # CB/FE11 - Red Flash
+    # CB/FE1A - Red Flash
+    # CB/FE1D - Red Flash
+    # CB/FE88 - Red Flash
+    # CB/FE8C - Red Flash
+    # CB/FE8F - Red Flash
+    # CB/FE95 - Red Flash
+    # CB/FE99 - Red Flash
+    # CB/FEEB - Red Flash
+    # CB/FEEF - Red Flash
+    # CC/00A2 - Red Flash
+    # CC/00A7 - Yellow Flash
+    # CC/00AC - Cyan Flash
+    # CC/00B1 - Magenta Flash
+    # CC/00B6 - Red Flash
+    # CC/018B - White Flash
+    # CC/0190 - White Flash
+    # CC/01A2 - White Flash
+    # CC/01CA - End Color Effects
+    # CC/01F2 - End Color Effects
+    # CC/01F6 - White Flash
+    # CC/023F - Yellow Flash
+    # CC/0246 - Yellow Flash
+    # CC/029E - Magenta Flash
+    # CC/02A5 - Magenta Flash
+    # CC/02DA - Red Flash
+    # CC/02DF - Yellow Flash
+    # CC/02E4 - Cyan Flash
+    # CC/02E9 - Magenta Flash
+    # CC/02EE - Red Flash
+    # CC/03AC - Red Flash
+    # CC/03B1 - Green Flash
+    # CC/03B6 - Yellow Flash
+    # CC/03BB - Blue Flash
+    # CC/03C0 - Magenta Flash
+    # CC/03C5 - Cyan Flash
+    # CC/03CA - White Flash
+    # CC/0469 - White Flash
+    # CC/0D12 - White Flash
+    # CC/0D5F - White Flash
+    # CC/0D7F - White Flash
+    # CC/0D9F - White Flash
+    # CC/0DF0 - White Flash
+    # CC/0E09 - White Flash
+    # CC/0E22 - White Flash
+    # CC/0E3B - White Flash
+    # CC/0E65 - White Flash
+    # CC/0E74 - White Flash
+    # CC/1AEA - Red Flash
+    # CC/1B51 - Red Flash
+    # CC/1BB9 - Red Flash
+    # CC/1D80 - Red Flash
+    # CC/1DAB - Red Flash
+    # CC/1E0A - Red Flash
+    # CC/1EA7 - Blue Flash
+    # CC/33AE - Blue Flash
+    # CC/45A9 - White Flash
+    # CC/45AC - White Flash
+    # CC/45AF - White Flash
+    # CC/462D - White Flash
+    # CC/4630 - White Flash
+    # CC/4633 - White Flash
+    # CC/4636 - White Flash
+    # CC/4639 - White Flash
+    # CC/464E - White Flash
+    # CC/4690 - White Flash
+    # CC/4693 - White Flash
+    # CC/4696 - White Flash
+    # CC/46F8 - White Flash
+    # CC/477E - White Flash
+    # CC/4CAE - White Flash
+    # CC/5848 - White Flash
+    # CC/5863 - White Flash
+    # CC/5868 - White Flash
+    # CC/59EC - White Flash
+    # CC/59F5 - White Flash
+    # CC/5C95 - Blue Flash
+    # CC/793F - Red Flash
+    # CC/7955 - Red Flash
+    # CC/79A8 - White Flash
+    # CC/79B4 - White Flash
+    # CC/79D2 - White Flash
+    # CC/79E2 - White Flash
+    # CC/7A89 - Blue Flash
+    # CC/7BD4 - Blue Flash
+    # CC/7BD7 - Blue Flash
+    # CC/7C4C - Blue Flash
+    # CC/7D8B - Red Flash
+    # CC/7DAC - Red Flash
+    # CC/7DDF - Red Flash
+    # CC/7E2A - Blue Flash
+    # CC/80FD - Red Flash
+    # CC/8329 - Red Flash
+    # CC/8750 - Red Flash
+    # CC/875D - Blue Flash
+    # CC/876A - Green Flash
+    # CC/87C7 - Red Flash
+    # CC/87D4 - Blue Flash
+    # CC/87E1 - Green Flash
+    # CC/881A - Red Flash
+    # CC/8827 - Blue Flash
+    # CC/8834 - Green Flash
+    # CC/887D - Red Flash
+    # CC/888A - Blue Flash
+    # CC/8897 - Green Flash
+    # CC/8A66 - Red Flash
+    # CC/8A73 - Blue Flash
+    # CC/8A80 - Green Flash
+    # CC/93C3 - Blue Flash
+    # CC/93CC - End Color Effects
+    # CC/9434 - Blue Flash
+    # CC/94EC - End Color Effects
+    # CC/9AF9 - Blue Flash
+    # CC/9B03 - Blue Flash
+    # CC/9FE3 - End Color Effects
+    # CC/A483 - Red Flash
+    # CC/BDDD - White Flash
+    # CC/BE36 - White Flash
+    # CC/BE7F - White Flash
+    # CC/C58F - Blue Flash
+    # CC/D6FB - Blue Flash
+    # CC/D713 - Blue Flash
+    # CC/D720 - Blue Flash
