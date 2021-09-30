@@ -148,9 +148,11 @@ def manage_opera(fout, affect_music):
         random.shuffle(charpool)
         for c in ["Maria", "Draco", "Ralse"]:
             char[c] = charpool.pop()
+            opera_log += str(str(c) + ": ").ljust(17) + string.capwords(str(char[c].name)) + "\n"
         #by sprite/name, for impresario
         charpool = [c for c in singer_options if c not in char.values()]
         char["Impresario"] = random.choice(charpool)
+        opera_log += str("Impresario: ").ljust(17) + string.capwords(str(char["Impresario"].name)) + "\n"
     else:
         print("\nalasdraco -- note: opera voices will not be changed unless a" +
                 " random music code (johnnydmad/johnnyachaotic) is also used." +
@@ -159,7 +161,7 @@ def manage_opera(fout, affect_music):
         char = {}
         for c in ["Maria", "Draco", "Ralse", "Impresario"]:
             char[c] = cchoices.pop()
-            opera_log+= str(str(c) + ": ").ljust(17) + str(char[c].name) + "\n"
+            opera_log+= str(str(c) + ": ").ljust(17) + string.capwords(str(char[c].name)) + "\n"
             
     #reassign sprites in npc data
     locations = get_locations()

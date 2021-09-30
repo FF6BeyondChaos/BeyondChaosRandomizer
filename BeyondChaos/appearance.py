@@ -1,5 +1,6 @@
 import itertools
 import os
+import string
 
 from character import get_characters
 from options import Options_
@@ -533,11 +534,11 @@ def manage_character_appearance(fout, preserve_graphics=False):
 
     for index, name in NAME_ID_DICT.items():
         if index in swap_to:
-            sprite_log += str(str(name) + ": ").ljust(17) + str(swap_to[index].name) + "\n"
+            sprite_log += str(str(name) + ": ").ljust(17) + string.capwords(str(swap_to[index].name)) + "\n"
         elif lookup[index].new_appearance is not None:
-            sprite_log += str(str(name) + ": ").ljust(17) + str(lookup[index].new_appearance) + "\n"
+            sprite_log += str(str(name) + ": ").ljust(17) + string.capwords(str(lookup[index].new_appearance)) + "\n"
         else:
-            sprite_log += str(str(name) + ": ").ljust(17) + str(name) + "\n"
+            sprite_log += str(str(name) + ": ").ljust(17) + string.capwords(str(name)) + "\n"
 
     sprite_ids = list(range(0x16))
 
