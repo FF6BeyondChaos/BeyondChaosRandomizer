@@ -71,7 +71,7 @@ VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "2.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydpartypartymakeovernotawaiterdancingmaduinbsiaberandombossesmimetimeeasymodocanttouchthis.1630973998"
+TEST_SEED = "2.normal.bcdefgijkmnopqrstuwyzmakeoverpartypartyfrenchvanillaelectricboogaloorandombossesalasdracocapslockoffjohnnyachaoticnotawaiterdancingmaduin.1632060671"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
