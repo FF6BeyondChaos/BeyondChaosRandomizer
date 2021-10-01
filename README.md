@@ -4,7 +4,7 @@ FF6 Beyond Chaos CE Randomizer
 a fork of SubtractionSoup's FF6 Beyond Chaos EX Randomizer
 a fork of Abyssonym's FF6 Beyond Chaos Randomizer
 Version:    2.0.0
-Date:       2021-07-16
+Date:       2021-09-29
 URL:        https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest
 Beyond Chaos Discord:    https://discord.gg/S3G3UXy
 
@@ -46,7 +46,7 @@ Mode:
     On the left, you can select a mode.
     In normal mode (default), you play through the story as usual.
     In ancient cave, speed cave, and race cave modes you going through a randomized three-party dungeon to defeat Kefka; they differ in the length of the dungeon.
-    In K at N mode, you play through the beginning of the normal story, ending at the fight with Kefka at Narshe. The randomness is adjusted to give you a lot more variety in that section than you would see in normal mode.
+    In K at N mode, you play through the beginning of the normal story, ending at the fight with Kefka at Narshe. Designed for racing, you start with a random set of Espers, encounters on the Lete River are fixed, and enemies always drop the same item 100% of the time.
     In dragon hunt mode, you start in the World of Ruin with the airship, and it ends immediately when you kill the 8th dragon.
 
 Flags:
@@ -73,6 +73,8 @@ Output rom file:
 
     Beyond Chaos CE is a randomizer, a program that remixes game content randomly, for FF6. It is a fork of Abyssonym's Beyond Chaos randomizer with even more features. Every time you run Beyond Chaos CE, it will generate a completely unique, brand-new mod of FF6 for you to challenge and explore. There are over 10 billion different possible randomizations! Nearly everything is randomized, including treasure, enemies, colors, graphics, character abilities, and more.
     Beyond Chaos CE is also customizable. Using the flags in the above section, you can choose to only randomize certain parts of the game. Every flag you select will make the game a little more random, and also a little more difficult. Therefore, even experienced players should be able to find some challenge in the resulting game. As the game progresses, enemies may become more and more difficult, so that it becomes necessary to develop specialized strategies for individual formations.
+
+    DISCLAIMER: This randomizer uses a Markov chain to generate enemy names, and as such may create names that make you uncomfortable. Use at your own risk.
 
 --- FAQ/KNOWN ISSUES ---
 
@@ -197,10 +199,10 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
     Dracovious - Created new GUI and R-Limit, and some other codes
 	GreenKnight5 - First GUI, Cecilbot
 	DrInsanoPHD - Refactoring code, character stats randomizer, bug fixes, lots of help with CE v1 release
-	Crimdahl - Rotating status patch, dancelessons code lots of help with CE v1 release
+	Crimdahl - Rotating status patch, dancelessons code, removeflashing code, lots of help with CE v1  and v2 release, 
 	fusoyeahhh - lots of help with CE v1 release
 	RazzleStorm - refactoring some code, adding type hints, lots of help with CE v1 release
-	CDude - lots of help with event code for CE v1 and v2 release
+	CDude - lots of help with event code for CE v1 and v2 release, fixing Bio Blast and Flash/Schiller animations
 	Cecil188 - ported over music, owner of the Discord, and overall helper with everything
 	
 

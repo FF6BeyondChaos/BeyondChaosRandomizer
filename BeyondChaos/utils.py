@@ -30,8 +30,6 @@ TEXT_TABLE = path.join(tblpath, "text.txt")
 SHORT_TEXT_TABLE = path.join(tblpath, "shorttext.txt")
 DIALOGUE_TEXT_TABLE = path.join(tblpath, "dialoguetext.txt")
 ENEMY_NAMES_TABLE = path.join(tblpath, "enemynames.txt")
-MODIFIERS_TABLE = path.join(tblpath, "moves.txt")
-MOVES_TABLE = path.join(tblpath, "moves.txt")
 LOCATION_TABLE = path.join(tblpath, "locationformations.txt")
 LOCATION_PALETTE_TABLE = path.join(tblpath, "locationpaletteswaps.txt")
 BATTLE_BG_PALETTE_TABLE = path.join(tblpath, "battlebgpalettes.txt")
@@ -67,6 +65,8 @@ MOOGLE_NAMES_TABLE = path.join(custom_path, "mooglenames.txt")
 DANCE_NAMES_TABLE = path.join(custom_path, "dancenames.txt")
 PASSWORDS_TABLE = path.join(custom_path, "passwords.txt")
 POEMS_TABLE = path.join(custom_path, "poems.txt")
+MODIFIERS_TABLE = path.join(custom_path, "moves.txt")
+MOVES_TABLE = path.join(custom_path, "moves.txt")
 
 def open_mei_fallback(filename, mode='r', encoding=None):
     if not MEI:

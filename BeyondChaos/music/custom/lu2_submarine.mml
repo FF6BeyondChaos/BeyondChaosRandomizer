@@ -1,0 +1,198 @@
+#TITLE Deep Blue // The Abysmal Depths of the Ocean
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED Rushlight
+
+#SHORTNAME LU2 Deep Blue
+
+#WAVE 0x20 0x75 ## Vox
+#WAVE 0x21 0x61 ## Harp
+#WAVE 0x22 0x52 ## Bass
+#WAVE 0x23 0x65 ## Strings
+
+## NOTE: Time signature is 3/4
+#def init= t114 %x240 %v46 %b0,85 %f0,0
+
+## This gets multiplied by .63 and .47 to keep the right proportions between the two vox channels. It's advised to keep this*.63 at 127 or less.
+#def voxBaseVol=  v195
+#def leadVoxVol=  'voxBaseVol*v.63'
+#def layerVoxVol= 'voxBaseVol*v.47'
+
+#def harpVol= v95
+
+#def bassVol= v75
+
+#def stringsVol= v42
+
+#def vox= |0 o4 %a8 %r10
+#def strings= |3 o5 %a15
+
+#def leadVox=     'vox'     'leadVoxVol'  p45               %e1 m
+#def layerVox=    'vox'     'layerVoxVol' p74               %e0 m
+#def harp=        |1 o5     'harpVol'     p84 %r18          %e1 m
+#def bass=        |2 o6     'bassVol'     p64 %y0 %s6 %r11  %e0 m
+#def highStrings= 'strings' 'stringsVol'  p64               %e1 m
+#def lowStrings=  'strings' 'stringsVol'  p16               %e1 m
+
+
+{1}
+'init'
+## Lead Vox, originally channel 1
+'leadVox'
+$101
+l8
+r2.
+## 2
+r2.
+[2
+  ## 3 / 11
+  efgae4
+  ## 4 / 12
+  c2e4
+  ## 5 / 13
+  d2.
+  ## 6 / 14
+  ^2c4
+  ## 7 / 15
+  d2.
+  ## 8 / 16
+  ^2.
+  ## 9 / 17
+  ^2.
+  ## 10 / 18
+  ^2.
+]
+[2
+  [2
+    ## 19 / 23 / 27 / 31
+    >b-<cdefg
+    ## 20 / 24 / 28 / 32
+    a4g4<c4>
+    ## 21 / 25 / 29 / 33
+    a2.
+    j2
+    ## 22
+    f+2.
+  ]
+  ## 26 / 34
+  ^2.
+]
+;101
+
+
+{2}
+$
+## Harp, originally channel 2
+'harp-o1'
+l8
+[2
+  ## 1-2
+  da<d>a<e>a
+]
+[2
+  [2
+    ## 3-4 / 11-12
+    da<d>a<e>a
+  ]
+  [2
+    ## 5-6 / 13-14
+    e-b-<e->b-<f>b-
+  ]
+  [4
+    ## 7-10 / 15-18
+    da<d>a<e>a
+  ]
+]
+[4
+  ## 19 / 23 / 27 / 31
+  e-b-<e-fga
+  ## 20 / 24 / 28 / 32
+  b-agfe->b-
+  [2
+    ## 21-22 / 25-26 / 29-30 / 33-34
+    da<dege>
+  ]
+]
+;
+
+
+{3}
+$
+## Bass, originally channel 3
+'bass-o2'
+## 1
+d2.
+## 2
+^2 j2 ^4
+[2
+  ## 3 / 11
+  d2.
+  ## 4 / 12
+  ^2 > m48,8 f+4 <
+  ## 5 / 13
+  e-2.
+  ## 6 / 14
+  ^2 > m48,8 g4 <
+  [2
+    ## 7 / 9 / 15 / 17
+    d2.
+    ## 8 / 10 / 16 / 18
+    ^2.
+  ]
+]
+[4
+  ## 19 / 23 / 27 / 31
+  e-2.
+  ## 20 / 24 / 28 / 32
+  ^2e-4
+  ## 21 / 25 / 29 / 33
+  d2.
+  ## 22 / 26 / 30 / 34
+  ^2.
+]
+;
+
+
+{4}
+## High Strings, originally channel 5
+'highStrings'
+$401
+d2.
+## 2
+^2.
+[2
+  ## 3-4 / 11-12
+  [2 ^2.]
+  ## 5 / 13
+  e-2.
+  ## 6 / 14
+  ^2.
+  ## 7 / 15
+  d2.
+  ## 8-10 / 16-18
+  [3 ^2.]
+]
+[4
+  ## 19 / 23 / 37 / 31
+  e-2.
+  ## 20 / 24 / 28 / 32
+  ^2.
+  ## 21 / 25 / 29 / 33
+  d2.
+  ## 22 / 26 / 30 / 34
+  ^2.
+]
+;401
+
+
+{5}
+## Low Strings, originally channel 4
+'lowStrings'
+%k-5
+;401
+
+
+{6}
+## Layer Vox, originally channel 6
+'layerVox-o1'
+;101

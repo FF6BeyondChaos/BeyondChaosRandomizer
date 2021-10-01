@@ -5,6 +5,7 @@
 
 import configparser
 import os
+import string
 import sys
 
 from locationrandomizer import get_locations, get_location
@@ -17,6 +18,8 @@ from music.musicrandomizer import process_music, process_formation_music_by_tabl
 from music.mfvitools.insertmfvi import byte_insert
 
 BC_MUSIC_FREESPACE = ["53C5F-9FDFF", "310000-37FFFF", "410000-4FFFFF"]
+
+opera_log = ""
 
 def music_init():
     johnnydmad_initialize(rng=random)
@@ -48,7 +51,7 @@ def randomize_music(fout, Options_, opera=None, form_music_overrides={}):
     
 def get_music_spoiler(*a, **kw):
     return get_spoiler(*a, **kw)
-    
+
 ####### OPERA #######
 
 def manage_opera(fout, affect_music):
@@ -56,7 +59,9 @@ def manage_opera(fout, affect_music):
     data = fout.read()
     
     SAMPLE_MAX_SIZE = 3746
-    
+
+    global opera_log
+
     #Determine opera cast
     
     class OperaSinger:
@@ -143,9 +148,11 @@ def manage_opera(fout, affect_music):
         random.shuffle(charpool)
         for c in ["Maria", "Draco", "Ralse"]:
             char[c] = charpool.pop()
+            opera_log += str(str(c) + ": ").ljust(17) + string.capwords(str(char[c].name)) + "\n"
         #by sprite/name, for impresario
         charpool = [c for c in singer_options if c not in char.values()]
         char["Impresario"] = random.choice(charpool)
+        opera_log += str("Impresario: ").ljust(17) + string.capwords(str(char["Impresario"].name)) + "\n"
     else:
         print("\nalasdraco -- note: opera voices will not be changed unless a" +
                 " random music code (johnnydmad/johnnyachaotic) is also used." +
@@ -154,6 +161,7 @@ def manage_opera(fout, affect_music):
         char = {}
         for c in ["Maria", "Draco", "Ralse", "Impresario"]:
             char[c] = cchoices.pop()
+            opera_log+= str(str(c) + ": ").ljust(17) + string.capwords(str(char[c].name)) + "\n"
             
     #reassign sprites in npc data
     locations = get_locations()
@@ -222,25 +230,27 @@ def manage_opera(fout, affect_music):
             npc.palette = random.choice(range(6))
             npc.facing = item[1]
             set_dialogue_var("OperaItem", item[2])
+            opera_log += str("Opera Flowers: ").ljust(17) + string.capwords(item[2]) + "\n"
             #print(f"opera item is {npc.graphics}, palette {npc.palette} ({item[2]})")
             #print(f"at address {npc.pointer:X}")
     #4 ton weight
     for npc in get_location(0xEB).npcs:
         if npc.graphics == 97:
             item = random.choice([
-                (89, 0x00),  # letter
-                (92, 0x44),  # book
-                (108, 0x00),  # rat
-                (87, 0x44), # mini statue
-                (93, 0x54), # ultros is allowed to try to throw the baby (STOP HIM)
-                (97, 0x54), # 4ton weight
-                (112, 0x43), # fire
+                (89, 0x00, "letter"),  # letter
+                (92, 0x44, "book"),  # book
+                (108, 0x00, "rat"),  # rat
+                (87, 0x44, "mini statue"), # mini statue
+                (93, 0x54, "baby"), # ultros is allowed to try to throw the baby (STOP HIM)
+                (97, 0x54, "4 ton weight"), # 4ton weight
+                (112, 0x43, "fire"), # fire
                 ###(118, 0x10), #rock (didn't work)
                 ###(138, 0x12) #leo's sword (didn't work)
                 ])
             npc.graphics = item[0]
             npc.palette = random.choice(range(6))
             npc.facing = item[1]
+            opera_log += str("Opera Rafters: ").ljust(17) + string.capwords(item[2]) + "\n"
             #print(f"ultros item is {npc.graphics}, palette {npc.palette}")
             #print(f"at address {npc.pointer:X}")
 
@@ -321,6 +331,7 @@ def manage_opera(fout, affect_music):
     factions = random.choice(factions)
     if random.choice([False, True]):
         factions = (factions[1], factions[0])
+    opera_log += str("Opera Factions: ").ljust(17) + string.capwords(factions[0]) + " VS " + string.capwords(factions[1]) + "\n"
     set_dialogue_var("OperaEast", factions[0])
     set_dialogue_var("OperaWest", factions[1])
         
@@ -457,7 +468,10 @@ def create_sprite(sprite, extra_tiles=None):
         loc = t*32
         new_sprite.extend(sprite[loc:loc+32])
     return new_sprite
-    
+
+def get_opera_log():
+    return opera_log
+
 def read_opera_mml(file):
     try:
         file = os.path.join('custom','opera',f'{file}.mml')

@@ -1,0 +1,288 @@
+#TITLE Venus Lighthouse
+#ALBUM Golden Sun
+#COMPOSER Motoi Sakuraba
+#ARRANGED emberling
+
+#WAVE 0x20 0x62 strings
+#WAVE 0x21 0x73 choir
+#WAVE 0x22 0x87 brass
+#WAVE 0x23 0xA7 flute
+#WAVE 0x24 0x19 celesta
+#WAVE 0x25 0x51 bass
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x4A toms
+#WAVE 0x2C 0x2D crash
+#WAVE 0x2F 0x3A hihat-closed
+
+#def init= t128 %v40 %b0,85 %f0,0
+
+#def strings= |0     o5 %e1 %y0        m118,18,199
+#def vox=     |1 'v' o4 %e1 %r3        m118,18,207
+#def brass=   |2 'b' o5 %e1 %y0%s6%r8  m118,18,231
+#def flute=   |3 'f' o4 %e1 %r10       m
+#def celesta= |4 'c' o5 %e1            m118,18,215
+#def ebass=   |5 'e' o4 %e0            m
+
+#def s= v75
+#def sb= v135
+#def v= v40
+#def b= v99
+#def f= v49
+#def c= v42
+#def e= v54
+
+#def track2b= 'brass' p73
+#def track3v= 'vox' p64
+#def track4e= 'ebass' p64
+#def track5c= 'celesta' p58
+#def track6s= 'strings' p55 'st2hold'
+#def track7s= 'strings' p70
+#def track8f= 'flute' p64
+#def track10b= 'brass*v.35' p58
+#def track11c= 'celesta*v.5' p73
+
+#def str8th= %s6%r25   %g0 'sb*v.94'
+#def str16th= %s6%r28  %g1 'sb*v.94'
+#def strhold= %s7%r4   %g0 's*v.94'
+#def st2hold= %s7%r4       's*v.88'
+
+#def br8th= %r22
+#def br16th= %r28
+#def brhold= %r8
+
+#drum "y"= 5f+ |C m %e1 v100 p64 %r17
+
+#drum "k"= 5a |8 m %e0 v90 p64
+#drum "s"= 5a |9 m %e1 v90 p64
+#drum "r"= 5a |9 m %e1 v65 p64
+
+#drum "c"= 4b  |A m %e1 v80 p80
+#drum "a"= 4f+ |A m %e1 v80 p64
+#drum "f"= 4d  |A m %e1 v80 p48
+
+#drum "h"= 5c |F m %e0 v32 p80
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init' $
+'track2b'
+l8 f+2g+'br8th'ab<e  'brhold'c+1    l16 d4.'br16th'ef+'brhold'e4>b4< c+1
+l8 >[b<'br8th'c+>'brhold'f+4.ej2f+4]f+'br8th'g+  'brhold'f+1 f+2 f+.g+.a
+## 9
+['track2b'
+l8 f+2g+'br8th'ab<e  'brhold'c+1    l16 d4.'br16th'ef+'brhold'e4>b4< c+1
+l8 >[b<'br8th'c+>'brhold'f+4.ej2f+4]f+'br8th'g+  'brhold'f+1 f+2 e2
+j2,133
+## 17
+'track6s''strhold' l8
+f+4.<f+4edc+> b2b.<c+.d   c+4.>f+^2 ^2^8.g+.a
+f+4.<f+4edc+> b2b.<c+.d   c+4. f+^2 f4.f+4.g+4
+]$133
+## 33
+'track8f+o1' l16
+[4[3 crdr>br<cr j3 d8..r32]]
+## 41
+'track2b+o1' l8
+e2e.d+.'br8th'e  'brhold'f+1
+a2a.g.'br8th'a   'brhold'b2b2
+;
+
+{2}
+$ 'track4e' l24
+[[3f+12r][f+16f+12rf+12r]]
+[3d12r][e16e12re12r]
+[3f+12r]c+16c+12rc+12r c+16<c+12r>c+12r
+[3d12r][d16d12rd12r]
+[3e12r][e16e12re12r]
+[3f+12r][f+16f+12rf+12r]
+[3d12r]d16d12rd12r d16d12r<d12r>
+## 9
+[
+[[3f+12r][f+16f+12rf+12r]]
+[3d12r][e16e12re12r]
+[3f+12r]c+16c+12rc+12r c+16<c+12r>c+12r
+[3d12r][d16d12rd12r]
+[3e12r][e16e12re12r]
+[3f+12r][f+16f+12rf+12r]
+[3e12r]e16e12re12r e16 l16 ee<ee>
+j2,233
+## 17
+l16 d2.^12r24<dd>  l8 e4e4e4ef
+l8  f+f+rf+16f+16f+f+f+f+   [4eb]
+[4da] [4eb] [4f+<f+>] [4c+<c+>]
+]$233
+## 33
+[
+l8 [8f]  f<f>f<e>f<d>f<c>
+g<g>g<f>g<e>g<d> gggggg<g>g
+]
+## 41
+a4^16.r32a<a.e.a>
+b4...r32f+4b4
+f4^16.r32f16f16<f.c.f>
+gg<g>g g+<eg+b
+;
+
+{3}
+$
+l8 "k4s4kks4"  "k4s4k8.k16s4"
+   "k4s4kks4"  "k4s4k16k16kss"
+   "k4s4kks4"  "k4s4k8."l16"kssss"
+l8 "k4s4kks4"  "k8.k16sk"l16"ccaaffaf"
+## 9
+[ "!!!o"
+l8 "k4s4kks4"  "k4s4k8.k16s4"
+   "k4s4kks4"  "k4s4k16k16kss"
+   "k4s4kks4"  "k4s4k8."l16"kssss"
+l8 "k4s4kks4"  l16 "k8.ks8k8crrarrfr"
+j2,333
+## 17
+l16 "k4.k8s4.hh" l8 "kk4kskss"
+l16 "k4.k8s4.hh" l8 "kk4kskss16s16"
+l8  "k4s4kks4"      "k4s4k.k16s4"
+    "k4s4kks4"  l16 "k4s4kkk8ssss"
+]$333
+## 33
+"!!!o" l8
+"k4ks4ks4" "^ks4.kss16s16"
+"k4ks4ks4" "^ks4.k" l16 "caff" l8
+"k4ks4ks4" "^ks4.kss16s16"
+"k4ks4ks4" l16 "ccccaaaaffffssss"
+## 41
+l8 "y2y.y.s"  "y2k4s4"
+   "y2y.y.s" l16 "ccccaaaaffffs8s8"
+;
+
+{4}
+$ 'track3v' l2
+<c+>b ab ab <c+c+>
+a1 b1 a1 a<d
+## 9
+[
+c+>b ab ab <c+c+>
+a1 b1 a+1 b1
+j2,433
+## 17
+<c+d e>b  <c+d ef+4>b4
+<c+d e>b  <c+>b g+<c+
+]$433
+## 33
+'track6s+o1'
+l2 ag   fe
+l4 d.e.f  g.a.b
+l2 <c>b  ag
+l4 d.e.f l2 ag
+## 41
+'track2b+o1' l8
+c+2c+.>b.<'br8th'c+  'brhold'd+1
+c2c.c.'br8th'c   'brhold'd2e2
+;
+
+{5}
+$ 'track7s' l8 'str8th'
+c+c+c+c+ dddd   c+c+c+c+ eeee
+dddd >bbbb<   [8c+]
+r1r1  'strhold' %a2<c+1.> %a15 b2
+## 9
+['track7s'
+['str16th' l16 <f+c+>af+c+>a 'str8th' f+8 ^2<]
+'str16th' <f+d>af+ d>a<df+  <e>bg+e >bg+b<e
+          <f+c+>af+ c+>ag+<c+   fg+fg+ <c+fg+f>
+'str8th' [8d8][8e8][8c+8]
+'str16th' >b<eg+b eg+b<e  g+e>bg+ bg+e>b
+j2,533
+## 17
+'str8th' [8a8] [8b8] <[8c+8]> [8b8]
+         [8a8] [8b8] <[8c+8]>
+'str16th' fg+<c+f> g+<c+fg+  <c+>g+fc+ g+fc+>g+
+]$533
+## 33
+'track3v+o1' l1
+f^ dg f^ dg
+## 41
+'track5c-o1' l16
+ea<c+e a<c+e>a    <aec+>a <ec+>ae>
+f+b<d+f+ bd+f+b   <f+d+>bf+ bf+d+>b
+fa<cf acfa        <afc>a <fc>af>
+gb<dg b<dgb       g+<e>eb>b<g+>g+<e
+;
+
+{6}
+$ 'track3v' l2
+ag+ f+g+ f+g+ f+f
+d1 e1 c+1 df+
+## 9
+['track3v'
+ag+ f+g+ f+g+ f+f
+d1 e1 c+1 e1
+j2,633
+## 17
+'track5c' l8
+f+4.<f+4edc+>  b2b.<c+.d     c+4.>f+^2 ^2f+.g+.a
+f+4.<f+4edc+>  b2b.<c+.d     c+4.f+^2 f4.f+4.g+4
+]$633
+## 33
+'track8f' l16
+[4[3arbrgrar j3 b8..r32]]
+## 41
+'track6s+o1' l2
+c+1 >b<d+ fa b1
+;
+
+{7}
+$ 'track7s' l8 'str8th'
+>[f+f+f+f+ g+g+g+g+]
+f+f+f+f+ eeee f+f+f+g+ g+g+g+g+
+r1r1r1r1<
+## 9
+['track7s'
+['str16th' l16 <c+>af+c+>af+ 'str8th' c+8 ^2<]
+'str16th' <d>af+d >af+a<d  bg+e>b g+eg+b<
+          <c+>af+c+ >af+fg+<  c+fc+f g+<c+fc+>
+'str8th' >[8a8][8b8][8a+8]
+'str16th' eg+b<e> g+b<eg+  bg+e>b< e>bg+e
+j2,733
+## 17
+'str8th' [8d8] [8e8] [8f+8] [8e8]
+         [8d8] [8e8] [8f+8]
+'str16th' c+fg+<c+> fg+<c+f  g+fc+>g+ <fc+>g+f
+]$733
+## 33
+'track3v'
+[([16a8])([8g8])([8b8])]
+## 41
+"!!!o" l8
+"k2k.k.y" "k2y2"
+"k2k.k.y" r1
+;
+
+{8}
+$
+&118 "y2" 'track10b'
+g+ab<e  c+1    l16 d4.ef+e4>b4< c+1
+l8 >[b<c+>f+4.ej2f+4]f+g+  f+1 f+2f+.g+. &2r
+## 9
+[
+&118 "!!!o y2" 'track10b'
+g+ab<e  c+1    l16 d4.ef+e4>b4< c+1
+l8 >[b<c+>f+4.ej2f+4]f+
+&2r "!!!o y1 ^4y2."
+j2,833
+## 17
+[
+&94 "!!!o y2"
+'track11c' l8
+    <f+4edc+>  b2b.<c+.d     c+4.j2>f+^2 ^2f+.g+. &2a
+]                                   f+^2 f4.f+4.&26g+4
+]$833
+## 33
+"!!!o y1" ^1^1
+'track6s+o1' d4.f4.g4
+"!!!o y2" 'track6s+o1'
+l2 g fe l4 >b.<c.d l2 dd
+## 41
+[4r1]
+;

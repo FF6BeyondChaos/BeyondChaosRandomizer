@@ -1,5 +1,6 @@
 import itertools
 import os
+import string
 
 from character import get_characters
 from options import Options_
@@ -221,7 +222,6 @@ def manage_character_names(fout, change_to, male):
         assert len(name) == 6
         fout.seek(0x478C0 + (6*c))
         fout.write(name)
-
 
 def get_free_portrait_ids(swap_to, change_to, char_ids, char_portraits):
     # get unused portraits so we can overwrite them if needed
@@ -447,6 +447,8 @@ def manage_character_appearance(fout, preserve_graphics=False):
     sprite_swap_mode = Options_.is_code_active('makeover') and not (sabin_mode or tina_mode or soldier_mode or moogle_mode or ghost_mode)
     new_palette_mode = not Options_.is_code_active('sometimeszombies')
 
+    sprite_log = ""
+
     if new_palette_mode:
         # import recolors for incompatible base sprites
         recolors = [("cyan", 0x152D40, 0x16A0), ("mog", 0x15E240, 0x16A0),
@@ -527,6 +529,16 @@ def manage_character_appearance(fout, preserve_graphics=False):
                 c.new_appearance = NAME_ID_DICT[change_to[c.id]]
             else:
                 c.new_appearance = c.original_appearance
+
+    lookup = {c.id: c for c in characters}
+
+    for index, name in NAME_ID_DICT.items():
+        if index in swap_to:
+            sprite_log += str(str(name) + ": ").ljust(17) + string.capwords(str(swap_to[index].name)) + "\n"
+        elif lookup[index].new_appearance is not None:
+            sprite_log += str(str(name) + ": ").ljust(17) + string.capwords(str(lookup[index].new_appearance)) + "\n"
+        else:
+            sprite_log += str(str(name) + ": ").ljust(17) + string.capwords(str(name)) + "\n"
 
     sprite_ids = list(range(0x16))
 
@@ -675,6 +687,7 @@ def manage_character_appearance(fout, preserve_graphics=False):
 
     manage_palettes(fout, change_to, char_ids)
 
+    return sprite_log
 
 def manage_palettes(fout, change_to, char_ids):
     sabin_mode = Options_.is_code_active('suplexwrecks')

@@ -172,6 +172,7 @@ class MonsterBlock:
         self.rageptr = 0xF4600 + (0x2 * monster_id)
         self.aiptr = 0xF8400 + (0x2 * monster_id)
         self.attackanimationptr = 0xF37C0 + monster_id
+        self.battleanimationptr = 0xF001A + (0x20 * monster_id)
         self.stats = {}
         self.moulds = set([])
         self.width, self.height = None, None
@@ -188,6 +189,7 @@ class MonsterBlock:
         self.absorb = 0
         self.null = 0
         self.weakness = 0
+        self.battleanimation = 0
         self.attackanimation = 0
         self.statuses = []
         self.special = 0
@@ -630,8 +632,11 @@ class MonsterBlock:
         fout.seek(self.specialeffectpointer)
         fout.write(bytes(random.randint(0, 0x21)))
 
-        candidates = list(range(0, 33))
+        candidates = list(range(0, 33)) #randomize special animations
         self.attackanimation = random.choice(candidates)
+
+        candidates = sorted(set(range(0, 0x5A)) - set([0, 0x1C])) #randomize battle animations
+        self.battleanimation = random.choice(candidates)
 
     def mutate_graphics_swap(self, candidates):
         chosen = self.choose_graphics(candidates)
@@ -682,6 +687,9 @@ class MonsterBlock:
 
             f.seek(self.attackanimationptr)
             self.attackanimation = ord(f.read(1))
+
+            f.seek(self.battleanimationptr)
+            self.battleanimation = ord(f.read(1))
 
             f.seek(self.pointer + 27)
             self.statuses = list(f.read(4))
@@ -1089,6 +1097,9 @@ class MonsterBlock:
 
         fout.seek(self.attackanimationptr)
         fout.write(bytes([self.attackanimation]))
+
+        fout.seek(self.battleanimationptr)
+        fout.write(bytes([self.battleanimation]))
 
         fout.seek(self.pointer + 27)
         for s in self.statuses:
@@ -1726,7 +1737,7 @@ class MonsterBlock:
     def copy_all(self, other, everything=True):
         attributes = ["ai", "aiscript", "controls", "sketches", "stats",
                       "absorb", "null", "weakness", "special", "morph", "items",
-                      "misc1", "misc2", "immunities", "statuses", "attackanimation"]
+                      "misc1", "misc2", "immunities", "statuses", "attackanimation", "battleanimation"]
         if "aiptr" in attributes:
             attributes.remove("aiptr")  # don't copy this, yo
         if not everything:

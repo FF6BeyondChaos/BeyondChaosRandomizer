@@ -41,7 +41,7 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
                                shuffle_monsters, get_monster, read_ai_table,
                                change_enemy_name, randomize_enemy_name,
                                get_collapsing_house_help_skill)
-from musicinterface import randomize_music, manage_opera, get_music_spoiler, music_init
+from musicinterface import randomize_music, manage_opera, get_music_spoiler, music_init, get_opera_log
 from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
@@ -71,7 +71,7 @@ VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "1.normal.bcdefgijklmnopqrstuwyzalasdracocapslockoffjohnnydmadmakeovernotawaiterpartypartydancingmaduinbsiaberandombossesmimetimeeasymodocanttouchthissuplexwrecksremoveflashing.1630973998"
+TEST_SEED = "2.normal.bcdefgijkmnopqrstuwyzmakeoverpartypartyfrenchvanillaelectricboogaloorandombossesalasdracocapslockoffjohnnyachaoticnotawaiterdancingmaduin.1632060671"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -87,6 +87,7 @@ FORBIDDEN_COMMANDS = ["leap", "possess"]
 
 MD5HASHNORMAL = "e986575b98300f721ce27c180264d890"
 MD5HASHTEXTLESS = "f08bf13a6819c421eee33ee29e640a1d"
+MD5HASHTEXTLESS2 = "e0984abc9e5dd99e4bc54e8f9e0ff8d0"
 
 
 TEK_SKILLS = (  # [0x18, 0x6E, 0x70, 0x7D, 0x7E] +
@@ -4278,7 +4279,6 @@ def manage_dances():
     fout.seek(0x2D8E79)
     fout.write(bytes([3]))
 
-
 def nerf_paladin_shield():
     paladin_shield = get_item(0x67)
     paladin_shield.mutate_learning()
@@ -4556,7 +4556,7 @@ def randomize(**kwargs) -> str:
                 if size == 3145728 + 0x200:
                     data = data[0x200:]
                 h = md5(data).hexdigest()
-                if h == MD5HASHNORMAL or h == MD5HASHTEXTLESS:
+                if h == MD5HASHNORMAL or h == MD5HASHTEXTLESS or h == MD5HASHTEXTLESS2:
                     sourcefile = filename
                     break
             else:
@@ -4718,7 +4718,7 @@ def randomize(**kwargs) -> str:
         f.close()
 
     h = md5(data).hexdigest()
-    if h != MD5HASHNORMAL and h != MD5HASHTEXTLESS:
+    if h != MD5HASHNORMAL and h != MD5HASHTEXTLESS and h!= MD5HASHTEXTLESS2:
         print("WARNING! The md5 hash of this file does not match the known "
               "hashes of the english FF6 1.0 rom!")
         x = input("Continue? y/n ")
@@ -4908,7 +4908,8 @@ def randomize(**kwargs) -> str:
 
     if Options_.random_palettes_and_names or Options_.swap_sprites or Options_.is_any_code_active(['partyparty', 'bravenudeworld', 'suplexwrecks',
              'christmas', 'halloween', 'kupokupo', 'quikdraw', 'makeover']):
-        manage_character_appearance(fout, preserve_graphics=preserve_graphics)
+        s = manage_character_appearance(fout, preserve_graphics=preserve_graphics)
+        log(s, "aesthetics")
         show_original_names(fout)
     reseed()
 
@@ -5162,6 +5163,7 @@ def randomize(**kwargs) -> str:
         
     if Options_.is_code_active('alasdraco'):
         opera = manage_opera(fout, has_music)
+        log(get_opera_log(), section="aesthetics")
     else:
         opera = None
     reseed()
@@ -5340,7 +5342,7 @@ def randomize(**kwargs) -> str:
     log_break_learn_items()
 
     f = open(outlog, 'w+')
-    f.write(get_logstring(["characters", "stats", "commands", "blitz inputs", "slots", "dances", "espers", "item magic",
+    f.write(get_logstring(["characters", "stats", "aesthetics", "commands", "blitz inputs", "slots", "dances", "espers", "item magic",
                            "item effects", "command-change relics", "colosseum", "monsters", "music", "shops",
                            "treasure chests", "zozo clock"]))
     f.close()
