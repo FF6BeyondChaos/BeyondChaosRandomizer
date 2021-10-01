@@ -1,5 +1,6 @@
 #Standard library imports
 import configparser
+import multiprocessing
 import os
 import subprocess
 import sys
@@ -15,6 +16,7 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
     QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox)
 
 #Local application imports
+import randomizer
 from config import (readFlags, writeFlags)
 from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES)
 from update import (update, configExists)
@@ -1081,19 +1083,18 @@ class Window(QWidget):
                     QtCore.pyqtRemoveInputHook()
                     # TODO: put this in a new thread
                     try:
-                        randomizer_process = subprocess.Popen([
-                            sys.executable,
-                            "randomizer.py",
-                            "source={0}".format(self.romText),
-                            "seed={0}".format(bundle),
-                            "destination={0}".format(self.romOutputDirectory),
-                            "expMultiplier={0}".format(self.expMultiplier),
-                            "gpMultiplier={0}".format(self.gpMultiplier),
-                            "mpMultiplier={0}".format(self.mpMultiplier),
-                            "randomboost={0}".format(self.randomboost)
-                        ], stdin=subprocess.PIPE, text=True)
-                        randomizer_process.communicate(os.linesep)
-                        randomizer_process.wait()
+                        kwargs = {
+                            "sourcefile": self.romText,
+                            "seed": bundle,
+                            "output_directory": self.romOutputDirectory,
+                            "expMultiplier": self.expMultiplier,
+                            "gpMultiplier": self.gpMultiplier,
+                            "mpMultiplier": self.mpMultiplier,
+                            "randomboost": self.randomboost
+                        }
+                        p = multiprocessing.Process(target=randomizer.randomize, kwargs=kwargs)
+                        p.start()
+                        p.join()
                         # generate the output file name since we're using subprocess now instead of a direct call
                         if '.' in self.romText:
                             tempname = os.path.basename(self.romText).rsplit('.', 1)
@@ -1188,6 +1189,7 @@ class Window(QWidget):
 
 
 if __name__ == "__main__":
+    multiprocessing.freeze_support()
     print(
         "Loading GUI, checking for config file, "
         "updater file and updates please wait."
