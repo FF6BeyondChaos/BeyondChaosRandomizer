@@ -1144,7 +1144,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None):
                 if key > 0:
                     final_cut.bytestring += bytearray([0x3F, c, key])
         final_cut.bytestring += bytearray([0x99, 0x03, locked & 0xFF, locked >> 8])
-        from ChestRandomizer import get_2pack
+        from chestrandomizer import get_2pack
         event_bosses = {
             1: [0xC18A4, 0xC184B],
             2: [0xC16DD, 0xC171D, 0xC1756],
