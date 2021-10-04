@@ -2075,7 +2075,7 @@ def manage_monsters() -> List[MonsterBlock]:
         m.tweak_fanatics()
         m.relevel_specifics()
 
-    #change_enemy_name(fout, 0x166, "L.255Magic") #Commenting out to revert back to MagiMaster so Chaotic AI works with it
+    change_enemy_name(fout, 0x166, "L.255Magic")
 
     shuffle_monsters(monsters, safe_solo_terra=safe_solo_terra)
     for m in monsters:
