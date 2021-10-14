@@ -21,9 +21,10 @@ except ImportError:
 
 WELL_KNOWN_ROM_HASHES = [
     "e986575b98300f721ce27c180264d890",  # NORMAL
-    "f08bf13a6819c421eee33ee29e640a1d",  # TEXTLESS2
+    "f08bf13a6819c421eee33ee29e640a1d",  # TEXTLESS1
     "e0984abc9e5dd99e4bc54e8f9e0ff8d0"  # TEXTLESS2
-]
+    ]
+
 ENEMY_TABLE = path.join(tblpath, "enemycodes.txt")
 ITEM_TABLE = path.join(tblpath, "itemcodes.txt")
 SPELL_TABLE = path.join(tblpath, "spellcodes.txt")
