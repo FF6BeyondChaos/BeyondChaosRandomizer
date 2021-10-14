@@ -841,6 +841,10 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
 
         changed_commands.add(c.id)
         x = random.randint(1, 3)
+
+        if Options_.is_code_active('nocombos'):
+            x = random.randint(1, 2)
+
         if x <= 1:
             random_skill = False
             combo_skill = False

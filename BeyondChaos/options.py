@@ -245,7 +245,7 @@ NORMAL_CODES = [
     Code('randombosses', "RANDOM BOSSES MODE", "Causes boss skills to be randomized similarly to regular enemy skills. Boss skills can change to similarly powerful skills.", "battle", "checkbox"),
     Code('replaceeverything', "REPLACE ALL SKILLS MODE", "All vanilla skills that can be replaced, are replaced.", "battle", "checkbox"),
     Code('allcombos', "ALL COMBOS MODE", "All skills that get replaced with something are replaced with combo skills.", "battle", "checkbox"),
-    Code('nocombos', "No Ccombo moves", "There will be no combo(dual) skills.", "battle", "checkbox"),
+    Code('nocombos', "NO COMBOS MODE", "There will be no combo(dual) skills.", "battle", "checkbox"),
     Code('endless9', "ENDLESS NINE MODE", "All R-[skills] are automatically changed to 9x[skills]. W-[skills] will become 8x[skills].", "battle", "checkbox"),
     Code('supernatural', "SUPER NATURAL MAGIC MODE", "Makes it so that any character with the Magic command will have natural magic.", "battle", "checkbox"),
     Code('canttouchthis', "INVINCIBILITY", "All characters have 255 Defense and 255 Magic Defense, as well as 128 Evasion and Magic Evasion.", "battle", "checkbox"),
