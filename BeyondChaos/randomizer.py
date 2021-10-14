@@ -71,7 +71,7 @@ VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "2.normal.bcdefgijkmnopqrstuwyzmakeoverpartypartyfrenchvanillaelectricboogaloorandombossesalasdracocapslockoffjohnnyachaoticnotawaiterdancingmaduin.1632060671"
+TEST_SEED = "2.katn.bcdefgijkmnopqrstuwyzmakeoverpartypartyfrenchvanillaelectricboogaloorandombossesalasdracocapslockoffjohnnyachaoticnotawaitereasymodocanttouchthisdearestmolulu.1632060671"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -278,8 +278,12 @@ class AutoRecruitGauSub(Substitution):
 class EnableEsperMagicSub(Substitution):
     @property
     def bytestring(self) -> bytes:
-        return bytes([0xA9, 0x20, 0xA6, 0x00, 0x95,
-                      0x79, 0xE8, 0xA9, 0x24, 0x60])
+        return bytes([0x20, 0xDD, 0x4E,
+                      0xA6, 0x00, 0xB9, 0x00, 0x00, 0xC9, 0x0E, 0xB0, 0x04,
+                      0xA9, 0x20, 0x80, 0x02, 0xA9, 0x24,
+                      0x95, 0x79,
+                      0xE8,
+                      0xA9, 0x24, 0x60])
 
     def write(self, fout: BinaryIO):
         jsr_sub = Substitution()
@@ -624,7 +628,7 @@ def manage_commands(commands: Dict[str, CommandBlock]):
     rage_blank_sub.write(fout)
 
     eems = EnableEsperMagicSub()
-    eems.set_location(0x3F091)
+    eems.set_location(0x3F09F)
     eems.write(fout)
 
     # Let x-magic user use magic menu.
@@ -636,10 +640,10 @@ def manage_commands(commands: Dict[str, CommandBlock]):
         0xC9, 0x17, # CMP #$17
         0x6b        # RTL
     ])
-    enable_xmagic_menu_sub.set_location(0x3F09B)
+    enable_xmagic_menu_sub.set_location(0x3F091)
     enable_xmagic_menu_sub.write(fout)
 
-    enable_xmagic_menu_sub.bytestring = bytes([0x22, 0x9B, 0xF0, 0xC3])
+    enable_xmagic_menu_sub.bytestring = bytes([0x22, 0x91, 0xF0, 0xC3])
     enable_xmagic_menu_sub.set_location(0x34d56)
     enable_xmagic_menu_sub.write(fout)
 
