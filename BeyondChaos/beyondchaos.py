@@ -1108,9 +1108,11 @@ class Window(QWidget):
                             "randomboost": self.randomboost,
                             "userConfirmedRomMd5": self._good_rom,
                         }
-                        p = multiprocessing.Process(target=randomizer.randomize, kwargs=kwargs)
-                        p.start()
-                        p.join()
+                        pool = multiprocessing.Pool()
+                        x = pool.apply_async(func=randomizer.randomize, kwds=kwargs)
+                        x.get()
+                        pool.start()
+                        pool.join()
                         # generate the output file name since we're using subprocess now instead of a direct call
                         if '.' in self.romText:
                             tempname = os.path.basename(self.romText).rsplit('.', 1)
