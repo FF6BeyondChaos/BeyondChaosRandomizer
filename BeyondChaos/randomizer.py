@@ -4724,7 +4724,7 @@ def randomize(**kwargs) -> str:
         f.close()
 
     h = md5(data).hexdigest()
-    user_confirmed_proceed_from_gui = kwargs.get("userConfirmedRomMd5", False)
+    user_confirmed_proceed_from_gui = kwargs.get("from_gui", False)
     if h not in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2] and not user_confirmed_proceed_from_gui:
         print("WARNING! The md5 hash of this file does not match the known "
               "hashes of the english FF6 1.0 rom!")

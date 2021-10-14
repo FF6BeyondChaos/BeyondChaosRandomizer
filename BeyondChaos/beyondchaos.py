@@ -47,7 +47,6 @@ class Window(QWidget):
         super().__init__()
 
         # window geometry data
-        self._good_rom = True
         self.title = "Beyond Chaos Randomizer"
         self.left = 200
         self.top = 200
@@ -981,7 +980,6 @@ class Window(QWidget):
     def generateSeed(self):
 
         self.romText = self.romInput.text()
-        self._good_rom = True
 
         #Check to see if the supplied output directory exists.
         if os.path.isdir(self.romOutput.text()):
@@ -1008,7 +1006,6 @@ class Window(QWidget):
             )
         else:
             if not os.path.exists(self.romText):
-                self._good_rom = False
                 self.romInput.setText('')
                 QMessageBox.about(
                     self,
@@ -1017,13 +1014,14 @@ class Window(QWidget):
                     + str(self.romText)
                     + ". Please choose a different ROM file."
                 )
+                return
             try:
                 f = open(self.romText, 'rb')
                 data = f.read()
                 f.close()
                 md5_hash = hashlib.md5(data).hexdigest()
                 if md5_hash not in utils.WELL_KNOWN_ROM_HASHES:
-                    self._good_rom = QMessageBox.question(
+                    confirm_hash = QMessageBox.question(
                         self,
                         "WARNING!",
                         "The md5 hash of this file does not match the known hashes of the english FF6 1.0 rom!"
@@ -1031,6 +1029,8 @@ class Window(QWidget):
                         + "Continue Anyway?",
                         QMessageBox.Yes | QMessageBox.Cancel
                     ) == QMessageBox.Yes
+                    if not confirm_hash:
+                        return
             except IOError as e:
                 QMessageBox.about(self, "Error", str(e))
                 return
@@ -1071,13 +1071,13 @@ class Window(QWidget):
                        f"Flags: \n----{flagMsg}\n"
                        f"(Hyphens are not actually used in seed generation)"
             )
-            messBox = QMessageBox.question(
+            continue_confirmed = QMessageBox.question(
                 self,
                 "Confirm Seed Generation?",
                 message,
                 QMessageBox.Yes | QMessageBox.Cancel
             ) == QMessageBox.Yes
-            if messBox and self._good_rom:
+            if continue_confirmed:
                 self.clearConsole()
                 self.seed = self.seed or int(time.time())
                 seedsToGenerate = int(self.seedCount.text())
@@ -1106,7 +1106,7 @@ class Window(QWidget):
                             "gpMultiplier": self.gpMultiplier,
                             "mpMultiplier": self.mpMultiplier,
                             "randomboost": self.randomboost,
-                            "userConfirmedRomMd5": self._good_rom,
+                            "from_gui": True,
                         }
                         pool = multiprocessing.Pool()
                         x = pool.apply_async(func=randomizer.randomize, kwds=kwargs)
