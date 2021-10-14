@@ -30,7 +30,7 @@ class CharacterStats(Randomizer):
                 character.initial_level_override = int(self._rng.choice([1,2,2,3,3,3,4,4,4,4,5,5,5,5,6,6,6,7,7,8]))
             for stat in character.stats_mutated:
                 continue_mutating = True
-                if character.berserk:~
+                if character.berserk:
                     character.stats_mutated[stat] += 1
                 new_stat = character.stats_mutated[stat]
                 while continue_mutating:
