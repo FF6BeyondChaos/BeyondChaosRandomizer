@@ -4556,7 +4556,7 @@ def randomize(**kwargs) -> str:
                 if size == 3145728 + 0x200:
                     data = data[0x200:]
                 h = md5(data).hexdigest()
-                if h == MD5HASHNORMAL or h == MD5HASHTEXTLESS or h == MD5HASHTEXTLESS2:
+                if h in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2]:
                     sourcefile = filename
                     break
             else:
@@ -4718,7 +4718,8 @@ def randomize(**kwargs) -> str:
         f.close()
 
     h = md5(data).hexdigest()
-    if h != MD5HASHNORMAL and h != MD5HASHTEXTLESS and h!= MD5HASHTEXTLESS2:
+    user_confirmed_proceed_from_gui = kwargs.get("userConfirmedRomMd5", False)
+    if h not in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2] and not user_confirmed_proceed_from_gui:
         print("WARNING! The md5 hash of this file does not match the known "
               "hashes of the english FF6 1.0 rom!")
         x = input("Continue? y/n ")

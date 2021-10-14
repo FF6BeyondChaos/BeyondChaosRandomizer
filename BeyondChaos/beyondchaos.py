@@ -1,5 +1,6 @@
 #Standard library imports
 import configparser
+import hashlib
 import multiprocessing
 import os
 import subprocess
@@ -17,6 +18,7 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
 
 #Local application imports
 import randomizer
+import utils
 from config import (readFlags, writeFlags)
 from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES)
 from update import (update, configExists)
@@ -45,6 +47,7 @@ class Window(QWidget):
         super().__init__()
 
         # window geometry data
+        self._good_rom = True
         self.title = "Beyond Chaos Randomizer"
         self.left = 200
         self.top = 200
@@ -978,6 +981,7 @@ class Window(QWidget):
     def generateSeed(self):
 
         self.romText = self.romInput.text()
+        self._good_rom = True
 
         #Check to see if the supplied output directory exists.
         if os.path.isdir(self.romOutput.text()):
@@ -1003,21 +1007,32 @@ class Window(QWidget):
                 "You need to select a FFVI rom!"
             )
         else:
+            if not os.path.exists(self.romText):
+                self._good_rom = False
+                self.romInput.setText('')
+                QMessageBox.about(
+                    self,
+                    "Error",
+                    "No ROM was found at the path "
+                    + str(self.romText)
+                    + ". Please choose a different ROM file."
+                )
             try:
                 f = open(self.romText, 'rb')
+                data = f.read()
                 f.close()
-            except IOError as e:
-                if '[Errno 2]' in str(e):
-                    self.romInput.setText('')
-                    QMessageBox.about(
+                md5_hash = hashlib.md5(data).hexdigest()
+                if md5_hash not in utils.WELL_KNOWN_ROM_HASHES:
+                    self._good_rom = QMessageBox.question(
                         self,
-                        "Error",
-                        "No ROM was found at the path "
-                        + str(self.romText)
-                        + ". Please choose a different ROM file."
-                    )
-                else:
-                    QMessageBox.about(self, "Error", str(e))
+                        "WARNING!",
+                        "The md5 hash of this file does not match the known hashes of the english FF6 1.0 rom!"
+                        + os.linesep
+                        + "Continue Anyway?",
+                        QMessageBox.Yes | QMessageBox.Cancel
+                    ) == QMessageBox.Yes
+            except IOError as e:
+                QMessageBox.about(self, "Error", str(e))
                 return
 
             self.seed = self.seedInput.text()
@@ -1061,8 +1076,8 @@ class Window(QWidget):
                 "Confirm Seed Generation?",
                 message,
                 QMessageBox.Yes | QMessageBox.Cancel
-            )
-            if messBox == 16384:
+            ) == QMessageBox.Yes
+            if messBox and self._good_rom:
                 self.clearConsole()
                 self.seed = self.seed or int(time.time())
                 seedsToGenerate = int(self.seedCount.text())
@@ -1090,7 +1105,8 @@ class Window(QWidget):
                             "expMultiplier": self.expMultiplier,
                             "gpMultiplier": self.gpMultiplier,
                             "mpMultiplier": self.mpMultiplier,
-                            "randomboost": self.randomboost
+                            "randomboost": self.randomboost,
+                            "userConfirmedRomMd5": self._good_rom,
                         }
                         p = multiprocessing.Process(target=randomizer.randomize, kwargs=kwargs)
                         p.start()
