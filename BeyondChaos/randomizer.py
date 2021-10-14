@@ -4504,38 +4504,40 @@ def randomize(**kwargs) -> str:
     if sourcefile.startswith('"') and sourcefile.endswith('"'):
         sourcefile = sourcefile.strip('"')
     sourcefile = os.path.abspath(sourcefile)
-    
+
+    output_directory = kwargs.get('output_directory')
+    # if len(args) > 4:
+    # If a directory was supplied by the GUI, use that directory
+    # output_directory = args[4]
+    # else:
+    if not output_directory:
+        # If no previous directory or an invalid directory was obtained from bcce.cfg, default to the ROM's directory
+        if not previous_output_directory or not os.path.isdir(previous_output_directory):
+            previous_output_directory = os.path.dirname(sourcefile)
+
+        while True:
+            # Input loop to make sure we get a valid directory
+            previous_output = f" (blank for default: {previous_output_directory})"
+            output_directory = input(
+                f"Please input the directory to place the randomized ROM file. {previous_output}:\n> ").strip()
+            print()
+
+            if previous_output_directory and not output_directory:
+                output_directory = previous_output_directory
+            if output_directory.startswith('"') and output_directory.endswith('"'):
+                output_directory = output_directory.strip('"')
+
+            if os.path.isdir(output_directory):
+                # Valid directory received. Break out of the loop.
+                break
+            else:
+                print("That output directory does not exist. Please try again.")
+
     try:
         f = open(sourcefile, 'rb')
         data = f.read()
         f.close()
 
-        output_directory = kwargs.get('output_directory')
-        #if len(args) > 4:
-            #If a directory was supplied by the GUI, use that directory
-            #output_directory = args[4]
-        #else:
-        if not output_directory:
-            #If no previous directory or an invalid directory was obtained from bcce.cfg, default to the ROM's directory
-            if not previous_output_directory or not os.path.isdir(previous_output_directory):
-                previous_output_directory = os.path.dirname(sourcefile)
-
-            while True:
-                #Input loop to make sure we get a valid directory
-                previous_output = f" (blank for default: {previous_output_directory})"
-                output_directory = input(f"Please input the directory to place the randomized ROM file. {previous_output}:\n> ").strip()
-                print()
-
-                if previous_output_directory and not output_directory:
-                    output_directory = previous_output_directory
-                if output_directory.startswith('"') and output_directory.endswith('"'):
-                    output_directory = output_directory.strip('"')
-                    
-                if os.path.isdir(output_directory):
-                    #Valid directory received. Break out of the loop.
-                    break
-                else:
-                    print("That output directory does not exist. Please try again.")
     except IOError:
         response = input("File not found. Would you like to search the current directory \n"
             "for a valid FF3 1.0 rom? (y/n) ")
