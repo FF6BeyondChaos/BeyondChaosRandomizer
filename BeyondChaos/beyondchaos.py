@@ -1111,7 +1111,7 @@ class Window(QWidget):
                         pool = multiprocessing.Pool()
                         x = pool.apply_async(func=randomizer.randomize, kwds=kwargs)
                         x.get()
-                        pool.start()
+                        pool.close()
                         pool.join()
                         # generate the output file name since we're using subprocess now instead of a direct call
                         if '.' in self.romText:
