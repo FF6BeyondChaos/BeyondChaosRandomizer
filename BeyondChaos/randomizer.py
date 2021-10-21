@@ -71,7 +71,7 @@ VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "2.katn.bcdefgijkmnopqrstuwyzmakeoverpartypartyfrenchvanillaelectricboogaloorandombossesalasdracocapslockoffjohnnyachaoticnotawaitereasymodocanttouchthisdearestmolulu.1632060671"
+TEST_SEED = "2.normal.bcdefgijklmnopqrstuwyzpartypartyfrenchvanillarandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremoveflashingcanttouchthiseasymododearestmolulu.1634145350"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -1746,7 +1746,6 @@ def manage_skips():
     [0xDA, 0x5A, 0xDA, 0x59, 0xDB, 0x20, 0xDA, 0x68] +  # NPC event bits
     [0xD2, 0xB3, 0xD2, 0xB4] +  # Facing left and pressing A?
     [0xD0, 0x7A] +  # Set event bit 0x7A, The Espers attacked the Blackjack
-    [0xD2, 0x76] + # Set event bit 0x176, Serves to ensure that branching
     # always occurs 2 (always remains clear)
     [0xD2, 0x6F] +  # Set event bit 0x16F, Learned how to operate the airship
     [0x6B, 0x00, 0x04, 0xF9, 0x80, 0x00] +  # load map, place party
