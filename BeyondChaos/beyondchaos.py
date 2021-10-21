@@ -1051,7 +1051,7 @@ class Window(QWidget):
                 flagMsg = ""
             for flag in self.flags:
                 if flagMsg != "":
-                    flagMsg += "\n----"
+                    flagMsg += "\n-"
                 flagMsg += flag
             if flagMsg == "":
                 QMessageBox.about(
@@ -1068,7 +1068,7 @@ class Window(QWidget):
                        f"Seed: {displaySeed}\n"
                        f"Number of seeds: {self.seedCount.text()}\n"
                        f"Mode: {self.mode}\n"
-                       f"Flags: \n----{flagMsg}\n"
+                       f"Flags: \n-{flagMsg}\n"
                        f"(Hyphens are not actually used in seed generation)"
             )
             continue_confirmed = QMessageBox.question(
