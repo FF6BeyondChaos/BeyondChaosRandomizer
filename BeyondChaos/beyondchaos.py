@@ -10,7 +10,7 @@ import traceback
 
 # Related third-party imports
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtGui import QCursor, QIntValidator
+from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
                              QLabel, QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QFileDialog,
                              QApplication, QTabWidget, QInputDialog, QScrollArea, QMessageBox,
