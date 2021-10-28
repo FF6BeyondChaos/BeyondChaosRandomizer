@@ -14,7 +14,8 @@ from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
                              QLabel, QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QFileDialog,
                              QApplication, QTabWidget, QInputDialog, QScrollArea, QMessageBox,
-                             QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox, QDialog)
+                             QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox, QDialog,
+                             QDialogButtonBox)
 
 # Local application imports
 import randomizer
@@ -96,17 +97,32 @@ class BingoPrompts(QDialog):
         layout.addWidget(num_cards_label)
         layout.addWidget(self.num_cards_box)
 
+        button_box = QDialogButtonBox(self)
+        button_box.setStandardButtons(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        button_box.setOrientation(QtCore.Qt.Horizontal)
+        button_box.accepted.connect(self.accept)
+        button_box.rejected.connect(self.reject)
+
+        self.ok_button = button_box.button(QDialogButtonBox.Ok)
+        self.ok_button.setEnabled(False)
+        button_box.button(QDialogButtonBox.Cancel)
+        layout.addWidget(button_box)
+
     def _toggle_abilities(self):
         self.abilities = not self.abilities
+        self.ok_button.setEnabled(self._get_is_ok_enabled())
 
     def _toggle_monsters(self):
         self.monsters = not self.monsters
+        self.ok_button.setEnabled(self._get_is_ok_enabled())
 
     def _toggle_items(self):
         self.items = not self.items
+        self.ok_button.setEnabled(self._get_is_ok_enabled())
 
     def _toggle_spells(self):
         self.spells = not self.spells
+        self.ok_button.setEnabled(self._get_is_ok_enabled())
 
     def _set_grid_size(self):
         self.grid_size = self.grid_size_box.value()
@@ -116,6 +132,9 @@ class BingoPrompts(QDialog):
 
     def _set_num_cards(self):
         self.num_cards = self.num_cards_box.value()
+
+    def _get_is_ok_enabled(self):
+        return self.spells or self.items or self.monsters or self.abilities
 
 class Window(QWidget):
 
