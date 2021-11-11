@@ -74,6 +74,7 @@ PASSWORDS_TABLE = path.join(custom_path, "passwords.txt")
 POEMS_TABLE = path.join(custom_path, "poems.txt")
 MODIFIERS_TABLE = path.join(custom_path, "moves.txt")
 MOVES_TABLE = path.join(custom_path, "moves.txt")
+CORAL_TABLE = path.join(custom_path, "coralnames.txt")
 
 
 def open_mei_fallback(filename, mode='r', encoding=None):

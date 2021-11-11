@@ -70,8 +70,8 @@ BETA = False
 VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
-TEST_SEED = "2.normal.bcdefgijklmnopqrstuwyzpartypartyfrenchvanillarandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremoveflashingcanttouchthiseasymodosuplexwrecksnoflashing.1603333081"
+TEST_ON = True
+TEST_SEED = "2.normal.bcdefgijklmnopqrstuwyzpartypartyfrenchvanillarandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremoveflashingcanttouchthiseasymodo.1603333081"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -1287,8 +1287,8 @@ def manage_suplex(commands: Dict[str, CommandBlock], monsters: List[MonsterBlock
     freespaces.append(FreeBlock(0x2FAAC, 0x2FC6D))
     c = [d for d in commands.values() if d.id == 5][0]
     myfs = freespaces.pop()
-    s = SpellSub(spellid=0xB6)
-    sb = SpellBlock(0xB6, sourcefile)
+    s = SpellSub(spellid=0x5F)
+    sb = SpellBlock(0x5F, sourcefile)
     s.set_location(myfs.start)
     s.write(fout)
     c.targeting = sb.targeting
