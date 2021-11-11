@@ -5370,10 +5370,11 @@ def randomize(**kwargs) -> str:
             else:
                 numcards = int(numcards)
 
-    print("Generating Bingo cards, please wait.")
-    target_score = float(target_score) * (size ** 2)
+        print("Generating Bingo cards, please wait.")
+        target_score = float(target_score) * (size ** 2)
 
-    manage_bingo(bingoflags=bingoflags, size=size, difficulty=difficulty, numcards=numcards, target_score=target_score)
+        manage_bingo(bingoflags=bingoflags, size=size, difficulty=difficulty, numcards=numcards, target_score=target_score)
+
     return outfile
 
 
