@@ -72,8 +72,9 @@ class BingoPrompts(QDialog):
         layout.addWidget(self.spells_box)
 
         self.grid_size = 5
-        grid_size_label = QLabel("What size grid?")
+        grid_size_label = QLabel("What size grid? (2-7)")
         self.grid_size_box = QSpinBox()
+        self.grid_size_box.setRange(2, 7)
         self.grid_size_box.setValue(self.grid_size)
         self.grid_size_box.valueChanged.connect(self._set_grid_size)
         layout.addWidget(grid_size_label)
@@ -159,6 +160,10 @@ class Window(QWidget):
         self.gpMultiplier = 1
         self.mpMultiplier = 1
         self.randomboost = 1
+        self.bingotype = []
+        self.bingosize = 5
+        self.bingodiff = ""
+        self.bingocards = 1
 
         # dictionaries to hold flag data
         self.aesthetic = {}
@@ -1140,6 +1145,24 @@ class Window(QWidget):
                 bingo.setModal(True)
                 bingo.exec()
 
+                bingotype = ""
+                if bingo.abilities:
+                    bingotype += "a"
+                if bingo.items:
+                    bingotype += "i"
+                if bingo.monsters:
+                    bingotype += "m"
+                if bingo.spells:
+                    bingotype += "s"
+
+                if bingotype != "":
+                    self.bingotype = bingotype
+                else:
+                    return
+                self.bingodiff = bingo.difficulty
+                self.bingosize = bingo.grid_size
+                self.bingocards = bingo.num_cards
+
             # This makes the flag string more readable in 
             # the confirm dialog
             message = (f"Rom: {self.romText}\n"
@@ -1185,6 +1208,10 @@ class Window(QWidget):
                             "gpMultiplier": self.gpMultiplier,
                             "mpMultiplier": self.mpMultiplier,
                             "randomboost": self.randomboost,
+                            "bingotype": self.bingotype,
+                            "bingosize": self.bingosize,
+                            "bingodifficulty": self.bingodiff,
+                            "bingocards": self.bingocards,
                             "from_gui": True,
                         }
                         pool = multiprocessing.Pool()

@@ -15,7 +15,7 @@ import options
 from monsterrandomizer import MonsterBlock
 from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
-from appearance import manage_character_appearance
+from appearance import manage_character_appearance, manage_coral
 from character import get_characters, get_character, equip_offsets
 from chestrandomizer import mutate_event_items, get_event_items
 from decompress import Decompressor
@@ -71,7 +71,7 @@ VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "2.normal.bcdefgijklmnopqrstuwyzpartypartyfrenchvanillarandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremoveflashingcanttouchthiseasymododearestmolulu.1634145350"
+TEST_SEED = "2.normal.bcdefgijklmnopqrstuwyzpartypartyfrenchvanillarandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremoveflashingcanttouchthiseasymododearestmolulu.1603333081"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -3852,43 +3852,7 @@ def manage_auction_house():
         set_dialogue(auction_item[3], f'<line>        “<item>”!<page><line>Do I hear {opening_bid} GP?!')
 
 
-def manage_bingo():
-    target_score = 200.0
-    print("WELCOME TO BEYOND CHAOS BINGO MODE")
-    print("Include what type of squares? (blank for all)")
-    print("    a   Abilities\n"
-          "    i   Items\n"
-          "    m   Monsters\n"
-          "    s   Spells")
-    bingoflags = input("> ").strip()
-    if not bingoflags:
-        bingoflags = "aims"
-    bingoflags = [c for c in "aims" if c in bingoflags]
-
-    print("What size grid? (default: 5)")
-    size = input("> ").strip()
-    if not size:
-        size = 5
-    else:
-        size = int(size)
-    target_score = float(target_score) * (size ** 2)
-
-    print("What difficulty level? Easy, Normal, or Hard? (e/n/h)")
-    difficulty = input("> ").strip()
-    if not difficulty:
-        difficulty = "n"
-    else:
-        difficulty = difficulty[0].lower()
-        if difficulty not in "enh":
-            difficulty = "n"
-
-    print("Generate how many cards? (default: 1)")
-    numcards = input("> ").strip()
-    if not numcards:
-        numcards = 1
-    else:
-        numcards = int(numcards)
-    print("Generating Bingo cards, please wait.")
+def manage_bingo(bingoflags=[], size=5, difficulty="", numcards=1, target_score=200.0):
 
     skills = get_ranked_spells()
     spells = [s for s in skills if s.spellid <= 0x35]
@@ -5303,6 +5267,7 @@ def randomize(**kwargs) -> str:
     cycle_statuses(fout)
     name_swd_techs(fout)
     fix_flash_and_bioblaster(fout)
+    manage_coral(fout)
     #add_esper_bonuses(fout) #Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
 
     if Options_.is_code_active('removeflashing'):
@@ -5360,7 +5325,55 @@ def randomize(**kwargs) -> str:
     print("Randomization successful. Output filename: %s\n" % outfile)
 
     if Options_.is_code_active('bingoboingo'):
-        manage_bingo()
+
+        target_score = 200.0
+
+        if kwargs.get("from_gui", False):
+            bingoflags = kwargs.get('bingotype')
+            size = kwargs.get('bingosize')
+            difficulty = kwargs.get('bingodifficulty')
+            numcards = kwargs.get('bingocards')
+
+        else:
+            print("WELCOME TO BEYOND CHAOS BINGO MODE")
+            print("Include what type of squares? (blank for all)")
+            print("    a   Abilities\n"
+                  "    i   Items\n"
+                  "    m   Monsters\n"
+                  "    s   Spells")
+            bingoflags = input("> ").strip()
+            if not bingoflags:
+                bingoflags = "aims"
+            bingoflags = [c for c in "aims" if c in bingoflags]
+
+            print("What size grid? (default: 5)")
+            size = input("> ").strip()
+            if not size:
+                size = 5
+            else:
+                size = int(size)
+
+
+            print("What difficulty level? Easy, Normal, or Hard? (e/n/h)")
+            difficulty = input("> ").strip()
+            if not difficulty:
+                difficulty = "n"
+            else:
+                difficulty = difficulty[0].lower()
+                if difficulty not in "enh":
+                    difficulty = "n"
+
+            print("Generate how many cards? (default: 1)")
+            numcards = input("> ").strip()
+            if not numcards:
+                numcards = 1
+            else:
+                numcards = int(numcards)
+
+    print("Generating Bingo cards, please wait.")
+    target_score = float(target_score) * (size ** 2)
+
+    manage_bingo(bingoflags=bingoflags, size=size, difficulty=difficulty, numcards=numcards, target_score=target_score)
     return outfile
 
 
@@ -5379,6 +5392,11 @@ if __name__ == "__main__":
             '\t\texpmultplier=<The desired positive integer EXP multiplier, if you are using the exp code>\n',
             '\t\tgpmultplier=<The desired positive integer GP multiplier, if you are using the gp code>\n',
             '\t\trandomboost=<The desired positive integer randomboost amount, if you are using the randomboost code>\n',
+            '\t\tbingotype=<The desired bingo options, if you are using the bingoboingo code>\n',
+            '\t\tbingosize=<The desired positive integer for the size of bingo card, if you are using the bingoboingo code>\n',
+            '\t\tbingodifficulty=<The desired bingo difficulty selection, if you are using the bingoboingo code>\n',
+            '\t\tbingocards=<The desired positive integer for number of bingo cards to generate, if you are using the bingoboingo code>\n',
+
         )
         sys.exit()
     try:
@@ -5389,6 +5407,10 @@ if __name__ == "__main__":
         gpMultiplier = 1
         mpMultiplier = 1
         randomboost = None
+        bingotype = "aims"
+        bingosize = 5
+        bingodifficulty = "n"
+        bingocards = 1
         for argument in args[1:]:
             if 'source=' in argument:
                 source_arg = argument[argument.index('=') + 1:]
@@ -5420,6 +5442,14 @@ if __name__ == "__main__":
                 except ValueError:
                     print("The supplied value for randomboost was not a number.")
                     sys.exit()
+            elif 'bingotype=' in argument:
+                bingotype = argument[argument.index('=') + 1:]
+            elif 'bingosize=' in argument:
+                bingosize = int(argument[argument.index('=') + 1:])
+            elif 'bingodifficulty=' in argument:
+                bingodifficulty = argument[argument.index('=') + 1:]
+            elif 'bingocards=' in argument:
+                bingocards = int(argument[argument.index('=') + 1:])
             else:
                 print('Keyword unrecognized or missing: ' + str(argument) + '.\nUse "python randomizer.py ?" to view a list of valid keyword arguments.')
 
@@ -5430,7 +5460,11 @@ if __name__ == "__main__":
             expMultiplier=expMultiplier, 
             gpMultiplier=gpMultiplier, 
             mpMultiplier=mpMultiplier, 
-            randomboost=randomboost
+            randomboost=randomboost,
+            bingotype=bingotype,
+            bingosize=bingosize,
+            bingodifficulty=bingodifficulty,
+            bingocards=bingocards
         )
         input('Press enter to close this program.')
     except Exception as e:
