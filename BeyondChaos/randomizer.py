@@ -71,7 +71,7 @@ VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "2.normal.bcdefgijklmnopqrstuwyzpartypartyfrenchvanillarandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremoveflashingcanttouchthiseasymododearestmolulu.1603333081"
+TEST_SEED = "2.normal.bcdefgijklmnopqrstuwyzpartypartyfrenchvanillarandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremoveflashingcanttouchthiseasymodosuplexwrecksnoflashing.1603333081"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -1287,8 +1287,8 @@ def manage_suplex(commands: Dict[str, CommandBlock], monsters: List[MonsterBlock
     freespaces.append(FreeBlock(0x2FAAC, 0x2FC6D))
     c = [d for d in commands.values() if d.id == 5][0]
     myfs = freespaces.pop()
-    s = SpellSub(spellid=0x5F)
-    sb = SpellBlock(0x5F, sourcefile)
+    s = SpellSub(spellid=0xB6)
+    sb = SpellBlock(0xB6, sourcefile)
     s.set_location(myfs.start)
     s.write(fout)
     c.targeting = sb.targeting
@@ -2801,7 +2801,7 @@ def manage_dragons():
         fout.write(bytes([dragon]))
 
 
-def manage_formations(formations: List[Formation], fsets: List[FormationSet], mpMultiplier: float=None) -> List[Formation]:
+def manage_formations(formations: List[Formation], fsets: List[FormationSet], mpMultiplier: float=1) -> List[Formation]:
     for fset in fsets:
         if len(fset.formations) == 4:
             for formation in fset.formations:
@@ -2862,7 +2862,7 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet], mp
                            0x1E0, 0x1E6]}
 
     for formation in formations:
-        if Options_.is_code_active('mp'):
+        if Options_.is_code_active('mpboost'):
             formation.mutate(mp=False, mpMultiplier=mpMultiplier)
         else:
             formation.mutate(mp=False)
@@ -4966,7 +4966,7 @@ def randomize(**kwargs) -> str:
             c.mutate_stats(fout, start_in_wor, read_only=True)
     reseed()
 
-    if Options_.is_code_active('mp'):
+    if Options_.is_code_active('mpboost'):
         if 'mpMultiplier' in kwargs and kwargs.get('mpMultiplier') is not None:
             mpValue = kwargs.get('mpMultiplier')
         else:
@@ -4982,7 +4982,7 @@ def randomize(**kwargs) -> str:
     if Options_.random_formations:
         formations = get_formations()
         fsets = get_fsets()
-        if Options_.is_code_active('mp'):
+        if Options_.is_code_active('mpboost'):
             manage_formations(formations, fsets, mpValue)
         else:
             manage_formations(formations, fsets)
@@ -5015,7 +5015,7 @@ def randomize(**kwargs) -> str:
     form_music = {}
     if Options_.random_formations:
         no_special_events = not Options_.is_code_active('bsiab')
-        if Options_.is_code_active('mp'):
+        if Options_.is_code_active('mpboost'):
             manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music, no_special_events=no_special_events, mpMultiplier=mpValue)
         else:
             manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music, no_special_events=no_special_events)
@@ -5178,7 +5178,7 @@ def randomize(**kwargs) -> str:
     if Options_.random_zerker or Options_.random_character_stats:
         manage_equip_umaro(event_freespaces)
         
-    if Options_.is_code_active('easymodo') or Options_.is_code_active('exp'):
+    if Options_.is_code_active('easymodo') or Options_.is_code_active('expboost'):
         if 'expMultiplier' in kwargs and kwargs.get('expMultiplier') is not None:
             expValue = kwargs.get('expMultiplier')
         else:
@@ -5193,11 +5193,11 @@ def randomize(**kwargs) -> str:
         for m in monsters:
             if Options_.is_code_active('easymodo'):
                 m.stats['hp'] = 1
-            if Options_.is_code_active('exp'):
+            if Options_.is_code_active('expboost'):
                 m.stats['xp'] = int(min(0xFFFF, float(expValue) * m.stats['xp']))
             m.write_stats(fout)
 
-    if Options_.is_code_active('gp'):
+    if Options_.is_code_active('gpboost'):
         if 'gpMultiplier' in kwargs and kwargs.get('gpMultiplier') is not None:
             gpValue = kwargs.get('gpMultiplier')
         else:
@@ -5210,7 +5210,7 @@ def randomize(**kwargs) -> str:
                 except ValueError:
                     print("The supplied value for the gp multiplier was not a positive number.")
         for m in monsters:
-            m.stats['gp'] = int(min(0xFFFF, float(gpValue) * m.stats['gp']))
+            m.stats['gpboost'] = int(min(0xFFFF, float(gpValue) * m.stats['gp']))
             m.write_stats(fout)
 
     if Options_.is_code_active('naturalmagic') or Options_.is_code_active('naturalstats'):
