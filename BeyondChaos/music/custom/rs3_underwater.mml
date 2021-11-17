@@ -1,0 +1,174 @@
+#TITLE Underwater Palace
+#ALBUM Romancing SaGa 3
+#COMPOSER Kenji Ito
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.6
+
+#WAVE 0x20 0x61 harp
+#WAVE 0x21 0x62 strings
+#WAVE 0x22 0x75 vox
+#WAVE 0x23 0x72 violin
+#WAVE 0x24 0x2F gong
+#WAVE 0x25 0x7C synth conga
+#WAVE 0x26 0x53 fretless bass
+#WAVE 0x27 0x22 vibraphone
+#WAVE 0x28 0x0A kick
+
+#def 0i=   |0 %y5%s4
+#def 0o=   o6
+#def 0v=   v133
+#def 0f= v1,133
+
+#def 1i=   |1
+#def 1o=   o6
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2 %r3
+#def 2o=   o5
+#def 2v=   v133
+#def 2f= v1,133
+
+#def 3i=   |3 %r6
+#def 3o=   o6
+#def 3v=   v75
+#def 3f= v1,75
+
+#def 4i=   |4
+#def 4v=   v100
+#def 4f= v1,100
+
+#def 5i=   |5
+#def 5v=   v100
+#def 5f= v1,100
+
+#def 6i=   |6
+#def 6o=   o4
+#def 6v=   v75
+#def 6f= v1,75
+
+#def 7i=   |7
+#def 7o=   o5
+#def 7v=   v100
+#def 7f= v1,100
+
+#def 8i=   |8
+#def 8v=   v100
+#def 8f= v1,100
+
+## auto percussion  0x24
+#drum "h"= 4e
+## auto percussion  0x25
+#drum "i"= 4a- %r28
+#drum "j"= 5e %r28
+## auto percussion  0x28
+#drum "k"= 5a
+
+#cdef ( %l1
+#cdef ) %l0
+
+{5}
+t80%v50%b0,85%f0,0%x244'0v*v.54'
+'0i' p38%e1%r18'0o-o1'c8g8<c8d8g8c8d8>a+8c8g8<c8d8g2
+$101'0o-o1'c8g8<c8d8g8c8d8>a+8c8g8<c8d8g2>c8g8<c8d8g8c8d8>a+8c8g8<c8d8
+g2>>f8<c8f8g8<c8>f8g8d+8>f8<c8f8g8<c2>>g+8<d+8g+8a+8<d+8>g+8a+8g8>g+8<
+d+8g+8a+8<d+2>c8g8<c8d8g2>c8g8<c8d8g2>>f8<c8f8g8<c8>f8g8d+8>f8<c8f8g8<
+c2>>g+8<d+8g8g+8<d+8>g8g+8d+8>g+8<d+8g8g+8<d+2r1r1>>f8<c8f8g8<c2>>g+8<
+d+8g+8a+8<d+2>>f+8<c+8f+8g+8<c+2>c+8g+8<c+8d+8g+2>c8g8<c8d8g8c8d8>g8c8
+g8<c8d8g2
+;101
+
+
+{2}
+r1r1
+$201'1v*v.44''1o-o1'
+'1i' p40%e1%a7a+1^2^4<c4>a+1^2^4a8a+8<c1^2^4d4c1^2^4>a+8g+8a+2^4a4a+4<
+c4d4d+4c1^2^4>a+4g1^2^4f4a+2a2g+2g2<c2^4>a+4g2^4d+4f2^4d+4g+2^4a+4g1^2
+r2
+;201
+
+
+{7}
+r1r1
+$301'1v*v.44''1o-o1'
+'1i' p88%e1%a7 l8
+(g g g g g g g g    g g g g g g)(aa)                            ## g1^2^4a4
+(g g g g g g g g    g g g g g g)f g                             ## g1^2^4f8g8
+(a a a a a a a a    a a a a a a)(a+a+)                          ## a1^2^4a+4
+(g+g+g+g+g+g+g+g+   g+g+g+g+g+g+)gf                             ## g+1^2^4g8f8
+(g g g g g g)(ff)  (g g g g)(a+a+a+a+)                          ## g2^4f4g2a+2
+(f f f f f f f f    f f f f f f f f)                            ## f1^1
+(c c c c c c c c    c c c c c c c c)                            ## c1^1
+(d+d+d+d+d+d+d+d+) (c c c c c c c c)                            ## d+1c1
+(f f f f f f f f)  (c c c c c c c c)                            ## f1c1
+(cccc)>(a+a+a+a+)< (d+d+d+d+)(c+c+c+c+)                         ## c2>a+2<d+2c+2
+(d d d d d d d d    d d d d) r2                                 ## d1^2r2
+;301
+
+#def vioStart= '3v*v.44''3f*v24,.88'
+#def falseVibUp= m192,1^8
+#def falseVibDown= m192,-1^8
+#def falseVibCycle= 'falseVibDown''falseVibUp''falseVibUp''falseVibDown'
+
+{1}
+r1r1
+$401r4'2v*v1.03''2o-o1'm24,36,207v0,18,159
+'2i' p59%e1a+4<f8.d+8.f8g3f12d+12d4c4d4.d+8>'2v*v.90'g2^2^4r4'2v*v1.03'
+r4a8a+8<c8.d8.d+8g3f12d+12d4c4d+8.d8.d+8g2f8.d+8.f8a+4.^24a24g+24g1'2f*v168,.70'
+^2^4.r8
+'3i' '3o+o1'p69%a8'3v*v.88'm24,18,231v0,12,159
+r8>>'vioStart'g8a8a+8<'vioStart'c8.d8.>a+8<'vioStart'c4'vioStart'g4f4'vioStart'd+4d8.d+8.f8
+'vioStart'c4 'falseVibCycle''falseVibDown'm0,0 r8##c2^4.r8
+d4d+4'vioStart'f4.g8 d+8'falseVibCycle''falseVibCycle''falseVibDown'm0,0r4r8##d+2^2^4r4r8
+>'vioStart'g8a8a+8<'vioStart'c8.d8.>a+8<'vioStart'c4g4'vioStart'f4'vioStart'd+4'vioStart'f8.d+8.f8
+'vioStart'k-2m104,2a+16m192,-2^16'falseVibDown''falseVibUp''falseVibDown'm0,0 k0##a+2
+'vioStart'd+8.c+8.d+8
+'vioStart'k-1m104,1g+16m192,-1^16m255,-1^16m255,-1^16 k0m0,0 ##g+4
+f4
+'vioStart'k-2m104,2g16m192,-2^16m0,0^8^4'falseVibCycle''3f*v96,.68''falseVibCycle'r2k0 ##g1'3f*v96,.68'^2r2
+;401
+
+{6}
+['8i' p64 '8v*v.70' "k4."'8v*v.52'"k8"'8v*v.60'"k2"]
+$
+[11
+'8i' p64 '8v*v.70' "k4."'8v*v.52'"k8"'8v*v.60'"k2"
+         '8v*v.70' "k4."'8v*v.52'"k8"'8v*v.60'"k8"
+j11
+'5i''5v*v1.25'p55%e1 "!!!o i16i16j16j16" ^8 %e0] ^4.
+;
+
+{8}
+r1r1
+$
+'4i' p50%e1%r12'4v*v.84'"!!!o h1^1"
+[8r1]
+"h1^1"
+[4r1]
+;
+
+{3}
+r1r2r4'6v*v1.15''6o'
+'6i' p64%r11d+8f8
+$601c2^8>a+8g8a+8<c2^8f8d+8f8c2^8>a+8g8a+8<c2^8>a+8<c8g8f2^8d+8c8d+8f2
+^8g8f8c8>g+2^8<g+8g8g+8>g+2^8<d+8f8g8c2^8>a+8g8a+8<c2^8f8d+8f8f2^8d+8f8
+c8f1>g+2^8<g8g+8d+8>g+4.<d+8>g+4a+4<c2^8f+8g8>g8<c2^8>a+8<c8d+8f2^8d+8
+f8c8>g+2^8<g8g+8d+8f+2^8g+8f+8>f+8<c+2^8d+8c+8>g+8<c2^8>a+8<c8g8c2^4>a+8
+<d+8
+;601
+
+
+{4}
+'7v*v.28'
+'7i' %e1%a10%r23[[3'7o+o2'p38c16>p90c16p38g16p90c16]<p38c16>p90c16p38f16
+p90c16]
+$701[8'7o+o2'p38c16>p90c16p63g16p90c16p38a+16>p90a+16<p38f16>p90a+16][4
+'7o+o2'p38c16>p90c16p38g16p90c16p38a16>p90a16<p38f16>p90a16][7'7o+o2'p38
+c16>p90c16p38g16p90c16p38a+16>p90a+16<p38f16>p90a+16]'7o+o2'p38c2[8'7o+o2'
+p38c16>p90c16p38f16p90c16][10'7o+o2'p38c16>p90c16p38g16p90c16]['7o+o2'
+p38c16>p90c16p38f+16p90c16]['7o+o2'p38c16>p90c16p38f16p90c16]['7o+o2'p38
+c16>p90c16p38g16p90c16][4'7o+o2'p38c16>p90c16p38f16p90c16][4'7o+o2'p38
+c16>p90c16p38g16p90c16][4'7o+o1'p38a+16>p90a+16<p38f16>p90a+16][10'7o+o2'
+p38c16>p90c16p38g16p90c16]'7o+o2'p38c2
+;701
+
