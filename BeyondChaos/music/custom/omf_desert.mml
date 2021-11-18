@@ -1,0 +1,327 @@
+#TITLE ARENA4 (Desert)
+#ALBUM One Must Fall 2097
+#COMPOSER Kenny Chou
+#ARRANGED emberling
+
+#WAVE 0x20 0x55 - legacy 0x1C - syn.bass
+##WAVE 0x21 0x52 - legacy 0x62 - e.piano
+#WAVE 0x22 0x41 - legacy 0x1E - dist.fuzz
+#WAVE 0x23 0x47 - legacy 0x52 - dist.lead
+#WAVE 0x24 0xC1 - legacy 0x5c - pulse.mod
+##WAVE 0x25 0x48 - legacy 0x89 - syn.fuzz
+#BRR 0x25; ../samples/legacy/cs16_synth, 9F0C, F270, F 7 7 0
+#WAVE 0x26 0xB5 - legacy 0x9B - rotary
+#WAVE 0x27 0xC4 - legacy 0x45 - syn.strings
+#WAVE 0x28 0x0D - legacy 0x65 - trance.kick
+#WAVE 0x29 0x1B - legacy 0x14 - snare
+#WAVE 0x2C 0x2D - legacy 0x8e - crash
+#WAVE 0x2F 0x3A - legacy 0x0f - hihat.c
+
+#def init= t150 %x212 %v40 %b0,85 %f0,0
+
+#def boop1= |0 'b' o5 %e0
+#def boop2= @3 'x' o5 %e0 %s5%r13
+#def boop3= @5 'x' o4 %e0 %r13
+#def dist1= |2 'd' o4 %e1 %r15
+#def dist2= |3 'g' o4 %e1 %r16
+#def syb1= |5 'a' o3 %e0 %y3%s4%r20
+#def syb2= |4 'y' o2 %e1 %y4%s3%r16
+#def organ= |6 'o' o4 %e1
+#def chord= |7 'c' o4 %e1 %r18
+
+#def b= v32
+#def x= v80
+#def d= v112
+#def g= v80
+#def a= v127
+#def y= v127
+#def o= v78
+#def p= v127
+#def c= v64
+#def h= v48
+
+#def be= 'b*v.15'
+#def xe= 'x*v.15'
+#def de= 'd*v.31'
+#def ge= 'g*v.31'
+#def ce= 'c*v.34'
+#def oe= 'o*v.47'
+#def he= 'h*v.34'
+#def pe= 'p*v.48'
+#def ae= 'a*v.23'
+#def ye= 'y*v.23'
+
+#def pr= 'p*v.23'
+#def pee= 'p*v.16'
+#def pre= 'p*v.10'
+#def peee= 'p*v.03'
+#def pree= 'p*v.06'
+#def oee=  'o*v.16'
+#def oeee= 'o*v.05'
+#def dee= 'd*v.18'
+#def gee= 'g*v.18'
+#def deee= 'd*v.06'
+#def geee= 'g*v.06'
+
+#cdef ( @5 >%r13
+#cdef ) @3 <%s5%r13
+#cdef ` %l1
+#cdef \ %l0
+
+#def h= v64
+#def s= v112
+
+#drum "k"=5a %e0 |8 v112
+#drum "r"=5g %e1 |9 's*v.51'
+#drum "s"=5g %e1 |9 's*v1'
+#drum "h"=5d+ %e0 |F 'h*v1' %r25
+#drum "i"=5d+ %e0 |F 'h*v.38' %r25
+#drum "j"=5d+ %e0 |F 'h*v.18' %r25
+#drum "y"=5a %e1 |C v64 %r18
+#drum "y+"=5a+ %e1 |C v64 %r18
+
+{1} 'init' $
+'boop1' l8 p40
+[6d'be'd'b'c>d'be'd'b'd<c>d  <f'be'f'b'd+>d+'be'd+'b'j6d+<c>g+<]
+## 1
+#^^
+## 2
+#^
+dfg
+## 3
+[d'be'd'b'<c>d<f'be'f'b'd>d  'be'd'b'<dc>dj2g+gfg] fga<c
+## 4
+['boop1-o1'd 'dist1+o1'd 'boop1'c>d 'dist1+o1'd'de'd 'boop1'd>d
+'dist1+o1'd16r16d 'boop1'c 'dist1+o1'd 'boop1-o1'g+gfg
+d 'dist1+o1'd 'boop1'c>d 'dist1+o1'd'de'd 'boop1'd>d
+'dist1+o1'd16r16d 'boop1'c 'dist1+o1'df 'boop1-o1'g 'dist1+o1'c 'boop2'c]
+## 5
+#^^
+## 6
+%k3 [j1,1004] %k0 'boop1-o1'ba+g+a+
+%k3 [j1,1004] %k0 g+ 'boop1-o1'a+ 'dist1+o1'd+ 'boop1'd+
+## 7
+[j1,1004] 'boop1-o1'g+gfg
+[j1,1004] f 'boop1-o1'g 'dist1'a+4
+## 8
+[%k3 [j1,1004] %k0 'boop1-o1'ba+ 'dist1'g+4]
+## 9
+[ [j1,1004] 'boop1-o1'g+g 'dist1'f4]
+## 10
+<d4'de'd4'dee'd4'deee'd4'd*v.02'd4'd'f4
+;
+
+{2} $
+'boop2' l8 p40 %p1
+[6(d'xe'd)'x'c>d'xe'd'x'd<c>(d  <f'xe'f)'x'd+>d+'xe'd+'x'j6d+<c>g+<]
+## 1
+#^^
+## 2
+#^
+dfg
+## 3
+[d'xe'd'x'<c>d<(f'xe'f)'x'd>(d  'xe'd)'x'<dc>d(j2g+)gf(g)] f)ga<c
+## 4
+['boop2-o1'%p1d 'dist2+o1'%p0d 'boop2'%p1c>d 'dist2+o1'%p0d'ge'd 'boop2'%p1d>(d
+'dist2+o1'%p0d16r16d 'boop2'%p1c 'dist2+o1'%p0d 'boop3-o1'%p1g+)gf(g)
+d 'dist2+o1'%p0d 'boop2'%p1c>d 'dist2+o1'%p0d'ge'd 'boop2'%p1d>(d
+'dist2+o1'%p0d16r16d 'boop2'%p1c 'dist2+o1'%p0df 'boop2-o1'%p1g 'dist2+o1'%p0c 'boop2'%p1c]
+## 5
+#^^
+## 6
+%k3 [j1,2004] %k0 'boop3-o1'%p1b)a+g+(a+
+%k3 [j1,2004] %k0 g+ 'boop2-o1'%p1a+ 'dist2+o1'%p0d+ 'boop2'%p1d+
+## 7
+[j1,2004] 'boop3-o1'%p1g+)gf(g
+[j1,2004] f 'boop2-o1'%p1g 'dist2'%p0a+4
+## 8
+[%k3 [j1,2004] %k0 'boop3-o1'%p1b)a+ 'dist2'%p0g+4]
+## 9
+[ [j1,2004] 'boop3-o1'%p1g+)g 'dist2'%p0f4]
+## 10
+<d4'ge'd4'gee'd4'geee'd4'g*v.02'd4'g'f4
+;
+
+
+{3} $ p96
+l8 "kjhjhjhj  kjhjhjh16i16h"  "kjhjhjhj kjhjhsh16i16h"
+## 1
+l16 [7"kjhjs8hj"]"kjhrs8hj"
+## 2
+[5"kjhjs8hj"]"kjhjk8s8 ^8k8s4.k8sss8"
+## 3
+p96 "!!!o y1"
+'organ+o2' l8
+r`c+16d16c\>agfdc  `c+16 d4m12,-2^16\
+'oe'd4^16m12,-2^16
+'oee'd4^16m12,-2^16
+'oeee'd4^16m12,-2^16
+'o'l16 [`gg+a8\]
+## 4
+<d8'oe'dm12,-2^
+'chord+o1' l8
+[[f'ce'f'c'ef'ce'f'c'g  'ce'g'c'gf'ce'f'c'j2ef'ce'f'c'e
+'ce'e'c'g] j2 e'ce'e'c'f'ce'f
+## 5
+'c'g'ce'g'c'] "!!!o y+4"m9,-2"y+4"
+## 6
+"y4" 'organ+o1' l16
+'p'`ef8\'pe'f'p'd+8c8d+8c8 >a+g+a+ba+8g+8f8d+8`>b<d+fg+\
+a+'pe'^'p'`b<%r14m0,8,239c2.m12,-2^%rm24,8,239
+'pee'c2m'p'[`cd+f8\]
+## 7
+'p*v.29'`cd+f8\
+'p'`c+d8\'pe'd'p'c8>a8<c8>a8 gfgg+g8f8d8c8`>g+<cdf\
+g'pe'^'p'g+%r14m0,8,239a2.m12,-2^%rm24,8,239
+'pee'a4..m12,-2^'peee'a4..m12,-32^m
+## 8
+"!!!o" [15"kjhjs8hj"]
+## 9
+#^
+"kjhjs8k8"
+## 10
+"s4k8s4k8s4.k8s4"
+;
+
+
+{4} $
+'dist1+o1' l8 p40
+[['d'd'de'd'd'ddd'de'd'd'dd4'de'd4'dee'd4j2'deee'd4.]'d'f4'de'f]
+## 1
+#^^
+## 2
+['d'd'de'd'd'ddd'de'd'd'dd4'de'd4'dee'd4j2'deee'd4.]
+'syb1+%y1+%r2+o1' dfg
+## 3
+p96 l16 [40"!!!o kjhjs8hj"]
+## 4
+#^^
+## 5
+#^^
+## 6
+#^^
+## 7
+#^^
+## 8
+p40 'syb1+o1' %k3 [[j1,5008]]
+## 9
+%k0 [[j1,5008]]
+## 10
+d4 'a*v.23'd4 'a*v.08'd4 'a*v.02'd2 'a'f4
+;
+
+{5} $
+'dist2+o1' l8 p40 %p0 %k0
+[['g'd'ge'd'g'ddd'ge'd'g'dd4'ge'd4'gee'd4j2'geee'd4.]'g'f4'ge'f]
+## 1
+#^^
+## 2
+['g'd'ge'd'g'ddd'ge'd'g'dd4'ge'd4'gee'd4j2'geee'd4.]
+'syb2+%y1+%r2+o1' %p1 dfg
+## 3
+p40 %p0'syb1+o1' l8
+[3[j1,5003]a<c>]
+## 4
+#^^
+## 5
+#^^
+## 6
+%k3 [j1,5003] a<c> %k0
+## 7
+[j1,5003] a+'ae'a+
+## 8
+'syb2+o1' %p1 %k3 [[j1,5008]]
+## 9
+%k0 [[j1,5008]]
+## 10
+d4 'y*v.23'd4 'y*v.08'd4 'y*v.02'd2 'y'f4 %p0
+;
+
+{6} $ p96
+r1r1r1r2r8"y4."
+## 1
+"y1^1^1^1"
+## 2
+"y1^1...y+4.y+2"m9,-2"y+4"
+## 3
+p40 %p1 'syb2+o1' l8
+[3[j1,5003]a<c>]
+## 4
+#^^
+## 5
+#^^
+## 6
+%k3 [j1,5003] a<c> %k0
+## 7
+[j1,5003] a+'ye'a+
+## 8
+%p0 p96 "!!!o" ["y1..y+4 ^1..y+4"]
+## 9
+#^^
+## 10
+"y+4."m9,-2"y+4.y+2"m9,-2"y+4"
+;
+
+{7} $
+[12r1] p40
+## 3
+r1r4r16
+'organ+o2*v.37' l8
+`c+16d16c\>agfdc  `c+16 d4m12,-2^16\
+'o*v.16'd4^16m12,-2^16
+'o*v.05'd4^16m12,-2^16
+'o*v.01'd4^16m12,-2^16
+'o*v.37'l16 [`gg+a8\]
+## 4
+^16 'chord+o1''h' l8 p96
+[d'he'd'h'd]  ['he'd'h'd[d'he'd'h'd]] 'he'd'h'd[d'he'd'c']c'he'c
+## 5
+'h'd'he'd'h'[d'he'd'h'd] ['he'd'h'd[d'he'd'h'd]] 'he'd'h'dd'he'd r2
+## 6
+r4.r16 'organ+o1' l16 p40
+'pr'`ef8\'pre'f'pr'd+8c8d+8c8 >a+g+a+ba+8g+8f8d+8`>b<d+fg+\
+a+'pre'^'pr'`b<%r14m0,8,239c2.m12,-2^%rm24,8,239
+'pree'c4..%r16^16%rm'pr'  [`cd+f8\]
+## 7
+'pre'`cd+f8\
+'pr'`c+d8\'pre'd'pr'c8>a8<c8>a8 gfgg+g8f8d8c8`>g+<cdf\
+g'pre'^'pr'g+%r14m0,8,239a2.m12,-2^%rm24,8,239
+'pree'a2'peee'a^4m
+## 8
+[4r1]
+## 9
+[4r1]
+## 10
+r1.
+;
+
+{8} $
+[16r1]
+## 4
+r4 'chord+o1' l8 p96 %k7
+[d'he'd'h'd]  ['he'd'h'd[d'he'd'h'd]] 'he'd'h'd[d'he'd'c']c'he'c
+## 5
+'h'd'he'd'h'[d'he'd'h'd] ['he'd'h'd[d'he'd'h'd]] 'he'd'h'dd'he'd r2
+## 6
+[4r1]
+## 7
+[4r1]
+## 8
+[4r1]
+## 9
+[4r1]
+## 10
+r1.
+;
+
+$1004 ##Repeating section of boop/dist pattern - 1 (7 beats)
+l8  'boop1-o1'd 'dist1+o1'd 'boop1'c>d 'dist1+o1'd'de'd 'boop1'd>d
+    'dist1+o1'd16r16d 'boop1'c 'dist1+o1'd ]
+$2004 ##Repeating section of boop/dist pattern - 2 (7 beats)
+l8  'boop2-o1'%p1d 'dist2+o1'%p0d 'boop2'%p1c>d 'dist2+o1'%p0d'ge'd 'boop2'%p1d>(d
+    'dist2+o1'%p0d16r16d 'boop2'%p1c 'dist2+o1'%p0d ]
+$5003 ##Repeating syb pattern
+l24 d8dr12<c8>dr12<d8>d8g+8d8  dr12<f8c8>dr12g+8g8f8g8
+    d8dr12<c8>dr12<d8>d8g+8d8  dr12<f8c8>dr12f8g8 ]
+$5008 ##Another syb pattern
+l24 d8dr12<c8>dr12<d8>d8g+8d8  dr12<f8c8>dr12g+8g8f4 ]

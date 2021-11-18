@@ -1,0 +1,440 @@
+#TITLE Battle 1 ~Believe in Victory~
+#ALBUM Seiken Densetsu
+#COMPOSER Kenji Ito
+#ARRANGED emberling
+
+#SHORTNAME SD1 Battle 1
+
+## This arrangement combines aspects of the versions of this piece from both
+## Seiken Densetsu [Final Fantasy Adventure / GB] and Shinyaku Seiken Densetsu 
+## [Sword of Mana / GBA]
+
+#WAVE 0x20 0x62 strings
+#WAVE 0x21 0x84 horn
+#WAVE 0x22 0x75 choir
+#WAVE 0x23 0x13 was going to be atmosphere pad but changed during development
+#WAVE 0x24 0x04 piano-ish
+#WAVE 0x25 0xA1 clarinet
+#WAVE 0x26 0x71 violin
+#WAVE 0x27 0xD3 pulse-duty-75
+#WAVE 0x28 0xD1 triangle wave
+#WAVE 0x29 0x54 syn-bass
+#WAVE 0x2A 0x0A kick
+#WAVE 0x2B 0x1C snare
+#WAVE 0x2C 0x3B hihat
+
+#def init= t150 %x236 %v50 %b0,70 %f0,0
+
+#def strings=  |0 o5 %e1 's' m
+#def horn=     |1 o5 %e1 'h' m48,18,223
+#def choir=    |2 o4 %e1 'v' m
+#def atmos=    |3 o5 %e1 'a' m
+#def piano=    |4 o5 %e1 'p' m
+#def clarinet= |5 o4 %e1 'c' m12,18,239
+#def fiddle=   |6 o4 %e1 'f' m12,18,223
+#def pulse=    |7 o4 %e1 'y' m24,18,239
+#def triangle= |8 o5 %e0 't' m
+#def bass=     |9 o7 %e1 'b' m
+
+#def s= v80
+#def h= v40
+#def v= v64
+#def a= v48
+#def p= v64
+#def c= v64
+#def f= v96
+#def y= v32
+#def t= v64
+#def b= v64
+
+#def cf= v1,64
+#def vf= v1,64
+
+#def kickVol= v96
+#def snareVol= v96
+#def hatVol= v48
+
+#def fanfareMainInst= 'pulse' %y2%s2%r14
+#def fanfareSubInst=  'atmos' %r17
+#def bassMainInst= 'bass-o2' p64
+#def bassSubInst=  'triangle-o2' p64
+#def mainLeadStrings= 'strings*v1.5' %r6 p56
+#def mainLeadLayer= 'horn*v.67' %r5 p96
+#def mainHarmoHorn= 'horn' %r5 p96
+#def mainHarmoLayer= 'choir*v.5' %r10 p44
+#def gbLeadAtmos= 'pulse*v1.5' p56 %y0%s1%r7
+#def gbLeadAtmos2= 'y*v1.75'
+#def gbLeadEcho=  'pulse*v.75' p112 %y0%s1%r7
+#def gbHarmo=     'pulse' %r10 p80
+#def gbVox= 'choir' %r2
+#def gbBassMainInst= 'bass-o2' %r0 p64
+#def gbBassSubInst= 'triangle-o2' p64
+#def gbBassPiano=   'piano' p80
+#def gbBridgeClari= 'clarinet' p56 %r9
+#def gbBridgeVio= 'fiddle' p72 %r8
+#def gbBridgeTwinkle= 'pulse*v.90' %y4%s1%r17
+#def gbBridgeCello= 'pulse*v.85' p56
+#def gbBridgeDrone= 'strings' p48 %a4 v24,72,179 %r3
+#def gbFanfareMain= 'pulse' %y2%s2%r14 p80
+#def gbFanfareSub=  'atmos' %r17 p48
+#def transitionDrone= 'clarinet*v0''cf*v192,.111' p0p192,64 p0,24,8
+#def transitionDrone2=             'cf*v192,.333' p192,127
+
+#drum "k"= 5a  |A 'kickVol' p64 %e0
+#drum "q"= 5f+ |B 'snareVol*v.8' p64 %e1 %r14
+#drum "r"= 5f+ |B 'snareVol*v.9' p64 %e1 %r14
+#drum "s"= 5f+ |B 'snareVol*v1'  p64 %e1 %r14
+#drum "h"= 5a |C 'hatVol' p32 %e1 %y6%s0
+#drum "p"= 5a |C 'hatVol' p32 %e1 %y5%s0
+#drum "o"= 5g |C 'hatVol' p32 %e1 %y0%s0
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init' $
+'fanfareMainInst+o1' p64 l16
+[8'mainFanfarePattern']
+r2
+$## 42. GBA Main - Lead, strings
+'mainLeadStrings-o1' l8
+[
+a.<e.cg2  ^4.f+16g16f+.e.d
+e.c.ea2   ^4gaef16f+16g4
+f+4.d4.e4  fefe4d16c16>b4
+]
+## 52. Fanfare
+'fanfareMainInst+o1' p64 l16
+[[bgec>br<]r4]
+## 85. GB Bridge
+[
+'gbBridgeClari+o1' l16
+(c4.>ba+) (a4.a+b) (<c8>ba+)a2(g8a8)
+'gbBridgeVio' l16
+(e4.ff+) (g4.f+f)  (e8ff+)g2.
+]
+## 93. GB Fanfare
+'gbFanfareMain' l16
+eg+b eg+b g+b <e2>
+fa<c> fa<c> a<c f2>
+b<cdc>b4 ab<c>ba4 g+4.a4.b4
+## 73. GB Main - 
+'gbLeadAtmos' l8
+[
+a.<e.cg2  ^4.f+16g16f+.e.d
+e.c.ea2   ^.g.ae.f32f+32g4
+f+4.d4.e4  fefe4d16c16>b4
+'gbLeadAtmos2'
+]
+## 52. Fanfare
+'fanfareMainInst+o1' p64 l16
+[[bgec>br<]r4]
+## 56. GBA Bridge
+'mainLeadStrings+o1' l16
+[
+c4.>ba+a4.a+b  <c8>ba+a2g8a8
+e4.ff+g4.f+f   e8ff+g2.<
+]
+## 52. Fanfare
+'fanfareMainInst+o1' p64 l16
+[[bgec>br<]r4]
+;
+
+{2}
+$
+'fanfareMainInst+o1' p64 l16
+[8'subFanfarePattern']
+r2
+$## 42. GBA Main - Harmony, horn
+'mainHarmoHorn-o1' l8
+[
+e4g4a.b.<c  d4c4>b.a.g
+a4g4a.b.<c  d4c4>b.<c.>b
+a4.f+4.g4   a4<c>b4ag4
+]
+## 52. Fanfare
+'fanfareMainInst+o1' p64 l16
+[[ec>bger<]r4]
+## 85. GB Bridge
+[
+'gbBridgeTwinkle+o1' l8
+[4 p0 a <p64 e> p127 a <p64 e>]
+'gbBridgeCello-o1' l16
+%l1 [[ba+ag+][gg+aa+]] %l0
+]
+## 93. GB Fanfare
+'gbFanfareMain-o1'
+g+b<e> g+b<e> b<e> r8 b<c>bag+b
+a<cf> a<cf> a<c    r8 cdc>ba<c
+d4gd>b<d c4fc>a<c>
+[3be][3<c>e] l24 <d>bg+bg+e
+## 73. GB Main - 
+'gbVox' l16
+%l1
+[ [p0 ec>b<c p127 ec>b<c] p64 [4 ec>b<c]]
+%l1 [p0 f+d>a<d p127 f+d>a<d] p64 %l1 [4 fc>a<c]
+'gbHarmo-o1' l8
+e4g4a.b.<c  d4c4>b.a.g
+a4g4a.b.<c  d4c4>b.<c.>b
+a4.f+4.g4   a4<c>b4ag4
+## 52. Fanfare
+'fanfareMainInst+o1' p64 l16
+[[ec>bger<]r4]
+## 56. GBA Bridge
+'mainHarmoHorn' l4
+[e2c2  ec2d    >b2<c2  >b<c2.]
+## 52. Fanfare
+'fanfareMainInst+o1' p64 l16
+[[ec>bger<]r4]
+;
+
+{3}
+[8r1]
+'bassMainInst' p64 l16
+[15>a8<a8] edc>b
+[16a8<a8>]
+r2
+$## 42. GBA Main - bass, main
+'bassMainInst'>p64
+[[16a8<a8>]<[4d8<d8>][>f8<f8]>e8<e8dc>b<e>]
+## 52. Fanfare
+'transitionDrone' a1 'transitionDrone2' ^1 p
+## 85. GB Bridge
+'gbBridgeDrone-o2'
+f1^1^1^1
+d1^1 e1^1 v
+## 93. GB Fanfare
+'bassMainInst' p64 l16 > %r0
+[4er] r8<e8.r>br
+[4fr] r8<f8.r cr>
+l4 g<g>f<f> e.f+.g+16.r32e16.r32
+## 73. GB Main - 
+'gbBassMainInst' l16
+[>
+[a.r32a.r32 <r4.e8.re.r32>        p0 a.r32 p127 a.r32 p64 r2.]
+<d1 p0p192,127 f4.e4.d4 p64
+]
+## 52. Fanfare
+r1r1
+## 56. GBA Bridge
+'bassMainInst'>p64
+[14f8<f8>]f8<fc>f<edc
+[8d8<d8>] [6e8<e8>] e<ef>e dc>be
+## 52. Fanfare
+r1r2. l16 <edc>b
+;
+
+{4}
+l16
+[[3'mainDrumPattern']'firstDrumPattern' l24 %g1 j2 ":s: ^2. srqsrs"%g0]
+l16 ":s: qqqqrrrrssss" l24 "srqsrs"
+^2
+$## 42. GBA Main - drumset
+[['mainDrumPattern']'firstDrumPattern' ":s: k4s8k4"j2"s8k16s16"%g1"q24r24s24"%g0]
+l16 ":k: rqsrqs"
+## 52. Fanfare
+'firstDrumPattern' ":s: k4s8k4s8" l24 %g1 "srqsrs" %g0
+## 85. GB Bridge
+'mainDrumPattern''firstDrumPattern' l16 ":s: k4s8k4s8kqrs"
+"k4s8k4k8s4" "k4sk8.k8k8sk8."
+"k4s8k4kks4" "k8.ksk8ks8k8skq24r24s24"
+## 93. GB Fanfare
+"skqkrks8k8k4s8"
+"skqkrks8k8kk8.sk"
+"k4sk8kskk8s8k8"
+"skk8k8skk8k8s8"^8 #"q24r24s24"
+## 73. GB Main - 
+[ "!!!o"
+"k4.k4.ks8." "k8k4k4k8k8s8"
+"k4.k4.ks8." "k8k4k4k8rsk8" j2
+"k4s8k4k8s4" "k4sk8.k8k8skq24r24s24"
+] "k4s8k4kks4" "k8.ksk8ks8k8skq24r24s24"
+## 52. Fanfare
+'firstDrumPattern' ":s: k4s8k4s8" l24 %g1 "srqsrs" %g0
+## 56. GBA Bridge
+[3'mainDrumPattern']'firstDrumPattern' l16 ":s: k4s8k4s8rqrs"
+## 52. Fanfare
+'firstDrumPattern' ":s: k4s8k4s8" l24 %g1 "srqsrs" %g0
+;
+
+{5}
+'fanfareSubInst+o1*v.67' l16
+[8'mainFanfarePatternWithPan']
+r2
+$## 42. GBA Main - lead, horn layer
+'mainLeadLayer-o1' l8
+[
+a.<e.cg2  ^4.f+16g16f+.e.d
+e.c.ea2   ^4gaef16f+16g4
+f+4.d4.e4  fefe4d16c16>b4
+]
+## 52. Fanfare
+'fanfareSubInst+o1*v.67' l16
+[p32[bgec>br<p96]r4]
+## 85. GB Bridge
+[
+'gbBridgeTwinkle+o1' l8
+r16 [4 p0 e p64 e p127 e p64 j4e]e16
+'gbBassPiano-o2' b2<c2>b4<c2.>
+] 
+## 93. GB Fanfare
+'gbFanfareSub' l16
+eg+b eg+b g+b <e8>>b<c>bag+b<
+fa<c> fa<c> a<c f8>cdc>ba<c
+b<cdc> gd>b<d ab<c>b fc>a<c>
+[3be][3<c>e] l24 <d>bg+bg+e
+## 73. GB Main - 
+'gbLeadEcho' l8 r8
+a.<e.cg2  ^4.f+16g16f+.e.d
+e.c.ea2   ^.g.ae.f32f+32g4
+f+4.d4.e4  fefe4d16c16>b8
+'gbVox' l16
+%l1
+[ [p0 ec>b<c p127 ec>b<c] p64 [4 ec>b<c]]
+%l1 [p0 f+d>a<d p127 f+d>a<d] p64 %l1 [4 fc>a<c]
+## 52. Fanfare
+'fanfareSubInst+o1*v.67' l16
+[p32[bgec>br<p96]r4]
+## 56. GBA Bridge
+'mainLeadLayer+o1' l16
+[
+c4.>ba+a4.a+b  <c8>ba+a2g8a8
+e4.ff+g4.f+f   e8ff+g2.<
+]
+## 52. Fanfare
+'fanfareSubInst+o1*v.67' l16
+[p32[bgec>br<p96]r4]
+;
+
+{6}
+l16 [15'mainHatPattern']
+'abbrevHatPattern' ":o: popo^2"
+$## 42. GBA Main - hihats
+[12'mainHatPattern']
+## 52. Fanfare
+'mainHatPattern''abbrevHatPattern' r4
+## 85. GB Bridge
+[ ['mainHatPattern']
+  [":o:" "hho8 hhoh hho8 hho8"] ]
+## 93. GB Fanfare
+[":o: o8o8 ppo8 hho8 hho8"]
+'mainHatPattern'
+":o: hoh8 o8ho h8o8"^4 #"o8pp"
+## 73. GB Main - 
+[12'mainHatPattern']
+## 52. Fanfare
+'mainHatPattern''abbrevHatPattern' r4
+## 56. GBA Bridge
+[7'mainHatPattern']'abbrevHatPattern' r4
+## 52. Fanfare
+'mainHatPattern''abbrevHatPattern' r4
+;
+
+{7}
+[8r1]
+'bassSubInst' p64 l16
+[15>a8<a.r32] edc>b
+[16a8<a.r32>]
+r2
+$## 42. GBA Main - bass, sub
+'bassSubInst'> p64
+[[16a8<a.r32>]<[4d8<d.r32>][>f8<f.r32]>e8<e.r32dc>b<e>]
+## 52. Fanfare
+'transitionDrone' l4 (eeee 'transitionDrone2' eeee) p
+## 85. GB Bridge
+'gbBassSubInst'> l16 p64
+[4 frfr r4]
+'t*v.75'<p0p192,64 f2c2 p127p192,64 f2c2>'t'
+[4 erer r4]
+'t*v.75'<p0p192,64 e2c2 p127p192,64 e2c2
+## 93. GB Fanfare
+'gbVox*v.4' l4 p32
+(eeee)(ffff)(bb)(aa)(eeee)
+## 73. GB Main - 
+'gbVox*v.4' l16 p32
+[ %l1
+[16 ceee] %l0
+%l1 [4df+f+f+] %l0%l1 [4 cfff]%l0
+]
+## 52. Fanfare
+r1r1
+## 56. GBA Bridge
+'bassSubInst'> p64
+[14f8<f.r32>]f8<fc>f<edc
+[8d8<d.r32>] [6e8<e.r32>] e<ef>e dc>be
+## 52. Fanfare
+r1r2. l16 <edc>b
+;
+
+{8}
+[33r2]
+$## 42. GBA Main - harmony, vox layer
+'mainHarmoLayer' l8
+[
+e4g4a.b.<c  d4c4>b.a.g
+a4g4a.b.<c  d4c4>b.<c.>b
+a4.f+4.g4   a4<c>b4ag4
+]
+## 52. Fanfare
+'transitionDrone' l4 (cccc 'transitionDrone2' cccc) p
+## 85. GB Bridge
+'gbBassMainInst' > l16 p64
+[4 frfr r4]
+'b*v.67'<p0p192,64 f2c2 p127p192,64 f2c2>'b'
+[4 erer r4]
+'b*v.67'<p0p192,64 e2c2 p127p192,64 e2c2
+## 93. GB Fanfare
+'gbVox*v.4-o1' l4 p96
+(bbbb)<(cccc)(dd)(cc)>(bbbb)
+## 73. GB Main - 
+'gbVox*v.4-o1' l16 p96
+[ %l1
+[16 bb<c>b] %l0
+%l1 [4aa<d>a] %l0%l1 [4 aa<c>a]%l0
+]
+## 52. Fanfare
+r1r1
+## 56. GBA Bridge
+'mainHarmoLayer+o1' l4
+[e2c2  ec2d    >b2<c2  >b<c2.]
+## 52. Fanfare
+r1r1
+;
+
+#####
+
+#def mainFanfarePattern= [j1,1025]
+##
+$1025 l16 [bgec>br<]r4
+           bgec>br< bgec>bab<ceg ]
+
+#def mainFanfarePatternWithPan= [j1,5025]
+##
+$5025 l16 p32[bgec>br<p96]r4
+           p32bgec>br< p96bgec>bab<ceg ]
+           
+#def subFanfarePattern= [j1,2025]
+##
+$2025 l16 [ec>bger<]r4
+           ec>bger< ec>bgecegb<c ]
+
+#def mainDrumPattern= [j1,4026]
+## 
+$4026 l16 "!!!o"
+      "k4s8k4s8ks8."
+      "k4s8k4s8ksk8" ]
+      
+#def firstDrumPattern= [j1,4025]
+##
+$4025 l16 "!!!o"
+      "k4s8k4s8ks8." ]
+
+#def mainHatPattern= [j1,6025]
+##
+$6025 l16 "!!!o"
+      [3"hho8"]"popo" ]
+
+#def abbrevHatPattern= [j1,6055]
+##
+$6055 l16 "!!!o"
+      [3"hho8"] ]

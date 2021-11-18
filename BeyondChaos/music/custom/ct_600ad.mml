@@ -1,0 +1,151 @@
+#TITLE Wind Scene
+#ALBUM Chrono Trigger
+#COMPOSER Yasunori Mitsuda
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.6
+
+#WAVE 0x20 0x62 strings
+#WAVE 0x21 0x59 pizz
+#WAVE 0x22 0x8c wood block
+#WAVE 0x23 0x2D cymbal
+#WAVE 0x24 0x6D tambourine
+#WAVE 0x25 0xA4 piccolo
+#WAVE 0x26 0x57 ac.bass
+
+#def 0i=   |0 m36,18,193v6,23,175
+#def 0o=   o6
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1 %a10%y4%s0%r13 mv
+#def 1h=   |1 %a11%y4%s0%r16
+#def 1o=   o5
+#def 1v=   v133
+#def 1f= v1,133
+
+#def 2i=   |2 mv
+#def 2o=   o5
+#def 2v=   v100
+#def 2f= v1,100
+
+#def 3i=   |3 mv
+#def 3o=   o5
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |4 mv
+#def 4o=   o5
+#def 4v=   v100
+#def 4f= v1,100
+
+#def 5i=   |5 mv
+#def 5o=   o4
+#def 5v=   v100
+#def 5f= v1,100
+
+#def 6i=   |6 mv
+#def 6o=   o3
+#def 6v=   v133
+#def 6f= v1,133
+
+## auto percussion  0x22
+#drum "h"= 5a+
+## auto percussion  0x23
+#drum "i"= 5g+
+## auto percussion  0x24
+#drum "j"= 5b
+
+{7}%e1
+'5i' '5v*v.94'p64'5o+o1'd24r8.r48e24r8.r48
+$101f24r12e24r12c24r12>a24r12<d24r3d24r12c24r12>a24r12f24r12g24r12a24r8.
+r48g24r8.r48e24r12f24r12a24r12<c24r12e24r8.r48f24r8.r48c24r2r8.r48e24r8.
+r48f24r12e24r12c24r12>a24r12<d24r3d24r12c24r12>a24r12f24r12g24r12a24r8.
+r48g24r8.r48e24r12f24r12a24r12<c24r12e24r12d24r12c24r12d24r12d24r2r4.r12
+[8r1][16r1]
+;101
+
+
+{1}
+%x232
+t84%v40%b0,100%f0,0%e1
+'1o+o1''1h' p64'1v*v.78'd4e4 #d16(d8.)e16(e8.)
+$201f8e8c8>a8<d4.d8c8>a8f8g8a4g4e8f8a8<c8e4f4c2^4e4f8e8c8>a8<d4.d8c8>a8
+f8g8a4g4e8f8a8<c8e8d8c8d8d2
+'0i' p64'0o+o1'%a8'0v*v.59'd4'0v*v.62'e4'0v*v.70'f8e8c8>a8<d4.d8c8>a8f8
+g8a4g4e8f8a8<c8e4f4c2^4e4f8e8c8>a8<d4.d8c8>a8f8g8a4g4e8f8a8<c8e8d8c8d8
+d2^4.a8a2g4f4e2f4g4e2^4c4>a2^4<c4>a+2<c4d4e2f4g4e1c1a2g4f4e2f4g4a2g4f4
+e4d4e4f4a2g4f4e4d4c+4d4e1^2
+'1o+o1''1h' p64'1v*v1.00'd4e4
+;201
+
+
+{2}
+%e1r2
+$301
+'1i' '1v*v.70'p64'1o'r4e2c4r4.c4.d4r4>e4<<c4.>>g8<g4.f8e2r4e2c4r4.c4.d4
+r4>e4<<c4>a4a8>a8<e4a2
+'0i' '0v*v.70'p27'0o'%a8f1e4d4c4c+4c1f2e2f1e4d4c4c+4c1g2f+2<f2e4d4c2d4
+e4c2^4>a4f4e4f4a4g2a4a+4<c2d4e4c4>a4g4a4d+4f4'0v*v.78'g8a8a+8'0v*v.70'
+<c8f2e8.r16d4c2d4e4f2e4d4>a2^8g8a8<c8>a1b1^1<c+1
+;301
+
+
+{3}
+%e1r2
+$401
+'1i' '1v*v.69'p64'1o-o1'r8a2f4.r8e2f4e8^8>a4.<<g8>d4.<f8>g8<d4c2r8>a2f4.
+^8e2f4e8r8>a4.<<g8>g4a8<g4.g8f+2
+'0i' '0v*v.55'p64'0o'%a8c2d2>g4a+4a2a1g1<c2d2>g4a+4a2a1a1<d16r16d16r8.
+d16r16d16r16d16r8.d16r16c16r16c16r8.c16r16c16r16c16r8.c16r16c16r16c16r8.
+c16r16c16r16c16r8.c16r16>a16r16a16r8.a16r16a16r16a16r8.a16r16a+16r16a+16
+r8.a+16r16a+16r16a+16r8.a+16r16g16r16g16r8.g16r16g16r16g16r8.g16r16a16
+r16a16r8.a16r16a16r16a16r8.a16r16a16r16a16r8.a16r16a16r16a16r8.a16r16<
+d16r16d16r8.d16r16d16r16d16r8.d16r16c16r16c16r8.c16r16c16r16c16r8.c16r16
+d16r16d16r8.d16r16d16r16d16r8.d16r16d16r16d16r8.d16r16d16r16d16r8.d16r16
+d16r16d16r8.d16r16d16r16d16r8.d16r16d16r16d16r8.d16r16d16r16d16r8.d16r16
+d16r16d16r8.d16r16d16r16d16r8.d16r16c+1
+;401
+
+
+{4}
+%e1r2
+$501
+'1i' '1v*v.55'p64'1o-o1'd2>a+2a4<c4>f4e4d2g2<c1d2>a+2a4<c4>f4e4d2g4a4<
+d2<d2
+'0i' '0v*v.55'p127'0o-o1'%a8d2>a+2a4<c4f4e4d2>g2<c1d2>a+2a4<c4f4e4d2>g4
+a4<d1>a+16r16a+16r8.a+16r16a+16r16a+16r8.a+16r16a+16r16a+16r8.a+16r16a+16
+r16a+16r8.a+16r16a16r16a16r8.a16r16a16r16a16r8.a16r16<d16r16d16r8.d16r16
+d16r16d16r8.d16r16>g16r16g16r8.g16r16g16r16g16r8.g16r16<c16r16c16r8.c16
+r16c16r16c16r8.c16r16>f16r16f16r8.f16r16f16r16f16r8.f16r16f16r16f16r8.
+f16r16f16r16f16r8.f16r16a+16r16a+16r8.a+16r16a+16r16a+16r8.a+16r16a+16
+r16a+16r8.a+16r16a+16r16a+16r8.a+16r16b16r16b16r8.b16r16b16r16b16r8.b16
+r16b16r16b16r8.b16r16b16r16b16r8.b16r16g16r16g16r8.g16r16g16r16g16r8.g16
+r16g+16r16g+16r8.g+16r16g+16r16g+16r8.g+16r16a16r16a16r8.a16r16a16r16a16
+r8.a16r16a1
+;501
+
+
+{5}
+%e1r2
+$601
+'6i' '6v*v1.03'p64'6o'd4r8d8>a+4r8a+8a4<c4f4e4d4r8d8>g4r8g8<c4r8>g8<c2
+d4r8d8>a+4r8a+8a4<c4f4e4d4r8d8>g4a4<d1[8r1][16r1]
+;601
+
+
+{6}
+%e1r2'4v*v1.10'p64'4o'
+$701[7r4
+'4i' '4v*v1.10'" !!!o j2"
+'2i' '2v*v1.10'" !!!o h4"]r4
+'4i' '4v*v1.10'" !!!o j2"r4[8r1]
+'2i' '2v*v1.10'[16r4" !!!o h2"r4]
+;701
+
+
+{8}
+%e1r2
+$801[7r1]
+'3i' '3v*v1.20'p64'3o'%a3" !!!o i1"[24r1]
+;801
+

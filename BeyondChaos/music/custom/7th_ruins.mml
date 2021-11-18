@@ -1,0 +1,334 @@
+#TITLE Wilme Pelin
+#ALBUM 7th Saga
+#COMPOSER Norihiko Yamanuki
+#ARRANGED Rushlight
+
+#SHORTNAME 7TH Ruins
+
+#WAVE 0x20 0xB1 ## Organ
+#WAVE 0x21 0xA2 ## Pan Flute
+#WAVE 0x22 0x66 ## Low Strings
+#WAVE 0x23 0x85 ## Horn
+#WAVE 0x24 0x62 ## Strings
+
+#def init=t152 %x230 %v40 %b0,70 %f0,0
+
+
+#def organVol=            v50
+#def backingOrganVol=     'organVol*v.875'
+#def hornVol=             v105
+#def earlySupportHornVol= 'hornVol*v.87'
+#def earlyMainHornVol=    'hornVol*v.62'
+#def middleMainHornVol=   'hornVol*v.95'
+#def lateSupportHornVol=  'hornVol*v1'
+#def lateMainHornVol=     'hornVol*v.73'
+#def extraHornVol =       'hornVol*v.25'
+#def fluteVol=            v120
+#def supportStringsVol=   v55
+#def backingStringsVol=   v75
+
+#def organSustain= %r0
+#def organRelease= %r25
+
+#def organ= |0 o5
+#def horn=  |3 o5
+
+#def melodyOrgan=    'organ' 'organVol'            p62 'organSustain' %e1 m36,15,228
+#def backingOrgan=   'organ' 'backingOrganVol'     p64 'organSustain' %e1 m
+#def mainHorn=       'horn'  'earlyMainHornVol'    p64 %r0            %e1 m30,18,218
+#def supportHorn=    'horn'  'earlySupportHornVol' p64 %r0            %e0 m30,18,218
+#def extraHorn=      'horn'  'extraHornVol'        p64 %r0            %e1 m
+#def panFlute=       |1 o4   'fluteVol'            p64 %r0            %e1 m48,15,228
+#def supportStrings= |4 o5   'supportStringsVol'   p64 %r0            %e1 m
+#def backingStrings= |2 o5   'backingStringsVol'   p64 %r0            %e1 m
+
+
+{1}
+'init'
+$
+## Melody Organ, originally channel 1
+'melodyOrgan-o1'
+[2
+  [2
+    ## 1 / 5 / 11 / 15
+    'organSustain'd4a16.'organRelease'^32^8'organSustain'a8'organRelease'^8<'organSustain'c16.'organRelease'^32^8>
+    j2,106
+    ## 2 / 12
+    'organSustain'b4a16.'organRelease'^32'organSustain'g16.'organRelease'^32'organSustain'a4. e16.'organRelease'^32
+    ## 3 / 13
+    'organSustain'f16.'organRelease'^32'organSustain'g16.'organRelease'^32'organSustain'a16.'organRelease'^32'organSustain'b16.'organRelease'^32'organSustain'a16.'organRelease'^32^8'organSustain'g16.'organRelease'^32^8
+    ## 4 / 14
+    'organSustain'a4d16.'organRelease'^32^8'organSustain'd4.'organRelease'^8
+  ]
+  $106
+  ## 6 / 16
+  'organSustain'b4^16.'organRelease'^32'organSustain'a16g16 a8^16.'organRelease'^32<'organSustain'e4
+  ## 7 / 17
+  d16.'organRelease'^32'organSustain'c16.'organRelease'^32>'organSustain'b16.'organRelease'^32'organSustain'a16.'organRelease'^32'organSustain'b16.'organRelease'^32^8'organSustain'g8^16.'organRelease'^32
+  ## 8 / 18
+  'organSustain'a4<d16.'organRelease'^32^8'organSustain'd2
+  j2
+  ## 9
+  ^1
+  ## 10
+  ^2r2>
+]
+## 19
+## Pan Flute, originally channel 1
+'panFlute'
+l4
+ga<e>g
+## 20
+<e2.r>
+## 21
+g+a<e>b
+## 22
+<e2^8r8d
+[3
+  ## 23 / 25 / 27
+  d2c+>b<
+  ## 24 / 26 / 28
+  c+2.r
+]
+## 29
+>g2<e2
+## 30
+>a2<e2
+## 31
+d2c+2
+## 32
+a2.r
+;
+
+
+{2}
+$
+[7r1]
+## Main Horn, originally channel 4
+'mainHorn'
+'earlyMainHornVol'
+l8
+## 8
+r2d2
+## 9
+^2.c12c12c12
+## 10
+c4 c12c12c12c4c4
+## 11
+'middleMainHornVol'
+defgar4.
+## 12
+defcdr4.
+## 13
+b-rarergr
+## 14
+fedcdr4.
+## 15
+defgar4.
+## 16
+cdecdr4.
+## 17
+b-rgrergr
+## 18
+f4erd4.r8
+## 19
+'lateMainHornVol'
+e2^8r8e12e12e12
+## 20
+e2e2
+## 21
+d2^8r8d12d12d12
+## 22
+d2e2
+## 23
+e2^8r8e12e12e12
+## 24
+c+8r8c+8r8c+2
+## 25
+d2^8r8d12d12d12
+## 26
+c+8r8c+8r8c+2
+## 27
+d2^8r8d12d12d12
+## 28
+c+8r8c+8r8c+4>a8r8
+## 29
+g4g12g12g12g8r8g8r8
+## 30
+a4a12a12a12a8r8a8r8
+## 31
+<d4d12d12d12c+8r8c+8r8
+## 32
+c+8r8c+8r8>a2
+;
+
+
+{3}
+$
+## Backing Organ, originally channel 2
+'backingOrgan-o2'
+[2
+  [2
+    ## 1 / 5 / 11 / 15
+    'organSustain'd4^16.'organRelease'^32^8'organSustain'g4^16.'organRelease'^32^8
+    ## 2 / 6 / 12 / 16
+    'organSustain'c4^16.'organRelease'^32^8'organSustain'f4^16.'organRelease'^32^8
+    ## 3 / 7 / 13 / 17
+    >'organSustain'b-4^16.'organRelease'^32^8'organSustain'j2,207 a4^16.'organRelease'^32^8
+    ## 4 / 14
+    <'organSustain'd4^16.'organRelease'^32^8'organSustain'd4^16.'organRelease'^32^8
+  ]
+  $207
+  ## End of 7 / 17
+  <'organSustain'c4^16.'organRelease'^32^8
+  ## 8 / 18
+  'organSustain'd4^16.'organRelease'^32^8>'organSustain' j2 g2
+  ## 9
+  ^1
+  ## 10
+  ^2.^16.'organRelease'^32^8<
+]
+## End of 18
+d2
+## 19
+## Backing Strings, originally channel 5
+'backingStrings-o2'
+l4
+f<cf2
+## 20
+^2c2
+## 21
+>eb<e2
+## 22
+^2>e2
+## 23
+a<ea2
+## 24
+^2e2
+## 25
+>g<dg2
+## 26
+^2>g2
+## 27
+f+<c+f+2
+## 28
+^2c+2
+## 29
+>f2<f2
+## 30
+>g2<g2
+## 31
+>a2<e2
+## 32
+a1
+;
+
+
+{4}
+$
+[7r1]
+## Support Horn, originally channel 3
+'supportHorn-o1'
+'earlySupportHornVol'
+## 8
+r2a2
+## 9
+^2.g12g12g12
+## 10
+g4 g12g12g12 g4 g4
+## 11
+[8 r1]
+## 19
+'lateSupportHornVol'
+a2^8r8a12a12a12
+## 20
+a2a2
+## 21
+b2^8r8b12b12b12
+## 22
+b2b2
+## 23
+a2^8r8a12a12a12
+## 24
+a8r8a8r8<e2
+## 25
+>a2^8r8a12a12a12
+## 26
+a8r8a8r8a2
+## 27
+a2^8r8a12a12a12
+## 28
+a8r8a8r8e4e8r8
+## 29
+f4f12f12f12f8r8f8r8
+## 30
+g4g12g12g12g8r8g8r8
+## 31
+a4a12a12a12a8r8a8r8
+## 32
+a8r8a8r8e2
+;
+
+
+{5}
+$
+[8 r1]
+## 9
+## Extra horn coming in to mitigate the transition from onset to loop, since we can spare the channels
+'extraHorn'
+d2.r4
+## 10
+[9 r1]
+## 19
+## Support Strings, originally channel 2
+'supportStrings-o1'
+r2g4r4
+## 20
+a2<e2
+## 21
+>r2g+4r4
+## 22
+<e2>b2
+## 23
+<d2c+2
+## 24
+>a1
+## 25
+<d2c+4>b4
+## 26
+<c+1
+## 27
+>a2<e2
+## 28
+>a1
+## 29
+g2<e2
+## 30
+>a2<d2
+## 31
+c+2>a2
+## 32
+<a1
+;
+
+
+{6}
+$
+[8 r1]
+## 9
+## Extra horn coming in to mitigate the transition from onset to loop, since we can spare the channels
+'extraHorn-o1'
+a2.r4
+## 10
+[23 r1]
+;
+
+
+{7}
+
+;
+
+
+{8}
+
+;

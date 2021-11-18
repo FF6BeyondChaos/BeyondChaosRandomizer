@@ -9,6 +9,8 @@
 #VARIANT ?` tier2
 #VARIANT ?_ tier3
 
+#UID tier2
+
 #WAVE 0x20 -- 0xB0  #C.Organ
 #WAVE 0x22 -- 0x75  #Maria
 #WAVE 0x23 -- 0x73  #Draco
