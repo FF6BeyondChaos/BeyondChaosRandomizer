@@ -70,8 +70,9 @@ BETA = False
 VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = True
-TEST_SEED = "2.normal.bcdefgijklmnopqrstuwyzpartypartyfrenchvanillarandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremoveflashingcanttouchthiseasymodo.1603333081"
+TEST_ON = False
+#TEST_SEED = "2.normal.bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontentcanttouchthiseasymodo.1635554018"
+TEST_SEED = "2.normal.bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontentcanttouchthiseasymodo.1603333081"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -3435,9 +3436,23 @@ def manage_tower():
     npc = [n for n in get_npcs() if n.event_addr == 0x233B8][0]
     npc.event_addr = 0x233A6
     narshe_beginner_sub = Substitution()
-    narshe_beginner_sub.bytestring = bytes([0x4B, 0xE5, 0x00])
+    narshe_beginner_sub.bytestring = bytes([0x4B, 0xE5, 0x00]) #Keep NPC in front of Beginner's House in World of Balance
     narshe_beginner_sub.set_location(0xC33A6)
     narshe_beginner_sub.write(fout)
+
+    #Moving NPCs in the World of Ruin in the Beginner's House to prevent soft locks
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x233AA][0]
+    npc.x = 108
+    npc.facing = 2
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x23403][0]
+    npc.x = 99
+    npc.facing = 2
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x2369E][0]
+    npc.x = 93
+    npc.facing = 2
 
 def manage_strange_events():
     shadow_recruit_sub = Substitution()
@@ -5268,6 +5283,7 @@ def randomize(**kwargs) -> str:
     name_swd_techs(fout)
     fix_flash_and_bioblaster(fout)
     manage_coral(fout)
+
     #add_esper_bonuses(fout) #Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
 
     if Options_.is_code_active('removeflashing'):
