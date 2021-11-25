@@ -133,14 +133,17 @@ def manage_coral(fout):
     coralnames = sorted(set(sanitize_coral([line.strip() for line in f.readlines()])))
     f.close()
 
+    sprite_log = ""
+
     newcoralname = random.choice(coralnames)
+    sprite_log += str("Coral: ").ljust(17) + string.capwords(str(newcoralname)) + "\n"
     coraldescription1 = "Piece of " + newcoralname.lower() + ","
     coraldescription2 = "found near Ebot's Rock."
 
     load_patch_file("coral")
     set_dialogue_var("coralsub", newcoralname)
 
-    newcoralname = name_to_bytes(newcoralname, 12)
+    newcoralnamebytes = name_to_bytes(newcoralname, 12)
     coraldescription1 = name_to_bytes(coraldescription1, 24)
     coraldescription2 = name_to_bytes(coraldescription2, 26)
 
@@ -148,12 +151,14 @@ def manage_coral(fout):
 
     coral_sub = Substitution()
     coral_sub.set_location(0xEFC08) ##change the name when opening a chest
-    coral_sub.bytestring = newcoralname
+    coral_sub.bytestring = newcoralnamebytes
     coral_sub.write(fout)
 
     coral_sub.set_location(0xEFD7F) ##Change the name in the description
     coral_sub.bytestring = coraldescription
     coral_sub.write(fout)
+
+    return sprite_log
 
 def manage_character_names(fout, change_to, male):
     characters = get_characters()
