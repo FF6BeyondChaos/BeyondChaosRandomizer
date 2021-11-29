@@ -31,11 +31,13 @@ ct_battle2:         grandfinale
 ct_bobonga:         umaro, veldt*2
 ct_final:           grandfinale, floating
 ct_forest:          cave*2, forest*2
+ct_frog:            cyan, setzer, locke*2
 ct_keeper:          espers, ruin, forest, train, dream*2
 ct_lavos:           metamorphosis
 ct_lavos_full:      kefka, catastrophe*2, grandfinale
 ct_night:           celes, coin*2, ruin
 ct_revolution:      grandfinale, floating*2, ktower
+ct_seal:            espers, zozo, narshe, ruin, tomb*2
 ct_sewer:           zozo, owzer*2, train, dream
 ct_silent:          zozo, owzer, cave*2, tomb, dream
 ct_singing:         prelude, forest, tomb, dream*2
@@ -68,6 +70,7 @@ ff4_moon:           zozo, ruin*2, train
 ff4_mysidia:        what, strago*2
 ff4_restless:       metamorphosis, grandfinale, unforgiven*2, assault
 ff4_rosa:           celes, rachel*2, awakening
+ff4_world:          falcon, balance*2, serpent
 ff5_airship:        setzer, blackjack*2, mount2
 ff5_book:           zozo, owzer, ruin, train*2, tomb, gate, ancient
 ff5_boss:           catastrophe, grandfinale, savethem
@@ -76,6 +79,7 @@ ff5_home:           prelude, daryl, coin, gau, ruintown*2
 ff5_hurry:          unforgiven
 ff5_mountain:       setzer, mountain*2, mount2
 ff5_pirates:        returners*2, umaro, veldt, mountain, engine
+ff5_ronka:          magitek*2, engine, floating
 ff5_seal:           umaro, zozo, owzer, train, gate*2, ancient
 ff5_village:        village
 ff5_void2:          setzer, returners, troops, savethem, mountain, ktower
@@ -113,7 +117,7 @@ ff6_magitek:        magitek*2, engine, ktower
 ff6_martiallaw:     shadow, zozo, martiallaw*2, ruintown
 ff6_metamorphosis:  metamorphosis*2, catastrophe, grandfinale, unforgiven
 ff6_moogles:        what, moogles*2, gogo
-ff6_mountain:       figaro, umaro, veldt, mountain*2, mount2
+ff6_mountain:       umaro, veldt, mountain*2, mount2
 ff6_narshe:         shadow, umaro, zozo, narshe*2, martiallaw
 ff6_omen3:          omen3, cyan, ruin, balance*2
 ff6_owzer:          zozo, owzer*2, strago, dream
@@ -164,6 +168,7 @@ ff9_siege:          metamorphosis*2, grandfinale, assault, savethem
 ff9_treno:          spinach*2
 ff9_vivi:           spinach, strago*2, martiallaw
 ff10_calm:          espers, cave*2, forest, tomb
+ff10_gagazet:       omen3*2, gau, narshe, ruin
 ff10_seymour:       grandfinale, magitek, engine, floating*2, ktower
 ff10_via:           prelude, owzer, ruin, tomb*2, dream
 ff10_zanarkand:     prelude, celes, coin, ruin
@@ -331,7 +336,6 @@ ff4_giant_remix: blackjack*2, setzer, serpent
 ff4_golbez:     H2, kefka*2, fanatics*2, owzer
 ff4_illusion:   prelude, awakening, owzer, ruintown, ruin, forest*2, espers, cave, tomb, dream, gate, ancient, train
 ff4_longway:    omen3, ruin, forest, tomb, train
-ff4_overworld:  balance*2, setzer, mountain, falcon, serpent
 ff4_prologue:   prelude*2, omen3, grandfinale
 ff4_redwings:   omen3, figaro, setzer, troops*2, umaro, engine, assault
 ff4_rydia:      prelude, celes, daryl, coin, relm*2, awakening, gau, town, village
@@ -396,7 +400,6 @@ ff9_world:      strago, ruintown, balance*2, forest
 ffx_ambition:   H2, omen3, kefka, owzer, fanatics*2, dream, gate, phoenix, ancient
 ffx_battle:     I55, G10, battle*2, savethem, bat2, bat3, mboss
 ffx_decision:   relm, awakening, town, martiallaw, forest, village
-ffx_gagazet:    W4, omen3, gau, cyan, umaro, narshe, ruin*2, veldt, forest, tomb, ancient, W:rachel, W:awakening, W:zozo, W:owzer, W:strago, W:martiallaw, W:ruintown
 ffx_luca:       relm, spinach, town*2
 ff12_barheim:   owzer, martiallaw, cave, train*2, dream, ancient*2, tomb
 ff12_estersand: locke, chocobo, moogles, balance*2, veldt, mountain*2, mount2, serpent
@@ -554,6 +557,52 @@ zlttp_darkworld: troops, assault, umaro, ruin, falcon*2, mount2, serpent, ancien
 zlttp_dungeon:  ruin, train*2, cave, tomb, dream, gate, phoenix, ancient
 zoot_storms:    kefka*2, shadow*2, gogo*2, umaro, owzer, strago, dream*2
 
+## temporary? seasonal selections
+#  mostly just copying over the full.txt entry for matching songs
+#  hopefully this will be replaced someday with entirely separate playlists but don't hold your breath
+
+[winter]
+ct_singing:         W:prelude, W:rachel, W:ruin, W:forest, W:tomb, W:dream*2, W:omen3, W:espers, W:awakening, W:balance
+ff6_narshe:         W:shadow, W:umaro, W:zozo, W:narshe*2, W:martiallaw, W:cave, W:train, W:dream, W:balance, W:veldt, W:ruin
+ff6_omen3:          W:omen3, W:cyan, W:ruin, W:balance*2, W:falcon
+ff6_ruin:           W:empire, W:umaro, W:owzer, W:narshe, W:cave
+ff10_gagazet:       W:omen3*2, W:espers, W:gau, W:umaro, W:narshe, W:strago, W:ruin, W:veldt, W:forest, W:cyan
+ff12_crystal:       W:omen3, W:espers*2, W:narshe, W:ruin, W:cave, W:forest, W:train, W:tomb, W:gate, W:ancient, W:dream, W:phoenix
+fz_white1:          W:chocobo*2, W:blackjack, W:johnny, W:serpent
+ot_stillsnow:       W:omen3, W:awakening, W:narshe*2, W:ruintown, W:ruin, W:town, W:village
+rtrek_world:        W:prelude, W:rachel, W:relm, W:awakening*2, W:gau, W:ruintown, W:ruin, W:balance, W:omen3
+tn_darkworld:       W:balance
+top_sylphs:         W:omen3, W:espers, W:umaro, W:zozo, W:narshe, W:ruin*2, W:cave, W:forest, W:tomb, W:dream, W:balance
+xcx_sylvan:         W:omen3, W:espers, W:zozo, W:narshe, W:ruin*2, W:cave, W:forest, W:train, W:tomb, W:ancient, W:dream, W:phoenix, W:balance, W:falcon
+
+[spooky]
+ff6_train:          H:empire, H:gogo, H:umaro, H:zozo, H:owzer, H:train*2, H:tomb, H:dream, H:cave, H:gate, H:kefka, H:phoenix, H:veldt
+blord_ruins:        H:shadow, H:umaro, H:zozo, H:owzer, H:cave, H:train, H:tomb, H:gate, H:ancient, H:magitek, H:engine, H:dream, H:narshe, H:ruin
+cc_dragonia:        H:omen3, H:zozo, H:owzer, H:train, H:ancient*2, H:dream, H:phoenix, H:ktower, H:cave, H:gogo, H:gate, H:falcon, H:ruin
+ct_sewer:           H:gogo, H:zozo, H:owzer*2, H:martiallaw, H:cave, H:train, H:dream, H:kefka, H:zozo
+cv4_chandeliers:    H:gogo, H:umaro, H:zozo, H:owzer*2, H:train, H:tomb, H:dream, H:fanatics, H:serpent
+dc2_palmbrinks:     H:kefka, H:grandfinale, H:spinach, H:what*2, H:moogles, H:gogo, H:train
+doom2_doom:         H:train*2, H:tomb, H:dream, H:fanatics, H:phoenix, H:ktower, H:owzer, H:zozo, H:ruin, H:cave
+ff1_volcano_psx:    H:umaro, H:zozo, H:owzer, H:serpent, H:cave, H:gate*2, H:ancient, H:dream, H:phoenix
+ff3_hyne:           H:kefka, H:owzer*2, H:strago, H:train, H:ancient, H:dream, H:fanatics
+ff4_moon:           H:empire, H:zozo, H:ruin*2, H:train, H:engine, H:umaro, H:gogo, H:ancient, H:phoenix, H:gate, H:owzer
+ff5_book:           H:empire, H:zozo, H:owzer, H:ruin, H:cave, H:train*2, H:tomb, H:gate, H:ancient, H:dream
+ff5_seal:           H:espers, H:shadow, H:gogo, H:umaro, H:zozo, H:owzer, H:train, H:tomb, H:gate*2, H:ancient, H:kefka
+ff6_forest:         H:espers, H:owzer, H:mountain, H:cave*2, H:forest, H:tomb, H:ancient, H:dream, H:balance, H:ruin
+ff6_owzer:          H:relm, H:zozo, H:owzer*2, H:strago, H:train, H:dream, H:ruin
+ff9_blackwaltz:     H:empire, H:kefka, H:owzer, H:train*2, H:ruin, H:fanatics
+ff9_vivi:           H:spinach, H:what, H:moogles, H:gogo, H:strago*2, H:martiallaw
+ff10_via:           H:prelude, H:espers, H:zozo, H:owzer, H:tomb*2, H:dream, H:cave, H:serpent
+homm2_sorceress:    H:owzer, H:strago, H:forest, H:train, H:tomb, H:dream*2, H:narshe, H:balance, H:ruin
+lal_labyrinth:      H:omen3, H:espers*2, H:zozo, H:owzer, H:cave, H:train, H:tomb, H:gate, H:ancient, H:dream, H:phoenix
+ro_labyrinth:       H:omen3, H:espers, H:zozo, H:owzer, H:ruin, H:cave, H:forest, H:train, H:tomb*2, H:gate, H:ancient, H:dream, H:phoenix, H:falcon
+saga3_ruins:        H:espers, H:zozo*2, H:owzer, H:ruin, H:cave, H:tomb, H:dream
+sd2_thanatos:       H2, H:kefka, H:zozo, H:owzer, H:ruin, H:train, H:tomb, H:gate, H:dream, H:fanatics*2, H:forest
+sd3_blackmarket:    H:shadow, H:gogo, H:umaro, H:zozo*2, H:owzer, H:narshe, H:strago, H:martiallaw, H:ruintown, H:train, H:ancient
+sd3_counterpoint:   H:shadow, H:gogo, H:umaro, H:veldt*2, H:mountain, H:phoenix, H:ktower
+sd3_faith:          H:kefka, H:metamorphosis, H:catastrophe, H:grandfinale, H:floating, H:phoenix, H:ktower
+totr_aquarians:     H:empire, H:catastrophe, H:espers, H:umaro, H:zozo, H:ruin, H:train, H:gate, H:ancient, H:dream, H:floating, H:cave
+
 [battle]
 # BATTLE plays in formations through 3 Scenarios / K@N
 # BAT2 plays in formations through the rest of WoB
@@ -658,6 +707,7 @@ sd3_final3:         I95,              atma, dmad5
 [victory]
 bl_fahrenheit:  fanfare
 ct_ayla:        fanfare
+ct_frog:        fanfare
 ff3_warrior:    fanfare
 ff4_fanfare:    fanfare
 ff6_fanfare:    fanfare

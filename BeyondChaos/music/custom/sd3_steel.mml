@@ -64,7 +64,7 @@
 #cdef ) %g0
 
 {1}
-t120 %v-72 %b0,56 %f0,0 %x232
+t120 ~%v-72~/%v72/ %b0,56 %f0,0 %x232
 p80%e1
 '9i' '9o-o1''9v*v.80'e16g+16b16<d16p96e4^16r16e24e24e24e16r16d16r16g16
 r16f+16r16e16r8e16e2^4.r2r8$p80
@@ -115,8 +115,8 @@ e4d8f+8;
 
 {2}
 %e1p16
-'Bi' r4'Bo''Bv*v.80'e4^16r16e24e24e24e16r16d16r16e16r16>a16r16<d16r8e16
-e2^4.r2r8$p32'Bv*v.80'['Bo'
+'Bi' r4'Bo''Bv*v.80'/k1/e4^16r16e24e24e24e16r16d16r16e16r16>a16r16<d16r8e16
+e2^4.r2r8/k0/$p32'Bv*v.80'['Bo'
 'Bi' m12,18,220r4g8r8g4f+32g32f+8.r4>b8r8b8<d8c+32d32c+16>g8][r4<'Bo'g8r8
 g4g32f8.^32][3r4'Bo'g8r8g4f+32g32f+8.r4>b8r8b8<d8c+32d32c+16>g8][r4<'Bo'g8
 r8g4g32f8.^32]r4g8r8g4f+32g32f+8.r4>b8r8b8<d8c+32d32c+16>g8m['Bo-o1'e1
