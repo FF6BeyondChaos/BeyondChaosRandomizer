@@ -70,7 +70,8 @@ BETA = False
 VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
+TEST_ON = True
+#TEST_SEED = "2.normal.bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontentcanttouchthiseasymodounbreakablecollateraldamage.1603333081"
 TEST_SEED = "2.normal.bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontentcanttouchthiseasymodo.1635554018"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
@@ -2180,6 +2181,8 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int]=None) -> Lis
     crazy_prices = Options_.is_code_active('madworld')
     extra_effects = Options_.is_code_active('masseffect')
     wild_breaks = Options_.is_code_active('electricboogaloo')
+    no_breaks = Options_.is_code_active('nobreaks')
+    unbreakable = Options_.is_code_active('unbreakable')
 
     set_item_changed_commands(changed_commands)
     unhardcode_tintinabar(fout)
@@ -2188,7 +2191,7 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int]=None) -> Lis
     auto_equip_relics = []
 
     for i in items:
-        i.mutate(always_break=always_break, crazy_prices=crazy_prices, extra_effects=extra_effects, wild_breaks=wild_breaks)
+        i.mutate(always_break=always_break, crazy_prices=crazy_prices, extra_effects=extra_effects, wild_breaks=wild_breaks, no_breaks=no_breaks, unbreakable=unbreakable)
         i.unrestrict()
         i.write_stats(fout)
         if i.features['special2'] & 0x38 and i.is_relic:
@@ -3452,6 +3455,25 @@ def manage_tower():
     npc = [n for n in get_npcs() if n.event_addr == 0x2369E][0]
     npc.x = 93
     npc.facing = 2
+
+    #Make the guy guarding the Beginner's House to give a full heal
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x233B8][0]  # Narshe School Guard
+    npc.event_addr = 0x12240  # Airship guy event address
+    npc.graphics = 30
+    npc.palette = 4  # School guard becomes a helpful Returner
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x2D223][0]  # Warehouse Guy
+    npc.event_addr = 2707F  # Barking dog event address
+    npc.x = 5
+    npc.y = 35
+    npc.graphics = 25  # In sacrifice to the byte gods, this old man becomes a dog
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x2D1FB][0]  # Follow the Elder Guy
+    npc.event_addr = 2D223  # Warehouse Guy event address
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x2D1FF][0]  # Magic DOES exist Guy
+    npc.event_addr = 2D1FB  # Follow the Elder Guy event address
 
 def manage_strange_events():
     shadow_recruit_sub = Substitution()
