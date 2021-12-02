@@ -418,6 +418,45 @@ def fewer_flashes(fout):
     anti_seizure_sub.write(fout)
 
     #
+    # Removing Diffuser Flash
+    #
+    anti_seizure_sub.set_location(0x103AEB)  # D03AEB
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x103AEE)  # D03AEE
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x103AF1)  # D03AF1
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x103AF4)  # D03AF4
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x103AF7)  # D03AF7
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x103AFA)  # D03AFA
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x103AFD)  # D03AFD
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x103B00)  # D03B00
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x103B03)  # D03B00
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
     # Removing Cat Rain Flash
     #
     anti_seizure_sub.set_location(0x102678)  # D02678

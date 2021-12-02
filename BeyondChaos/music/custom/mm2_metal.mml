@@ -1,0 +1,240 @@
+#TITLE Metal Man Stage
+#ALBUM Mega Man 2
+#COMPOSER Takashi Tateishi (Ogeretsu Kun)
+#ARRANGED emberling
+
+#VARIANT ~
+#VARIANT / tr
+
+#WAVE 0x20 0x13 was 0x7B bright thing
+#WAVE 0x21 0x98 was 0x4F saxothing
+#WAVE 0x22 0x40 was 0xA0 synod
+#WAVE 0x23 0x88 was 0x6A oct.brass
+#WAVE 0x27 0x55 was 0x1C syn.bass
+#WAVE 0x28 0x0D was ~0x59~ /0x22/ kick
+#WAVE 0x29 0x1C was 0x21 snare
+#WAVE 0x2A 0x3B was 0x5A hihat
+#WAVE 0x2B 0x4C was 0x6E tomb
+#WAVE 0x2C 0x2D was 0x8E crash
+
+#def init= t150 %x204 %v40 %b0,85 %f0,0
+
+#def bright= |0 'd' o5 m
+#def sax=    |1 's' o6 m48,18,207 %r8
+#def energy= |2 'e' o4 m48,18,239 %r5
+#def brass=  |3 'b' o5 m48,18,223 %r11
+#def bass=   |7 'x' o6 m %y3%s4%r12
+#def tone=   @3 't' o5 m48,18,223 %a8%r7
+
+#def d= v64
+#def s= v64
+#def e= v64
+#def b= v80
+#def x= v64
+#def t= v48
+
+#drum "k"= 6d |8 v80 p60 %e0
+#drum "s"= 6d |9 v96 p60 %y2%s3 %e0
+#drum "o"= 6d |A v40 p68 %y0%s0
+#drum "h"= 6d |A v40 p68 %y5%s0
+#drum "i"= 6d |A v40 p68 %y6%s0
+#drum "y"= 4a |C v72 p127 %y20
+#drum "z"= 4a |C v72 p0 %y20
+#drum "t"= 5g+ |B v64 p90
+#drum "u"= 5d+ |B v64 p65
+#drum "v"= 4a+ |B v64 p40
+
+#cdef ( %l1
+#cdef ) %l0
+
+#### iteration 1 - lead1
+{1} 'init' %e1 $
+['sax-o1' p48 l16
+a+2 ^4a+<frd+  rc+8.d+8c+>a+ ^4g+g+ra+
+^4.<cr c+8r>a+^4  'brass+o1' c+4d+4c+rc+rd+4]
+##
+['energy' p80
+a+a+g+ra+rg+r a+4f8g+8  r8a+4. ^8r8a+<f8.
+'bright+o1' %r0m48,18,223
+d+4r8c+8 c8rc+8.c8 j2 >a+2 r8f8g+8a8] r8c+rc8rc+ r4 'energy' p48 a+<f8.
+##
+[%k-1 m9,1d+4m6,1c+4 m9,1c4m6,1c+%k0d+8. >a+ra+ra+g+8. a+4a+<f8.
+%k-1 m9,1d+4m6,1c+4 m9,1c4m6,1c+%k0d+rj2f  rf8rfd+c+d+ c+cc+c>a+<c>a+g+<]
+{'brass+o1'} f rffrfrfr f8.'sax-o1'ffg+8.
+#### iteration 2 - lead1
+['bass-o1' p48 l16
+a+2 ^4a+<frd+  rc+8.d+8c+>a+ ^4g+g+ra+
+^4.<cr c+m6,-1^r>a+^4  'energy+o1' c+4d+4c+rc+rd+4]
+##
+['bass' p80
+a+a+g+ra+rg+r a+4f8g+8  r8a+4. ^8r8a+<f8.
+'bass+o1'
+d+4r8c+8 c8rc+8.c8 j2 >a+2 r8f8g+8a8] r8c+rc8rc+ r4 'energy' p48 a+<f8.
+##
+p48
+[%k-1 m9,1d+4m6,1c+4 m9,1c4m6,1c+%k0d+8. >a+ra+ra+g+8. a+4a+<f8.
+%k-1 m9,1d+4m6,1c+4 m9,1c4m6,1c+%k0d+rj2f  rf8rfd+c+d+ c+cc+c>a+<c>a+g+<]
+'bass+o1' f rffrfrfr f8.'bass-o1'ffg+8.
+;
+
+#### iteration 1 - lead2
+{7} $ %e1 %p0
+['energy-o1' p80 l16 k1
+a+2 ^4a+<frd+  rc+8.d+8c+>a+ ^4g+g+ra+
+^4.<cr c+8r>a+^4  'bright+o1' c+4d+4c+rc+rd+4]
+##
+['bright' p48
+a+a+g+ra+rg+r a+4f8g+8  r8a+4. ^8r8a+<f8.
+'energy+o1' %k-1
+m12,1d+4r8m3,1c+8 m12,1c8rm6,1c+8.m6,1c8 j2 >m18,1a+2 %k0 r8f8g+8a8]
+%k0 r8c+rc8rc+ r4 'tone' p80 a+<f8.
+##
+[%a8%k-1 m9,1d+4m6,1c+4 m9,1c4m6,1c+%k0d+8. %a11 >a+ra+ra+g+8. a+4a+<f8. %a8
+%k-1 m9,1d+4m6,1c+4 m9,1c4m6,1c+%k0d+rj2%a11f  rf8r(fd+c+d+ c+cc+c>a+<c>a+g+<)]
+'bright+o1' f rffrfrfr f8. 'tone+%a3' ffg+8.
+#### iteration 2 - bass2
+'sax-o2' p60 l16 %p1 k0
+[a+ra+rg+8..r32 a+8ra+<c+8f8>  a+ra+rg+8..r32 a+8ra+a+8g+8
+f+rf+rf8..r32 f+8rf+f+8f8  f+8..r32g+8..r32f+rf+rg+8..r32]
+##
+[a+ra+rg+8..r32 a+8ra+<c+8f8  d+rd+rc+8..r32 d+8rd+>a+8g+8
+f+8r4f+8 g+8rg+g+8g+8  j2 a+8..r32g+8ra+ ra+8.g+8a8]
+a+ra+rg+8g+a+ r2
+##
+<[
+d+d+c+rd+rc+d+ rd+d+8d+8c+c+  c+rc+rc+crc c+8rc+d+8f8
+d+d+c+rd+rc+d+ rd+d+8d+8cf j2  rf8fr4 r2]
+>raararar ar8fff8.
+;
+
+#### iteration 1 - harmony1
+{2} $ %e1
+['bright' p80 l16
+[3a+<c+fr>a+r8a+ <cc+c>a+ra+g+a+] 'bright' a+4c4>a+ra+r<c4]
+##
+['bright*v.67' [a+<c+fr>a+r8a+ <cc+c>a+ra+g+a+]
+'bright' %r0m48,18,223 a+4r8a+8 d+8rf8.d+8
+'brass+o1' j2 c+4c+8rc+ rc+8.c8c8] c+rc+rc8c>a+ ^2
+##
+'energy+o1*v.67' %a8 r8[[%k-1m9,1d+4m6,1c+4m9,1c4m6,1c+%k0j2d+
+c+rc+rc+c8. c+4r8>a+<f8.] j2d+ rfrf8rfd+ c+d+c+cc+c>a+<c>a+g+<]
+{'brass*v.67+o1'} c rccrcrcr  c8.>ffg+8.
+#### iteration 2 - lead2
+['sax-o1' p80 l16 %p1
+a+2 ^4a+<frd+  rc+8.d+8c+>a+ ^4g+g+ra+
+^4.<cr c+m6,-1^r>a+^4  'sax+o1' c+4d+4c+rc+rd+4]
+##
+['energy*v1.2' p48
+a+a+g+ra+rg+r a+4f8g+8  r8a+4. ^8r8a+<f8.
+'sax+o1*v.67' %k-1
+m12,1d+4r8m3,1c+8 m12,1c8rm6,1c+8.m6,1c8 j2 >m18,1a+2 %k0 r8f8g+8a8]
+%k0 r8c+rc8rc+ r4 'sax' p80 a+<f8.
+##
+[%a8%k-1 m9,1d+4m6,1c+4 m9,1c4m6,1c+%k0d+8. %a11 >a+ra+ra+g+8. a+4a+<f8. %a8
+%k-1 m9,1d+4m6,1c+4 m9,1c4m6,1c+%k0d+rj2%a11f  rf8r(fd+c+d+ c+cc+c>a+<c>a+g+<)]
+'sax+o1*v.67' f rffrfrfr f8. 'sax*v.67' ffg+8. %p0
+;
+
+#### iteration 1 - harmony2
+{6} $ %e1 %p0
+['energy' p48 l16 k1
+[3a+<c+fr>a+r8a+ <cc+c>a+ra+g+a+] 'brass' a+4c4>a+ra+r<c4]
+##
+['energy*v.67' [a+<c+fr>a+r8a+ <cc+c>a+ra+g+a+]
+'energy' %k-1 m12,1a+4r8m3,1a+8 m12,1d+8rm6,1f8.m6,1d+8 %k0
+'bright+o1' j2 c+4c+8rc+ rc+8.c8c8] c+rc+r 'brass-o1' g+8g+a+ ^2
+##
+'tone+o1*v.67' r8[[%a8 %k-1m9,1d+4m6,1c+4m9,1c4m6,1c+%k0j2d+
+%a11 c+rc+rc+c8. c+4r8>a+<f8.] j2d+ %a11 rfrf8rfd+ c+d+c+cc+c>a+<c>a+g+<]
+'bright+o1' c rccrcrcr c8.>ffg+8.
+#### iteration 2 - bass1
+%e0 k0
+'bass-o2' p68 l16
+[a+ra+rg+8..r32 a+8ra+<c+8f8>  a+ra+rg+8..r32 a+8ra+a+8g+8
+f+rf+rf8..r32 f+8rf+f+8f8  f+8..r32g+8..r32f+rf+rg+8..r32]
+##
+[a+ra+rg+8..r32 a+8ra+<c+8f8  d+rd+rc+8..r32 d+8rd+>a+8g+8
+f+8r4f+8 g+8rg+g+8g+8  j2 a+8..r32g+8ra+ ra+8.g+8a8]
+a+ra+rg+8g+a+ r2
+##
+['bass-o1' p68
+d+d+c+rd+rc+d+ rd+d+8d+8c+c+  c+rc+rc+crc c+8rc+d+8f8
+d+d+c+rd+rc+d+ rd+d+8d+8cf j2  rf8f "!!!o ttttuuuuvvvv"]
+>raararar ar8fff8.
+;
+
+#### iteration 1 - bass 1
+{4} $ %e0
+'bass-o2' p68 l16 k0
+[a+ra+rg+8..r32 a+8ra+<c+8f8>  a+ra+rg+8..r32 a+8ra+a+8g+8
+f+rf+rf8..r32 f+8rf+f+8f8  f+8..r32g+8..r32f+rf+rg+8..r32]
+##
+[a+ra+rg+8..r32 a+8ra+<c+8f8  d+rd+rc+8..r32 d+8rd+>a+8g+8
+f+8r4f+8 g+8rg+g+8g+8  j2 a+8..r32g+8ra+ ra+8.g+8a8]
+a+ra+rg+8g+a+ r2
+##
+['bass-o1' p68
+d+d+c+rd+rc+d+ rd+d+8d+8c+c+  c+rc+rc+crc c+8rc+d+8f8
+d+d+c+rd+rc+d+ rd+d+8d+8cf j2  rf8f "!!!o ttttuuuuvvvv"]
+>raararar ar8fff8.
+#### iteration 2 - harmony 1
+['bright' p80 l16 %e1 k1
+[3a+<c+fr>a+r8a+ <cc+c>a+ra+g+a+] 'energy' a+4c4>a+ra+r<c4]
+##
+['bright*v.67' [a+<c+fr>a+r8a+ <cc+c>a+ra+g+a+]
+'bass*v.67' %k-1 m12,1a+4r8m3,1a+8 m12,1d+8rm6,1f8.m6,1d+8 %k0
+j2 'bass+o1' %a10 c+4c+8rc+ rc+8.c8c8] 'bass+o1' %a10 c+rc+r > g+8g+a+ ^2
+##
+'energy+o1*v.67' %a8 r8[[%k-1m9,1d+4m6,1c+4m9,1c4m6,1c+%k0j2d+
+c+rc+rc+c8. c+4r8>a+<f8.] j2d+ rfrf8rfd+ c+d+c+cc+c>a+<c>a+g+<]
+'energy+o1' c rccrcrcr  c8.>ffg+8.
+;
+
+#### iteration 1 - bass 2
+{5} %e1 $
+'sax-o2' p60 l16 %p1 k0
+[a+ra+rg+8..r32 a+8ra+<c+8f8>  a+ra+rg+8..r32 a+8ra+a+8g+8
+f+rf+rf8..r32 f+8rf+f+8f8  f+8..r32g+8..r32f+rf+rg+8..r32]
+##
+[a+ra+rg+8..r32 a+8ra+<c+8f8  d+rd+rc+8..r32 d+8rd+>a+8g+8
+f+8r4f+8 g+8rg+g+8g+8  j2 a+8..r32g+8ra+ ra+8.g+8a8]
+a+ra+rg+8g+a+ r2
+##
+<[
+d+d+c+rd+rc+d+ rd+d+8d+8c+c+  c+rc+rc+crc c+8rc+d+8f8
+d+d+c+rd+rc+d+ rd+d+8d+8cf j2  rf8fr4 r2]
+>raararar ar8fff8.
+#### iteration 2 - harmony 2
+['energy' p48 l16 k1
+[3a+<c+fr>a+r8a+ <cc+c>a+ra+g+a+] 'sax' a+4c4>a+ra+r<c4]
+##
+['energy*v.67' [a+<c+fr>a+r8a+ <cc+c>a+ra+g+a+]
+'sax*v.67' %k-1 m12,1a+4r8m3,1a+8 m12,1d+8rm6,1f8.m6,1d+8 %k0
+'energy+o1' j2 c+4c+8rc+ rc+8.c8c8] 'energy+o1' c+rc+r > g+8g+a+ ^2
+##
+'sax+o1*v.67' r8[[%a8 %k-1m9,1d+4m6,1c+4m9,1c4m6,1c+%k0j2d+
+%a11 c+rc+rc+c8. c+4r8>a+<f8.] j2d+ %a11 rfrf8rfd+ c+d+c+cc+c>a+<c>a+g+<]
+'sax+o1' c rccrcrcr c8.>ffg+8.
+;
+
+{3} $
+l16 [7[j1,3000]] "s8i8s8i8sisis8i8"
+##
+[7[j1,3000]] "k8s8kksk ^tttuuvv"
+##
+[3[j1,3000]] "^s8.s8hi hihihihi"
+[3[j1,3000]] "^ss8s8s8 s2"
+;
+
+$3000 l16 "!!!o k8k8s8kk kkk8s8kk" ]
+
+{8} $
+l16 [7[j1,8000]] "o4o4o8o8o4"
+##
+[7[j1,8000]] "h8o8hio" m60,-16"y^4"m48,-12"z4"
+##
+[3[j1,8000]] "io8.o4 ^2"
+[3[j1,8000]] "ioo8o8o8 o8hihio8"
+;
+
+$8000 l16 "!!!o h8h8o8hi hih8o8hi" ]

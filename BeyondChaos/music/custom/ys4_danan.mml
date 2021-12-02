@@ -1,0 +1,440 @@
+#TITLE Ancient Legend
+#ALBUM Ys IV / Memories of Celceta
+#COMPOSER Atsushi Shirakawa
+#ARRANGED emberling
+
+#VARIANT / tr
+#VARIANT ~ 
+
+#WAVE 0x20 0x62 synth-strings
+#WAVE 0x21 0x78 vox
+#WAVE 0x22 0x59 pizzicato
+#WAVE 0x23 0x18 epiano|celesta
+#WAVE 0x24 0xA4 pennywhistle
+#WAVE 0x25 0x99 bagpipe
+#WAVE 0x26 0x96 clarinet
+#WAVE 0x27 0x54 syn.bass
+#WAVE 0x28 0x0D kick
+#WAVE 0x29 0x1A snare
+#WAVE 0x2A 0x7F horns
+#WAVE 0x2B 0x29 tubular bells
+#WAVE 0x2C 0x2D crash cym.
+#WAVE 0x2D 0x3B hihat
+#WAVE 0x2E ~0xA2~ /0xA3/ panflute
+
+#def str= |0 o5 's' m %r6
+#def vox= |1 o5 'v' m %r3
+#def piz= |2 o4 'p' m
+#def epi= |3 o4 'e' m
+#def whi= |4 o3 'w' m20,18,239
+#def bag= |5 o4 'x' m23,18,223
+#def net= |6 o5 'c' m48,18,215
+#def pet= |A o5 't' m48,18,207 %r5
+#def bas= |7 o7 'b' m %r14
+#def bel= |B o5 'r' m %y2%s1
+#def syf= |E o4 'f' m48,18,231
+#def cel= @3 o5 'l' m %y3%s1%r11
+
+#def baggins= @0 o3 v5 m23,18,223
+#def pet2= @5 o4 v21v192,42 m48,18,207 %a10%r5
+
+#def s=v36
+#def v=v36
+#def p=v73
+#def e=v52
+#def w=v73
+#def x=v21
+#def c=v52
+#def t=v20v192,39
+#def b=v83
+#def r=v47
+#def f=~v104~/v73/
+#def l=v21
+
+#def epi_main= %r8 %y2%s2## was 15/7/7/13 -> new 15/2/1/8
+#def epi_penult= %s3 %y2%r13## 15/2/3/13
+#def epi_end= %y4%s1%r13 ## 15/4/4/12
+
+#def init= t102 %v40 %b0,100 %f0,0
+#def tempobreak= t82
+#def tempomain= t106
+#def tempomore= t107
+
+#def hatvol= v78
+#drum "h"=5g+ |D %y4%s0 'hatvol*v1.00' p72
+#drum "i"=5g+ |D %y4%s0 'hatvol*v0.67' p72
+#drum "j"=5g+ |D %y4%s0 'hatvol*v0.33' p72
+#drum "p"=5g+ |D %y6%s0 'hatvol*v1.00' p72
+#drum "q"=5g+ |D %y6%s0 'hatvol*v0.67' p72
+#drum "r"=5g+ |D %y6%s0 'hatvol*v0.33' p72
+#drum "m"=5g  |D %y2%s0 'hatvol*v1.00' p72
+#drum "n"=5g  |D %y2%s0 'hatvol*v0.67' p72
+#drum "o"=5g  |D %y2%s0 'hatvol*v0.33' p72
+
+#def cymvol= v127
+#drum "z"= 5c |C %a1%r17 p90 'cymvol*v1'
+#drum "z+"=5c |C %a3%r17 p90 'cymvol*v1'
+#drum "y"= 5c |C %a15%r17 p90 'cymvol*v.75'
+
+#def drumvol= v78
+#drum "c"=5a |8  %e0 ~p60~/p60/ 'drumvol*v1.00' 
+#drum "b"=5a |8  %e0 ~p60~/p60/ 'drumvol*v0.67' 
+#drum "a"=5a |8  %e0 ~p60~/p60/ 'drumvol*v0.37' 
+#drum "e"=5f @4  %e1 ~p40~/p60/ 'drumvol*v0.37' %r30
+#drum "f"=5f @4  %e1 ~p40~/p60/ 'drumvol*v0.67' %r30
+#drum "g"=4d @4  %e1 ~p25~/p60/ 'drumvol*v0.67' %r31
+#drum "g-"=4d @4 %e1 ~p25~/p60/ 'drumvol*v0.33' %r31
+#drum "s"=5b |9  %e1 ~p60~/p60/ 'drumvol*v1.00' 
+#drum "t"=5b |9  %e1 ~p60~/p60/ 'drumvol*v0.67' 
+
+#cdef ( %l1
+#cdef ) %l0
+
+#def wd=%r13
+#def wr=%r23
+#def bd=%r8
+#def br=%r25
+#def sd=%r6
+#def sr=%r16
+
+{1}
+'init' %e1 r32 $
+'vox-o1' p64 %a5 b1^1^1^1
+##6 higher string
+'str+o1*v1.33' l1 p48 %a9
+c^>b<c >g^^^<   c^>bg aa2g2a^^^
+##
+'tempobreak'
+%r21 ^4. %r6
+## 25 higher string
+'tempomain'
+<c^>b<c >g^^^<    c^>bg aa2g2a^^^
+## 43 pennywhistle
+'whi+o1*v1.1' l16 p88
+'wd'a8<e'wr'^'wd'e8(de)(dc)>bg  a8<(c>b<)c'wr'^'wd'(>b<c>)(ba)ge
+a8<e'wr'^'wd'(d+32e.)(ga)(gf)(ed)  [(d+32e.)>a'wr'^'wd'a8<]
+## 47 celesta
+'epi+o3*v1.33''epi_main' p40 l16
+c8.>ba8g8e8g8 <c8>b24<c24>b24a8a4. <d8.c>a8g8e8g8
+## 50 higher string
+'str+o2*v1.15' l1 p48 %a9
+c^>b<c >g^^^<  c^>bg a.g2a^^^
+## 68 pennywhistle
+'tempomore'
+'whi+o1*v1.1' l16 p88
+'wd'a8<e'wr'^'wd'e8(de)(dc)>bg  a8<(c>b<)c'wr'^'wd'(>b<c>)(ba)ge
+a8<e'wr'^'wd'(d+32e.)(ga)(gf)(ed)  [(d+32e.)>a'wr'^'wd'a8<]
+## 72 pennywhistle
+'w*v.67'
+<c8'wr'^>'wd'(ba'wr'^)'wd'g8e'wr'^'wd'g8
+<c8>(b24<c24>b24)a'wr'^'wd'a4.
+<d8'wr'^'wd'(c>a'wr'^)'wd'g8e'wr'^'wd'g8
+<me8(d24e24d24)m20,18,239c'wr'^'wd'(>b32<c32>b8.)g'wr'^
+l8 %r10 a2^g a2^g a1.
+## 76 clari
+'tempomain'
+'net-o1' p88 l1
+[ab2<c2c+^> ab2<c2g+^>]
+## 84 clari
+#^^
+## 92 celesta / highest vox
+'epi+o2*v.7' l8 p72 'epi_end'
+[<c4>b<c>a4<c>b <c>a4eb<c>a4]
+'vox+o1*v.5+%r7' p64 %a3 e1^1
+;
+
+{2} %e1 r32 $
+'piz-o2*v1.25' l8 p72
+[4a<eg>a<eage>]
+##6
+[4a<eg>a<eage> a<fg>a<eage>]
+[f<cf>f<cagc>] [g<dg>g<dagd>]
+da<<d>>da<<fec>  da<d>da<fec>>
+[4a<eg>a<eage>]
+##
+^4.
+## 25 bass
+'bas-o3' p64
+[4a<eg>a<eage> a<fg>a<eage>]
+[f<cf>f<cagc>] [g<dg>g<dagd>]
+<[da<d>da<fec>]> [4a<eg>a<eagj4e>] &20e
+## 43 low strings (4 frames early)
+'str-o3*v2' p80 l4 %a7
+'sd'a.'sr'^. 'sd'f.'sr'^. 'sd'g.'sr'^. 'sd'<d.'sr'^8'sd'e4'sr'^48
+## 47 pizzicato low + others
+'piz-o2' l8 p72
+f<<cf>> g<<dg>> e<b<e>> a<<ea>> d<a<d>> e<b<e>>
+## 50 bass
+'bas-o3' p64
+[4a<eg>a<eage> a<fg>a<eage>]
+[f<cf>f<cagc>] [g<dg>g<dagd>]
+[da<d>da<fec>] [f<cf>f<cgfc>] [g<dg>g<dagj2d>]&20d
+## 68 low strings (4 frames early)
+'str-o3*v2' p80 l4 %a7
+'sd'a.'sr'^. 'sd'f.'sr'^. 'sd'g.'sr'^. 'sd'<d.'sr'^8'sd'e4'sr'^48
+## 72 bass
+'bas-o3' p64 %y2
+l8 f4r g4r e4r a4r   <d4r e4r f4r g4r
+l16 f8rf8rf8>f8.r< g8rg8rg8>g8.r< a8ra8ra8e8e8 a8e8c8>a4r8
+## 76 pizzicato
+'piz+o1' l8 p72
+[4 cr>b<c>ar<c>b< c>areb<c>ar<
+   erd+ec+red+ ec+r>g+<d+ec+r]
+## 84 pizzicato
+#^^
+## 92 low pizz -> low strings
+'p*v1.20' > p52
+[c4>b<c>a4<c>b <c>a4eb<c>a4<]
+'str-o2' l1 p80 %a6
+a+^
+;
+
+{3} %e1 $
+'str-o1' l1 p80 %a6
+a^^^
+##6 (lower string - 6 frames early)
+<cc^^ ecdc    c>bab<< ed2c2>b^^^
+##
+%r17 ^4. %r6
+## 25 lower string - 6 frames early
+ec^^ ecdc    c>bab< c>ab^ <d>b ^32
+## 43 high strings
+<< p96 %a7 l4
+['sd'e'sr'^2] 'sd'd'sr'^2 'sd'>a'sr'^'sd''s*v.67'a
+## 47 strings
+'s'< l4 %a9
+e.d.d.c.>a. &66b
+## 50 lower string - 6 frames early
+%a6 p80 l1
+ec^^ ^^dc  c>bab< afe^ d^ ^32
+## 68 high strings
+< p96 %a7 l4
+['sd'e'sr'^2] 'sd'd'sr'^2 'sd'>a'sr'^'sd''s*v.67'a
+## 72 strings (low / only)
+'s'< l4 %a9
+e.d.d.c. >a.b.<c.>b.
+p48< l8 's*v.67'
+a2^g a2^g a1.
+## 76 strings
+'s' l1 p64 %a7>
+[ee2e2e^]
+## 84 pan flute
+'syf+o1' l8 p76 %r4
+(c>ba4.)e(b<c) d4.(c>bag4  (g+f+)e4.(d+ef+) %r9e1%r4
+c4(de)e2 v28,0^'f'(gf+a)(gf+>b<)d  ed+(ef+)%r9g+1.)
+## 92 high/mid vox
+'vox' p96 %a5 l1
+e^ e^ e&186^
+;
+
+{4} %e1 r32. $
+'vox' l1 p96 %a5
+e^^^
+##6 (high vox - 3 frames late)
+efgf efgf  gggg <e.c2>b^^^
+##
+%r18 ^4. %r3
+## 25 high vox - 3 frames late
+efgf efgf    eeed <e^d^^&189^ 
+## 43 bagpipe
+'bag' l16 'playthepipes'
+## 47 vox
+'vox+o1+%r10' p68 l4
+c.>b.g.a.f.g.
+## 50 perc
+"!!!o" l16
+[18 'c8ab stg_g f8cb stab']%e1
+## 68 bagpipe
+'bag' l16 'playthepipes'
+## 72 perc
+"!!!o" l16
+[8 "c8ab" "stc"j8"b" "fgcb"] ^^4
+## 76 perc
+[16 'c8ab stg_g f8cb stab'] %e1
+## 84 perc
+#^^
+## 92 high strings
+'str' p48 %a9 l1
+a^ a^ a+^
+r64;
+
+{5} %e1 r64 $
+'vox' l1 p32 %a4
+(cccc)
+##6 (mid vox - 3 frames early)
+[cc>b<c]  eeed (ee)agfe
+##
+%r19 ^4.^64
+## 25 perc/hihat
+l16 "!!!o"
+[18"h8hq hqhq rhmp irhq"]
+## 43 mid strings
+'str' %a11 p88 r64 l4
+['sd'a'sr'^2] 'sd'g'sr'^2 'sd'd'sr'^'sd'&45e
+## 47 tubular bell
+'bel+o1' l4
+c.>b.g.a.<d.> g.
+## 50 high vox - 3 frames early after whistle
+'whi+o3*v.4' 'wd' p24 &189c
+'vox+o1+%r4' p96 %a5 l1
+c>b<c >(gggg)<   c>bab< (ee)d(gg.)%a9g2
+## 68 mid strings
+'str' %a11 p88 r64 l4
+['sd'a'sr'^2] 'sd'g'sr'^2 'sd'd'sr'^'sd'&45e
+## 72 string layer / "horn"
+p48< l16 %r9 's*v.67'
+<c8.>ba8g8e8g8 <c8>b8a8a4.
+<d8.c>a8g8e8g8 <e8d8c8>b4g8 r64
+'pet+%r5' l8
+a2^g 't'a2^g <'t'd2%r15^1
+## 76 bass
+'bas-o3' p64 l8
+[4 [ar4aaara] <[c+r4c+c+c+rc+]> ]
+## 84 bass
+#^^
+## 92 celesta layer
+'cel+o1' l8 p72
+[<c4>b<c>ar<c>b <c>areb<c>ar]
+r1 &189r
+;
+
+{6} %e1 r32 $
+l1 rrrr
+##6 epiano
+'epi+o3''epi_main' p40 l1
+c^>b<c >g^^^<   c^>bg2f2 a.g2a^
+'vox' p64 dc
+##
+%r16 ^4.
+## 25 epiano
+'epi+o3''epi_main' p40 l1
+c^>b<c >g^^^<   c^>bg2f2 a.g2a^^.
+"!!!oz2"
+## 43 cymbals
+v48,0^1^1^2. "!v0 z+4"
+## 47 pennywhistle
+'whi+o3*v.4' 'wd' p24 l16
+c8.>(ba8)g8e8g8 <c8>(b24<c24>b24a8)a4. <d8.(c>a8)g8e8g8
+## 50 epiano
+'epi+o3*v1.33''epi_main' p40 l1
+c^>'e'b<c >g^^^<   c^>bg2f2 a.g2a^^.
+"!!!oz2"
+## 68 cymbals
+v48,0^1^1^2. "!v0 z+4"
+## 72 vox
+'vox+o1+%r10' p68 l4
+c.>b.g.a.< c.d.e.d.  %a5%r8 c.e.d.g. d2.c2.
+## 76 vox
+'vox*v1.15' %a4 p48 l1
+[(cc)(c+c+)]
+## 84 strings
+'str' l1 p64 %a7
+ee2e2(ee) ee2e2(c+c+)
+## 92 mid strings
+(ee)(ee)(>a+a+)
+;
+
+{7} %e1 r16 $
+'vox-o1' l1 p64 %a6
+(aaaa)
+##6 (low vox - 6 frames late)
+[8g] ffgg a.g2 (aaa)
+'pet2' %a2 e
+##
+r4.
+## 25 low vox - 6 frames late
+'vox' %a6
+[cc>b<c] >aagg 'v*v.75'a'v'<c'v*v.75'a'v'b f&186e
+## 43 bagpipe layer 2
+'bag+o1*v.8''playthepipes'
+## 47 additional pizzicato
+'piz-o1' l4 p72
+f.g.e.a.d.e.
+## 50 bell & low vox - 6 frames late after bell
+'bel' p88 g1^32
+'vox' p64 %a6 l1
+fgf efed   eeed (ee)(ee)b<&186d
+## 68
+'bag+o1*v.8''playthepipes'
+## 72 bell / pizzicato
+l8
+'bel' p88 %r17 <c>  'piz*v.75' p72 cf
+'bel' p88 %r17 b    'piz*v.75' p72 dg
+'bel' p88 %r17 g    'piz*v.75' p72 >b<e
+'bel' p88 %r17 a    'piz*v.75' p72 ea
+'bel' p88 %r17 a    'piz*v.75' p72 >a<d
+'bel' p88 %r17 a    'piz*v.75' p72 >b<e
+'bel' p88 %r17 a    'piz*v.75' p72 cf
+'bel' p88 %r17 g    'piz*v.75' p72 dg
+'bel' p88 %r17 a    'piz*v.75' p72 cfafc
+'bel' p88 %r17 a    'piz*v.75' p72 dgbgd
+'bel' p88 %r17 a    'piz*v.75' p72 ea<d>ae
+'bel' p88 %r17 a    'piz*v.75' p72 a<ec4.
+## 76 bell 
+'bel' p88 [a1^1 k8 a1^1 k0]
+## 84 celesta
+'epi+o3' 'epi_penult' p40 l8
+c>ba4.eb<c d4.c>bag4  g+f+e4.d+ef+ e24f+24e24^2..
+c4dee2 rgf+agf+>b<d  ed+ef+g+2 ^2
+"!!!oz2"
+## 92 -> low vox
+v24,0^8
+'vox-o1' p32 %a4 l1 
+(a2..a)(aa)(ee)
+r32;
+
+{8} %e1 r32 $
+[4r1]
+##6
+'epi+o3*v.5''epi_main' p64 l1 r16.
+c^>b<c >g^^^<   c^>bg2f2 a.g2a^
+&174r 'pet2-o1' %a2 a
+##
+r4.
+## 25 perc
+"!!!o" l16
+[9"b4^ab4b4^a" "b8eg-e8b4b4ae"]
+## 43 bagpipe layer 3
+'baggins''playthepipes'
+## 47 cymbals 
+v48,0^1^1"!!!oz+4"
+## 50 cymbals & hihats
+#  v48,0^4 "!!!o" l16
+#  "hqhq rhmp irhq"
+#  [17"h8hq hqhq rhmp irhq"]
+v48,0^4 "!!!o" l16
+#[18 "hqhq rhmp irhq" j18
+[18 'hqhq rhmp irhq' j18
+"h8hq"]
+## 68 cymbals
+'baggins''playthepipes'
+## 72 cymbals & hihats
+"!!!o" l16
+#  "y4"    "hqhq rimp"
+#  [6 "h8hq hqhq rimp"]
+#     "h8hq hqh8" ^4
+"y4"   [8 "hqh"j8"q rimp"
+"h8hq"] ^ ^4
+## 76 hihats
+#[16"h8hq hqhq rhmp irhq"]
+[16"h8hq" 'hqhq rhmp irhq']
+## 84 hihats
+#^^
+## 92 low strings
+'str-o2' l1 p80 %a6
+a^ b^ rr
+;
+
+#def playthepipes= [j1,4043]
+## Bagpipe pattern
+$4043 p32 l16
+    'bd'a8<e'br'^'bd'e8(de)(dc)>bg  a8<(c>b<)c'br'^'bd'(>b<c>)(ba)ge
+    a8<e'br'^'bd'e8(ga)(gf)(ed)  [e8>a'br'^'bd'a8<]
+    m
+    ]
+    
+#def c8ab stg_g f8cb stab= [j1,4050] ":b:"
+$4050 "!!!o" l16 "c8ab stg-g f8cb stab" ]
+
+#def hqhq rhmp irhq= [j1,8050] ":q:"
+$8050 "!!!o" l16 "hqhq rhmp irhq" ]

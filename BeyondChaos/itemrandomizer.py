@@ -447,9 +447,17 @@ class ItemBlock:
         self.mutate_name()
 
 
-    def mutate_break_effect(self, always_break=False, wild_breaks=False):
+    def mutate_break_effect(self, always_break=False, wild_breaks=False, no_breaks=False, unbreakable=False):
         global effects_used
         if self.is_consumable:
+            return
+
+        if no_breaks:
+            self.itemtype &= ~0x20
+            return
+
+        if unbreakable:
+            self.features['otherproperties'] &= ~0x08
             return
 
         if always_break:
@@ -682,7 +690,7 @@ class ItemBlock:
 
         self.price = min(self.price, 65000)
 
-    def mutate(self, always_break=False, crazy_prices=False, extra_effects=False, wild_breaks=False):
+    def mutate(self, always_break=False, crazy_prices=False, extra_effects=False, wild_breaks=False, no_breaks=False, unbreakable=False):
         global changed_commands
         self.mutate_stats()
         self.mutate_price(crazy_prices=crazy_prices)
@@ -722,6 +730,10 @@ class ItemBlock:
                 self.mutate_feature()
             while random.randint(1, 3) == 3:
                 self.mutate_feature()
+        if no_breaks:
+            self.mutate_break_effect(no_breaks=no_breaks)
+        if unbreakable:
+            self.mutate_break_effect(unbreakable=unbreakable)
 
     def mutate_name(self):
         if Options_.is_code_active("questionablecontent") and not self.is_consumable and '?' not in self.name:

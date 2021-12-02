@@ -27,7 +27,7 @@ class CharacterStats(Randomizer):
             return
         for character in self._characters:
             if character.id == 1:
-                character.initial_level_override = self._rng.choice([1, 2, 3, 4, 5, 6, 7, 8])
+                character.initial_level_override = int(self._rng.choice([1,2,2,3,3,3,4,4,4,4,5,5,5,5,6,6,6,7,7,8]))
             for stat in character.stats_mutated:
                 continue_mutating = True
                 if character.berserk:

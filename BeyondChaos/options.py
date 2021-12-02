@@ -245,14 +245,14 @@ NORMAL_CODES = [
     Code('randombosses', "RANDOM BOSSES MODE", "Causes boss skills to be randomized similarly to regular enemy skills. Boss skills can change to similarly powerful skills.", "battle", "checkbox"),
     Code('replaceeverything', "REPLACE ALL SKILLS MODE", "All vanilla skills that can be replaced, are replaced.", "battle", "checkbox"),
     Code('allcombos', "ALL COMBOS MODE", "All skills that get replaced with something are replaced with combo skills.", "battle", "checkbox"),
-    Code('nocombos', "No Ccombo moves", "There will be no combo(dual) skills.", "battle", "checkbox"),
+    Code('nocombos', "NO COMBOS MODE", "There will be no combo(dual) skills.", "battle", "checkbox"),
     Code('endless9', "ENDLESS NINE MODE", "All R-[skills] are automatically changed to 9x[skills]. W-[skills] will become 8x[skills].", "battle", "checkbox"),
     Code('supernatural', "SUPER NATURAL MAGIC MODE", "Makes it so that any character with the Magic command will have natural magic.", "battle", "checkbox"),
     Code('canttouchthis', "INVINCIBILITY", "All characters have 255 Defense and 255 Magic Defense, as well as 128 Evasion and Magic Evasion.", "battle", "checkbox"),
     Code('naturalstats', "NATURAL STATS MODE", "No Espers will grant stat bonuses upon leveling up.", "battle", "checkbox"),
-    Code('exp', "MULTIPLIED EXP MODE", "All battles will award multiplied exp", "beta", "numberbox"),
-    Code('gp', "MULTIPLIED GP MODE", "All battles will award multiplied gp", "beta", "numberbox"),
-    Code('mp', "MULTIPLIED MP MODE", "All battles will award multiplied magic points.", "beta", "numberbox"),
+    Code('expboost', "MULTIPLIED EXP MODE", "All battles will award multiplied exp", "beta", "numberbox"),
+    Code('gpboost', "MULTIPLIED GP MODE", "All battles will award multiplied gp", "beta", "numberbox"),
+    Code('mpboost', "MULTIPLIED MP MODE", "All battles will award multiplied magic points.", "beta", "numberbox"),
     Code('dancelessons', "NO DANCE FAILURES", "Removes the 50% chance that dances will fail when used on a different terrain.", "beta", "checkbox"),
 
     Code('airship', "AIRSHIP MODE", "The party will have access to the airship immediately after leaving Narshe. Chocobo stables can also be used to acquire the airship. Doing events out of order can cause softlocks.", "gamebreaking", "checkbox"),
@@ -293,7 +293,9 @@ NORMAL_CODES = [
     Code('thescenarionottaken', 'DIVERGENT PATHS MODE', "Changes the way the 3 scenarios are split up.", "experimental", "checkbox"),
     Code('worringtriad', "START IN WOR", "The player will start in the World of Ruin, with all of the World of Balance treasure chests, along with a guaranteed set of items, and more Lores.", "major", "checkbox"),
     
-    Code('desperation', "When all options fail", "When the adventurer back is up against the wall. Break the wall.", "beta", "checkbox"),
+    Code('desperation', "DESPERTION MODE", "When the adventurer back is up against the wall. Break the wall.", "beta", "checkbox"),
+    Code('nobreaks', "NO ITEM BREAKS MODE", "Causes no items to break for spell effects.", "beta", "checkbox"),
+    Code('unbreakable', "UNBREAKABLE ITEMS MODE", "Causes all items to be indestructible  when broken for a spell", "beta", "checkbox")
     #Code('sixtytwoqd', "version 62 randomizer", "For quickdraw only, run version 62 of the randomizer", "beta", "checkbox"),
 ]
 

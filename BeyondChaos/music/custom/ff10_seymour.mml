@@ -1,0 +1,504 @@
+#TITLE Fight with Seymour
+#ALBUM Final Fantasy X
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#SHORTNAME FFX Seymour Battle
+
+#VARIANT /* tr
+#VARIANT ~` sfx
+#VARIANT ~* 
+
+#WAVE 0x20 0xB5 rotary organ
+#WAVE 0x21 0x79 vox
+#WAVE 0x22 0xC4 synth strings
+#WAVE 0x23 0xD2 square wave
+#WAVE 0x24 0x07 atmosphere
+#WAVE 0x25 0xC2 brassy
+#WAVE 0x26 0x52 bass
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1D snare
+#WAVE 0x2A 0x4D tom
+#WAVE 0x2C 0x2D crash
+#WAVE 0x2E 0x3C hihat open
+#WAVE 0x2F 0x3A hihat closed
+
+#def init= t135 %v40 %b0,85 %f0,0
+
+#def organ=   |0 'o' o4 p63
+#def vox=     |1 'v' o5 p119
+#def strings= |2 's' o5
+#def square=  |3 'c' o5 %a13
+#def atmos=   |4 'a' o5 %a13%s7
+#def sawlead= |4 'y' o5 %a10%y0%s5%r2
+#def brassy=  |5 't' o4 %a10%y0%s5%r6
+#def epiano=  |6 'e' o6
+#def epihigh= @3 'h' o5 %r16
+#def bass=    |6 'b' o6 p63
+
+#def o= v150
+#def v= v48
+#def s= v32
+#def c= v24
+#def a= v28
+#def y= v48
+#def t= v72
+#def e= v24
+#def h= v28
+#def b= v56
+
+#def vf= v1,48
+#def ef= v1,20
+
+#cdef ( %l1
+#cdef ) %l0
+
+#def epivib= m12,18,239
+#def sawvib= m48,18,223
+#def brsvib= m48,18,207
+#def sqrvib= m24,18,239
+#def voxtrem= v0,18,239
+
+#def kick= v104
+#def snare= v104
+#def tom= v104
+#def hhc= v32
+#def hho= v32
+#def bonk= v96
+#def crash= v112
+#def splash= v80
+
+#drum "c"= 5c  |A ~p120~ 'tom'         ~%e1~
+#drum "c-"=4b  |A ~p120~ 'tom'         ~%e1~
+#drum "a"= 4a  |A ~p90~  'tom'         ~%e1~
+#drum "g"= 4e  |A ~p63~  'tom'         ~%e1~
+#drum "f"= 4c+ |A ~p20~  'tom'         ~%e1~
+#drum "k"= 5a |8 p63 'kick*v1'         ~%e0~
+#drum "k-"=5a |8 p63 'kick*v.5'        ~%e0~
+#drum "s"= 5a |9 p63 'snare'           ~%e1~
+#drum "b"= 6g |C p65 'bonk' ~%r18       %e1~
+#drum "y"= 5g+  |C p63 'crash' ~%r15    %e1~
+#drum "y-"= 5g+ |C p63 'crash' ~%r17    %e1~
+#drum "x"= 6d   |C p63 'splash' ~%r18   %e1~
+#drum "w"= 6c   |C p63 'splash' ~%r18   %e1~
+
+## version with both samples
+#drum "h"= 5a |F p120 'hhc*v1'         ~%e0~
+#drum "i"= 5a |F p120 'hhc*v.8'        ~%e0~
+#drum "o"= 5a |E p120 'hho'            ~%e1~
+## version with just open hihat sample
+##drum "h"= 5b |E p120 'hhc*v1'         %e0 %r27
+##drum "i"= 5b |E p120 'hhc*v.8'        %e0 %r27
+##drum "o"= 5a |E p120 'hho'            %e1 %r0
+
+{1}
+'init' %e1
+[12 'atmoPatternA']
+## 13
+r1r1r1r1
+'epiano''epivib' l24 p30
+[[3 e16[4br12]br48ar12 j2,118 <d4>]
+j2,124 l16 <regf+ e>b<d>a <c>gbf+ aegd] $118 d4]
+$124 p90 gf+ga bab<c+> l24 b<c+d c+de def+ ef+g
+m
+$## 25
+"!!!o y1" [5r1]
+'strings+o1*v.8' l4 p63
+ga+ a<c> a+<d+ da
+## 33
+g2.f+12g12f+12 e1
+'organ+o1*v.28' l16
+[[16 gm-1] %k0]
+r1r1 [16 gm-1][16 gm1]
+## 41
+'strings+o1*v.8' l16 p63
+e8g8f+8ag rg<c8>b8a8   b8<e8d+8f+e rea8g8f+8
+'sawlead+o1*v1.25''sawvib' p63 l8
+g1 f+2b2 f+1 e2.ga
+b1 a2<d2 c1> b1
+g1 f+2b2 f+1 e2.ef+
+g2.g4 f+2b2 e1^1
+## 59
+'brassy+o1''brsvib' p63 l8
+g+1 g2<c2> g1 f2.g+a+
+<c1> a+2<d+2 c+1 c1>
+g+1 g2<c2> g1 f2f4g4
+a1 g+4a+4<c4c+4
+## 73
+d+1m
+"!!!o" l8 "k.k.k.k.ks"
+"k1" "cc-acc-a"l24"c-c-aggf"
+"y1" l16 "k8ks8kk8ks8kk8s8"
+&190"x1" "c4.c4."&2r"g8y-8"
+## 81
+[28r4]
+'strings*v1.25' p100 l4
+    f+ag+b a<dc+g+ f+1.
+'square*v.8+o1' p127 'sqrvib'
+    d+f+fg+ f+ba+<f d+1.
+'sawlead*v.8' p0 'sawvib'
+    f+ag+b a<dc+g+ f+1.>
+## 91
+    g+ba+<c+> b<ed+a+ g+1^1
+[p30 ['epiano''ef*v96,.625' l16 g+<[3d+r]d+> p90]]
+;
+
+{2} 
+'strings' %e1 l1 rrrr
+ba<d>g  gf+2b2e^
+## 13
+'organ+o1*v.38' l16
+[6 [e4 eree rere j2 g8f+8] d4]
+$## 25
+['organ+o2*v.51' l16
+  rgd>a+ fa<fd+  d>dga+ afgd j2,230
+  g>a+<fd+ ca+gd+  <c>d+a+a g<d+d>a+
+[g4 grgg rgrg j2 a+8a8] f4]
+$230 g8da8dga a+8d<c8>a+gd+
+l4 'o*v.28' g.a.^ a+.<c.^
+## 33
+[
+  ['atmoPatternA']
+'epivib' p90 [2 'epihigh+o2' l16
+g>a+b<cc+>g8<g8>a+b<cc+8>g8]m
+## 41
+]
+r1r1
+'square+o1' l16 p127
+[4
+'c*v.80' er<ere>ere <er>e<er4  p63'c*v.70' [ er>e<er>ere< p0'c*v.60' ]>
+j4,257
+'c*v.80' er<ere>ere <er>e<er4  p63'c*v.70' [ er>e<er>ere< p127'c*v.60' ]>
+]$257 l16 p63 'c*v.80'
+'leadPattern57'
+#    eceg <c>eg<c e>g<ce gec>g
+#    f+ef+a <d>af+e f+gab <cdef+
+## 59
+'organ*v.28+o1' p63 l16
+frg+r<cr>[fg+r<cr>]
+d+rgra+r[d+gra+r]
+gra+r<d+r>[ga+r<d+r>]
+frg+r<c+r>[fg+r<c+r>]
+frg+r<cr>[fg+r<cr>]
+d+rgra+r[d+gra+r]
+fra+r<c+r>[fa+r<c+r>]
+[frg+r<cr>[fg+r<cr>]]
+d+rgr<cr>[d+gr<cr>]
+gra+r<dr>[ga+r<dr>]
+frar<dr>[far<dr>]
+f+rar<c+r>[f+ar<c+r>]
+erg+r<c+r>[eg+r<c+r>]
+## 73
+'square+o1*v.90' p63 l16
+[
+ [ <d+>g+g <e>g+g [<d+>g+g] <d+>g<d>g ]
+   <c+>f+f <d>f+f [<c+>f+f] <c+>f<c>f  j2,280
+   <c+>f+f <d>f+f [<c+>f+f] <c+>f<c>f
+]  $280
+'c*v.80' <c+>f+c+f+ bf+>b<a8 c+>a<c+ g+c+>g+<c+
+## 81
+'organ+o1*v0' l16
+[5 [arar8ar8 [arg+ar8] ararg+ar8 'o*v.28'] j3,287 %k0]
+## 91
+[3 [g+4 g+rg+g+ rg+rg+ j2 b8a+8] f+4]
+;
+
+$287 %k-3]
+
+{3}
+'strings-o1' %e1 l1 rrrr
+gf+be  cdc^
+## 13
+'bass-o2' l16 %e0
+[12 'bassPatternBDE']
+$## 25
+[8 g8d8f8dg  rgd8f8d8]
+## 33
+[['bassPatternBDE'] r1r1]
+## 41
+[11'bassPatternBDE']
+'bassPatternACD'
+c8>a8 b8 a<c rc>a8 b8 a8<
+c8>g8 a+8g<c rc>g8 a+8g8
+a8 e8 g8 e a ra e8 g8 e8
+b8 f+8a8 f+b rb f+8a8 f+8<
+c8>g8 a+8g<c rc>g8 a+8g8<
+'bassPatternACD'
+## 59
+[10 f8c8d+8cf rfc8d+8c8 ]
+g8d8f8dg rgd8f8e8
+'bassPatternACD'
+f+8c+8e8c+f+ rf+c+8e8c+8
+g+8c+8e8c+g+ rg+c+8e8c+8
+## 73
+[>g+1    g+r8a+r8br8<c+8.d+rfr
+f+1j2^1] c+4d8.e^4f+4
+## 81
+[5 l16 'seveneights' j3,387 %k0]
+## 91
+[6 g+8d+8f+8d+g+ rg+d+8f+8d+8 ]
+;
+
+$387 %k-3]
+
+{4} 
+'vox' %e1 l1 rrrr
+ba<d>g  gf+2b2e^
+## 13
+"!!!o" l8
+[12'drumPatternKick']
+$## 25
+[6 'drumPatternSnare']
+l8 ":s:" "s c24c24a24 f4 k4 k4"
+l16 "sk8k8kck8k8kako8" 
+## 33
+[3 l8
+['drumPatternKick']
+j3,443
+[8"k4"]
+]
+## 43
+$443 [30'drumPatternSnare'] ## x16
+## 59
+#^ x14
+## 73
+":s:" l16 "k"
+'square*v.60+o1' l16 %e1
+[
+ [{g+}d+>g+< g+e>g+< [g+d+>g+<] g+d+ g+d       j2 g+]
+  f+c+>f+< f+d>f+< [f+c+>f+<] f+c+ f+c     j2,460
+  f+c+>f+< f+d>f+< [f+c+>f+<] f+c+ f+c            g+
+] $460
+"!!!o" "ccaas8cc aaffc-ks8"
+## 81
+[14"k4"] l16
+[4 "k4s4k8.s8.k8.ks8k8k8s4"
+   "k4s4k8.s8.k8.s8.k8k8sk8." ]
+## 91
+[6'drumPatternKick']
+;
+
+{5}
+'vox' %e1 l1 rrrr
+e^gc  e>b<c^
+## 13
+[8r1]
+'epiano''epivib' l24 p90
+[3 b16<[4f+r12]f+r48er12 j2,522 a4>]
+p30 l16 edef+ gf+ga l24 gab ab<c+> b<c+d c+de
+m
+$## 25
+[6r1]
+'strings' p63 l4
+ga+ a<c> a+<d+ da
+## 33
+g2.f+12g12f+12 e1
+'organ+o1*v.28' l16
+[[16 dm-1] %k0]
+r1r1 [16 dm-1][16 dm1]
+## 41
+'strings-o1' p63 l16
+g8b8a8<c>b rb<e8d8c8   e8g8f+8ag rg<c8>b8a8
+l1
+edag    gf+ag   edag    ed
+'square+o1' l16 %l1
+c>g<ce gceg <c>eg<c ec>ge>
+af+a<d f+d>af+ <def+g ab<cd
+## 59
+'brassy+o1*v.8''brsvib' p63 l8
+f1 d+2g2 d+1 c+2.fg
+g+1 g2a+2 a+1 g+1
+f1 d+2g2 d1 d2d4e4
+f+1 e4f+4g+4a+4
+## 73
+b1 r1 m
+"x1" "!o" l16 ["k"[5"k-"]]"kk-k-k-"
+r1 ["!o x8.y-8."]"x8y-8"
+&188^ "c4.c48^8^2"
+## 81
+'organ*v.28+o1' p63
+[5 l16 'seveneights' j3,387 %k0]
+## 91
+'strings*v1.25' p100 l4
+ g+ba+<c+> b<ed+a+ g+1^1 r1r1
+;
+
+$522 >a4]
+
+{6}
+%e1
+[6 r1 'atmoPatternB' ]
+## 13
+'organ+o1*v.38' l16
+[6 [d4 drdd rdrd j2 d8c8] >a4<]
+$## 25
+['organ+o1*v.51' l16
+r2..d+r j2,630 cr4ar8gr4ar8 
+[f4 frff rfrf j2 f8d+8] c4]
+$630 r8.f8r8.g8ra8r8.
+l4 'o*v.28' d.c.^ d.f.^
+## 33
+[ r1 'atmoPatternB' "!!!o" [8"b4"]]
+## 41
+'strings' p63 l16
+e8g8f+8ag rg<c8>b8a8   b8<e8d+8f+e rea8g8f+8
+l1 >>ba<dc  eaee    >ba<dc  cf+
+l16 #eceg <c>eg<c e>g<ce gec>g
+    #f+ef+a <d>af+e f+gab <cdef+
+    'leadPattern57'
+## 59
+'organ*v.28+o1' p63 l16
+crfrg+r[cfrg+r]
+>a+r<d+rgr[>a+<d+rgr]
+d+rgra+r[d+gra+r]
+c+rfrg+r[c+frg+r]
+crfrg+r[cfrg+r]
+>a+r<d+rgr[>a+<d+rgr]
+c+rfra+r[c+fra+r]
+[crfrg+r[cfrg+r]]
+crd+rgr[cd+rgr]
+drgra+r[dgra+r]
+drfrar[dfrar]
+c+rf+rar[c+f+rar]
+c+rerg+r[c+erg+r]
+## 73
+'voxtrem'
+[4 'vox*v.29''vf*v192,.48' j4,679 ([8g+4]) j1,675 %k0]
+$675 %k-2]
+$679 ([4f+4])
+'organ+o2*v.28' l16 v
+c+>f+c+f+ bf+>b<a8 c+>a<c+ g+c+>g+<c+
+## 81
+[14r4] <
+[4 [c+rc+r8c+r8 [c+rc+c+r8] c+rc+rc+c+r8] j2,387 %k0]>
+## 91
+[3 [ f+4 f+rf+f+ rf+rf+ j2 f+8e8 ] c+4 ]
+;
+
+*
+{7}
+'vox' %e1 l1 rrrr
+d^f+>b  aag^
+## 13
+"!!!o" l4
+[48"b"]
+$## 25
+"!!!o" l8
+[6 'hatPatternSnare']
+"x4ky4.^4" "x4.y-4.fw"
+## 33
+[3 "!o" [8"h4"] j3 r1r1 ]
+## 43
+[15'hatPatternSnare']
+":o" "h4ho h4xo"
+## 59
+[14'hatPatternSnare']
+## 73
+":o: y1^1"
+&190r "a8g8f8a8g8f8" &50^
+'voxtrem''vox*v.29''vf*v192,.48' ([8d+4])
+'v*v.29''vf*v192,.48' ([4c+4]) r1v
+## 81
+[14r4] "!!!o" l8
+[[7"h"j7"i"]":h: o"]
+[3
+  "y-4"[6"h"j6"i"]":h: o"
+  [7"h"j7"i"]":h: o"
+]
+## 91
+":o: y-4"
+[23"!o b4"]
+;
+
+{8}
+%e1 p90
+[6 'atmoPatternC' j6r4]
+'organ-o1*v.38' %g1 l48 gab<cde fgab<cd %g0
+## 13
+l16>
+[12 b4 brbb rbrb r4]
+$## 25
+'organ+o1*v.51' l16
+r1r1
+[d4 drdd rdrd r4]
+r1r1
+l4 'o*v.28' r.f.^ g.a.^
+## 33
+['atmoPatternC' r4r1r1]
+## 41
+r1r1
+"!!!o y1"
+'strings' p63 l1
+f+f+e  bd<c>b  gf+f+e  g>b<
+l16 c>g<ce gceg <c>eg<c ec>ge>
+    af+a<d f+d>af+ <def+g ab<cd
+## 59
+"!!!o y1" [7r1]
+'strings*v.92+o2' p100 l16
+%k-4 'stringsPattern67'
+%k-5 'stringsPattern67'
+%k-2 'stringsPattern67'
+%k-3['stringsPattern67']
+%k-4 'stringsPattern67' %k0
+## 73
+'voxtrem'
+[4 'vox*v.29-o1''vf*v192,.48' j4,879 ([8b4]) j1,875 %k0]
+$875 %k-2]
+$879 ([4a4]) r1
+## 81
+[28r4] < ([14c+4])([14d+4])([14c+4]) v
+## 91
+'organ+o1*v.28' p63 l16
+[6 d+4 d+rd+d+ rd+rd+ r4]
+;
+*
+
+## Pattern A - one measure long, constant
+#def atmoPatternA= [j1,1001]
+$1001 'atmos+o3' l16 p59 p192,127
+       e>abg <d>abe ade>b <gde>a
+       ]
+## Pattern B - two measures long, silent first measure not included
+#def atmoPatternB= [j1,2001]
+$2001 'atmos+o2' l16 p76 p192,0
+      bef+d aef+>b <e>abf+ <d>abe
+      ]
+## Pattern C - two measures long, requires additional quarter rest at end
+#def atmoPatternC= [j1,3001]
+$3001 r4. 'atmos+o3' l16
+      e>abg <d>abe ade>b <gde>a  r4.
+      ]
+
+## Square wave + strings pattern @ 57-58 - high note
+## (Low note is not patterned due to minor variation added [legato])
+#def leadPattern57= [j1,2057]
+$2057 l16  eceg <c>eg<c e>g<ce gec>g
+           f+ef+a <d>af+e f+gab <cdef+
+           ]
+## Strings pattern @ 67 - use transpose
+#def stringsPattern67= [j1,8067]
+$8067 l16 crcr crcc rcrc crcr ]
+
+## Bass pattern B + D + E
+#def bassPatternBDE= [j1,3033]
+$3033 l16 e8>b8<d8>b<e re>b8<d8>b8< ]
+## Bass pattern A + C + D
+#def bassPatternACD= [j1,3052]
+$3052 l16 d8>a8<c8>a<d rd>a8<c8>a8< ]
+
+## Seven-eights pattern
+#def seveneights= [j1,3081]
+$3081 l16 [f+rf+r8f+r8  [f+ref+r8] f+rf+ref+r8] ]
+
+## Drum pattern - main channel, four floor
+#def drumPatternKick= [j1,4001]
+$4001 l8 "!!!o" [3"ko"] "k16i16o" ]
+## Drum pattern - second channel, four floor
+#def hatPatternKick= [j1,7001]
+$7001 l4 "!!!o" [4"h"] ]
+## Drum pattern - main channel, kick snare
+#def drumPatternSnare= [j1,4002]
+$4002 l8 "!!!o" ["kos4"] ]
+## Drum pattern - second channel, kick snare
+#def hatPatternSnare= [j1,7002]
+$7002 l8 "!!!o" "h4ho h4h16i16o" ]

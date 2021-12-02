@@ -6,6 +6,7 @@ from typing import BinaryIO
 
 try:
     from sys import _MEIPASS
+
     MEI = True
     tblpath = path.join(_MEIPASS, "tables")
 except ImportError:
@@ -17,6 +18,12 @@ except ImportError:
 
     # tblpath = "tables"
     MEI = False
+
+WELL_KNOWN_ROM_HASHES = [
+    "e986575b98300f721ce27c180264d890",  # NORMAL
+    "f08bf13a6819c421eee33ee29e640a1d",  # TEXTLESS1
+    "e0984abc9e5dd99e4bc54e8f9e0ff8d0"  # TEXTLESS2
+    ]
 
 ENEMY_TABLE = path.join(tblpath, "enemycodes.txt")
 ITEM_TABLE = path.join(tblpath, "itemcodes.txt")
@@ -67,6 +74,8 @@ PASSWORDS_TABLE = path.join(custom_path, "passwords.txt")
 POEMS_TABLE = path.join(custom_path, "poems.txt")
 MODIFIERS_TABLE = path.join(custom_path, "moves.txt")
 MOVES_TABLE = path.join(custom_path, "moves.txt")
+CORAL_TABLE = path.join(custom_path, "coralnames.txt")
+
 
 def open_mei_fallback(filename, mode='r', encoding=None):
     if not MEI:
@@ -154,7 +163,6 @@ for line in f:
 shorttexttable[' '] = 'FF'
 f.close()
 
-
 dialoguetexttable = {}
 f = open(DIALOGUE_TEXT_TABLE, encoding='utf8')
 for line in f:
@@ -165,7 +173,6 @@ for line in f:
     if string not in dialoguetexttable:
         dialoguetexttable[string] = value
 f.close()
-
 
 reverse_dialoguetexttable = {v: k for k, v in dialoguetexttable.items()}
 reverse_dialoguetexttable["1104"] = "<wait 60 frames>"
@@ -180,6 +187,7 @@ def shuffle_key_values(d):
     random.shuffle(keys)
     shuffled = dict(zip(keys, d.values()))
     d.update(shuffled)
+
 
 def dialogue_to_bytes(text, null_terminate=True):
     bs = []
@@ -198,8 +206,8 @@ def dialogue_to_bytes(text, null_terminate=True):
             j = text.find(">", i) + 1
             hexstr = dialoguetexttable.get(text[i:j], "")
             i = j
-        elif i < len(text) - 1 and text[i:i+2] in dialoguetexttable:
-            hexstr = dialoguetexttable[text[i:i+2]]
+        elif i < len(text) - 1 and text[i:i + 2] in dialoguetexttable:
+            hexstr = dialoguetexttable[text[i:i + 2]]
             i += 2
         else:
             hexstr = dialoguetexttable[text[i]]
@@ -220,7 +228,7 @@ def bytes_to_dialogue(bs):
         c = bs[i]
         if c == b'\x00':
             break
-        d = bs[i+1] if i + 1 < len(bs) else None
+        d = bs[i + 1] if i + 1 < len(bs) else None
         if d and f"{c:02X}{d:02X}" in reverse_dialoguetexttable:
             text.append(reverse_dialoguetexttable[f"{c:02X}{d:02X}"])
             i += 2
@@ -343,13 +351,16 @@ random = utilrandom
 
 RANDOM_MULTIPLIER = 1
 
+
 def set_randomness_multiplier(multiplier):
     global RANDOM_MULTIPLIER
     RANDOM_MULTIPLIER = multiplier
 
+
 def clamp(n, lower_bound, upper_bound):
     assert lower_bound <= upper_bound
     return max(lower_bound, min(n, upper_bound))
+
 
 def mutate_index(index, length, continuation=None, basic_range=None,
                  extended_range=None, disregard_multiplier=False):
@@ -364,9 +375,9 @@ def mutate_index(index, length, continuation=None, basic_range=None,
     basic_range = basic_range or (-3, 3)
     extended_range = extended_range or (-1, 1)
     if not disregard_multiplier:
-        basic_range = tuple(int(round(RANDOM_MULTIPLIER*v))
+        basic_range = tuple(int(round(RANDOM_MULTIPLIER * v))
                             for v in basic_range)
-        extended_range = tuple(int(round(RANDOM_MULTIPLIER*v))
+        extended_range = tuple(int(round(RANDOM_MULTIPLIER * v))
                                for v in extended_range)
 
     index = utran.randint(*(clamp(index + b, 0, highest) for b in basic_range))
@@ -415,8 +426,8 @@ def shift_middle(triple, degree, ungray=False):
     else:
         value = high
     degree = abs(degree)
-    a = (1 - (degree/90.0)) * medium
-    b = (degree/90.0) * value
+    a = (1 - (degree / 90.0)) * medium
+    b = (degree / 90.0) * value
     medium = a + b
     medium = int(round(medium))
     triple[mediumdex] = medium
@@ -428,7 +439,7 @@ def get_palette_transformer(use_luma=False, always=None, middle=True,
     def get_ratio(a, b):
         if a > 0 and b > 0:
             return max(a, b) / float(min(a, b))
-        if abs(a-b) <= 1:
+        if abs(a - b) <= 1:
             return 1.0
         return 9999
 
@@ -537,7 +548,7 @@ def get_palette_transformer(use_luma=False, always=None, middle=True,
             values.append(index)
         values = sorted(values)
         low, high = min(values), max(values)
-        median = values[len(values)//2]
+        median = values[len(values) // 2]
         clusters = [set([low]), set([high])]
         done = set([low, high])
         if median not in done and random.choice([True, False]):
@@ -553,10 +564,10 @@ def get_palette_transformer(use_luma=False, always=None, middle=True,
             done.add(index)
 
             def cluster_distance(cluster):
-                distances = [abs(index-i) for i in cluster]
+                distances = [abs(index - i) for i in cluster]
                 return sum(distances) // len(distances)
-                nearest = min(cluster, key=lambda x: abs(x-index))
-                return abs(nearest-index)
+                nearest = min(cluster, key=lambda x: abs(x - index))
+                return abs(nearest - index)
 
             chosen = min(clusters, key=cluster_distance)
             chosen.add(index)
@@ -576,7 +587,7 @@ def get_palette_transformer(use_luma=False, always=None, middle=True,
         random.shuffle(remaining)
 
         def get_nearest_swapcode(index):
-            nearest = min(swapmap, key=lambda x: abs(x-index))
+            nearest = min(swapmap, key=lambda x: abs(x - index))
             return nearest
 
         for i in remaining:
@@ -624,6 +635,7 @@ def get_palette_transformer(use_luma=False, always=None, middle=True,
 
     return palette_transformer
 
+
 huetranstable = {
     0: [31, 0, 0],
     60: [31, 31, 0],
@@ -631,7 +643,8 @@ huetranstable = {
     180: [0, 31, 31],
     240: [0, 0, 31],
     300: [31, 0, 31],
-    }
+}
+
 
 def hue_rgb(deg):
     rgbtweentable = {0: 2, 60: -1, 120: 3, 180: -2, 240: 1, 300: -3}
@@ -652,16 +665,17 @@ def hue_rgb(deg):
     rgb[tween] = remainder
     return rgb
 
+
 def shuffle_char_hues(hues):
     while True:
         tryagain = False
         random.shuffle(hues)
-        for c in range(0, 18, 3): #check for too close colors vertically (within one palette)
-            chunk = hues[c:c+3]
-            chunk += [h+360 for h in chunk]
+        for c in range(0, 18, 3):  # check for too close colors vertically (within one palette)
+            chunk = hues[c:c + 3]
+            chunk += [h + 360 for h in chunk]
             for i in range(6):
-                for j in range(i+1, 6):
-                    if abs(chunk[i]-chunk[j]) <= 16:
+                for j in range(i + 1, 6):
+                    if abs(chunk[i] - chunk[j]) <= 16:
                         tryagain = True
                         break
                 if tryagain:
@@ -670,12 +684,12 @@ def shuffle_char_hues(hues):
                 break
         if tryagain:
             continue
-        for c in range(0, 3): #check for too close colors horizontally (same element on different palettes)
+        for c in range(0, 3):  # check for too close colors horizontally (same element on different palettes)
             chunk = hues[c:len(hues):3]
-            chunk += [h+360 for h in chunk]
+            chunk += [h + 360 for h in chunk]
             for i in range(12):
-                for j in range(i+1, 12):
-                    if abs(chunk[i]-chunk[j]) <= 16:
+                for j in range(i + 1, 12):
+                    if abs(chunk[i] - chunk[j]) <= 16:
                         tryagain = True
                         break
                 if tryagain:
@@ -687,8 +701,8 @@ def shuffle_char_hues(hues):
         break
     return list(map(hue_rgb, hues))
 
-def generate_character_palette(skintones_unused=None, char_hues_unused=None, trance=False):
 
+def generate_character_palette(skintones_unused=None, char_hues_unused=None, trance=False):
     def hue_deg(rgb):
         tweens = [i for i in rgb if i not in [0, 31]]
         assert len(tweens) <= 1
@@ -714,7 +728,7 @@ def generate_character_palette(skintones_unused=None, char_hues_unused=None, tra
         order = [rgb.index(min(rgb)), rgb.index(max(rgb))]
         order = [order[0], [n for n in [0, 1, 2] if n not in order][0], order[1]]
         color = list(rgb)
-        color = [c-color[order[0]] for c in color]
+        color = [c - color[order[0]] for c in color]
         pct = color[order[1]] / float(color[order[2]])
         pure = [0, 0, 0]
         pure[order[1]] = int(31 * pct)
@@ -735,9 +749,9 @@ def generate_character_palette(skintones_unused=None, char_hues_unused=None, tra
         red, green, blue = color_to_components(color)
         width = top - bot
         lightest = max(red, green, blue)
-        red = int(round(width*(float(red)/float(lightest)))) + bot
-        green = int(round(width*(float(green)/float(lightest)))) + bot
-        blue = int(round(width*(float(blue)/float(lightest)))) + bot
+        red = int(round(width * (float(red) / float(lightest)))) + bot
+        green = int(round(width * (float(green) / float(lightest)))) + bot
+        blue = int(round(width * (float(blue) / float(lightest)))) + bot
         return components_to_color((red, green, blue))
 
     def hsv_approx(hue, sat, val):
@@ -750,10 +764,10 @@ def generate_character_palette(skintones_unused=None, char_hues_unused=None, tra
         for i, c in enumerate(new_color):
             new_color[i] = int(c * (1 - skewamount) + skewtoward[i] * skewamount)
         new_color = [(c if c <= 31 else 31) for c in new_color]
-        new_color = [(c if c >= 0 else 0) for c in new_color] # just in case
+        new_color = [(c if c >= 0 else 0) for c in new_color]  # just in case
         return new_color
 
-    def nudge_hue(hue): #designed for 'pure' hue: one 31, one 0, one anything
+    def nudge_hue(hue):  # designed for 'pure' hue: one 31, one 0, one anything
         new_color = hue[:]
         if len([h for h in hue if h not in [0, 31]]) > 0:
             new_color = [(h if h in [0, 31] else h + random.randint(-2, 2)) for h in hue]
@@ -764,17 +778,17 @@ def generate_character_palette(skintones_unused=None, char_hues_unused=None, tra
             nudge_idx = random.choice([i for i, h in enumerate(hue) if h == 0])
             new_color[nudge_idx] += random.randint(0, 3)
         new_color = [(c if c <= 31 else 31) for c in new_color]
-        new_color = [(c if c >= 0 else 0) for c in new_color] # just in case
+        new_color = [(c if c >= 0 else 0) for c in new_color]  # just in case
         return new_color
 
     def nudge_apart(dynamic, static, threshold=10):
-        if static - dynamic >= 360-threshold:
+        if static - dynamic >= 360 - threshold:
             dynamic += 360
-        if dynamic - static >= 360-threshold:
+        if dynamic - static >= 360 - threshold:
             static += 360
-        if dynamic in range(static, static+threshold):
+        if dynamic in range(static, static + threshold):
             dynamic = static + threshold
-        elif dynamic in range(static, static-threshold):
+        elif dynamic in range(static, static - threshold):
             dynamic = static - threshold
         while dynamic >= 360:
             dynamic -= 360
@@ -794,14 +808,15 @@ def generate_character_palette(skintones_unused=None, char_hues_unused=None, tra
         hair_sat = random.choice([random.randint(15, 30), random.randint(20, 50), random.randint(20, 75)])
         hair_light = random.choice([random.randint(60, 80), random.randint(55, 90)])
         hair_dark = random.randint(int(hair_light * .5), int(hair_light * .65)) if hair_sat < 40 else \
-                    random.randint(int(hair_light * .45), int(hair_light * .52))
+            random.randint(int(hair_light * .45), int(hair_light * .52))
         hair_highlight = random.randint(93, 100)
         hair_shadow = random.randint(10, 22)
 
         cloth_light = random.randint(32, max(42, hair_dark + 10))
         cloth_dark = random.randint(int(cloth_light * .6), int(cloth_light * .72))
-        cloth_sat = random.choice([random.randint(10, 50), random.randint(30, 60), random.randint(10, 85)]) if cloth_light < 40 else \
-                    random.choice([random.randint(10, 40), random.randint(25, 55)])
+        cloth_sat = random.choice(
+            [random.randint(10, 50), random.randint(30, 60), random.randint(10, 85)]) if cloth_light < 40 else \
+            random.choice([random.randint(10, 40), random.randint(25, 55)])
         while hair_light >= hair_highlight - 8:
             hair_light -= 1
             if hair_light <= int(hair_dark / .65):
@@ -817,7 +832,8 @@ def generate_character_palette(skintones_unused=None, char_hues_unused=None, tra
             mindelta = 8
         elif 180 <= cloth_hue_deg <= 300:
             mindelta = 6
-        else: mindelta = 4
+        else:
+            mindelta = 4
         while cloth_dark < hair_shadow + mindelta:
             if cycle < 1:
                 cycle = 1
@@ -841,27 +857,33 @@ def generate_character_palette(skintones_unused=None, char_hues_unused=None, tra
                     done |= 0b01
                 cycle = 1
 
-        new_palette[2] = components_to_color(hsv_approx(nudge_hue(hair_hue), random.randint(80, 97), random.randint(93, 98)))
+        new_palette[2] = components_to_color(
+            hsv_approx(nudge_hue(hair_hue), random.randint(80, 97), random.randint(93, 98)))
         new_palette[3] = components_to_color(hsv_approx(nudge_hue(hair_hue), random.randint(10, 100), hair_shadow))
-        new_palette[4] = components_to_color(hsv_approx(nudge_hue(hair_hue), hair_sat + random.randint(-7, 8), hair_light))
-        new_palette[5] = components_to_color(hsv_approx(nudge_hue(hair_hue), hair_sat + random.randint(-7, 8), hair_dark))
-        new_palette[8] = components_to_color(hsv_approx(nudge_hue(cloth_hue), cloth_sat + random.randint(-7, 8), cloth_light))
-        new_palette[9] = components_to_color(hsv_approx(nudge_hue(cloth_hue), cloth_sat + random.randint(-7, 8), cloth_dark))
+        new_palette[4] = components_to_color(
+            hsv_approx(nudge_hue(hair_hue), hair_sat + random.randint(-7, 8), hair_light))
+        new_palette[5] = components_to_color(
+            hsv_approx(nudge_hue(hair_hue), hair_sat + random.randint(-7, 8), hair_dark))
+        new_palette[8] = components_to_color(
+            hsv_approx(nudge_hue(cloth_hue), cloth_sat + random.randint(-7, 8), cloth_light))
+        new_palette[9] = components_to_color(
+            hsv_approx(nudge_hue(cloth_hue), cloth_sat + random.randint(-7, 8), cloth_dark))
 
-        acc_sat = random.choice([random.randint(10, 25)] + [random.randint(25, 65)]*2 + [random.randint(20, 85)]*2)
+        acc_sat = random.choice([random.randint(10, 25)] + [random.randint(25, 65)] * 2 + [random.randint(20, 85)] * 2)
         acc_light = random.randint(cloth_light + 10, min(100, max(80, cloth_light + 20)))
-        acc_dark = random.randint(int(acc_light * .5), int(acc_light * .68)) #if acc_sat < 50 else \
-                   #random.randint(int(acc_light * .4), int(acc_light * .52))
-        new_palette[10] = components_to_color(hsv_approx(nudge_hue(acc_hue), acc_sat + random.randint(-7, 8), acc_light))
+        acc_dark = random.randint(int(acc_light * .5), int(acc_light * .68))  # if acc_sat < 50 else \
+        # random.randint(int(acc_light * .4), int(acc_light * .52))
+        new_palette[10] = components_to_color(
+            hsv_approx(nudge_hue(acc_hue), acc_sat + random.randint(-7, 8), acc_light))
         new_palette[11] = components_to_color(hsv_approx(nudge_hue(acc_hue), acc_sat + random.randint(-7, 8), acc_dark))
     else:
         sign = random.choice([1, -1])
-        hues = [random.randint(0, 360)] # skin
-        if hues[0] in range(20, 40): # -- discourage skin-colored skin
+        hues = [random.randint(0, 360)]  # skin
+        if hues[0] in range(20, 40):  # -- discourage skin-colored skin
             hues[0] = random.randint(0, 360)
-        hues.append(hues[0] + random.randint(15, 60) * sign) # hair
-        hues.append(hues[1] + random.randint(15, 60) * sign) # clothes
-        hues.append(hues[2] + random.randint(15, 60) * sign) # acc
+        hues.append(hues[0] + random.randint(15, 60) * sign)  # hair
+        hues.append(hues[1] + random.randint(15, 60) * sign)  # clothes
+        hues.append(hues[2] + random.randint(15, 60) * sign)  # acc
 
         new_palette = [[0, 0, 0], [3, 3, 3]] * 6
 
@@ -920,12 +942,12 @@ def decompress(bytestring, simple=False, complicated=False, debug=False):
                     cycle = buffaddr - seekaddr
                     if cycle < 0:
                         cycle += 0x800
-                    subbuff = "".join((buff+buff)[seekaddr:seekaddr+cycle])
+                    subbuff = "".join((buff + buff)[seekaddr:seekaddr + cycle])
                     while len(subbuff) < length:
                         subbuff = subbuff + subbuff
                     copied = "".join(subbuff[:length])
                 else:
-                    copied = "".join((buff+buff)[seekaddr:seekaddr+length])
+                    copied = "".join((buff + buff)[seekaddr:seekaddr + length])
                 assert len(copied) == length
                 result += copied
                 if debug:
@@ -955,7 +977,7 @@ def line_wrap(things, width=16):
 
 def get_matrix_reachability(M):
     M2 = list(zip(*M))
-    new = [0]*len(M)
+    new = [0] * len(M)
     new = [list(new) for _ in range(len(M))]
     for i, row in enumerate(M):
         for j, row2 in enumerate(M2):
@@ -995,6 +1017,7 @@ def make_table(cols):
     horizborder = "/%s\\" % horizborder
     table = "\n".join([horizborder, table, horizborder[::-1]])
     return table
+
 
 if __name__ == "__main__":
     M = [[1, 0, 0, 1],

@@ -1,0 +1,164 @@
+#TITLE Hope Isolation Pray
+#ALBUM Trials of Mana
+#COMPOSER Hiroki Kikuta
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.6
+
+#VARIANT `
+#VARIANT _ tr
+
+#WAVE 0x20 0x36
+#WAVE 0x27 0x02
+#WAVE 0x28 0x01
+#WAVE 0x29 0xA2
+#WAVE 0x2A 0x50
+#WAVE 0x2B 0x57
+#WAVE 0x2C `0x65` _0x66_
+
+#def 0i=   |0vm %y0%s3
+#def 0o=   o5
+#def 0v=   v130
+#def 0f= v1,130
+
+#def 8i=   |8vm
+#def 8o=   o5
+#def 8v=   v130
+#def 8f= v1,130
+
+#def 9i=   |9vm24,18,207
+#def 9o=   o5
+#def 9v=   v130
+#def 9f= v1,130
+
+#def Ai=   |Avm
+#def Ao=   o6
+#def Av=   v195
+#def Af= v1,195
+
+#def Bi=   |Bvm
+#def Bo=   o5
+#def Bv=   v156
+#def Bf= v1,156
+
+#def Ci=   |Cv8,36,191m
+#def Co=   o6
+#def Cv=   v78
+#def Cf= v1,78
+
+#def xCo=   o7
+#def xCv=   v20
+#def yCv=   v88
+
+#def p5= |7 %r15
+#def p6= |8
+
+#def pr= %r24
+#def ph= %r15
+
+{1}
+t62 %v72 %b0,56 %f0,0 %x224
+%e1$'Ai' p64'Ao-o2''Av*v.65'a4.e16r16>a4.<e8f4.<c8e8^32r32c8>'Av*v.54'e32r32
+'Av*v.65'g8d4.f8a8.<c8.e8>a+4.<f16r16a+8^32r32a8.f8>a4.e16r16>a4.<e8f4.
+<c16r16e8>'Av*v.54'a16<'Av*v.65'c8>'Av*v.54'e16'Av*v.65'g8d4f16r16a8g8.
+<d8.>e8a4e4>a2
+'Bi' p64>'Bv*v.65''Bo-o2'a8<e8a4.e8>a8<e8>f8<c8f4.c8>f8e8d8a8<d4.>a8d8
+e8f8<c8e4.f8e8>g8a8<e8a4.e8>a8<e8>f8<c8f4.c8>f8e8d8a8<d4>g8<d8g4>a4e4>
+a2[<'Bo-o2'f4<c4f4c4>e4b4<e4>b4]d4a4<d4>d4a4<e4a4>a4f4<c4>g4<d4>a4e4>a4
+r4;
+
+{2}
+%e1$
+'Ci' p48%a8'Co-o1''Cv*v.65'b8<c8g4.e8c8e8c4>a2^8g8g8a8<c4.>b8g8e8d4c2.
+b8<c8g4.a8e8g8d4c2^8>g8g8a8<c4.d8c8>b8a1
+'9i' p64%a11%r12'9v*v.65''9o-o1'b8<c8g4.e8c8e8c4>a2^8g8g8a8<c4.>b8g8e8
+d4c2.b8<c8g4.a8e8g8d4c2^8>g8g8a8<c4.d8c8>b8a2a2
+'0i''0o''0v*v.65'p24a24g24a4.^24a24g24a4a12b12&2^e4.^48
+g32f+32f32e3e12g12a24g24a4.^24a24g24a4a12b12&2^e3f12g16&2^e4g4d4.^24d24
+e24f4a12<c12d12e4.^24c24>b24a3g12a12<c3>g12a12<d4e12>g6a2a2
+
+;
+
+{3}
+%e1$
+'Ci' p40%a8'Co-o2''yCv*v.65'a1f1d1f1a1f2a2d2g2a1
+'8i' p104r4.'8o''8v*v.65'd24'pr'^24^24^2^4.^16'ph'f48'pr'<^48^48^4.^16'ph'd48'pr'^48>^48^2.
+^8.'ph'r32r32r4c2^8.>r48r48<r48e2.^8.r48r48r48d4.^16r32e32'pr'^16^16<^16'ph'd16'pr'^12
+^12^12'ph'c2^8.r32r32>r12d12'pr'^12'ph'a1[[4'8v*v.59''8o'f16r48'8v*v.44'f16r48'8v*v.24'
+f16r48][4'8v*v.59''8o'g16r48'8v*v.44'g16r48'8v*v.24'g16r48]][4'8v*v.59'
+'8o'f16r48'8v*v.44'f16r48'8v*v.24'f16r48][4'8v*v.59''8o'e16r48'8v*v.44'
+e16r48'8v*v.24'e16r48]['8v*v.59''8o'f16r48'8v*v.44'f16r48'8v*v.24'f16r48
+]['8v*v.59''8o'g16r48'8v*v.44'g16r48'8v*v.24'g16r48][3'8v*v.59''8o'a16
+r48'8v*v.44'a16r48'8v*v.24'a16r48]'8v*v.44'a16r48'8v*v.29'a16r48'8v*v.08'
+a16r48;
+
+{4}
+%e1$
+'Ci' p24%a8'Co-o1''Cv*v.65'g8a8<e4.c8>a8<c8>a4f2^8e8e8f8a4.g8e8c8c4>d2.
+<g8a8<e4.e8c8d8>b4a2^8e8e8f8a4.b8a8g8e1
+
+'8i' p104r4.'8o''8v*v.65'r8e2^4.^16r48<e48'pr'^48'ph'e4.^16r16>a2.
+^8.r16d4^2^8.r24d48'pr'^2.^8.'ph'r24a48'pr'^4.^16'ph'd32'pr'^32^8<'ph'c16'pr'^16^12
+^12'ph'e12'pr'^2^8.'ph'r16>b12'pr'^12'ph'e12'pr'^1
+
+ p104[[4'8i''8v*v.59''8o'c16r48'8v*v.44'c16r48'8v*v.24'c16r48][4'8v*v.59'
+'p5'b16r48'8v*v.44'b16r48'8v*v.24'b16r48]][10'8v*v.59'a16r48
+'8v*v.44'a16r48'8v*v.24'a16r48]['8v*v.59'b16r48'8v*v.44'b16r48'8v*v.24'
+b16r48]'p6''8v*v.59'd16r48'8v*v.44'd16r48'8v*v.08'd16r48'8v*v.59'd16r48'8v*v.44'
+d16r48'8v*v.24'd16r48'8v*v.59'c+16r48'8v*v.44'c+16r48'8v*v.24'c+16r48'8v*v.44'
+c+16r48'8v*v.29'c+16r48'8v*v.08'c+16r48
+;
+
+{5}
+%e1$
+'Ci' p32%a8'Co-o1''Cv*v.65'e1c1>a1a+1<e1c2f4>e4a2<d2d4>b4<c2
+
+'8i' p104r4.'8o''8v*v.65'r12b24'pr'^2^4.^16r24<'ph'f48'pr'^4.^16r24>'ph'b48'pr'^2.
+^8.r32'ph'e32'pr'^4^2^8.'p5'r48a48'pr'^48^2.^8.'p6''ph'r48g48'pr'^48^4.^16'ph'r8a16'pr'<^8^12
+'ph'f12'pr'^12^2^8.'ph'r32c32'pr'^4^1
+
+'8i' p104[[4<'8v*v.59''8o'd16r48'8v*v.44'd16r48'8v*v.24'd16r48][4'8v*v.59'
+'8o'e16r48'8v*v.44'e16r48'8v*v.24'e16r48]][8'8v*v.59''8o'd16r48'8v*v.44'
+d16r48'8v*v.24'd16r48]['8v*v.59''8o'c16r48'8v*v.44'c16r48'8v*v.24'c16r48
+]['8v*v.59''8o'd16r48'8v*v.44'd16r48'8v*v.24'd16r48][3'8v*v.59''8o'e16
+r48'8v*v.44'e16r48'8v*v.24'e16r48]'8v*v.44'e16r48'8v*v.29'e16r48'8v*v.08'
+e16r48
+;
+
+{6} %e1$
+
+'Ci' p48'xCo-o1''xCv*v.65' l24
+bbb <ccc  [9g] ... ... eee ccc  eee
+[6c]>     [15a]                 ggg
+ggg  aaa <[9c]>        bbb ggg  eee
+[6d]      [18c]
+bbb <ccc  [9g]         aaa eee  ggg
+[6d]      [15c]>                ggg
+ggg  aaa <[9c]         ddd ccc> bbb
+[24a]
+
+'8i' p104r4.'8o''8v*v.65'r24g24'pr'^24^2^4.^16r16<r4.^16r48'ph'c48'pr'^48>^2.
+^8.'ph'g32'pr'^32^4^2^8.'p5'g48'pr'^24^2.^8.'p6''ph'e48'pr'^24^4.^16'ph'r16f16'pr'^8.<'ph'e12
+'pr'^6^2^8.'ph'd32'pr'^32^4^1
+[8r1];
+
+{7}
+%e1$
+'Ci' p24'xCo-o1''xCv*v.65' l24
+ggg aaa <[9e] ... ... ccc> aaa <ccc>
+[6a]     [15f]                  eee
+eee fff  [9a]         ggg  eee  ccc
+[6c]    >[18d]<
+ggg aaa <[9e]         eee  ccc  ddd>
+[6b]     [15a]                  eee
+eee fff  [9a]         bbb  aaa  ggg
+[24e]
+[16r1]
+;
+
+{8}
+%e1$
+'Ci' p32'xCo-o1''xCv*v.65' l24
+[24e][24c]>[24a][24a+]<
+[24e][12c][6f]>[6e][12a]<[12d][6d]>[6b]<[12c]
+[16r1]
+;

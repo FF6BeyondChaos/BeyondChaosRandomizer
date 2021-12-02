@@ -1,0 +1,269 @@
+#TITLE Cross Counter
+#ALBUM Breath of Fire II
+#COMPOSER Yuko Takehara
+#ARRANGED emberling
+
+#WAVE 0x20 0x39 overdrive
+#WAVE 0x21 0x87 brass
+#WAVE 0x22 0xC2 synth
+#WAVE 0x23 0x41 dist
+#WAVE 0x24 0x51 bass
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x4D toms
+#WAVE 0x2C 0x2D crash
+#WAVE 0x2E 0x3B hihat
+
+##prg22 = loopy crash, 2D ~@ 5G
+##prg25 = loopy hihat / 3B, 3C, 3D (3B @ 5F)
+##prg31 = kick, 0A @ A5
+##prg36 = brassy synth / C2, 83, or 81
+##prg37 = synth brass / 87, C2, or 83
+##prg39 = ebass, 51
+##prg40 = overdrive / 39, 40, 46, or E2
+##prg42 = toms, 4D @ +8
+##prg44 = snare, 1C @ D6
+##prg46 = fuzzy dist / 41, 42 or 45
+
+## pan position info -- undo vgmtrans mangling pan values
+## midi "2"   => 92 => -110 => p9
+## midi "9"   => B0 => -80  => p24
+## midi "13"  => BA => -70  => p29
+## midi "18"  => C4 => -60  => p34
+## midi "26"  => CE => -50  => p39
+## midi "34"  => D8 => -40  => p44
+## midi "70"  => F6 => -10  => p59
+## midi "85"  => 00 =>  00  => p64
+## midi "114" => 28 => +40  => p84
+## midi "117" => 32 => +50  => p89
+## midi "119" => 3C => +60  => p94
+## midi "122" => 46 => +70  => p99
+
+#def lead=  |0 'o' o5 %e1 m36,18,239
+#def brass= |1 't' o5 %e1 m24,18,207
+#def synth= |2 's' o5 %e1 m24,18,207
+#def dist=  |3 'd' o7 %e1 m
+#def bass=  |4 'b' o7 %e1 m
+
+#def lv= m36,18,239
+#def lvh= m1,18,255
+
+#def o= v80
+#def t= v92
+#def s= v72
+#def d= v96
+#def b= v64
+
+#def r= %r24^%r0
+#def r12= %r28^12%r0
+
+#def init= t179 %v-48 %b0,29 %f0,0
+
+#drum "k"= 5a  |8 p64 v88 %e0 %r0
+#drum "s"= 6d  |9 p64 v80 %e1 %r0
+#drum "t"= 6d  |9 p64 v80 %e1 %r22 k0
+#drum "u"= 6d  |9 p64 v80 %e1 %r22 k252
+#drum "c"= 5g+ |A p94 v96 %e1 %r0
+#drum "a"= 5f  |A p64 v96 %e1 %r0
+#drum "d"= 4b  |A p34 v96 %e1 %r0
+#drum "l"= 4g+ |A p9  v96 %e1 %r0
+#drum "r"= 5^                 %r26
+#drum "q"= 5^                 %r22
+
+#drum "y"= 5g |C p24 v88 %e1 %r10
+#drum "z"= 5^ %r20
+#drum "o"= 5f |E p84 v48 %e1
+
+{1}
+'init'
+## lead, brass - orig track 7
+'brass*v.638+o1' p34
+l48 &92e'r' &92f+'r' &92g'r' &92a'r'
+$## 3
+'lead*v.582' p59 l16
+##e1'lvh'^2. 'lv'ef+ga b1'lvh'^1'lv'
+e1'lvh'^2. 'lv'em6,2em3,1f+m6,2g m6,2a1'lvh'^1'lv'
+%g1 l32 a<ceg16 l2 'r'^16. %g0
+%g1 l32 cdf+a16 l2 'r'^16. %g0 ^2
+## 9, upper synth, orig track 5
+'synth*v.666' p39
+l48 &92e'r' &92f+'r' &92g'r' &92a'r'
+## 11 lead, orig track 7
+'lead*v.504' p59 l32
+e2.'lvh'^1^8'lv' %g1 m6,2e m3,1f+ m6,2g m6,2a
+m15,5 b2.'lvh'^1^8'lv'%g0%g1 m15,-5<e> m6,-2b m6,-2a m9,-3g
+m3,1 e4.'lvh'^2'lv' %g0%g1 m6,2f m6,2g m6,2a m15,5b
+<m3,1 e4'lvh'^2.'lv' %g0 m12,4f4'lvh'^2.'lv'
+m6,-2a8'lvh'^4'lv' m6,-2g8'lvh'^4 m9,-3f4'lv'
+## 19
+l4 > a+d+g+gf+  fcd+c+
+l8 m9,-3c+ >m3,1a+ m3,1b1'lvh'^1
+;
+
+{2}
+## synth 1, orig track 5
+'synth*v.638-o1' p39
+l48 &92b'r' <&92d'r' &92e'r' &92f+'r'
+$## 3 - echo, orig track 1
+'lead*v.386' p99 l16 r12
+e1'lvh'^2. 'lv'em6,2em3,1f+m6,2g m6,2a1'lvh'^1'lv'
+%g1 l32 a<ceg16 l2 'r'^16. %g0
+%g1 l32 cdf+a16 l2 'r'^16. %g0 ^3^12
+## 9 lower synth, orig track 4
+'synth*v.638-o1' p44
+l48 &92b'r' <&92d'r' &92e'r' &92f+'r'
+## 11 upper brass hits, orig track 5
+'brass*v.666+o1' p39
+[
+l4 [3 e16'r'^16] &69el64'r' l8 g'r'f+'r'
+][
+l4 [3 a16'r'^16] &69al64'r' l8 <c'r'>b'r'
+]
+## 19 brass, orig track 5
+'t*v.582' l4
+a+d+g+gf+  fcd+c+>a+8b8< c1....l16'r'
+;
+
+{3}
+## dist, orig track 3
+'dist*v.787-o2' p89 l8
+[ ee e24'r12'e dd d24'r12'd]
+$## 3
+'dist*v.787-o2' p89 l8
+[4 ee e24'r12'e dd d24'r12'd]
+[  cc c24'r12'c dd d24'r12'd]
+## 9
+[  ee e24'r12'e dd d24'r12'd]
+## 11
+[
+ [3 e e24'r12' j3 e24'r12']
+ %l1 e m15,-5e >m3,1b< m3,-1c %l0 d>b %l1 m12,4b <m12,-4d+ %l0
+][
+ [3 f f24'r12' j3 f24'r12']
+ %l1 f m15,-5f m6,2c m6,-2d %l0 ec %l1 m12,4c m9,3e %l0
+]
+## 19
+'bass*v.868-o2' p64 l64
+l24 a+8^12'r' d+8^12'r' g+8^12'r' g8^12'r'
+f+8^12'r' f8^12'r' c8^12'r' d+8^12'r'
+c+8^12'r' l64 >&21a+'r' &21b'r'<
+[3 &21cl64'r' c24l12'r' j3 c24l12'r']
+[4 <c24l12'r'> &21cl64'r']
+;
+
+{4}
+l16 ## orig track 6
+["krkrsrkr"]
+l32 "krcrcrcr arararar drdrdrdr lrlrlrlr"
+$## 3 + 9
+ "!!!o"
+l16 "k8r8srk8 r8krs8r8"
+    "krkrsrk8 r8krsrsr"
+    "k8r8srk8 r8krs8r8"
+    "krkrsrkr" l32 "krcrcrcr arardrdr"
+l16 "k8r8srk8 r8krs8r8"
+    "krkrsrk8 r8krsrsr"
+    "k8r8srk8 r8krs8r8"
+    "krkrsrkr" l32 l16 "ktut utut"
+## 11
+[ 
+l16 "krsrsrkr srsrkrsr"
+l32 "krcrcrcr crararar ardrdrdr drlrlrlr"
+l16 "krsrsrkr srsrkrsr"
+l32 "krcrardr krcrardr" l16 "ktut utut"
+]
+## 19
+l16 "k8r8krs8 r8kr"
+l32 "crcrarar drdrlrlr"
+l16 "k8r8krs8 r8kr"
+    "utututut"
+    "krkrsrk8 r8krsrkr"
+    "krkrsrkr ktututut"
+;
+
+{5}
+## bass, orig track 8
+'bass*v.868-o2' p64 l64
+[ [&21e'r' &21b'r'] [&21d'r' &21a'r'] ]
+$## 3
+'bass*v.868-o2' p64 l64
+[4 [&21e'r' &21b'r'] [&21d'r' &21a'r'] ]
+[  [&21c'r' &21g'r'] [&21d'r' &21a'r'] ]
+## 9
+[  [&21e'r' &21b'r'] [&21d'r' &21a'r'] ]
+## 11
+[4
+ [3 &21el64'r' >e24l12'r'< j3 >e24l12'r'<]
+ &21el64'r' [>e24l12'r'<] &21el64'r' >b24l12'r' &21el64'r'< e24l12'r' >&21el64'r'<
+j2,515
+]%k0
+## 19 switch to dist (orig 3)
+'dist*v.787-o3' p89 l8
+a+8l2'r'a+24'r12'a+8a+24'r12'
+b8b8<c8'r'c24'r12'
+l8 cc24'r12'>bb<
+[3 cc24'r12'c24'r12']
+[3 cc24'r12']c
+;
+
+$515 %k1]
+
+{6}
+## synth 1, orig track 5
+'synth*v.638-o1' p44
+l48 &92g'r' &92a'r' &92b'r' <&92d'r'
+$## 3 + 9 - cymbals, orig track 2
+["y12z6^8" [6 "!o o4"] "o12z24"
+ "y12z6^8" [5 "!o o4"] ^4.]
+## 11 lower brass hits, orig track 4
+'brass*v.638' p44
+[
+l4 [3 b16'r'^16] &69bl64'r' l8 <e'r'c'r'>
+]<[
+l4 [3 f16'r'^16] &69fl64'r' l8 a'r'g'r'
+]
+## 19
+"!!!o"
+["y16z8. o4o4o4o4"]
+"y12z24^4 o4o4o8"
+[4"y16z8."]
+;
+
+{7}
+## cymbals, orig track 2
+l8 "yz4.yz4." l16 [4"yz8."]
+$## 3
+[6r1]
+## 9
+r1r1
+## 11
+[ "!!!o"
+"y12z24^4 y12z24^4 y16z8. y8^12z24^2."
+"y12z24^4 y12z24^4" [5"y16z8."]
+]
+## 19 brass echo, orig 4
+'brass*v.386+o1' p44 l4
+r12
+a+d+g+gf+  fcd+c+>a+8b24
+'t*v.504' g1....l16'r'
+;
+
+{8} r12
+## echo, brass - orig track 1
+'brass*v.386+o1' p29
+l48 &92e'r' &92f+'r' &92g'r' &92a'r'
+$## 3 + 9
+[6r1]
+'synth*v.386' p99
+l48 &92e'r' &92f+'r' &92g'r' &92a'r'
+## 11
+'lead*v.386' p99 l32 
+e2.'lvh'^1^8'lv' %g1 m6,2e m3,1f+ m6,2g m6,2a
+m15,5 b2.'lvh'^1^8'lv'%g0%g1 m15,-5<e> m6,-2b m6,-2a m9,-3g
+m3,1 e4.'lvh'^2'lv' %g0%g1 m6,2f m6,2g m6,2a m15,5b
+<m3,1 e4'lvh'^2.'lv' %g0 m12,4f4'lvh'^2.'lv'
+m6,-2a8'lvh'^4'lv' m6,-2g8'lvh'^4 m9,-3f4
+## 19
+l4 > %a10 a+d+g+gf+  fcd+c+
+l8 m9,-3c+ >m3,1a+ m3,1b1'lvh'^1
+;

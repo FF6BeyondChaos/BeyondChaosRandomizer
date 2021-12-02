@@ -1,0 +1,560 @@
+#TITLE The Doom Island War
+#ALBUM Lufia and the Fortress of Doom
+#COMPOSER Yasunori Shiono
+#ARRANGED Rushlight
+
+#SHORTNAME LU1 Doom Isl. War
+
+#WAVE 0x20 0x65 ## Strings
+#WAVE 0x21 0x61 ## Harp
+#WAVE 0x22 0x64 ## Contrabass
+#WAVE 0x23 0xA1 ## Recorder
+#WAVE 0x24 0xA3 ## Bottle Blow
+#WAVE 0x25 0x53 ## Bass
+#WAVE 0x26 0x5A ## Timpani
+#WAVE 0x27 0x2D ## Crash
+
+#WAVE 0x2A 0x91 ## Oboe B6
+#WAVE 0x2B 0x92 ## Oboe F6
+#WAVE 0x2C 0x93 ## Oboe C+6
+#WAVE 0x2D 0x94 ## Oboe A5
+
+#def init= t120 %v64 %b0,50 %f0,0
+
+#def stringsBaseVol=       v96
+#def stringsEarlyVol=      'stringsBaseVol*v.72'
+#def stringsMiddleVol=     'stringsBaseVol*v.78'
+#def stringsLateVol=       'stringsBaseVol*v.82'
+#def harpEarlyVol=         v53
+#def harpEarlyFade=      v1,53 ## Keep in line with harpEarlyVol
+#def harpLateVol=          'harpEarlyVol*v1.5'
+#def contrabassVol=        v90
+#def timpaniMaxVol=        v90
+#def timpaniFade=        v1,90 ## Keep in line with timpaniMaxVol
+#def timpaniMinVol=        'timpaniMaxVol*v.2'
+#def timpaniStrikeVol=     'timpaniMaxVol*v.5'
+#def timpaniLoudStrikeVol= 'timpaniMaxVol*v.75'
+#def recorderVol=          v23
+#def bassVol=              v49
+#def oboeMiddleVol=        v56
+#def oboeLateVol=          'oboeMiddleVol*v.75'
+#def bottleVol=            v34
+#def crashVol=             v127
+
+#def contrabassSustain= %r0
+#def contrabassRelease= %r26
+
+#def strings=    |0 o5      p74 'stringsEarlyVol'   %a7        %e1 m
+#def harp=       |1 o5      p54 'harpEarlyVol'                 %e1 m
+#def oboeAdsr=                                     %r10
+#def oboe=       'oboe4' o5 p54 'oboeMiddleVol'                %e1 m
+#def contrabass= |2 o7      p64 'contrabassVol'                %e1 m
+#def bottle=     |4 o4      p54 'bottleVol'        %r10        %e1 m
+#def recorder=   |3 o4      p84 'recorderVol'                  %e1 m
+#def bass=       |5 o6      p64 'bassVol'          %r13        %e1 m
+#def timpani=    |6 o6      p64 'timpaniStrikeVol'             %e1 m
+
+## Use those macros when switching between oboe1 and oboe2, or when switching between oboe3 and oboe4.
+#def oboe1= |A 'oboeAdsr'
+#def oboe2= |B 'oboeAdsr'
+#def oboe3= |C 'oboeAdsr'
+#def oboe4= |D 'oboeAdsr'
+
+## Use those macros when switching from (oboe1 or oboe2) to (oboe3 or oboe4) or the opposite, so the octaves adjust. The 'oboe' macro starts at oboe4.
+#def upToOboe1=   'oboe1'>
+#def upToOboe2=   'oboe2'>
+#def downToOboe3= 'oboe3'<
+#def downToOboe4= 'oboe4'<
+
+#DRUM "c"= 5f+ |7 p64 'crashVol' %e0 m %y1%s2%r13
+
+{1}
+'init'
+$
+## Strings, originally channel 1
+'strings' l4
+## 1-4
+r1r1r1
+[2
+  ## 5 / 13
+  e2.
+  ## 6 / 14
+  >a2.<
+  ## 7 / 15
+  e2d8e8
+  ## 8 / 16
+  aec
+  j2
+  ## 9
+  >b<cd
+  ## 10
+  fe>b<
+  ## 11
+  c2.
+  ## 12
+  >b2.<
+]
+## 17
+>b2.
+## 18
+^4<cd
+## 19
+>a2.
+## 20
+^2.
+'stringsMiddleVol' <
+[
+  ## 21 / 29
+  fga
+  ## 22 / 30
+  g+a4.b8
+  ## 23 / 31
+  <c>bg
+  ## 24 / 32
+  c2.
+  ## 25-26 / 33-34
+  [2 ed4.g8]
+  j2
+  ## 27
+  e2.
+  ## 28
+  ^2.8
+]
+## 35
+a2.
+## 36
+^2.
+## Oboe, originally channel 7
+'oboe+o1''oboeLateVol' l4
+'upToOboe2'
+[2
+  ## 37 / 44
+  e2.
+  'downToOboe3'dc>b
+  ## 38 / 45
+  ^2<c8d8
+  ## 39 / 46
+  c2.
+  ## 40 / 47
+  'upToOboe2' e2.
+  ## 41 / 48
+  'downToOboe3'd2'upToOboe2'g
+  ## 42 / 49
+  'oboe1'a2.
+  ## 43 / 50
+  'oboe2'e2.
+]
+;
+
+
+{2}
+$
+## Harp, originally channel 2
+'harp' l8
+## 1-4
+[4 a<edeae>]
+[2
+  ## 5-6 / 13-14
+  [2 a<edeae>]
+  ## 7-8 / 15-16
+  [2 f<c>b<cfc>]
+  ## 9-10 / 17-18
+  [2 g<dcdgd>]
+  j2,219
+  ## 11-12
+  [2 ebab<e>b]
+]
+$219
+## 19
+a<edeae>
+## 20
+l16 a<ceacea<c>ea<ce>> l8
+[2
+  ## 21 / 29
+  fa<cfc>a
+  ## 22 / 30
+  eg+b<e>bg+
+  ## 23-24 / 31-32
+  [2 a<ceaec>]
+  ## 25 / 33
+  fa<cfc>a
+  ## 26 / 34
+  gb<dgd>b
+  ## 27 / 35
+  a<cecea<
+  j2
+  ## 28
+  ec>aec>a
+]
+## 36
+l16 ec+>ae<c+>aec+aec+>a l8
+[2
+  ## 37 / 45
+  f'harpLateVol'a<cfc>a
+  ## 38 / 46
+  gb<dgd>b
+  ## 39-40 / 47-48
+  [2 a<ceaec>]
+  ## 41 / 49
+  fa<cfc>a
+  ## 42 / 50
+  gb<dgd>b
+  j2,251
+  ## 43-44
+  [2 a<c+ec+ea>]
+]
+$251
+## 51
+l16 a<c+ec+eaea<c+>a<c+e
+## 52
+[3 aec+>] a8. l8
+;
+
+
+{3}
+$
+## Contrabass, originally channel 3
+'contrabass-o2'
+## 1-4
+a1^1^1
+[2
+  ## 5 / 13
+  a2.
+  ## 6 / 14
+  ^2.
+  ## 7 / 15
+  f2.
+  ## 8 / 16
+  ^2.
+  ## 9 / 17
+  g2.
+  ## 10 / 18
+  ^2.
+  j2
+  ## 11
+  e2.
+  ## 12
+  ^2.
+]
+## 19
+a2.
+## 20
+^2.
+[
+  ## 21 / 29
+  f2.
+  ## 22 / 30
+  e2.
+  ## 23 / 31
+  a2.
+  ## 24 / 32
+  ^8'contrabassRelease'^8'contrabassSustain'g8'contrabassRelease'^8'contrabassSustain'e8'contrabassRelease'^8'contrabassSustain'
+  ## 25 / 33
+  f2.
+  ## 26 / 34
+  e2.
+  ## 27 / 35
+  a2.
+  ## 28 / 36
+  ^2.
+]
+[
+  [
+    ## 37 / 41 / 45 / 49
+    f2.
+    ## 38 / 42 / 46 / 50
+    g2.
+    ## 39 / 43 / 47 / 51
+    a2.
+    j2
+    ## 40 / 48
+    ^8'contrabassRelease'^8'contrabassSustain'g8'contrabassRelease'^8'contrabassSustain'e8'contrabassRelease'^8'contrabassSustain'
+  ]
+  ## 44 / 52
+  ^2.
+]
+;
+
+
+{4}
+$
+## 1-4
+r1r1r1
+## Bottle Blow, originally channel 7
+'bottle+o1' l4
+[2
+  ## 5 / 13
+  e2.
+  ## 6 / 14
+  >a2.<
+  ## 7 / 15
+  e2d8e8
+  ## 8 / 16
+  aec
+  j2
+  ## 9
+  >b<cd
+  ## 10
+  fe>b<
+  ## 11
+  c2.
+  ## 12
+  >b2.<
+]
+## 17
+>b2.
+## 18
+^4<cd
+## 19
+>a2.
+## 20
+^2.
+## Recorder, originally channel 5
+'recorder' l4
+[2
+  ## 21 / 29
+  c2.
+  ## 22 / 30
+  ^2>b
+  ## 23 / 31
+  e2.
+  ## 24 / 32
+  ege
+  ## 25 / 33
+  a2.
+  ## 26 / 34
+  ^2g
+  ## 27 / 35
+  a2.
+  ## 28 / 36
+  ^2.<
+]
+>
+[
+  [2
+    ## 37 / 41 / 45 / 49
+    a2<c>
+    ## 38 / 42 / 46 / 50
+    b2<d
+    j2
+    ## 39 / 47
+    d2g
+    ## 40 / 48
+    e2.>
+  ]
+  ## 43 / 51
+  c+2.
+  ## 44 / 52
+  ^2.>
+]
+;
+
+
+{5}
+$
+## Bass, originally channel 6
+'bass-o2'
+## 1-4
+e1^1^1
+## 5
+e2.
+## 6
+a2.
+## 7
+f2.
+## 8
+^2.
+## 9
+g2.
+## 10
+^2.
+## 11
+e2.
+## 12
+^2.
+## 13
+a2.
+## 14
+^2.
+## 15
+f2.
+## 16
+^2.
+## 17
+g2.
+## 18
+^2.
+## 19
+a2.
+## 20
+^2.
+## 21
+## Oboe, originally channel 7
+'oboe' l4
+[
+  ## 21 / 29
+  fga
+  ## 22 / 30
+  g+a4.'oboe3'b8
+  ## 23 / 31
+  <c>b'oboe4'g
+  ## 24 / 32
+  c2.
+  ## 25-26 / 33-34
+  [2 ed4.g8]
+  j2
+  ## 27
+  e2.
+  ## 28
+  ^2.8
+]
+## 35
+a2.
+## 36
+^2.
+## Strings, originally channel 1
+'strings-o1''stringsLateVol' l4
+[2
+  ## 37 / 45
+  e2.
+  ## 38 / 46
+  dc>b
+  ## 39 / 47
+  ^2<c8d8
+  ## 40 / 48
+  c2.
+  ## 41 / 49
+   e2.
+  ## 42 / 50
+  d2g
+  ## 43 / 51
+  a2.
+  j2
+  ## 44
+  e2.
+]
+## 52
+^2.
+;
+
+
+{6}
+$
+## Timpani, originally channel 4
+'timpani-o2'
+## 1-4
+a1^1^1
+[2
+  'timpaniLoudStrikeVol'
+  ## 5 / 13
+  a2.
+  ## 6-11 / 14-19
+  [18 r4]
+  j2
+  ## 12
+  r2.
+]
+## 20
+## Spread the roll over two channels
+'timpaniMinVol' 'timpaniFade*v120,1' l16
+[12 a]
+
+
+## Bass, originally channel 6
+'bass-o2' l8
+[
+  [2
+    ## 21 / 25 / 29 / 33
+    f2.
+    ## 22 / 26 / 30 / 34
+    e2.
+    ## 23 / 27 / 31 / 35
+    a2.
+    j2
+    ## 24 / 32
+    ^8rgrer
+  ]
+  ## 28 / 36
+  ^2.
+]
+[
+  [2
+    ## 37 / 41 / 45 / 49
+    f2.
+    ## 38 / 42 / 46 / 50
+    g2.
+    ## 39 / 43 / 47 / 51
+    a2.
+    j2
+    ## 40 / 48
+    ^8rgrer
+  ]
+  ## 44 / 52
+  ^2.
+]
+;
+
+
+{7}
+$
+## Crash, originally channel 8
+## 1-4
+"c1^1^1"
+[2
+  ## 5 / 13
+  "c2."
+  ## 6-11 / 14-19
+  [18 ^4]
+  j2
+  ## 12
+  r2.
+]
+## 20
+## Timpani, originally channel 4 (half the notes of the roll)
+'timpani-o2'
+'timpaniMinVol' 'timpaniFade*v120,1' l16
+r32[11 a]a32
+## 21
+## Now playing timpani in earnest
+f2.
+## 22-27
+[18 r4]
+## 28
+## Spread the roll over two channels
+'timpaniMinVol' 'timpaniFade*v120,1' l16
+[12 a]
+## 29
+f2.
+## 30-50
+[63 r4]
+## Spread the roll over two channels
+'timpaniMinVol' 'timpaniFade*v240,1' l16
+## 51-52
+[24 a]
+;
+
+
+{8}
+$
+## 1-20
+[60 r4]
+## 21
+## Crash, originally channel 8
+"c2."
+## 22-27
+[18 ^4]
+## 28
+## Timpani, originally channel 4 (half the notes of the roll)
+'timpani-o2'
+'timpaniMinVol' 'timpaniFade*v120,1' l16
+r32[11 a]a32
+## 29
+## Crash, originally channel 8
+"!!!oc2."
+## 30-50
+[63 ^4]
+## Timpani, originally channel 4 (half the notes of the roll)
+'timpani-o2'
+'timpaniMinVol' 'timpaniFade*v240,1' l16
+r32[23 a]a32
+;

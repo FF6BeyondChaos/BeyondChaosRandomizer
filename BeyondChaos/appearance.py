@@ -6,8 +6,9 @@ from character import get_characters
 from options import Options_
 from locationrandomizer import get_npcs
 from monsterrandomizer import change_enemy_name
+from dialoguemanager import set_dialogue_var, load_patch_file
 from utils import (CHARACTER_PALETTE_TABLE, EVENT_PALETTE_TABLE, FEMALE_NAMES_TABLE, MALE_NAMES_TABLE,
-                   MOOGLE_NAMES_TABLE, RIDING_SPRITE_TABLE, SPRITE_REPLACEMENT_TABLE,
+                   MOOGLE_NAMES_TABLE, RIDING_SPRITE_TABLE, SPRITE_REPLACEMENT_TABLE, CORAL_TABLE,
                    generate_character_palette, get_palette_transformer, hex2int, name_to_bytes,
                    open_mei_fallback, read_multi, shuffle_char_hues,
                    Substitution, utilrandom as random, write_multi)
@@ -120,6 +121,44 @@ def sanitize_names(names):
     names = [name.translate(table) for name in names]
     return [name[:6] for name in names if name != ""]
 
+def sanitize_coral(names):
+    delchars = ''.join(c for c in map(chr, range(256)) if not c.isalnum() and c not in "!?/:\"'-.")
+    table = str.maketrans(dict.fromkeys(delchars))
+    names = [name.translate(table) for name in names]
+    return [name[:12] for name in names if name != ""]
+
+def manage_coral(fout):
+
+    f = open_mei_fallback(CORAL_TABLE)
+    coralnames = sorted(set(sanitize_coral([line.strip() for line in f.readlines()])))
+    f.close()
+
+    sprite_log = ""
+
+    newcoralname = random.choice(coralnames)
+    sprite_log += str("Coral: ").ljust(17) + string.capwords(str(newcoralname)) + "\n"
+    coraldescription1 = "Piece of " + newcoralname.lower() + ","
+    coraldescription2 = "found near Ebot's Rock."
+
+    load_patch_file("coral")
+    set_dialogue_var("coralsub", newcoralname)
+
+    newcoralnamebytes = name_to_bytes(newcoralname, 12)
+    coraldescription1 = name_to_bytes(coraldescription1, 24)
+    coraldescription2 = name_to_bytes(coraldescription2, 26)
+
+    coraldescription = coraldescription1 + bytes([0x01]) + coraldescription2
+
+    coral_sub = Substitution()
+    coral_sub.set_location(0xEFC08) ##change the name when opening a chest
+    coral_sub.bytestring = newcoralnamebytes
+    coral_sub.write(fout)
+
+    coral_sub.set_location(0xEFD7F) ##Change the name in the description
+    coral_sub.bytestring = coraldescription
+    coral_sub.write(fout)
+
+    return sprite_log
 
 def manage_character_names(fout, change_to, male):
     characters = get_characters()

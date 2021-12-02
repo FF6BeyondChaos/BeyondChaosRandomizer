@@ -1,0 +1,1531 @@
+#TITLE Antipyretic
+#ALBUM Final Fantasy Tactics
+#COMPOSER Hitoshi Sakimoto
+#ARRANGED Rushlight
+
+## Summary of variant characters: 
+## ~ is for stuff that's excluded only from the train variant
+## ` is for stuff that is specific to the train variant
+## _ is for stuff that's excluded only from the SFX variant
+
+#VARIANT ~_ 
+#VARIANT `_ tr
+#VARIANT ~ sfx
+
+#WAVE 0x20 0x64 ## Contrabass
+#WAVE 0x21 0x66 ## Strings
+#WAVE 0x22 0x83 ## Deep Brass
+#WAVE 0x23 0x86 ## Mellow Horn
+#WAVE 0x24 0x82 ## Trumpet
+#WAVE 0x25 0x92 ## Oboe F6
+#WAVE 0x26 ~0x84~`0x00` ## Horn, with train variant using the mellow horn instead (which is already loaded at 0x22)
+#WAVE 0x27 0x95 ## Clarinet
+
+#WAVE 0x28 0x61 ## Harp
+#WAVE 0x29 0x59 ## Pizzicato
+#WAVE 0x2A 0x2C ## Orchestra Clash
+#WAVE 0x2B 0x2D ## Crash
+#WAVE 0x2C 0x29 ## LQ Bell
+#WAVE 0x2D 0x28 ## Bell
+#WAVE 0x2E 0x5C ## Timpani
+
+## Tempo varies a lot in the latter parts of the song. It's omitted in this macro because it needs to reset at the start.
+#def init= %x240 %v40 %b0,85 %f0,0
+
+
+## Base volumes. The entire series of base volumes for any given instrument should all be changed together. We don't use macro scaling here because we're saving it for the velocity macros.
+#def contrabassBaseVol= v90
+
+## There's many different pan/baseVol combinations for strings. The names used here are a little bit arbitrary.
+## stringsBaseVol is 120. All other strings vols should be derived from that.
+#def leadStringsVol=          v98  ## stringsBaseVol*0.82
+#def lowLayerStringsVol=      v115 ## stringsBaseVol*0.96
+#def lowLayerStringsQuietVol= v71  ## stringsBaseVol*0.59
+#def supportStringsVol=       v96  ## stringsBaseVol*0.8
+#def accentStringsVol=        v90  ## stringsBaseVol*0.75 (though originally would have been 0.63)
+#def accentStringsFade=     v1,90  ## Keep this in line with accentStringsVol
+
+## deepBrassBaseVol is 75. All other deep brass vols should be derived from that. INCLUDING HORNBASEVOL IN THE TRAIN VARIANT!
+#def supportDeepBrassVol=         v72 ## deepBrassBaseVol*0.96
+#def accentDeepBrassVol=          v59 ## deepBrassBasevol*0.78
+#def backingDeepBrassVol=         v50 ## deepBrassBasevol*0.66
+#def backingDeepBrassDuoVol=      v40 ## deepBrassBasevol*0.53
+#def backingDeepBrassQuietDuoVol= v32 ## deepBrassBasevol*0.42
+
+#def hornBaseVol= ~ v80 ~ `v64` ## 64 is deepBrassBasevol*.85
+
+## mellowHornBaseVol is 100. All other mellow horn vols should be derived from that.
+#def accentMellowHornVol= v78 ## mellowHornBaseVol*0.78
+
+#def bellBaseVol= v110
+
+#def trumpetBaseVol= v40
+
+#def timpaniBaseVol=    v96
+#def timpaniBaseFade= v1,96 ## Keep in line with timpaniBaseVol
+
+#def harpBaseVol= v80
+
+## pizzicatoBaseVol is 150. All other pizzicato vols should be derived from that
+#def lowPizzicatoBaseVol=  v144 ## pizzicatoBaseVol * 0.96
+#def highPizzicatoBaseVol= v86  ## pizzicatoBaseVol * 0.57
+
+#def oboeBaseVol=    v85
+#def oboeBaseFade= v1,85 ## Keep in line with oboeBaseVol
+
+#def clarinetBaseVol=    v120
+#def clarinetBaseFade= v1,120 ## Keep in line with clarinetBaseVol
+
+## Velocity volumes. FFT mostly uses a velocity per note rather than volume variation to vary an instrument's volume throughout.
+## We'll round velocity values to the nearest multiple of 5 then apply an adjustment factor of max_volume * (velocity/126)^2
+#def contrabass_125= 'contrabassBaseVol*v.98'
+#def contrabass_120= 'contrabassBaseVol*v.91'
+#def contrabass_115= 'contrabassBaseVol*v.83'
+#def contrabass_100= 'contrabassBaseVol*v.63'
+#def contrabass_90=  'contrabassBaseVol*v.51'
+#def contrabass_85=  'contrabassBaseVol*v.46'
+#def contrabass_65=  'contrabassBaseVol*v.27'
+#def contrabass_60=  'contrabassBaseVol*v.23'
+#def contrabass_55=  'contrabassBaseVol*v.19'
+
+#def leadStrings_125= 'leadStringsVol*v.98'
+#def leadStrings_120= 'leadStringsVol*v.91'
+#def leadStrings_115= 'leadStringsVol*v.83'
+#def leadStrings_110= 'leadStringsVol*v.76'
+#def leadStrings_105= 'leadStringsVol*v.69'
+#def leadStrings_100= 'leadStringsVol*v.63'
+#def leadStrings_95=  'leadStringsVol*v.57'
+#def leadStrings_90=  'leadStringsVol*v.51'
+#def leadStrings_85=  'leadStringsVol*v.46'
+#def leadStrings_80=  'leadStringsVol*v.4'
+
+#def lowLayerStrings_125= 'lowLayerStringsVol*v.98'
+#def lowLayerStrings_120= 'lowLayerStringsVol*v.91'
+#def lowLayerStrings_115= 'lowLayerStringsVol*v.83'
+#def lowLayerStrings_110= 'lowLayerStringsVol*v.76'
+#def lowLayerStrings_105= 'lowLayerStringsVol*v.69'
+#def lowLayerStrings_100= 'lowLayerStringsVol*v.63'
+#def lowLayerStrings_95=  'lowLayerStringsVol*v.57'
+#def lowLayerStrings_90=  'lowLayerStringsVol*v.51'
+#def lowLayerStrings_85=  'lowLayerStringsVol*v.46'
+#def lowLayerStrings_80=  'lowLayerStringsVol*v.4'
+#def lowLayerStrings_75=  'lowLayerStringsVol*v.35'
+#def lowLayerStrings_55=  'lowLayerStringsVol*v.19'
+
+#def supportStrings_105= 'supportStringsVol*v.69'
+#def supportStrings_95=  'supportStringsVol*v.57'
+#def supportStrings_85=  'supportStringsVol*v.46'
+#def supportStrings_75=  'supportStringsVol*v.35'
+#def supportStrings_55=  'supportStringsVol*v.19'
+
+#def lowLayerStringsQuiet_60= 'lowLayerStringsQuietVol*v.23'
+
+#def accentStrings_125= 'accentStringsVol*v.98'
+#def accentStrings_120= 'accentStringsVol*v.91'
+#def accentStrings_115= 'accentStringsVol*v.83'
+#def accentStrings_110= 'accentStringsVol*v.76'
+#def accentStrings_105= 'accentStringsVol*v.69'
+#def accentStrings_100= 'accentStringsVol*v.63'
+#def accentStrings_95=  'accentStringsVol*v.57'
+#def accentStrings_90=  'accentStringsVol*v.51'
+#def accentStrings_80=  'accentStringsVol*v.4'
+#def accentStrings_70=  'accentStringsVol*v.31'
+#def accentStrings_60=  'accentStringsVol*v.23'
+#def accentStrings_55=  'accentStringsVol*v.19'
+#def accentStrings_50=  'accentStringsVol*v.16'
+#def accentStrings_45=  'accentStringsVol*v.13'
+#def accentStrings_40=  'accentStringsVol*v.1'
+#def accentStrings_35=  'accentStringsVol*v.08'
+#def accentStrings_30=  'accentStringsVol*v.06'
+#def accentStringsFadeTo40Lasting42=  'accentStringsFade*v42,.1'
+#def accentStringsFadeTo60Lasting42=  'accentStringsFade*v42,.23'
+#def accentStringsFadeTo105Lasting42= 'accentStringsFade*v42,.69'
+#def accentStringsFadeTo115Lasting42= 'accentStringsFade*v42,.83'  
+
+#def supportDeepBrass_125= 'supportDeepBrassVol*v.98'
+#def supportDeepBrass_120= 'supportDeepBrassVol*v.91'
+#def supportDeepBrass_110= 'supportDeepBrassVol*v.76'
+#def supportDeepBrass_100= 'supportDeepBrassVol*v.63'
+#def supportDeepBrass_90=  'supportDeepBrassVol*v.51'
+
+#def accentDeepBrass_125= 'accentDeepBrassVol*v.98'
+#def accentDeepBrass_120= 'accentDeepBrassVol*v.91'
+#def accentDeepBrass_115= 'accentDeepBrassVol*v.83'
+
+#def horn_125= 'hornBaseVol*v.98'
+#def horn_120= 'hornBaseVol*v.91'
+#def horn_115= 'hornBaseVol*v.83'
+#def horn_110= 'hornBaseVol*v.76'
+#def horn_105= 'hornBaseVol*v.69'
+#def horn_100= 'hornBaseVol*v.63'
+#def horn_95=  'hornBaseVol*v.57'
+#def horn_90=  'hornBaseVol*v.51'
+#def horn_85=  'hornBaseVol*v.46'
+#def horn_80=  'hornBaseVol*v.4'
+#def horn_70=  'hornBaseVol*v.31'
+
+#def backingDeepBrass_120= 'backingDeepBrassVol*v.91'
+#def backingDeepBrass_115= 'backingDeepBrassVol*v.83'
+#def backingDeepBrass_105= 'backingDeepBrassVol*v.69'
+
+#def backingDeepBrassDuo_110= 'backingDeepBrassDuoVol*v.76'
+#def backingDeepBrassDuo_105= 'backingDeepBrassDuoVol*v.69'
+
+#def backingDeepBrassQuietDuo_105= 'backingDeepBrassQuietDuoVol*v.69'
+#def backingDeepBrassQuietDuo_60=  'backingDeepBrassQuietDuoVol*v.23'
+
+#def accentMellowHorn_125= 'accentMellowHornVol*v.98'
+#def accentMellowHorn_120= 'accentMellowHornVol*v.91'
+#def accentMellowHorn_115= 'accentMellowHornVol*v.83'
+#def accentMellowHorn_105= 'accentMellowHornVol*v.69'
+#def accentMellowHorn_95=  'accentMellowHornVol*v.57'
+#def accentMellowHorn_85=  'accentMellowHornVol*v.46'
+#def accentMellowHorn_80=  'accentMellowHornVol*v.4'
+#def accentMellowHorn_70=  'accentMellowHornVol*v.31'
+#def accentMellowHorn_65=  'accentMellowHornVol*v.27'
+
+#def bell_115= 'bellBaseVol*v.83'
+#def bell_105= 'bellBaseVol*v.69'
+#def bell_95=  'bellBaseVol*v.57'
+#def bell_75=  'bellBaseVol*v.35'
+#def bell_70=  'bellBaseVol*v.31'
+
+#def trumpet_125= 'trumpetBaseVol*v.98'
+#def trumpet_120= 'trumpetBaseVol*v.91'
+#def trumpet_115= 'trumpetBaseVol*v.83'
+#def trumpet_110= 'trumpetBaseVol*v.76'
+#def trumpet_100= 'trumpetBaseVol*v.63'
+
+#def timpani_120= 'timpaniBaseVol*v.91'
+#def timpani_115= 'timpaniBaseVol*v.83'
+#def timpani_110= 'timpaniBaseVol*v.76'
+#def timpani_105= 'timpaniBaseVol*v.69'
+#def timpani_100= 'timpaniBaseVol*v.63'
+#def timpani_95=  'timpaniBaseVol*v.57'
+#def timpani_90=  'timpaniBaseVol*v.51'
+#def timpani_85=  'timpaniBaseVol*v.46'
+#def timpani_80=  'timpaniBaseVol*v.4'
+#def timpani_75=  'timpaniBaseVol*v.35'
+#def timpani_70=  'timpaniBaseVol*v.31'
+#def timpani_65=  'timpaniBaseVol*v.27'
+#def timpani_60=  'timpaniBaseVol*v.23'
+#def timpani_55=  'timpaniBaseVol*v.19'
+#def timpani_50=  'timpaniBaseVol*v.16'
+#def timpani_45=  'timpaniBaseVol*v.13'
+#def timpani_40=  'timpaniBaseVol*v.1'
+#def timpani_35=  'timpaniBaseVol*v.08'
+#def timpani_30=  'timpaniBaseVol*v.06'
+#def timpaniFadeTo60Lasting40=  'timpaniBaseFade*v40,.23'
+#def timpaniFadeTo60Lasting42=  'timpaniBaseFade*v42,.23'
+#def timpaniFadeTo105Lasting72= 'timpaniBaseFade*v72,.69'
+#def timpaniFadeTo90Lasting36=  'timpaniBaseFade*v36,.51'
+
+#def harp_100= 'harpBaseVol*v.63'
+#def harp_95=  'harpBaseVol*v.57'
+#def harp_90=  'harpBaseVol*v.51'
+#def harp_85=  'harpBaseVol*v.46'
+#def harp_80=  'harpBaseVol*v.4'
+
+#def lowPizzicato_70= 'lowPizzicatoBaseVol*v.31'
+
+#def highPizzicato_115= 'highPizzicatoBaseVol*v.83'
+#def highPizzicato_105= 'highPizzicatoBaseVol*v.69'
+#def highPizzicato_100= 'highPizzicatoBaseVol*v.63'
+#def highPizzicato_90=  'highPizzicatoBaseVol*v.51'
+#def highPizzicato_75=  'highPizzicatoBaseVol*v.35'
+
+#def oboe_90= 'oboeBaseVol*v.51'
+#def oboe_85= 'oboeBaseVol*v.46'
+#def oboe_80= 'oboeBaseVol*v.4'
+#def oboe_75= 'oboeBaseVol*v.35'
+#def oboe_70= 'oboeBaseVol*v.31'
+#def oboe_65= 'oboeBaseVol*v.27'
+#def oboe_60= 'oboeBaseVol*v.23'
+#def oboe_55= 'oboeBaseVol*v.19'
+#def oboe_50= 'oboeBaseVol*v.16'
+#def oboe_45= 'oboeBaseVol*v.13'
+#def oboe_40= 'oboeBaseVol*v.1'
+#def oboe_35= 'oboeBaseVol*v.08'
+#def oboe_30= 'oboeBaseVol*v.06'
+#def oboe_20= 'oboeBaseVol*v.03'
+#def oboe_10= 'oboeBaseVol*v.01'
+#def oboeFadeTo70Lasting240= 'oboeBaseFade*v240,.31'
+#def oboeFadeTo70Lasting96=  'oboeBaseFade*v96,.31'
+#def oboeFadeTo65Lasting208= 'oboeBaseFade*v208,.27'
+#def oboeFadeTo65Lasting80=  'oboeBaseFade*v80,.27'
+#def oboeFadeTo40Lasting128= 'oboeBaseFade*v128,.1'
+#def oboeFadeTo35Lasting176= 'oboeBaseFade*v176,.08'
+
+
+#def clarinet_90= 'clarinetBaseVol*v.51'
+#def clarinet_85= 'clarinetBaseVol*v.46'
+#def clarinet_80= 'clarinetBaseVol*v.4'
+#def clarinet_75= 'clarinetBaseVol*v.35'
+#def clarinet_70= 'clarinetBaseVol*v.31'
+#def clarinet_65= 'clarinetBaseVol*v.27'
+#def clarinet_60= 'clarinetBaseVol*v.23'
+#def clarinet_55= 'clarinetBaseVol*v.19'
+#def clarinet_50= 'clarinetBaseVol*v.16'
+#def clarinet_45= 'clarinetBaseVol*v.13'
+#def clarinet_40= 'clarinetBaseVol*v.1'
+#def clarinet_35= 'clarinetBaseVol*v.08'
+#def clarinet_30= 'clarinetBaseVol*v.06'
+#def clarinet_25= 'clarinetBaseVol*v.04'
+#def clarinet_20= 'clarinetBaseVol*v.03'
+#def clarinet_10= 'clarinetBaseVol*v.01'
+#def clarinetFadeTo35Lasting96= 'clarinetBaseFade*v96,.08'
+#def clarinetFadeTo20Lasting96= 'clarinetBaseFade*v192,.03'
+
+## Other instrument macros
+#def contrabassRelease= %r22
+#def contrabassSustain= %r0
+
+#def stringsQuickRelease= %r26
+#def stringsMedRelease=   %r24
+#def stringsRelease=      %r22
+#def stringsSlowRelease=  %r20
+#def stringsSustain=      %r0
+
+#def deepBrassQuickerRelease= %r30
+#def deepBrassQuickRelease=   %r26
+#def deepBrassRelease=        %r22
+#def deepBrassSustain=        %r0
+
+#def mellowHornQuickerRelease= %r30
+#def mellowHornRelease=        %r20
+#def mellowHornSustain=        %r0
+
+#def stringsNormalAttack=  %a10
+#def stringsQuickAttack=   %a13
+#def stringsInstantAttack= %a15
+
+#def bellQuickRelease=%r18
+#def bellDefaultSustain=%r11
+
+#def trumpetDecay=   %r18
+## The high held notes can be a bit grating, so make them fade away slowly
+#def trumpetSustain= %r4
+
+#def hornQuickRelease= %r26
+#def hornRelease=      %r22
+#def hornSustain=      %r0
+
+#def timpaniInstantAttack=  %a15
+#def timpaniHighRollAttack= %a12
+
+## Velocity varies a lot, so volumes will be omitted from instrument macros
+#def contrabass=      |0 o7 p54
+
+#def stringsNoAttack= |1 o5
+#def strings=         'stringsNoAttack'  'stringsNormalAttack'
+#def leadStringsPan=        p44
+#def lowLayerStringsPan=    p74
+#def accentStringsPan=      p54
+#def backingStringsPan=     p54
+
+#def deepBrass=       |2 o6
+#def supportDeepBrassPan=        p64
+#def accentDeepBrassPan=         p74
+#def hornPan=                    p54
+#def backingDeepBrassPan=        p74
+#def supportDeepBrass=        'deepBrass' 'supportDeepBrassPan'
+#def accentDeepBrass=         'deepBrass' 'accentDeepBrassPan'         %a9
+#def backingDeepBrass=        'deepBrass' 'backingDeepBrassPan'
+
+#def hornSubstituteDeepBrassAttack= %a8
+#def hornAttack=~%a15~`'hornSubstituteDeepBrassAttack'`
+#def hornFadeInAttack= %a4
+#def horn= ~|6 o5~`'deepBrass''hornSubstituteDeepBrassAttack'` 'hornPan'
+#def quickRiseHorn= ~|6 o5~`'deepBrass'` 'hornPan'
+
+#def brassPan= p64
+
+#def mellowHorn=      |3 o5
+#def accentMellowHornPan= p74
+#def accentMellowHorn='mellowHorn' 'accentMellowHornPan'
+
+#def bell=            |D o4 p74
+
+#def trumpet=         |4 o5 p64                         'trumpetDecay'
+
+#def timpani=         |E o5 p64
+
+#def harp=            |8 o5 p54
+
+#def pizzicato=       |9 o4
+#def highPizzicatoPan= p54
+#def lowPizzicatoPan=  p74
+#def highPizzicato=   'pizzicato' 'highPizzicatoPan'
+#def lowPizzicato=    'pizzicato' 'lowPizzicatoPan'
+
+#def oboe=  |5 o4 %a10
+#def softWindRight=  p74
+#def softWindCenter= p64
+#def softWindLeft=   p54
+
+#def clarinet= |7 o5
+
+#def crashVol=    v127
+#def revCrashVol= 'crashVol*v.85'
+## As tempo slows down, the timing for reverse cymbals changes... so we'll use several different macros
+## These macros all last a measure, but each is timed so that the attack roughly reaches its peak after that one measure
+#def reverseCymbal= |B o5 p64 'revCrashVol' %a2 d2.%a1^4
+#def lateReverseCymbal= |B o5 p64 'revCrashVol' %a2 d4.%a1^2^8
+
+#def crash='crashVol' %a15 d1
+
+#def clashVol=    v127
+#def lowClashVol= 'clashVol'
+#DRUM "o"= 5g+ |A 'clashVol'    p64 %r15
+#DRUM "p"= 5g+ |A 'clashVol'    p64 %r17 ## For when we have only half a measure
+#DRUM "l"= 3d  |A 'lowClashVol' p64 
+
+#def triangleVol= v25
+#DRUM "t"= 8g |C 'triangleVol'  p64 %r16
+
+{1}
+'init'
+$
+%e1
+t139
+## Support Deep Brass Low Note, originally channel 16 or 17
+'supportDeepBrass+o1' 'supportDeepBrass_125'
+c16r2...
+## 2
+r8
+[3
+  j3
+  ## 2 / 7 (at beat 1.5)
+  ## Lead strings, originally channels 2-3
+  'strings-o1' 'leadStringsPan' 'leadStrings_125' l8
+  gg+<e-d>f<c>e-16~'stringsRelease'^16~`r16`
+  ## Measures 3 and 8 are different, so fork here then reconvene for 4/9 which are identical
+  j2,108
+  ## 3
+  ## Low bell, originally channel 9
+  'bell-o1' 'bell_95' l4
+  gcde-
+  j1,104
+  $108
+  ## 8
+  ## Accent Deep Brass, originally channel 9
+  'accentDeepBrass-o1' 'accentDeepBrass_120' l8
+  rgg+<e-16r16df16r16ce-16r16
+  $104
+  ## 4 / 9
+  ## Support Deep Brass Low Note, originally channel 16 or 17
+  'supportDeepBrass+o1' 'supportDeepBrass_125' l8
+  c16r16
+  ## Lead strings, originally channels 2-3
+  'strings-o1' 'leadStringsPan' 'leadStrings_125'
+  gg+<e-f>b-<cg
+  j2
+  ## 5
+  g+e-f<d'leadStrings_110'e-2
+  ## 6
+  ^2'leadStrings_125'd4..~'stringsRelease'^16~`r16`>>
+  ## 7
+  ## Support Deep Brass Low Note, originally channel 16 or 17
+  'supportDeepBrass+o1' 'supportDeepBrass_125'
+  c16r16
+]
+## 10
+g+e-f<d'leadStrings_110'e-4..~'stringsRelease'^16~`r16`
+## 11
+## Percussions, originally channel 13
+'reverseCymbal'
+## 12
+'crash'
+[2
+  ## 13 / 18
+  ## Support Deep Brass Low Note, originally channel 16 or 17
+  'supportDeepBrass+o1' 'supportDeepBrass_125'
+  e-16r16
+  'strings-o1' 'leadStringsPan'
+  'leadStrings_125'
+  b-b<f+f>g+<e->f+
+  ## Measures 14 and 19 are different, so fork here then reconvene for 15/20 which are identical
+  j2,119
+  ## 3
+  ## Low bell, originally channel 9
+  'bell-o1' 'bell_95' l4
+  b-e-ff+
+  j1,115
+  $119
+  ## 19
+  ## Accent Deep Brass, originally channel 9
+  'accentDeepBrass-o1' 'accentDeepBrass_120' l8
+  rb-b<f+16r16fg+16r16e-f+16r16
+  $115
+  ## 15 / 20
+  ## Support Deep Brass Low Note, originally channel 16 or 17
+  'supportDeepBrass+o1' 'supportDeepBrass_125' l8
+  e-16r16
+  ## Lead strings, originally channels 2-3
+  'strings-o1' 'leadStringsPan' 'leadStrings_125'
+  b-b<f+g+c+e-b-
+  j2
+  ## 16
+  bf+g+<f'leadStrings_110'f+2
+  ## 17
+  ^2'leadStrings_125'f4..~'stringsRelease'^16~`r16`>>
+]
+## 21
+l8
+bf+g+<f'leadStrings_110'f+2
+## 22
+'stringsRelease'^4.'stringsSustain'
+%g1 l32 'stringsInstantAttack'
+>g+b-b<c+'leadStrings_120'e-'leadStrings_110'f'leadStrings_105'f+'stringsQuickAttack'g+24 %g0 'leadStrings_110'b-24'leadStrings_115'b24<'leadStrings_120''stringsNormalAttack'c+16'leadStrings_125'e-16f16f+16.
+## 23
+## Accent Strings, originally channels 4-6... but they seem to take over the lead for 4 measures
+'accentStringsPan' l4
+'accentStrings_115'f+e-g+f+8'accentStrings_105'f8
+## 24
+f+2.'stringsRelease'^4'stringsSustain'
+## 25
+'accentStrings_115'g+>b<b-g+8'accentStrings_105'f+8
+## 26
+g+2.'stringsRelease'^4'stringsSustain'
+## 27
+## Lead strings, originally channels 2-3
+'leadStringsPan'
+>'leadStrings_120'bg+<c+>b8b-8
+## 28
+b<e-ee-8c+8
+## 29
+'leadStrings_100'c+>b'leadStrings_95'b-g+
+## 30
+'leadStrings_90'f+ee-c+
+## 31
+'leadStrings_80'e-1
+## 32
+'stringsRelease'^1'stringsSustain'
+## 33
+r1
+## 34
+r2.>b-4
+## 35
+l8 'leadStrings_70'<f+2.'leadStrings_85'ff+
+## 36
+'leadStrings_70'g+4'leadStrings_85'f+f'leadStrings_70'f+4b-4
+## 37
+b4'leadStrings_85'b-g+'leadStrings_70'b-4<f4
+## 38
+'leadStrings_80'f4'leadStrings_70'>g+4<'leadStrings_60'e-2
+## 39
+^4'leadStrings_85'c+>b'leadStrings_70'b4'leadStrings_85'b-g+
+## 40
+b-4e-b-g+2
+## 41
+^4'stringsRelease'^4'stringsSustain'e-4g+4
+## 42
+b-4e-b-g+2
+## 43
+^2f+4f4
+## 44
+f+1
+## 45
+t139
+f4c+4>g+2
+## 46
+t129
+f+4'leadStrings_100'g+8b-8'leadStrings_70'e-2
+## 47
+>b2<c+2
+## 48
+e-1
+## 49
+'stringsRelease'^4.'stringsSustain'
+%g1 l32 'stringsInstantAttack'
+'leadStrings_125'g+'leadStrings_120'b-'leadStrings_115'b<c+
+t110
+'leadStrings_110'e-'leadStrings_100'e'leadStrings_90'f+'leadStrings_85''stringsQuickAttack'g+24 %g0'leadStrings_95'b-24'leadStrings_100'b24'leadStrings_105''stringsNormalAttack'<c+32
+t98
+^32'leadStrings_115'e-16'leadStrings_120'e32
+t63
+^32f+16.
+## 50
+t108
+'leadStrings_120'>g+4e-4
+t113
+b-4
+t118
+g+8f+8
+## 51
+'leadStrings_105'g+2^4.'stringsRelease'^8'stringsSustain'
+## 52
+'leadStrings_120'g+4e4b-4g+8f+8
+## 53
+'leadStrings_105'g+2^4.'stringsRelease'^8'stringsSustain'
+## 54
+t116
+'leadStrings_115'<c+4.>b8a8g+8f+8e8
+## 55
+t112
+'leadStrings_105'b4.'leadStrings_95'a8
+t108
+g8f+8
+t99
+e8d8
+## 56
+t113
+'leadStrings_80'f+4
+t126
+^2.
+## 57
+'stringsRelease'^1
+## 58
+r2.
+t118
+r4
+## 59
+## Percussions, originally channel 13
+|B o5 p64 'revCrashVol'
+## We can't use a reverse cymbal macro because we need to break it up, to insert tempo changes every beat
+%a2d4
+t108
+%a1^4
+t104
+^4
+t85
+^4
+
+;
+
+
+{2}
+$
+%e1
+## High Bell, originally channel 14
+'bell' 'bell_105' l4
+r64 c1
+## 2 (one 64th note in)
+r1
+## 3 (one 64th note in)
+'bell_75' gcde-
+## 4 (one 64th note in)
+'bell_95' c1
+## 5 (one 64th note in)
+^4 'bell_75' de-g
+## 6 (one 64th note in)
+<fgg+b->
+## 7 (one 64th note in)
+'bell_95' c1
+## 8 (one 64th note in)
+gcde-
+## 9 (one 64th note in)
+'bell_115' c4.^2^16..
+## 10
+## Alternate strings (using the same config as low layer strings), originally channels 7-8
+'strings' 'lowLayerStringsPan' 'lowLayerStrings_125' l8
+c>'lowLayerStrings_115'gg+b-'lowLayerStrings_125'cgfb-
+## 11
+g+e-f<d>cg16~'stringsQuickRelease'^16'stringsSustain'~`r16`fb-16~'stringsQuickRelease'^16'stringsSustain'~`r16`
+## 12
+g+<e-16~'stringsQuickRelease'^16'stringsSustain'~`r16`cf16~'stringsQuickRelease'^16'stringsSustain'~`r16`>b-<f16~'stringsQuickRelease'^16'stringsSustain'~`r16`fb-16~'stringsQuickRelease'^16~`r16`
+## 13
+## High Bell, originally channel 14
+'bell' 'bell_95' r64 l4 e-1
+## 14 (one 64th note in)
+'bell_75' b-e-ff+
+## 15 (one 64th note in)
+'bell_95' e-1
+## 16 (one 64th note in)
+^4'bell_75'ff+b-
+## 17 (one 64th note in)
+<g+b-b<c+>
+## 18 (one 64th note in)
+>'bell_95' e-1
+## 19 (one 64th note in)
+b-e-ff+
+## 20 (one 64th note in)
+'bell_115' e-4.^2^16..
+## 21
+## Alternate strings (using the same config as low layer strings), originally channels 7-8
+'strings''lowLayerStringsPan' 'lowLayerStrings_125' l8
+e-'lowLayerStrings_115'>b-b<c+'lowLayerStrings_125'>e-b-g+<c+
+## 22
+>bf+g+<ff+2
+## 23
+'lowLayerStrings_115'^2f2
+## 24
+e-4.~'stringsQuickRelease'^8'stringsSustain'~`r8`e-8~'stringsQuickRelease'^8'stringsSustain'~`r8`c+8~'stringsQuickRelease'^8'stringsSustain'~`r8`
+## 25
+>b2e2
+## 26
+^8~'stringsQuickRelease'^8'stringsSustain'~`r8`<e8~'stringsQuickRelease'^8'stringsSustain'~`r8`e8~'stringsQuickRelease'^8'stringsSustain'~`r8`e-4
+## 27
+c+2.~'stringsQuickRelease'^4'stringsSustain'~`r4`
+## 28
+l4
+'lowLayerStrings_120'g+b<c+>b8b-8
+## 29
+<'lowLayerStrings_100'b-g+'lowLayerStrings_95'f+e
+## 30
+'lowLayerStrings_90'e-c+>bb-
+## Harp, originally channels 4-6
+[4
+  ## 31 / 33 / 35 / 37
+  'harp-o2' 'harp_90' l8
+  e-b-<b-b<f+c+e-b-
+  j2,234
+  j3,236
+  j4
+  ## 32
+  >>e-b-<<ff+<c+>g+b-<f
+]
+## 38
+>>e-b-<<ff+<e->g+b-<f+
+## 39
+>>>e-b-<<g+>b<g+e-fb-
+[2
+  ## 40 / 42
+  >>e-b-<<e-f+ j3 <c>g+<ce-
+  ## 41 / 43
+  >>>e-<c<g+ce-ce-<c>
+]
+## 44
+>>e-b-<e-<f+>b<e-f+b
+## 45
+c+>c+fg+<c+g+<c+g+
+## 46
+## Low Oboe, originally channels 10-11
+'oboe''softWindLeft'
+'oboe_55'b2^8r8'oboe_85'b8<c+8
+## 47
+e-4>b4<f4e-8c+8
+## 48
+## Accent Mellow Horn, originally channels 10-11
+'accentMellowHorn'
+'accentMellowHorn_125'f+4e-4g+4f+8f8
+## 49
+f+4b-4b4b-8g+8
+## 50
+~'mellowHornRelease'^4~`r4`
+## Horn, originally channels 10-11
+'quickRiseHorn-o1' l64
+'horn_125'g+8^32 %g1 'horn_105'f+g+'horn_115'b-b'horn_120'<c+e-e4.%g0r8 `'hornAttack'`
+## 51
+e8 e-16r16e-16r16 c+16r16c+16r16 >b16r16b-16r16f+16r16
+## 52
+r4g+8^32 %g1 `%a15` 'horn_105'b-b'horn_115'<c+'horn_120'e-ef+g+4.%g0r8 `'hornAttack'`
+## 53
+g+8f+16r16f+16r16 e16r16e16r16 e-16r16e-16r16 c+16r16
+## 54
+## Play high note from Horn chord
+'horn_105'c+2.r4
+## 55
+## Mellow Horn High Note, originally channels 10-11
+'accentMellowHorn'
+'accentMellowHorn_85'[2 g4.~'mellowHornRelease'^8'mellowHornSustain'~`r8`]
+## 56
+'accentMellowHorn_65'>f+2.~'mellowHornRelease'^4'mellowHornSustain'~`r4`
+## 57
+g4.~'mellowHornRelease'^8'mellowHornSustain'~`r8`<d4.~'mellowHornRelease'^8'mellowHornSustain'~`r8`
+## 58
+'accentMellowHorn_85'e2.~'mellowHornRelease'^4'mellowHornSustain'~`r4`
+## 59
+'accentMellowHorn_105'a2.~'mellowHornRelease'^4'mellowHornSustain'~`r4`
+
+;
+
+
+$234
+## 34
+ff+<c+>g+b-<fcg+
+]## Then back to the loop for measure 35
+
+$236
+## 36
+>>e-b-<<ff+<c+>f+b-<e-
+]## Then back to the loop for measure 37
+
+
+{3}
+$
+%e1
+## Contrabass, originally channel 1
+'contrabass-o1' 'contrabass_125'
+## 1 through 11
+[44  c12 'contrabassRelease'^6'contrabassSustain']
+## 12
+> [4 b-12'contrabassRelease'^6'contrabassSustain']
+## 13 through 21
+< [36 e-12'contrabassRelease'^6'contrabassSustain']
+## 22
+>[4 b12'contrabassRelease'^6'contrabassSustain']
+## 23
+'contrabass_90'g+1
+## 24
+'contrabassRelease'^4'contrabassSustain''contrabass_115' [2 g+8'contrabassRelease'^8'contrabassSustain'] f+8'contrabassRelease'^8'contrabassSustain'
+## 25
+'contrabass_90'e1
+## 26
+'contrabassRelease'^4'contrabassSustain''contrabass_115'<[2 e8'contrabassRelease'^8'contrabassSustain'] e-8'contrabassRelease'^8'contrabassSustain'
+## 27
+'contrabass_85'c+1
+## 28
+^2'contrabassRelease'^4'contrabassSustain''contrabass_100'c+4
+## 29-30
+^8.'contrabassRelease'^4^16'contrabassSustain''contrabass_115' [3 c+8. 'contrabassRelease'^4^16'contrabassSustain']
+## Low Pizzicato, originally channel 1
+'lowPizzicato-o2' 'lowPizzicato_70'
+## 31-44
+[14 e-1]
+## 45
+## Contrabass, originally channel 1
+'contrabass-o1''contrabass_65'c+1
+## 46
+>b1
+## 47
+b4..'contrabassRelease'^16'contrabassSustain'b-2
+## 48
+g+1
+## 49
+f+1
+## 50
+'contrabass_80'e1
+## 51
+'contrabassRelease'^4'contrabassSustain''contrabass_115'<[2 e8'contrabassRelease'^8'contrabassSustain'] 'contrabass_125'e-8'contrabassRelease'^8'contrabassSustain'
+## 52
+'contrabass_85'c+1
+## 53
+'contrabassRelease'^4'contrabassSustain''contrabass_115'[2 c+8'contrabassRelease'^8'contrabassSustain'] 'contrabass_125'>b8'contrabassRelease'^8'contrabassSustain'
+## 54
+'contrabass_90'a2.^16'contrabassRelease'^8.'contrabassSustain'
+## 55
+<c2.^16'contrabassRelease'^8.'contrabassSustain'
+>'contrabass_115'
+## 56-59
+[16 b12 'contrabassRelease'^6'contrabassSustain']
+
+;
+
+
+{4}
+$
+%e1
+## Percussions, originally channel 13
+[4
+  j4
+  ## 1 / 4 / 7
+  "o1"
+  j2,105
+  ## 2 / 8
+  r1
+  ## 3 / 9
+  r2
+  j1,103
+  j3,103
+  $105
+  ## 5
+  ## Low bell, originally channel 9
+  'bell-o1' 'bell_95' l4
+  rde-g
+  ## 6
+  <fg
+  ## 3 / 6 / 9 (at beat 3)
+  $103
+  ## Accent Strings, originally channels 4-6
+  'stringsNoAttack-o1' 'accentStringsPan' l32 'stringsInstantAttack' %g1
+  ## For this quick rise, we'll increase velocity by 10 across the board (vs original)
+  'accentStrings_110''accentStringsFadeTo40Lasting42'b-<cde-fgg+b-'accentStringsFadeTo105Lasting42'<c+de-ff+g+b-<c  
+  %g0
+]
+## 10 - Staying with accent strings and cutting out the first mellow horn note, because it gets buried and is basically inaudible anyway
+^32r16.
+## Accent Mellow Horn, originally channel 9
+'accentMellowHorn-o1' l8
+'accentMellowHorn_120'gg+b-<cgfb-
+## 11
+g+e-f<de-2
+## 12
+^2d2
+## 13
+## Percussions, originally channel 13
+"!!!oo1"
+## 14
+r2
+[3
+  ## 14 / 17 / 20 (at beat 3)
+  ## Accent Strings, originally channels 4-6
+  'stringsNoAttack' 'accentStringsPan' l32 'stringsInstantAttack' %g1
+  ## For this quick rise, we'll increase velocity by 10 across the board (vs original)
+  'accentStrings_115''accentStringsFadeTo60Lasting42'c+e-ff+g+b-b<c+'accentStringsFadeTo115Lasting42'e-ff+g+b-b<c+
+  j3
+  e-
+  %g0
+  ## 15 / 18
+  "!!!oo1"
+  j1,416
+  ## 19
+  r1
+  ## 20
+  r2
+]
+## 20 (last 32nd note)
+%g0 r32
+## 21
+## Trumpet, originally channel 12
+'trumpet+o1' l8 'trumpet_125' bf+16r16g+16r16<f16r16'trumpet_110''trumpetSustain'f+2
+## 22
+'reverseCymbal'
+## 23
+"!!!op2"
+## Horn, originally channels 10-11 (but we're using deep brass).
+## Since we skipped the first note, we'll try fading the second note in...
+'horn''hornFadeInAttack''horn_120'c+4.r8'hornAttack'
+## 24
+e-4.r8f4.r8
+## 25
+e4.r8f+4.r8
+## 26
+g+4.r8b-4.r8
+## 27
+e2>b2
+## 28
+g+2e2
+## 29
+r4 'horn_85'e4^16r8. 'horn_80'e4
+## 30
+^16r8. 'horn_70'e4^16r8.e8.r16
+## 31
+## High Oboe, originally channels 10-11
+'oboe+o1''softWindLeft'l12
+'oboe_35''oboeFadeTo65Lasting208'[6 ff+]
+## 32
+g+'oboeFadeTo35Lasting176'b-[5 g+b-]
+## 33
+f'oboeFadeTo65Lasting80'f+ff+ff+f'oboe_55'f+g+'oboe_70'b-'oboe_55'e-g+
+## 34
+'oboe_75'f'oboe_65'f+f
+## High Clarinet, originally channels 10-11
+'clarinet+o1'
+'clarinet_70'c+>g+b-'clarinetFadeTo35Lasting96'ff+g+b-<cc+
+## 35
+## Support Strings, originally channels 7-8 (but using low layer strings' pan)
+'strings-o1''lowLayerStringsPan' l2
+'supportStrings_75'b-1
+## 36
+'supportStrings_95'bb-
+## 37
+<c+c
+## 38
+'supportStrings_55'g+1
+## 39
+^1
+## 40
+'supportStrings_85'f+4~'stringsRelease'^4'stringsSustain'~`r4`'supportStrings_75'e-
+## 41
+^4~'stringsRelease'^4'stringsSustain'~`r4`'supportStrings_95'>g+
+## 42
+'supportStrings_105'b-4~'stringsRelease'^4'stringsSustain'~`r4`'supportStrings_95'<e-
+## 43
+^4~'stringsRelease'^4'stringsSustain'~`r4`'supportStrings_55'>g+
+## 44
+'supportStrings_75'f+1
+## 45
+g+1
+## 46-49
+'harp+o1' l8
+[4 'harp_95'e-'harp_80'<e-4e-4'harp_95'e->e-'harp_80'<e->]
+## 50
+## Percussions, originally channel 13
+"!!!oo1"
+## 51
+r1
+## 52
+r1
+## 53
+'lateReverseCymbal'
+## 54
+'crash'
+## 55
+r1
+## 56
+## High Bell, originally channel 14
+'bell'r64
+'bell_95'b1
+## 57 (one 64th note in)
+'bell_70'<f+4>b4<c+4d4
+## 58 (one 64th note in)
+e1
+## 59 (one 64th note in)
+r2^4....
+
+;
+
+
+$416
+## 16
+## Low bell, originally channel 9
+'bell-o1' 'bell_95' l4
+rff+b-
+## 17
+<g+b-
+] ## Then back to the loop for the second half of measure 17
+
+
+{5}
+$
+%e1
+## Low Bell, originally channel 9
+'bell-o1' 'bell_115' c1
+## 2
+r8
+[2
+  ## 2 / 7 (at beat 1.5)
+  ## Trumpet, originally channel 12
+  'trumpet' l8
+  'trumpet_110'gg+<'trumpet_125'e-16r16d>f16r16<c>e-16r16
+  ## 3 / 8
+  r2
+  ## Low Layer Strings High Note, originally channel 7 or 8
+  'strings' 'lowLayerStringsPan' 'lowLayerStrings_125' d16'stringsSlowRelease'^8'stringsSustain'r4^16>
+  ## 4 / 9
+  ## Low Bell, originally channel 9
+  'bell-o1' 'bell_115' 'bellQuickRelease' c8
+  ## Trumpet, originally channel 12
+  'trumpet' l8
+  'trumpet_120'gg+<e-f>b-16r16<c16r16g16r16
+  ## 5 / 10
+  g+e-16r16f16r16<d'trumpetSustain''trumpet_100'e-2
+  j2
+  ## 6
+  ^2'trumpet_120'd2
+  ## 7
+  ## Low Bell, originally channel 9
+  'bell-o1' 'bell_115' 'bellQuickRelease' c8
+]
+## 11
+'trumpetDecay'>> r2'trumpet_125'
+cg16r16fb-16r16
+## 12
+g+<e-16r16cf16r16>b-16r16<f16r16f16r16b-16r16
+[2
+  ## 13 / 18
+  ## Low Bell, originally channel 9
+  'bell-o1' 'bell_115' 'bellQuickRelease' e-8
+  ## Trumpet, originally channel 12
+  'trumpet' l8 'trumpet_125'b-b<f+16r16f>g+16r16<e->f+16r16
+  ## 14 / 19
+  r2
+  ## Low Layer Strings High Note, originally channel 7 or 8
+  'strings' 'lowLayerStringsPan' 'lowLayerStrings_125' f16'stringsSlowRelease'^8'stringsSustain'r4^16>
+  ## 15 / 20
+  ## Low Bell, originally channel 9
+  'bell-o1' 'bell_115' 'bellQuickRelease' e-8
+  ## Trumpet, originally channel 12
+  'trumpet' l8 'trumpet_125'b-b<f+16r16g+c+16r16e-16r16b-16r16
+  j2
+  ## 16 / 21
+  bf+16r16g+16r16<f16r16'trumpet_110''trumpetSustain'f+2
+  j2
+  ## 17
+  ^2'trumpet_125'f2
+]
+## 21
+## Accent Mellow Horn, originally channel 9
+'accentMellowHorn' 'accentMellowHorn_120' l8
+e->b-b<c+e-b-g+<c+
+## 22
+>bf+g+<f'accentMellowHorn_95'f+2
+## 23
+^2'accentMellowHorn_115'f2
+## 24
+e-4.~'mellowHornRelease'^8'mellowHornSustain'~`r8`c+4.~'mellowHornRelease'^8'mellowHornSustain'~`r8`
+## 25
+>b4.~'mellowHornRelease'^8'mellowHornSustain'~`r8`b-4.~'mellowHornRelease'^8'mellowHornSustain'~`r8`
+## 26
+g+4.~'mellowHornRelease'^8'mellowHornSustain'~`r8`f+4.~'mellowHornRelease'^8'mellowHornSustain'~`r8`
+## 27
+e2e-2
+## 28
+>b2g+2
+## 29
+~'mellowHornRelease'^4'mellowHornSustain'~`r4`'accentMellowHorn_85'g+4^16~'mellowHornRelease'^8.'mellowHornSustain'~`r8.`'accentMellowHorn_80'g+4
+## 30
+^16~'mellowHornRelease'^8.'mellowHornSustain'~`r8.`'accentMellowHorn_70'g+4^16~'mellowHornRelease'^8.'mellowHornSustain'~`r8.`g+4
+## 31
+## Low Oboe, originally channels 16-17
+'oboe+o1''softWindCenter'l12
+'oboe_40''oboeFadeTo70Lasting240'[6 c+e-]
+## 32
+ff+f'oboeFadeTo40Lasting128'f+ [4ff+]
+## 33
+'oboeFadeTo70Lasting96'c+e-c+e-c+e-c+'oboe_55'e-f'oboe_75'f+'oboe_60'>b-<f
+## 34
+'oboe_80'c+'oboe_65'e-c+
+## Low Clarinet, originally channels 16-17
+'clarinet+o1'
+'clarinet_75'>ff+g+'clarinetFadeTo20Lasting96'c+e-ff+g+b-
+## 35
+## Switching to High Clarinet, originally channels 10-11. Although we're switching original channels, the decrescendo is consistent and can continue.
+'softWindLeft'
+[2 b-<cc+>] r2
+## 36
+r1
+## 37
+r1
+## 38
+## Backing Strings, originally channels 10-11 (but using the volume of low layer strings)
+'strings''backingStringsPan'
+'lowLayerStrings_80'c1
+## 39
+>b1
+## 40
+b-4~'stringsRelease'^4'stringsSustain'~`r4`g+2
+## 41
+^4~'stringsRelease'^4'stringsSustain'~`r4`'lowLayerStrings_100'c2
+## 42
+## Contrabass, originally channels (10-11)
+'contrabass-o2'
+'contrabass_120'e-4~'contrabassRelease'^4'contrabassSustain'~`r4`>g+2
+## 43
+~^4'contrabassRelease'~`r4`^4
+## Backing Strings, originally channels 10-11 (but using the volume of low layer strings)
+'strings-o1''backingStringsPan'
+'lowLayerStrings_55'c2
+## 44
+'lowLayerStrings_75'>b1
+## 45
+~'stringsRelease'^4~`r4`
+## Backing Clarinet, originally channels 16-17
+'clarinet''softWindCenter' l8
+'clarinet_80'f<c+>b4'clarinet_70'b-4
+## 46
+f+4'clarinet_85'g+8b-8'clarinet_60'e-1
+## 47 (at beat 3)
+f2
+## 48
+b1
+## 49
+## Percussions, originally channel 13
+'lateReverseCymbal'
+## 50
+r1
+## 51
+r4
+## Brass, originally channels 16-17, but we'll use a horn
+'horn' 'brassPan' l16
+'horn_95'erf+rg+r8.b-r8.
+## 52
+b4'horn_80'g+4r2
+## 53
+r4
+'horn_115'g+rb-r'horn_95'b4<c+4
+## 54
+## Horn Low Note, originally channels 10-11
+'hornPan''horn_105'>>g+2.r4
+## 55
+## Mellow Horn Low Note, originally channels 10-11
+'accentMellowHorn'
+'accentMellowHorn_85'e4.~'mellowHornRelease'^8'mellowHornSustain'~`r8`>b4.~'mellowHornRelease'^8'mellowHornSustain'~`r8`
+## 56
+## Low bell, originally channel 12
+'bell-o1'
+'bell_95'b1
+## 57
+'bell_70'<f+4>b4<c+4d4
+## 58
+e1
+## 59
+r1
+
+;
+
+
+{6}
+$
+%e1
+[4
+  ## 1 / 4 / 7 / 9
+  ## Support Deep Brass High Note, originally channel 16 or 17
+  'supportDeepBrass+o1' 'supportDeepBrass_125'
+  f16r2...>>>
+  ## Continue playing Support Deep Brass as a whole, originally channels 16-17
+  j2,605
+  j4
+  ## 2 / 8
+  ## The low notes don't come out enough, so use a higher velocity than the original's 90
+  'supportDeepBrass_110'c2.r4
+  j3,609
+  ## 3
+  r1
+  $609
+]
+## 10
+## Accent Strings low note, originally a channel between 4 and 6
+'strings' 'accentStringsPan' 'accentStrings_120' c16~'stringsRelease'^8.~`r8.`
+## High Bell, originally channel 14
+'bell' 'bell_115' l4 r64 de-g
+## 11 (one 64th note in)
+<fgg+b-8...
+## 12
+r1
+[4
+  ## 13 / 15 / 18 / 20
+  ## Support Deep Brass High Note, originally channel 16 or 17
+  'supportDeepBrass+o1' 'supportDeepBrass_125'
+  g+16r2...>>>
+  ## Continue playing Support Deep Brass as a whole, originally channels 16-17
+  j2,616
+  j4
+  ## 14 / 19
+  ## The low notes don't come out enough, so use a higher velocity than the original's 90
+  'supportDeepBrass_110'e-2.r4
+]
+## 21
+## Accent Strings low note, originally a channel between 4 and 6
+'strings+o1' 'accentStringsPan' 'accentStrings_120' e-16r8.
+## High Bell, originally channel 14
+'bell''bell_95' l4 r64ff+b-
+## 22 (one 64th note in)
+<g+b-b<c+8...
+## 23
+l2 'bell_115'>f+f
+## 24
+e-c+
+## 25
+>bb-
+## 26
+g+f+
+## 27 through 30
+r1r1r1r1
+## 31
+## Percussions, originally channel 13
+"!!!ol1"
+## 32 through 34
+r1r1r1
+## Triangle, originally channel 13
+## 35 through 40
+[6 "!!!ot2." j6 ^4]
+[2
+  ## 40 / 42 (at beat 4)
+  ## Bell, originally channels 12 and 14
+  'bell+o1' l4
+  'bell_75' e-
+  ## 41 / 43
+  <e->e-^2
+  ## 42 / 44
+  ## Triangle, originally channel 13
+  "!!!ot2."
+]
+## 44 (at beat 4)
+^4
+## 45
+"!!!ot1"
+## 46
+## High Oboe, originally channels 7-8
+'oboe+o1''softWindRight'
+'oboe_55'e-2^8r8'oboe_80'e-8f8
+## 47
+f+4e-4g+4f+8f8
+## 48
+f+2.r4
+## 49
+## Backing Deep Brass, originally chanels 7-8
+'backingDeepBrass-o1'
+'backingDeepBrass_105'f+4'backingDeepBrass_115'b-4b4'backingDeepBrass_105'b-8g+8
+## 50
+## Backing Deep Brass High Note, originally channels 7-8
+l16
+## Original song's volume is lower, but it plays a chord here and we don't have the second note, so play higher volume to compensate
+'backingDeepBrass_110'g+1
+## 51
+^16r8.g+r8.g+r8.b-r8.
+## 52
+b1
+## 53
+r4br8.br8.<c+r8.
+## 54
+## Now the second note comes in, so stop playing a higher volume
+'backingDeepBrassQuietDuo_105' c+4.r8>g+4<e4
+## 55
+e4.r8e4.r8
+## 56
+## Accent Mellow Horn Low Note, originally channels 10-11
+'accentMellowHorn-o2'
+'accentMellowHorn_65'b2.~'mellowHornRelease'^4'mellowHornSustain'~`r4`
+## 57
+b4.~'mellowHornRelease'^8'mellowHornSustain'~`r8`<g4.~'mellowHornRelease'^8'mellowHornSustain'~`r8`
+## 58
+'accentMellowHorn_85'a2.~'mellowHornRelease'^4'mellowHornSustain'~`r4`
+## 59
+'accentMellowHorn_105'<e2.~'mellowHornRelease'^4'mellowHornSustain'~`r4`
+
+;
+
+
+$605
+## 5
+## The low notes don't come out enough, especially since the original pairs them with channels 10-11 which we've cut, so use a higher velocity than the original's 100
+l8 'supportDeepBrass_110'
+crdre-rg+r<
+## 6
+## Channels 10-11 diverge here in the original, so ease off on the velocity
+'supportDeepBrass_90'
+e-4.rf4.r
+] ## Back to the start of the loop for measure 7
+
+$616
+## The low notes don't come out enough, especially since the original pairs them with channels 10-11 which we've cut, so use a higher velocity than the original's 100
+l8 'supportDeepBrass_110'
+e-rfrf+rb-r<
+## 17
+## Channels 10-11 diverge here in the original, so ease off on the velocity
+'supportDeepBrass_90'
+f+4.rg+4.r
+] ## Back to the start of the loop for measure 18
+
+_
+{7}
+$
+%e1
+## Accent Strings Lowest Note, originally channel 4 or 5 or 6
+'stringsNoAttack+o1' 'accentStringsPan' 'accentStrings_110' 'stringsInstantAttack' c16 ~'stringsQuickRelease'^16~`r16` r4.r2
+## 2
+r8
+[2
+  ## Low layer strings, originally channels 7-8
+  'strings-o2' 'lowLayerStringsPan' 'lowLayerStrings_110' l8
+  ## 2 / 7 (at beat 1.5)
+  gg+<e-d>f<c>e-
+  ## 3 / 8
+  r2
+  ## Play lower note of the Low Layer Strings chord
+  <'lowLayerStrings_125'g16'stringsSlowRelease'^8'stringsSustain'r4^16
+  ## 4 / 9
+  ## Accent Strings Lowest Note, originally channel 4 or 5 or 6
+  'stringsNoAttack+o1' 'accentStringsPan' 'accentStrings_110' 'stringsInstantAttack' c16~'stringsQuickRelease'^16~`r16`
+  ## Low layer strings, originally channels 7-8
+  'strings-o2' 'lowLayerStringsPan' 'lowLayerStrings_110' l8
+  gg+<e-f>b-<cg
+  j2
+  ## 5
+  g+e-f<de-2
+  ## 6
+  ^2d2 >>
+  ## 7
+  ## Accent Strings Lowest Note, originally channel 4 or 5 or 6
+  'stringsNoAttack+o1' 'accentStringsPan' 'accentStrings_110' 'stringsInstantAttack' c16~'stringsQuickRelease'^16~`r16`
+]
+## 10
+## Support Deep Brass, originally channels 16-17
+'supportDeepBrass-o2'
+## The low notes don't come out enough, especially since the original pairs them with channels 10-11 which we've cut, so use a higher velocity than the original's 100
+l8 'supportDeepBrass_110'
+crdre-rgr
+## 11
+g+rb-r<crdr
+## 12
+e-4.rf4.r
+[2
+  ## 13 / 18
+  ## Accent Strings Lowest Note, originally channel 4 or 5 or 6
+  'stringsNoAttack+o1' 'accentStringsPan' 'accentStrings_110' 'stringsInstantAttack' e-16~'stringsQuickRelease'^16~`r16`
+  ## Low layer strings, originally channels 7-8
+  'strings-o2' 'lowLayerStringsPan' 'lowLayerStrings_110' l8
+  b-b<f+f>g+<e->f+
+  ## 14 / 19
+  r2
+  ## Play lower note of the Low Layer Strings chord
+  <'lowLayerStrings_125'b-16'stringsSlowRelease'^8'stringsSustain''stringsNormalAttack'r4^16>
+  j2
+  ## 15
+  ## Accent Strings Lowest Note, originally channel 4 or 5 or 6
+  'stringsNoAttack+o1' 'accentStringsPan' 'accentStrings_110' 'stringsInstantAttack' e-16~'stringsQuickRelease'^16~`r16`
+  ## Low layer strings, originally channels 7-8
+  'strings-o2' 'lowLayerStringsPan' 'lowLayerStrings_110' l8
+  b-b<f+g+c+e-b-
+  ## 16
+  bf+g+<ff+2
+  ## 17
+  ^2f2
+]
+## 20
+'lowLayerStrings_110' l8
+rb-b<f+g+c+e-b-16.
+## Accent Strings, originally channels 4-6 (Taking over this last note from channel 4 so we can hold it into measure 21)
+'stringsNoAttack+o2' 'accentStringsPan' l32 'stringsInstantAttack' 'accentStrings_115'e-32
+## 21
+^32
+## Support Deep Brass, originally channels 16-17 (starting the first note one 32nd late)
+'supportDeepBrass-o2'
+## The low notes don't come out enough, especially since the original pairs them with channels 10-11 which we've cut, so use a higher velocity than the original's 100
+l8 'supportDeepBrass_110'
+e-16.r
+frf+rb-r
+## 22
+## Original velocity goes up to 120
+'supportDeepBrass_125'br<c+re-rfr
+## 23
+## Lead strings, originally channels 2-3... but they seem to become layer strings for 4 measures
+'strings+o1''leadStringsPan'
+l4
+f+'leadStrings_120'e-g+f+8f8
+## 24
+f+2.~'stringsQuickRelease'^4'stringsSustain'~`r4`
+## 25
+g+>b<b-g+8f+8
+## 26
+g+2.~'stringsQuickRelease'^4'stringsSustain'~`r4`
+## 27 through 34
+[8 r1]
+## 35
+## Low Clarinet, originally channels 16-17
+'clarinet' 'softWindRight' l12
+'clarinet_25'f+g+b-f+g+b-
+## 35 (at beat 3) through 40
+[11 r2]
+[2
+  ## 41 / 43
+  ## Triangle, originally channel 13
+  "!!!ot1"
+  ## 42 / 44
+  r1
+]
+## 45
+r1
+## 46
+## Low Layer Strings, originally channels 9 and 15
+'strings+o1''lowLayerStringsPan'
+r2r4.'lowLayerStringsQuiet_60'f8
+## 47
+f+4e-4g+4f+8f8
+## 48
+f+1
+## 49
+~'stringsRelease'^2~`r2`
+## Half of Timpani notes, originally channels 9 and 15
+'timpani-o1' 'timpaniHighRollAttack' l16
+'timpani_35'f+'timpani_40'f+'timpani_50'f+'timpani_60'f+'timpani_70'f+'timpani_85'f+'timpani_100'f+'timpani_110'f+
+## 50
+r1
+## 51
+r4
+## Accent Strings, originally channels 4-6
+'strings-o1''accentStringsPan'
+'accentStrings_115'e16~'stringsRelease'^16'stringsSustain'~`r16`f+16~'stringsRelease'^16'stringsSustain'~`r16`g+16~'stringsRelease'^8.'stringsSustain'~`r8.`b-16~'stringsRelease'^8.'stringsSustain'~`r8.`
+## 52
+'accentStrings_100'b4g+4^16~'stringsRelease'^4..'stringsSustain'~`r4..`
+## 53
+r4'accentStrings_125'g+16~'stringsRelease'^16'stringsSustain'~`r16`b-16~'stringsRelease'^16'stringsSustain'~`r16`'accentStrings_110'b4<c+4
+## 54
+## Backing Deep Brass Low Note, originally channels 7-8
+'backingDeepBrass-o1''backingDeepBrassQuietDuo_105'g+4.r8c+4g+4
+## 55
+g4.r8b4.r8
+## 56
+'backingDeepBrassQuietDuo_60'>>b1
+## 57
+^1
+## 58
+r1
+## 59
+r1
+
+;
+
+
+{8}
+$
+%e1
+## Timpani, originally channel 15
+'timpani-o1' 'timpani_100' c1
+## 2
+r1
+[5
+  ## 3 / 5 / 7 / 9 / 11
+  >'timpani_115'c4<'timpani_105'c8'timpani_65'c24'timpani_90'c24'timpani_105'c24'timpani_120'c8'timpani_100'>g8<c8>g8<
+  j5
+  ## 4 / 6 / 8 / 10
+  'timpani_100'c2
+  j2,806
+  ^2
+]
+## 12
+>'timpani_120'b-8'timpani_105'f8'timpani_120'b-8'timpani_65'b-24'timpani_90'b-24'timpani_105'b-24'timpani_120'b-8'timpani_100'f8'timpani_120'b-8'timpani_100'f8
+
+[5
+  ## 13 / 15 / 17 / 19 / 21
+  <'timpani_100'e-2
+  j3,817
+  ^2
+  j5
+  $818
+  ## 14 / 16 / 18 / 20
+  >'timpani_115'e-4<'timpani_105'e-8'timpani_65'e-24'timpani_90'e-24'timpani_105'e-24'timpani_120'e-8'timpani_100'>b-<e->b-
+]
+## 22
+>'timpani_115'b4'timpani_105'b8'timpani_65'b24'timpani_90'b24'timpani_105'b24'timpani_120'b8'timpani_100'f+bf+
+
+[2
+  ## 23 / 25
+  'timpani_115'g+1
+  ## 24 / 26
+  l24 'timpani_35'g+g+g+'timpaniFadeTo60Lasting40'[5 g+]'timpaniFadeTo105Lasting72'[10 g+]^4
+  ## Then do it a second time with a higher note
+  %k8
+]
+%k0
+## 27
+r1
+## 28
+r1
+## 29
+'timpani_105'<c+2'timpani_75'c+2
+## 30
+'timpani_55'c+2'timpani_40'c+2
+## High Pizzicato, originally channel 18
+'highPizzicato-o1' 'highPizzicato_75'
+## 31 through 43
+[13 e-1]
+## 44
+e-2.b4
+## 45
+c+2g+2
+## 46
+'highPizzicato_100'>b1
+## 47
+b4<b4b-4'highPizzicato_115'>b-4
+## 48
+g+4<g+2.
+## 49
+'highPizzicato_105'f+2
+## Half of Timpani notes, originally channels 9 and 15
+'timpani-o1' 'timpaniHighRollAttack' l16
+r16.'timpani_45'f+'timpani_55'f+'timpani_65'f+'timpani_80'f+'timpani_90'f+'timpani_105'f+'timpani_120'f+32
+## 50
+'timpaniInstantAttack''timpani_125'>e1
+## 51
+r1
+## 52
+r1
+## 53
+## Now playing all Timpani notes
+l32<
+'timpaniHighRollAttack''timpani_30'c+c+c+'timpaniFadeTo60Lasting42'[7 c+]'timpaniFadeTo90Lasting36'[7 c+]r4...
+## 54
+'timpaniInstantAttack''timpani_125'>a1
+## 55-59
+[5r1]
+
+;
+
+
+$806
+## 6 (at beat 3)
+## Low bell, originally channel 9
+'bell' 'bell_95' l4 g+b-
+'timpani-o1'
+] ## Then go back to the loop for measure 7
+
+$817
+## 17 (at beat 3)
+## Low bell, originally channel 9
+'bell' 'bell_95' l4 b<c+
+'timpani-o1'
+%j818 ## Then go back to middle of the loop for measure 18
+_
