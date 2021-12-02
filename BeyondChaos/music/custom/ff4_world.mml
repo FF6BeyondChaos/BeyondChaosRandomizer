@@ -1,0 +1,174 @@
+#TITLE Main Theme of FINAL FANTASY IV
+#ALBUM Final Fantasy IV
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.6
+
+#WAVE 0x20 0xA5
+#WAVE 0x21 0x07
+#WAVE 0x22 0x65
+#WAVE 0x23 0x1D
+#WAVE 0x24 0x0B
+#WAVE 0x25 0x3B
+#WAVE 0x26 0x05
+
+#def 0i=   |0 %r6
+#def 0o=   o5
+#def 0v=   v56
+#def 0f= v1,56
+
+#def 1i=   |1 %s7
+#def 1o=   o6
+#def 1v=   v80
+#def 1f= v1,80
+
+#def 2i=   |2
+#def 2o=   o6
+#def 2v=   v56
+#def 2f= v1,56
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v72
+#def 3f= v1,72
+
+#def 4i=   |4
+#def 4o=   o5
+#def 4v=   v64
+#def 4f= v1,64
+
+#def 5i=   |5
+#def 5o=   o5
+#def 5v=   v100
+#def 5f= v1,100
+
+#def 6i=   |6 %s7
+#def 6o=   o6
+#def 6v=   v64
+#def 6f= v1,64
+
+## auto percussion  0x23
+#drum "h"= 5a+ %e0
+## auto percussion  0x24
+#drum "i"= 5a %e0
+## auto percussion  0x25
+#drum "j"= 5a+ %y3%s0
+
+#drum "e"= 5^ %e1
+
+{1}
+t141%v50%b0,85%f0,0%x240
+##
+'1v*v.10'p50{'Duration 95%'}{'VolEnvMode 11'}
+'1i'%r17 %e1'1f*v168,.34''1o-o2'a16<c16e16a16>g16b16<d16g16>a16<c16e16a16>
+b16<d16'1f*v216,.65'g16b16c16e16a16<c16>>b16<d16g16b16c16e16a16<c16>d16g16b16<d16>
+##
+'0v*v1.15'p60{'Duration 95%'}{'VolEnvMode 11'}%r0
+'0i' %e1m70,18,207
+$101['0o-o1'a2<c2e2g2f+1d2^8d8d8e8f2g4f4e4c4>a4<c4d1^2.c4d1^2.c4c1^2.r4
+]d4f4e4f4a4g4f4g4e2c1^4r4d4f4e4f4a4g4f4g4e1^2.r4e4g4f+4g4b4a4g4a4f+2d1
+^4r4e4g4f+4g4b4a4g4a4a4<c4>b4<c4e4d4c4d4>b2.^8<c16c+16d2.^8c+16c16>b1^2.
+r4
+;101
+
+
+{5}
+'1v*v.65'p50{'Duration 95%'}{'VolEnvMode 11'}
+'1i'%r17 %e1'1o-o1'r1r1
+$201[[8>a16<c16e16a16][8>a16<d16f+16a16][4>a16<c16f16a16][4>g16<c16e16
+g16][8>g16a+16<d16g16][8>f16g+16<c16f16][8>e16g16<c16e16]]>[f16a+16<d16
+f16a+16<d16f16a+16<d16>a+16f16d16>a+16f16d16>a+16][e16a16<c16e16a16<c16
+e16a16<c16>a16e16c16>a16e16c16>a16][f16a+16<d16f16a+16<d16f16a+16<d16>
+a+16f16d16>a+16f16d16>a+16][e16a16<c16e16a16<c16e16a16<c16>a16e16c16>a16
+e16c16>a16][e16g16<c16e16g16<c16e16g16<c16>g16e16c16>g16e16c16>g16][d16
+f+16b16<d16f+16b16<d16f+16b16f+16d16>b16f+16d16>b16f+16][e16g16<c16e16
+g16<c16e16g16<c16>g16e16c16>g16e16c16>g16][f16a16<c16f16a16<c16f16a16<
+c16>a16f16c16>a16f16c16>a16]e16g+16b16<e16g+16b16<e16g+16b16g+16e16>b16
+g+16e16>b16g+16d16g16b16<d16g16b16<d16g16b16g16d16>b16g16d16>b16g16e16
+a16b16<e16a16b16<e16a16b16a16e16>b16a16e16>b16a16e16g+16b16<d16e16g+16
+b16<d16e16d16>b16g+16e16d16>b16g+16<
+;201
+
+
+{7}
+'6v*v1.00'p90{'Duration 95%'}{'VolEnvMode 11'}
+'6i'%r17 %e1r1r1'6o-o2'
+$301[a4a4a4a4a4a4a4a4<d4d4d4d4d4d4d4d4>f4f4f4g4a4a4a4a4g4g4g4g4g4g4g4g4
+f4f4f4f4f4f4f4f4<c4c4c4c4c4c4c4c4>]a+1^1a1^1a+1^1a1^1<c1^1>b1^1<c1^1>f1
+^1e1g1e4e4e4e4e4e4e4e4
+;301
+
+#def env12= '2v*v.40''2f*v48,.80'
+
+{2}
+'6v*v.10'p90{'Duration 95%'}{'VolEnvMode 11'}
+'6i'%r17 %e1'6f*v192,.55''6o-o2'a4a4a4a4'6f*v192,1.00'a4a4a4a4
+##
+'2v*v.80'p95{'Duration 95%'}{'VolEnvMode 12'}
+'2i'%r3 %e1m100,50,197
+$401['2o-o1''env12'e1^2'env12'a4'env12'g4'env12'f+1^1
+'env12'f1'env12'e2'env12'a4'env12'g4'env12'a+2<'env12'd2'env12'c2>'env12'a+2
+'env12'g+2<'env12'c2>'env12'a+2'env12'g+2'env12'g1^1]
+'env12'a+1<'env12'd1'env12'e2<'env12'c2>'env12'b2'env12'a2>
+'env12'a+1<'env12'd1'env12'e2<'env12'c2>'env12'b2'env12'a2
+'env12'c1'env12'e1'env12'd2'env12'b2'env12'a2'env12'f+2
+'env12'c1'env12'e1'env12'f1'env12'e1
+'env12'e1'env12'd1'env12'e1^1
+;401
+
+
+{6}
+'2v*v.80'p65{'Duration 95%'}{'VolEnvMode 12'}
+'2i'%r3 %e1m110,50,197r1r1
+$501['2o-o1''env12'c1^1'env12'c1^2>'env12'b4'env12'a4
+'env12'a2.'env12'b4<'env12'c1'env12'd1^1
+'env12'c1^2.'env12'd4'env12'e1^1]
+'env12'd1'env12'f1<'env12'c2'env12'e2'env12'd2'env12'c2>
+'env12'd1'env12'f1<'env12'c2'env12'e2'env12'd2'env12'c2>
+'env12'e1'env12'g1'env12'f+1'env12'b1
+'env12'e1'env12'g1'env12'a1^1
+'env12'g+1'env12'b1'env12'a1'env12'g+1
+;501
+
+#def 6env4a= '2v*v.25''2f*v144,1.33'
+#def 6env4b= '2f*v12,1.00'
+#def 6env3=  '2v*v.75''2f*v12,1.00'
+
+{3}
+'2v*v1.00'p40{'Duration 95%'}{'VolEnvMode 12'}
+'2i'%r3 %e1m120,50,197r1r1
+$601[{'VolEnvMode 4'}'2o-o3'
+'6env4a'a2.'6env4b'^4^1<'6env4a'd2.'6env4b'^4^1>
+'6env4a'f2.'6env4a'g4'6env4a'a2.'6env4b'^4'6env4a'g2.'6env4b'^4^1
+'6env4a'f2.'6env4b'^4^1<'6env4a'c2.'6env4b'^4^1]>
+'6env4a'a+2.'6env4b'^4^1'6env4a'a2.'6env4b'^4^1
+'6env4a'a+2.'6env4b'^4^1'6env4a'a2.'6env4b'^4^1
+'6env4a'<c2.'6env4b'^4^1>'6env4a'b2.'6env4b'^4^1
+'6env4a'<c2.'6env4b'^4^1>'6env4a'f2.'6env4b'^4^1
+'6env4a'e2.'6env4b'^4'6env4a'g2.'6env4b'^4
+{'VolEnvMode 3'}[8'6env3'e4]
+;601
+
+
+{4}
+'4v*v1.20'p64{'Duration 95%'}{'VolEnvMode 11'}%r0
+'3i' %e0r1r1'4o'
+$701[12
+'4i' " !!!o i8i8"r4
+'3i' '3v*v1.20'" !!!o h16e16e8"r8
+'4i' '4v*v1.20'" !!!o i8i4i4"
+'3i' '3v*v1.20'" !!!o h16e16e8"r4
+'4i' '4v*v1.20'][10" !!!o i4"r4
+'3i' '3v*v1.20'" !!!o h4"r4
+'4i' '4v*v1.20'" !!!o i8i8"r4
+'3i' '3v*v1.20'" !!!o h4"r4
+'4i' '4v*v1.20']
+;701
+
+
+{8}
+'5v*v.30'p70{'Duration 95%'}{'VolEnvMode 11'}%r0
+'5i' %e0r1r1'5o'
+$801" !!!o j16"r16"j16j16
+";801
+
