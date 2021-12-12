@@ -1,0 +1,580 @@
+#TITLE Decision Bell
+#ALBUM Trials of Mana
+#COMPOSER Hiroki Kikuta
+#ARRANGED Rushlight
+##created with sqspcmml beta 1.1.4
+## Additional changes and comments made by hand.
+
+#WAVE 0x28 0xA2 ## Flute
+#WAVE 0x29 0x51 ## Bass
+#WAVE 0x2A 0x36 ## Guitar
+#WAVE 0x2B 0x74 ## Chorus
+#WAVE 0x2C 0x28 ## Bell
+
+#def init= t144 %v70 %b0,55 %f0,0
+
+## Flute
+#def flute= '8i' '8o' %r6
+#def supportFlute= 'flute' p55 ## p48
+#def mainFlute= 'flute' p43 ## original pan is 32 but gives a ratio of roughly 2:1
+#def 8i=   |8
+#def 8o=   o5
+#def 8v=   v78
+#def 8f= v1,78
+
+## Bass
+#def bass= '9i' '9o' p64 %s2 %r11
+#def bassExtraKick= 'bass' %s0 %r22
+#def 9i=   |9
+#def 9o=   o4
+#def 9v=   v240
+#def 9f= v1,240
+
+## Guitar
+#def guitar= 'Ai' 'Ao' p85 %r14 ## original pan is 96 but gives a ratio of roughly 2:1
+#def Ai=   |A
+#def Ao=   o5
+#def Av=   v80
+#def Af= v1,80
+
+## Chorus
+#def chorus= 'Bi' 'Bo' %r5
+#def chorusLeft =  'chorus' p55 ## p48
+#def chorusRight = 'chorus' p73 ## p80
+#def Bi=   |B
+#def Bo=   o5
+#def Bv=   v95
+#def Bf= v1,95
+
+## Bell
+#def bell= 'Ci' 'Co' p64
+#def Ci=   |C
+#def Co=   o6
+#def Cv=   v83
+#def Cf= v1,83
+
+
+
+{1}
+'init'
+%e1
+$
+## Main Flute, originally channel 3
+'mainFlute' 
+[2
+  ## 1 / 5
+  '8o-o1''8v*v.61'a4<e4e4d4
+  ## 2 / 6
+  d8e8g8f+8e4d4
+  ## 3 / 7
+  c4>b8<c8d4e4
+  ## 4 / 8
+  d8c8>b8<c8>a4g4
+]
+## 9
+f8<c8f8r8f8r8e4
+## 10
+d8r8g8r8g8r8b4
+## 11
+b32<c16^32>b8a8g8f+8e8d8>b8
+## 12
+b32a16^32<c8e8g8<c8>b8g8e8
+## 13
+>f8<c8f8r8f8r8e4
+## 14
+d8r8g8r8g8r8b4
+## 15
+b32<c16^32>b8a8g8f+8e8d8>b8
+## 16
+a2>a2
+[2
+  ## 17 / 21
+  <'8o-o1'a4<e4e4d4
+  ## 18 / 22
+  d8e8g8f+8e4d4
+  ## 19 / 23
+  c4>b8<c8d4e4
+  ## 20 / 24
+  d8c8>b8<c8>a4g4
+]
+## 25
+f8<c8f8r8f8r8e4
+## 26
+d8r8g8r8g8r8b4
+## 27
+b32<c16^32>b8a8g8f+8e8d8>b8
+## 28
+b32a16^32<c8e8g8<c8>b8g8e8
+## 29
+>f8<c8f8r8f8r8e4
+## 30
+d8r8g8r8g8r8b4
+## 31
+b32<c16^32>b8a8g8f+8e8d8>b8
+## 32
+a8<c+8e8a8<c8>b8g8e8
+## 33
+>f8<c8f8r8f8r8e4
+## 34
+d8r8g8r8g8r8b4
+## 35
+b32<c16^32>b8a8g8f+8e8d8>b8
+## 36
+b32a16^32<c8e8g8<c8>b8g8e8
+## 37
+>f8<c8f8r8f8r8e4
+## 38
+d8r8g8r8g8r8b4
+## 39
+b32<c16^32>b8a8g8f+8e8d8>b8
+## 40
+a2>a2
+[2
+  ## 41 / 45
+  '8o''8v*v.42'c4r4c4r4
+  ## 42 / 46
+  >b4r4b4r4
+  ## 43 / 47
+  <c4r4c4r4
+  ## 44 / 48
+  d8c8>b8r8b8a8g8d8
+]
+
+[3
+  ## 49 / 51 / 53
+  '8v*v.49''8o-o1'f4r4f4r4
+  ## 50 / 52 / 54
+  g4r4g4r4
+]
+## 55
+e4r4g4r4
+## 56
+a8^32r16^32a8^32r16^32a4.r8
+;
+
+
+{2}
+%e1$
+## Guitar, originally channel 1
+'guitar' 
+[2
+  ## 1 / 5
+  'Ao''Av*v.61'
+  a16^32r8r32a4d8e8g8f+32g32f+16
+  ## 2 / 6
+  e8f+8d4d32c16^32>b8<d8e8
+  ## 3 / 7
+  c16^32r8r32c4c32>b16^32<c8d8e8
+  ## 4 / 8
+  e32d16^32c32d32c16>b4a8b8g4
+]
+## 9
+f2f8a8<c8f8
+## 10
+e4e32c8.^32>b4a4
+## 11
+a32g16^32a8<d8g8e2
+## 12
+^4b8<c8>b32<c32>b16g8d32e32d16>b8
+## 13
+f2f8a8<c8f8
+## 14
+f32e8.^32d4c4>b4
+## 15
+b32a16^32<c8d8g8>b4<e8r8
+## 16
+a2>a2
+[
+  ## 17 / 21
+  <'Ao'a16^32r8r32a4d8e8g8f+32g32f+16
+  ## 18 / 22
+  e8f+8d4d32c16^32>b8<d8e8
+  ## 19 / 23
+  c16^32r8r32c4c32>b16^32<c8d8e8
+  ## 20 / 24
+  e32d16^32c32d32c16>b4a8b8g4
+]
+## 25
+f2f8a8<c8f8
+## 26
+e4e32c8.^32>b4a4
+## 27
+a32g16^32a8<d8g8e2
+## 28
+^4b8<c8>b32<c32>b16g8d32e32d16>b8
+## 29
+f2f8a8<c8f8
+## 30
+f32e8.^32d4c4>b4
+## 31
+b32a16^32<c8d8g8a2
+## 32
+^4a8b8<c32d32c16>b8g8e8
+## 33
+>f2f8a8<c8f8
+## 34
+e4e32c8.^32>b4a4
+## 35
+a32g16^32a8<d8g8e2
+## 36
+^4b8<c8>b32<c32>b16g8d32e32d16>b8
+## 37
+f2f8a8<c8f8
+## 38
+f32e8.^32d4c4>b4
+## 39
+b32a16^32<c8d8g8>b4<e8r8
+## 40
+a2>a2
+## 41
+'Av*v.49'a4g8a8<c8>b8a8r8
+## 42
+b4g4d4g8f+24g24f+24
+## 43
+e4a8b8<c8>b8a8r8
+## 44
+<d4g4g32d16^32c8>b8g8
+## 45
+a4g8a8<c8>b8a8r8
+## 46
+b4g4d4g8f+24g24f+24
+## 47
+e4a8b8<c8>b8a8r8
+## 48
+<d8c8>b8<g8g32d16^32c8>b8g8
+## 49
+'Av*v.57'd4f8a8<c8e8e32d16^32c8
+## 50
+d4c4>b4g8e8
+## 51
+d4f8a8<c8e8f8e8
+## 52
+d4c4>b8<d8g8>g8
+## 53
+d4f8a8<c8e8e32d16^32c8
+## 54
+>b8g8a8<g8g32d16^32c8>b8g8
+## 55
+a8g8a4<d8c+8>b4
+## 56
+a8^32r16^32<e8^32r16^32a4.r8
+;
+
+
+{3}
+%e1
+## Bass, originally channel 2. Define it outside the main loop so the extra bass kick can be sent to this channel with a different configuration
+'bass'
+$301
+$
+[4
+  ## 1 / 3 / 5 / 7
+  '9v*v.49'a8r8a2a8r8
+  ## 2 / 4 / 6 / 8
+  a4a4r8a8a4
+]
+## 9
+f8r8f2f8r8
+## 10
+g8r8g2g8r8
+## 12
+g8r8a2a8r8
+## 12
+a4a8g8.r8.g4
+## 13
+f8r8f2f8r8
+## 14
+g8r8g2g8r8
+## 15
+g8r8a2a8r8
+## 16
+a1
+[4
+  ## 17 / 19 / 21 / 23
+  '9o'a8r8a2a8r8
+  ## 18 / 20 / 22 / 24
+  a4a4r8a8a4
+]
+## 25
+f8r8f2f8r8
+## 26
+g8r8g2g8r8
+## 27
+g8r8a2a8r8
+## 28
+a4a8g8.r8.g4
+## 29
+f8r8f2f8r8
+## 30
+g8r8g2g8r8
+## 31
+g8r8a2a8r8
+## 32
+a4a8g8.r8.e4
+## 33
+f8r8f2f8r8
+## 34
+g8r8g2g8r8
+## 35
+g8r8a2a8r8
+## 36
+a4a8g8.r8.g4
+## 37
+f8r8f2f8r8
+## 38
+g8r8g2g8r8
+## 39
+g8r8a2a8r8
+## 40
+a1
+[4
+  ## 41 / 43 / 45 / 47
+  '9v*v.46''9o'a4r4a4r4
+  ## 42 / 44 / 46 / 48
+  g4r4g4r4
+]
+## 49
+'9v*v.53'd4r4d4r4
+## 50
+g4r4g4r4
+## 51
+f4r4f4r4
+## 52
+g4r4g4r4
+## 53
+d4r4d4r4
+## 54
+g4r4g4r4
+## 55
+a4r4a4e8^32r16^32
+## 56
+>a8^32r16^32<e8^32r16^32a4.r8
+;
+
+
+{4}
+%e1
+$
+## Main Chorus, originally channel 4
+'chorusRight' 'Bv*v.61'
+## 1
+c1d1e1f+1
+## 5
+c1d1e1d1
+## 9
+c1
+## 10
+d2>b2
+## 11
+g4a4a2
+## 12
+<g4.f+4.d4
+## 13
+c1
+## 14
+d2>b2
+## 15
+<d4e8d8c+4>b4
+## 16
+<c+1c1d1e1
+## 20
+f+1c1d1e1
+## 24
+d1
+## 25
+c1
+## 26
+d2>b2
+## 27
+g4a4a2
+## 28
+<g4.f+4.d4
+## 29
+c1
+## 30
+d2>b2
+## 31
+<d4e8d8c+2
+## 32
+c+4.d4.e4
+## 33
+c1
+## 34
+d2>b2
+## 35
+g4a4a2
+## 36
+<g4.f+4.d4
+## 37
+c1
+## 38
+d2>b2
+## 39
+<d4e8d8c+4>b4
+## 40
+<c+1
+
+## Support Flute, originally channel 6
+'supportFlute' 
+[2
+  ## 41 / 45
+  '8v*v.42''8o-o1'a4r4a4r4
+  ## 42 / 46
+  g4r4g4r4
+  ## 43 / 47
+  a4r4a4r4
+  ## 44 / 48
+  g4r4g4>b4
+]
+[3
+  ## 49 / 51 / 53
+  <'8v*v.49''8o-o1'd4c16r8.d4c16r8.
+  ## 50 / 52 / 54
+  e4d16r8.e4d16r8.
+]
+## 55
+d4c+16r8.e4d16r8.
+## 56
+c+8^32r16^32d8^32r16^32c+4.r8
+;
+
+{5}
+%e1
+$
+## Bell, originally channel 5
+'bell-o2''Cv*v.61'
+## 1
+a1b1<c1d1>
+## 5
+a1b1<c1>b1
+## 9
+f1
+## 10
+g1
+## 11
+g4a2.
+## 12
+<d4.c4.>b4
+## 13
+a1
+## 14
+b2g2
+## 15
+g4a2.
+## 16
+a1a1b1<c1
+## 20
+d1>a1b1<c1
+## 24
+>b1
+## 25
+f1
+## 26
+g1
+## 27
+g4a2.
+## 28
+<d4.c4.>b4
+## 29
+a1
+## 30
+b2g2
+## 31
+g4a2.
+## 32
+b4.g4.e4
+## 33
+f1
+## 34
+g1
+## 35
+g4a2.
+## 36
+<d4.c4.>b4
+## 37
+a1
+## 38
+b2g2
+## 39
+g4a2.
+## 40
+a1
+## 41 through 55
+[15r1]
+## 56
+r1
+;
+
+{6}
+%e1
+$
+## 1
+## Support Chorus, originally channel 6
+'chorusLeft-o1' 'Bv*v.61'a1b1<c1d1
+## 5
+>a1b1<c1>b1
+## 9
+a1
+## 10
+b2g2
+## 11
+d4g8f+8e2
+## 12
+<d4.d4.>b4
+## 13
+a1
+## 14
+b2g2
+## 15
+b4a4a4a4
+## 16
+a1a1b1<c1
+## 20
+d1>a1b1<c1
+## 24
+>b1
+## 25
+a1
+## 26
+b2g2
+## 27
+d4g8f+8e2
+## 28
+<d4.d4.>b4
+## 29
+a1
+## 30
+b2g2
+## 31
+b4a4a2
+## 32
+a4.b4.<c4
+## 33
+>a1
+## 34
+b2g2
+## 35
+d4g8f+8e2
+## 36
+<d4.d4.>b4
+## 37
+a1
+## 38
+b2g2
+## 39
+b4a4a4a4
+## 40
+a1
+## 41 through 55
+[15r1]
+## 56
+r1
+;
+
+
+{7}
+## The bass pluck in this song packs a heavy punch, so we'll add a second channel to increase that pluck.
+## Use extremely low sustain level and a high release rate to avoid increasing the volume of the hold.
+'bassExtraKick'
+%e1
+;301

@@ -1,0 +1,276 @@
+#TITLE Singing Wind, Journey's Path
+#ALBUM Legend of Mana
+#COMPOSER Yoko Shimomura
+#ARRANGED emberling
+
+#WAVE 0x20 0x33 guitar
+#WAVE 0x21 0xA1 flute
+#WAVE 0x22 0x62 strings
+#WAVE 0x23 0x75 choir
+#WAVE 0x24 0x54 bass - sweep
+#WAVE 0x25 0x55 bass - synth
+#WAVE 0x28 0x0A kick - dry
+#WAVE 0x29 0x0C kick - deep
+#WAVE 0x2A 0x1C snare - standard
+#WAVE 0x2B 0x1B snare - rim
+#WAVE 0x2C 0x1E snare - synth
+#WAVE 0x2D 0x6C tambourine
+#WAVE 0x2E 0x3C hihat - open
+#WAVE 0x2F 0x3A hihat - closed
+
+#def init= t132 %v50 %b0,85 %f0,0 %x232
+
+#def guitar=  |0 o6 'g' %e1 m3,9,207 %y1%s4%r12
+#def flute=   |1 o5 'f' %e1 m72,18,205 %r5
+#def strings= |2 o5 's' %e1 
+#def choir=   |3 o4 'v' %e1 %a8
+#def sweep=   |4 o6 'b' %e1 
+#def synbass= |5 o6 'y' %e1 
+
+#def g= v128
+#def f= v48
+#def s= v24
+#def v= v20
+#def b= v72
+#def y= v72
+
+#def ff= v1,64
+
+#drum "b"= 5a+ |D p100 v48 %e1
+#drum "r"= 5d  |B p64 v96 %e0 %y4%s2
+#drum "k"= 5a  |8 p64 v80 %e0
+#drum "y"= 5a+ |C p64 v64 %e0
+
+#drum "d"= 6c |9 p64 v80 %e1
+#drum "s"= 6c |A p64 v80 %e0
+#drum "t"= 6g+|A p64 v80 %e0 m3,-8
+
+#drum "h"= 5g |F p36 v32 %e1
+#drum "o"= 6c |E p36 v26 %e1 %s0
+
+#drum "c"= 5e |9 p64 v48 %e1 %y5%s0
+#drum "c+"=5e |9 p64 v64 %e1 %y5%s0
+#drum "u"= 5g |B p64 v96 %e0
+#drum "j"= 6a |8 p64 v64 %e0
+#drum "v"= 5a+ |A p64 v64 %e1 %r20
+
+#drum "x"= 5r
+#drum "e"= 6^ %e1
+
+#cdef ` m8,2&8
+#cdef ~ m8,-2^12
+
+{1} 'init' r8
+##
+r1r1
+'flute*v.696' p64 l4
+`e~^2b<c+8  ^2...r16
+`d~^c+.>b  <c+.>a.f+8.r16
+e.b.<c+  `d~^e.f+
+e2..r8  `d~^c+.>b8.r16
+$## 12
+`e~^2b<c+8  ^2...r16
+`d~^c+.>b  <c+.>a.f+8.r16
+e.b.<c+  `d~^e.f+
+e2..r8  `d~^c+.>b8.r16<
+## 20
+c.`a~^2  ^.r8ab
+g.a.`b~^8  ^2.r
+a+.<c.'f*v.479'`d~^.'f*v.696'dc>a+
+`a~^ 'f*v.408''ff*v24,.238'<f+8'ff*v72,.504'^. v16,0 ^8>
+'f*v.696' b.<'f*v.479'`e~^2
+## 28
+'ff*v144,0' ^2. r4
+'sweep-o2' l16
+[ a4^r a4 'synbass-o1' ar8. 'sweep-o2' a8 j2
+  a4^r a2^r ]
+## 32
+'flute*v.696' p64 l4
+`e~^2b<c+8  ^2...r16
+`d~^c+.>b  <c+.>a.f+8.r16
+e.b.<c+  `d~^e.f+
+e2..r8  `d~^c+.>b8.r16
+;
+
+{2}
+'guitar-o2*v.458' p100 l16
+a24r48 'g*v.348' a24r48
+##
+[10
+'g*v.401'a8. 'g*v.348'a 'g*v.374'a8 'g*v.401'a8.
+'g*v.348'a 'g*v.374'a8 a 'g*v.291'a24r48 'g*v.401'a8
+j9,209 ]
+$## 12
+p72 %k0
+[7 'lowGuitarPatternSafe'] %k-2 'lowGuitarPattern'
+## 20
+%k0  ['lowGuitarPattern']
+%k2  ['lowGuitarPattern']
+%k-2 ['lowGuitarPattern']
+%k0   'lowGuitarPattern'
+%k2   'lowGuitarPattern'
+## 28
+%k0 [4 'lowGuitarPattern']
+## 32
+[7 'lowGuitarPatternSafe'] %k-2 'lowGuitarPattern'
+;
+
+#def lowGuitarPatternSafe= 'g*v.710'a8. [j1,2001]
+#def lowGuitarPattern= [j1,2000]
+
+$2000 l16 'g*v.710'a8.
+$2001 'g*v.602'a 'g*v.658'a8 'g*v.710'a8.
+      'g*v.602'a 'g*v.658'a8 a 'g*v.482'a24r48 'g*v.658' j10 a8
+      ]
+
+$209 %k-2]
+
+{3}
+&2r
+'guitar-o1*v.513' p120 l16
+e24r48 'g*v.390' e24r48
+##
+[10
+##'g*v.449'e8. 'g*v.390'e 'g*v.419'e8 'g*v.449'e8.
+##'g*v.390'e 'g*v.419'e8 e 'g*v.326'e24r48 'g*v.449'e8
+p72
+'g*v.793'e8. 'g*v.673'e 'g*v.736'e8 'g*v.793'e8.
+'g*v.673'e 'g*v.736'e8 e 'g*v.539'e24r48 'g*v.736'e8
+j1,0 j2,0 j3,303 j6,306 j8,306 m-2 $0]
+$## 12
+%k0 'highGuitarPatternSafe' %k2 'highGuitarPattern'
+[3 %k0 'highGuitarPattern' %k-2 'highGuitarPattern']
+## 20
+%k1  ['highGuitarPattern']
+%k3  ['highGuitarPattern']
+%k-1 ['highGuitarPattern']
+%k2   'highGuitarPattern'
+%k4   'highGuitarPattern'
+## 28
+%k0   'highGuitarPattern'
+%k2   'highGuitarPattern'
+%k0   'highGuitarPattern'
+%k-2  'highGuitarPattern'
+## 32
+%k0 'highGuitarPatternSafe' %k2 'highGuitarPattern'
+[3 %k0 'highGuitarPattern' %k-2 'highGuitarPattern']
+;
+
+$303 %k2]
+$306 %k0]
+
+#def highGuitarPatternSafe= 'g*v.793'e8. [j1,3001]
+#def highGuitarPattern= [j1,3000]
+
+$3000 l16 'g*v.793'e8.
+$3001     'g*v.673'e 'g*v.736'e8 'g*v.793'e8.
+          'g*v.673'e 'g*v.736'e8 e 'g*v.539'e24r48 'g*v.736'e8
+          ]
+{4}
+r8
+##
+'sweep-o2' p64 l16
+[a4^r a2^r]
+[4 a4^r a2^r   j4
+   a4^r a4 'synbass-o1' ar8. 'sweep-o2' a8 ]
+   a4^r a4 'synbass-o1' gr8. 'sweep-o2' g8 
+$## 12
+[4
+"d4y8dykyk8s32e.kr"
+"d4y8dykyk8t64e..kr"
+]
+## 20
+[4 "!!!o"
+"d4y8kydyk8s32e.kr"
+"d4y8kydyk8t64e..kr"
+]
+## 28
+[4 "!!!o"
+"c4c4c4 u8jv" ]
+## 32
+[7 "!!!o"
+"c4c4c4 u8jv" ]
+"c+8k8y8kyc+yk8t64e..jv"
+;
+
+{5}
+'guitar*v.283' p30 l16
+e>'g*v.213'e>
+##
+'g*v.166' a32
+[10
+'g*v.309'a8. 'g*v.254'a 'g*v.284'a8 'g*v.309'a8.
+'g*v.254'a 'g*v.284'a8 a 'g*v.191'a24r48 'g*v.284' j10 a8
+j9,209 ] a16. %k0
+$## 12
+'strings+o1' m l1 p68 p0,9,18
+c+ d c+ >a< c+ d c+ >b<
+## 20
+p p50
+c ^ >b ^  a+ ^ a b
+## 28
+'s*v.67' a1 %r24 ^1r1r1
+## 32
+'choir+o1' p85 l1
+c+ d c+ >a<  c+ d c+ >b
+;
+
+{6}
+'guitar-o1*v.283' p10 l32
+r'g*v.251'a16'g*v.213'>a<
+l16 m
+##
+[9^1]
+"b4 b4 b4 y8kr"
+$## 12
+[8 l16 "!o hxh8ho8h h8o8h8ho"]
+[8 l16 "!o hxh8do8h h8o8h8ho"]
+## 28
+'strings+o1*v.67' p40 e1 %r24 ^1r1r1
+## 32
+'choir+o1' p95 l1
+e f+ e d e f+ e
+"!!!o" l16 "b4b4b4b8ho"
+;
+
+{7}
+r8
+##
+[9r1]
+r2. "b4"
+$## 12
+'strings+o1' l1 p68 p0,12,28
+e f+ e d e f+ e d
+## 20
+p p40
+f ^ e d  d+ ^ d e
+## 28
+[4r1]
+## 32
+'choir+o1' p95 l1
+[7r1] d1
+;
+
+{8}
+r8
+##
+[9r1] l16
+r2.. "ho"
+$## 12
+'sweep-o2' p64 l16
+[4 a4^r a2^r   j4
+   a4^r a4 'synbass-o1' ar8. 'sweep-o2' a8 ]
+   g4^r g4 'synbass-o1' gr8. 'sweep-o2' g8 
+## 20
+[ f4f4f4 'synbass-o1' fr 'sweep-o2' f8 ]
+[ e4e4e4 'synbass-o1' er 'sweep-o2' e8 ]
+[ d+4d+4d+4 'synbass-o1' d+r 'sweep-o2' d+8 ]
+  d4d4d4 'synbass-o1' dr 'sweep-o2' d8
+  e4e4e4 'synbass-o1' er 'sweep-o2' e8  
+## 28
+[4r1]
+## 32
+[4 a4^r a2^r   j4
+   a4^r a4 'synbass-o1' ar8. 'sweep-o2' a8 ]
+   g4 "!!!o c+8" 'sweep-o2'p64 g4 'synbass-o1' gr8. 'sweep-o2' g8 
+;

@@ -138,7 +138,7 @@ A7: A7_ff6_flute              , 4104, E158  , FFE0, {123}  [+12] Flute LQ
 
 # ORGANS                                                        -------------
 B0: B0_ff6_pipeorgl     , 1B00 , f++37 , FFE0    , {299}  [-12] Pipe Organ HQ
-B1: B1_l2_pipeorg       , 1C02 , *1.094, FFE0    , {65}   [   ] Pipe Organ LQ
+B1: B1_l2_pipeorg       , 1C02 , g+35  , FFE0    , {65}   [   ] Pipe Organ LQ
 B2: B2_ff7_polyorg      , @57bl, *0.733, FFE0    , {67}   [   ] PolyOrgan
 B3: B3_fmgh_rockorg     , 6E04 , ^e-51 , FFE0    , {151}  [   ] Rock Organ
 B4: B4_ff6_percorg      , 3B01 , BE90  , FFE0    , {116}  [-12] Perc Organ

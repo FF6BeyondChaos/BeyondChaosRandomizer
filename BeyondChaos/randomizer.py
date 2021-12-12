@@ -15,7 +15,7 @@ import options
 from monsterrandomizer import MonsterBlock
 from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
-from appearance import manage_character_appearance
+from appearance import manage_character_appearance, manage_coral
 from character import get_characters, get_character, equip_offsets
 from chestrandomizer import mutate_event_items, get_event_items
 from decompress import Decompressor
@@ -71,7 +71,8 @@ VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "2.normal.bcdefgijkmnopqrstuwyzmakeoverpartypartyfrenchvanillaelectricboogaloorandombossesalasdracocapslockoffjohnnyachaoticnotawaiterdancingmaduin.1632060671"
+#TEST_SEED = "2.normal.bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontentcanttouchthiseasymodounbreakablecollateraldamage.1603333081"
+TEST_SEED = "2.normal.bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu.1635554018"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -278,8 +279,12 @@ class AutoRecruitGauSub(Substitution):
 class EnableEsperMagicSub(Substitution):
     @property
     def bytestring(self) -> bytes:
-        return bytes([0xA9, 0x20, 0xA6, 0x00, 0x95,
-                      0x79, 0xE8, 0xA9, 0x24, 0x60])
+        return bytes([0x20, 0xDD, 0x4E,
+                      0xA6, 0x00, 0xB9, 0x00, 0x00, 0xC9, 0x0E, 0xB0, 0x04,
+                      0xA9, 0x20, 0x80, 0x02, 0xA9, 0x24,
+                      0x95, 0x79,
+                      0xE8,
+                      0xA9, 0x24, 0x60])
 
     def write(self, fout: BinaryIO):
         jsr_sub = Substitution()
@@ -624,7 +629,7 @@ def manage_commands(commands: Dict[str, CommandBlock]):
     rage_blank_sub.write(fout)
 
     eems = EnableEsperMagicSub()
-    eems.set_location(0x3F091)
+    eems.set_location(0x3F09F)
     eems.write(fout)
 
     # Let x-magic user use magic menu.
@@ -636,10 +641,10 @@ def manage_commands(commands: Dict[str, CommandBlock]):
         0xC9, 0x17, # CMP #$17
         0x6b        # RTL
     ])
-    enable_xmagic_menu_sub.set_location(0x3F09B)
+    enable_xmagic_menu_sub.set_location(0x3F091)
     enable_xmagic_menu_sub.write(fout)
 
-    enable_xmagic_menu_sub.bytestring = bytes([0x22, 0x9B, 0xF0, 0xC3])
+    enable_xmagic_menu_sub.bytestring = bytes([0x22, 0x91, 0xF0, 0xC3])
     enable_xmagic_menu_sub.set_location(0x34d56)
     enable_xmagic_menu_sub.write(fout)
 
@@ -841,6 +846,10 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
 
         changed_commands.add(c.id)
         x = random.randint(1, 3)
+
+        if Options_.is_code_active('nocombos'):
+            x = random.randint(1, 2)
+
         if x <= 1:
             random_skill = False
             combo_skill = False
@@ -1738,7 +1747,6 @@ def manage_skips():
     [0xDA, 0x5A, 0xDA, 0x59, 0xDB, 0x20, 0xDA, 0x68] +  # NPC event bits
     [0xD2, 0xB3, 0xD2, 0xB4] +  # Facing left and pressing A?
     [0xD0, 0x7A] +  # Set event bit 0x7A, The Espers attacked the Blackjack
-    [0xD2, 0x76] + # Set event bit 0x176, Serves to ensure that branching
     # always occurs 2 (always remains clear)
     [0xD2, 0x6F] +  # Set event bit 0x16F, Learned how to operate the airship
     [0x6B, 0x00, 0x04, 0xF9, 0x80, 0x00] +  # load map, place party
@@ -2075,7 +2083,7 @@ def manage_monsters() -> List[MonsterBlock]:
         m.tweak_fanatics()
         m.relevel_specifics()
 
-    #change_enemy_name(fout, 0x166, "L.255Magic") #Commenting out to revert back to MagiMaster so Chaotic AI works with it
+    change_enemy_name(fout, 0x166, "L.255Magic")
 
     shuffle_monsters(monsters, safe_solo_terra=safe_solo_terra)
     for m in monsters:
@@ -2173,6 +2181,8 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int]=None) -> Lis
     crazy_prices = Options_.is_code_active('madworld')
     extra_effects = Options_.is_code_active('masseffect')
     wild_breaks = Options_.is_code_active('electricboogaloo')
+    no_breaks = Options_.is_code_active('nobreaks')
+    unbreakable = Options_.is_code_active('unbreakable')
 
     set_item_changed_commands(changed_commands)
     unhardcode_tintinabar(fout)
@@ -2181,7 +2191,7 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int]=None) -> Lis
     auto_equip_relics = []
 
     for i in items:
-        i.mutate(always_break=always_break, crazy_prices=crazy_prices, extra_effects=extra_effects, wild_breaks=wild_breaks)
+        i.mutate(always_break=always_break, crazy_prices=crazy_prices, extra_effects=extra_effects, wild_breaks=wild_breaks, no_breaks=no_breaks, unbreakable=unbreakable)
         i.unrestrict()
         i.write_stats(fout)
         if i.features['special2'] & 0x38 and i.is_relic:
@@ -2794,7 +2804,7 @@ def manage_dragons():
         fout.write(bytes([dragon]))
 
 
-def manage_formations(formations: List[Formation], fsets: List[FormationSet], mpMultiplier: float=None) -> List[Formation]:
+def manage_formations(formations: List[Formation], fsets: List[FormationSet], mpMultiplier: float=1) -> List[Formation]:
     for fset in fsets:
         if len(fset.formations) == 4:
             for formation in fset.formations:
@@ -2855,7 +2865,7 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet], mp
                            0x1E0, 0x1E6]}
 
     for formation in formations:
-        if Options_.is_code_active('mp'):
+        if Options_.is_code_active('mpboost'):
             formation.mutate(mp=False, mpMultiplier=mpMultiplier)
         else:
             formation.mutate(mp=False)
@@ -3425,12 +3435,45 @@ def manage_tower():
                     thamasa_map_sub.write(fout)
         l.write_data(fout)
 
-    npc = [n for n in get_npcs() if n.event_addr == 0x233B8][0]
-    npc.event_addr = 0x233A6
-    narshe_beginner_sub = Substitution()
-    narshe_beginner_sub.bytestring = bytes([0x4B, 0xE5, 0x00])
-    narshe_beginner_sub.set_location(0xC33A6)
-    narshe_beginner_sub.write(fout)
+    #npc = [n for n in get_npcs() if n.event_addr == 0x233B8][0]
+    #npc.event_addr = 0x233A6
+    #narshe_beginner_sub = Substitution()
+    #narshe_beginner_sub.bytestring = bytes([0x4B, 0xE5, 0x00]) #Keep NPC in front of Beginner's House in World of Balance
+    #narshe_beginner_sub.set_location(0xC33A6)
+    #narshe_beginner_sub.write(fout)
+
+    #Moving NPCs in the World of Ruin in the Beginner's House to prevent soft locks
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x233AA][0]
+    npc.x = 108
+    npc.facing = 2
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x23403][0]
+    npc.x = 99
+    npc.facing = 2
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x2369E][0]
+    npc.x = 93
+    npc.facing = 2
+
+    #Make the guy guarding the Beginner's House to give a full heal
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x233B8][0]  # Narshe School Guard
+    npc.event_addr = 0x12240  # Airship guy event address
+    npc.graphics = 30
+    npc.palette = 4  # School guard becomes a helpful Returner
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x2D223][0]  # Warehouse Guy
+    npc.event_addr = 0x2707F  # Barking dog event address
+    npc.x = 5
+    npc.y = 35
+    npc.graphics = 25  # In sacrifice to the byte gods, this old man becomes a dog
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x2D1FB][0]  # Follow the Elder Guy
+    npc.event_addr = 0x2D223  # Warehouse Guy event address
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x2D1FF][0]  # Magic DOES exist Guy
+    npc.event_addr = 0x2D1FB  # Follow the Elder Guy event address
 
 def manage_strange_events():
     shadow_recruit_sub = Substitution()
@@ -3845,43 +3888,7 @@ def manage_auction_house():
         set_dialogue(auction_item[3], f'<line>        “<item>”!<page><line>Do I hear {opening_bid} GP?!')
 
 
-def manage_bingo():
-    target_score = 200.0
-    print("WELCOME TO BEYOND CHAOS BINGO MODE")
-    print("Include what type of squares? (blank for all)")
-    print("    a   Abilities\n"
-          "    i   Items\n"
-          "    m   Monsters\n"
-          "    s   Spells")
-    bingoflags = input("> ").strip()
-    if not bingoflags:
-        bingoflags = "aims"
-    bingoflags = [c for c in "aims" if c in bingoflags]
-
-    print("What size grid? (default: 5)")
-    size = input("> ").strip()
-    if not size:
-        size = 5
-    else:
-        size = int(size)
-    target_score = float(target_score) * (size ** 2)
-
-    print("What difficulty level? Easy, Normal, or Hard? (e/n/h)")
-    difficulty = input("> ").strip()
-    if not difficulty:
-        difficulty = "n"
-    else:
-        difficulty = difficulty[0].lower()
-        if difficulty not in "enh":
-            difficulty = "n"
-
-    print("Generate how many cards? (default: 1)")
-    numcards = input("> ").strip()
-    if not numcards:
-        numcards = 1
-    else:
-        numcards = int(numcards)
-    print("Generating Bingo cards, please wait.")
+def manage_bingo(bingoflags=[], size=5, difficulty="", numcards=1, target_score=200.0):
 
     skills = get_ranked_spells()
     spells = [s for s in skills if s.spellid <= 0x35]
@@ -4504,38 +4511,40 @@ def randomize(**kwargs) -> str:
     if sourcefile.startswith('"') and sourcefile.endswith('"'):
         sourcefile = sourcefile.strip('"')
     sourcefile = os.path.abspath(sourcefile)
-    
+
+    output_directory = kwargs.get('output_directory')
+    # if len(args) > 4:
+    # If a directory was supplied by the GUI, use that directory
+    # output_directory = args[4]
+    # else:
+    if not output_directory:
+        # If no previous directory or an invalid directory was obtained from bcce.cfg, default to the ROM's directory
+        if not previous_output_directory or not os.path.isdir(previous_output_directory):
+            previous_output_directory = os.path.dirname(sourcefile)
+
+        while True:
+            # Input loop to make sure we get a valid directory
+            previous_output = f" (blank for default: {previous_output_directory})"
+            output_directory = input(
+                f"Please input the directory to place the randomized ROM file. {previous_output}:\n> ").strip()
+            print()
+
+            if previous_output_directory and not output_directory:
+                output_directory = previous_output_directory
+            if output_directory.startswith('"') and output_directory.endswith('"'):
+                output_directory = output_directory.strip('"')
+
+            if os.path.isdir(output_directory):
+                # Valid directory received. Break out of the loop.
+                break
+            else:
+                print("That output directory does not exist. Please try again.")
+
     try:
         f = open(sourcefile, 'rb')
         data = f.read()
         f.close()
 
-        output_directory = kwargs.get('output_directory')
-        #if len(args) > 4:
-            #If a directory was supplied by the GUI, use that directory
-            #output_directory = args[4]
-        #else:
-        if not output_directory:
-            #If no previous directory or an invalid directory was obtained from bcce.cfg, default to the ROM's directory
-            if not previous_output_directory or not os.path.isdir(previous_output_directory):
-                previous_output_directory = os.path.dirname(sourcefile)
-
-            while True:
-                #Input loop to make sure we get a valid directory
-                previous_output = f" (blank for default: {previous_output_directory})"
-                output_directory = input(f"Please input the directory to place the randomized ROM file. {previous_output}:\n> ").strip()
-                print()
-
-                if previous_output_directory and not output_directory:
-                    output_directory = previous_output_directory
-                if output_directory.startswith('"') and output_directory.endswith('"'):
-                    output_directory = output_directory.strip('"')
-                    
-                if os.path.isdir(output_directory):
-                    #Valid directory received. Break out of the loop.
-                    break
-                else:
-                    print("That output directory does not exist. Please try again.")
     except IOError:
         response = input("File not found. Would you like to search the current directory \n"
             "for a valid FF3 1.0 rom? (y/n) ")
@@ -4556,7 +4565,7 @@ def randomize(**kwargs) -> str:
                 if size == 3145728 + 0x200:
                     data = data[0x200:]
                 h = md5(data).hexdigest()
-                if h == MD5HASHNORMAL or h == MD5HASHTEXTLESS or h == MD5HASHTEXTLESS2:
+                if h in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2]:
                     sourcefile = filename
                     break
             else:
@@ -4718,7 +4727,8 @@ def randomize(**kwargs) -> str:
         f.close()
 
     h = md5(data).hexdigest()
-    if h != MD5HASHNORMAL and h != MD5HASHTEXTLESS and h!= MD5HASHTEXTLESS2:
+    user_confirmed_proceed_from_gui = kwargs.get("from_gui", False)
+    if h not in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2] and not user_confirmed_proceed_from_gui:
         print("WARNING! The md5 hash of this file does not match the known "
               "hashes of the english FF6 1.0 rom!")
         x = input("Continue? y/n ")
@@ -4992,7 +5002,7 @@ def randomize(**kwargs) -> str:
             c.mutate_stats(fout, start_in_wor, read_only=True)
     reseed()
 
-    if Options_.is_code_active('mp'):
+    if Options_.is_code_active('mpboost'):
         if 'mpMultiplier' in kwargs and kwargs.get('mpMultiplier') is not None:
             mpValue = kwargs.get('mpMultiplier')
         else:
@@ -5008,7 +5018,7 @@ def randomize(**kwargs) -> str:
     if Options_.random_formations:
         formations = get_formations()
         fsets = get_fsets()
-        if Options_.is_code_active('mp'):
+        if Options_.is_code_active('mpboost'):
             manage_formations(formations, fsets, mpValue)
         else:
             manage_formations(formations, fsets)
@@ -5041,7 +5051,7 @@ def randomize(**kwargs) -> str:
     form_music = {}
     if Options_.random_formations:
         no_special_events = not Options_.is_code_active('bsiab')
-        if Options_.is_code_active('mp'):
+        if Options_.is_code_active('mpboost'):
             manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music, no_special_events=no_special_events, mpMultiplier=mpValue)
         else:
             manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music, no_special_events=no_special_events)
@@ -5204,7 +5214,7 @@ def randomize(**kwargs) -> str:
     if Options_.random_zerker or Options_.random_character_stats:
         manage_equip_umaro(event_freespaces)
         
-    if Options_.is_code_active('easymodo') or Options_.is_code_active('exp'):
+    if Options_.is_code_active('easymodo') or Options_.is_code_active('expboost'):
         if 'expMultiplier' in kwargs and kwargs.get('expMultiplier') is not None:
             expValue = kwargs.get('expMultiplier')
         else:
@@ -5219,11 +5229,11 @@ def randomize(**kwargs) -> str:
         for m in monsters:
             if Options_.is_code_active('easymodo'):
                 m.stats['hp'] = 1
-            if Options_.is_code_active('exp'):
+            if Options_.is_code_active('expboost'):
                 m.stats['xp'] = int(min(0xFFFF, float(expValue) * m.stats['xp']))
             m.write_stats(fout)
 
-    if Options_.is_code_active('gp'):
+    if Options_.is_code_active('gpboost'):
         if 'gpMultiplier' in kwargs and kwargs.get('gpMultiplier') is not None:
             gpValue = kwargs.get('gpMultiplier')
         else:
@@ -5236,7 +5246,7 @@ def randomize(**kwargs) -> str:
                 except ValueError:
                     print("The supplied value for the gp multiplier was not a positive number.")
         for m in monsters:
-            m.stats['gp'] = int(min(0xFFFF, float(gpValue) * m.stats['gp']))
+            m.stats['gpboost'] = int(min(0xFFFF, float(gpValue) * m.stats['gp']))
             m.write_stats(fout)
 
     if Options_.is_code_active('naturalmagic') or Options_.is_code_active('naturalstats'):
@@ -5293,6 +5303,10 @@ def randomize(**kwargs) -> str:
     cycle_statuses(fout)
     name_swd_techs(fout)
     fix_flash_and_bioblaster(fout)
+
+    s = manage_coral(fout)
+    log(s, "aesthetics")
+
     #add_esper_bonuses(fout) #Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
 
     if Options_.is_code_active('removeflashing'):
@@ -5350,7 +5364,56 @@ def randomize(**kwargs) -> str:
     print("Randomization successful. Output filename: %s\n" % outfile)
 
     if Options_.is_code_active('bingoboingo'):
-        manage_bingo()
+
+        target_score = 200.0
+
+        if kwargs.get("from_gui", False):
+            bingoflags = kwargs.get('bingotype')
+            size = kwargs.get('bingosize')
+            difficulty = kwargs.get('bingodifficulty')
+            numcards = kwargs.get('bingocards')
+
+        else:
+            print("WELCOME TO BEYOND CHAOS BINGO MODE")
+            print("Include what type of squares? (blank for all)")
+            print("    a   Abilities\n"
+                  "    i   Items\n"
+                  "    m   Monsters\n"
+                  "    s   Spells")
+            bingoflags = input("> ").strip()
+            if not bingoflags:
+                bingoflags = "aims"
+            bingoflags = [c for c in "aims" if c in bingoflags]
+
+            print("What size grid? (default: 5)")
+            size = input("> ").strip()
+            if not size:
+                size = 5
+            else:
+                size = int(size)
+
+
+            print("What difficulty level? Easy, Normal, or Hard? (e/n/h)")
+            difficulty = input("> ").strip()
+            if not difficulty:
+                difficulty = "n"
+            else:
+                difficulty = difficulty[0].lower()
+                if difficulty not in "enh":
+                    difficulty = "n"
+
+            print("Generate how many cards? (default: 1)")
+            numcards = input("> ").strip()
+            if not numcards:
+                numcards = 1
+            else:
+                numcards = int(numcards)
+
+        print("Generating Bingo cards, please wait.")
+        target_score = float(target_score) * (size ** 2)
+
+        manage_bingo(bingoflags=bingoflags, size=size, difficulty=difficulty, numcards=numcards, target_score=target_score)
+
     return outfile
 
 
@@ -5369,6 +5432,11 @@ if __name__ == "__main__":
             '\t\texpmultplier=<The desired positive integer EXP multiplier, if you are using the exp code>\n',
             '\t\tgpmultplier=<The desired positive integer GP multiplier, if you are using the gp code>\n',
             '\t\trandomboost=<The desired positive integer randomboost amount, if you are using the randomboost code>\n',
+            '\t\tbingotype=<The desired bingo options, if you are using the bingoboingo code>\n',
+            '\t\tbingosize=<The desired positive integer for the size of bingo card, if you are using the bingoboingo code>\n',
+            '\t\tbingodifficulty=<The desired bingo difficulty selection, if you are using the bingoboingo code>\n',
+            '\t\tbingocards=<The desired positive integer for number of bingo cards to generate, if you are using the bingoboingo code>\n',
+
         )
         sys.exit()
     try:
@@ -5379,6 +5447,10 @@ if __name__ == "__main__":
         gpMultiplier = 1
         mpMultiplier = 1
         randomboost = None
+        bingotype = "aims"
+        bingosize = 5
+        bingodifficulty = "n"
+        bingocards = 1
         for argument in args[1:]:
             if 'source=' in argument:
                 source_arg = argument[argument.index('=') + 1:]
@@ -5410,6 +5482,14 @@ if __name__ == "__main__":
                 except ValueError:
                     print("The supplied value for randomboost was not a number.")
                     sys.exit()
+            elif 'bingotype=' in argument:
+                bingotype = argument[argument.index('=') + 1:]
+            elif 'bingosize=' in argument:
+                bingosize = int(argument[argument.index('=') + 1:])
+            elif 'bingodifficulty=' in argument:
+                bingodifficulty = argument[argument.index('=') + 1:]
+            elif 'bingocards=' in argument:
+                bingocards = int(argument[argument.index('=') + 1:])
             else:
                 print('Keyword unrecognized or missing: ' + str(argument) + '.\nUse "python randomizer.py ?" to view a list of valid keyword arguments.')
 
@@ -5420,7 +5500,11 @@ if __name__ == "__main__":
             expMultiplier=expMultiplier, 
             gpMultiplier=gpMultiplier, 
             mpMultiplier=mpMultiplier, 
-            randomboost=randomboost
+            randomboost=randomboost,
+            bingotype=bingotype,
+            bingosize=bingosize,
+            bingodifficulty=bingodifficulty,
+            bingocards=bingocards
         )
         input('Press enter to close this program.')
     except Exception as e:

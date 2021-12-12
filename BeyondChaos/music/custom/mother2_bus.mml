@@ -1,0 +1,317 @@
+#TITLE Get on the Bus
+#ALBUM Earthbound
+#COMPOSER Keiichi Suzuki, Hirozaku Tanaka
+#ARRANGED Rushlight
+
+#SHORTNAME Mother2 Bus
+
+#WAVE 0x21 0x38 ## Deeper Bass
+#WAVE 0x22 0x36 ## Guitar + Early Bass
+#WAVE 0x23 0xB2 ## Organ
+
+#WAVE 0x2A 0x0A ## Kick
+#WAVE 0x2B 0x1E ## Snare
+#WAVE 0x2C 0x6C ## Tambourine
+#WAVE 0x2D 0x7A ## Conga
+
+
+#def init= t151 %v40 %b0,85 %f0,0
+
+#def guitarBaseVol=   v152
+#def guitarVol=      'guitarBaseVol*v.65'
+#def guitarQuietVol= 'guitarBaseVol*v.6'
+
+#def organBaseVol= v42
+#def organVol30=   'organBaseVol*v3'
+#def organVol18=   'organBaseVol*v1.8'
+#def organVol7=    'organBaseVol*v.7'
+#def organVol4=    'organBaseVol*v.4'
+#def organVol2=    'organBaseVol*v.2'
+
+#def organCenter= p64
+#def organRight=  p117
+#def organLeft=   p10
+
+#def earlyBassBaseVol= v184
+#def earlyBassVol1=    'earlyBassBaseVol*v.27'
+#def earlyBassVol2=    'earlyBassBaseVol*v.36'
+#def earlyBassVol3=    'earlyBassBaseVol*v.45'
+#def earlyBassVol4=    'earlyBassBaseVol*v.57'
+
+#def bassVol= v127
+
+#def guitar= |2 o5 'guitarVol' %r18 %e1 m
+
+#def guitar1=   'guitar'                 p21
+#def guitar2=   'guitar'                 p39
+#def guitar3=   'guitar'                 p30
+#def organ=     |3 o5    'organVol30'    'organCenter'      %r20 %e1 m1,6,232
+#def earlyBass= |2 o5    'earlyBassVol1' p89           %a12 %r18 %e0 mv
+#def bass=      |1 o6    'bassVol'       p64                %r16 %e0 m %y3%s4%r13 m6,9,239 v6,9,191
+
+#def baseKickVol= v220
+#DRUM "k"=5e  |a 'baseKickVol*v.24' p64 %e0
+#DRUM "l"=5e  |a 'baseKickVol*v.41' p64 %e0
+#DRUM "m"=5e  |a 'baseKickVol*v.49' p64 %e0
+
+#def baseSnareVol= v420
+#DRUM "s"=5g+ |b 'baseSnareVol*v.04' p64 %e0
+#DRUM "t"=5g+ |b 'baseSnareVol*v.1'  p64 %e0
+#DRUM "u"=5g+ |b 'baseSnareVol*v.14' p64 %e0
+#DRUM "v"=5g+ |b 'baseSnareVol*v.19' p64 %e0
+#DRUM "w"=5g+ |b 'baseSnareVol*v.24' p64 %e0
+#DRUM "x"=5g+ |b 'baseSnareVol*v.30' p64 %e0
+
+#def baseTambourineVol= v284
+#DRUM "o"=5b- |c 'baseTambourineVol*v.08' p15 %e0
+#DRUM "p"=5b- |c 'baseTambourineVol*v.1'  p15 %e0
+#DRUM "q"=5b- |c 'baseTambourineVol*v.2'  p15 %e0
+#DRUM "r"=5b- |c 'baseTambourineVol*v.23' p15 %e0
+
+## Conga volumes are:  9/19; 5/10; 7/14; 5/10;       9/19; 3/7; 5/10; 3;7     7/14; 3/7; 5/10; 9/19;      (high note) 31/11; 3/3; 5/5; 11/11; 
+## Repeated 4 probably
+
+## Then   18/18; 5/5; 8/8; 5/5;     18/18; 5/5; 8/8; 5/5;      18/18; 5/5; 8/8; 5/5;     18/18; 3/3; 5/5; 3/3
+## Till end of song
+
+## So we got 3 pans and a bunch of volumes...
+#def baseCongaVol= v200
+## The 3 pans are 89, 64, and 30
+#def congaLeft=   p30
+#def congaCenter= p64
+#def congaRight=  p89
+
+## The conga has enough volumes and pans that we'll just handle it as a normal instrument rather than as percussions
+#def conga= |d o5 %e0
+
+
+
+{1}
+'init'
+$
+## Guitar 3, originally channel 7
+'guitar3'
+r1r1
+## 3 / 4
+[2
+  r12e2^4.^24
+]
+## Guitar 1, originally channel 5
+'guitar1'
+## 5 / 6 / 7 / 8
+[4
+  r6r32e8^12e16. [2 r12r16e16^24]
+]
+## Guitar 3, originally channel 7
+'guitar3' 'guitarQuietVol'
+[2
+  ## 9 / 11
+  r8r32r48e8.^24e16. [2 r8r32d16.]
+  ## 10 / 12
+  r8r32r48c8.^24c16. >[2 r8r32b16.]<
+]
+
+## Organ, originally channel 5
+'organ-o1'
+[2
+  [2
+    ## 13 / 17 / 21 / 25
+    r24'organVol30'a8 <e12r24 'organRight''organVol7'e8 'organVol4'e8e8'organVol2'e8r24r6
+    ## 14 / 18 / 22 / 26
+    r4r32 'organCenter''organVol18'e-32'organVol30'e12^48a8e-16d16c8>a8g12
+    j2,119
+    ## 15 / 23
+    ^24a8 [3 e16 j3 r48r6] r16<c8r12
+    ## 16 / 24
+    r24d8>g+12r2r6d16r48
+  ]
+  $119
+  ## 19 / 27
+  ^24a16r16r2<c16r16d16r16e16r48
+  ## 20 / 28
+  r24f32r32f32r32'organLeft''organVol7'f8'organCenter''organVol30'd12r24'organLeft''organVol7'd8'organCenter''organVol30'
+    >b32r32b32r32'organLeft''organVol7'b8'organCenter''organVol30'g+12r24'organLeft''organVol7'g+12'organCenter''organVol30'
+]
+;
+
+
+{2}
+r48
+$
+## Kick/Snare, includes most notes found originally in channels 2 and 3. Some leftover notes in case of conflict play in another channel
+"!!!o"
+## 1-4
+[4 "m4t8w8" j4 "l4w4"]
+## 4 (at beat 3)
+"l8s16u16v8x8"
+;
+
+
+{3}
+r48
+$
+## Early Bass, originally channel 4
+## 1-4
+'playEarlyBass'
+## Deeper Bass, originally channel 4
+'bass-o3'
+## 5-8
+[4 a4.<c4 j4 m12,2 d8d8c8>]
+## 8 (at beat 3.5)
+^8>e4
+[2
+  ## 9 / 11
+  a4a8<e8> g4g8<e8>
+  ## 10 / 12
+  f4f8<c8> e4e8b8
+]
+[4
+  ## 13 / 17 / 21 / 25
+  a4a8<e8> g4g8<e8>
+  ## 14 / 18 / 22 / 26
+  f4f8<c8> e4e8b8
+  ## 15 / 19 / 23 / 27
+  a4a8<e8 c4c8g8>
+  ## 16 / 20 / 24 / 28
+  b-4b-4 e4e4
+]
+;
+
+
+{4}
+$
+## Guitar 2, originally channel 6
+'guitar2'
+r1r1
+## 3 / 4
+[2
+  r32r48  c2.^8^24^32
+]
+## Guitar 3, originally channel 7
+'guitar3'
+## 5 / 6 / 7 / 8
+[4
+  r8r32r48c8.^24c16. [2 r8r32c16.]
+]
+## Guitar 2, originally channel 6
+'guitar2' 'guitarQuietVol'
+[2
+  ## 9 / 11
+  r8r32c4c16. >[2 r6b12]
+  ## 10 / 12
+  r8r32a4a16. [2 r6g+12]<
+]
+## Guitar 3, originally channel 7
+'guitar3'
+[4
+  ## 13 / 17 / 21 / 25
+  r8r32r48e8.^24e16. [2 r8r32d16.]
+  ## 14 / 18 / 22 / 26
+  r8r32r48c8.^24c16. >[2 r8r32b16.]<
+  ## 15 / 19 / 23 / 27
+  r8r32r48e8.^24e16. [2 r8r32g16.]
+  ## 16 / 20 / 24 / 28
+  r8r32r48f8.^24f16. >[2 r8r32b16.]<
+]
+;
+
+
+{5}
+$
+## Guitar 1, originally channel 5
+'guitar1-o1'
+r1r1
+## 3 / 4
+[2
+  r48a2^4.^16^24
+]
+## Guitar 2, originally channel 6
+'guitar2-o1'
+## 5 / 6 / 7 / 8
+[4
+  r8r32a4a16. [2 r6a12]
+]
+## Guitar 1, originally channel 5
+'guitar1-o1' 'guitarQuietVol'
+[2
+  ## 9 / 11
+  r6r32a8^12a16. [2 r12r16g16^24]
+  ## 10 / 12
+  r6r32f8^12f16. [2 r12r16e16^24]
+]
+## Guitar 2, originally channel 6
+'guitar2'
+[4
+  ## 13 / 17 / 21 / 25
+  r8r32c4c16. >[2 r6b12]
+  ## 14 / 18 / 22 / 26
+  r8r32a4a16. [2 r6g+12]<
+  ## 15 / 19 / 23 / 27
+  r8r32c4c16. [2 r6e12]
+  ## 16 / 20 / 24 / 28
+  r8r32d4d16. >[2 r6g+12]<
+]
+;
+
+
+{6}
+r48
+$
+## Early Bass, originally channel 4
+## We play this on two different channels because the sample doesn't get as loud as we want (and this channel is available anyway)
+## 1-4
+'playEarlyBass'
+## Conga, originally channel 8
+'conga+o1'
+l16
+[4
+  ## 5-8
+  'congaRight''baseCongaVol*v.27'g+               'baseCongaVol*v.15'g+'baseCongaVol*v.21'g+'baseCongaVol*v.15'g+
+              'baseCongaVol*v.27'g+               'baseCongaVol*v.1' g+'baseCongaVol*v.15'g+'baseCongaVol*v.1' g+
+              'baseCongaVol*v.21'g+               'baseCongaVol*v.1' g+'baseCongaVol*v.15'g+'baseCongaVol*v.27'g+
+  'congaLeft' 'baseCongaVol*v.42'<g+>'congaCenter''baseCongaVol*v.06'g+'baseCongaVol*v.1' g+'baseCongaVol*v.22'g+
+]
+'congaCenter'
+[20
+  ## 9-28
+  [3 'baseCongaVol*v.36'g+'baseCongaVol*v.1' g+'baseCongaVol*v.16'g+'baseCongaVol*v.1' g+]  'baseCongaVol*v.36'g+'baseCongaVol*v.06'g+'baseCongaVol*v.1' g+'baseCongaVol*v.06'g+
+]
+;
+
+
+{7}
+r48
+$
+## Tambourine, originally channel 1
+"!!!o"
+l8
+## 1-8
+[8 "pprrpprp"]
+## 9-28
+[20 "ooqqooqo"]
+;
+
+
+{8}
+r48
+$
+## Leftover kicks, originally in channel 2. The notes that conflict with the snare and couldn't be in the snare/kick channel
+"!!!o"
+## 1-4
+r4."k8"r2
+## Then the pattern continues throughout the song
+;
+
+
+## ** Jump functions **
+
+## Plays the first 4 measures (which is actually just lower notes on a regular guitar)
+#def playEarlyBass= [j1,9000]
+$9000
+## Early Bass, originally channel 4
+'earlyBass-o2'
+l8
+## 1-4
+[4 'earlyBassVol1'm12,2 g'earlyBassVol2'a<'earlyBassVol4'c>'earlyBassVol1'a< m12,1 'earlyBassVol2'd m12,1 'earlyBassVol1'd'earlyBassVol3'd'earlyBassVol1'c>]
+## Then go back to wherever we came from
+]

@@ -1,0 +1,178 @@
+#TITLE Walls and Steels
+#ALBUM Trials of Mana
+#COMPOSER Hiroki Kikuta
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.4
+
+#VARIANT / vic
+#VARIANT ~ 
+
+#WAVE 0x20 0x78 - legacy 0x92 (chorus)
+#WAVE 0x28 0x19 - legacy 0x20 (celeste)
+#WAVE 0x29 0x67 - legacy 0x46 (strings)
+#WAVE 0x2A 0x57 - legacy 0x96 (pizz)
+#WAVE 0x2B 0x88 - legacy 0x82 (brass)
+#WAVE 0x2C 0x00 - legacy 0x58 (clavi)
+#WAVE 0x2D 0x62 - legacy 0x0D (strings)
+#WAVE 0x2E 0x1A - legacy 0x81 (snare)
+
+#WAVE /0x28 0x18/
+#WAVE /0x2B 0x89/
+#WAVE /0x2D 0x00/
+
+#def 0i=   |0 %a8%y1%s2%r10
+#def 0o=   o6
+#def 0v=   v67
+#def 0f= v1,67
+
+#def 8i=   |8 %y3%s3%r10
+#def 8o=   o6
+#def 8v=   v125
+#def 8f= v1,125
+
+#def 9i=   |9 %a10%s7%r6
+#def 9o=   o6
+#def 9v=   v67
+#def 9f= v1,67
+
+#def Ai=   |A %r10
+#def Ao=   o5
+#def Av=   v125
+#def Af= v1,125
+
+#def Bi=   |B %r10
+#def Bo=   o6
+#def Bv=   ~v80~ /v100/
+#def Bf= ~v1,80~ /v1,100/
+
+#def Ci=   |9 %a15%r7
+#def Co=   o4
+#def Cv=   v133
+#def Cf= v1,133
+
+#def Di=   ~|D~ /|9/
+#def Do=   o6
+#def Dv=   ~v100~ /v80/
+#def Df= ~v1,100~ /v1,80/
+
+#def Ei=   |E %r20
+#def Eo=   o5
+#def Ev=   v100
+#def Ef= v1,100
+
+#cdef ( %g1
+#cdef ) %g0
+
+{1}
+t120 ~%v-72~/%v72/ %b0,56 %f0,0 %x232
+p80%e1
+'9i' '9o-o1''9v*v.80'e16g+16b16<d16p96e4^16r16e24e24e24e16r16d16r16g16
+r16f+16r16e16r8e16e2^4.r2r8$p80
+['9i' '9o-o1''9v*v.80'r4d8r8d4d4r4>b8r8b4.b8][r4'9o-o1'd8r8d4c4]r4d8r8
+d4d4r4>b8r8b4.b8>a2^8<d8e8f+8e8d8g4c+8d8c+8>b8a2^8<d8e8f+8e8d8g4c+8d8e8
+g8a2g4f8d8f8g8a4g4f8g8a8r8<c4c8>b8a8g8a8b8<d4>a8g8d8>b8p64
+'Ai' <[3'Av*v.80''Ao-o2'a2'Av*v.70'a2'Av*v.61'a2'Av*v.52'a2]'Av*v.80'a2
+g2a2'Av*v.70'a2[3'Av*v.80''Ao-o2'b2'Av*v.70'b2'Av*v.61'b2'Av*v.52'b2]'Av*v.80'
+b2a2b2'Av*v.70'b2
+'Av*v.34'[3'Ao-o1'e4<e4>d4<d8>d8]e4<e4>d4r8d8[3'Ao-o1'e4<e4>d4<d8
+>d8]>b4<b4e2
+;
+
+{6}
+p80%e1
+'9i' r32'9o-o1''9v*v.80'f+16a16<c+16d+32>a4^16r16a24a24a24a16r16g16r16
+<c16r16>b16r16g16r8b16a2^4.r2r8$p96['9o-o1''9v*v.80'
+'9i' r4a8r8a4a4r4a8r8a4.a8][3r4'9o-o1'a8r8a4a4]r4a8r8a4.a8[r4<'9o'd8r8
+d4d4r4>b8r8b4.b8][r4<'9o'd8r8d4c4]r4d8r8d4d4r4>b8r8b4.b8p80>a4a8<d8e4a8
+e8f+8g8f+24g24f+24e8d4c8d8e4>a8r8a4a8a8<d4>g8r8g2a4a8<d8e4a8e8f+8g8f+24
+g24f+24e8d4c8d8e4>a8r8g8a8b8g8a4a8r8a2b4b8<e8f+4b8f+8g+8a8g+24a24g+24f+8
+e4d8e8f+4>b8r8b4b8b8<e4>a8r8a2b4b8<e8f+4b8f+8g+8a8g+24a24g+24f+8e4d8e8
+f+4>b8r8a8b8<c+8>a8b4b8r8b2p64
+'Ai' r4
+['Ao''Av*v.34'g4r4f+8r8r8>b8]<g4r8>a8<f+8r8r4g4r2r4
+['Ao'g4r4f+8r8r8>b8]<g4r8>a8<f+8r8r4d4r2
+;
+
+{5}
+%e1p32
+'Bi' r4'Bo-o1''Bv*v.80'a4^16r16a24a24a24a16r16a16r16g16r16f+16r16a16r8
+<d16c+2^4.r2r8$p64'Cv*v.80''Co-o2'
+'Ci' a1['Co-o2'a1a1a1<c1c1d1d1>a1]a1a1a1a1a1a2g2a1b1b1b1b1b1b1b2a2
+b1
+'Di' p32%a8%r10<'Dv*v.57''Do-o1'e2d2>b2<d2e2d2>b2a4f+4<e2d2>b2<d2e2d2>
+b4a4b2;
+
+{4}
+p48%e1
+'Bi' r4'Bo-o1''Bv*v.80'e4^16r16e24e24e24g16r16f+16r16d16r16>b16r16<e16
+r8a16a2^4.r2r8$p48'Dv*v.80'
+'Di' %r10%a8'Do-o1'e1e1e1e1g1g1a1a1e1e1e1e1g1g1a1a1'Dv*v.70'a4a8<d8e4a8
+e8f+8g8(f+24g24f+24e8)d4c8d8e4>a8r8a4a8a8<d4>g8r8g2a4a8<d8e4a8e8f+8g8(f+24
+g24f+24e8)d4c8d8e4>a8r8g8a8b8g8a4a8r8a2b4b8<e8f+4b8f+8g+8a8(g+24a24g+24f+8)
+e4d8e8f+4>b8r8b4b8b8<e4>a8r8a2b4b8<e8f+4b8f+8g+8a8(g+24a24g+24f+8)e4d8e8
+f+4>b8r8a8b8<c+8>a8b4b8r8b2'Dv*v.57'b2a2g2a2b2a2g2f+4d4b2a2g2a2b2a2g4f+4
+e4d8f+8;
+
+{2}
+%e1p16
+'Bi' r4'Bo''Bv*v.80'/k1/e4^16r16e24e24e24e16r16d16r16e16r16>a16r16<d16r8e16
+e2^4.r2r8/k0/$p32'Bv*v.80'['Bo'
+'Bi' m12,18,220r4g8r8g4f+32g32f+8.r4>b8r8b8<d8c+32d32c+16>g8][r4<'Bo'g8r8
+g4g32f8.^32][3r4'Bo'g8r8g4f+32g32f+8.r4>b8r8b8<d8c+32d32c+16>g8][r4<'Bo'g8
+r8g4g32f8.^32]r4g8r8g4f+32g32f+8.r4>b8r8b8<d8c+32d32c+16>g8m['Bo-o1'e1
+^1>a1^1]['Bo-o1'f+1^1>b1^1]
+'8i' p80r4'8o''8v*v.80'e2d4e8d8>b8a8f+4a4g4a4<d4e8d8c8>b8<c8>b8g4f+4r4
+<e2d4e8d8>b8a8f+4a4g4a4<d4e8f+8g8f+8d8f+8e2;
+
+{3}
+p64
+'Ei' r1r1r2'Eo''Ev*v.00'a48'Ev*v.01'a48'Ev*v.03'a48'Ev*v.05'a48'Ev*v.07'
+a48'Ev*v.10'a48'Ev*v.11'a48'Ev*v.15'a48'Ev*v.17'a48'Ev*v.20'a48'Ev*v.23'
+a48'Ev*v.27'a48'Ev*v.30'a48'Ev*v.34'a48'Ev*v.37'a48'Ev*v.40'a48'Ev*v.45'
+a48'Ev*v.49'a48'Ev*v.52'a48'Ev*v.57'a48'Ev*v.61'a48'Ev*v.66'a48'Ev*v.70'
+a48'Ev*v.74'a48$p64%e0
+'Ei' [8'Eo''Ev*v.80'a8r8a8'Ev*v.61'a8'Ev*v.80'a32'Ev*v.70'a32'Ev*v.61'
+a32'Ev*v.52'a32'Ev*v.45'a32'Ev*v.37'a32'Ev*v.30'a32'Ev*v.23'a32'Ev*v.61'
+a8'Ev*v.70'a8'Ev*v.80'a8r8'Ev*v.61'a8r8'Ev*v.80'a32'Ev*v.74'a32'Ev*v.70'
+a32'Ev*v.66'a32'Ev*v.61'a32'Ev*v.57'a32'Ev*v.52'a32'Ev*v.49'a32'Ev*v.45'
+a32'Ev*v.40'a32'Ev*v.37'a32'Ev*v.34'a32'Ev*v.30'a32'Ev*v.27'a32'Ev*v.23'
+a32'Ev*v.20'a32]'Ev*v.80'a8r2.r8r1r1r1r1r1r1r2'Ev*v.17'a32'Ev*v.20'a32
+'Ev*v.23'a32'Ev*v.27'a32'Ev*v.30'a32'Ev*v.34'a32'Ev*v.37'a32'Ev*v.40'a32
+'Ev*v.45'a32'Ev*v.49'a32'Ev*v.52'a32'Ev*v.57'a32'Ev*v.61'a32'Ev*v.66'a32
+'Ev*v.70'a32'Ev*v.74'a32[4'Ev*v.80''Eo'a8r8a8'Ev*v.61'a8'Ev*v.80'a32'Ev*v.70'
+a32'Ev*v.61'a32'Ev*v.52'a32'Ev*v.45'a32'Ev*v.37'a32'Ev*v.30'a32'Ev*v.23'
+a32'Ev*v.61'a8'Ev*v.70'a8'Ev*v.80'a8r8'Ev*v.61'a8r8'Ev*v.80'a32'Ev*v.74'
+a32'Ev*v.70'a32'Ev*v.66'a32'Ev*v.61'a32'Ev*v.57'a32'Ev*v.52'a32'Ev*v.49'
+a32'Ev*v.45'a32'Ev*v.40'a32'Ev*v.37'a32'Ev*v.34'a32'Ev*v.30'a32'Ev*v.27'
+a32'Ev*v.23'a32'Ev*v.20'a32]
+'8i' p96%e1'8v*v.80''8o'b2a4g8f+8g8f+8d4>a8b8<d8>b8<e4b4a4g8f+8g8f+8d4
+>a2<b2a4g8f+8g8f+8d4>a8b8<d8>b8<e4b4a4g8a8b8a8f+8a8g+2;
+
+{7}
+%e1p16
+'0i' r4'0o''0v*v.80'e4^16r16e24e24e24e16r16d16r16e16r16>a16r16<d16r8e16
+e2^4.r2r8 $
+p32'0v*v.80'['0o'
+'0i' r4g8r8g4f+32g32f+8.r4>b8r8b8<d8c+32d32c+16>g8][r4<'0o'g8r8
+g4g32f8.^32][3r4'0o'g8r8g4f+32g32f+8.r4>b8r8b8<d8c+32d32c+16>g8][r4<'0o'g8
+r8g4g32f8.^32]r4g8r8g4f+32g32f+8.r4>b8r8b8<d8c+32d32c+16>g8
+p48'0o-o1''0v*v.70'a4a8<d8e4a8
+e8f+8g8f+24g24f+24e8d4c8d8e4>a8r8a4a8a8<d4>g8r8g2a4a8<d8e4a8e8f+8g8f+24
+g24f+24e8d4c8d8e4>a8r8g8a8b8g8a4a8r8a2b4b8<e8f+4b8f+8g+8a8g+24a24g+24f+8
+e4d8e8f+4>b8r8b4b8b8<e4>a8r8a2b4b8<e8f+4b8f+8g+8a8g+24a24g+24f+8e4d8e8
+f+4>b8r8a8b8<c+8>a8b4b8r8b2'Dv*v.57'b2a2g2a2b2a2g2f+4d4b2a2g2a2b2a2g4f+4
+e4d8f+8;
+
+{8}
+p48%e1
+'0i' r4'0o-o1''0v*v.80'e4^16r16e24e24e24g16r16f+16r16d16r16>b16r16<e16
+r8a16a2^4.r2r8 $
+p64'0v*v.80''0o-o2'
+'0i' a1a1a1a1<c1c1d1d1>
+'0i''0o-o3''0v*v.80'p80a2^8<d8e8f+8e8d8g4c+8d8c+8>b8a2^8<d8e8f+8e8d8g4c+8d8e8
+g8a2g4f8d8f8g8a4g4f8g8a8r8<c4c8>b8a8g8a8b8<d4>a8g8d8>b8
+p32'0v*v.8'['0o-o1'e1
+^1>a1^1]['0o-o1'f+1^1>b1^1]
+'0i' p32<'0v*v.57''0o-o1'e2d2>b2<d2e2d2>b2a4f+4<e2d2>b2<d2e2d2>
+b4a4b2
+;

@@ -1,0 +1,188 @@
+#TITLE Light Cast on the Lost
+#ALBUM Chrono Cross
+#COMPOSER Yasunori Mitsuda
+#ARRANGED Rushlight
+
+#SHORTNAME CC Game Over
+
+#WAVE 0x20 0x36 ## Guitar
+#WAVE 0x21 0xAD ## Fret Noise
+
+#def init=t84 %v70 %b0,40 %f0,0
+
+#def guitarBaseVol=      v125 %a13
+## The original song has another guitar sample that sounds like the normal guitar, but more accented.
+## We don't have a separate sample for this, but we can at least play it a bit louder.
+#def sharpGuitarBaseVol= v117 %a15
+#def sharpGuitarAddlVol= v20
+#def fretVol=            v20
+
+#def lowGuitarSustain= %r8
+#def guitarSustain=    %r12
+#def guitarRelease=    %r18
+#def guitarSharp=      %y2%s3%r15
+
+#def lowGuitar=      |0 o5 p64 'guitarSustain' %e1 m
+#def guitar=         |0 o5 p64 'guitarSustain' %e1 m
+#def guitarOverflow= |0 o5 p64 'guitarSharp'   %e1 m
+#def fret=           |1 o5 p64 'fretVol'       %e0 m
+
+
+
+{1}
+'init'
+## The tempo varies throughout the song, and it's not that smooth, so it's difficult to replicate with tempo slides.
+## To simplify things, since we have free channels and channel ordering isn't important for game over songs, we'll just dedicate this channel to tempo control with no notes
+[3
+  ## 1 / 3 / 5
+  t84 &20rt85 &16rt87 &12rt89 &12rt92 &10rt93 &8rt95 &6rt96 &2rt97 &6rt95 &12rt93 &2rt92 &14rt91 &18rt94 &18rt97 &18rt95 &18r
+  j3
+  ## 2 / 4
+  &16rt94 &16rt93 &12rt91 &10rt90 &8rt89 &2rt88 &6rt87 &2rt86 &6rt85 &6rt84 &6rt83 &2rt82 &4rt80
+  &6rt78 &4rt77 &4rt75 &4rt74 &4rt73 &2rt72 &2rt71 &2rt70 &2rt69 &4rt68 &4rt66 &2rt65 &2rt64 &4rt62 &2rt61
+  &2rt60 &2rt59 &2rt57 &2rt56 &2rt54 &2rt53 &2rt52 &2rt51 &2rt49 &2rt47 &2rt45 &2rt43 &2rt41 &2rt39 &2rt35 &2rt32 &2rt26 &2rt22 &12r
+]
+## 6
+t92 &18rt90 &16rt89 &2rt88 &12rt86 &12rt85 &12rt83 &12rt81 &10rt78
+&10rt75 &8rt74 &8rt72 &4rt70 &4rt69 &6rt68 &4rt66 &4rt65 &4rt64 &4rt62 &4rt61 &4rt59 &4rt57 &4rt55 &4rt54 &4rt52 &4rt50 &4rt48 &4rt46 &6r
+## 7
+t83 &14rt82 &12rt80 &10rt79 &2rt78 &8rt77 &8rt76 &2rt75 &6rt74 &8rt72 &6rt71 &6rt69 &6rt68 &4rt67
+&6rt65 &4rt64 &4rt63 &4rt62 &2rt61 &2rt60 &4rt59 &4rt58 &2rt57 &2rt56 &4rt55 &2rt54 &2rt53 &4rt52
+&4rt51 &2rt50 &2rt49 &4rt48 &2rt47 &2rt46 &2rt45 &2rt44 &2rt43 &2rt41 &2rt40 &2rt39 &2rt38 &2rt37
+&2rt36 &2rt34 &2rt33 &2rt31 &2rt30 &2rt28 &2rt27 &2rt26 &2rt25
+;
+
+
+{2}
+## High Guitar, playing a portion of notes found in channels 1 through 4 and 11 through 13 of VGMTrans output
+'guitar'
+r8'guitarBaseVol*v.85'e-'guitarRelease'^8'guitarSustain''guitarBaseVol'a8'guitarRelease'^8'guitarSustain''guitarBaseVol'e-4'guitarRelease'^8'guitarSustain'
+## 2
+'guitarBaseVol*v.89'e-4'guitarRelease'^8'guitarSustain''guitarBaseVol*v.83'e-4'guitarRelease'^8'guitarSustain''guitarBaseVol*v.73'e-8'guitarRelease'^8'guitarSustain'
+## 3
+r8'guitarBaseVol*v.93'e-'guitarRelease'^8'guitarSustain''sharpGuitarBaseVol*v1.05'a8'guitarRelease'^8'guitarSustain''sharpGuitarBaseVol*v1.03'e-4'guitarRelease'^8'guitarSustain'
+## 4
+'guitarBaseVol*v.91'e-4'guitarRelease'^8'guitarSustain''guitarBaseVol*v.83'e-4'guitarRelease'^8'guitarSustain''guitarBaseVol*v.74'e-8'guitarRelease'^8'guitarSustain'
+## 5
+^8'guitarBaseVol*v.91'>g+8'guitarRelease'^8'guitarSustain''sharpGuitarBaseVol*v1.06'b8'guitarRelease'^8'guitarSustain''sharpGuitarBaseVol*v1.08'<e-8'guitarRelease'^8'guitarSustain''guitarBaseVol*v.98'f+8
+## 6
+'guitarRelease'^4.'guitarSustain'a8'guitarRelease'^4.'guitarSustain''guitarBaseVol*v.84'e8
+## 7
+'guitarRelease'^4'guitarSustain''guitarBaseVol*v.93'e-8'guitarRelease'^8'guitarSustain''guitarBaseVol*v.88'g+8'guitarRelease'^8'guitarSustain''guitarBaseVol*v.84'<e-8'guitarRelease'^8
+## 8
+'guitarSustain'&6r>&42b4'guitarRelease'^4
+;
+
+
+{3}
+## High Guitar, playing a portion of notes found in channels 1 through 4 and 11 through 13 of VGMTrans output
+'guitar'
+r4'guitarBaseVol*v.92'e4'sharpGuitarBaseVol*v1.03'g+8'guitarRelease'^4'guitarSustain''guitarBaseVol*v.98'c+8
+## 2
+'guitarRelease'^4'guitarSustain''guitarBaseVol*v.8'c+8'guitarRelease'^4'guitarSustain''guitarBaseVol*v.75'c+8'guitarRelease'^8'guitarSustain''guitarBaseVol*v.68'c+8
+## 3
+'guitarRelease'^4'guitarSustain''guitarBaseVol'e4'sharpGuitarBaseVol*v1.04'g+8'guitarRelease'^4'guitarSustain''guitarBaseVol'c+8
+## 4
+'guitarRelease'^4'guitarSustain''guitarBaseVol*v.82'c+8'guitarRelease'^4'guitarSustain''guitarBaseVol*v.77'c+8'guitarRelease'^8'guitarSustain''guitarBaseVol*v.68'c+8
+## 5
+'guitarRelease'^4'guitarSustain''guitarBaseVol*v1.01'>a8'guitarRelease'^8'guitarSustain'<c+8'guitarRelease'^8'guitarSustain''sharpGuitarBaseVol*v1.05'e8'guitarRelease'^8'guitarSustain'
+## 6
+'guitarBaseVol*v1.01'g+2'guitarBaseVol*v.95'f+2
+## 7
+'guitarBaseVol*v.85'e-4'guitarRelease'^8'guitarSustain''guitarBaseVol*v.98'e4'guitarBaseVol*v.86'f+8'guitarRelease'^4'guitarSustain'
+## 8
+&4r &44f+4'guitarRelease'^4
+;
+
+
+{4}
+## Medium Guitar, playing a portion of notes found in channels 5 through 8 of VGMTrans output
+'guitar-o1'
+r8'guitarBaseVol*v.82'g+4'guitarBaseVol*v.91'g+8'guitarRelease'^8'guitarSustain''guitarBaseVol*v.85'f+4'guitarBaseVol*v.87'f+8
+## 2
+'guitarRelease'^8'guitarSustain''guitarBaseVol*v.84'e4'guitarBaseVol*v.8'e4'guitarBaseVol*v.75'e4'guitarBaseVol*v.69'e8
+## 3
+'guitarRelease'^8'guitarSustain''guitarBaseVol*v.87'g+4'guitarBaseVol*v.91'g+8'guitarRelease'^8'guitarSustain''guitarBaseVol*v.85'f+4'guitarBaseVol*v.98'f+8
+## 4
+'guitarRelease'^8'guitarSustain''guitarBaseVol*v.84'e4'guitarBaseVol*v.79'e4'guitarBaseVol*v.73'e4'guitarBaseVol*v.69'e8
+## 5
+'guitarRelease'^8'guitarSustain''guitarBaseVol*v.83'c+4'guitarBaseVol*v.85'c+4'guitarBaseVol*v.87'c+4'guitarBaseVol*v.91'c+8
+## 6
+'guitarRelease'^8'guitarSustain''guitarBaseVol*v.91'e4.'guitarRelease'^8'guitarSustain''guitarBaseVol*v.87'f+4.
+## 7
+'guitarRelease'^8'guitarSustain''guitarBaseVol*v.82'g+2^8'guitarBaseVol*v.73'<c+8'guitarRelease'^8'guitarSustain'
+## 8
+'guitarBaseVol*v.77'>g+4'guitarRelease'^4
+;
+
+
+{5}
+## Medium Guitar, playing a portion of notes found in channels 5 through 8 of VGMTrans output
+'guitar'
+r4'guitarBaseVol*v.77'c+4'guitarRelease'^4'guitarSustain''guitarBaseVol*v.91'>b4
+## 2
+'guitarRelease'^4'guitarSustain''guitarBaseVol*v.81'a4'guitarBaseVol*v.8'b4'guitarBaseVol*v.72'a4
+## 3
+'guitarRelease'^4'guitarSustain''guitarBaseVol*v.84'<c+4'guitarRelease'^4'guitarSustain''guitarBaseVol*v.98'>b4
+## 4
+'guitarRelease'^4'guitarSustain''guitarBaseVol*v.84'a4b4'guitarBaseVol*v.74'a4
+## 5
+'guitarRelease'^4'guitarSustain''guitarBaseVol*v.82'f+4'guitarBaseVol*v.92'a4'guitarBaseVol'b4
+## 6
+'guitarRelease'^4'guitarSustain'b4'guitarRelease'^4'guitarSustain''guitarBaseVol*v.86'b4
+## 7
+'guitarRelease'^2^8'guitarSustain''guitarBaseVol*v.84'<e-8'guitarRelease'^8'guitarSustain''guitarBaseVol*v.63'>g+8
+## 8
+'guitarBaseVol*v.78'&2r &46<e-'guitarRelease'^4
+;
+
+
+{6}
+## Low Guitar notes, channels 10-11 in VGMTrans output
+'lowGuitar-o1'
+'guitarBaseVol*v.79'c+2'guitarBaseVol*v.89'>b2
+## 2
+'guitarBaseVol*v.8'a1
+## 3
+'guitarBaseVol*v.71'<c+2'guitarBaseVol*v.91'>b2
+## 4
+'guitarBaseVol*v.8'a1
+## 5
+'guitarBaseVol*v.83'f+1
+## 6
+'guitarBaseVol*v.94'a2'guitarBaseVol*v.91'b2
+## 7
+&190'guitarBaseVol*v.72'<c+1
+## 8 (2 ticks before)
+'guitarBaseVol*v.77'&2c+^2'guitarRelease'^2
+;
+
+
+{7}
+## Fret noises, channels 14-15 in VGMTrans output
+'fret'&69r &123f
+## 2
+&187r &5g+
+## 3
+^4 &20r &28g
+'guitarOverflow''sharpGuitarAddlVol*v1.04'g+4. r8
+## 4
+'fret'&188r &4e-
+## 5
+^4 &38r &10f+^4
+'guitarOverflow''sharpGuitarAddlVol*v1.05'e4
+;
+
+{8}
+## High volume overflow notes, additional copies of existing notes that need > 127 volume
+'guitarOverflow'
+r2'sharpGuitarAddlVol*v1.03'g+8^4r8
+## 2
+r1
+## 3
+r4.'sharpGuitarAddlVol*v1.03'a4'sharpGuitarAddlVol*v1.05'e-4.
+## 4
+r1
+## 5
+r4.'sharpGuitarAddlVol*v1.06'>b4<'sharpGuitarAddlVol*v1.08'e-4
+;
