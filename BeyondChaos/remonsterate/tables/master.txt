@@ -1,0 +1,2 @@
+FF6_NA_1.0          e986575b98300f721ce27c180264d890    tables_list.txt
+FF6_NA_1.1          544311e104805e926083acf29ec664da    tables_list_1.1.txt
