@@ -1,0 +1,104 @@
+# monster graphics relocation patch created by madsiur
+
+00ffd5: 35
+00ffd7: 0d
+
+40ffd5: 35
+40ffd7: 0d
+
+012114: 69 00
+01211a: 69 58
+
+03af8d: a9 58
+03af93: a9 00 00
+
+01217a: 6f 20 a8 5f
+012184: bf 00 00 5f
+0121a0: 6f 22 a8 5f
+0121aa: bf 00 00 5f
+
+03afd3: a9 5f
+03affd: a9 5f
+
+# new stuff by abyssonym
+0120ed: 22 00 f8 5f
+:       ea ea
+012104: ea
+012561: 22 00 f8 5f
+:       ea ea
+012572: ea
+5ff800: ad a8 81
+:       0a 0a 0a 0a
+:       6b
+
+# coliseum prebattle view
+03af9e: 22 10 f8 5f
+:       ea ea ea ea
+:       ea ea ea ea
+5ff810: 06 f9
+:       26 fb
+:       06 f9
+:       26 fb
+:       06 f9
+:       26 fb
+:       06 f9
+:       26 fb
+:       6b
+
+# reads from palette bank
+012349: bf 00 c0 5f
+01d67c: bf 00 c0 5f
+02fa75: bf 00 c0 5f
+02fa8c: bf 00 c0 5f
+03b171: bf 00 c0 5f
+
+5fffff: 00
+
+VALIDATION
+
+00ffd5: 31
+00ffd7: 0c
+
+40ffd5: 31
+40ffd7: 0c
+
+012114: 69 70
+01211a: 69 e9
+
+03af8d: a9 e9
+03af93: a9 00 70
+
+01217a: 6f 20 a8 d2
+012184: bf 00 00 d2
+0121a0: 6f 22 a8 d2
+0121aa: bf 00 00 d2
+
+03afd3: a9 d2
+03affd: a9 d2
+
+0120ed: ad a8 81
+        0a 0a 0a
+012104: 4a 4a 4a 4a 4a
+012561: ad a8 81
+        0a 0a 0a
+012572: 4a 4a 4a 4a 4a
+
+03af9e: 06 f9 26 fb
+        06 f9 26 fb
+        06 f9 26 fb
+
+012349: bf 20 78 d2
+01d67c: bf 20 78 d2
+02fa75: bf 20 78 d2
+02fa8c: bf 20 78 d2
+03b171: bf 20 78 d2
+
+580000: 00 00 00 00 00 00 00 00
+        00 00 00 00 00 00 00 00
+        00 00 00 00 00 00 00 00
+        00 00 00 00 00 00 00 00
+
+5ff800: 00 00 00 00 00 00 00 00
+        00 00 00 00 00 00 00 00
+        00 00 00 00 00 00 00 00
+        00 00 00 00 00 00 00 00
