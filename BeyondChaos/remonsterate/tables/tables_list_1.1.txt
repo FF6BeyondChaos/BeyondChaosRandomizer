@@ -1,0 +1,18 @@
+MouldObject             mould_table.txt             2d01a   13
+FormationObject         formation_table.txt         f6200   576
+MonsterSpriteObject     monster_sprite_table.txt    127000  416
+MonsterPaletteObject    monster_palette_table.txt   127820  832
+MonsterComp8Object      monster_comp8_table.txt     12a824  128
+MonsterComp16Object     monster_comp16_table.txt    12ac24  48
+$previous_max_palettes  300
+$moulds_end             2d0f4
+$comp8_pointer          12a820
+$comp16_pointer         12a822
+$monster_graphics       297000
+$end_monster_graphics   2ce3c0
+$new_monster_graphics   580000
+$new_comp8_pointer      5fa820
+$new_comp16_pointer     5fa822
+$new_palette_pointer    5fc000
+$new_code_pointer       5ff800
+.patch                  monster_expansion_patch_1.1.txt
