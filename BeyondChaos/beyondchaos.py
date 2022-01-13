@@ -22,7 +22,7 @@ import randomizer
 import utils
 from config import (readFlags, writeFlags)
 from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES)
-from update import (update, update_needed)
+from update import (update, configExists)
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. "
@@ -1318,7 +1318,7 @@ if __name__ == "__main__":
         "updater file and updates please wait."
     )
     try:
-        if not update_needed():
+        if configExists():
             App = QApplication(sys.argv)
             window = Window()
             time.sleep(3)
