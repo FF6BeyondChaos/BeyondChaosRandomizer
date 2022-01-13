@@ -295,8 +295,7 @@ NORMAL_CODES = [
     
     Code('desperation', "DESPERTION MODE", "When the adventurer back is up against the wall. Break the wall.", "beta", "checkbox"),
     Code('nobreaks', "NO ITEM BREAKS MODE", "Causes no items to break for spell effects.", "beta", "checkbox"),
-    Code('unbreakable', "UNBREAKABLE ITEMS MODE", "Causes all items to be indestructible  when broken for a spell", "beta", "checkbox"),
-    Code('remonsterate', "MONSTER SPRITE REPLACEMENT MODE", "Enables monster sprite replacements from sprites in the remonstrate\\sprites folder.", "beta", "checkbox")
+    Code('unbreakable', "UNBREAKABLE ITEMS MODE", "Causes all items to be indestructible  when broken for a spell", "beta", "checkbox")
     #Code('sixtytwoqd', "version 62 randomizer", "For quickdraw only, run version 62 of the randomizer", "beta", "checkbox"),
 ]
 

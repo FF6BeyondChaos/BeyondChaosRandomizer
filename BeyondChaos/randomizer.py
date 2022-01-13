@@ -64,7 +64,6 @@ from utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    AutoLearnRageSub)
 from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
-from remonsterate.remonsterate import remonsterate
 
 VERSION = "2"
 BETA = False
@@ -116,7 +115,6 @@ def log(text: str, section: str):
         text = "\n".join([line.rstrip() for line in text])
     text = text.strip()
     randlog[section].append(text)
-
 
 def get_logstring(ordering: List = None) -> str:
     global randlog
@@ -5169,14 +5167,6 @@ def randomize(**kwargs) -> str:
             improve_dance_menu(fout)
     reseed()
 
-    if Options_.is_code_active('remonsterate'):
-        fout.close()
-        remonsterate_results = remonsterate(outfile=outfile, seed=seed, rom_type="1.0",
-                                            list_of_monsters=get_monsters(outfile))
-        fout = open(outfile, "r+b")
-        for result in remonsterate_results:
-            log(str(result) + '\n', section='remonsterate')
-
     has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
     if has_music:
         music_init()
@@ -5367,7 +5357,7 @@ def randomize(**kwargs) -> str:
 
     f = open(outlog, 'w+')
     f.write(get_logstring(["characters", "stats", "aesthetics", "commands", "blitz inputs", "slots", "dances", "espers", "item magic",
-                           "item effects", "command-change relics", "colosseum", "monsters", "music", "remonsterate", "shops",
+                           "item effects", "command-change relics", "colosseum", "monsters", "music", "shops",
                            "treasure chests", "zozo clock"]))
     f.close()
 
