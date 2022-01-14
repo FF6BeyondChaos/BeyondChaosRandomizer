@@ -5174,8 +5174,9 @@ def randomize(**kwargs) -> str:
         remonsterate_results = remonsterate(outfile=outfile, seed=seed, rom_type="1.0",
                                             list_of_monsters=get_monsters(outfile))
         fout = open(outfile, "r+b")
-        for result in remonsterate_results:
-            log(str(result) + '\n', section='remonsterate')
+        if remonsterate_results:
+            for result in remonsterate_results:
+                log(str(result) + '\n', section='remonsterate')
 
     has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
     if has_music:
