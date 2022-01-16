@@ -1,4 +1,5 @@
 from utils import Substitution
+from random import Random
 
 
 def allergic_dog(fout):
@@ -274,11 +275,29 @@ def cycle_statuses(fout):
     ]) 
     cycles_sub.write(fout)
 
+
 def no_dance_stumbles(fout):
     nds_sub = Substitution()
     nds_sub.set_location(0x0217A0) #C217A0
     nds_sub.bytestring = bytes([0xEA, 0xEA])            #No Op x2
     nds_sub.write(fout)
+
+
+def change_swdtech_speed(fout, speed: str, random: Random):
+    swdtech_speed = 0x03
+    if speed.lower() == "sonic":
+        swdtech_speed = 0x00
+    elif speed.lower() == "faster":
+        swdtech_speed = 0x01
+    elif speed.lower() == "fast":
+        swdtech_speed = 0x02
+    elif speed.lower() == "random":
+        swdtech_speed = random.randint(0, 3)
+    css_sub = Substitution()
+    css_sub.set_location(0x017D86)
+    css_sub.bytestring = bytes([0x29, swdtech_speed, 0xD0, swdtech_speed])
+    css_sub.write(fout)
+
 
 def fewer_flashes(fout):
     anti_seizure_sub = Substitution()
