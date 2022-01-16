@@ -1254,7 +1254,7 @@ class Window(QWidget):
                             tempname = os.path.basename(self.romText).rsplit('.', 1)
                         else:
                             tempname = [os.path.basename(self.romText), 'smc']
-                        seed = bundle.split(".")[-1]
+                        seed = bundle.split("|")[-1]
                         resultFile = os.path.join(self.romOutputDirectory,
                                                   '.'.join([os.path.basename(tempname[0]),
                                                             str(seed), tempname[1]]))

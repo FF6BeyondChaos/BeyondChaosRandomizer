@@ -77,6 +77,7 @@ class Options:
     shuffle_wor: bool = field(init=False, default=False)
     randomize_forest: bool = field(init=False, default=False)
     randomize_magicite: bool = field(init=False, default=False)
+    random_final_party: bool = field(init=False, default=False)
 
     def is_code_active(self, code_name: str):
         if code_name in self.active_codes.keys():
