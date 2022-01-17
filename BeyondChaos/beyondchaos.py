@@ -559,8 +559,8 @@ class Window(QWidget):
                     if flagname == "cursepower":
                         nbox.setMinimum(0)
                         nbox.setSpecialValueText("Random")
-                        nbox.setMaximum(256)
-                        nbox.default = 256
+                        nbox.setMaximum(255)
+                        nbox.default = 255
                     elif flagname in ['expboost', 'gpboost', 'mpboost']:
                         nbox.setMinimum(-0.1)
                         nbox.setSingleStep(.1)
