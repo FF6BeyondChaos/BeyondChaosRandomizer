@@ -1,4 +1,4 @@
-from utils import Substitution
+from utils import Substitution, RANDOM_MULTIPLIER
 from random import Random
 
 
@@ -283,7 +283,7 @@ def no_dance_stumbles(fout):
     nds_sub.write(fout)
 
 
-def change_swdtech_speed(fout, speed: str, random: Random):
+def change_swdtech_speed(fout, random: Random, speed: str = "Vanilla"):
     swdtech_speed = 0x03
     if speed.lower() == "sonic":
         swdtech_speed = 0x00
@@ -297,6 +297,22 @@ def change_swdtech_speed(fout, speed: str, random: Random):
     css_sub.set_location(0x017D86)
     css_sub.bytestring = bytes([0x29, swdtech_speed, 0xD0, swdtech_speed])
     css_sub.write(fout)
+
+
+def change_cursed_shield_battles(fout, random: Random, amount: int = None):
+    ccsb_sub = Substitution()
+    ccsb_sub.set_location(0x025FF7)  # C25FF7
+    if not amount:
+        base_cursed_shield_battle_amount = 48
+        standard_deviation_number = 16 * RANDOM_MULTIPLIER
+        if standard_deviation_number == 0:
+            # Tierless - could be anything!
+            amount = random.randint(1, 256)
+        else:
+            amount = max(1, int(random.gauss(base_cursed_shield_battle_amount, standard_deviation_number)))
+    amount = hex(amount)
+    ccsb_sub.bytestring = bytes(amount)
+    ccsb_sub.write(fout)
 
 
 def fewer_flashes(fout):

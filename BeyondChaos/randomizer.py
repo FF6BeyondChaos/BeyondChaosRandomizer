@@ -46,7 +46,7 @@ from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
-                     change_swdtech_speed)
+                     change_swdtech_speed, change_cursed_shield_battles)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -5405,12 +5405,15 @@ def randomize(**kwargs) -> str:
     name_swd_techs(fout)
     fix_flash_and_bioblaster(fout)
     if Options_.is_code_active("swdtechspeed"):
-        change_swdtech_speed(fout, Options_.get_code_value("swdtechspeed"), random)
+        change_swdtech_speed(fout, random, Options_.get_code_value("swdtechspeed"))
+    if Options_.is_code_active("cursepower"):
+        change_cursed_shield_battles(fout, random, Options_.get_code_value("cursepower"))
 
     s = manage_coral(fout)
     log(s, "aesthetics")
 
-    # add_esper_bonuses(fout) #Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
+    # Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
+    # add_esper_bonuses(fout)
 
     if Options_.is_code_active('removeflashing'):
         fewer_flashes(fout)

@@ -324,7 +324,8 @@ NORMAL_CODES = [
     Code('nobreaks', "NO ITEM BREAKS MODE", "Causes no items to break for spell effects.", "beta", "checkbox"),
     Code('unbreakable', "UNBREAKABLE ITEMS MODE", "Causes all items to be indestructible  when broken for a spell", "beta", "checkbox"),
     Code('remonsterate', "MONSTER SPRITE REPLACEMENT MODE", "Enables monster sprite replacements from sprites in the remonstrate\\sprites folder.", "beta", "checkbox"),
-    Code('swdtechspeed', "SWDTECH SPEED RANDO MODE", "Alters the speed at which the swdtech bar moves.", "beta", "combobox", ("Sonic", "Faster", "Fast", "Vanilla", "Random"))
+    Code('swdtechspeed', "SWDTECH SPEED RANDO MODE", "Alters the speed at which the swdtech bar moves.", "beta", "combobox", ("Sonic", "Faster", "Fast", "Vanilla", "Random")),
+    Code('cursepower', "CURSE POWER SHUFFLE MODE", "Set the number of battles required to uncurse a Cursed Shield. (Vanilla = 256, 0 = Random)", "beta", "numberbox"),
     #Code('sixtytwoqd', "version 62 randomizer", "For quickdraw only, run version 62 of the randomizer", "beta", "checkbox"),
 ]
 

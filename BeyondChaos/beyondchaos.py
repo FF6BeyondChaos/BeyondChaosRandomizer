@@ -554,17 +554,26 @@ class Window(QWidget):
                         nbox = QDoubleSpinBox()
                     else:
                         nbox = QSpinBox()
-                    nbox.setSpecialValueText('Off')
-                    nbox.setFixedWidth(50)
-                    nbox.setMinimum(-1)
-                    nbox.setValue(nbox.minimum())
-                    nbox.setMaximum(50)
-                    if flagname in ['expboost', 'gpboost', 'mpboost']:
-                        nbox.setFixedWidth(70)
+
+
+                    if flagname == "cursepower":
+                        nbox.setMinimum(0)
+                        nbox.setSpecialValueText("Random")
+                        nbox.setMaximum(256)
+                        nbox.default = 256
+                    elif flagname in ['expboost', 'gpboost', 'mpboost']:
                         nbox.setMinimum(-0.1)
-                        nbox.setValue(-0.1)
                         nbox.setSingleStep(.1)
+                        nbox.setSpecialValueText('Off')
                         nbox.setSuffix("x")
+                        nbox.default = nbox.minimum()
+                    else:
+                        nbox.setMinimum(-1)
+                        nbox.setSpecialValueText('Off')
+                        nbox.default = nbox.minimum()
+
+                    nbox.setFixedWidth(70)
+                    nbox.setValue(nbox.default)
                     nbox.text = flagname
                     flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
                     tablayout.addWidget(nbox, currentRow, 1)
@@ -577,7 +586,7 @@ class Window(QWidget):
                     for choice in flagdesc['choices']:
                         width = max(width, len(choice) * 10)
                     cmbbox.setFixedWidth(width)
-                    cmbbox.setPlaceholderText(flagname)
+                    cmbbox.text = flagname
                     cmbbox.setCurrentIndex(cmbbox.findText("Vanilla"))
                     flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
                     tablayout.addWidget(cmbbox, currentRow, 1)
@@ -781,7 +790,7 @@ class Window(QWidget):
                             self.flags.append(v)
                         except ValueError:
                             pass
-                elif type(child) in [QComboBox] and str(v).startswith(child.placeholderText().lower()):
+                elif type(child) in [QComboBox] and str(v).startswith(child.text.lower()):
                     if ":" in v:
                         index_of_value = child.findText(str(v).split(":")[1], QtCore.Qt.MatchFixedString)
                         if index_of_value > 0:
@@ -947,7 +956,7 @@ class Window(QWidget):
         self.seedInput.setText(self.seed)
 
         self.modeBox.setCurrentIndex(0)
-
+        self.presetBox.setCurrentIndex(0)
         self.initCodes()
         self.updateFlagCheckboxes()
         self.flagButtonClicked()
@@ -961,7 +970,7 @@ class Window(QWidget):
                 if type(child) == FlagCheckBox:
                     child.setChecked(False)
                 elif type(child) == QSpinBox or type(child) == QDoubleSpinBox:
-                    child.setValue(child.minimum())
+                    child.setValue(child.default)
                 elif type(child) == QComboBox:
                     child.setCurrentIndex(child.findText("Vanilla"))
 
@@ -983,18 +992,20 @@ class Window(QWidget):
                         d[c.value]['checked'] = False
                 children = t.findChildren(QSpinBox) + t.findChildren(QDoubleSpinBox)
                 for c in children:
-                    if not round(c.value(), 1) == c.minimum():
-                        if c.text + ":" + str(round(c.value(), 2)) not in self.flags:
+                    if not round(c.value(), 1) == c.default:
+                        if c.text == "cursepower" and c.value() == 0:
+                            self.flags.append(c.text + ":random")
+                        else:
                             self.flags.append(c.text + ":" + str(round(c.value(), 2)))
                 children = t.findChildren(QComboBox)
                 flagset = False
                 for c in children:
-                    if c.placeholderText() == "swdtechspeed":
+                    if c.text == "swdtechspeed":
                         if not c.currentText() == "Vanilla":
                             self.swdtechspeed = c.currentText().lower()
                             flagset = True
                     if flagset:
-                        self.flags.append(c.placeholderText().lower() + ":" + c.currentText().lower())
+                        self.flags.append(c.text.lower() + ":" + c.currentText().lower())
 
             self.updateFlagString()
 
@@ -1308,8 +1319,10 @@ class Window(QWidget):
         temp = ""
         for x in range(0, len(self.flags)):
             flag = self.flags[x]
-            temp += flag
-            temp += " "
+            if len(flag) == 1:
+                temp += flag
+            else:
+                temp += " " + flag
         self.flagString.setText(temp)
         self.flagsChanging = False
 
