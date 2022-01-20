@@ -326,15 +326,15 @@ class Formation():
     def exp(self):
         return sum(e.stats['xp'] for e in self.present_enemies)
 
-    def mutate(self, mp=False, mpMultiplier=None):
+    def mutate(self, mp=False, mp_boost_value=None):
         if mp and self.mp is not None and 0 < self.mp < 100:
             factor = self.levelrank() / 100
             self.mp += int(round(self.mp * factor))
             while random.choice([True, False]):
                 self.mp += random.randint(-1, 1)
                 self.mp = min(100, max(self.mp, 0))
-            if mpMultiplier:
-                self.mp = min(255, floor(self.mp * float(mpMultiplier)))
+            if mp_boost_value:
+                self.mp = min(255, floor(self.mp * float(mp_boost_value)))
         if self.ambusher:
             if not (self.pincer_prohibited and self.back_prohibited):
                 self.misc1 |= 0x90

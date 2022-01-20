@@ -413,7 +413,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
         known_replacements.extend(og_replacements)
 
     #weight selection based on no*/hate*/like*/only* codes
-    whitelist = [c.name[4:] for c in Options_.active_codes if c.name.startswith("only")]
+    whitelist = [c.name[4:] for c in Options_.active_codes.keys() if c.startswith("only")]
     replace_candidates = []
     for r in known_replacements:
         whitelisted = False

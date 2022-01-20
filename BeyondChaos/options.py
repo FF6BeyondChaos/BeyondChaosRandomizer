@@ -28,21 +28,33 @@ class Code:
     long_description: str
     category: str
     inputtype: str
+    choices: [str] = None
     key1: str = ''
     key2: str = ''
 
     def remove_from_string(self, s: str):
         name = self.name
         if name in s:
-            return True, s.replace(name, '')
-        return False, s
+            if name + ":" in s:
+                # A value was supplied, return the value
+                string_after_key = s[s.index(name + ":") + len(name + ":"):]
+                try:
+                    value = string_after_key[:string_after_key.index(" ")]
+                except ValueError:
+                    # A space did not exist after the flag. Get the entire rest of the flag string.
+                    value = string_after_key
+                return True, value, s.replace(name + ":" + value, '')
+            else:
+                # No value was supplied, return True
+                return True, True, s.replace(name, '')
+        return False, False, s
 
 
 @dataclass
 class Options:
     mode: Mode
+    active_codes = {}
     active_flags: Set[Flag] = field(default_factory=set)
-    active_codes: Set[Code] = field(default_factory=set)
     shuffle_commands: bool = field(init=False, default=False)
     replace_commands: bool = field(init=False, default=False)
     sprint: bool = field(init=False, default=False)
@@ -65,18 +77,30 @@ class Options:
     shuffle_wor: bool = field(init=False, default=False)
     randomize_forest: bool = field(init=False, default=False)
     randomize_magicite: bool = field(init=False, default=False)
+    random_final_party: bool = field(init=False, default=False)
 
     def is_code_active(self, code_name: str):
-        for code in self.active_codes:
-            if code.name == code_name:
-                return True
+        if code_name in self.active_codes.keys():
+            return True
+        #for code in self.active_codes:
+        #    if code.name == code_name:
+        #        return True
         return False
 
     def is_any_code_active(self, code_names: List[str]):
-        for code in self.active_codes:
-            if code.name in code_names:
+        for code in code_names:
+            if code in self.active_codes.keys():
                 return True
+        #for code in self.active_codes:
+        #    if code.name in code_names:
+        #        return True
         return False
+
+    def get_code_value(self, code_name: str):
+        try:
+            return self.active_codes[code_name]
+        except KeyError:
+            return None
 
     def is_flag_active(self, flag_name: str):
         for flag in self.active_flags:
@@ -84,10 +108,10 @@ class Options:
                 return True
         return False
 
-    def activate_code(self, code_name: str):
+    def activate_code(self, code_name: str, code_value):
         for code in ALL_CODES:
             if code.name == code_name:
-                self.active_codes.add(code)
+                self.active_codes[code_name] = code_value
                 if code in MAKEOVER_MODIFIER_CODES:
                     self.activate_code("makeover")
                 if code in RESTRICTED_VANILLA_SPRITE_CODES:
@@ -100,16 +124,18 @@ class Options:
 
     def activate_from_string(self, flag_string):
         for code in self.mode.forced_codes:
-            self. activate_code(code)
+            self.activate_code(code)
 
         s = ""
         flags, codes = read_Options_from_string(flag_string, self.mode)
-        for code in codes:
-            if code.name in self.mode.prohibited_codes:
-                s += f"SECRET CODE: '{code.description}' is not compatible with {self.mode.name} mode.\n"
+        for code in codes.keys():
+            if code in self.mode.prohibited_codes:
+                s += f"SECRET CODE: '{code}' is not compatible with {self.mode.name} mode.\n"
                 continue
-            s += f"SECRET CODE: {code.description} ACTIVATED\n"
-            self.activate_code(code.name)
+            for code_object in NORMAL_CODES + MAKEOVER_MODIFIER_CODES:
+                if code_object.name == code:
+                    s += f"SECRET CODE: {code_object.description} ACTIVATED\n"
+            self.activate_code(code, codes[code])
 
         if self.is_code_active('strangejourney'):
             self.activate_code('notawaiter')
@@ -126,15 +152,15 @@ class Options:
 
 def read_Options_from_string(flag_string: str, mode: Union[Mode, str]):
     flags = set()
-    codes = set()
+    codes = {}
 
     if isinstance(mode, str):
         mode = [m for m in ALL_MODES if m.name == mode][0]
 
     for code in NORMAL_CODES + MAKEOVER_MODIFIER_CODES:
-        found, flag_string = code.remove_from_string(flag_string)
+        found, value, flag_string = code.remove_from_string(flag_string)
         if found:
-            codes.add(code)
+            codes[code.name] = value
 
     if '-' in flag_string:
         print("NOTE: Using all flags EXCEPT the specified flags.")
@@ -201,6 +227,7 @@ ALL_FLAGS = [
     Flag('e', 'random_espers', 'Randomize esper spells and levelup bonuses.', "checkbox"),
     Flag('f', 'random_formations', 'Randomize enemy formations.', "checkbox"),
     Flag('g', 'random_dances', 'Randomize dances', "checkbox"),
+    Flag('h', 'random_final_party', 'Your party in the Final Kefka fight will be random.', "checkbox"),
     Flag('i', 'random_items', 'Randomize the stats of equippable items.', "checkbox"),
     Flag('j', 'randomize_forest', 'Randomize the phantom forest.', "checkbox"),
     Flag('k', 'random_clock', 'Randomize the clock in Zozo', "checkbox"),
@@ -296,7 +323,9 @@ NORMAL_CODES = [
     Code('desperation', "DESPERTION MODE", "When the adventurer back is up against the wall. Break the wall.", "beta", "checkbox"),
     Code('nobreaks', "NO ITEM BREAKS MODE", "Causes no items to break for spell effects.", "beta", "checkbox"),
     Code('unbreakable', "UNBREAKABLE ITEMS MODE", "Causes all items to be indestructible  when broken for a spell", "beta", "checkbox"),
-    Code('remonsterate', "MONSTER SPRITE REPLACEMENT MODE", "Enables monster sprite replacements from sprites in the remonstrate\\sprites folder.", "beta", "checkbox")
+    Code('remonsterate', "MONSTER SPRITE REPLACEMENT MODE", "Enables monster sprite replacements from sprites in the remonstrate\\sprites folder.", "beta", "checkbox"),
+    Code('swdtechspeed', "SWDTECH SPEED RANDO MODE", "Alters the speed at which the swdtech bar moves.", "beta", "combobox", ("Sonic", "Faster", "Fast", "Vanilla", "Random")),
+    Code('cursepower', "CURSE POWER SHUFFLE MODE", "Set the number of battles required to uncurse a Cursed Shield. (Vanilla = 256, 0 = Random)", "beta", "numberbox"),
     #Code('sixtytwoqd', "version 62 randomizer", "For quickdraw only, run version 62 of the randomizer", "beta", "checkbox"),
 ]
 
