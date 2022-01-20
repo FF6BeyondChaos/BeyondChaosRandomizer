@@ -1319,10 +1319,7 @@ class Window(QWidget):
         temp = ""
         for x in range(0, len(self.flags)):
             flag = self.flags[x]
-            if len(flag) == 1:
-                temp += flag
-            else:
-                temp += " " + flag
+            temp += flag + " "
         self.flagString.setText(temp)
         self.flagsChanging = False
 

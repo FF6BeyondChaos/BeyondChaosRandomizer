@@ -108,7 +108,7 @@ class Options:
                 return True
         return False
 
-    def activate_code(self, code_name: str, code_value):
+    def activate_code(self, code_name: str, code_value=None):
         for code in ALL_CODES:
             if code.name == code_name:
                 self.active_codes[code_name] = code_value
