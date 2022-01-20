@@ -73,8 +73,10 @@ VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-# TEST_SEED = "2.normal.bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontentcanttouchthiseasymodounbreakablecollateraldamage.1603333081"
-TEST_SEED = "2.normal.bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu.1635554018"
+#WOR TEST TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontentcanttouchthiseasymodounbreakablecollateraldamage|1603333081"
+#FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
+#REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
+TEST_SEED = "2|normal|bcdefghijklmnopqrstuyz partyparty novanilla noanime noboys likegirls nopets nopotato nocustom electricboogaloo masseffect randombosses supernatural alasdraco capslockoff johnnydmad notawaiter mimetime thescenarionottaken|1642483034"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -4275,7 +4277,7 @@ def manage_dances():
         other = []
         for i in range(8):
             while True:
-                index = random.randint(0, half) + random.randint(0, half)
+                index = random.randint(0, half) + random.randint(0, half-1)
                 spellid = spells[index].spellid
                 if spellid not in other:
                     break
@@ -5139,11 +5141,7 @@ def randomize(**kwargs) -> str:
     form_music = {}
     if Options_.random_formations:
         no_special_events = not Options_.is_code_active('bsiab')
-        if Options_.is_code_active('mpboost'):
-            manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music,
-                                     no_special_events=no_special_events, mpMultiplier=mp_boost_value)
-        else:
-            manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music,
+        manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music,
                                      no_special_events=no_special_events)
         for m in get_monsters():
             m.write_stats(fout)
