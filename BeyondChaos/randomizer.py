@@ -46,7 +46,7 @@ from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
-                     change_swdtech_speed, change_cursed_shield_battles)
+                     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -72,11 +72,11 @@ BETA = False
 VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
+TEST_ON = True
 #WOR TEST TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontentcanttouchthiseasymodounbreakablecollateraldamage|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "2|normal|bcdefghijklmnopqrstuyz partyparty novanilla noanime noboys likegirls nopets nopotato nocustom electricboogaloo masseffect randombosses supernatural alasdraco capslockoff johnnydmad notawaiter mimetime thescenarionottaken|1642483034"
+TEST_SEED = "2|normal|bcdefgijkmnopqrstuwyzmakeoverpartypartyfrenchvanillaelectricboogaloorandombossesalasdracocapslockoffjohnnyachaoticnotawaiterbsiabmimetimequestionablecontentremoveflashingeasymodocanttouchthis|1642782645"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -2225,6 +2225,7 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int] = None) -> L
 
     set_item_changed_commands(changed_commands)
     unhardcode_tintinabar(fout)
+    sprint_shoes_break(fout)
     extend_item_breaks(fout)
 
     auto_equip_relics = []
@@ -5317,7 +5318,7 @@ def randomize(**kwargs) -> str:
 
     if Options_.is_code_active('easymodo') or Options_.is_code_active('expboost'):
         exp_boost_value = Options_.get_code_value('expboost')
-        if not exp_boost_value:
+        if Options_.is_code_active('expboost') and not exp_boost_value:
             while True:
                 try:
                     exp_boost_value = float(input("Please enter an EXP multiplier value (0.0-50.0): "))
