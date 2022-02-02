@@ -1,13 +1,13 @@
+import imp
 import os
 from .tools.tablereader import (
     set_global_label, set_global_table_filename, determine_global_table,
     set_table_specs, set_global_output_filename, sort_good_order,
     get_open_file, close_file, TableObject, addresses, write_patches)
-from .tools.utils import cached_property, utilrandom as random
+from .tools.utils import cached_property, get_transparency, utilrandom as random
 from .tools.interface import get_outfile, set_seed, get_seed
-from collections import Counter
 from hashlib import md5
-from PIL import Image
+from PIL import Image, ImageOps
 from math import ceil
 
 
@@ -15,6 +15,7 @@ VERSION = '5.3'
 ALL_OBJECTS = None
 file_paths = os.path.join(os.getcwd(), "remonsterate")
 sprite_paths = os.path.join(os.getcwd(), "remonsterate", "sprites")
+monster_list = None
 
 
 def sig_func(c):
@@ -364,7 +365,7 @@ class MonsterSpriteObject(TableObject):
         if self.is_protected:
             if monster_original_name:
                 print("Remonsterate: " + monster_original_name +
-                      " is protected and was not sprite randomized.")
+                      " is protected and did not receive a randomized sprite.")
             self.load_image(self.image)
             return True
 
@@ -494,13 +495,7 @@ class MonsterSpriteObject(TableObject):
         self._image = image
         assert self.image == image
 
-        if transparency is None:
-            border = (
-                    [self.image.getpixel((0, j)) for j in range(height)] +
-                    [self.image.getpixel((width - 1, j)) for j in range(height)] +
-                    [self.image.getpixel((i, 0)) for i in range(width)] +
-                    [self.image.getpixel((i, height - 1)) for i in range(width)])
-            transparency = Counter(border).most_common(1)[0][0]
+        transparency = get_transparency(self.image)
 
         palette = self.image.getpalette()
         if transparency != 0:
@@ -618,7 +613,9 @@ class MonsterSpriteObject(TableObject):
                 mco = MonsterComp8Object.create_new()
             mco.stencil = self.stencil
             self.stencil_index = mco.new_index
-        assert self.stencil_index <= 0xff
+        if not self.stencil_index <= 0xff:
+            raise OverflowError()
+        #assert self.stencil_index <= 0xff
 
         if not hasattr(MonsterSpriteObject, 'free_space'):
             MonsterSpriteObject.free_space = addresses.new_monster_graphics
@@ -834,69 +831,55 @@ def prepare_image(image: Image) -> Image:
     image_filename = image.filename
     palette_indexes = set(image.tobytes())
 
+    # If the image had transparent rows or columns, crop them out for efficiency
+    border_color = get_transparency(image)
+    solid_top = True
+    solid_left = True
+    image_width_in_pixels, image_height_in_pixels = image.size
+
+    while solid_top or solid_left:
+        pixel_data = image.convert('RGBA')
+        current_color = border_color
+        for x in range(image_width_in_pixels):
+            # Scan the top and bottom rows of pixels, cropping out the row if it is fully transparent
+            if not current_color == pixel_data.getpixel((x, 0))[3]:
+                solid_top = False
+            if not solid_top:
+                break
+            if x == image_width_in_pixels - 1 and solid_top:
+                # If the top row was fully transparent, crop it out
+                image = image.crop((0, 1, image_width_in_pixels, image_height_in_pixels))
+                image_width_in_pixels, image_height_in_pixels = image.size
+
+        for y in range(image_height_in_pixels):
+            # Scan the left and right columns of pixels, cropping out the column if it is fully transparent
+            current_color = border_color
+            if not current_color == pixel_data.getpixel((0, y))[3]:
+                solid_left = False
+            if not solid_left:
+                break
+            if y == image_height_in_pixels - 1 and solid_left:
+                # If the left column was fully transparent, crop it out
+                image = image.crop((1, 0, image_width_in_pixels, image_height_in_pixels))
+                image_width_in_pixels, image_height_in_pixels = image.size
+
+    # Tiles are 8x8, so we ensure the image's width and height are divisible by 8
+    image_width_in_pixels, image_height_in_pixels = image.size
+    if not image_width_in_pixels % 8 == 0:
+        border_width = 8 - (image_width_in_pixels % 8)
+        image = ImageOps.expand(image, border=(0, 0, border_width, 0), fill=border_color)
+
+    if not image_height_in_pixels % 8 == 0:
+        border_width = 8 - (image_height_in_pixels % 8)
+        image = ImageOps.expand(image, border=(0, 0, 0, border_width), fill=border_color)
+
     # If the image has too many colors, convert it into a form with reduced colors
     if max(palette_indexes) > allowed_colors:
-        print(image_filename + ' had too many colors and is being converted.')
         if image.mode == "P":
             # Images already in P mode cannot be converted to P mode to shrink their allowed colors, so
             #   temporarily convert them back to RGB
             image = image.convert("RGB")
         image = image.convert("P", palette=Image.ADAPTIVE, colors=allowed_colors)
-
-    # If the image had transparent rows or columns, crop them out for efficiency
-    transparent_top = True
-    transparent_bottom = True
-    transparent_left = True
-    transparent_right = True
-    cropped = False
-    image_width_in_pixels, image_height_in_pixels = image.size
-
-    while transparent_top or transparent_bottom or transparent_left or transparent_right:
-        pixel_data = image.convert('RGBA')
-        for x in range(image_width_in_pixels):
-            # Scan the top and bottom rows of pixels, cropping out the row if it is fully transparent
-            current_alpha_1 = pixel_data.getpixel((x, 0))[3]
-            current_alpha_2 = pixel_data.getpixel((x, image_height_in_pixels - 1))[3]
-            if not current_alpha_1 == 0:
-                transparent_top = False
-            if not current_alpha_2 == 0:
-                transparent_bottom = False
-            if not transparent_top and not transparent_bottom:
-                break
-            if x == image_width_in_pixels - 1 and transparent_top:
-                # If the top row was fully transparent, crop it out
-                image = image.crop((0, 1, image_width_in_pixels, image_height_in_pixels))
-                image_width_in_pixels, image_height_in_pixels = image.size
-                cropped = True
-            if x == image_width_in_pixels - 1 and transparent_bottom:
-                # If the bottom row was fully transparent, crop it out
-                image = image.crop((0, 0, image_width_in_pixels, image_height_in_pixels - 1))
-                image_width_in_pixels, image_height_in_pixels = image.size
-                cropped = True
-
-        for y in range(image_height_in_pixels):
-            # Scan the left and right columns of pixels, cropping out the column if it is fully transparent
-            current_alpha_3 = pixel_data.getpixel((0, y))[3]
-            current_alpha_4 = pixel_data.getpixel((image_width_in_pixels - 1, y))[3]
-            if current_alpha_3 and not current_alpha_3 == 0:
-                transparent_left = False
-            if current_alpha_4 and not current_alpha_4 == 0:
-                transparent_right = False
-            if not transparent_left and not transparent_right:
-                break
-            if y == image_height_in_pixels - 1 and transparent_left:
-                # If the left column was fully transparent, crop it out
-                image = image.crop((1, 0, image_width_in_pixels, image_height_in_pixels))
-                image_width_in_pixels, image_height_in_pixels = image.size
-                cropped = True
-            if y == image_height_in_pixels - 1 and transparent_right:
-                # If the right column was fully transparent, crop it out
-                image = image.crop((0, 0, image_width_in_pixels - 1, image_height_in_pixels))
-                image_width_in_pixels, image_height_in_pixels = image.size
-                cropped = True
-
-    if cropped:
-        print(image_filename + ' had a transparent border and was cropped.')
 
     image.filename = image_filename
     return image
@@ -971,12 +954,16 @@ sprites folder and document the file paths to those images in images_and_tags.tx
             print("Remonsterate: All usable images have been exhausted. Some monsters may not be randomized.")
             break
 
-    results = finish_remonsterate(list_of_monsters)
-
-    if images:
-        for image in images:
-            # Remonsterate is finished. Close all the image files.
-            image.close()
+    # Wrapped in a try/except/finally block so that even if finish_remonsterate errors, the images are closed
+    try:
+        results = finish_remonsterate(list_of_monsters)
+    except OverflowError as e:
+        raise e
+    finally:
+        if images:
+            for image in images:
+                # Remonsterate is finished. Close all the image files.
+                image.close()
     return results
 
 

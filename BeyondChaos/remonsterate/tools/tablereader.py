@@ -322,7 +322,7 @@ def write_patch(outfile, patchfilename, noverify=None, force=False):
 
 
 def write_cmp_patch(outfile, patchfilename, verify=False):
-    from randomtools.interface import get_sourcefile
+    from .interface import get_sourcefile
 
     sourcefile = open(get_sourcefile(), 'r+b')
     patchfile = open(patchfilename, 'r+b')
