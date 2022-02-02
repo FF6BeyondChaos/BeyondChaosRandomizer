@@ -158,7 +158,13 @@ def show_coliseum_rewards(fout):
         0x68, 0xC0, 0x60, 0xA9, 0xFF, 0x20, 0x54, 0xF9, 0x60, 0xFF
         ])
     rewards_sub.write(fout)
-    
+
+def sprint_shoes_break(fout):
+    sprint_shoes_sub = Substitution()
+    sprint_shoes_sub.set_location(0x2273D)
+    sprint_shoes_sub.bytestring = bytes([0xE7])
+    sprint_shoes_sub.write(fout)
+
 def cycle_statuses(fout):
     cycles_sub = Substitution()
     cycles_sub.set_location(0x012E4F) #C12E4F
