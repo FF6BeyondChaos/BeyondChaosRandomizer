@@ -73,11 +73,11 @@ BETA = False
 VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = True
+TEST_ON = False
 #WOR TEST TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontentcanttouchthiseasymodounbreakablecollateraldamage|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "2|normal|bcdefgijkmnopqrstuwyzmakeoverpartypartyfrenchvanillaelectricboogaloorandombossesalasdracocapslockoffjohnnyachaoticnotawaiterbsiabmimetimequestionablecontentremoveflashingeasymodocanttouchthis|1642782645"
+TEST_SEED = "2|normal|bdefgijmnopqrstuwyzmakeoverpartypartynovanillaelectricboogaloorandombossesalasdracojohnnydmadbsiabmimetimedancingmaduinquestionablecontentdancelessons|1639809308"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -2322,17 +2322,19 @@ def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
                 equiptype = equiptype.strip('1').strip('2')
                 func = equippable_dict[equiptype]
                 equippable_items = list(filter(func, items))
-                equipitem = random.choice(equippable_items)
-                equipid = equipitem.itemid
-                if (equipitem.has_disabling_status and (0xE <= c.id <= 0xF or c.id > 0x1B)):
-                    equipid = 0xFF
-                elif equipitem.prevent_encounters and c.id in [0x1C, 0x1D]:
-                    equipid = 0xFF
-                else:
-                    if (equiptype not in ["weapon", "shield"] and random.randint(1, 100) == 100):
-                        equipid = random.randint(0, 0xFF)
+                while True:
+                    equipitem = equippable_items.pop(random.randint(0, len(equippable_items)-1))
+                    equipid = equipitem.itemid
+                    if (equipitem.has_disabling_status and (0xE <= c.id <= 0xF or c.id > 0x1B)):
+                        equipid = 0xFF
+                    elif equipitem.prevent_encounters and c.id in [0x1C, 0x1D]:
+                        equipid = 0xFF
+                    else:
+                        if (equiptype not in ["weapon", "shield"] and random.randint(1, 100) == 100):
+                            equipid = random.randint(0, 0xFF)
+                    if equipid != 0xFF or len(equippable_items) == 0:
+                        break
                 fout.write(bytes([equipid]))
-
             continue
 
         equippable_items = [i for i in items if i.equippable & (1 << c.id)]

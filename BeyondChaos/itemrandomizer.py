@@ -304,6 +304,8 @@ class ItemBlock:
             return True
         if self.features['statusacquire3'] & 0x14:
             return True
+        if (self.features['specialaction'] & 0xf0) in {0x50, 0x60, 0xC0}:
+            return True
         return False
 
     @property
