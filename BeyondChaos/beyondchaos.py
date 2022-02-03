@@ -2,6 +2,7 @@
 import configparser
 import hashlib
 import multiprocessing
+import multiprocessing.pool
 import os
 import subprocess
 import sys
@@ -27,6 +28,23 @@ from update import (update, update_needed)
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. "
                     "Report this to Green Knight")
+
+
+class NonDaemonProcess(multiprocessing.Process):
+    def __init__(self, group=None, target=None, name=None, args=(), kwargs={}):
+        super(NonDaemonProcess, self).__init__(group=None, target=target, name=name, args=args, kwargs=kwargs)
+
+    # make 'daemon' attribute always return False
+    def _get_daemon(self):
+        return False
+    def _set_daemon(self, value):
+        pass
+    daemon = property(_get_daemon, _set_daemon)
+
+# We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
+# because the latter is only a wrapper function, not a proper class.
+class NonDaemonPool(multiprocessing.pool.Pool):
+    Process = NonDaemonProcess
 
 
 # Extended QButton widget to hold flag value - NOT USED PRESENTLY
@@ -1255,7 +1273,8 @@ class Window(QWidget):
                             "bingocards": self.bingocards,
                             "from_gui": True,
                         }
-                        pool = multiprocessing.Pool()
+                        # pool = multiprocessing.Pool()
+                        pool = NonDaemonPool(1)
                         x = pool.apply_async(func=randomizer.randomize, kwds=kwargs)
                         x.get()
                         pool.close()

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import configparser
+import multiprocessing
 from hashlib import md5
 import os
 import re
@@ -5262,9 +5263,36 @@ def randomize(**kwargs) -> str:
 
     if Options_.is_code_active('remonsterate'):
         fout.close()
-        remonsterate_results = remonsterate(outfile=outfile, seed=seed, rom_type="1.0",
-                                            list_of_monsters=get_monsters(outfile))
+        backup_path = outfile[:outfile.rindex('.')] + '.backup' + outfile[outfile.rindex('.'):]
+        copyfile(src=outfile, dst=backup_path)
+        attempt_number = 0
+        remonsterate_results = None
+
+        while True:
+            try:
+                kwargs = {
+                    "outfile": outfile,
+                    "seed": (seed + attempt_number),
+                    "rom_type": "1.0",
+                    "list_of_monsters": get_monsters(outfile)
+                }
+                pool = multiprocessing.Pool()
+                x = pool.apply_async(func=remonsterate, kwds=kwargs)
+                remonsterate_results = x.get()
+                pool.close()
+                pool.join()
+
+            except OverflowError as e:
+                print("Remonsterate: An error occurred attempting to remonsterate. Trying again...")
+                # Replace backup file
+                copyfile(src=backup_path, dst=outfile)
+                attempt_number = attempt_number + 1
+                continue
+            break
+
+        # Remonsterate finished
         fout = open(outfile, "r+b")
+        os.remove(backup_path)
         if remonsterate_results:
             for result in remonsterate_results:
                 log(str(result) + '\n', section='remonsterate')

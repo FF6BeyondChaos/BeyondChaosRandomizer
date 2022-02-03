@@ -1,6 +1,8 @@
 import random
 from collections import defaultdict
 from hashlib import md5
+from collections import Counter
+from PIL import Image
 
 
 def cached_property(fn):
@@ -424,6 +426,16 @@ def get_snes_palette_transformer(use_luma=False, always=None, middle=True,
 
     return palette_transformer
 
+
+def get_transparency(image: Image):
+    width, height = image.size
+    border = (
+            [image.getpixel((0, j)) for j in range(height)] +
+            [image.getpixel((width - 1, j)) for j in range(height)] +
+            [image.getpixel((i, 0)) for i in range(width)] +
+            [image.getpixel((i, height - 1)) for i in range(width)])
+    transparency = Counter(border).most_common(1)[0][0]
+    return transparency
 
 def rewrite_snes_title(text, filename, version, lorom=False):
     f = open(filename, 'r+b')
