@@ -559,7 +559,7 @@ def fewer_flashes(fout):
     anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
-    anti_seizure_sub.set_location(0x10299C)  # D0299C
+    anti_seizure_sub.set_location(0x10296C)  # D0296C
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
@@ -764,7 +764,7 @@ def fewer_flashes(fout):
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
-    anti_seizure_sub.set_location(0x105A78)  # D05A78
+    anti_seizure_sub.set_location(0x105A7A)  # D05A7A
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
@@ -921,7 +921,7 @@ def fewer_flashes(fout):
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
-    anti_seizure_sub.set_location(0x1074F8)  # D074F8
+    anti_seizure_sub.set_location(0x107508)  # D07508
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
