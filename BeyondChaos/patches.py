@@ -308,7 +308,7 @@ def change_swdtech_speed(fout, random: Random, speed: str = "Vanilla"):
 def change_cursed_shield_battles(fout, random: Random, amount: int = None):
     ccsb_sub = Substitution()
     ccsb_sub.set_location(0x025FF7)  # C25FF7
-    if not amount:
+    if not amount or amount == "random":
         base_cursed_shield_battle_amount = 48
         standard_deviation_number = 16 * RANDOM_MULTIPLIER
         if standard_deviation_number == 0:
@@ -316,10 +316,8 @@ def change_cursed_shield_battles(fout, random: Random, amount: int = None):
             amount = random.randint(1, 256)
         else:
             amount = max(1, int(random.gauss(base_cursed_shield_battle_amount, standard_deviation_number)))
-    amount = hex(amount)
-    ccsb_sub.bytestring = bytes(amount)
+    ccsb_sub.bytestring = bytes(int(amount))
     ccsb_sub.write(fout)
-
 
 def fewer_flashes(fout):
     anti_seizure_sub = Substitution()
