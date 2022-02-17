@@ -48,6 +48,7 @@
 # reads from palette bank
 01233d: bf 00 c0 5f
 01d679: bf 00 c0 5f
+02bbd4: bf 20 c0 5f
 02fa7c: bf 00 c0 5f
 02fa93: bf 00 c0 5f
 03b171: bf 00 c0 5f
@@ -89,6 +90,7 @@ VALIDATION
 
 01233d: bf 20 78 d2
 01d679: bf 20 78 d2
+02bbd4: bf 40 78 d2
 02fa7c: bf 20 78 d2
 02fa93: bf 20 78 d2
 03b171: bf 20 78 d2
