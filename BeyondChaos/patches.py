@@ -316,7 +316,7 @@ def change_cursed_shield_battles(fout, random: Random, amount: int = None):
             amount = random.randint(1, 256)
         else:
             amount = max(1, int(random.gauss(base_cursed_shield_battle_amount, standard_deviation_number)))
-    ccsb_sub.bytestring = bytes(int(amount))
+    ccsb_sub.bytestring = bytes([amount])
     ccsb_sub.write(fout)
 
 def fewer_flashes(fout):
