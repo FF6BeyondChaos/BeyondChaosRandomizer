@@ -1,0 +1,657 @@
+#TITLE The Dead Sea -Tower of Geddon-
+#ALBUM Chrono Cross
+#COMPOSER Yasunori Mitsuda
+#ARRANGED Rushlight
+
+#SHORTNAME CC The Dead Sea
+
+#VARIANT `
+#VARIANT _ tr
+
+#WAVE 0x20 0x75 ## Chorus
+#WAVE 0x21 0x27 ## Bell
+#WAVE 0x22 0x65 ## Strings
+#WAVE 0x23 0x96 ## Harsh Clarinet
+#WAVE 0x24 0x01 ## Piano
+#WAVE 0x25 0x61 ## Harp
+#WAVE 0x26 0x57 ## Pizzicato Bass
+#WAVE 0x27 0x29 ## Tubular Bell, used kind of like a triangle
+#WAVE 0x28 0x5A ## Timpani
+#WAVE 0x29 0x7A ## Conga
+#WAVE 0x2A `0x6B`_0x6A_ ## Shaker
+#WAVE 0x2D 0xC0 ## Played as a layer to staccato echo
+
+
+#def normalEchoFeedback=             %b0,100
+#def normalEchoFeedbackTransition= %b192,100 ## Keep in line with normalEchoFeedback
+#def lateEchoFeedbackTransition=   %b192,106
+#def normalEchoVolume=            %v40
+#def normalEchoVolumeTransition=  %v192,40 ## Keep in line with normalEchoVolume
+#def lateEchoVolumeTransition=    %v192,50
+#def normalEchoVolume=  %v40
+#def init= t87 'normalEchoVolume' 'normalEchoFeedback' %f0,0
+
+#def lowChorusMaxVol=       v65
+#def lowChorusFade=       v1,65 ## Keep in line with lowchorusMaxVol
+#def midChorusVol=         'lowChorusMaxVol*v.76'
+
+#def staccatoChorusBaseVol= v150
+#def staccatoChorus_x105=   'staccatoChorusBaseVol*v.69'
+#def staccatoChorus_x100=   'staccatoChorusBaseVol*v.63'
+#def staccatoChorus_x90=    'staccatoChorusBaseVol*v.51'
+
+#def staccatoEchoBaseVol= v90
+#def staccatoLayer_x105=   'staccatoEchoBaseVol*v.69'
+#def staccatoLayer_x100=   'staccatoEchoBaseVol*v.63'
+#def staccatoLayer_x90=    'staccatoEchoBaseVol*v.51'
+
+#def pianoBaseVol= v249
+#def piano_x90=    'pianoBaseVol*v.51'
+#def piano_x85=    'pianoBaseVol*v.46'
+#def piano_x80=    'pianoBaseVol*v.40'
+#def piano_x75=    'pianoBaseVol*v.35'
+#def piano_x55=    'pianoBaseVol*v.19'
+## These three volumes are used for the first three notes as we loop back to start, when we don't have the channels to play the additional volume layer.
+## Some of them max out and we lose the relative volumes between them, but it's better than being quiet.
+#def piano_x85_boost=   'pianoBaseVol*v.55'
+#def piano_x80_boost=   'pianoBaseVol*v.48'
+#def piano_x75_boost=   'pianoBaseVol*v.42'
+
+#def pianoLayerVol= v50 ## Maintain at pianoBaseVol*.2
+#def pianoLayer_x90=    'pianoLayerVol*v.51'
+#def pianoLayer_x85=    'pianoLayerVol*v.46'
+#def pianoLayer_x80=    'pianoLayerVol*v.40'
+#def pianoLayer_x75=    'pianoLayerVol*v.35'
+#def pianoLayer_x55=    'pianoLayerVol*v.19'
+
+#def clarinetBaseVol= v90
+#def clarinet_x100=   'clarinetBaseVol*v.63'
+
+#def harpBaseVol= v140
+#def harp_x100=   'harpBaseVol*v.63'
+
+#def pizziBassVol=      v127
+#def pizziBassLayerVol= 'pizziBassVol*v.15'
+
+#def bellBaseVol= v35
+#def bellFade=  v1,35 ## Keep in line with bellBaseVol
+
+#def stringsBaseVol=        v50
+#def stringsFade=         v1,50 ## Keep in line with stringsBaseVol
+#def supportStringsBaseVol= v38 ## Roughly stringsBaseVol*.75
+#def supportStringsFade=  v1,38 ## Keep in line with supportStringsBaseVol
+
+#def congaBaseVol=v150
+#def conga_x85=   'congaBaseVol*v.46'
+#def conga_x80=   'congaBaseVol*v.4'
+#def conga_x75=   'congaBaseVol*v.35'
+#def conga_x70=   'congaBaseVol*v.31'
+#def conga_x65=   'congaBaseVol*v.27'
+#def conga_x60=   'congaBaseVol*v.23'
+#def conga_x55=   'congaBaseVol*v.19'
+#def conga_x40=   'congaBaseVol*v.1'
+
+## Because we can't reach quite as high a volume as we want, the timpani volume variations are compressed
+#def timpaniBaseVol= v128
+#def timpani_x125=   'timpaniBaseVol*v.99'
+#def timpani_x115=   'timpaniBaseVol*v.89'
+#def timpani_x105=   'timpaniBaseVol*v.8'
+#def timpani_x100=   'timpaniBaseVol*v.75'
+#def timpani_x95=    'timpaniBaseVol*v.7'
+#def timpani_x75=    'timpaniBaseVol*v.52'
+#def timpani_x70=    'timpaniBaseVol*v.48'
+#def timpani_x60=    'timpaniBaseVol*v.40'
+#def timpani_x25=    'timpaniBaseVol*v.13'
+
+#def shakerBaseVol= v80
+#def shaker_x60=    'shakerBaseVol*v.23'
+#def shaker_x85=    'shakerBaseVol*v.46'
+
+#def closedTriangleBaseVol= v14
+#def closedTriangle_x115=   'closedTriangleBaseVol*v.83'
+#def closedTriangle_x110=   'closedTriangleBaseVol*v.76'
+#def closedTriangle_x105=   'closedTriangleBaseVol*v.69'
+#def closedTriangle_x100=   'closedTriangleBaseVol*v.63'
+#def closedTriangle_x95=    'closedTriangleBaseVol*v.57'
+#def closedTriangle_x90=    'closedTriangleBaseVol*v.51'
+#def closedTriangle_x85=    'closedTriangleBaseVol*v.46'
+#def closedTriangle_x75=    'closedTriangleBaseVol*v.35'
+#def closedTriangle_x70=    'closedTriangleBaseVol*v.31'
+#def closedTriangle_x65=    'closedTriangleBaseVol*v.27'
+#def closedTriangle_x60=    'closedTriangleBaseVol*v.23'
+#def closedTriangle_x55=    'closedTriangleBaseVol*v.19'
+#def closedTriangle_x40=    'closedTriangleBaseVol*v.10'
+
+#def openTriangleBaseVol= v14
+#def openTriangle_x125= 'openTriangleBaseVol*v.98'
+#def openTriangle_x120= 'openTriangleBaseVol*v.91'
+#def openTriangle_x115= 'openTriangleBaseVol*v.83'
+#def openTriangle_x110= 'openTriangleBaseVol*v.76'
+#def openTriangle_x100= 'openTriangleBaseVol*v.63'
+#def openTriangle_x95=  'openTriangleBaseVol*v.57'
+#def openTriangle_x85=  'openTriangleBaseVol*v.46'
+#def openTriangle_x75=  'openTriangleBaseVol*v.35'
+#def openTriangle_x70=  'openTriangleBaseVol*v.31'
+#def openTriangle_x65=  'openTriangleBaseVol*v.27'
+#def openTriangle_x60=  'openTriangleBaseVol*v.23'
+
+
+#def clarinetSustain=     %r0
+#def clarinetFastRelease= %r26
+#def clarinetSlowRelease= %r8
+
+#def stringsSustain= %r0
+#def stringsRelease= %r26
+#def stringsNormalAttack= %a15
+#def stringsSlowAttack=   %a7
+
+#def piano=          |4 o4                                  p64                      %y1 %s2 %r11      %e1 m
+#def clarinet=       |3 o5     'clarinet_x100'              p70                      'clarinetSustain' %e1 m48,24,218 ## Decide if vibrato is good
+#def harp=           |5 o5     'harp_x100'                  p24                                        %e1 m
+#def chorus=         |0 o4                                                                             %e1 m
+#def lowChorus=      'chorus'  'lowChorusMaxVol'            p27                 %a1
+#def midChorus=      'chorus'  'midChorusVol'               p100                %a8   
+#def staccatoChorus= |0 o3                                  p84                      %y3 %s4 %r18      %e1 m ## 75 version
+#def pizziBass=      |6 o5     'pizziBassVol'               p64                              %r16      %e1 m
+#def bell=           |1 o4                                  p64                      %y3 %s2           %e1 m
+#def strings=        |2 o5                                       'stringsSlowAttack' 'stringsSustain'  %e1 m
+#def highStrings=    'strings' 'stringsBaseVol*v.11'        p28
+#def midStrings=     'strings' 'supportStringsBaseVol*v.11' p54
+#def lowStrings=     'strings' 'supportStringsBaseVol*v.11' p82
+#def timpani=        |8 o6     'timpani_x95'                p48                                        %e1 m
+#def staccatoLayer=  |D o3                                  p84                 %a8 %y1 %s2 %r17      %e1 m ## 06 version
+
+## Volume varies too much, so exclude it from the conga macros
+#drum "c"=4c+ |9              p74       %e0 m
+#drum "d"=4g  |9              p74       %e0 m
+
+#drum "m"=5b  |A 'shaker_x60' p108 %r27 %e0 m
+#drum "n"=5b  |A 'shaker_x85' p108 %r27 %e0 m
+
+## Volume varies too much, so exclude it from the triangle macros
+#drum "s"=7a  |7              p64 %y6 %s2 %r26 %e0 m
+#drum "t"=7a  |7              p64 %y5 %s2 %r18 %e0 m
+
+
+{1}
+'init'
+r8
+$
+## Piano, channels 8-12 in VGMTrans output
+'piano+o1'
+## Measure 1 lasts 2 beats
+'piano_x75'&26d 'piano_x80'e-8 'piano_x85'&22b-
+## 2
+^1
+$
+## 3
+## Piano, channels 8-12 in VGMTrans output
+'piano+o1'
+&74r 'piano_x75' &27g+ 'piano_x85' &35g 'piano_x65' c6 'piano_x85' &27f
+## 4 (3 ticks in)
+'piano_x75'd1
+## 5 (3 ticks in)
+&69^ &26d 'piano_x85' &38e- 'piano_x90' &33f 'piano_x80'> &28g+
+## 6 (5 ticks in)
+'piano_x75' &187g
+## 7
+r4.
+## The clarinet notes all play one tick early in the original for some reason, but we'll play on beat
+## Clarinet, channel 7 in VGMTrans output
+'clarinet' l16
+fg[2 g+32.'clarinetFastRelease'^16^64'clarinetSustain']g+b-g+g
+## 8
+f..'clarinetFastRelease'^64'clarinetSustain' g32'clarinetFastRelease'^16.'clarinetSustain' e-2^32.'clarinetFastRelease'^16^64'clarinetSustain'de-
+## 9
+f32'clarinetFastRelease'^16.'clarinetSustain'e-dc2^32.'clarinetFastRelease'^16^64'clarinetSustain'>b-32.'clarinetFastRelease'^16^64'clarinetSustain'<
+## 10
+c4g2.
+## 11
+^4'clarinetFastRelease'^8'clarinetSustain'g32.'clarinetFastRelease'^16^64'clarinetSustain'g+8b-32'clarinetFastRelease'^16.'clarinetSustain'g+b-g+g
+## 12
+f+2.^16'clarinetFastRelease'^16'clarinetSustain'g32.'clarinetFastRelease'^16^64'clarinetSustain'
+## 13
+e-2.^32.'clarinetFastRelease'^16^64'clarinetSustain'de-
+## 14
+d16..'clarinetFastRelease'^64'clarinetSustain'c32'clarinetFastRelease'^16.'clarinetSustain' 'clarinetSlowRelease'c2.
+## 15
+^2..r8
+## 16
+## High Strings, channel 4 in VGMTrans output
+'highStrings+o1'
+'stringsFade*v12,.23'c16
+'stringsFade*v12,.3' ^16
+'stringsFade*v24,.43'^8
+'stringsFade*v48,.59'^4
+'stringsFade*v96,.83'^2
+## 17
+'stringsFade*v96,1.01'^2
+'stringsFade*v96,.89' d4.e-16.'stringsRelease'^32'stringsSustain'
+## 18
+'stringsFade*v192,.62'e-1
+## 19
+'stringsFade*v192,.87'^2f2
+## 20
+'stringsFade*v192,1.07'd1
+## 21
+'stringsFade*v192,0.95'^2.d8e-12'stringsRelease'^24'stringsSustain'
+## 22
+'stringsFade*v96,.86'd8c4.
+'stringsFade*v96,.74'^2
+## 23
+'lateEchoFeedbackTransition' 'lateEchoVolumeTransition'
+'stringsFade*v48,.66'^4
+'stringsFade*v24,.61'^8
+'stringsFade*v24,.55'^8
+'stringsFade*v24,.48'^8
+'stringsFade*v12,.44'^16
+'stringsFade*v12,.39'^16
+'stringsFade*v12,.34'^16
+'stringsFade*v12,.28'^16
+'stringsFade*v12,.18'^16
+'stringsFade*v12,0'  ^16
+## Staccato Chorus, channel 2 in VGMTrans output
+'staccatoChorus+o2' l8
+[4
+  ## 24 / 26 / 28 / 30
+  'staccatoChorus_x100'd>'staccatoChorus_x90'g<'staccatoChorus_x100'c>f'staccatoChorus_x105'b-'staccatoChorus_x100'gc'staccatoChorus_x105'd
+  j4
+  ## 25 / 27 / 29
+  ^<d4>'staccatoChorus_x100'g<'staccatoChorus_x105'c j4 >'staccatoChorus_x100'b-fg<
+]
+## 31
+'normalEchoFeedbackTransition' 'normalEchoVolumeTransition'
+^<d4>'staccatoChorus_x100'g<'staccatoChorus_x105'c j4 >'staccatoChorus_x100'
+## Piano, channels 8-12 in VGMTrans output
+'piano+o1'
+'piano_x75_boost'&26d 'piano_x80_boost'e-8 'piano_x85_boost'&22b-
+## 32
+^1
+;
+
+
+{2}
+## Measure 1 lasts 2 beats
+r2
+$
+## Harp, channels 13-18 in VGMTrans output
+'harp-o1' l8
+## 2-11
+[10 cg<e->g<d>g+<fd>]
+## 12
+cf+<e->f+<d>a<f+e->
+## 13
+cf+<e->f+<d>a<c>a
+## 14-15
+[2cg<e->g<d>g+<fd>]
+## 16
+cg<e->g<d>g<c>g
+## 17
+cf+<e->f+<d>f+<c>f+
+## 18-19
+[2 cg<e->g<d>g<c>g]
+## 20-21
+[2 cg+<d>g+bg+<f>g+]
+## 22-23
+[2 cg<e->g<d>g<c>g]
+## 24-31
+[8 cg<e->g<d>g+<fd>]
+;
+
+
+{3}
+## Measure 1 lasts 2 beats
+r2
+$
+## 2
+## Low Chorus, channel 1 in VGMTrans output
+'lowChorus-o1'
+c1
+## 3-15
+[13 ^1]
+## 16
+## Mid Strings, channel 5 in VGMTrans output
+'midStrings'
+'supportStringsFade*v12,.23'g16
+'supportStringsFade*v12,.3' ^16
+'supportStringsFade*v24,.43'^8
+'supportStringsFade*v48,.59'^4
+'supportStringsFade*v96,.83'^2
+## 17
+'stringsNormalAttack'
+'supportStringsFade*v96,1.01'f+2
+'supportStringsFade*v96,.89' ^2
+## 18
+'supportStringsFade*v192,.62'g1
+## 19
+'supportStringsFade*v192,.87'^2g+2
+## 20
+'supportStringsFade*v192,1.07'^1
+## 21
+'supportStringsFade*v192,0.95'^1
+## 22
+'supportStringsFade*v96,.86'g2
+'supportStringsFade*v96,.74'^2
+## 23
+'supportStringsFade*v48,.66'^4
+'supportStringsFade*v24,.61'^8
+'supportStringsFade*v24,.55'^8
+'supportStringsFade*v24,.48'^8
+'supportStringsFade*v12,.44'^16
+'supportStringsFade*v12,.39'^16
+'supportStringsFade*v12,.34'^16
+'supportStringsFade*v12,.28'^16
+'supportStringsFade*v12,.18'^16
+'supportStringsFade*v12,0'  ^16
+## Conga, channel 25 in VGMTrans output
+[4
+  ## 24 / 26 / 28 / 30
+  'conga_x70'"!!!oc8"'conga_x55'"c16"'conga_x80'"c16"'conga_x85'"d8"'conga_x60'"c16"'conga_x70'"c16"
+  'conga_x40'"c16"'conga_x70'"c16"'conga_x80'"d16"'conga_x60'"c16"'conga_x55'"c16"'conga_x85'"d16"'conga_x65'"c16"'conga_x75'"c16"
+  ## 25 / 27 / 29 / 31
+  'conga_x80'"c8"'conga_x55'"c16"'conga_x75'"c16"'conga_x85'"d8"'conga_x55'"c16"'conga_x65'"c16"
+  'conga_x70'"d16c16" j4 'conga_x65'"c16"'conga_x85'"d8"'conga_x60'"c16"'conga_x65'"c16"'conga_x75'"d16"
+]
+## 31, at beat 3.5
+## Staccato Chorus, channel 2 in VGMTrans output
+'staccatoChorus+o1' l8
+'staccatoChorus_x100'b-fg
+;
+
+
+{4}
+## Measure 1 lasts 2 beats
+r2
+## 2
+r1
+$
+## 3
+r1
+## Mid Chorus, channel 2 in VGMTrans output
+'midChorus-o1'
+[2
+  ## 4 / 8
+  g1
+  ## 5 / 9
+  ^1
+  ## 6 / 10
+  ^1
+  ## 7 / 11
+  b-2f2
+]
+## 12
+f+1
+## 13
+^1
+## 14
+g1
+## 15
+^1
+## 16
+## Low Strings, channel 6 in VGMTrans output
+'lowStrings'
+'supportStringsFade*v12,.23'e-16
+'supportStringsFade*v12,.3' ^16
+'supportStringsFade*v24,.43'^8
+'supportStringsFade*v48,.59'^4
+'supportStringsFade*v96,.83'^2
+## 17
+'stringsNormalAttack'
+'supportStringsFade*v96,1.01'^2
+'supportStringsFade*v96,.89' ^2
+## 18
+'supportStringsFade*v192,.62'^2d2
+## 19
+'supportStringsFade*v192,.87'c1
+## 20
+'supportStringsFade*v192,1.07'>b1
+## 21
+'supportStringsFade*v192,0.95'^2<f2
+## 22
+'supportStringsFade*v96,.86'e-2
+'supportStringsFade*v96,.74'^2
+## 23
+'supportStringsFade*v48,.66'^4
+'supportStringsFade*v24,.61'^8
+'supportStringsFade*v24,.55'^8
+'supportStringsFade*v24,.48'^8
+'supportStringsFade*v12,.44'^16
+'supportStringsFade*v12,.39'^16
+'supportStringsFade*v12,.34'^16
+'supportStringsFade*v12,.28'^16
+'supportStringsFade*v12,.18'^16
+'supportStringsFade*v12,0'  ^16
+## Timpani, channel 24 in VGMTrans output
+'timpani-o1'
+[4
+  ## 24 / 26 / 28 / 30
+  'timpani_x125'c2..'timpani_x70'c16'timpani_x100'c16
+  ## 25 / 27 / 29 / 31
+  'timpani_x125'c2^8 j4 'timpani_x25'c16'timpani_x60'c16'timpani_x75'c16'timpani_x95'c16'timpani_x105'c16'timpani_x115'c16
+]
+## 31, at beat 3.5
+## Conga, channel 25 in VGMTrans output
+'conga_x65'"!!!oc16"'conga_x85'"d8"'conga_x60'"c16"'conga_x65'"c16"'conga_x75'"d16"
+## 32
+## Timpani, channel 24 in VGMTrans output
+'timpani-o1'
+'timpani_x125'c1
+## Then loop to measure 3
+;
+
+
+{5}
+## Pizzicato Bass, channels 19-21 in VGMTrans output
+'pizziBass-o2'
+## Measure 1 lasts 2 beats
+r4.g8
+$
+## Pizzicato Bass, channels 19-21 in VGMTrans output
+'pizziBass-o2'
+[5
+  ## 2/4/6/8/10
+  c1
+  ## 3/5/7/9/11
+  ^2..
+  j5
+  ## 3/5/7/9 (last 8th note)
+  g8
+]
+## 11 (last 8th note)
+f+8
+## 12
+c1
+## 13
+^2..
+## 13 (last 8th note)
+g8
+## 14
+c1
+## 15
+^2..
+r8
+## 16
+## Bell, channel 3 in VGMTrans output
+'bell+o3' l8
+'bellBaseVol*v.62' 'bellFade*v192,.89'[2 ce-de-]
+## 17
+'bellFade*v96,1.01'ce-de- 'bellFade*v96,.94' ce-de-
+## 18
+'bellFade*v192,.8' [2 ce-de-]
+## 19
+'bellFade*v192,.94' [2ce-de-]
+## 20
+'bellFade*v192,1.07' [2 >b<e-de-]
+## 21
+'bellFade*v192,.94' [2 >b<e-de-]
+## 22
+'bellFade*v192,.8' [2 ce-de-]
+## 23
+'bellFade*v192,.63' [2 ce-de-]
+## 24
+## Pizzicato Bass, channels 19-21 in VGMTrans output
+'pizziBass-o2'
+## In the original the pizzicato bass gets a tad quieter here, but it's already a bit quiet at max volume so leave it there.
+c1
+## 25
+^2..
+[3
+  ## 25 / 27 / 29 (last 8th note)
+  g8
+  ## 26 / 28 / 30
+  c1
+  ## 27 / 29 / 31
+  ^2^8 j3 ^4
+]
+## 31, at beat 3.5
+## Timpani, channel 24 in VGMTrans output
+'timpani-o1'
+'timpani_x25'c16'timpani_x60'c16'timpani_x75'c16'timpani_x95'c16'timpani_x105'c16'timpani_x115'c16
+;
+
+
+{6}
+## Measure 1 lasts 2 beats
+r2
+## 2
+r1
+$
+## 3-14
+[12 r1]
+## 15
+r2..
+## Pizzicato Bass, channels 19-21 in VGMTrans output
+'pizziBass-o2'
+[5
+  ## 15 / 17 / 19 / 21 / 23 (last 8th note)
+  g8
+  j5
+  ## 16 / 18 / 20 / 22
+  c1
+  ## 17 / 19 / 21 / 23
+  ^2..
+]
+## Staccato Echo, an additionnal layer for channel 2 in VGMTrans output
+'staccatoLayer+o2' l8
+[4
+  ## 24 / 26 / 28 / 30
+  'staccatoLayer_x100'd>'staccatoLayer_x90'g<'staccatoLayer_x100'c>f'staccatoLayer_x105'b-'staccatoLayer_x100'gc'staccatoLayer_x105'd
+  j4
+  ## 25 / 27 / 29
+  ^<d4>'staccatoLayer_x100'g<'staccatoLayer_x105'c j4 >'staccatoLayer_x100'b-fg<
+]
+## 31
+^<d4>'staccatoLayer_x100'g<'staccatoLayer_x105'c j4 >'staccatoLayer_x100'b-f
+## Pizzicato Bass, channels 19-21 in VGMTrans output
+'pizziBass-o2'
+g8
+## 32
+## Triangle, channels 22-23 in VGMTrans output
+'openTriangle_x70' "!!!ot1"
+## Then loop to measure 3
+;
+
+
+{7}
+r8
+## Piano layer for extra volume, channels 8-12 in VGMTrans output
+'piano+o1'
+## Measure 1 lasts 2 beats
+'pianoLayer_x75'&26d 'pianoLayer_x80'e-8 'pianoLayer_x85'&22b-
+$
+## Piano layer for extra volume, channels 8-12 in VGMTrans output
+
+## 2
+## Hold for 2 extra ticks
+&2^
+^1
+## 3 (2 ticks in)
+^4.
+'piano+o1''pianoLayer_x75' &27g+ 'pianoLayer_x85' &35g 'pianoLayer_x65' c6 'pianoLayer_x85' &27f
+## 4 (3 ticks in)
+'pianoLayer_x75'd1
+## 5 (3 ticks in)
+&69^ &26d 'pianoLayer_x85' &38e- 'pianoLayer_x90' &33f 'pianoLayer_x80'> &28g+
+## 6 (5 ticks in)
+'pianoLayer_x75' &187g
+## 7-22
+[16 r1]
+## 23
+r2..
+## Timpani, channel 24 in VGMTrans output
+'timpani-o2'
+g+8
+## 24-31
+## Shaker, channel 26 in VGMTrans output
+[32  "!!!om8n8"]
+;
+
+
+{8}
+## Pizzicato Bass layer for extra volume, channels 19-21 in VGMTrans output
+'pizziBass-o2'
+'pizziBassLayerVol'
+## Measure 1 lasts 2 beats
+r4.g8
+$
+## Pizzicato Bass layer for extra volume, channels 19-21 in VGMTrans output
+'pizziBass-o2'
+'pizziBassLayerVol'
+[5
+  ## 2/4/6/8/10
+  c1
+  ## 3/5/7/9/11
+  ^2..
+  j5
+  ## 3/5/7/9 (last 8th note)
+  g8
+]
+## 11 (last 8th note)
+f+8
+## 12
+c1
+## 13
+^2..
+## 13 (last 8th note)
+g8
+## 14
+c1
+## 15
+^2..
+[5
+  ## 15 / 17 / 19 / 21 / 23 (last 8th note)
+  g8
+  j5
+  ## 16 / 18 / 20 / 22
+  c1
+  ## 17 / 19 / 21 / 23
+  ^2..
+]
+## 24
+## Bell, channel 3 in VGMTrans output
+'bell+o3'
+'bellBaseVol*v.63' c8
+## Triangle, channels 22-23 in VGMTrans output
+"!!!o"'closedTriangle_x60'"s16"'openTriangle_x75'"t16"'closedTriangle_x110'"s8"'closedTriangle_x85'"s16"'openTriangle_x65'"t16"
+'closedTriangle_x60'"s16"'openTriangle_x120'"t8"'closedTriangle_x85'"s16"'openTriangle_x120'"t8"'closedTriangle_x75'"s16"'openTriangle_x60'"t16"
+[2
+  ## 25 / 29
+  'closedTriangle_x60'"!!!os16"'openTriangle_x95'"t16"'closedTriangle_x95'"s16"'openTriangle_x120'"t16"'closedTriangle_x115'"s8"'closedTriangle_x70'"s16"'openTriangle_x85'"t16"
+  'closedTriangle_x75'"s16"'openTriangle_x115'"t8"'closedTriangle_x90'"s16"'openTriangle_x110'"t16"'closedTriangle_x75'"s16"'openTriangle_x100'"t16"'closedTriangle_x100'"s16"
+  ## 26 / 30
+  'openTriangle_x120'"t8"'closedTriangle_x70'"s16"'openTriangle_x100'"t16"'closedTriangle_x100'"t8"'closedTriangle_x65'"s16"'openTriangle_x75'"t16"
+  'closedTriangle_x70'"s16"'openTriangle_x120'"t8"'closedTriangle_x75'"s16"'openTriangle_x110'"t8"'closedTriangle_x70'"s16"'openTriangle_x70'"t16"
+  ## 27 / 31
+  'closedTriangle_x40'"s16"'openTriangle_x70'"t16"'closedTriangle_x105'"s16"'openTriangle_x120'"t16"'closedTriangle_x115'"s8"'closedTriangle_x70'"s16"'openTriangle_x85'"t16"
+  'closedTriangle_x70'"s16"'openTriangle_x115'"t8"'closedTriangle_x90'"s16"'openTriangle_x125'"t8" j2 'closedTriangle_x75'"s16"'openTriangle_x110'"t16"
+  ## 28
+  'closedTriangle_x105'"s8"
+  ## This is almost identical to measure 24 on, but there's slight divergences so we'll repeat it instead of including measure 24 in this loop
+  'closedTriangle_x60'"s16"'openTriangle_x75'"t16"'closedTriangle_x110'"s8"'closedTriangle_x85'"s16"'openTriangle_x65'"t16"
+  'closedTriangle_x55'"s16"'openTriangle_x120'"t8"'closedTriangle_x85'"s16"'openTriangle_x120'"t8"'closedTriangle_x75'"s16"'openTriangle_x60'"t16"
+]
+## 31 (last 8th note)
+## Staccato Echo, an additionnal layer for channel 2 in VGMTrans output
+'staccatoLayer+o1' l8
+'staccatoLayer_x100' g
+;

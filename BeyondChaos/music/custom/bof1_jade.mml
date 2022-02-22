@@ -1,0 +1,690 @@
+#TITLE Black Dragon
+#ALBUM Breath of Fire
+#COMPOSER Yasuaki Fujita
+#ARRANGED Rushlight
+
+#WAVE 0x20 0x86 ## Horn
+#WAVE 0x21 0x65 ## Strings
+#WAVE 0x22 0x51 ## Bass
+#WAVE 0x24 0x04 ## Piano3
+#WAVE 0x26 0x02 ## Piano5
+#WAVE 0x27 0x01 ## Piano6
+
+#WAVE 0x28 0x2D ## Crash
+#WAVE 0x29 0x5C ## Timpani
+#WAVE 0x2A 0x91 ## Oboe B6
+#WAVE 0x2B 0x92 ## Oboe F6
+#WAVE 0x2C 0x93 ## Oboe C+6
+#WAVE 0x2D 0x94 ## Oboe A5
+
+## These tempos are all increased a little bit from their original values
+#def s1_tempo1= t152 ## original 150
+#def s1_tempo2= t127 ## original 125
+#def s1_tempo3= t102 ## originaL 102
+#def s1_tempo4= t74  ## original 73
+#def s1_tempo5= t119 ## original 117
+#def mainTempo= t127 ## original 125
+
+#def init= 's1_tempo1' %v70 %b0,50 %f0,0
+
+#def stringsBaseVol=   v145
+#def hornBaseVol=      v106
+#def crashVol=         v127
+#def timpaniBaseVol=   v116
+#def bassBaseVol=      v126
+#def bassPianoBaseVol= v163
+#def oboeVol=          v48
+#def pianoBaseVol=     v105
+#def highPianoVol=     'pianoBaseVol*v1'
+#def lowPianoVol=      'pianoBaseVol*v.85'
+
+## Some instruments have so many pans and volumes that it's easier to separate them from the instrument macro
+#def strings=   |1 o5                                               %e1
+#def horn=      |0 o5                                               %e1
+#def timpani=   |9 o5      p64                                      %e1
+#def bass=      |2 o7                         %y1 %s4 'bassSustain' %e0
+#def bassPiano= |4 o5      p64                                      %e1
+#def oboeAdsr=  %a11
+#def oboe=      'oboe4' o5 p64  'oboeVol'     'oboeAdsr'            %e1 m
+#def oboeLeft=  'oboe'     p33
+#def oboeRight= 'oboe'     p94
+#def piano5=    |6 o5                                          %r15 %e1 m
+#def piano6=    |7 o4                                               %e1 m
+
+
+## General note about Strings volume: it looks like the original Strings sample comes out louder at high notes and quieter at low notes relative to our own
+## So relative volumes will be adjusted
+#def timpaniVol1=                              'timpaniBaseVol*v.33' ## Based on original value, should be .28
+#def timpaniVol2=                              'timpaniBaseVol*v.38'
+#def timpaniVol3=                              'timpaniBaseVol*v.42'
+#def timpaniVol4=                              'timpaniBaseVol*v.50'
+#def timpaniVol5=                              'timpaniBaseVol*v.60'
+#def timpaniVol6=                              'timpaniBaseVol*v.76'
+#def bassPianoVol1=                            'bassPianoBaseVol*v.38'
+#def bassPianoVol2=                            'bassPianoBaseVol*v.7'
+#def bassPianoVol3=                            'bassPianoBaseVol*v.76'
+#def pianoPanLeft=                                                    p57
+#def pianoPanRight=                                                   p70
+## s1 is section 1, the intro (measures 1-4)
+#def stringVolpan_s1_highestStrings=           'stringsBaseVol*v.3'   p33  ## Based on original value, should be .25
+#def stringVolpan_s1_highStrings=              'stringsBaseVol*v.28'  p46  ## Based on original value, should be .25
+#def stringVolpan_s1_lowStrings=               'stringsBaseVol*v.5'   p81  ## Based on original value, should be .55
+#def stringVolpan_s1_lowestStrings=            'stringsBaseVol*v.6'   p94  ## Based on original value, should be .7
+#def stringVolpan_s1_riffStrings=              'stringsBaseVol*v.33'  p107 ## Based on original value, should be .38
+#def hornVolpan1_s1=                           'hornBaseVol*v.47'     p94
+#def hornVolpan2_s1=                           'hornBaseVol*v.65'     p94
+## s2 is section 2, the early portion (measures 5-18)
+#def stringVolpan_s2_riffStrings=              'stringsBaseVol*v.38'  p107
+#def hornVolpan_s2=                            'hornBaseVol*v.38'     p107
+#def bassVolpan_s2_high=                       'bassBaseVol*v.76'     p64
+#def bassVolpan_s2_low=                        'bassBaseVol*v.5'      p64
+## s2a is the portion of section 2 where there are accent strings but no melody
+#def stringVolpan_s2abc_accentStrings1=        'stringsBaseVol*v.05'  p33 ## Based on original value, should be .04
+#def stringVolpan_s2abc_accentStrings2=        'stringsBaseVol*v.07'  p33 ## Based on original value, should be .06
+#def stringVolpan_s2abc_accentStrings3=        'stringsBaseVol*v.1'   p33 ## Based on original value, should be .08
+#def stringVolpan_s2abc_accentStrings4=        'stringsBaseVol*v.12'  p33 ## Based on original value, should be .1
+#def stringVolpan_s2abc_accentStrings5=        'stringsBaseVol*v.14'  p33 ## Based on original value, should be .12
+#def stringVolpan_s2abc_accentStrings6=        'stringsBaseVol*v.24'  p33 ## Based on original value, should be .2
+#def stringVolpan_s2abc_accentStrings7=        'stringsBaseVol*v.4'   p33 ## Based on original value, should be .35
+## s2b is the portion of section 2 where there are no accent strings
+#def stringVolpan_s2b_melodyStrings=           'stringsBaseVol*v.43'  p64 ## Based on original value, should be .4
+## s2c is the portion of section 2 where there are accent strings and a melody
+#def stringVolpan_s2c_melodyStrings=           'stringsBaseVol*v.32'  p94 ## Based on original value, should be .26
+## s2d is the portion of section 2 that transitions to section 3
+#def stringPan_s2d_accentStringsLeft=                                 p46
+#def stringPan_s2d_accentStringsRight=                                p81
+#def stringVol_s2d_accentHighStrings1=         'stringsBaseVol*v.18'      ## Based on original value, should be .16
+#def stringVol_s2d_accentHighStrings2=         'stringsBaseVol*v.2'       ## Based on original value, should be .17
+#def stringVol_s2d_accentHighStrings3=         'stringsBaseVol*v.23'      ## Based on original value, should be .2
+#def stringVol_s2d_accentHighStrings4=         'stringsBaseVol*v.34'      ## Based on original value, should be .3
+#def stringVol_s2d_accentHighStrings5=         'stringsBaseVol*v.41'      ## Based on original value, should be .37
+#def stringVol_s2d_accentHighStrings6=         'stringsBaseVol*v.44'      ## Based on original value, should be .39
+#def stringVol_s2d_accentHighStrings7=         'stringsBaseVol*v.46'      ## Based on original value, should be .41
+#def stringVol_s2d_accentMidStrings1=          'stringsBaseVol*v.17'      ## Based on original value, should be .16
+#def stringVol_s2d_accentMidStrings2=          'stringsBaseVol*v.18'      ## Based on original value, should be .17
+#def stringVol_s2d_accentMidStrings3=          'stringsBaseVol*v.21'      ## Based on original value, should be .2
+#def stringVol_s2d_accentMidStrings4=          'stringsBaseVol*v.32'      ## Based on original value, should be .3
+#def stringVol_s2d_accentMidStrings5=          'stringsBaseVol*v.4'       ## Based on original value, should be .37
+#def stringVol_s2d_accentMidStrings6=          'stringsBaseVol*v.42'      ## Based on original value, should be .39
+#def stringVol_s2d_accentMidStrings7=          'stringsBaseVol*v.44'      ## Based on original value, should be .41
+#def stringVolpan_s2d_lateHighAccentStrings=   'stringsBaseVol*v.41'  p46 ## Based on original value, should be .37
+#def stringVolpan_s2d_lateMidAccentStrings=    'stringsBaseVol*v.4'   p46 ## Based on original value, should be .37
+#def stringVolpan_s2d_lateLowAccentStrings=    'stringsBaseVol*v.34'  p82 ## Based on original value, should be .37
+#def stringVolpan_s2d_lateLowestAccentStrings= 'stringsBaseVol*v.41'  p94 ## Based on original value, should be .47
+## s3 is section 3, the strings frenzy (measures 19-26)
+## This section plays a lot of 16th notes for the melody where the volume may not come out quite as much with the strings' built-in attack, so we'll have a different volume for 16ths.
+## We could have used an instant-on sample instead, but this one sounds good
+#def stringVolpan_s3_melodyStringsStaccato=    'stringsBaseVol*v.34'  p94 ## Based on original value, should be .26. Let's assume the normal boost brings it to .31, then add the "high note" boost on top.
+#def stringVolpan_s3_melodyStringsNormal=      'stringsBaseVol*v.29'  p94 ## Based on original value, should be .26
+#def stringVolpan_s3_supportStrings=           'stringsBaseVol*v.29'  p33 ## Based on original value, should be .26
+#def bassVolpan_s3_right=                      'bassBaseVol*v.7'      p81
+#def bassVolpan_s3_center=                     'bassBaseVol*v.7'      p64
+## s3a is the main portion of section 3
+## s3b is the first no-bass portion of section 3
+#def hornVolpan_s3ab=                          'hornBaseVol*v.35'     p107
+#def stringVolpan_s3ab_LowStrings=             'stringsBaseVol*v.45'  p21 ## Based on original value, should be .61
+#def stringVolpan_s3b_midStrings=              'stringsBaseVol*v.26'  p33 ## Based on original value, should be .26
+## s3c is the second no-bass portion of section 3
+#def stringVolpan_s3c_highStrings1=            'stringsBaseVol*v.41'  p33 ## Based on original value, should be .32 (.16*2 because we combine two identical channels). It also gets an extra boost due to being 16th notes
+#def stringVolpan_s3c_highStrings2=            'stringsBaseVol*v.44'  p33 ## Based on original value, should be .34 (.17*2 because we combine two identical channels). It also gets an extra boost due to being 16th notes
+#def stringVolpan_s3c_highStrings3=            'stringsBaseVol*v.48'  p33 ## Based on original value, should be .38 (.19*2 because we combine two identical channels). It also gets an extra boost due to being 16th notes
+#def stringVolpan_s3c_midStrings1=             'stringsBaseVol*v.5'   p64 ## Based on original value, should be .42, gets a boost due to being 16th notes
+#def stringVolpan_s3c_midStrings2=             'stringsBaseVol*v.52'  p64 ## Based on original value, should be .44, gets a boost due to being 16th notes
+#def stringVolpan_s3c_midStrings3=             'stringsBaseVol*v.54'  p64 ## Based on original value, should be .46, gets a boost due to being 16th notes
+#def stringVolpan_s3c_midStrings4=             'stringsBaseVol*v.58'  p64 ## Based on original value, should be .5, gets a boost due to being 16th notes
+#def stringVolpan_s3c_lowStrings=              'stringsBaseVol*v.47'  p64 ## Based on original value, should be .47
+#def hornVolpan_s3c=                           'hornBaseVol*v.37'     p20
+## s4 is section 4, the piano section (measures 27-28)
+## Moving high accent strings closer to center vs original...
+#def stringVolpan_s4_highAccentStrings=        'stringsBaseVol*v.44'  p82 ## Based on original value, should be .4
+#def stringVolpan_s4_lowAccentStrings=         'stringsBaseVol*v.45'  p46 ## Based on original value, should be .4
+#def bassVolpan_s4=                            'bassBaseVol*v.7'      p64
+## s5 is section 5, the transition to loop (measures 29-30)
+#def stringVolpan_s5_highStrings=              'stringsBaseVol*v.29'  p33 ## Based on original value, should be .26
+#def stringVolpan_s5_midStrings=               'stringsBaseVol*v.28'  p64 ## Based on original value, should be .28
+#def stringVolpan_s5_lowStrings=               'stringsBaseVol*v.27'  p94 ## Based on original value, should be .31
+#def hornVolpan_s5=                            'hornBaseVol*v.44'     p107
+
+
+## Use those macros when switching between oboe1 and oboe2, or when switching between oboe3 and oboe4.
+#def oboe1= |A 'oboeAdsr'
+#def oboe2= |B 'oboeAdsr'
+#def oboe3= |C 'oboeAdsr'
+#def oboe4= |D 'oboeAdsr'
+
+## Use those macros when switching from (oboe1 or oboe2) to (oboe3 or oboe4) or the opposite, so the octaves adjust. The 'oboe' macro starts at oboe4.
+#def upToOboe1=   'oboe1'>
+#def upToOboe2=   'oboe2'>
+#def downToOboe3= 'oboe3'<
+#def downToOboe4= 'oboe4'<
+
+
+#def stringsSustain=        %r0
+#def stringsRelease=        %r20
+#def stringsQuickRelease=   %r22
+#def stringsQuickerRelease= %r24
+#def riffStrings_release=   %r20
+#def hornSustain=           %r0
+#def hornRelease=           %r20
+#def oboeSustain=           %r0
+#def oboeRelease=           %r20
+#def bassPianoRelease=      %r20
+#def bassSustain=           %r13
+#def bassRelease=           %r24
+
+
+## Pans for the crash have been pushed somewhat towards center vs. original values
+#DRUM "c"= 5f+ |8 p46 'crashVol' %r17 %e1
+#DRUM "d"= 5f+ |8 p81 'crashVol' %r17 %e1
+
+
+{1}
+'init'
+## Intro: Highest Strings, originally channel 8
+'strings+o2' 'stringVolpan_s1_highestStrings' l3
+c>af
+## 2
+t125 e- t101 e t73 c
+## 3
+t117 >g+1
+## 4
+^1
+t125
+$
+## Early Section: With accent strings without melody: High Accent Strings, originally channel 8
+'strings+o2' 'stringVolpan_s2abc_accentStrings7' 'stringsRelease' l4
+## 5 / 6
+[2 c>'stringVolpan_s2abc_accentStrings6'b<cd]
+## Early Section: Without accent strings: Melody Strings, originally channel 8
+'strings' 'stringVolpan_s2b_melodyStrings' l16
+[2
+  ## 7 / 9
+  ab<cfe-2^8 j2 ^16'stringsRelease'^16'stringsSustain'
+  ## 8
+  e2...'stringsRelease'^16'stringsSustain'>
+]
+## 9 (last 8th note)
+ef
+## 10
+e2...'stringsRelease'^16'stringsSustain'
+## 11
+## Oboe, originally channel 8
+'oboeRight+o1''oboe3' l8
+r2rc+d'upToOboe2'e-
+## 12
+e>'downToOboe4'ee-2^8.'oboeRelease'^16
+## 13
+## Early Section: With accent strings with melody: Melody Strings, originally channel 8
+'strings+o2' 'stringVolpan_s2c_melodyStrings' l16
+r2r8d>g+d4
+## 14
+^8c+8d8>b8-g+4...'stringsRelease'^32
+## 15
+## Oboe, originally channel 8
+'oboeLeft+o1''oboe3' l8
+r2r8c+24d24'upToOboe2'e24'oboe1'g+8'oboe2'e8
+## 16
+'downToOboe'd8c+8d4...'oboeRelease'^32
+## Early Section: Transition to strings frenzy: High Accent Strings, originally channel 8
+'strings+o1' 'stringPan_s2d_accentStringsRight' 'stringVol_s2d_accentHighStrings1' l8
+ef
+## 17
+'stringVol_s2d_accentHighStrings2' gf 'stringVol_s2d_accentHighStrings3' ef 'stringVol_s2d_accentHighStrings4' gf 'stringVol_s2d_accentHighStrings5' ef
+## 18
+'stringVol_s2d_accentHighStrings6' gf 'stringVol_s2d_accentHighStrings7' ef 
+## Early Section: Transition to strings frenzy: Late High Accent Strings, originally channel 8
+'stringVolpan_s2d_lateHighAccentStrings' <c+16'stringsRelease'^16'stringsSustain'c+16'stringsRelease'^16^4
+[2
+  ## 19 / 23
+  ## String Frenzy Section: Melody Strings, originally channel 8
+  'strings+o1' 'stringVolpan_s3_melodyStringsStaccato' l16
+  defag>a<dfec+defefg
+  j2
+  ## 20
+  ab-<cdc>b-ab-agagfgfe
+  ## 21
+  c+de>ag+aba<c+>a<d>a<e>a<f>a<
+  ## 22
+  'stringVolpan_s3_melodyStringsNormal'f8'stringVolpan_s3_melodyStringsStaccato'ef'stringVolpan_s3_melodyStringsNormal'g8'stringVolpan_s3_melodyStringsStaccato'fg
+  'stringVolpan_s3_melodyStringsNormal'a8'stringVolpan_s3_melodyStringsStaccato'gf'stringVolpan_s3_melodyStringsNormal'e4'stringVolpan_s3_melodyStringsStaccato'
+]
+## 24
+[3 aga<d> j3 a'stringsRelease'^'stringsSustain']
+## 25
+[3 agab- j3 <c>b-]
+## 26
+## String Frenzy Section: Second no-bass portion: High Strings, originally channel 8
+'strings+o1' 'stringVolpan_s3c_highStrings1' l16
+aa'stringVolpan_s3c_highStrings2'aa
+'stringVolpan_s3c_highStrings3'[4 b-] [4 b] <[4 c+]
+## 27
+## High Piano, originally channel 8
+'piano5' 'highPianoVol' 'pianoPanLeft' l8
+dc+dfg+gg+b
+## 28
+'piano6+o1'
+dc+dfg+gg+b
+## 29
+## Loop to Transition: High Strings, originally channel 8
+'strings+o1' 'stringVolpan_s5_highStrings'
+a4...'stringsRelease'^32'stringsSustain'f4...'stringsRelease'^32'stringsSustain'
+## 30
+c+4...'stringsRelease'^32'stringsSustain'e4...'stringsRelease'^32'stringsSustain'
+;
+
+
+{2}
+## Intro: High Strings, originally channel 7
+'strings+o1' 'stringVolpan_s1_highStrings' l3
+c>af
+## 2
+e-ec
+## 3
+>g+1
+## 4
+^1
+$
+## 5
+## Early Section: With accent strings without melody: Mid Accent Strings, originally channel 8
+'strings+o2' 'stringVolpan_s2abc_accentStrings7' l16
+e'stringsRelease'^'stringsSustain' 'stringVolpan_s2abc_accentStrings6' >> [8 a 'stringsRelease'^'stringsSustain' j8 <a'stringsRelease'^'stringsSustain'>]
+## Early Section: Horn, originally channel 7
+'horn-o1' 'hornVolpan_s2'
+[2
+  ## 7 / 9
+  a2^8.'hornRelease'^16'hornSustain'<c4>
+  ## 8 / 10
+  g+4...'hornRelease'^32'hornSustain' e4...'hornRelease'^32'hornSustain'
+]
+
+## Early Section: With accent strings with melody: High Accent Strings, originally channel 8 (sometimes migrating to channel 7).
+[
+  ## 11 / 13
+  'strings+o2' 'stringVolpan_s2abc_accentStrings6' l8
+  [2 e'stringsQuickRelease'^'stringsSustain'] 'stringVolpan_s2abc_accentStrings5' e'stringsQuickRelease'^'stringsSustain' 'stringVolpan_s2abc_accentStrings4' e'stringsQuickRelease'^'stringsSustain'
+  ## 12 / 14
+  'stringVolpan_s2abc_accentStrings3' [2 e'stringsQuickRelease'^'stringsSustain'] 'stringVolpan_s2abc_accentStrings1' [2 e'stringsQuickRelease'^'stringsSustain']
+]
+## 15
+>
+'stringVolpan_s2abc_accentStrings6' b-'stringsQuickRelease'^'stringsSustain' 'stringVolpan_s2abc_accentStrings5' b-'stringsQuickRelease'^'stringsSustain'
+'stringVolpan_s2abc_accentStrings4' b-'stringsQuickRelease'^'stringsSustain' 'stringVolpan_s2abc_accentStrings3' b-'stringsQuickRelease'^'stringsSustain'
+## 16
+'stringVolpan_s2abc_accentStrings2' b-'stringsQuickRelease'^'stringsSustain' 'stringVolpan_s2abc_accentStrings1' [2 e'stringsQuickRelease'^'stringsSustain']
+## Early Section: Transition to strings frenzy: Mid Accent Strings, originally channel 7
+'strings' 'stringPan_s2d_accentStringsLeft' 'stringVol_s2d_accentMidStrings1' l8
+b-<c+
+## 17
+'stringVol_s2d_accentMidStrings2' ec+> 'stringVol_s2d_accentMidStrings3' b-<c+ 'stringVol_s2d_accentMidStrings4' ec+> 'stringVol_s2d_accentMidStrings5' b-<c+
+## 18
+'stringVol_s2d_accentMidStrings6' ec+> 'stringVol_s2d_accentMidStrings7' b-<c+ 
+## Early Section: Transition to strings frenzy: Late Mid Accent Strings, originally channel 7
+'stringVolpan_s2d_lateMidAccentStrings' b-8b-8'stringsRelease'^4
+[2
+  ## 19 / 23
+  ## String Frenzy Section: Support Strings, originally channel 5
+  'strings' 'stringVolpan_s3_supportStrings' l4
+  g+ab-g+
+  ## 20 / 24
+  <defd
+  j2
+  ## 21
+  gab-<c+
+  ## 22
+  d>g+e4...'stringsRelease'^32'stringsSustain'
+]
+## 25
+efgg+
+## 26
+## String Frenzy Section: Second no-bass portion: Mid Strings, originally channel 5
+'strings' 'stringVolpan_s3c_midStrings1' l16
+[4 a] 'stringVolpan_s3c_midStrings2' [4 b-] 'stringVolpan_s3c_midStrings3' [4 b] 'stringVolpan_s3c_midStrings4' <[4 c+]
+## 27
+## Low Piano, originally channel 7
+'piano5-o1' 'lowPianoVol' 'pianoPanRight' l8
+r16dc+dfg+gg+b
+## 28 (one 16th note in)
+<dc+dfg+gg+b16
+## 29
+## Loop to Transition: Mid Strings, originally channel 7
+'strings' 'stringVolpan_s5_midStrings'
+a4...'stringsRelease'^32'stringsSustain'f4...'stringsRelease'^32'stringsSustain'
+## 30
+c+4...'stringsRelease'^32'stringsSustain'e4...'stringsRelease'^32'stringsSustain'
+;
+
+
+{3}
+## Intro: Low Strings, originally channel 6
+'strings' 'stringVolpan_s1_lowStrings' l3
+c>af
+## 2
+e-ec
+## 3
+## Intro: Lowest Strings, originally channel 5
+'strings-o2' 'stringVolpan_s1_lowestStrings'
+g+1
+## 4
+## Intro: Riff Strings, originally channel 5
+'strings-o1' 'stringVolpan_s1_riffStrings' l16
+[2 a'riffStrings_release'^'stringsSustain'g+'riffStrings_release'^'stringsSustain'a'riffStrings_release'^'stringsSustain'<c'riffStrings_release'^'stringsSustain'>]
+$
+## Bass, originally channel 6
+'bass-o3' l8
+## 5-14
+'bassVolpan_s2_high'a'bassVolpan_s2_low' [79a]
+## 15-17
+[28 g]
+## 18.5
+## Bass Piano, originally channel 4
+'bassPiano-o2' 'bassPianoVol2' l8
+b-b-'bassPianoRelease'^4
+
+## Bass, originally channel 6
+'bass-o2' 'bassVolpan_s3_right' l8
+[2
+  ## 19 / 23
+  [8 d]
+  ## 20 / 24
+  >[8 b-]
+  j2,325
+  ## 21
+  [8 a]
+  ## 22
+  ## String Frenzy Section: First portion with no bass: Mid Strings, originally channel 6
+  'strings+o1' 'stringVolpan_s3b_midStrings'
+  f4e4c+4...'stringsRelease'^32
+  ## Bass, originally channel 6
+  'bass-o2' 'bassVolpan_s3_center' l8
+]
+$325
+## 25
+<[8 g]
+## 26
+## String Frenzy Section: Second no-bass portion: Horn, originally channel 4
+'horn-o1' 'hornVolpan_s3c'
+f8.'hornRelease'^16'hornSustain'f+8.'hornRelease'^16'hornSustain'g8.'hornRelease'^16'hornSustain'g+8.'hornRelease'^16'hornSustain'
+## 27
+## Bass, originally channel 6
+'bass-o2' 'bassVolpan_s4'
+d8.'bassRelease'^4^16'bassSustain'[2 d8.'bassRelease'^16'bassSustain']
+## 28
+d8.'bassRelease'^4..'bassSustain'd8'bassRelease'^8'bassSustain'd8
+## 29
+## Loop to Transition: Horn Strings, originally channel 4
+'horn-o1' 'hornVolpan_s5'
+a4.'hornRelease'^8'hornSustain'f4.'hornRelease'^8'hornSustain'
+## 30
+c+4.'hornRelease'^8'hornSustain'e4.'hornRelease'^8'hornSustain'
+;
+
+
+{4}
+## Intro: Horn, originally channel 4
+'horn' 'hornVolpan1_s1'
+c4'hornRelease'^12'hornSustain' >a4'hornRelease'^12'hornSustain' f4'hornRelease'^12'hornSustain'
+## 2
+e-4'hornRelease'^12'hornSustain' e4'hornRelease'^12'hornSustain' c4'hornRelease'^12'hornSustain'
+## 3
+>g+1
+## 4
+'hornVolpan2_s1'^2.'hornRelease'^4'hornSustain'
+$
+## Early Section: Strings Riff, originally channel 5
+'strings-o1' 'stringVolpan_s2_riffStrings' l16
+## 5-14
+[20 a'riffStrings_release'^'stringsSustain'g+'riffStrings_release'^'stringsSustain'a'riffStrings_release'^'stringsSustain'<c'riffStrings_release'^'stringsSustain'>]
+## 15-16 - in the original song, this gets pushed to channel 4 for a while
+[4 g'riffStrings_release'^'stringsSustain'f+'riffStrings_release'^'stringsSustain'g'riffStrings_release'^'stringsSustain'b-'riffStrings_release'^'stringsSustain']
+## 17
+[3 b-'riffStrings_release'^'stringsSustain'<c+'riffStrings_release'^'stringsSustain'>g'riffStrings_release'^'stringsSustain'<c'riffStrings_release'^'stringsSustain'>]
+## 18.5
+## Crash, originally channel 6
+"!!!oc8c4."
+r2
+[2
+  ## 19.5 / 23.5
+  ^4
+  ## Strings Frenzy Section: Horn, originally channel 7
+  'horn' 'hornVolpan_s3ab'
+  f4
+  ## 20 / 24
+  e4.f8d4...'hornRelease'^32'hornSustain'
+  j2
+  ## 21
+  c+4...'hornRelease'^32'hornSustain'>b-4...'hornRelease'^32'hornSustain'
+  ## 22
+  a2...'hornRelease'^16
+  ## 23
+  ^2
+]
+## 25
+>b-4...'hornRelease'^32'hornSustain'<g4...'hornRelease'^32'hornSustain'
+## 26
+## String Frenzy Section: Second no-bass portion: Low Strings, originally channel 6
+'strings-o1' 'stringVolpan_s3c_lowStrings' l4
+ab-b<c+
+## 27
+## Piano Section: High Accent Strings, originally channel 5
+'strings+o2' 'stringVolpan_s4_highAccentStrings'
+d16'stringsQuickerRelease'^8.^4'stringsSustain' [2 d16'stringsQuickerRelease'^8.'stringsSustain']
+## 28
+d16'stringsQuickerRelease'^2^16'stringsSustain' d16'stringsQuickerRelease'^8.'stringsSustain' d16'stringsQuickerRelease'^16'stringsSustain'
+## 29
+## Loop to Transition: Low Strings, originally channel 6
+'strings-o1' 'stringVolpan_s5_lowStrings'
+a4...'stringsRelease'^32'stringsSustain'f4...'stringsRelease'^32'stringsSustain'
+## 30
+c+4...'stringsRelease'^32'stringsSustain'e4...'stringsRelease'^32'stringsSustain'
+;
+
+
+{5}
+## Timpani, originally channel 3 (but for short notes, plays only half of them)
+'timpani-o2' 'timpaniVol1' l12
+[12 g+]
+## 2
+'timpaniVol2' g+g+'timpaniVol4'g+'timpaniVol6' g+8g+8 g+6g+12^8g+8
+## 3
+## Crash, originally channel 3
+"!!!oc2"
+## Timpani, originally channel 3 (but for short notes, plays only half of them)
+'timpani-o2' 'timpaniVol1' l12
+[12 g+]
+## 4.5
+'timpaniVol2'g+g+'timpaniVol5'g+'timpaniVol6' g+g+g+
+$
+## 5
+## Crash, originally channel 3
+"!!!oc2.."
+## Timpani, originally channel 3 (but for short notes, plays only half of them)
+'timpani-o2' 'timpaniVol6' l12g+12g+12
+## 6 (one 24th note in)
+r2.^12g+8
+## 7
+g1+
+## 8
+r2..<d8>
+## 9
+g+1
+## 10
+r4.<d12d12r12r4.
+## Early Section: With accent strings with melody: Mid Accent Strings, originally channel 7 (sometimes getting cut out, but we'll keep playing it anyway).
+[
+  ## 11 / 13
+  'strings+o1' 'stringVolpan_s2abc_accentStrings6' l8
+  [2 b-'stringsQuickRelease'^'stringsSustain'] 'stringVolpan_s2abc_accentStrings5' b-'stringsQuickRelease'^'stringsSustain' 'stringVolpan_s2abc_accentStrings4' b-'stringsQuickRelease'^'stringsSustain'
+  ## 12 / 14
+  'stringVolpan_s2abc_accentStrings3' [2 b-'stringsQuickRelease'^'stringsSustain'] 'stringVolpan_s2abc_accentStrings1' [2 b-'stringsQuickRelease'^'stringsSustain']
+]
+## 15
+'stringVolpan_s2abc_accentStrings6' g+'stringsQuickRelease'^'stringsSustain' 'stringVolpan_s2abc_accentStrings5' g+'stringsQuickRelease'^'stringsSustain'
+'stringVolpan_s2abc_accentStrings4' g+'stringsQuickRelease'^'stringsSustain' 'stringVolpan_s2abc_accentStrings3' g+'stringsQuickRelease'^'stringsSustain'
+## 16
+'stringVolpan_s2abc_accentStrings2' g+'stringsQuickRelease'^'stringsSustain' 'stringVolpan_s2abc_accentStrings1' [2 g+'stringsQuickRelease'^'stringsSustain']
+## Early Section: With accent strings with melody: High Accent Strings, originally channel 5. Not switching anything cause Mid Accent Strings already has the same volpan
+b-'stringsQuickRelease'^'stringsSustain'
+## 17
+r1
+## 18
+## Half of the Timpani roll, originally channel 3
+'timpani-o2' 'timpaniVol1' l12
+g+g+'timpaniVol3'g+'timpaniVol5'g+g+'timpaniVol6'g+
+## Early Section: Transition to strings frenzy: Late Lowest Accent Strings, originally channel 5
+'strings+o1' 'stringVolpan_s2d_lateLowestAccentStrings'
+ c+16'stringsRelease'^16'stringsSustain'c+16'stringsRelease'^16^4
+[2
+  ## 19 / 23
+  ## String Frenzy Section: Main portion and first portion with no bass: Low Strings, originally channel 4
+  'strings-o1' 'stringVolpan_s3ab_LowStrings'
+  d2...'stringsRelease'^16'stringsSustain'
+  ## 20 / 24
+  >b-2...'stringsRelease'^16'stringsSustain'
+  j2
+  ## 21
+  a2...'stringsRelease'^16'stringsSustain'
+  ## 22
+  <d4c+4>a4...'stringsRelease'^32'stringsSustain'
+]
+## 25
+g2...'stringsRelease'^16'stringsSustain'
+## Crash, originally channel 3
+"!!!od4"
+## Timpani, originally channel 3 (but for short notes, plays only half of them)
+'timpani-o1' 'timpaniVol6'
+d8>g+8g+8^24g+12g+4
+## 27
+## Piano Section: Low Accent Strings, originally channel 4
+'strings+o1' 'stringVolpan_s4_lowAccentStrings'
+a16'stringsQuickerRelease'^8.^4'stringsSustain' [2 a16'stringsQuickerRelease'^8.'stringsSustain']
+## 28
+a16'stringsQuickerRelease'^2^16'stringsSustain' a16'stringsQuickerRelease'^8.'stringsSustain' a16'stringsQuickerRelease'^16'stringsSustain'
+## 29
+## Crash, originally channel 5
+"!!!oc2c2"
+## 30
+"c2c2"
+;
+
+
+{6}
+## Timpani, originally channel 3 (but playing only short notes, and half of them)
+'timpani-o2' 'timpaniVol1' l12
+r24 [12 g+]
+## 2 (one 24th note in)
+'timpaniVol2' g+'timpaniVol4'g+g+24^16'timpaniVol6'g+8g+16^12g+6g+4
+## 3
+r2 'timpaniVol1'
+r24 [12 g+]
+## 4.5 (one 24th note in)
+'timpaniVol2'g+'timpaniVol5'g+g+'timpaniVol6' g+g+g+24
+$
+## 5
+^24
+## Timpani, originally channel 3 (but playing only short notes, and half of them)
+'timpani-o2' 'timpaniVol6'
+r4..^48r4.^24g+12
+## 6
+r1
+## 7
+r1
+## 8
+r1
+## 9
+r1
+## 10
+r4.r24<e12>g+2
+## 11
+## Now playing all Timpani notes
+r1
+## 12
+r8[2 <d8>g+16g+16g+8] r8
+## 13
+r1
+## 14
+r2r8<d16d16>g+8g+8
+## 15
+g+2..<d24d24d24>
+## 16
+g+2.
+## Early Section: With accent strings with melody: Mid Accent Strings, originally pushed out and doesn't play.
+'strings+o1' 'stringVolpan_s2abc_accentStrings1' l8
+g+'stringsQuickRelease'^'stringsSustain'
+## 17
+r1
+## 18
+## Half of the Timpani roll, originally channel 3
+'timpani-o2' 'timpaniVol1' l12
+r24g+'timpaniVol3'g+g+'timpaniVol5'g+'timpaniVol6'g+g+24
+## Early Section: Transition to strings frenzy: Late Low Accent Strings, originally channel 6
+'strings+o1' 'stringVolpan_s2d_lateLowAccentStrings'
+g16'stringsRelease'^16'stringsSustain'g16'stringsRelease'^16^4
+[2 
+  ## 19 / 23
+  ## Crash, originally channel 3
+  "!!!oc2.."
+  ## Timpani, originally channel 3
+  'timpani-o1' 'timpaniVol6'
+  d24>g+24g+24
+  j2,624
+  ## 20
+  <d8>g+8g+2^8g+16g+16
+  ## 21
+  [2 <d8>g+4.]
+  ## 22
+  ## Crash, originally channel 3
+  "!!!oc4."
+  ## Timpani, originally channel 3
+  'timpani-o2' 'timpaniVol6'
+  g+16g+16g+16g+16g+8g+4
+]
+$624
+## 24
+<d2.>g+8g+16g+16
+## 25
+[2 <d8>g+4g+16g+16]
+## 26
+## Timpani, originally channel 3 (but playing only short notes, and half of them)
+'timpani-o2' 'timpaniVol6'
+r4..g+8.g+12g+24^8g+8
+## 27
+## Crash, originally channel 3
+"!!!od2d4d4"
+## 28
+"d2^8d4d8"
+## Timpani, originally channel 3
+'timpani-o1' 'timpaniVol6'
+## 29-30
+[2 d4>g+12g+12g+12g+4<d4]
+;
+
+
+{7}
+## Intro: Lowest Strings, originally channel 5
+'strings-o1' 'stringVolpan_s1_lowestStrings' l3
+c>af
+## 2
+e-ec
+## 3
+## Intro: Low Strings, originally channel 5
+'strings-o2' 'stringVolpan_s1_lowStrings'
+g+1
+## 4
+^1
+$
+## Bass Piano, originally channel 4
+'bassPiano-o2' l8
+## 5-14
+'bassPianoVol3' a 'bassPianoVol1' [79 a]
+## 15-16 - Note: Bass piano originally gets cut out for half of measure 15 and for measure 16, but we'll keep playing it
+[28 g]
+## 18.5
+r2
+## 19-30
+[12 r1]
+## 
+;
+
+
+{8}
+;
