@@ -320,12 +320,12 @@ NORMAL_CODES = [
     Code('thescenarionottaken', 'DIVERGENT PATHS MODE', "Changes the way the 3 scenarios are split up.", "experimental", "checkbox"),
     Code('worringtriad', "START IN WOR", "The player will start in the World of Ruin, with all of the World of Balance treasure chests, along with a guaranteed set of items, and more Lores.", "major", "checkbox"),
     
-    Code('desperation', "DESPERTION MODE", "When the adventurer back is up against the wall. Break the wall.", "beta", "checkbox"),
+    Code('desperation', "DESPERATION MODE", "When the adventurer back is up against the wall. Break the wall.", "beta", "checkbox"),
     Code('nobreaks', "NO ITEM BREAKS MODE", "Causes no items to break for spell effects.", "beta", "checkbox"),
-    Code('unbreakable', "UNBREAKABLE ITEMS MODE", "Causes all items to be indestructible  when broken for a spell", "beta", "checkbox"),
+    Code('unbreakable', "UNBREAKABLE ITEMS MODE", "Causes all items to be indestructible when broken for a spell", "beta", "checkbox"),
     Code('remonsterate', "MONSTER SPRITE REPLACEMENT MODE", "Enables monster sprite replacements from sprites in the remonstrate\\sprites folder.", "beta", "checkbox"),
-    Code('swdtechspeed', "SWDTECH SPEED RANDO MODE", "Alters the speed at which the swdtech bar moves.", "beta", "combobox", ("Sonic", "Faster", "Fast", "Vanilla", "Random")),
-    Code('cursepower', "CURSE POWER SHUFFLE MODE", "Set the number of battles required to uncurse a Cursed Shield. (Vanilla = 256, 0 = Random)", "beta", "numberbox"),
+    Code('swdtechspeed', "CHANGE SWDTECH SPEED MODE", "Alters the speed at which the swdtech bar moves.", "beta", "combobox", ("Fastest", "Faster", "Fast", "Vanilla", "Random")),
+    #Code('cursepower', "CHANGE CURSED SHIELD MODE", "Set the number of battles required to uncurse a Cursed Shield. (Vanilla = 256, 0 = Random)", "beta", "numberbox"),
     #Code('sixtytwoqd', "version 62 randomizer", "For quickdraw only, run version 62 of the randomizer", "beta", "checkbox"),
 ]
 

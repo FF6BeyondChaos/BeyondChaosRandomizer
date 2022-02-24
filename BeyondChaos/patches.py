@@ -291,7 +291,7 @@ def no_dance_stumbles(fout):
 
 def change_swdtech_speed(fout, random: Random, speed: str = "Vanilla"):
     swdtech_speed = 0x03
-    if speed.lower() == "sonic":
+    if speed.lower() == "fastest":
         swdtech_speed = 0x00
     elif speed.lower() == "faster":
         swdtech_speed = 0x01
@@ -300,8 +300,8 @@ def change_swdtech_speed(fout, random: Random, speed: str = "Vanilla"):
     elif speed.lower() == "random":
         swdtech_speed = random.randint(0, 3)
     css_sub = Substitution()
-    css_sub.set_location(0x017D86)
-    css_sub.bytestring = bytes([0x29, swdtech_speed, 0xD0, swdtech_speed])
+    css_sub.set_location(0x017D87)
+    css_sub.bytestring = bytes([swdtech_speed])
     css_sub.write(fout)
 
 
@@ -316,6 +316,8 @@ def change_cursed_shield_battles(fout, random: Random, amount: int = None):
             amount = random.randint(1, 256)
         else:
             amount = max(1, int(random.gauss(base_cursed_shield_battle_amount, standard_deviation_number)))
+    else:
+        amount = int(amount)
     ccsb_sub.bytestring = bytes([amount])
     ccsb_sub.write(fout)
 

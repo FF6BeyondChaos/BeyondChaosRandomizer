@@ -74,10 +74,10 @@ VERSION_ROMAN = "II"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-#WOR TEST TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontentcanttouchthiseasymodounbreakablecollateraldamage|1603333081"
+TEST_SEED = "2|normal|bcdefgimnopqrstuwyz makeover partyparty novanillar andombosses supernatural alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent canttouchthis suplexwrecks cursepower:1 |1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "2|normal|bdefgijmnopqrstuwyzmakeoverpartypartynovanillaelectricboogaloorandombossesalasdracojohnnydmadbsiabmimetimedancingmaduinquestionablecontentdancelessons|1639809308"
+#TEST_SEED = "2|normal|bdefgijmnopqrstuwyzmakeoverpartypartynovanillaelectricboogaloorandombossesalasdracojohnnydmadbsiabmimetimedancingmaduinquestionablecontentdancelessons|1639809308"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -1309,7 +1309,7 @@ def manage_suplex(commands: Dict[str, CommandBlock], monsters: List[MonsterBlock
     for c in characters:
         c.set_battle_command(0, command_id=0)
         c.set_battle_command(1, command_id=5)
-        c.set_battle_command(2, command_id=0xA)
+        c.set_battle_command(2, command_id=0x7)
         c.set_battle_command(3, command_id=1)
         c.write_battle_commands(fout)
 
@@ -5434,7 +5434,18 @@ def randomize(**kwargs) -> str:
     name_swd_techs(fout)
     fix_flash_and_bioblaster(fout)
     if Options_.is_code_active("swdtechspeed"):
-        change_swdtech_speed(fout, random, Options_.get_code_value("swdtechspeed"))
+        swdtech_speed = Options_.get_code_value('swdtechspeed')
+        if type(swdtech_speed) == bool:
+            while True:
+                swdtech_speed = input("\nPlease enter a custom speed for Sword Tech " 
+                                      "(random, vanilla, fast, faster, fastest):\n")
+                try:
+                    if swdtech_speed.lower() in ["random", "vanilla", "fast", "faster", "fastest"]:
+                        break
+                    raise ValueError
+                except ValueError:
+                    print("The supplied speed was not a valid option. Please try again.")
+        change_swdtech_speed(fout, random, swdtech_speed)
     if Options_.is_code_active("cursepower"):
         change_cursed_shield_battles(fout, random, Options_.get_code_value("cursepower"))
 
