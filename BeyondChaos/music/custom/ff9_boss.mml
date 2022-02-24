@@ -1,0 +1,443 @@
+#TITLE Battle 2
+#ALBUM Final Fantasy IX
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#WAVE 0x20 0x82 trumpet x1
+#WAVE 0x21 0x80 trumpet x2
+#WAVE 0x22 0x83 trombone
+#WAVE 0x23 0x84 horn
+#WAVE 0x24 0x66 strings x1
+#WAVE 0x25 0x63 strings x2
+#WAVE 0x26 0xA7 flute
+#WAVE 0x27 0x96 clarinet
+#WAVE 0x28 0x93 oboe
+#WAVE 0x29 0x54 bass
+#WAVE 0x2A 0x08 piano
+#WAVE 0x2B 0x05 piano
+#WAVE 0x2C 0x2C clash cymbal
+#WAVE 0x2D 0x1A snare
+#WAVE 0x2E 0x5A timpani
+#WAVE 0x2F 0x6C tambourine
+
+#def init= t170 %v50 %b0,50 %f0,0
+
+#def synth1=   @6 o4 'y'       p64
+#def synth2=   @6 o4 'y'       p64
+#def trumpet=  |0 o5 't'       p24
+#def trumpets= |1 o5 't'       p24
+#def trombone= |2 o6 'n'       p74
+#def horn=     |3 o5 'h*v.610' p94
+#def string=   |4 o5 's*v.397'      %a10
+#def strings=  |5 o5 's*v.397'
+#def flute=    |6 o4 'f'       p127
+#def clarinet= |7 o5 'c'       p0
+#def oboe=     |8 o5 'o'       p64
+#def bass=     |9 o7           p64
+#def piano1=   |A o6 'p*v.504' p44 %y4%s6%r13
+#def piano2=   |B o7 'p*v.504' p44
+#def timpani=  |E o6 'd'       p89 %r15
+
+## note: vgmtrans export of timpani has it sounding at -3 semitones from written
+## this DOES seem to match the actual sound from what I can tell, so I'll mimic it
+## and record timpani notes as D instead of F etc (not using transpose to save data)
+
+#def y= v120
+#def t= v72
+#def n= v106
+#def h= v90
+#def s= v96
+#def f= v108
+#def c= v96
+#def o= v160
+#def b= v150
+#def p= v108
+#def d= v120
+
+#def df= v1,120
+
+#def p<= |B<<
+#def p>= |A>>%y4%s6%r13 ## [j1,9001]
+
+## Strings pan
+#def sp7a= p30 ## track 15+17 - 24/35 - c#67 and up
+#def sp6b= p34 ## track 15+18 - 24/44 - g#56 to c-67
+#def sp6a= p47 ## track 17+19 - 35/59 - c#56 to g-56
+#def sp5b= p59 ## track 18+20 - 44/74 - g#45 to c-56
+#def sp5a= p67 ## track 19+20 - 59/74 - g-45 and below
+
+#def TamVol= v96
+#def SnareVol= v160
+
+#drum "a"=3a |E v60 p64 %r13
+
+#drum "t"=5a |F 'TamVol*v.624' p15
+#drum "u"=5a |F 'TamVol*v.353' p15
+#drum "v"=5a |F 'TamVol*v.159' p15
+
+#drum "o"=5a |D 'SnareVol*v.197' p64 ## 50
+#drum "p"=5a |D 'SnareVol*v.247' p64 ## 56
+#drum "q"=5a |D 'SnareVol*v.293' p64 ## 61
+#drum "r"=5a |D 'SnareVol*v.343' p64 ## 66
+#drum "s"=5a |D 'SnareVol*v.397' p64 ## 71
+
+#drum "z"=5a |C v120 p64 %r17
+#drum "y"=5a |C v120 p64
+#drum "x"=4e |C v80 p50 %a8
+#drum "w"=5a |C v120 p64 %r22
+
+#cdef ( %l1
+#cdef ) %l0
+
+$5 %k5]
+
+{1}
+'init'
+$ %e1
+"y1^1^1^2."
+'synth1*v.397' l12 m24,18,239
+cc+f+  g1  ^8r8 fec d+>b<c >g+<c>g   b1.^8r8<cd+f+  b2 m
+'horn' l2 ba+<c+ c1..r4
+## 13 / 29
+['horn+o1'
+l8 c2^>gg+<c  c+2^>eg<c+
+   c2^>gg+<c> b2^egb
+'trumpet+o1*v.504' l16 [j2 $117
+r8crfrgr g+4grg+r        a+4gra+r  g+rgrfrer
+f4crfr   d+rc+rcr>a+r   <c4>gr<cr >a+rg+rgrer ]
+## 21 / 37
+'horn' l8
+f2^cc+f  f+2^>a<cf+
+f2^cc+f  e2^>a<ce
+'flute+o1*v.452' l16 [j2 $125
+r8g+rgrg+r  frc+r8.fr     d+rfrc+rcr8.  c+rcrc+r>
+a+rg+r8.a+r g+ra+rgrfr l8 d+fgg+ a+<cc+] j2 d+
+] >a+
+## 45
+'trumpets+o1*v.397' l24 
+[3c8r4.]c4 c+1...r8 drdrdr
+[3d8r4.]d4 e1...r8
+'strings+o2' crcrcr
+## 53
+[3c8r4.]c4 c+1^1 drdrdr
+[3d8r4.]d4 e4^1^1
+## 61
+'bass-o3''b*v.443' %e0 l16
+[4 g+r<g+r> ar<gr> a+r<f+r> br<fr>]
+l8 %e1
+[
+'flute+o2*v.397'    fc+ 'oboe+o1*v.397'     d+>b 'clarinet+o1*v.397' c+>a r4
+'oboe+o1*v.397'     fc+ 'clarinet+o1*v.397' d+>b 'flute+o2*v.397'    c+>a 'oboe*v.397'     bg j2
+'clarinet+o1*v.397' fc+ 'flute+o2*v.397'    d+>b 'oboe+o1*v.397'     c+>a r4
+'flute+o2*v.397'    fc+ 'oboe+o1*v.397'     d+>b 'clarinet+o1*v.397' c+>a 'flute+o1*v.397' bg
+'oboe+o1*v.397'     fc+ 'clarinet+o1*v.397' d+>b 'flute+o2*v.397'    c+>a r4
+'clarinet+o1*v.397' fc+ 'flute+o2*v.397'    d+>b 'oboe+o1*v.397'     c+>a 'clarinet*v.397' bg
+]
+## 73
+'strings+o2' p24 l24
+[3c8r4.]c4 c+1^1 drdrdr
+[3d8r4.]d4 e4^1^1
+;
+
+{2}
+$ %e1
+'piano2-o2' l8
+[rfrd+rfrg+ rfrcrd+re]
+r1 "!!!o x1^1" r1.
+'horn' l2 g+g+g+g1..r4
+## 13 / 29
+[ 'strings+o1' l16
+[
+'sp6b'<c2^8>'sp6a'g'sp5b'c'sp6b'g+'sp6a'f'sp6b'<c>g+ j2
+'sp7a'<c+2^8>'sp6a'e'sp5b'c'sp6a'ge'sp7a'<c+>'sp6a'g ]
+'sp6b'b2^8'sp6a'e'sp5b'c'sp6a'ge'sp6b'b'sp6a'g
+'trombone*v.504' l16
+[j1,117]
+## 21 / 37
+'strings+o1' l16
+[
+'sp6a'f2^8'sp5b'c>'sp5a'f'sp6a'<c+>'sp5b'a+'sp6a'<fc j2
+'sp6b'f+2^8>'sp5b'a'sp5a'f'sp5b'<c>a'sp6b'<f+'sp5b'c ]
+      e2^8>'sp5b'a'sp5a'f'sp5b'<c>a'sp6a'<e'sp5b'c
+'clarinet*v.490'
+[j1,125]
+l8 j2 d+ ] >a+
+## 45
+'trombone-o1*v.397' l24
+[3g8r4.]g4 f1...r8 f+rf+rf+r
+[3f+8r4.]f+4 <c1...r8  crcrcr
+## 53
+c8r4.c8r8
+'horn' crgrfr a+1. r4 <crcrcr> a+ra+ra+r g+rg+rg+r g4 r4
+"!!!o w4"
+'horn' l4 g+r f+r er dr cr> ar f+2.
+## 61
+'piano2-o2' l8
+[8 rg+rgrf+rf]
+'trumpets*v.397'
+f2..r8   g2.^16r16f24r48g24r48   a1
+l16 r8grbrar g6a6b6
+## 73
+'trombone*v.397' l24
+c8r4.c8r8
+'horn' crgrfr a+1. r4 <crcrcr> a+ra+ra+r g+rg+rg+r g4 r4
+"!!!o w4"
+'horn' l4 g+r f+r er dr cr> ar f+2.
+;
+
+{3}
+$ %e1
+'piano1-o3' l4
+[fd+fg+ fcd+e]
+[4 'fdfgpiano' l8
+   f 'p<'f 'p>'
+   c 'p<'c 'p>'
+   d+'p<'d+'p>'
+   e 'p<'e 'p>']
+## 13
+[[
+    'fdfgpiano'
+    'fdfbapiano'
+    'fdfgpiano'
+    f 'p<'f4c4d+4e'p>'
+    'fdfgpiano'
+    'fdfbapiano'
+    'fdfgpiano' j2,328
+    f 'p<'f 'p>'  
+    g 'p<'g 'p>'  
+    g+'p<'g+'p>'  
+    a 'p<'a 'p>'
+    %k5]
+$328
+g 'p<'g 'p>' %k0
+a+'p<'a+'p>' 
+g+'p<'g+'p>' 
+f+'p<'f+'p>'
+]
+## 45
+'p*v.756'%r10
+[<c1..>a+4^1^1
+b1.. a4^1^1]
+## 53
+#^
+## 61
+'piano1-o3'
+[8 l4 g+aa+b ]
+[4 l8
+    g+'p<'g+'p>'
+    a 'p<'g 'p>'
+    a+'p<'f+'p>'
+    b 'p<'f 'p>'
+  ]
+## 73
+'p*v.756'%r10
+<c1..>a+4^1^1
+b1.. a4^1^1
+;
+
+{4}
+$ %e1
+l8 [14"tv"[7"uv"]]
+## 13
+#^
+## 21
+#^
+## 29 / 37
+"!v0"
+[8 [3"so"]"s16s16o" [3"so"]"s16p16q16r16" ]
+## 45
+"!v0"
+[4"tv"[7"uv"]]
+## 53
+[
+ "tv"[6"uv"]"w4"
+ "tv"[7"uv"]
+]
+## 61
+"!v0"
+[6
+[3"qo"]["qo16o16"] j6,472 [3"qo"]
+]$472 "qo q24p24o24" l16 "qo opqr"
+## 73
+[ "!v0" l8
+ "tv"[6"uv"]"w4"
+ "tv"[7"uv"]
+]
+;
+
+{5}
+$ k1
+%e1 [24"a2"]
+## 13 / 29
+%e1
+[
+%k0 [4'timpaKeyedF']
+%k5 [4'timpaKeyedF']
+]
+## 21 / 37
+#^
+## 45 / 53
+%k-5 [8'timpaKeyedF']
+## 61
+%k0 [12
+'d*v.397'f8 'd*v.343'f8
+'d*v.455'f8 'd*v.397'f8
+'d*v.504'f8 'd*v.455'f4
+'d*v.397'f8 ]
+## 73
+%k-5 [4'timpaKeyedF'] %k0
+;
+
+{6}
+$
+'sparseSnare' r2. 'basslineEnd'
+[3'sparseSnare' r2. r1
+'sparseSnare' r2. j3,628 'basslineEnd']
+## 13
+#^
+## 21
+#^
+$628 %k5 'basslineEnd' %k0
+## 29 / 37
+"!!!o" %e1
+[
+[3"tv"j3,633[7"uv"]]$633 "uvz2"
+[4"uv"]"tv"[7"uv"]
+]
+## 45
+'trumpet*v.397' l24
+[3g8r4.]g4 ([6g+4]g+4.)r8 a+ra+ra+r
+[3a+8r4.]a+4 ([6g+4]g+4.)r4.
+## 53
+"!!!o w2."
+'horn-o1' a+r<drdr ([6f4]) r4 <[9c+r]c+4>>
+r2 l4 g+r f+r er dr cr> ar (f+4f+4f+4)
+## 61
+"!!!o y1^1^1^1"
+[4
+ ['string+o1'
+  l8 p35 fc+d+ p44 >b< p35 c+ p44 >a j2
+  l24 p59 g p44 ab< p35 c+d+g 
+ ] r4
+]
+"!!!o w2." l24
+'horn-o1' a+r<drdr ([6f4]) r4 <[9c+r]c+4>>
+r2 l4 g+r f+r er dr cr> ar (f+4f+4f+4)
+;
+
+{7}
+$ %e1
+'basslineFull''basslineHalf'r1
+['basslineFull'] l16 'b*v.556'fr'b*v.213'frfr'b*v.556'fr
+%e1 "!!!o y2y2y2y1" ^1
+## 13
+['basslineFull']
+'horn+o1' %e1 ([8c4])
+'basslineHalf'r1
+## 21
+%k5 ['basslineFull']
+'horn' %e1 ([8c4])
+'basslineHalf' r1 %k0
+## 29 / 37
+r4&48
+[
+%e1 "!!!o" [4"^2z2"] 'horn' j2,744 <([8c4]) 'basslineHalf''basslineEnd'
+] $744 ([8f4]) %k5 'basslineHalf''basslineEnd' %k0
+## 45
+'trombone*v.397' l24 %e1
+[3c8r4.]c4 >([6a+4]a+4.)r8 brbrbr
+[3b8r4.]b4 ([6a4]a4.)r8
+'trumpets*v.397' p49 grgrgr
+## 53
+[3g8r4.]g4 ([8f4]) f+rf+rf+r
+[3f+8r4.]f+4 <([9c4])
+## 61
+r1r1r1r1
+'bass-o3''b*v.443' %e0 l16
+[8 g+r<g+r> ar<gr> a+r<f+r> br<fr>]
+## 73
+'trumpets*v.397' p49 l24
+[3g8r4.]g4 ([8f4]) f+rf+rf+r
+[3f+8r4.]f+4 <([9c4])
+;
+
+{8}
+$ %e1
+r1r1r1r2.
+'synth2*v.230+o1' l12 m12,18,239 v0,72,191
+cc+f+  g1  ^8r8 fec d+>b<c >g+<c>g   b1.^8r8<cd+f+  b2 mv
+'horn' l2 cd+f+ ([7f4])r4
+## 13
+"!!!o y1^1^1^1"
+'strings+o2''sp6b' ([8c4]) r1r1>
+## 21
+r1r1r1r1 'sp6a'
+([8f4]) r1r1
+## 29 / 37
+['basslineFull'] %e1
+'strings+o2''sp6b' ([8c4]) r1^1
+%k5 ['basslineFull'] %k0 %e1
+'strings+o1''sp5a' ([8f4]) r1^1
+## 45
+"!!!o"
+"y1.. y4^1^1 y1.. y1^1"
+["!!!o s12s12s12"
+## 53
+[3":q: s4..o32q32"]"s4s1" j2,859
+'timpani-o2*v.375''df*v144,.607' k1 [9g12]g4 k0 ]
+$859 ^4^1
+## 61
+[8r1]
+'trombone-o1*v.596'
+(f4f4f4.)r8   (g4g4g4^16)r16f24r48g24r48   (a4a4a4a4)
+l16 r8grbrar g6a6b6
+## 73
+[
+"!!!o"
+[3"s4..o32q32"]"s4s1"
+'timpani-o2*v.375' k1 j2,880 'df*v144,.607' [9g12]g4 k0
+"!!!o s12s12s12" ]
+$880 r2 'd*v.397''df*v144,.607' [9f+12] k0
+;
+
+#def sparseSnare= [j1,9101]
+$9101 %e1 "!!!o" "s16s16s4." r1r8["o24p24q24s8"] ^8 ]
+
+## $9001 |A>>%y4%s6%r13 ]
+
+#def fdfgpiano= [j1,9002]
+#def fdfbapiano= [j1,9003]
+$9002 l8 #'piano1-o3'
+   f 'p<'f 'p>'
+   d+'p<'d+'p>'
+   f 'p<'f 'p>'
+   g+'p<'g+'p>'
+   ]
+$9003 l8 #'piano1-o3'
+    f 'p<'f 'p>'
+    d+'p<'d+'p>'
+    f 'p<'f 'p>'
+         ba+ ]
+
+#def timpaKeyedF= [j1,9202]
+
+$9202 'timpani*v.610-o2'd4
+ 'd*v.323'd8'd*v.420'd4
+ 'd*v.343'd8'd*v.455'd4
+ 'd*v.375'd8'd*v.479'd4
+ 'd*v.397'd8'd*v.504'd4
+    'd*v.556'd4
+ ]
+ 
+#def basslineFull=   [j1,9901]
+#def basslineHalf=   [j1,9902]
+#def basslineEnd=    [j1,9903]
+##def basslineSecond= [j1,9904]
+
+## end should be v.375 but balancing it to sound right makes
+## the rest too loud, so i'm going to boost it
+
+$9901 'bass-o3' l16 %e0 $90 [5'b*v.556'fr'b*v.213'frfr]fr ]
+$9902 'bass-o3' l16 %e0     [3'b*v.556'fr'b*v.213'frj3fr] ]
+$9903 'bass-o3' l16 %e0     'b*v.433' l8 f<cf<c>a+g+d+>a+ ]
+##$9904 'bass-o3' l16 %e0     'b*v.231'fr[2;90

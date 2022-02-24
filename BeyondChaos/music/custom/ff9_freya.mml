@@ -1,0 +1,406 @@
+#TITLE Freya's Theme
+#ALBUM Final Fantasy IX
+#COMPOSER Nobuo Uematsu
+#ARRANGED Rushlight
+
+#WAVE 0x20 0xA1 ## Recorder
+#WAVE 0x21 0x95 ## Clarinet
+#WAVE 0x22 0x85 ## Horn
+#WAVE 0x23 0x66 ## Strings
+#WAVE 0x24 0xB0 ## Organ
+#WAVE 0x25 0x75 ## Choir
+## #WAVE 0x26 0x12 ## Harpsichord
+#BRR 0x26; brr/mr74_harpsichord,   490B, -4.605, EE92
+#WAVE 0x27 0xA4 ## Piccolo
+
+## Time signature is 3/4
+#def init= %x210 t110 %b0,90 %f0,0 %v50
+
+#def harpsichordBaseVol=    v70
+#def coreHarpsichordVol=    'harpsichordBaseVol*v1'
+#def baseHarpsichordVol=    'harpsichordBaseVol*v1'
+#def highHarpsichordVol=    'harpsichordBaseVol*v1'
+#def highestHarpsichordVol= 'harpsichordBaseVol*v1'
+
+#def recorderBaseVol=   v85
+#def melodyRecorderVol= 'recorderBaseVol*v1'
+
+#def clarinetBaseVol=   v108
+#def melodyClarinetVol= 'clarinetBaseVol*v.75'
+
+#def hornBaseVol=   v170
+#def melodyHornVol= 'hornBaseVol*v.75'
+
+#def piccoloBaseVol=   v70
+#def melodyPiccoloVol= 'piccoloBaseVol'
+
+#def choirVol= v108
+
+#def stringAccentBaseVol=       v54
+#def stringAccentTrioStrongVol= 'stringAccentBaseVol*v1'
+#def stringAccentTrioWeakVol=   'stringAccentBaseVol*v.7'
+#def stringAccentDuoStrongVol=  'stringAccentBaseVol*v1.2'
+#def stringAccentDuoWeakVol=    'stringAccentBaseVol*v.84' ## 0.7*1.2
+#def stringAccentSoloStrongVol= 'stringAccentBaseVol*v1.5'
+#def stringAccentSoloWeakVol=   'stringAccentBaseVol*v1.05' ## 0.7*1.5
+
+#def organBaseVol=        v85
+#def organHigherNotesVol= 'organBaseVol*v1'
+#def organMidNotesVol=    'organBaseVol*v1.1'
+#def organLowerNotesVol=  'organBaseVol*v1.2'
+
+#def harpsichord= |6 o6 %r17 %e1 m
+#def coreHarpsichord=    'harpsichord' p64 'coreHarpsichordVol'
+#def baseHarpsichord=    'harpsichord' p64 'baseHarpsichordVol'
+#def highHarpsichord=    'harpsichord' p64 'highHarpsichordVol'
+#def highestHarpsichord= 'harpsichord' p64 'highestHarpsichordVol'
+
+
+#def recorder= |0 o4 %e1 %y0 %s5 m24,30,199
+#def melodyRecorder= 'recorder' 'melodyRecorderVol' p44
+
+#def clarinet= |1 o5 %e1 m24,30,199
+#def melodyClarinet= 'clarinet' 'melodyClarinetVol' p79
+
+#def horn= |2 o5 %r6 %e1 m12,30,199
+#def melodyHorn= 'horn' 'melodyHornVol' p64
+
+#def piccolo= |7 o3 %e1 m24,30,199
+#def melodyPiccolo= 'piccolo' 'melodyPiccoloVol' p94
+
+#def stringAccents= |3 o5 'stringAccentTrioStrongVol' %a13 %e1 m
+#def stringAccentHigh= 'stringAccents' p24
+#def stringAccentMid=  'stringAccents' p44
+#def stringAccentLow=  'stringAccents' p64
+
+#def organ= |4 o6 'organHigherNotesVol' p64 %e1 m
+
+#def choirRelease= %r10
+#def choir= |5 o4 'choirVol' p64 %e1 m
+
+
+{1}
+'init'
+r1^1^1
+$
+## Melody Recorder, channel 2 in VGMTrans output
+'melodyRecorder' l16
+[10
+  ## 5 / 17 / 21 / 25 / 37 / 41 / 45 / 57 / 61 / 65
+  f8.ed8a8.gf8e8.d^2
+  ## 7 / 19 / 23 / 27 / 39 / 43 / 47 / 59 / 63 / 67
+  ^1^4r4
+  j2,121 j5,121 j8,121 j10
+  ## During the third iteration, jump out to change instruments before starting the 4th iteration
+  j3,125 
+  j6,145
+  j9,121
+  ## 9 / 29 / 49
+  <c8.>ba8<e8.dc8>b8.a^2
+  ## 11 / 31 / 51
+  ^1^4r4
+  ## 13 / 33 / 53
+  a8.gf8<c8.>b-a8g8.f^2
+  ## 15 / 35 / 55
+  ^1^4r4
+  $121
+]
+## 69
+## Melody Piccolo, originally channel 1
+'melodyPiccolo+o1' l16
+a8.gf8<c8.>b-a8g8.f^2
+## 71
+^1^4r4
+## 73
+a8.gf8<c8.>b-a8a8.g^2
+## 75
+^1^4r4
+## 77
+<c8.>ba8<e8.dc8>b8.a^2
+## 79
+^1^4r4
+## 81
+<c8.>b-a8g8.ag8g2.
+## 83
+^2.r2g8a8
+## 85
+b4.g4.^2.
+## 87
+^2.r2g8a8
+## 89
+b-1.
+## 91
+^1^4r4
+## 93
+[24 r4]
+;
+
+$125
+## Melody Clarinet, channel 3 in VGMTrans output
+'melodyClarinet'
+## Then go back to the loop for the 4th iteration
+]
+$145
+## Melody Horn, channel 4 in VGMTrans output
+'melodyHorn'
+## Then go back to the loop for the 7th iteration
+]
+
+
+{2}
+## Core harpsichord, channels 17-18 in VGMTrans output
+'coreHarpsichord' l8
+[12 af]
+$
+'coreHarpsichord' l8
+[3
+  ## 5 / 25 / 45
+  [12 af]
+  ## 9 / 29 / 49
+  [12 ae]
+  ## 13 / 33 / 53
+  [12 ad]
+  ## 17 / 37 / 57
+  [12 b-d]
+  ## 21 / 41 / 61
+  [12 af]
+]
+## 65
+[24 af]
+## 73
+[3 af]ae[8 ge]
+## 77
+[12 ae]
+## 81
+[12 <c>g]
+## 85
+[12 bg]
+## 89
+[12 b-g]
+## 93
+[24 af]
+;
+
+
+{3}
+## Base harpsichord, channels 19-20 in VGMTrans output
+'baseHarpsichord-o1'
+[8 d8.a8.]
+$
+## Base harpsichord, channels 19-20 in VGMTrans output
+'baseHarpsichord-o1'
+[3
+  ## 5 / 25 / 45
+  [8 d8.a8.]
+  ## 9 / 29 / 49
+  [8 c8.a8.]
+  ## 13 / 33 / 53
+  [8 >b-8.<f8.]
+  ## 17 / 37 / 57
+  [8 g8.b-8.]
+  ## 21 / 41 / 61
+  [8 d8.a8.]
+]
+## 65
+[8 d8.a8.]
+## 69
+[8 f8.a8.]
+## 73
+[2 b-8.<d8.>] [6g8.<c8.>]
+## 77
+[8 a8.<c8.>]
+## 81
+[8 g8.<e-8.>]
+## 85
+[16 d8.g8.]
+## 93
+[16 d8.a8.]
+;
+
+
+{4}
+r1.
+## 3
+## High Harpsichord, channel 16 in VGMTrans output
+'highHarpsichord+o1' l4
+[6 d]
+$
+## High Harpsichord, channel 16 in VGMTrans output
+'highHarpsichord+o1' l4
+[3
+  ## 5 / 25 / 45
+  [12 d]
+  ## 9 / 29 / 49
+  [12 e]
+  ## 13 / 33 / 53
+  [36 d]
+]
+## 65
+[12 d]
+## 69
+[12 c]
+## 73
+ccc [9 e]
+## 77
+[12 e]
+## 81
+[12 e-]
+## 85
+## Choir High Note, channel 12 in VGMTrans output
+'choir'
+b1.^1.
+## 89
+## Choir Highest Note, channel 13 in VGMTrans output
+<d1.^2.'choirRelease'^2.
+## 93
+## High Harpsichord, channel 16 in VGMTrans output
+'highHarpsichord+o1' l4
+[24 d]
+;
+
+
+{5}
+[12 r4]
+$
+[60 r4]
+## 25
+## Highest Harpsichord, channel 15 in VGMTrans output
+'highestHarpsichord+o1'
+[4 f4.] [8 f8.]
+[2
+  ## 29 / 33
+  [4 a4.] [8 a8.]
+]
+## 37
+[4 g4.] [8 g8.]
+## 41
+[4 f4.] [8 f8.]
+## 45
+## String Accents High Note, channel 5 in VGMTrans output
+'stringAccentHigh+o2' l16
+[8 'stringAccentTrioStrongVol'dr8.'stringAccentTrioWeakVol'dr]
+## 49
+[8 'stringAccentTrioStrongVol'er8.'stringAccentTrioWeakVol'er]
+## 53
+[28 'stringAccentTrioStrongVol'dr8.'stringAccentTrioWeakVol'dr]
+## 67
+'organ-o3'
+d1.
+## 69
+f1.^1.
+## 73
+>'organLowerNotesVol'b-2.'organMidNotesVol'<c2.^1.
+## 77
+'organLowerNotesVol'>a1.^1.
+## 81
+'organMidNotesVol'<c1.^1.
+## 85
+'organHigherNotesVol'g1.^1.
+## 89
+^1.^2.^2.
+## 93
+## Highest Harpsichord, channel 15 in VGMTrans output
+'highestHarpsichord+o1'
+[4 f4.] [8 f8.]
+## 97
+[4 f4.] [4 f8.] [4 a8.]
+;
+
+
+{6}
+[12 r4]
+$
+[120 r4]
+## 45
+## Highest Harpsichord, channel 15 in VGMTrans output
+'highestHarpsichord+o1'
+[4 f4.] [8 f8.]
+[2
+  ## 49 / 53
+  [4 a4.] [8 a8.]
+]
+## 57
+[4 g4.] [8 g8.]
+[3
+  ## 61 / 65 / 69
+  [4 f4.] [8 f8.]
+]
+## 73
+a4.a4.g4.g4. [8 g8.]
+## 77
+[4 a4.] [8 a8.]
+## 81
+[4 g4.] [8 g8.]
+## 85
+## High Harpsichord, channel 16 in VGMTrans output
+'highHarpsichord+o1' l4
+[24 g]
+## 93
+[24 r4]
+;
+
+
+{7}
+[12 r4]
+$
+[120 r4]
+## 45
+## String Accents Mid Note, channel 6 in VGMTrans output
+'stringAccentMid+o1' l16
+[16 'stringAccentTrioStrongVol'ar8.'stringAccentTrioWeakVol'ar]
+## 53
+[8 'stringAccentTrioStrongVol'fr8.'stringAccentTrioWeakVol'fr]
+## 57
+[8 'stringAccentTrioStrongVol'gr8.'stringAccentTrioWeakVol'gr]
+## 61
+[12 'stringAccentTrioStrongVol'ar8.'stringAccentTrioWeakVol'ar]
+## 67
+## String Accents High Note, channel 5 in VGMTrans output
+'stringAccentHigh+o2' l16
+[4 'stringAccentDuoStrongVol'dr8.'stringAccentDuoWeakVol'dr]
+## 69
+[32 'stringAccentDuoStrongVol'cr8.'stringAccentDuoWeakVol'cr]
+## 85
+> [8 'stringAccentSoloStrongVol'br8.'stringAccentSoloWeakVol'br]
+## 89
+[8 'stringAccentSoloStrongVol'b-r8.'stringAccentSoloWeakVol'b-r]
+## 93
+[24 r4]
+;
+
+
+{8}
+[12 r4]
+$
+[120 r4]
+## 45
+## String Accents Low Note, channel 7 in VGMTrans output
+'stringAccentLow+o1' l16
+[8 'stringAccentTrioStrongVol'dr8.'stringAccentTrioWeakVol'dr]
+## 49
+[8 'stringAccentTrioStrongVol'cr8.'stringAccentTrioWeakVol'cr]
+## 53
+> [16 'stringAccentTrioStrongVol'b-r8.'stringAccentTrioWeakVol'b-r]
+## 61
+< [12 'stringAccentTrioStrongVol'dr8.'stringAccentTrioWeakVol'dr]
+## 67
+## String Accents Mid Note, channel 6 in VGMTrans output
+'stringAccentMid+o1' l16
+[4 'stringAccentDuoStrongVol'ar8.'stringAccentDuoWeakVol'ar]
+## 69
+[8 'stringAccentDuoStrongVol'ar8.'stringAccentDuoWeakVol'ar]
+## 73
+[2 'stringAccentDuoStrongVol'ar8.'stringAccentDuoWeakVol'ar] [6 'stringAccentDuoStrongVol'gr8.'stringAccentDuoWeakVol'gr]
+## 77
+[8 'stringAccentDuoStrongVol'ar8.'stringAccentDuoWeakVol'ar]
+## 81
+[8 'stringAccentDuoStrongVol'gr8.'stringAccentDuoWeakVol'gr]
+## 85
+## Highest Harpsichord, channel 15 in VGMTrans output
+'highestHarpsichord+o1'
+[4 b4.] [8 b8.]
+## 89
+[4 b-4.] [8 b-8.]
+## 93
+[24 r4]
+;

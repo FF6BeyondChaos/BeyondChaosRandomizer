@@ -1,0 +1,485 @@
+#TITLE Of Countless Stars
+#ALBUM Final Fantasy XIV: Endwalker
+#COMPOSER Masayoshi Soken
+#ARRANGED emberling
+
+# Theme for "The Dead Ends" aka 最終幻想　レムナント "The Final Fantasy -- Remnants"
+# Starbird come home
+
+#VARIANT ~
+#VARIANT / tr
+
+#SFXV ` *
+
+#WAVE 0x20 0x85 horn
+#WAVE 0x21 0x75 vox
+#WAVE 0x22 0x63 strings - octave
+#WAVE 0x23 0x67 strings - lq
+#BRR 0x24; brr/octpiano_sgm.brr , @174bl, e+19, a14d1s4r15, [+12]
+#WAVE 0x25 ~0x61~ /0x60/ harp
+#WAVE 0x26 0xB1 organ - lq
+#WAVE 0x27 0x5A timpani
+#WAVE 0x28 0x1F snare
+#WAVE 0x29 0x4A tom
+#WAVE 0x2B 0x28 tubular bell
+#WAVE 0x2C 0x2D crash cymbal
+
+#def init= t111 %v40 %b0,100 %f0,0
+
+#def horn=     |0 'h' o5
+#def vox=      |1 'v' o4
+#def ostrings= |2 's' o5
+#def strings=  |3 's' o5
+#def piano=    |4 'p' o4
+#def harp=     |5 'a' o5 
+#def organ=    |6 'o' o4
+#def timpani=  |7 't' o6
+#def bell=     |B 'b' o4 %y1%s1
+
+#def stringsNoVol=  |3 o5
+#def ostringsNoVol= |2 o5
+
+#def h= v64
+#def v= v88
+#def s= v72
+#def p= v127
+#def a= v96
+#def o= v48
+#def t= v56
+#def b= v56
+
+#def hf= v1,64
+#def sf= v1,72
+#def af= v1,96
+#def tf= v1,56
+
+#def organstuff= v0,8,180 m6,18,199
+#def organoff= mv
+#def leadstrstuff= v0,12,191 m6,18,205
+
+#def StrFrantic= %a10 %y1 %s2 %r17
+#def StrBass=    %a09 %y0 %s6 %r19
+
+#def snare= |8 p55 v52
+#def tomA=  |9 v80
+#def tomB=  |9 v50
+#def tomC=  |9 v35
+#def crash= |C p75 v120
+#def revc=  |C p75 v64
+
+#drum "a"=4e 'tomA*v1.00'
+#drum "b"=4e 'tomA*v0.90'
+#drum "c"=4e 'tomA*v0.80'
+#drum "d"=4e 'tomA*v0.70'
+#drum "z"=3d 'tomB*v1.00'
+
+#drum "t+"=4e 'tomB*v1.17'
+#drum "t"= 4e 'tomB*v1.00'
+#drum "u"= 4e 'tomB*v0.75'
+#drum "v"= 4e 'tomB*v0.50'
+
+#drum "s-"=4c 'tomC*v1.17'
+#drum "t-"=4c 'tomC*v1.00'
+#drum "u-"=4c 'tomC*v0.75'
+#drum "v-"=4c 'tomC*v0.50'
+#drum "w"= 4c 'tomB*v0.50'
+#drum "x"= 4c 'tomB*v0.2'
+
+#drum "f+"=4f+ 'tomB*v0.67'
+#drum "a+"=4a  'tomB*v0.33'
+#drum "d+"=5d  'tomB*v0.67'
+#drum "d-"=5d  'tomB*v0.33'
+#drum "g-"=5f+ 'tomB*v0.33'
+
+#drum "e"=4d+ 'tomB*v0.83'
+#drum "f"=4d+ 'tomB*v1.00'
+
+#drum "o"=5f 'snare*v0.40'
+#drum "p"=5f 'snare*v0.55'
+#drum "q"=5f 'snare*v0.70'
+#drum "r"=5f 'snare*v0.85'
+#drum "s"=5f 'snare*v1.00'
+#drum "y+"=5f+ 'crash' %y0%s6%r16
+#drum "y"=5f+ 'crash' %y0%s6%r18
+#drum "y-"=5f 'revc' %a5%r16
+
+#drum "q-"=5e 'snare*v0.70'
+
+{1} $ %e1
+'init''horn' p60 %r7 m48,18,223
+d1^1^1 d1. 'h*v1.5'e2. d2.'h'
+>b1. g2.%r16^4.
+'vox' p70 %a8%r3 m
+g4. e1.
+'horn-o1' p60 %r7 m48,18,223
+a1. m
+## 17
+[
+'piano' p50 b4.b4. %r20^4.%ra4b8  <c4 j2,127 >b4a4 b4g4e4      d6v0^12
+'strings+o1*v.20' %a7%s7%r9 {p50} 'sf*v144,.50' l4
+g>g<d.e.d2.c2.
+]$127
+dc>bg<e d.
+'strings+o1*v.30' %a7%s7%r9 {p50} 'sf*v144,.50'
+g.a.d.<d2.c8%r16^
+## 33 (3/8 early)
+'horn*v1.33' p65 m48,18,223 %r7
+[3g4f+2]g4f+4.d4.>b1^4<
+gf+2gf+4.d4.e1^4
+g4f+2g4f+4.d4.>b1^4<
+e4d2e4d4%r14^8
+## 49 (4/8 early)
+%r7'h*v1.67' p85
+[d8e4f+1^4g4. d2...'h*v.88'd8.'h*v1.67'>b4.<e1^1^2]
+## 65 (4/8 early)
+'vox*v1.5'm %a9[%r5 {p85}
+f+8g+4a+1^4b4.f+1 j2 f+8d+4.g+1.%r10^1] ^2%r15^2.
+%r5%a3d+2.%a9
+## 79
+g+1^1^1
+'horn' %r5 p60 m48,18,223
+d+1^1^4 #'h*v1.5''hf*v48,.75'd+4'hf*v96,2'^2
+'h*v.5''hf*v144,2'd+2.
+;
+
+{2} $ %e1m
+'vox' p70 %a8%r3
+d1. >b1.< c1. >a1.<
+d1. >b1.< c1. f+1.
+## 17
+'ostrings-o1*v.67' %r5
+b1<d2     c4.>b8^1
+g1.       <f+2.e2.>
+b4.<d8^1  c4.>b8^1
+'strings*v.20' %a7%s7%r9 p55 'sf*v216,.50' l4 d.g.<c.>a. <f+2. e8%r16^
+## 33 (3/8 early)
+'horn*v1.0' p45 m48,18,207 %r7
+[3e4d2]e4d4.>b4.g1^4<
+ed2ed4.>b4.<c1^4
+e4d2e4d4.>b4.g1^4<
+c4>b2<c4>b4%r14^2
+'bell*v.67' p85 g8
+## 49
+'ostringsNoVol+o1' p50 'StrFrantic' l16
+[
+ [['s'[c's*v.5'>geceg<'s*v.75']]%k2]%k0
+ j2,261
+  ['s'[e's*v.5'>bgegb<'s*v.75']]
+  ['s'[d's*v.5'>af+df+a<'s*v.75']]
+]
+$261 [3's'[e's*v.5'>bgegb<'s*v.75']]
+>c+8.%s7c+8.%s2c+8.%s7f+8.%s2<
+## 65
+[
+ [['s*v1.2'[e's*v.7'>bg+eg+b<'s*v.95']]%k2]%k0
+ j2,271
+ ['s*v1.2'[g+'s*v.7'd+>bg+b<d+'s*v.95']]
+ ['s*v.67'f+8.'s*v.417''sf*v36,.67'f+f+8f+8's*v.33''sf*v48,.67'f+8f+8]
+] $271
+"!!!o y4.y4.y2^8y-8"
+## 79
+"^8." p40
+'harp*v.125-o1''af*v108,.5' l8  a+.b.<d+. 'af*v144,1.2' g+.a+.b.<d+.
+               'af*v144,.83' g+.d+.>b.a+. 'af*v144,.67' g+.d+.>b.a+.
+               'af*v144,.83' g+.a+.b.<d+. 'af*v144,1.2' g+.a+.b.<d+.
+               'af*v144,.75' g+.d+.>b.a+. 'af*v144,.5' g+.d+.>b.a+.
+;
+
+{3} $ %e1
+'ostrings-o1' p85
+g1. e1. g1^1^4 f+2.
+g1. e1. c1. d1.
+## 17
+'strings-o2*v1.25''StrBass' l8
+[g4ggdg]  e4eef+e ebeeed
+c4ccdc c.c16ccgc    [d.d16ddad]
+g4ggdg gg16g16ggdg    e4eef+e ebeeed
+c4ccgc cc16c16ccgc  [d.d16ddad]
+## 33
+'ostrings-o1' p85
+d1. e1. c1. d1. c1. d1. c1. d2.
+'StrBass''s*v1.75' l8 af+dc+c+c+
+## 49
+'strings-o2*v1.25''StrBass' l8
+[ [c.c16cccc]d.d16dddd d.d16ddad [e.e16eeee] d.d16dddd j2 dadddc+ ] c+. %r15 c+. %r19 c+. %r15 f+. %r19
+## 65
+[e.e16eeee] f+.f+16f+f+c+f+f+d+f+f+<c+>f+
+[g+.g+16g+%r15g+4%r19d+] [f+.f+16f+f+f+d+]
+[6e][ee16e16e][12f+] r2. %r3 v0'sf*v144,1.25'a+2. %r19
+## 79
+[g+4g+8g+4 [7g+8]] %r3 g+1^1%r10^1
+;
+
+{4} $ %e1
+l16 [[6 's8pqr8''s8q8s8'] ['soqpr8''s8q8s8']]
+## 17
+#'s8pqr8' 's8q8s8'    's8pqr8' 's8pqr8'
+#'sqrqs8' 's8pqr8'    'sqrqs8' 's8sqs8'
+[4 's8pqr8' j1,902 j3,904] 'sqrqs8' 's8sqs8'
+#'s8pqr8' 's8pqr8'    's8pqr8' 's8q8s8'
+#'sqrqs8' 's8sqs8'    'sqrqs8' 'sqs8sq'
+[3's8pqr8']'s8q8s8'
+'sqrqs8' 's8sqs8'    'sqrqs8' 'sqs8sq'
+#'s8pqr8' 's8pqr8'    's8pqr8' 's8pqr8'
+#'sqrqs8' 's8sqs8'    'sqrqs8' 's8sqs8'
+[4's8pqr8']['sqrqs8' 's8sqs8']
+#'sqrqs8' 's8sqs8'    's8pqr8' 's8sqs8'
+#'sqrqs8' 'sqrqs8'    'sqrqs8' 'sqs8sq'
+'sqrqs8' 's8sqs8'    's8pqr8' 's8sqs8'
+[3'sqrqs8']'sqs8sq'
+## 33
+p45 l16 %e0
+["twuwvw twa+xf+x" "twuwvw td+g-wf+x"]
+'tompattern' #["twxwuw"]"twvwuw td+g-wf+x"
+"twxwuw twa+xf+x" "twuwvw twuwt+w"
+'tompattern' #["twxwuw"]"twvwuw td+g-wf+x"
+["txwxd-x"]"twvwuw td+g-wf+x"
+'tompattern' #["twxwuw"]"twvwuw td+g-wf+x"
+["txexwx"]%e1"z4z8z8z4"
+## 49
+#'s8sqs8' 's8sqs8'   'sqrqs8' 'sqrqsq'
+#'sqrqs8' 'sqrqs8'   'sqrqs8' 'sqrqsq'
+['s8sqs8'] [4'sqrqs8' j1,904] 'sqrqsq'
+#'sqrqs8' 'sqs8s8'   'sqrqs8' 'sqrqsq'
+#'sqrqs8' 'sqrqsq'   'sqrqs8' 'sqrqsq'
+'sqrqs8' 'sqs8s8' [3'sqrqs8' 'sqrqsq']
+#'s8sqs8' 'sqrqs8'   'sqrqs8' 'sqrqsq'
+#'s8sqs8' 'sqrqs8'   'sqrqs8' 'sqrqsq'
+['s8sqs8'['sqrqs8']'sqrqsq']
+#'sqrqs8' 'sqrqs8'   'sqrqs8' 'sqrqsq'
+#'sqrqs8' 'sqrqs8'   'sqrqs8' 'sqrqs8'
+[7 'sqrqs8' j3,904]
+## 65
+#[6 p45 l16 'tompattern' ] ":x" [3"t+8"j3"t8t8"]^8^2
+[24'sqrqs8'] ":s" [3"!o t+8"j3"t8t8"]^8^2
+## 79
+[8's8pqr8'][6'sqrqs8'] ":s: sqr8ssq-s^4"
+;
+
+{5} $ %e1
+[
+'strings*v.5' p50 'StrFrantic' l16
+[d4.d>bbaba<]
+d>'s*v.4'bb's*v.5'b8b<dc>'s*v.3'bbb's*v.5'b<   d>b<c>b8.<d>bb8b8<
+dc8c8. dc8's*v.4'c's*v.5'c8 dc8c8's*v.4'c 's*v.5'dc[c's*v.3'c's*v.4']
+j2,515
+[e['s*v.3'f+'s*v.4'f+]^'s*v.5'] e['s*v.35'd's*v.45'd]^ 's*v.5'e['s*v.35'f+'s*v.45'f+]^
+]$515
+['s*v.7'e's*v.6'dd's*v.4'd's*v.5'd's*v.2'd]
+'s*v.5'>a<'s*v.4'd's*v.5'd's*v.4'a's*v.5'a's*v.4'<d
+'s*v.5'd>a<'s*v.4'd's*v.5'>a<df+
+## 17
+[7
+j7,533
+j6,529
+'harp*v.1''af*v144,.75' l8 p40 da $530 b<df+ 'a*v1''af*v168,.5' a gf+d>bag
+j3,523 j6,523
+]
+$523 'a*v1'e 'a*v.1''af*v192,1' cdef+a b<da 'a*v.75'f+ 'a*v.88' <d> 'a*v.5' d ]
+$529 'bell+o1' p85 d4 'harp*v.3167''af*v96,.75' p40 %j530
+$533
+## 33
+'organ-o1' p80 %a11%r3 'organstuff'
+a1. b1. %r12^4.
+'vox+o1*v.75' p50 %a8%r10 'organoff'
+e4.d4>g4.%r18^8
+'organ-o1' p80 'organstuff'%a11[%r3
+a1. b1 %r12^2] %r3 b2.
+'organoff' "!!!o y2."
+## 49
+"y1." l16
+'bell*v.67' p85 f+1. b8.
+'harp' %y0%s6%r20 p40 egab^2  egab8'a*v.5'b4..'a'  egab8b8<d2..
+'bell*v.67' p85 g1. f+1. b8.
+'harp' %y0%s6%r20 p40 egab8<d4..>  ega<d8>'a*v.5'a'a'<c+4.>  egab8b8<d8>
+"!!!o y4.y4."
+## 65
+"y1."
+'bell*v.75' p85 f+1. g+8.
+'harp*v.33' %y0%s6%r20 p40  [3 g+'a'b<c+d+j3^2>'a*v.67']^c+d+f+2..
+"!!!o y1."
+'bell*v.75' p85 f+1^1^4 d+2.
+## 79
+'b*v1.33' %y g+1^1^1
+'horn-o1*v.75' %r5 p60 m48,18,223
+b1^1^4 #'h*v1''hf*v48,.5'b4'hf*v96,1.33'^2m
+'h*v.25''hf*v144,1.33'b2.m
+;
+
+{6} $ %e1
+'ostrings-o1*v.67' p70 %a8%r5
+b1. g1. e1. e1.
+b1. g1. g1. f+1.
+## 17
+'timpani-o1'p90 l16
+g4g8g4. g2.    e4.'t*v.8'e4.'t*v1.2'e2.
+c4.'t*v.8'c4. c2.    't'd2. d8't*v.8''tf*v24,1'%g1d24d24d24d8%g0 d16't*v.8'd16't'd8d8
+g4g8g8d4   g8't*v.7''tf*v48,1'ggg8g4.
+[4 e4't*v.8'e8't']
+'t*v1.2'c4't*v.8'c8't'c4.  c8't*v.7''tf*v48,1'ccc8c4't*v.85'c8
+['t*v1.2'd8.'t*v.85'd't'd8 j2 't*v1.1'd4.] 't*v1.2'd't*v.75'd't*v.85'd8't'd8
+## 33
+'organ-o1' p80 %a11%r3 'organstuff' d1. e1. 'organoff'
+'ostrings-o1*v.67' %r6 p85 g1.
+'organ-o1' p80 %a11%r3 'organstuff' d1. e1 %r18^8 'organoff'
+'strings*v.2+o1' {p80} %a6%r9 g4f+2g4f+4.>b4.v96,0e2
+'vox+o1*v.75' p50 %a8%r10 e4.d4>g4.%r18^8
+'timpani-o1*v.5'p90'tf*v144,1.5' [8d32.c+32.] d8>a8<d8 't*v1''tf*v72,1.5'[4d32.c+32.]
+## 49
+l8
+[[4't*v1.5'c't*v.5'c>g<]%k2]%k0
+['t*v1.5'e't*v.5'>bbbbb16b16<]
+'t*v1.5'd't*v.5'>aaaaa16a16<  't*v1.5'd't*v.5'>aa<'t*v1.5'd't*v.5''tf*v48,1.5'>a<c+
+[c't*v.5'>gg<'t*v1.5'c't*v.5'>g'tf*v24,1.5'g16g16<]
+[4't*v1.5'd't*v.5'>aj4a<]'tf*v24,1.5'a16a16<
+[3't*v1.5'e't*v.4''tf*v24,.5'>b16b16bb't*v.4'bb< j2,663]%k0
+'tf*v144,1.5' [8c+32.c32.]
+## 65
+#[24'sqrqs8'] r2.
+%e0 [6 p45 l16 'tompattern' ] r2. %e1
+'timpani-o1*v.33'p90'tf*v144,.75' [8d32.c+32.] l8
+## 79
+[6't'd+4't*v.75'd+8]['t*v1.13'd+8't*v.83'd+8't*v1'd+8]
+'t*v1.13'd+4't*v.83'd+8't'd+4't*v.83'd+8
+['t*v1.13'[d+'t*v.83'd+d+'t']] 't*v1.13' [6d+]
+;
+
+$663 %k-2]
+
+*
+{7} $ %e1 l8 p75
+[[7 "a4.dcb"] "a4cdcb"]
+## 17
+[
+"!!!o y+1."
+'bell+o1' p85 c2. 'b*v.75' >b2.< j2,829 'b'c4
+'strings+o1*v.20' %a7%s7%r9 p55 'sf*v144,.50' l4 d>dg.g.f+2.e2.
+]$829
+'ostrings-o1*v.67' %r5 p70
+g2.<c2.>  a1%r10 &98^2
+## 33 (2 ticks late)
+"!!!o" p60 l16 %e0
+[4"t-8u-8v-8t-4"j4^8] "ef"
+["t-4u-8"]"t-8v-8u-8t-4ef"
+"t-4u-8t-4." [":v-: t-8u-8v-8"]
+["t-4u-8"]"t-8v-8u-8t-4ef"
+"t-4.t-4. t-8v-8u-8 t-4ef"
+["t-4u-8"]"t-8v-8u-8t-4e"&10"f" %e1
+'organ-o1' p80 %a11%r3 'organstuff' f+2. 'organoff' r4
+## 49 (4/8 early)
+'strings*v.5' p60 %a8%s7%r6 'leadstrstuff'
+[d8e4f+1^4g4. d2...d8.>b4.<e1^1^2]
+'s*v.67'p45>
+## 65 (4/8 early)
+[f+8g+4a+1^4b4.f+1j2^8d+4.g+1.%r12^1%r6] ^2%r15^2. %a3%r6d+2.%a8
+## 79
+g+1^1^1
+'horn-o1*v.75' %r5 p60 m48,18,223v
+g+1^1^4 #'h*v1''hf*v48,.5'g+4'hf*v96,1.33'^2m
+'h*v.33''hf*v144,1.33'g+2.m
+;
+
+~
+{8} $ %e1
+[
+"y4." 'strings*v.5-o1' p70 'StrFrantic' l16
+a4. a4. a4.
+g's*v.4'ee's*v.5'e8. gf+'s*v.3'eee's*v.5'e   gef+e8. gee8e8
+ge8e8. ge8's*v.4'e's*v.5'e8  ge8e8's*v.4'e 's*v.5'ge[e's*v.3'e's*v.4']
+j2 ^4. e2. e4.
+]'timpani-o1*v.0'p90'tf*v144,.6'[16d32.]%g1'tf*v144,1.5'[16d32.]%g0
+## 17
+r1r1r1
+'piano*v0' p50 d6'p*v1'^3^1
+'bell' p85 b1 [7^2]
+'strings*v.20' %a7%s7%r9 p50 'sf*v216,.50' l4 b.
+[7r4.]
+## 33
+"!!!o y1^1^2"
+'strings-o1*v.50' %a6%r6 p75 b4.e1 %r16^1^1
+"!!!o y-8^1."
+'organ-o1' p80 %a11%r3 'organstuff' d1. e1 %r12^2 %r3d2. r2. 'organoff'
+## 49
+'ostrings*v.4''StrFrantic' p65 l8
+[ [e.e16eeee][f+.f+16f+f+f+f+][g.g16gggg] j2,863 [f+.f+16f+f+f+f+] ] $863 g.g16gggg &146r
+## 65
+p60 "!!!o" %e0
+[6 ["t-4u-8"]"t-8v-8u-8t-4."] %e1 [3"s-8"j3"t-8t-8"]&118^
+## 79
+'ostrings*v.4-o1''StrFrantic' p65 l8
+[4 b.b16bbbb]
+'timpani-o2*v.75' {p65} 
+d+4't*v.5'd+8't*v.625'd+4't*v.5'd+8
+['t*v.75'[d+'t*v.5'd+d+'t*v.625']] 't*v.75' [6d+]
+;
+~
+/ {8} r; /
+*
+
+#####
+
+## Once upon a time, there was a beautiful blue star...
+## ...that fell to pestilence, and rotted inside and out.
+## The more its people clung to life, the more they suffered.
+## Until they cursed not the illness, but their fellow corrupted.
+## Those who lived and festered, those who died and decayed...
+## And the very last of them wished they had never been born at all.
+
+## In a faraway place, a brilliant star eradicated disease...
+## ...before destroying the selfsame lives it had saved.
+## Its people sought ever greater freedoms no matter the cost...
+## They tried to buy peace with fire and steel...
+## And when one asked, "What is the point?" there were none left to answer.
+
+## Farther still existed a star without strife...
+## ...where none remembered life's trials--or its joys.
+## What its people had gained from ease, they lost to apathy.
+## So they created the kindest, most gentle of beasts.
+## Its steps were light, and its gift was as painless as it was beautiful.
+## Bathed in its golden glow, they all slept happily ever after.
+
+## Tales of loss, and fire, and faith
+## Every word on our hearts engraved
+## In the dark you will not stray
+## Forge ahead, till the end, we pray
+
+## That which lives is destined to die.
+## Love leads to loss. Every beginning has an end.
+## Treasure every moment, every step of your descent.
+## And there, in the depths where souls and stars rest,
+## find your truth.
+
+## In darkness seek joy.
+## Walk free, and bear the light for others to follow.
+
+#####
+
+## Snare drum patterns - half measures
+
+## This pattern appears first so it gets the full reset
+#def s8pqr8= [j1,901]
+$901 l16 "!!!o s8pqr8" ]
+
+#def s8q8s8= [j1,902]
+$902 l16 "!v0 s8q8s8" ]
+
+#def soqpr8= [j1,903]
+$903 l16 "!v0 soqpr8" ]
+
+#def sqrqs8= [j1,904]
+$904 l16 "!!!o sqrqs8" ]
+
+#def s8sqs8= [j1,905]
+$905 l16 "!!!o s8sqs8" ]
+
+#def sqs8sq= [j1,906]
+$906 l16 "!v0 sqs8sq" ]
+
+#def sqrqsq= [j1,907]
+$907 l16 "!v0 sqrqsq" ]
+
+#def sqs8s8= [j1,908]
+$908 l16 "!v0 sqs8s8" ]
+
+#def tompattern= [j1,920]
+$920 l16 ["!!!o twxwuw"]"twvwuw td+g-wf+x" ]

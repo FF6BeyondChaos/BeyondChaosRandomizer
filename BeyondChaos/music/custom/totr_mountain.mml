@@ -1,0 +1,501 @@
+#TITLE King of the Mountain
+#ALBUM Treasure of the Rudras
+#COMPOSER Ryuji Sasai
+#ARRANGED Rushlight
+##created with sqspcmml beta 1.1.6
+## Additional changes and comments made by hand.
+
+#SHORTNAME TOTR Mountain King
+
+#WAVE 0x20 0xC2 ## Synth
+#WAVE 0x21 0x75 ## Vox
+#WAVE 0x22 0x62 ## Strings
+#WAVE 0x23 0x51 ## Bass
+#WAVE 0x24 0x2D ## Crash
+#WAVE 0x25 0x3B ## HiHat
+#WAVE 0x26 0x0A ## Kick
+#WAVE 0x27 0x1C ## Snare
+#WAVE 0x28 0x4D ## Tom
+
+## Original tempo is actually 150, but it runs a tad slow
+#def init= %x255{'27 131'} t152 %b0,80 %f0,0 %v30{'05'}
+
+#def synthBaseVol=  v160
+#def synthFade=   v1,160
+#def synth= |0 o6 'synthBaseVol*v.40' %a15 %y4 %s3 %r0 m24,8,213
+#def highAccentSynth= 'synth' p94
+#def midAccentSynth=  'synth' p34
+#def lowAccentSynth=  'synth' p64
+#def melodySynth=     'synth' p64
+#def supportSynth=    'synth' p64
+
+#def earlyVoxBaseVol=  v360
+#def earlyVoxFade=   v1,360
+#def vox=       |1 o5 m48,4,213
+#def earlyVox=  'vox' 'earlyVoxBaseVol*v.26' %a15 %y3 %s4 %r10
+#def leadVox=    'earlyVox' p84
+#def supportVox= 'earlyVox' p44
+#def lateVoxBaseVol=  v240
+#def lateVoxFade=   v1,240
+#def lateVox=   'vox' 'lateVoxBaseVol*v.26'  %a13 %y1 %s7 %r10
+#def highVox=    'lateVox'  p44
+#def lowVox=     'lateVox'  p64
+
+#def stringsBaseVol=  v200
+#def strings= |2 o6 p64 'stringsBaseVol*v.40' %a9 %y7 %s7 %r8 m48,8,192
+
+#def bassBaseVol= v160
+#def bass= |3 o8 p64'bassBaseVol*v.40' %a15%y7%s7%r5m48,4,192{'AltTuning 24'}
+
+#def crashBaseVol= v160
+#def hihatBaseVol= v110
+
+#def baseKickVol=  v160
+#def baseSnareVol= v160
+#def baseTomVol=   v127
+
+#DRUM "k"= 5a  |6 p64 'baseKickVol*v.50' %e0 m
+
+#DRUM "s"= 6c  |7 p64 'baseSnareVol*v.63' %e1 m  %y7 %s4 %r20
+#DRUM "s"= 6c  |7 p64 'baseSnareVol*v.63' %e1 m  %y2 %s2 %r0
+
+#DRUM "t"= 4f+ |8 p34 'baseTomVol*v1.00' %e1 m
+#DRUM "u"= 4g+ |8 p54 'baseTomVol*v1.00' %e1 m
+
+
+#DRUM "c"= 5a |4 p64 'crashBaseVol*v.8' %r20 %e1 m
+#DRUM "d"= 5b- |4 p34 'crashBaseVol*v.8' %r20 %e1 m
+#DRUM "e"= 5b- |4 p94 'crashBaseVol*v.8' %r20 %e1 m
+#DRUM "f"= 6g+ |4 p34 'crashBaseVol*v.55' %r20 %e1 m
+#DRUM "g"= 6g+ |4 p94 'crashBaseVol*v.55' %r20 %e1 m
+
+#DRUM "h"= 5g |5 p64 'hihatBaseVol*v.5' %y1 %s0 %e1 m
+#DRUM "i"= 5a |5 p94 'hihatBaseVol*v.6' %y1 %s0 %e1 m
+
+
+{1}
+{'Note table: 96 64 48 32 16'}
+'init'
+%k0{'05'}%e1
+## High Accent Synth, originally channel 3
+'highAccentSynth-o1'r2c4d4<
+$
+## 2
+%k0
+## High Accent Synth, originally channel 3
+'highAccentSynth-o1'e6e12
+## Lead Vox, originally channel 3
+'leadVox-o1'a4<c4>b4
+## 3
+## High Accent Synth, originally channel 3
+'highAccentSynth-o1'd6d12
+## Lead Vox, originally channel 3
+'leadVox-o1'g4a4b4
+## 4
+## High Accent Synth, originally channel 3
+'highAccentSynth-o1'g6g12
+## Lead Vox, originally channel 3
+'leadVox-o1'g4a4b4
+## 5
+## High Accent Synth, originally channel 3
+'highAccentSynth-o1'a6a12
+## Lead Vox, originally channel 3
+'leadVox'c4
+## High Accent Synth, originally channel 3
+'highAccentSynth-o1'b6b12
+## Lead Vox, originally channel 3
+'leadVox-o1'b4
+## 6
+## High Accent Synth, originally channel 3
+'highAccentSynth-o1'e6e12
+## Lead Vox, originally channel 3
+'leadVox-o1'a4<c4d4
+## 7
+## High Accent Synth, originally channel 3
+'highAccentSynth-o1'd6d12
+## Lead Vox, originally channel 3
+'leadVox-o1'b4<c4d4
+## 8
+## High Accent Synth, originally channel 3
+'highAccentSynth-o1'b6b12
+## Lead Vox, originally channel 3
+'leadVox-o1'b4<c4d4
+## 9
+## High Accent Synth, originally channel 3
+'highAccentSynth-o1'a6a12
+## Lead Vox, originally channel 3
+'leadVox'c4
+## High Accent Synth, originally channel 3
+'highAccentSynth-o1'b6b12
+## Lead Vox, originally channel 3
+'leadVox'd4
+## 10
+## Melody Strings, originally channel 3
+'strings-o1'a4<e12d12c12>b12<c12>b12a12b12a12
+## 11
+g6d6g6b6<c6d6>
+## 12
+b6e6g6b12e12<c12d12c12>b12<
+## 13
+c6>f6<d6>b4g4
+## 14
+a4<e12d12c12e12f12e12>e12a12<e12
+## 15
+d6>g6<c6>b6a6g6
+## 16
+d4g4b12d12<c12>d12<c12d12
+## 17
+c6>b6a6b6g3
+## 18
+## Melody Synth, originally channel 3
+'melodySynth-o1'b2<d12r12c12r12>b12<r12
+## 19
+c2>c12d12e12f12g12a12
+## 20
+b2<e12r12>b12<r12d12r12
+## 21
+c2r12c12>b12a12g12f12
+## 22
+g2<r12>g12a12b12b12<d12
+## 23
+c12>b12<c2^3
+## 24
+d4>g4b12g12<d12>b12<c12d12
+## 25
+>a12g+12a3<c12>b12<c12>b12a12g12<
+;
+
+
+{2}
+{'Note table: 192 136 96 48 40 32 24'}
+%k-7%e1
+## Low Accent Synth, originally channel 6
+'lowAccentSynth-o1'r2c4d4
+$
+## 2
+## Low Accent Synth, originally channel 6
+'lowAccentSynth-o1' %k-5
+d6d12
+## Support Vox, originally channel 4
+'supportVox-o1' %k-1
+f4a+4g+4
+## 3
+## Low Accent Synth, originally channel 6
+'lowAccentSynth-o1' %k-5
+c6c12
+## Support Vox, originally channel 4
+'supportVox-o1' %k-1
+d+4f+4g+4
+## 4
+## Low Accent Synth, originally channel 6
+'lowAccentSynth-o1' %k-5
+e6e12
+## Support Vox, originally channel 4
+'supportVox-o1' %k-1
+f4f+4g+4
+## 5
+## Low Accent Synth, originally channel 6
+'lowAccentSynth-o1' %k-5
+f6f12
+## Support Vox, originally channel 4
+'supportVox-o1' %k-1
+a+4
+## Low Accent Synth, originally channel 6
+'lowAccentSynth-o1' %k-5
+g6g12
+## Support Vox, originally channel 4
+'supportVox-o1' %k-1
+g+4
+## 6
+## Low Accent Synth, originally channel 6
+'lowAccentSynth-o1' %k-5
+d6d12
+## Support Vox, originally channel 4
+'supportVox-o1' %k-1
+f4a+4<c4
+## 7
+## Low Accent Synth, originally channel 6
+'lowAccentSynth-o1' %k-5
+c6c12
+## Support Vox, originally channel 4
+'supportVox-o1' %k-1
+g+4a+4<c4
+## 8
+## Low Accent Synth, originally channel 6
+'lowAccentSynth-o1' %k-5
+g6g12
+## Support Vox, originally channel 4
+'supportVox-o1' %k-1
+g+4a+4<c4
+## 9
+## Low Accent Synth, originally channel 6
+'lowAccentSynth-o1' %k-5
+f6f12
+## Support Vox, originally channel 4
+'supportVox-o1' %k-1
+a+4
+## Low Accent Synth, originally channel 6
+'lowAccentSynth-o1' %k-5
+g6g12
+## Support Vox, originally channel 4
+'supportVox' %k-1
+c4
+## 10
+## High Accent Synth, originally channel 4
+'highAccentSynth-o1'%k-1
+f6f8<r3^4.>
+## 11
+d+6d+8<r3^4.>
+## 12
+g+6g+8<r3^4.>
+## 13
+a+6a+8<r6^24c6c8r6^24>
+## 14
+f6f8<r3^4.>
+## 15
+d+6d+8<r3^4.
+## 16
+c6c8r3^4.>
+## 17
+a+6a+8<r6^24c6c8r6^24
+## 18
+## High Vox, originally channel 6
+'highVox-o1' %k-5
+a1
+## 19
+a+1
+## 20
+a1
+## 21
+a+1
+## 22
+<c1>
+## 23
+a+1
+## 24
+<c1>
+## 25
+a+2^4<c4
+;
+
+
+{3}
+{'Note table: 96 32 16'}
+%k-31{'05'}
+## Bass, originally channel 2
+'bass-o1' 
+r2c12g12<c12>d12a12<d12
+$
+[2
+  [3
+    j3
+    ## 2 / 6 / 10 / 14
+    %k-32
+    >f12<r12>f12<c12>f6f12<f12d+12>f12<c+12c12>
+    ## 3 / 7 / 11 / 15
+    d+12<r12>d+12a+12d+6< j2,201 >d+12g+12g12f12c12g12
+    ## 4 / 12
+    c12<r12>c12d+12c6g12c12d+12g12g+12a+12
+    ## 5 / 13
+    c+12<r12>c+12<c+12>g+12c+12d+6a+6<d+6
+    $201
+    %k-31
+  ]
+  ## Measure 7/15, beat 3
+  d12c12>b12a12g12f+12
+  ## 8 / 16
+  d12<r12>d12a12d6f+6g6a6
+  ## 9 / 17
+  c6g6<c6>d6a6<d6
+]
+[2
+  ## 18 / 20
+  [6 %k-32 >c12<c12]
+  ## 19 / 21
+  [6 %k-31 >c12<c12]
+]
+
+[2
+  ## 22 / 24
+  [6%k-29>c12<c12]
+  ## 23 / 25
+  [6%k-31>c12<c12]
+]
+;
+
+
+{4}
+{'Note table: 48 32 16 8'}
+## Drums, originally channel 1
+"k12s24s24s12s12u12t12s12" [5 "s12"]
+$
+[2
+  ## 2 / 10
+  "!!!o"
+  "k4s4k6k12s12k6"
+  ## 3 / 11
+  "k4s4k6k12s12k12s12"
+  ## 4 / 12
+  "k4s4k6k12s12k6"
+  ## 5 / 13
+  "k6k12s12k6k12k12k12s6s12"
+  ## 6 / 14
+  "k4s4k6k12s12k6"
+  ## 7 / 15
+  "k4s4k6k12s12k12k12"
+  ## 8 / 16
+  "k4s4k6k12s12k6"
+  ## 9 / 17
+  "k6k12s12k6k12s12" [4 "s12"]
+]
+[2
+  ## 18 / 22
+  "k12k12k12s12k12" [7 "k12"]
+  ## 19 / 23
+  "k12k12k12s12k12" [4 "k12"] "s12k12s12"
+  ## 20 / 24
+  "k12k12k12s12k12" [5 "k12"] "s12s12"
+  ## 21 / 25
+  "k12k12k12s12k12k12k12s12" [4 "s12"]
+]
+;
+
+
+{5}
+{'Note table: 96 64 48 32'}
+r2
+## Cymbals, originally channel 7
+"e4d4"
+$
+[
+  ## 2-4 / 6-8
+  %k0 "!!!o c4h4" [10 "h4"]
+  ## 5 / 9
+  "h4g4h4f4"
+]
+## 10
+## Low Accent Synth, originally channel 6
+'lowAccentSynth-o1' %k-5
+d6d8<r3^4.>
+## 11
+c6c8<r3^4.>
+## 12
+e6e8<r3^4.>
+## 13
+f6f8<r6^24>g6g8<r6^24>
+## 14
+d6d8<r3^4.>
+## 15
+c6c8<r3^4.>
+## 16
+g6g8<r3^4.>
+## 17
+f6f8<r6^24>g6g8<r6^24
+## 18
+## Support Synth, originally channel 4
+'supportSynth-o1'%k-1
+g+2<c12r12>a+12<r12>g+12<r12
+## 19
+>a+2f12f+12g+12a+12<c12c+12>
+## 20
+g+2<c12r12>f12<r12c12r12>
+## 21
+a+2<r2>
+## 22
+d+2^12c12c+12d+12d+12f12
+## 23
+f+12f12f+2^3
+## 24
+g+2c12d+12g+12c12d+12g+12
+## 25
+f+12f12f+3<f12d+12f12d+12c+12c12
+;
+
+
+{6}
+{'Note table: 136 96 48 40 32 24 16'}
+%k-3{'05'}%e1
+## Mid Accent Synth, originally channel 4
+'midAccentSynth-o1'r2c4d4<
+$
+## 2
+%k-1
+## Mid Accent Synth, originally channel 4
+'midAccentSynth-o1'c+6c+8 r3^4.
+## 3
+c6c8 r3^4.
+## 4
+f6f8 r3^4.
+## 5
+f+6f+8 r6^24 g+6g+8 r6^24
+## 6
+c+6c+8 r3^4.
+## 7
+c6c8 r3^4.
+## 8
+g+6g+8 r3^4.
+## 9
+f+6f+8 r6^24 g+6g+8 r6^24
+## 10-13
+## Cymbals, originally channel 7
+%k0 "!!!o c4h4" [14 "h4"]
+## 14-17
+"c4h4" [12 "h4"] "c4h4"
+## 18
+"c3i6" [9 "i6"]
+## 20
+"c3i6" [6 "i6"] r2
+[
+  ## 22 / 24
+  "c3i6" [9 "i6"]
+]
+;
+
+
+{7}
+{'Note table: 192 136 40 32 24 255 255'}
+%e1
+r1
+$
+## 2-9
+[8%k-1r1]
+## 10
+## Mid Accent Synth, originally channel 5
+'midAccentSynth-o1'c+6c+8<r3^4.>
+## 11
+c6c8<r3^4.>
+## 12
+f6f8<r3^4.>
+## 13
+f+6f+8<r6^24>g+6g+8<r6^24>
+## 14
+c+6c+8<r3^4.>
+## 15
+c6c8<r3^4.>
+## 16
+g+6g+8<r3^4.>
+## 17
+f+6f+8<r6^24>g+6g+8<r6^24
+## 18
+## Low Vox, originally channel 5
+'lowVox-o1'c1
+## 19
+c+1
+## 20
+c1
+## 21
+c+1
+## 22
+d+1
+## 23
+c+1
+## 24
+d+1
+## 25
+c+2^4d+4<
+;
+
+
+{8}
+$r1;
+;
