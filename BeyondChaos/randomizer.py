@@ -68,9 +68,9 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "2"
+VERSION = "3"
 BETA = False
-VERSION_ROMAN = "II"
+VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
