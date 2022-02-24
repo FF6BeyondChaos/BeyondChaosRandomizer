@@ -1088,7 +1088,7 @@ class Window(QWidget):
                 )
             elif mode == "advancedplayer":
                 self.GamePresets['Advanced Player'] = (
-                    "b c d e f g i j k l m n o p q r s t u w y z alasdraco "
+                    "b c d e f g h i j k l m n o p q r s t u w y z alasdraco "
                     "capslockoff johnnydmad makeover notawaiter partyparty "
                     "dancingmaduin bsiab mimetime randombosses"
                 )
