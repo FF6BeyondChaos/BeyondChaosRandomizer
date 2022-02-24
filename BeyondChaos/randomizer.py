@@ -4867,17 +4867,17 @@ def randomize(**kwargs) -> str:
 
     if Options_.is_code_active('randomboost'):
         random_boost_value = Options_.get_code_value('randomboost')
-        if not random_boost_value:
+        if type(random_boost_value) == bool:
             while True:
                 random_boost_value = input("Please enter a randomness "
-                                           "multiplier value (blank for tierless): ")
+                                           "multiplier value (blank or <=0 for tierless): ")
                 try:
                     random_boost_value = float(random_boost_value)
                     if random_boost_value <= 0:
                         random_boost_value = None
                     break
                 except ValueError:
-                    print("The supplied value for the randomness multiplier was not a positive number.")
+                    print("The supplied value for the randomness multiplier was not valid.")
         set_randomness_multiplier(random_boost_value)
     elif Options_.is_code_active('madworld'):
         set_randomness_multiplier(None)
@@ -5098,7 +5098,7 @@ def randomize(**kwargs) -> str:
 
     if Options_.is_code_active('mpboost'):
         mp_boost_value = Options_.get_code_value('mpboost')
-        if not mp_boost_value:
+        if type(mp_boost_value) == bool:
             while True:
                 try:
                     mp_boost_value = float(input("Please enter an MP multiplier value (0.0-50.0): "))
@@ -5348,7 +5348,7 @@ def randomize(**kwargs) -> str:
 
     if Options_.is_code_active('easymodo') or Options_.is_code_active('expboost'):
         exp_boost_value = Options_.get_code_value('expboost')
-        if Options_.is_code_active('expboost') and not exp_boost_value:
+        if Options_.is_code_active('expboost') and type(exp_boost_value) == bool:
             while True:
                 try:
                     exp_boost_value = float(input("Please enter an EXP multiplier value (0.0-50.0): "))
@@ -5366,7 +5366,7 @@ def randomize(**kwargs) -> str:
 
     if Options_.is_code_active('gpboost'):
         gp_boost_value = Options_.get_code_value('gpboost')
-        if not gp_boost_value:
+        if type(gp_boost_value) == bool:
             while True:
                 try:
                     gp_boost_value = float(input("Please enter a GP multiplier value (0.0-50.0): "))
