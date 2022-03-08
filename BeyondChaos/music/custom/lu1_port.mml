@@ -1,0 +1,147 @@
+#TITLE Port City
+#ALBUM Lufia and the Fortress of Doom
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#WAVE 0x20 0x66 strings
+#WAVE 0x21 0x81 trumpet
+#WAVE 0x22 0x95 clarinet
+#WAVE 0x23 0xE3 clari layer
+#WAVE 0x24 0x34 guitar
+#WAVE 0x25 0x56 bass
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x3A hihat closed
+#WAVE 0x2C 0x2D crash cymbal
+
+#def init= t136 %v50 %b0,70 %f0,0 %x220
+
+#def strings= |0 o5     %e1 m          %a8
+#def trumpet= |1 o5 't' %e1 m48,18,207
+#def clari=   |2 o5 'c' %e1 m48,18,223 %r10
+#def layer=   |3 o5 'l' %e1 m48,18,239 %r9%a12
+#def guitar=  |4 o5 'g' %e1 m          %r0
+#def bass=    |5 o7 'b' %e0 m          %r10%a10
+
+#def s= v100
+#def t= v167
+#def c= v150
+#def l= v38
+#def g= v188
+#def b= v100
+
+#def 2=p87 's*v.90'
+#def 5=p52 's*v.38'
+#def 6=p42 's*v.38'
+
+#def hv= v62
+#def kv= v136
+
+#drum "k"=5a |8 p64 'kv*v.92' %e0
+#drum "l"=5a |8 p64 'kv*v.90' %e0
+#drum "m"=5a |8 p64 'kv*v.76' %e0
+#drum "s"=5f |9 p64 v100      %e0
+#drum "h"=5g |A p56 'hv'      %e0
+#drum "i"=5g |A p56 'hv*v.67' %e0
+#drum "y"=5a |C p48 v125      %e1 %r19
+
+{1} $ 'init'
+'trumpet*v.40' p64 l12 [
+e^32r6r16. g8
+f^32r6r16. a8
+g^32r6r16. <c8>
+b^32r6r16. <d8
+l16 c4.d8e1 ^r[3er]
+l8  e4.d>a2.<c4>b4<cd j2
+c4.>ag1.] c1^1
+##
+'clari*v.50+o1' p64 l8 [
+e4.d>a4.<d  ed>a4.<ed>a<
+d4.c>g4.<c  dc>g4.<dc>g<
+c4.>bf4.b<  c>bf4.<c>bf
+e2f2 j2 g4a4b4<c4 ] g1
+;
+
+{2} $
+'strings' l16 [
+'2'c12^48r48 '6'e'5'>b<'6'e r8.
+'2'd12^48r48 '6'f'5' c '6'f r8.
+'2'e12^48r48 '6'g'5' d '6'g r8.
+'2'f12^48r48 '6'a'5' e '6'a r8.
+r1 '2' l8
+c4.dg1f2
+e2f2  e1  j2  e4d4f4e4 ]  e4f4g4<c4>
+##
+> l4 [
+a1^b<cd>
+g1^ab<c>
+f1r<c>ba
+g2f2 j2 e2f2 ] e1
+;
+
+{3} $
+'bass-o2*v.72'p64 l4
+[[16c]>[8f]<[8c]]
+##
+[8f][8e][8d][6c]c8d8e
+[8f][8e][8d][8c]
+;
+
+{4} $ l8
+[62 "ki"] "ksss16s16"
+##
+"k4s4kism" [6"kis4kism"] "kis4ksss16s16"
+"k4s4kisl" [6"kis4kisl"] "kis4msss16s16"
+;
+
+{5} $
+'strings''5' l16 [
+r8crcr8.  r8drdr8.  r8erer8.  r8frfr8.  
+r1 <'6' r8<c>b<c>r gf+g8 ed+e8 c>b
+'5' c1.d2 j2 g1
+grfrerdr cr>brargr< ]  c1 l4 edfe
+##
+[ a1^eae  g1^dgd
+  f1^cfc  e2d2c2>g2< ]
+;
+
+{6} $
+'guitar*v.24-o1'p42 l8
+eg<e>g eg<d>g eg<c>g egbg
+eg<e>g eg<d>g eg<c>g eg<e32^48r24r32>g
+a<cgc> a<cfc> a<cgc> a<cfc>
+eg<e>g eg<d>g eg<c>g eg<d>g
+eg<e>g eg<d>g eg<c>g egbg
+eg<e>g eg<d>g eg<c>g egbe
+[4 a<cac>]
+eg<e>g eg<d>g eg<c>g egbg
+##
+[4 a<cgf>]
+[g32^48r24r32 b32^48r24r32 <f32^48r24r32 e32^48r24r32>] [gb<fe>]
+[4 fa<ed>]
+[3 eg<dc>] <fegf>
+[4 a<cgf>]
+[4 gb<fe>]
+[4 fa<ed>]
+[3 eg<dc>] <feag>
+;
+
+{7} $
+"y1^1^1" [
+'strings''5' l16
+r8<c>b<c>r gf+g8 ed+e8 c>b
+r1r1r1r1 j2
+r1r1r1 ]
+##
+'layer*v.50+o1' p64 l8 [
+e4.d>a4.<d  ed>a4.<ed>a<
+d4.c>g4.<c  dc>g4.<dc>g<
+c4.>bf4.b<  c>bf4.<c>bf
+e2f2 j2 g4a4b4<c4 ] g1
+;
+
+{8} $ l8
+[62"h"r] "hihi"
+##
+[ "y4hih"r"hi" [6"h"r"hih"r"hi"] "h"r"hihihi" ]
+;

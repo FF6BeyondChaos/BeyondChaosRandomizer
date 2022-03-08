@@ -1,0 +1,317 @@
+#TITLE Picturesque Landscape
+#ALBUM Legend of Mana
+#COMPOSER Yoko Shimomura
+#ARRANGED emberling
+
+#WAVE 0x20 0x67 strings
+#WAVE 0x21 0x63 oct.strings
+#WAVE 0x22 0x93 oboe
+#WAVE 0x23 0x86 horn
+#WAVE 0x24 0x88 brass
+#WAVE 0x25 0x07 piano
+#WAVE 0x26 0x59 pizzicato
+#WAVE 0x27 0x58 oct.pizzicato
+#WAVE 0x28 0x5C timpani
+#WAVE 0x29 0x81 trumpet
+#WAVE 0x2A 0x1F snare
+#WAVE 0x2C 0x2D crash cymbal
+#WAVE 0x2D 0x6C tambourine
+#WAVE 0x2E 0x6D jingle bells
+#WAVE 0x2F 0x3A stick
+
+#def init= t140 %v70 %b0,50 %f0,0
+
+#def strings= |0 o5 's' m
+#def ostrings= |1 o5 'd' m
+#def oboe= |2 o5 'o' m48,18,215
+#def horn= |3 o5 'h' m
+#def brass= |4 o5 'b' m
+#def piano= |5 o5 'p' m
+#def pizzi= |6 o4 'i' m %r16
+#def pizzo= |7 o5 'z' m %r16
+#def timpani= |8 o5 'k' m
+#def trumpet= |9 o5 't' m
+
+#def s= v110
+#def d= v110
+#def o= v110
+#def h= v90
+#def b= v165
+#def p= v150
+#def i= v110
+#def z= v183
+#def k= v133
+#def t= v120
+
+#def of= v1,110
+#def hf= v1,90
+#def kf= v1,110
+
+#def snareV= v88
+#def stickV= v110
+#def tamboV= v88
+#def bellsV= v165
+#def crashV= v272
+
+#drum "t+"=5f |A p64 'snareV*v.542' ## midi-exp 83
+#drum "t-"=5f |A p64 'snareV*v.504' ## midi-exp 80
+#drum "s-"=5f |A p64 'snareV*v.420' ## midi-exp 73
+#drum "s"= 5f |A p64 'snareV*v.420' ## midi-exp 70
+#drum "r+"=5f |A p64 'snareV*v.343' ## midi-exp 66
+#drum "r-"=5f |A p64 'snareV*v.303' ## midi-exp 62
+#drum "q+"=5f |A p64 'snareV*v.265' ## midi-exp 58
+#drum "q-"=5f |A p64 'snareV*v.230' ## midi-exp 54
+#drum "p+"=5f |A p64 'snareV*v.189' ## midi-exp 49
+#drum "p-"=5f |A p64 'snareV*v.146' ## midi-exp 43
+
+#drum "a"= 4d  |F p30 'stickV*v.230'
+#drum "a+"=4f+ |F p86 'stickV*v.386' ## midi-exp 70
+#drum "a-"=4f+ |F p86 'stickV*v.303' ## midi-exp 62
+#drum "b"= 5f  |D p80 'tamboV*v.596'
+#drum "b+"=5f  |D p80 'tamboV*v.596' %a15
+#drum "e"= 5b  |D p40 'tamboV*v.108' %a11
+#drum "d+"=5g+ |E p64 'bellsV*v.386'
+
+#drum "y"= 5a |C p64 'crashV*v.467' %r16
+#drum "y-"=5a |C p64 'crashV*v.386' %r16
+
+#cdef ( %l1
+#cdef ) %l0
+
+$0]
+
+{1} 'init' %e1
+$
+'strings*v.48' p35
+[j2,109 $101
+d24r12 a16g24r48 a24r12 a+24r12 <c8> a+24r12
+a24r12 a+16r16 a24r12 f24r12 g8 r8
+d24r12 a16g24r48 a24r12 a+24r12 <c8 d24r12
+c24r12> a+16r16 a24r12 f24r12 g8 r8
+[3 <d16c32r32> a+24r48a24r48 g32r16. a16r16 f8 g24r12 ]
+a16g24r48 a24r48a+24r48 <c8> a+24r48a24r48 a+24r12 f16.r32
+]$109
+## 9
+'ostrings*v.48+o1' #p71
+[j1,101]
+## 17
+'brass*v.414+o1' p100 l16
+[[3 g16f32r32g24r48a24r48 j3 gr] a+8a24r48g16a24r48f24r48gr ]
+p71 a16g24r48a16r8. <c16>a+24r48<c16r8.>
+r4. a16g24r48a24r12a+24r12  <c4^16r16>a+16r16 a24r12a+12r24 a24r12f24r12g8.r8.r8
+## 25
+'strings*v.610+o1' p71 l8 m48,18,207
+[d4.c f4.d+ dcdd+]
+p34 's*v.610' >>g4.< d4. c4f4d+4 a1^4g4
+## 33
+'pizzi*v.505+o1' p90
+[ [c+24r12 c+16c24r48 c+24r12 >a+24r12< c8 >g+24r12
+   a+24r12 <c16r16 c+24r12 j2 c24r12 >a+24r12 f+8<]
+                              d+24r12 c+24r12 c8 ]
+[d+24r12 d+16c+24r48 d+24r12 >a+24r12< c8 >g+24r12
+ a+24r12 <c16r16 c+24r12 j2 c24r12 >a+24r12 g+8<] d+24r12 c+24r12 c8
+'strings*v.48+o1' p35
+[3 >f+24r12< c+16c24r48 c+24r12 ] d+24r12 c+24r12 c8
+   >a+8< c24r12 >a24r12 a+16r16< c2..r8
+;
+
+{2} %e1
+$
+'strings*v.48-o1' p105
+[ j2,209 $201
+g24r12 <d16d24r48 d24r12 g24r12 a8 g24r12
+f24r12 g16r16 f24r12 d24r12 d8 r8>
+g24r12 <d16d24r48 d24r12 g24r12 a8 a+24r12
+a24r12 g16r16 d24r12 d24r12 d8 r8
+[3 a+16a32r32 g24r48f24r48 d+32r16. f16r16 d8 d+24r12]
+f16d+24r48 f24r48g24r48 a8 g24r48f24r48 g24r12 d16.r32
+]$209
+## 9
+'ostrings*v.48' #p68
+[j1,201]
+## 17
+'brass*v.284+o1' p20 l16
+[[3 d+16d32r32d+24r48f24r48 j3 d+r] g8f24r48d+16f24r48d24r48d+r ]
+'strings*v.610-o1' p51 g16r16<d4c4f4d+4a4g16r16 's*v.467' ([23a16])r16
+## 25
+p105 's*v.582' l8
+[a+4.a <d4.c> a+aa+<c>]
+'horn*v.542-o1' l4 p50
+d.a+. a<dc f1^ d
+## 33
+'pizzi*v.381' p38
+[ [a+24r12 a+16g+24r48 a+24r12 f+24r12 g+8 c+24r12
+   f+24r12 g+16r16 a+24r12 j2 g+24r12 f+8 c+8] <c24r12> a+8 g+8 ]
+  [<c24r12 c16>a+24r48< c24r12> g24r12 g+8 d+24r12
+   g24r12 g+16r16 a+24r12 j2 g+24r12 g8 d+8] <c24r12> a+8 g+8
+'oboe*v.314' p112
+[3 d+24r12 a+16g+24r48 a+24r12] <c+24r12> a+24r12 g+8
+ g8 a+24r12 f24r12 g16r16 a2..r8
+;
+
+{3} %e1
+$
+'piano*v.48' p64
+[j1,101]
+## 9
+'strings*v.970-o3'%s7 p64
+r8g8<d16r16's*v.386'a4g2.. v192,0 ^1 r2
+'s*v.970' r8c8g16r16's*v.386'<d4d+2.. v192,0^1 r2>
+## 17, 25
+'s*v.420' [d+1. f1. g1^1^1]
+## 33
+"!!!o y1^1^1"
+'oboe*v.03' p120
+'of*v72,.23' f2. f+2. g+2. a+2.
+<c1^4 v96,0 ^2 r1r4
+'strings*v.98-o3' p64 l16
+        r8d+8a+r 's*v.62'<fr 's*v.55' f+2. v24,0 ^8 r8>
+'s*v.98'r8d+8<cr 's*v.62'gr  's*v.59' ar 's*v.55' <c4.^4 v24,0 ^8 r8
+;
+
+{4} %e1
+[16 $ [3 "r+8 q-32q+32r+16 s-8"] l16 "s-r+q+r--r+s-"]
+## 33
+'timpani*v.554-o2'
+f+4.f+1f+8 f+4.f+1f+8
+d+4.d+1d+8 d+4.d+1d+8
+g+4.g+1g+8 g+4.g+1g+8
+'t*v.696'  d+4.d+1d+8 f+4.
+'t*v.610'f24't*v.542'f24't*v.582'f24 r4..
+l16 "!!!o" %g1 "p-48p+48q-48t+8" %g0 "q+r+q+r+s-t-"
+## 49
+[4 %g1 "s32t+."%g0"q-32q+32r+s-8 r+8q-32q+32r+s-8"
+"r+8q-32q+32r+s-8 s-r+q+r-r+s-"]
+[12
+;
+
+{5} %e1 [ $
+'oboe*v.462' p120 l16
+r8gr8.g32r.arg32r.
+r8gr8.g32r.a8a+24r12
+r8gr8.g32r.arg32r.
+r8g32r.ara32r.a+32r.a+32r.
+[3 r8gr8.g32r.a8a+24r12 ]
+r8g32r.ara32r.a+32r.a+32r. ]
+## 17
+'horn*v.386-o1' p50 ([23a+16])r16 <([23c16])r16
+'brass*v.284+o1' p20
+d16d24r48d16r8. g16g24r48g16r8.
+r4. d16d24r48f24r12g24r12  a4^16r16g16r16f24r12g12r24 f24r12d24r12 d8.r8.r8
+## 25
+'trumpet*v.443' p10
+[2 [3 d24r12 a16g24r48 a24r12] a+24r12 < c16r16> g8 ]
+'ostrings*v1.192+o1' %y0%s5%r3 p80 l8 m36,18,207 ([11d4]d8) r8 m
+## 33
+"!!!o" l8 [
+"a+ee a+4e" "bae a-bd+"
+"a+ee a+4e" j2 "bae a+d+d+" ]
+'horn*v.230' p40
+([6f+8]) ([10g+8] 'hf*v240,.11' [12g+8]) 'h*v.303' f4 'h*v.230' ([12f+8])([12f8])
+## 49
+'oboe*v.191+o1' p120
+[j1,101]
+[ j1,0
+;
+
+{6} %e1
+$ [
+'timpani*v.696-o2' p64
+[g4.g4.
+"!!!o b8"
+'pizzo*v.467-o2' p75 g16r16g8
+"!!!o a+8"
+'pizzo*v.467-o2' p75 g8
+'timpani*v.696-o2' p64 g8
+]<[c4.c4.
+"!!!o b8"
+'pizzo*v.467-o1' p75 c16r16c8
+"!!!o a+8"
+'pizzo*v.467-o1' p75 c8
+'timpani*v.696-o1' p64 j2 c8
+]'kf*v16,.819' c24c24c24 ]
+## 17, 25
+[
+'timpani*v.696-o2' p64 d+4.d+2
+'pizzo*v.467-o2' p75 d+16r16d+8r8d+
+'timpani*v.696-o2' p64 d+8
+                       f4.f2
+'pizzo*v.467-o2' p75 f16r16f8r8f8
+'timpani*v.696-o2' p64 'kf*v16,.819' f24f24f24
+                     [ g4.'k*v.696' g2
+'pizzo*v.467-o2' p75 g16r16g8r8g8
+'timpani*v.696-o2' p64 g8 ]
+]
+## 33
+'strings*v.610' p34 f+8
+'pizzo*v.696-o2' p75 l16
+           f+8 'z*v.504'<c+r 'z*v.386'g+r 'z*v.303'a+4> 'z*v.467'r8f+rf+8r8f+8r8
+'z*v.696'r8f+8 'z*v.504'<c+r 'z*v.386'g+r 'z*v.303'a+r  'z*v.467'<c8>>r8f+rf+8r8f+8r8
+'z*v.696'r8d+8 'z*v.504'a+r  'z*v.386'<fr 'z*v.303'f+4> 'z*v.467'r8d+rd+8r8d+8r8
+'z*v.696'r8d+8 'z*v.504'a+r  'z*v.386'<fr 'z*v.303'f+r  'z*v.467'<c+8>>r8d+rd+8r8d+8r8
+'z*v.696'r8g+8 'z*v.504'<d+r 'z*v.386'a+r 'z*v.303'<c4>>'z*v.467'r8g+rg+8r8g+8r8
+'z*v.696'r8g+8 'z*v.504'<d+r 'z*v.386'a+r 'z*v.303'<cr  'z*v.467'c+8>>r8g+rg+8r8g+8r8
+#'z*v.696'r8d+8 'z*v.504'a+r  'z*v.386'<fr 'z*v.303'f+4> 'z*v.467'r8d+rd+8r8d+8r8
+#'z*v.696'r8f8  'z*v.504'<cr  'z*v.386'gr  'z*v.303'g+r  'z*v.467'<c8>r8drd8r8
+'oboe*v.326+o1' p120
+[3 >f+24r12< c+16c24r48 c+24r12 ] d+24r12 c+24r12 c8
+   >a+8< c24r12 >a24r12 a+16r16< c2.
+'timpani*v.610-o2''tf*v32,.772' p64[6d24]
+;
+
+{7} %e1
+[ $
+'oboe*v.462' p112 l16
+r8dr8.d32r.drd32r.
+r8dr8.d32r.d8d24r12
+r8dr8.d32r.drd32r.
+r8d32r.dr[3d32r.]
+[3 r8d+r8.d+32r.d+8d+24r12]
+r8d+32r.d+r[3d+32r.] ]
+## 17
+'horn*v.386' p40 ([23d+16]) r16 ([23f16]) r16
+p50 'h*v.582' >d16r16 a+4a4<d4c4f4d16r16 'h*v.386'([23d16])r16
+## 25
+'oboe*v.365' p112
+[2 [3 >g24r12 <d16d24r48 d24r12] g24r12 g16r16 d8]
+'trumpet*v.443' p10
+[2 [3 d24r12 a16g24r48 a24r12] a+24r12 <j2 c16r16> g8 ] c24r12 d16r16
+## 33
+'horn*v.542' p50 c+8 r8[10r2]
+'h*v.230' ([6d+8]) ([10d+8] 'hf*v240,.11' [12d+8]) 'h*v.303' c+4 'h*v.230' ([12d+8])([12c8])
+## 49
+'oboe*v.191' p112
+[j1,201]
+[ j1,0
+;
+
+{8} %e1
+[4 $ "a+4.a+2..b8d+8"]
+## 9
+'piano*v.48' p64
+d24r12 a16g24r48 a24r12 a+24r12 <c8> a+24r12
+a24r12 a+16r16 a24r12 f24r12 "!!!o b8d+8"
+'piano*v.48' p64
+d24r12 a16g24r48 a24r12 a+24r12 <c8 d24r12
+c24r12> a+16r16 a24r12 f24r12 "!!!o b8d+8"
+'piano*v.48' p64
+[ <d16c32r32> a+24r48a24r48 g32r16. a16r16 j2 f8 g24r12 ] "!!!o b8d+8"
+'piano*v.48' p64
+<d16c32r32> a+24r48a24r48 g32r16. a16r16 f8 g24r12
+a16g24r48 a24r48a+24r48 <c8> a+24r48a24r48 "!!!o b8d+8"
+## 17
+l8  "y2^e baea-bd+"
+   "y-2^e baea-bd+"
+    "y2^e baea-bd+"
+"a+eea+4e baea-bd+"
+## 25
+[3 "y2^e baea-bd+"]
+"a+eea+4e baea-d+d+"
+## 33
+[7r2.]
+"!!!o" ["baea-d+d+"
+"a+eea+4e baea-bd+"
+"a+eea+4e" ] "b4.a-bd+"
+## 49
+"y1^4b8d+8" [3
+;
