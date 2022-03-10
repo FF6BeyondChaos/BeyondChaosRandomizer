@@ -1,0 +1,202 @@
+#TITLE Port City
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#WAVE 0x20 0x66 strings
+#WAVE 0x21 0xA8 harmonica 1
+#WAVE 0x22 0xB9 harmonica 2 (accordion)
+#WAVE 0x23 0x59 pizzicato
+#WAVE 0x24 0x28 tubular bells
+#WAVE 0x25 0x51 bass
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2C 0x2D crash cymbal
+#WAVE 0x2E 0x3C hihat open
+#WAVE 0x2F 0x3A hihat closed
+
+#def init= t136 %v40 %b0,85 %f0,0
+
+#def strings= |0     o5 %e1 m          %a15%y0%s6
+#def harmo1=  |1 'h' o6 %e1 m8,18,239
+#def harmo2=  |2 'l' o5 %e1 m
+#def pizzi=   |3 'p' o4 %e1 m          
+#def bells=   |4 't' o4 %e1 m          
+#def bass=    |5 'b' o7 %e0 m          %a14%r11
+#def layer=   @3 'y' o5 %e1 m          %y0%s5%r5
+
+#def s= v200
+#def h= v167
+#def l= v100
+#def p= v175
+#def t= v200
+#def b= v175
+#def y= v75
+
+#def 1= 's*v.32'p64
+#def 2= 's*v.12'p96
+#def 4= 's*v.16'p20
+#def 4b='s*v.10'p20
+#def 5= 's*v.26'p20
+#def 5b='s*v.21'p20
+
+#def kv= v170
+#def sv= v170
+#def hv= v80
+#def ov= v80
+#def cv= v300
+
+#drum "j"=5a  |8 p64 %e0 'kv*v.60'
+#drum "k"=5a  |8 p64 %e0 'kv*v.67'
+#drum "s"=5f+ |9 p64 %e0 'sv*v.60' %a12
+#drum "h"=5a  |F p48 %e0 'hv*v.50'
+#drum "i"=5a  |F p48 %e0 'hv*v.32'
+#drum "o"=5f+ |E p48 %e1 'ov*v.50' %r18
+#drum "y"=5f  |C p80 %e1 'cv*v.50' %r17
+
+#cdef ~ ^48r24r32
+#cdef ( %l1
+#cdef ) %l0
+
+{1} 'init' $
+'strings+o1''1' g2f2 e4d4f4>b4<
+## 3
+l16
+erdrf8er                              cr>br<d8cr>
+g2^8e8 f32~ g32~                      g4.a8f1.
+d32~ e32~ f8 g32~ a32~ b32~ <c8 d32~  e4d4g4f4
+d1                                    >g1<
+## 11
+erdrf8er                              cr>br<d8cr>
+g2 ^8e8f8g8                           g4.a8f1.<
+d32~c+32~e8d32~                       >b32~a+32~<c8>b32~
+g2a4b4 <d1 c8r8
+'harmo1*v.24+o1' l16 (cccc)(dddd)(d+d+d+d+)
+## 19
+[ (eeeeee)(dd)>(aaaaaa)<(dd)  (ee)(dd)(gggggg)(ff)(cc)(dd)
+  (dddddd)(cc)([24e]) ]
+## 27
+'strings-o1''1' l4
+ab<cd> b<cde cdea bab<c
+e2>a2<e2dc
+;
+
+{2} $
+'strings-o1''5' b2a2g2f2
+## 3
+< l32
+[8 e16r8.] [8 c16r8.] > [8 a16r8.] <
+[d16r8.] [c16r8.] > [b16r8.] a16r8. a4<
+## 11
+'2' l16
+<cr>br<d8cr>  grgrb8ar
+e2^8c8d8e8    e2>a2    ^4a4b4<c4
+f1  >b2<c4d4  d1  c32~r8 c4>b4a+4<
+## 19
+e1^1 >g1g4a4b4<c4
+e1^1 g1^1
+## 27
+'5' l16
+e1^1^1^1
+[4 crr4cr]
+;
+
+{3} $
+'bass-o2*v.40'p64 l8
+g2f2e2d4>g4<
+## 3
+[8c4][8f4][6d4]defd g4g4f4f4e4e4d4d4
+## 11
+[8c4][6f4]e4e4 [4d4][4g4][4c4]c8r8c4>b4a+4
+## 19
+[8f4]<[6c4]cdec>[8f4]<[7c4]>b4
+## 27
+l4 aaaa g+g+g+g+ gggg f+f+f+f+ ffff ffff
+;
+
+{4} $ l8
+"y2y2y4y4.h16h16o4"
+## 3
+"k4kh khkh"
+[7"kikh khkh"]
+## 11
+"k4kh" [26"kh"]
+"k4k4kh16i16s4"
+## 19
+"k4s4 khs4" [7 "kis4 khs4"]
+## 27
+"k4s4 khs4" [5 "kis4 khs4"]
+;
+
+{5} $
+'strings''4' g2f2e2d2
+## 3
+'layer+o1*v.32'p64 l16
+erdrf8er                            cr>br<d8cr>
+g2^8e8 f32^48r24r32 g32^48r24r32    g4.a8f1.
+d32^48r24r32 e32^48r24r32 f8 g32^48r24r32 a32^48r24r32 b32^48r24r32 <c8 d32^48r24r32
+                                    e4d4g4f4
+d1                                  >g1<
+## 11
+erdrf8er                              cr>br<d8cr>
+g2 ^8e8f8g8                           g4.a8f1.<
+d32~c+32~e8d32~                       >b32~a+32~<c8>b32~
+g2a4b4 <d1 c8r8
+'harmo2*v.24+o1' (cccc)(dddd)(d+d+d+d+)
+## 19
+'pizzi*v.40'p80 l8
+[>a4.b<c4.d e4.fg4.f
+  e4.ed4.d f4.fe4.e ]
+## 27
+'strings''2' [4 &186aa32]
+'5' l16 > [4 arr4ar]
+;
+
+{6} $
+"j4j4j4j4 k4k4k4k4"
+## 3
+l8 "y4o"r "i"r"o"r
+[7 "h"r"o"r "i"r"o"r]
+## 11
+"y4o"r [13"h"r"o"r]
+"h2.o4"
+## 19
+"y4oh" "i"r"oh"
+[7 "h"r"oh" "i"r"oh"]
+## 27
+"y4oh" "i"r"oh"
+[5 "h"r"oh" "i"r"oh"]
+;
+
+{7} $
+'layer+o1*v.32'p64 g2f2 e4d4f4>b4<
+## 3
+[8r1]
+## 11
+'strings''5' l32
+[8 e16r8.] [8 c16r8.] > [4 a16r8.][4 b16r8.] < [5 c16r8.] c4>b4a+4
+## 19
+'harmo2*v.24+o1'p64 l16
+[ (eeeeee)(dd)>(aaaaaa)<(dd)  (ee)(dd)(gggggg)(ff)(cc)(dd)
+  (dddddd)(cc)([24e]) ]
+## 27
+'layer-o1*v.32'p64 l4
+ab<cd> b<cde cdea bab<c
+e2>a2<e2dc
+;
+
+{8} $
+'bells*v.18'p96 b2a2g2f2
+## 3
+'strings''4' l16
+[8 c16r8.] > [8 a16r8.] [8 f16r8.]
+[b16r8.] [a16r8.] [g16r8.] f16r8. f4<
+## 11
+[8 c16r8.] > [8 a16r8.] [4 f16r8.] [9 g16r8.] g4g4g4<
+## 19
+[>f16r8.g16r8.a16r8.b16r8.  <c16r8.d16r8.e16r8.d16r8.
+  c16r8.c16r8.>b16r8.b16r8. <d16r8.d16r8.c16r8.c16r8. ]
+## 27
+([16c4])
+'bells+o1*v.12'p96 e2>a2<e2d4c4
+;
