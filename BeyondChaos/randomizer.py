@@ -1309,7 +1309,7 @@ def manage_suplex(commands: Dict[str, CommandBlock], monsters: List[MonsterBlock
     for c in characters:
         c.set_battle_command(0, command_id=0)
         c.set_battle_command(1, command_id=5)
-        c.set_battle_command(2, command_id=0x7)
+        c.set_battle_command(2, command_id=0xA)
         c.set_battle_command(3, command_id=1)
         c.write_battle_commands(fout)
 
