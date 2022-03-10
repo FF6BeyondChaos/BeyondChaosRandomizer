@@ -4878,7 +4878,7 @@ def randomize(**kwargs) -> str:
                     break
                 except ValueError:
                     print("The supplied value for the randomness multiplier was not valid.")
-        set_randomness_multiplier(random_boost_value)
+        set_randomness_multiplier(int(random_boost_value))
     elif Options_.is_code_active('madworld'):
         set_randomness_multiplier(None)
 
@@ -5452,7 +5452,7 @@ def randomize(**kwargs) -> str:
     s = manage_coral(fout)
     log(s, "aesthetics")
 
-    # Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
+    # TODO Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
     # add_esper_bonuses(fout)
 
     if Options_.is_code_active('removeflashing'):
