@@ -4872,13 +4872,14 @@ def randomize(**kwargs) -> str:
                 random_boost_value = input("Please enter a randomness "
                                            "multiplier value (blank or <=0 for tierless): ")
                 try:
-                    random_boost_value = float(random_boost_value)
-                    if random_boost_value <= 0:
-                        random_boost_value = None
+                    random_boost_value = int(random_boost_value)
                     break
                 except ValueError:
                     print("The supplied value for the randomness multiplier was not valid.")
-        set_randomness_multiplier(int(random_boost_value))
+        if int(random_boost_value) <= 0:
+            set_randomness_multiplier(None)
+        else:
+            set_randomness_multiplier(int(random_boost_value))
     elif Options_.is_code_active('madworld'):
         set_randomness_multiplier(None)
 
@@ -5278,7 +5279,7 @@ def randomize(**kwargs) -> str:
                     "rom_type": "1.0",
                     "list_of_monsters": get_monsters(outfile)
                 }
-                pool = multiprocessing.Pool()
+                pool = bcmultiprocessing.Pool()
                 x = pool.apply_async(func=remonsterate, kwds=kwargs)
                 remonsterate_results = x.get()
                 pool.close()
