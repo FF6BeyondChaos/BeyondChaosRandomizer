@@ -154,7 +154,7 @@ class Window(QWidget):
         # values to be sent to Randomizer
         self.romText = ""
         self.romOutputDirectory = ""
-        self.version = "2"
+        self.version = "3"
         self.mode = "normal"
         self.seed = ""
         self.flags = []
