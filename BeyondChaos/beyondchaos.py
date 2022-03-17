@@ -21,6 +21,7 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
 # Local application imports
 import randomizer
 import utils
+import customthreadpool
 from config import (readFlags, writeFlags)
 from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES)
 from update import (update, update_needed)
@@ -28,23 +29,6 @@ from update import (update, update_needed)
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. "
                     "Report this to Green Knight")
-
-
-class NonDaemonProcess(multiprocessing.Process):
-    def __init__(self, group=None, target=None, name=None, args=(), kwargs={}):
-        super(NonDaemonProcess, self).__init__(group=None, target=target, name=name, args=args, kwargs=kwargs)
-
-    # make 'daemon' attribute always return False
-    def _get_daemon(self):
-        return False
-    def _set_daemon(self, value):
-        pass
-    daemon = property(_get_daemon, _set_daemon)
-
-# We sub-class multiprocessing.pool.Pool instead of multiprocessing.Pool
-# because the latter is only a wrapper function, not a proper class.
-class NonDaemonPool(multiprocessing.pool.Pool):
-    Process = NonDaemonProcess
 
 
 # Extended QButton widget to hold flag value - NOT USED PRESENTLY
@@ -170,7 +154,7 @@ class Window(QWidget):
         # values to be sent to Randomizer
         self.romText = ""
         self.romOutputDirectory = ""
-        self.version = "2"
+        self.version = "3"
         self.mode = "normal"
         self.seed = ""
         self.flags = []
@@ -801,7 +785,14 @@ class Window(QWidget):
                 if type(child) == FlagCheckBox and v == child.value:
                     child.setChecked(True)
                     self.flags.append(v)
-                elif type(child) in [QSpinBox, QDoubleSpinBox] and str(v).startswith(child.text.lower()):
+                elif type(child) in [QSpinBox] and str(v).startswith(child.text.lower()):
+                    if ":" in v:
+                        try:
+                            child.setValue(int(str(v).split(":")[1]))
+                            self.flags.append(v)
+                        except ValueError:
+                            pass
+                elif type(child) in [QDoubleSpinBox] and str(v).startswith(child.text.lower()):
                     if ":" in v:
                         try:
                             child.setValue(float(str(v).split(":")[1]))
@@ -1274,7 +1265,7 @@ class Window(QWidget):
                             "from_gui": True,
                         }
                         # pool = multiprocessing.Pool()
-                        pool = NonDaemonPool(1)
+                        pool = customthreadpool.NonDaemonPool(1)
                         x = pool.apply_async(func=randomizer.randomize, kwds=kwargs)
                         x.get()
                         pool.close()
