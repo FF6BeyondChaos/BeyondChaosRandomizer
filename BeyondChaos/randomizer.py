@@ -702,9 +702,10 @@ def manage_commands(commands: Dict[str, CommandBlock]):
     xmagic_taken = False
     random.shuffle(characters)
     for c in characters:
-        if c.id == 11:
-            # Fixing Gau
-            c.set_battle_command(0, commands["fight"])
+        if Options_.shuffle_commands or Options_.replace_commands:
+            if c.id == 11:
+                # Fixing Gau
+              c.set_battle_command(0, commands["fight"])
 
         if Options_.is_code_active('metronome'):
             c.set_battle_command(0, command_id=0)
