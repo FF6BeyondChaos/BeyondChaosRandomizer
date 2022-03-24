@@ -3,8 +3,8 @@
 FF6 Beyond Chaos CE Randomizer
 a fork of SubtractionSoup's FF6 Beyond Chaos EX Randomizer
 a fork of Abyssonym's FF6 Beyond Chaos Randomizer
-Version:    2.0.0
-Date:       2021-09-30
+Version:    3.1.1
+Date:       2022-03-23
 URL:        https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest
 Beyond Chaos Discord:    https://discord.gg/S3G3UXy
 
@@ -16,7 +16,7 @@ Requirements:
 Setup:
 	Windows:
 		Download the BeyondChaos.zip from https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/releases, and extract the files to a folder of your choice. If you don't see a BeyondChaos.exe, you downloaded the wrong thing.
-		BeyondChaos.exe will download the Beyond Chaos Sprite pack automatically on startup. If you are using beyondchaos_console.exe, you will need to download the sprites manually at https://github.com/FF6BeyondChaos/BeyondChaosSprites
+		BeyondChaos.exe will download the Beyond Chaos Sprite pack automatically on startup. If you are using beyondchaos_console.exe, you will need to download the sprites manually at https://github.com/FF6BeyondChaos/BeyondChaosSprites and monster sprites at https://github.com/FF6BeyondChaos/BeyondChaosMonsterSprites
 	Linux/Mac:
 		Download the source files and extract them to a folder of your choice.
 		Install Python 3.7 or higher. (It DOES NOT work with python 2.)
@@ -198,11 +198,11 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
     myself086 - new menu features and natural magic expansion
     Dracovious - Created new GUI and R-Limit, and some other codes
 	GreenKnight5 - First GUI, Cecilbot
-	DrInsanoPHD - Refactoring code, character stats randomizer, bug fixes, lots of help with CE v1 release
-	Crimdahl - Rotating status patch, dancelessons code, removeflashing code, lots of help with CE v1  and v2 release, 
-	fusoyeahhh - lots of help with CE v1 release
-	RazzleStorm - refactoring some code, adding type hints, lots of help with CE v1 release
-	CDude - lots of help with event code for CE v1 and v2 release, fixing Bio Blast and Flash/Schiller animations
+	DrInsanoPHD - Refactoring code, character stats randomizer, bug fixes, lots of help with CE releases
+	Crimdahl - Rotating status patch, dancelessons code, removeflashing code, lots of help with CE releases, 
+	fusoyeahhh - lots of help with CE releases
+	RazzleStorm - refactoring some code, adding type hints, lots of help with CE releases
+	CDude - lots of help with event codes for CE versions, fixing Bio Blast and Flash/Schiller animations
 	Cecil188 - ported over music, owner of the Discord, and overall helper with everything
 	
 
