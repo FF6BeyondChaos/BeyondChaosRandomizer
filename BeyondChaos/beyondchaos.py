@@ -2,6 +2,7 @@
 import configparser
 import hashlib
 import multiprocessing
+import multiprocessing.pool
 import os
 import subprocess
 import sys
@@ -20,9 +21,10 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
 # Local application imports
 import randomizer
 import utils
+import customthreadpool
 from config import (readFlags, writeFlags)
 from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES)
-from update import (update, configExists)
+from update import (update, update_needed)
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. "
@@ -152,14 +154,10 @@ class Window(QWidget):
         # values to be sent to Randomizer
         self.romText = ""
         self.romOutputDirectory = ""
-        self.version = "2"
+        self.version = "3"
         self.mode = "normal"
         self.seed = ""
         self.flags = []
-        self.expMultiplier = 1
-        self.gpMultiplier = 1
-        self.mpMultiplier = 1
-        self.randomboost = 1
         self.bingotype = []
         self.bingosize = 5
         self.bingodiff = ""
@@ -229,7 +227,7 @@ class Window(QWidget):
         ]
 
         # global busy notifications
-        flagsChanging = False
+        self.flagsChanging = False
 
         # Begin buiding program/window
         # pull data from files
@@ -554,26 +552,48 @@ class Window(QWidget):
                     tablayout.addWidget(cbox, currentRow, 1, 1, 2)
                     cbox.clicked.connect(lambda checked: self.flagButtonClicked())
                 elif flagdesc['inputtype'] == 'numberbox':
-                    if flagname in ['exp', 'gp', 'mp']:
+                    if flagname in ['expboost', 'gpboost', 'mpboost']:
                         nbox = QDoubleSpinBox()
                     else:
                         nbox = QSpinBox()
-                    nbox.setSpecialValueText('Off')
-                    nbox.setFixedWidth(50)
-                    nbox.setMinimum(-1)
-                    nbox.setValue(nbox.minimum())
-                    nbox.setMaximum(50)
-                    if flagname in ['exp', 'gp', 'mp']:
-                        nbox.setFixedWidth(70)
+
+
+                    if flagname == "cursepower":
+                        nbox.setMinimum(0)
+                        nbox.setSpecialValueText("Random")
+                        nbox.setMaximum(255)
+                        nbox.default = 255
+                    elif flagname in ['expboost', 'gpboost', 'mpboost']:
                         nbox.setMinimum(-0.1)
-                        nbox.setValue(-0.1)
                         nbox.setSingleStep(.1)
+                        nbox.setSpecialValueText('Off')
                         nbox.setSuffix("x")
+                        nbox.default = nbox.minimum()
+                    else:
+                        nbox.setMinimum(-1)
+                        nbox.setSpecialValueText('Off')
+                        nbox.default = nbox.minimum()
+
+                    nbox.setFixedWidth(70)
+                    nbox.setValue(nbox.default)
                     nbox.text = flagname
                     flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
                     tablayout.addWidget(nbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
                     nbox.valueChanged.connect(lambda: self.flagButtonClicked())
+                elif flagdesc['inputtype'] == 'combobox':
+                    cmbbox = QComboBox()
+                    cmbbox.addItems(flagdesc['choices'])
+                    width = 50
+                    for choice in flagdesc['choices']:
+                        width = max(width, len(choice) * 10)
+                    cmbbox.setFixedWidth(width)
+                    cmbbox.text = flagname
+                    cmbbox.setCurrentIndex(cmbbox.findText("Vanilla"))
+                    flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
+                    tablayout.addWidget(cmbbox, currentRow, 1)
+                    tablayout.addWidget(flaglbl, currentRow, 2)
+                    cmbbox.activated[str].connect(lambda: self.flagButtonClicked())
                 currentRow += 1
 
             t.setLayout(tablayout)
@@ -752,20 +772,40 @@ class Window(QWidget):
         if (self.flagsChanging):
             return
         self.flagsChanging = True
-        for c in self.checkBoxes:
-            c.setChecked(False)
+        self.clear_controls()
         values = text.split()
         self.flags.clear()
         self.flagString.clear()
-        for v in values:
-            for d in self.dictionaries:
-                for flagname in d:
-                    if v == flagname:
-                        for c in self.checkBoxes:
-                            if v == c.value:
-                                c.setChecked(True)
-                                self.flags.append(c.value)
-                                self.updateFlagString()
+        children = []
+        for t in self.tablist:
+            children.extend(t.children())
+        for child in children:
+            for v in values:
+                v = str(v).lower()
+                if type(child) == FlagCheckBox and v == child.value:
+                    child.setChecked(True)
+                    self.flags.append(v)
+                elif type(child) in [QSpinBox] and str(v).startswith(child.text.lower()):
+                    if ":" in v:
+                        try:
+                            child.setValue(int(str(v).split(":")[1]))
+                            self.flags.append(v)
+                        except ValueError:
+                            pass
+                elif type(child) in [QDoubleSpinBox] and str(v).startswith(child.text.lower()):
+                    if ":" in v:
+                        try:
+                            child.setValue(float(str(v).split(":")[1]))
+                            self.flags.append(v)
+                        except ValueError:
+                            pass
+                elif type(child) in [QComboBox] and str(v).startswith(child.text.lower()):
+                    if ":" in v:
+                        index_of_value = child.findText(str(v).split(":")[1], QtCore.Qt.MatchFixedString)
+                        if index_of_value > 0:
+                            child.setCurrentIndex(index_of_value)
+                            self.flags.append(v)
+        self.updateFlagString()
         self.flagsChanging = False
 
     # (At startup) Opens reads code flags/descriptions and
@@ -795,7 +835,8 @@ class Window(QWidget):
             d[code.name] = {
                 'explanation': code.long_description,
                 'inputtype': code.inputtype,
-                'checked': False
+                'checked': False,
+                'choices': code.choices
             }
 
         for flag in sorted(ALL_FLAGS):
@@ -924,7 +965,7 @@ class Window(QWidget):
         self.seedInput.setText(self.seed)
 
         self.modeBox.setCurrentIndex(0)
-
+        self.presetBox.setCurrentIndex(0)
         self.initCodes()
         self.updateFlagCheckboxes()
         self.flagButtonClicked()
@@ -932,42 +973,50 @@ class Window(QWidget):
         self.flags.clear()
         self.updateGameDescription()
 
+    def clear_controls(self):
+        for tab in self.tablist:
+            for child in tab.children():
+                if type(child) == FlagCheckBox:
+                    child.setChecked(False)
+                elif type(child) == QSpinBox or type(child) == QDoubleSpinBox:
+                    child.setValue(child.default)
+                elif type(child) == QComboBox:
+                    child.setCurrentIndex(child.findText("Vanilla"))
+
     # When flag UI button is checked, update corresponding
     # dictionary values
     def flagButtonClicked(self):
-        self.flags.clear()
-        for t, d in zip(self.tablist, self.dictionaries):
-            children = t.findChildren(FlagCheckBox)
-            for c in children:
-                if c.isChecked():
-                    d[c.value]['checked'] = True
-                    flagset = False
-                    for flag in self.flags:
-                        if flag == d[c.value]:
-                            flagset = True
-                    if flagset == False:
+        # Check self.flagsChanging first. If that is set, a new flag preset has been selected, which is causing
+        #  the controls to change and call this method. But we do not want to do anything then, otherwise it can
+        #  add duplicate entries to the flag string
+        if not self.flagsChanging:
+            self.flags.clear()
+            for t, d in zip(self.tablist, self.dictionaries):
+                children = t.findChildren(FlagCheckBox)
+                for c in children:
+                    if c.isChecked():
+                        d[c.value]['checked'] = True
                         self.flags.append(c.value)
-                else:
-                    d[c.value]['checked'] = False
-            children = t.findChildren(QSpinBox) + t.findChildren(QDoubleSpinBox)
-            for c in children:
-                if c.text == 'exp':
-                    self.expMultiplier = round(c.value(), 1)
-                elif c.text == 'gp':
-                    self.gpMultiplier = round(c.value(), 1)
-                elif c.text == 'mp':
-                    self.mpMultiplier = round(c.value(), 1)
-                elif c.text == 'randomboost':
-                    self.randomboost = round(c.value(), 1)
-                if not round(c.value(), 1) == c.minimum():
-                    flagset = False
-                    for flag in self.flags:
-                        if flag == c.text:
+                    else:
+                        d[c.value]['checked'] = False
+                children = t.findChildren(QSpinBox) + t.findChildren(QDoubleSpinBox)
+                for c in children:
+                    if not round(c.value(), 1) == c.default:
+                        if c.text == "cursepower" and c.value() == 0:
+                            self.flags.append(c.text + ":random")
+                        else:
+                            self.flags.append(c.text + ":" + str(round(c.value(), 2)))
+                children = t.findChildren(QComboBox)
+                flagset = False
+                for c in children:
+                    if c.text == "swdtechspeed":
+                        if not c.currentText() == "Vanilla":
+                            self.swdtechspeed = c.currentText().lower()
                             flagset = True
-                    if flagset == False:
-                        self.flags.append(c.text)
+                    if flagset:
+                        self.flags.append(c.text.lower() + ":" + c.currentText().lower())
 
-        self.updateFlagString()
+            self.updateFlagString()
 
     # Opens file dialog to select rom file and assigns it to value in
     # parent/Window class
@@ -1030,7 +1079,7 @@ class Window(QWidget):
                 )
             elif mode == "advancedplayer":
                 self.GamePresets['Advanced Player'] = (
-                    "b c d e f g i j k l m n o p q r s t u w y z alasdraco "
+                    "b c d e f g h i j k l m n o p q r s t u w y z alasdraco "
                     "capslockoff johnnydmad makeover notawaiter partyparty "
                     "dancingmaduin bsiab mimetime randombosses"
                 )
@@ -1125,9 +1174,13 @@ class Window(QWidget):
 
             flagMode = ""
             for flag in self.flags:
-                flagMode += flag
+                if len(flag) > 1:
+                    flagMode += " " + flag
+                else:
+                    flagMode += flag
 
                 flagMsg = ""
+            flagMode = flagMode.strip()
             for flag in self.flags:
                 if flagMsg != "":
                     flagMsg += "\n-"
@@ -1187,7 +1240,7 @@ class Window(QWidget):
                 for currentSeed in range(seedsToGenerate):
                     print("Rolling seed " + str(currentSeed + 1) + " of " + str(seedsToGenerate) + ".")
                     # User selects confirm/accept/yes option
-                    bundle = f"{self.version}.{self.mode}.{flagMode}.{self.seed}"
+                    bundle = f"{self.version}|{self.mode}|{flagMode}|{self.seed}"
                     # remove spam if the Randomizer asks for input
                     # TODO: guify that stuff
                     # Hash check can be moved out to when you pick 
@@ -1200,21 +1253,19 @@ class Window(QWidget):
                     QtCore.pyqtRemoveInputHook()
                     # TODO: put this in a new thread
                     try:
+                        print(str(bundle))
                         kwargs = {
                             "sourcefile": self.romText,
                             "seed": bundle,
                             "output_directory": self.romOutputDirectory,
-                            "expMultiplier": self.expMultiplier,
-                            "gpMultiplier": self.gpMultiplier,
-                            "mpMultiplier": self.mpMultiplier,
-                            "randomboost": self.randomboost,
                             "bingotype": self.bingotype,
                             "bingosize": self.bingosize,
                             "bingodifficulty": self.bingodiff,
                             "bingocards": self.bingocards,
                             "from_gui": True,
                         }
-                        pool = multiprocessing.Pool()
+                        # pool = multiprocessing.Pool()
+                        pool = customthreadpool.NonDaemonPool(1)
                         x = pool.apply_async(func=randomizer.randomize, kwds=kwargs)
                         x.get()
                         pool.close()
@@ -1224,7 +1275,7 @@ class Window(QWidget):
                             tempname = os.path.basename(self.romText).rsplit('.', 1)
                         else:
                             tempname = [os.path.basename(self.romText), 'smc']
-                        seed = bundle.split(".")[-1]
+                        seed = bundle.split("|")[-1]
                         resultFile = os.path.join(self.romOutputDirectory,
                                                   '.'.join([os.path.basename(tempname[0]),
                                                             str(seed), tempname[1]]))
@@ -1278,8 +1329,7 @@ class Window(QWidget):
         temp = ""
         for x in range(0, len(self.flags)):
             flag = self.flags[x]
-            temp += flag
-            temp += " "
+            temp += flag + " "
         self.flagString.setText(temp)
         self.flagsChanging = False
 
@@ -1318,7 +1368,7 @@ if __name__ == "__main__":
         "updater file and updates please wait."
     )
     try:
-        if configExists():
+        if not update_needed():
             App = QApplication(sys.argv)
             window = Window()
             time.sleep(3)

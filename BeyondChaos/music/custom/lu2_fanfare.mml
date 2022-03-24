@@ -1,0 +1,197 @@
+#TITLE Triumph
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED Rushlight
+
+#WAVE 0x20 0x66 ## Strings
+#WAVE 0x21 0x7F ## Reedy Horn
+#WAVE 0x22 0x51 ## Bass
+#WAVE 0x23 0x5A ## Timpani
+#WAVE 0x28 0x0A ## Kick
+#WAVE 0x29 0x1B ## Snare
+
+##Original tempo is 140
+#def init= %x240 t142 %b0,72 %f0,0 %v42
+
+
+## All channels that play strings have the exact same volume, with only the pan varying
+#def stringsVol = v80
+#def strings=  |0 o5 'stringsVol' %e1
+#def melodyStrings=      'strings' p64
+#def melodyLayerStrings= 'strings' p78
+#def introLowStrings=    'strings' p18
+#def loopLowStrings=     'strings' p64
+#def accentLowStrings=   'strings' p38
+#def accentMidStrings=   'strings' p38
+#def accentHighStrings=  'strings' p78
+
+#def hornVol= v80
+#def horn= |1 o5 'hornVol' p64 %r8 %e1
+
+#def bassVol= v60
+#def bass= |2 o7 'bassVol' p64 %a10 %r11 %e0
+
+#def timpaniBaseVol= v80
+#def timpani= |3 o6 'timpaniBaseVol' p78 %e1 ## %r17
+
+#def snareBaseVol= v120
+#DRUM "s"= 5g |9 p96 'snareBaseVol*v.48' %y7 %s7 %r20 %e0
+#DRUM "t"= 5g |9 p96 'snareBaseVol*v.64' %y7 %s7 %r20 %e0
+#DRUM "u"= 5g |9 p96 'snareBaseVol*v.8'  %y7 %s7 %r20 %e0
+#DRUM "v"= 5g |9 p96 'snareBaseVol*v.96' %y7 %s7 %r20 %e0
+
+#def kickBaseVol= v110
+#DRUM "k"= 5a |8 p96 'kickBaseVol*v.6' %e0
+#DRUM "i"= 5a |8 p96 'kickBaseVol*v.8' %e0
+
+{1}
+'init'
+## Melody Strings, originally channel 1
+'melodyStrings+o1' l16
+e-4.e-e-f4f+r8g+
+## 2
+b-1
+$
+## 3
+## Melody Strings, originally channel 1
+'melodyStrings' l16
+b-rfr<cr>fr<drcr>b-r<cr
+## 4
+r8>fr<dr>fr<e-rdrcrdr
+## 5
+r8>gr<e-r>gr<fre-rdrf+r
+## 6
+r8c+rf+rb-rg+re-rg+4
+;
+
+
+{2}
+## Horn, originally channel 2
+'horn-o1' l16
+b-4.b-b-<f4>b-r8g+
+## 2
+b-1
+$
+## 3
+## Low Strings, originally channel 2
+'loopLowStrings-o1'
+f1
+## 4
+^1
+## 5
+b-1
+## 6
+<c+2e-2
+;
+
+
+{3}
+## Low Strings, originally channel 3
+'introLowStrings-o2' l16
+b-4.b-b-<f4>b-r8g+
+## 2
+b-1
+$
+## Bass, originally channel 3
+'bass-o2' l8
+b-b-4b-4b-b-b-
+## 4
+g+g+4g+4g+g+g+
+## 5
+gg4g4ggg
+## 6
+f+f+4f+g+g+4g+
+;
+
+
+{4}
+## Drums, originally channel 8
+l16
+"v4.vvv4v8.v"
+## 2
+"v" [5 "t24s24"] "t24u24^16k16i16v4"
+$
+## 3
+## Snare, originally channel 8
+"!!!o u8u4u4u8u16u16u16u16"
+;
+
+
+{5}
+## Accent Strings mid, originally channel 5
+'accentMidStrings-o1' l16
+g4.gga4b-r8<c
+## 2
+d1
+$
+## 3
+## Accent Strings mid, originally channel 6
+'accentHighStrings' l16
+frfr8.fr8.frfrfr
+## 4
+e-re-r8.e-r8.e-re-re-r
+## 5
+drdr8.dr8.drdrdr
+## 6
+c+rc+r8.c+r8.e-re-re-r
+;
+
+
+{6}
+## Melody Strings Layer, originally channel 6
+'melodyLayerStrings' l16
+b-4.b-b-<c4c+r8e-
+## 2
+f1
+$
+## 3
+## Accent Strings mid, originally channel 5
+'accentMidStrings' l16
+drdr8.dr8.drdrdr
+## 4
+crcr8.cr8.crcrcr
+## 5
+>b-rb-r8.b-r8.b-rb-rb-r
+## 6
+b-rb-r8.b-r8.<crcrcr
+;
+
+
+{7}
+## Accent Strings Low, originally channel 4
+'accentLowStrings-o1' l16
+e-4.e-e-f4f+r8g+
+## 2
+b-1
+$
+## 3
+## Accent Strings Low, originally channel 4
+'accentLowStrings-o1' l16
+b-rb-r8.b-r8.b-rb-rb-r
+## 4
+g+rg+r8.g+r8.g+rg+rg+r
+## 5
+grgr8.gr8.grgrgr
+## 6
+f+rf+r8.f+r8.g+rg+rg+r
+;
+
+
+{8}
+## Timpani, originally channel 7
+'timpani-o2' l16
+b-4.b-b-b-4b-8.b-
+## 2
+^1
+$
+## 3
+## Timpani, originally channel 7
+'timpani-o2' l16
+b-8b-4b-4b-8b-b-b-b-
+## 4
+g+8g+4g+4g+8g+g+g+g+
+## 5
+g8g4g4g-8gggg
+## 6
+f+8f+4f+4g+8g+g+g+g+
+;

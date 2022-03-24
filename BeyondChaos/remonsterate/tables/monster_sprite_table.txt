@@ -1,0 +1,4 @@
+misc_sprite_pointer,2
+misc_palette_index,1
+low_palette_index,1
+stencil_index,1

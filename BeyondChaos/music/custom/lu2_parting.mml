@@ -1,0 +1,408 @@
+#TITLE The Sorrow of Parting
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED Rushlight
+
+#SHORTNAME LU2 Parting
+
+#WAVE 0x20 0x72 ## Violin
+#WAVE 0x21 0x61 ## Harp
+#WAVE 0x22 0x52 ## Bass
+#WAVE 0x23 0x34 ## Guitar
+#WAVE 0x24 0x65 ## Strings
+
+#WAVE 0x2A 0x91 ## Oboe B6
+#WAVE 0x2B 0x92 ## Oboe F6
+#WAVE 0x2C 0x93 ## Oboe C+6
+#WAVE 0x2D 0x94 ## Oboe A5
+
+#def init= t64 %x240 %v45 %b0,90 %f0,0
+
+
+#def oboeVol=          v75
+#def harpVol=          v100
+#def bassVol=          v75
+#def guitarBaseVol=    v100
+#def guitarMaxVol=    'guitarBaseVol'
+#def guitarMidVol=    'guitarBaseVol*v.67'
+#def violinBaseVol=   v105
+#def violinMelodyVol= 'violinBaseVol'
+#def violinEchoVol=   'violinBaseVol*v.25'
+#def stringsBaseVol=  v40
+#def highStringsVol=  'stringsBaseVol'
+#def midStringsVol=   'stringsBaseVol*v.67'
+#def lowStringsVol=   'stringsBaseVol*v.67'
+
+#def oboeAdsr= %a11 %r8
+#def oboe=          'oboe4' o5 p64  'oboeVol'      'oboeAdsr'  %e1 m1,18,195
+#def harp=          |1 o5      p64  'harpVol'                  %e1 m
+#def bass=          |2 o6      p64  'bassVol'      %r11        %e0 m
+#def guitar=        |3 o5                                      %e1 m
+#def lowestGuitar=  'guitar'   p19  'guitarMidVol'
+#def lowGuitar=     'guitar'   p35  'guitarMaxVol'
+#def highGuitar=    'guitar'   p74  'guitarMidVol'
+#def highestGuitar= 'guitar'   p102 'guitarMidVol'
+#def violin=        |0 o5                              %r10    %e1
+## The original violin has some vibrato, but our sample has some built-in that would clash with it
+#def melodyViolin=  'violin'   p84  'violinMelodyVol'              m
+#def echoViolin=    'violin'   p102 'violinEchoVol'                m
+#def strings=       |4 o5                                      %e1 m
+#def highStrings=   'strings'  p35  'highStringsVol'
+#def midStrings=    'strings'  p19  'midStringsVol'
+#def lowStrings=    'strings'  p74  'lowStringsVol'
+
+
+## Use those macros when switching between oboe1 and oboe2, or when switching between oboe3 and oboe4.
+#def oboe1= |A 'oboeAdsr'
+#def oboe2= |B 'oboeAdsr'
+#def oboe3= |C 'oboeAdsr'
+#def oboe4= |D 'oboeAdsr'
+
+## Use those macros when switching from (oboe1 or oboe2) to (oboe3 or oboe4) or the opposite, so the octaves adjust. The 'oboe' macro starts at oboe4.
+#def upToOboe1=   'oboe1'>
+#def upToOboe2=   'oboe2'>
+#def downToOboe3= 'oboe3'<
+#def downToOboe4= 'oboe4'<
+
+{1}
+'init'
+## Oboe, originally channel 1
+'oboe' l8
+a'oboe3'b<cd
+$
+## Oboe, originally channel 1
+'oboe+o1' l8
+'upToOboe2'e2
+## 2
+^e'downToOboe3'dcd4>'oboe4'g4
+## 3
+^2^<'oboe3'c>b<c
+## 4
+'upToOboe2'gfe'downToOboe3'd'upToOboe2'e4>'downToOboe3'b4
+## 5
+^4'oboe4'a16'oboe3'b16<c16d16'upToOboe2'e2
+## 6
+^e'downToOboe3'dcd4>'oboe4'g4
+## 7
+^2^<'oboe3'c>b<c
+## 8
+## That last note originally plays on channel 7, with different pan and no vibrato, but let's keep it consistent
+d>b'oboe4'g'oboe3'b'oboe4'a2
+## 9
+^2
+## Violin, originally channel 1
+'melodyViolin-o1' l8
+## Make a loop here so that the echo violin can jump in here
+[2
+  j2
+  $109
+  a2
+  ## 10
+  <e4dc>b2
+  ## 11
+  g2fgab
+  ## 12
+  <c>b<cd>b2
+  ## 13
+  g2e2
+  ## 14
+  d4fec4d4
+  ## 15
+  e4a4<d>aa<d
+  ## 16
+  ## That last note originally plays on channel 7, with different pan and no vibrato, but let's keep it consistent
+  c>bab
+  ## The end of the loop allows echo violin to go back to its original channel
+]
+g+2
+## 17
+^2
+;
+
+
+{2}
+r2
+$
+## Harp, originally channel 2
+'harp+o1' l8
+rede
+## 2
+>a2^<dcd
+## 3
+>g2^<c>b<c
+## 4
+>f2^bab
+## 5
+e2^<ede
+## 6
+>a2^<dcd
+## 7
+>g2^<c>b<c
+## 8
+d>bgbaede
+## 9
+l16
+>ab<c>b<cdeg [4 fa<cf>]
+## 10.5
+[4 egb<e>]
+## 11.5
+[4 dfa<d>]
+## 12.5
+[4 ceg<c>]
+## 13.5
+>[4 b-<dfb->]
+## 14.5
+[4 a<cea>]
+## 15.5
+[4 fa<cf>]
+## 16.5
+eg+bg+b<e>b<e
+## 17
+a2
+;
+
+
+{3}
+r2
+$
+## Bass, originally channel 3
+'bass-o2' l2
+f
+## 2
+^e
+## 3
+^d
+## 4
+^c
+## 5
+^f
+## 6 
+^e
+## 7
+^d
+## 8
+ea
+## 9
+gf
+## 10
+^e
+## 11
+^d
+## 12
+^c
+## 13
+^>b-
+## 14
+^a
+## 15
+^<f
+## 16
+^e
+## 17
+^
+;
+
+
+{4}
+r2
+$
+## Low Guitar, originally channel 5
+'lowGuitar-o1' l1
+## This plays on a 2-tick delay to produce a chord effect
+&2r
+a
+## 2.5
+g
+## 3.5
+f
+## 4.5
+e
+## 5.5
+a
+## 6.5
+g
+## 7.5
+f2
+## 8
+## Undo the 2-tick delay here
+g2&94a
+## 9
+## Violin, originally channel 1
+'melodyViolin-o2' l8
+ab<ce
+## High Strings, originally channel 5
+'highStrings' l1
+a
+## 10.5
+g
+## 11.5
+f
+## 12.5
+e
+## 13.5
+e
+## 14.5
+c
+## 15.5
+>a
+## 16.5
+## Low Strings, originally channel 6
+'lowStrings-o1'
+## This note gets cut off early but another channel takes over mid-play
+## Bring volume down to nothing 3 ticks before the note really stops playing, to prevent the automatic gap from messing with the transition
+&93ev0&3^
+## 17
+## Oboe, originally channel 1
+'oboe' l8
+a'oboe3'b<cd
+;
+
+
+{5}
+r2
+$
+## High Guitar, originally channel 6
+'highGuitar' l1
+## This plays on a 4-tick delay to produce a chord effect
+&4r
+c
+## 2.5
+>b
+## 3.5
+a
+## 4.5
+g
+## 5.5
+<c
+## 6.5
+>b
+## 7.5
+a2
+## 8
+b2<c2
+## 9
+## Undo the 4-tick delay here
+&92^
+## Middle Strings, originally channel 4
+'midStrings' l1
+f
+## 10.5
+e
+## 11.5
+d
+## 12.5
+c
+## 13.5
+>b-
+## 14.5
+a
+## 15.5
+f
+## 16.5
+## High Strings, originally channel 5
+'highStrings-o1' l1
+b
+;
+
+
+{6}
+r2
+$
+## Highest Guitar, originally channel 7
+'highestGuitar' l1
+## This plays on a 6-tick delay to produce a chord effect
+&6r
+e
+## 2.5
+d
+## 3.5
+c
+## 4.5
+>b
+## 5.5
+<e
+## 6.5
+d
+## 7.5
+c2
+## 8
+## The original doesn't have a note in the last chord for highest guitar, but we have room for it so let's do it
+d2e2
+## 9
+## Undo the 6-tick delay here
+&90^
+## Low Strings, originally channel 6
+'lowStrings' l1
+c
+## 10.5
+>b
+## 11.5
+a
+## 12.5
+g
+## 13.5
+f
+## 14.5
+e
+## 15.5
+c
+## 16.5
+## Middle Strings, originally channel 4
+'midStrings-o1' l1
+g+
+;
+
+
+{7}
+r2
+$
+## Lowest Guitar, originally channel 4
+'lowestGuitar-o1' l1
+f
+## 2.5
+e
+## 3.5
+d
+## 4.5
+c
+## 5.5
+f
+## 6.5
+e
+## 7.5
+d2
+## 8
+e2e
+## 9.5
+## Echo violin, originally channel 7
+'echoViolin-o1'
+## Insert an 8th-note delay
+r8
+## Use a loop so we come back to this channel when we're done playing violin notes
+[2
+  j2
+  ## Jump into the melody violin's notes then come back here
+  %j109
+]
+## 16 (2.5 beats in)
+## Play the last violin note one 8th shorter because of the echo delay
+g+4.
+## 17
+^2
+;
+
+
+{8}
+r2
+$
+[15 r1]
+## 16.5
+## Low Strings, originally channel 6
+'lowStrings-o1'
+## This note gets cut off early, so use this channel as a backup to try and preserve it
+v0
+## Join in 3 ticks before the original gets cut off, and exactly as its volume switches to 0
+&93e'lowStringsVol'&3^
+## 17
+^2
+;

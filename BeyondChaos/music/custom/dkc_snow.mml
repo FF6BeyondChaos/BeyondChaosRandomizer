@@ -1,0 +1,1193 @@
+#TITLE Northern Hemispheres
+#ALBUM Donkey Kong Country
+#COMPOSER Eveline Fischer
+#ARRANGED Rushlight
+
+#SHORTNAME DKC N. Hemispheres
+
+#WAVE 0x20 0x04 ## Piano, but it's used to play the creaking noise in the intro
+#WAVE 0x21 0x61 ## Harp
+#WAVE 0x22 0xD3 ## Pulse
+#WAVE 0x23 0x01 ## Piano
+#WAVE 0x24 0xC3 ## Warmth Pad, to play low base
+#WAVE 0x25 0xA4 ## Piccolo, to play the airy, atmospheric flute
+#WAVE 0x26 0x78 ## Vox Pad, used in a separate channel to layer the Warmth Pad and give it some of the tremolo the original sample has
+#WAVE 0x27 0xD1 ## Triangle Wave, used for the Low Tone Harp
+#WAVE 0x28 0xAD ## Fret noise, used to play squeak noise
+
+#WAVE 0x29 0x0B ## Hard Kick, used to play snow steps
+#WAVE 0x2A 0x0A ## Kick
+#WAVE 0x2B 0xC4 ## Synth
+#WAVE 0x2C 0x4F ## Timbale
+#WAVE 0x2E 0x21 ## Glockenspiel, used at a high octave to play the High Clicks and Icicles
+
+
+## Tempo should be 94 in theory (and even 93.75), but it seems to run a bit slow.
+#def init= t96 %v25 %b0,75 %f0,0
+
+
+## NOTE: This song has several vol/pan macros that are referenced but are empty. This is the result of cleaning up volume/pan changes that were very close.
+#def lowBaseVol= v160
+#def lowBaseInitialVol=             'lowBaseVol*v.71'
+#def lowBaseAccentVol=              'lowBaseVol*v.79'
+#def lowBaseAlternanceVol=          'lowBaseVol*v.64'
+#def lowBaseAlternanceQuietVol=     'lowBaseVol*v.45'
+#def lowBaseAlternanceSemiQuietVol= 'lowBaseVol*v.61'
+#def lowBaseSecondLoopVol=          'lowBaseVol*v.55'
+## Volume for the additional channel where we'll also play the low base, using a second sample to combine the best properties of both
+#def lowBaseAddVol= v80
+#def lowBaseAddInitialVol=             'lowBaseAddVol*v.71'
+#def lowBaseAddAccentVol=              'lowBaseAddVol*v.79'
+#def lowBaseAddAlternanceVol=          'lowBaseAddVol*v.64'
+#def lowBaseAddAlternanceQuietVol=     'lowBaseAddVol*v.45'
+#def lowBaseAddAlternanceSemiQuietVol= 'lowBaseAddVol*v.61'
+#def lowBaseAddSecondLoopVol=          'lowBaseAddVol*v.55'
+
+
+#def atmoFluteBaseVol= v144
+#def atmoFluteVol4= 'atmoFluteBaseVol*v.25'
+#def atmoFluteVol1= 'atmoFluteBaseVol*v.21'
+## Those two volumes are originally lower (.24 and .23), but our sample doesn't seem to come out as well at lowernotes so we'll bump the volume up a bit
+#def atmoFluteVol3= 'atmoFluteBaseVol*v.32'
+#def atmoFluteVol2= 'atmoFluteBaseVol*v.28'
+
+
+## Multiplied by up to .61
+#def pianoBaseVol= v209
+
+
+#def creakingbaseVol= v60
+#def creakingVolPan1= 'creakingBaseVol*v1.92' p53
+#def creakingVolPan2= 'creakingBaseVol*v1.6'  p64
+#def creakingVolPan3= 'creakingBaseVol*v1.76' p69
+#def creakingVolPan4= 'creakingBaseVol*v1.92' p53
+#def creakingVolPan5= 'creakingBaseVol*v1.38' p64
+#def creakingVolPan6= 'creakingBaseVol*v1.44' p71
+#def creakingVolPan7= 'creakingBaseVol*v1.22'
+
+
+#def squeakBaseVol= v14
+#def squeakVolPan1= 'squeakBaseVol*v1.58' p77
+#def squeakVolPan2= 'squeakBaseVol*v1.38' p56
+#def squeakVolPan3= 'squeakBaseVol*v1.26' p69
+#def squeakVolPan4= 'squeakBaseVol*v1.08' p59
+#def squeakVolPan5= 'squeakBaseVol*v.81'  p53
+#def squeakVolPan6= 'squeakBaseVol*v.72'  p62
+#def squeakVolPan7= 'squeakBaseVol*v.39'  p69
+
+
+#def highToneVol= v22
+
+
+#def electronicBeatBaseVol= v144
+#def electronicBeatVol=    'electronicBeatBaseVol*v.29'
+
+
+#def synthHarpBaseVol= v144
+#def synthHarpVol=     'synthHarpBaseVol*v.73'
+
+
+#def toneHarpBaseVol= v84
+#def toneHarpVol=     'toneHarpBaseVol*v.7'
+
+
+#def lowToneHarpBaseVol= v95
+#def lowToneHarpVol=     'lowToneHarpBaseVol*v.73'
+
+
+#def harpBaseVol= v144
+## Early harp has 12 different Pan/Vol combinations, but only 5 different actual volumes
+#def harpEarlyVolPan1=   'harpBaseVol*v.73' p54
+#def harpEarlyVolPan2=                      p61
+#def harpEarlyVolPan3=                      p66
+#def harpEarlyVolPan4=   'harpBaseVol*v.69' p72
+#def harpEarlyVolPan5=
+#def harpEarlyVolPan6=                      p66
+#def harpEarlyVolPan7=                      p61
+#def harpEarlyVolPan8=   'harpBaseVol*v.66' p56
+#def harpEarlyVolPan9=                      p73
+#def harpEarlyVolPan10=                     p65
+#def harpEarlyVolPan11=
+#def harpEarlyVolPan12=                     p57
+## The harp during the piano frenzy section has 9 different Pan/Vol combinations, but 7 distinct volumes
+#def harpFrenzyVolPan1=  'harpBaseVol*v.73' p59
+#def harpFrenzyVolPan2=
+#def harpFrenzyVolPan3=                     p66
+#def harpFrenzyVolPan4=  'harpBaseVol*v.39'
+#def harpFrenzyVolPan5=  'harpBaseVol*v.74'
+#def harpFrenzyVolPan6=  'harpBaseVol*v.67'
+#def harpFrenzyPan7=                        p63
+#def harpFrenzyVol7=     'harpBaseVol*v.75'
+#def harpFrenzyVol8=     'harpBaseVol*v.69'
+#def harpFrenzyVolPan9=  'harpBaseVol*v.34'
+## The harp buildup section has 7 different Pan/Vol combinations, but 4 distinct volumes.
+## After cleaning up to eliminate minimal variations, there's little left
+#def harpBuildupVolPan1= 'harpBaseVol*v.7'  p62
+#def harpBuildupVolPan2= 
+#def harpBuildupVolPan3=
+#def harpBuildupVolPan4= 'harpBaseVol*v.74'
+#def harpBuildupVolPan5=
+#def harpBuildupVolPan6=
+#def harpBuildupVolPan7= 
+#def harpLateVol=    'harpBaseVol*v.73'
+
+
+## Gets multiplied by up to 1.27
+#def snowStepBaseVol= v100
+#def snowStepFade = v1,100 ## Keep in line with snowStepBaseVol
+
+
+## Does not get multiplied
+#def electronicPercussionVol= v61
+
+
+## Does not get multiplied
+#def clickVol= v110
+
+
+## Gets multiplied by up to 1.34
+#def kickBaseVol= v95
+
+
+## Gets multiplied by up to 1.23
+#def shakerBaseVol= v15
+
+
+#def timbaleBaseVol=     v90
+#def timbaleFade=      v1,90 ## Keep in line with timbaleBaseVol
+#def timbaleLowVol=      'timbaleBaseVol*v.23'
+#def timbaleSteadyVol=   'timbaleBaseVol*v.26'
+#def timbaleFadeToHigh=  'timbaleFade*v126,.29'
+
+
+#def icicleBaseVol= v66
+#def icicleEarlyVolPan1=  'icicleBaseVol*v1.56' p72
+#def icicleEarlyVolPan2=  'icicleBaseVol*v1.46' p57
+#def icicleEarlyVolPan3=                        p71
+#def icicleEarlyVolPan4=  'icicleBaseVol*v1.38' p61
+#def icicleEarlyVolPan5=                        p66
+#def icicleEarlyVolPan6=  'icicleBaseVol*v1.03' p59
+#def icicleEarlyVolPan7=  'icicleBaseVol*v.95'  p68
+#def icicleEarlyVolPan8=  'icicleBaseVol*v.76'  
+#def icicleEarlyVolPan9=  'icicleBaseVol*v.72'  p58
+#def icicleEarlyVolPan10=                       p65
+#def icicleEarlyVolPan11= 'icicleBaseVol*v.68'
+#def icicleEarlyVolPan12=                     
+#def icicleHighNoteVolPan1=  'icicleBaseVol*v1.56' p72
+#def icicleHighNoteVolPan2=  'icicleBaseVol*v1.46' p57
+#def icicleHighNoteVolPan3=                        p71
+#def icicleHighNoteVolPan4=  'icicleBaseVol*v1.38' p61
+#def icicleHighNoteVolPan5=                        p66
+#def icicleHighNoteVolPan6=                        p60
+#def icicleHighNoteVolPan7=  'icicleBaseVol*v1.43'
+#def icicleHighNoteVolPan8=                        p67
+#def icicleHighNoteVolPan9=  'icicleBaseVol*v1.04' p60
+#def icicleHighNoteVolPan10=                       p64
+#def icicleHighNoteVolPan11= 'icicleBaseVol*v1'    
+#def icicleHighNoteVolPan12=                       
+## Those volumes are originally higher, but our sample gets a bit more present at lower notes
+#def icicleLowNoteVolPan1=   'icicleBaseVol*v1.06'p67 ## Volume is 1.06*.9
+#def icicleLowNoteVolPan2=                        p59
+#def icicleLowNoteVolPan3=   'icicleBaseVol*v1.11'    ## Volume is 1.11*.9
+#def icicleLowNoteVolPan4=                        p68
+#def icicleLowNoteVolPan5=   'icicleBaseVol*v1.04'p60 ## Volume is 1.04*.9
+#def icicleLowNoteVolPan6=   'icicleBaseVol*v.69' p66 ## Volume is .69*.9
+#def icicleLowNoteVolPan7=                        p61
+#def icicleLowNoteVolPan8=   'icicleBaseVol*v.33' p65 ## Volume is .33*.9
+
+
+
+#def lowBaseInitialSetup=         'lowBaseInitialVol'    %a8
+#def lowBaseAccentSetup=          'lowBaseAccentVol'     %a10
+#def lowBaseAlternanceSetup=      'lowBaseAlternanceVol' %a2 %y0 %s5 %r7
+#def lowBaseSecondLoopSetup=      'lowBaseSecondLoopVol' %a8
+#def lowBaseCommon= |4 o4 p64 %e1 m
+#def lowBase=           'lowBaseCommon' 'lowBaseInitialSetup'
+#def lowBaseAlternance= 'lowBaseCommon' 'lowBaseAlternanceSetup'
+#def lowBaseAddInitialSetup=         'lowBaseAddInitialVol'    %a8
+#def lowBaseAddAccentSetup=          'lowBaseAddAccentVol'     %a10
+#def lowBaseAddAlternanceSetup=      'lowBaseAddAlternanceVol' %a2 %y0 %s5 %r7
+#def lowBaseAddSecondLoopSetup=      'lowBaseAddSecondLoopVol' %a8
+#def lowBaseAddCommon= |6 o5 p64 %e1 m
+#def lowBaseAdd=           'lowBaseAddCommon' 'lowBaseAddInitialSetup'
+#def lowBaseAddAlternance= 'lowBaseAddCommon' 'lowBaseAddAlternanceSetup'
+
+#def atmoFluteCommonRelease= %r11
+#def atmoFluteSlowerRelease= %r7
+#def atmoFluteSlowAttack=     %a2
+#def atmoFluteFastAttack=     %a7
+#def atmoFluteFasterAttack=   %a8
+
+#def atmoFluteCommon= |5 o3
+#def atmoFluteEarlyLeading=   'atmoFluteCommon' 'atmoFluteVol4' 'atmoFluteSlowAttack'     'atmoFluteCommonRelease' p66 %e1 m6,34,202
+#def atmoFluteEarlyTrailing=  'atmoFluteCommon' 'atmoFluteVol4' 'atmoFluteSlowAttack'     'atmoFluteCommonRelease' p61 %e1 m6,34,202
+#def atmoFluteChordEarlyHigh= 'atmoFluteCommon' 'atmoFluteVol1' 'atmoFluteSlowAttack'     %r3                      p66 %e1 m6,32,202
+#def atmoFluteChordEarlyLow=  'atmoFluteCommon' 'atmoFluteVol1' 'atmoFluteSlowAttack'     %r3                      p61 %e1 m6,32,202
+#def atmoFluteChordLate=      'atmoFluteCommon' 'atmoFluteVol1' 'atmoFluteSlowAttack'     %r5                      p61 %e1 m
+#def atmoFluteChordLatest=    'atmoFluteCommon' 'atmoFluteVol1' 'atmoFluteSlowAttack'     %r6                      p61 %e1 m6,32,202
+#def atmoFluteMelody=         'atmoFluteCommon' 'atmoFluteVol3' 'atmoFluteFasterAttack'   %r7                      p69 %e0 m6,38,208
+#def atmoFluteMelodyEcho=     'atmoFluteCommon' 'atmoFluteVol2' 'atmoFluteFasterAttack'   %r7                      p61 %e1 m6,38,208
+
+#def pianoTranquilRelease= %r21
+#def pianoFrenzyRelease=  %r19
+
+#def pianoCommon= |3 o4 %e1 m
+#def pianoTranquilNote1Setup=          %a12 'pianoBaseVol*v.61' p65
+#def pianoTranquilNote2Setup=          %a11                     
+#def pianoTranquilNote3Setup=          %a10                     
+#def pianoTranquilNote4Setup=          %a9                      
+#def pianoTranquilNote5Setup=          %a8  'pianoBaseVol*v.33' p69
+#def pianoTranquilNote6Setup=          %a7  'pianoBaseVol*v.22' p58
+## Note: Sets 1 and 2 have the same note setups
+#def pianoFrenzySet1_1FirstNoteSetup=  %a14 'pianoBaseVol*v.38' p60
+#def pianoFrenzySet1_1OtherNotesSetup= %a12
+#def pianoFrenzySet1_2FirstNoteSetup=  %a13                        
+#def pianoFrenzySet1_2OtherNotesSetup= %a12
+#def pianoFrenzySet1_3FirstNoteSetup=  %a13                     p65
+#def pianoFrenzySet1_3OtherNotesSetup= %a11                     p62
+#def pianoFrenzySet1_4FirstNoteSetup=  %a12                     p65
+#def pianoFrenzySet1_4OtherNotesSetup= %a10                     p69
+#def pianoFrenzySet3_1FirstNoteSetup=  %a14                     p60
+#def pianoFrenzySet3_1OtherNotesSetup= %a12 
+#def pianoFrenzySet3_2FirstNoteSetup=  %a13 'pianoBaseVol*v.35'    
+#def pianoFrenzySet3_2OtherNotesSetup= %a11 
+#def pianoFrenzySet3_3FirstNoteSetup=  %a13                     p67
+#def pianoFrenzySet3_3OtherNotesSetup= %a11 
+#def pianoFrenzySet3_4FirstNoteSetup=  %a12 
+#def pianoFrenzySet3_4OtherNotesSetup= %a10                     p60
+#def pianoFrenzySet4_1FirstNoteSetup= 
+#def pianoFrenzySet4_1OtherNotesSetup= %a9  
+#def pianoFrenzySet4_2FirstNoteSetup=  %a10                     p67
+#def pianoFrenzySet4_2OtherNotesSetup= %a9 
+#def pianoFrenzySet4_3FirstNoteSetup=                              
+#def pianoFrenzySet4_3OtherNotesSetup= %a8  
+#def pianoFrenzySet4_4FirstNoteSetup=                           p62
+#def pianoFrenzySet4_4OtherNotesSetup= %a7  
+
+
+## Original attack values go 15 through 10, but what we want depends on the sample we use
+#def squeakAttack15= %a13
+#def squeakAttack14= %a12
+#def squeakAttack13= %a11
+#def squeakAttack12= %a10
+#def squeakAttack11= %a9
+#def squeakAttack10= %a8
+## Because the creaking is a noise and the pitch will vary depending on what sample we try, we'll use this macro that plays the first note's pitch.
+## Other notes are played by using transpose commands in the arrangement.
+#def creakingNote= c+64
+#def creaking=  |0 o3 %s4 %r12 %e1 m
+
+#def squeakNote= c+16.
+#def squeakCommon= |8 o7 %s3 %r30 %e1 m
+
+#def highToneAttack1= %a7
+#def highToneAttack2= %a6
+#def highToneRelease1= %r3
+#def highToneRelease2= %r9
+#def highToneCommon= |2 o4 'highToneVol' p64 %y0 %s5 %e1 m6,34,205
+
+#def electronicBeatFastAttack= %a15
+#def electronicBeatSlowAttack= %a10
+#def electronicBeatCommon=   |B o5 'electronicBeatVol' %r19
+#def electronicBeatHighNote= 'electronicBeatCommon' p62 %e1 m6,20,205
+#def electronicBeatMidNote=  'electronicBeatCommon' p66 %e1 m6,20,205
+#def electronicBeatLowNote=  'electronicBeatCommon' p65 %e0 m
+
+## These two exact, alternating note setups are used by regular harp, lowToneHarp, and synthHarp.
+#def multiHarpAccentNoteSetup= %a15 %r24
+#def multiHarpOffNoteSetup=    %a12 %r26
+
+#def synthHarpCommon= |B o5 m
+#def synthHarpOneTimeSetup= 'synthHarpVol' p70
+#def synthHarpHighNoteEcho= %e1
+#def synthHarpLowNoteEcho=  %e0
+
+#def toneHarpPan= p64
+#def toneHarpAttack11= %a11
+#def toneHarpAttack12= %a12
+#def toneHarpAttack13= %a13
+#def toneHarpAttack14= %a14
+#def toneHarpAttack15= %a15
+#def toneHarpSustainHigh= %s7
+#def toneHarpSustainMed=  %s6
+#def toneHarpSustainLow=  %s5
+#def toneHarpReleaseHigh= %r27
+#def toneHarpReleaseLow=  %r25
+#def toneHarpCommon= @3 o5 %y0 %s5 %e1 m
+
+#def lowToneHarpCommon= |7 o5 %e1 m
+#def lowToneHarpOneTimeSetup= p70 'lowToneHarpVol'
+
+#def harpCommon= |1 o5 %y0 m
+#def harpAttack15= %a15
+#def harpAttack14= %a14
+#def harpAttack13= %a13
+#def harpAttack12= %a12
+#def harpAttack11= %a11
+#def harpAttack10= %a10
+#def harpAttack9 = %a9
+#def harpSustainHigh= %s7
+#def harpSustainMed=  %s6
+#def harpSustainLow=  %s5
+#def harpEarlyRelease=       %r17
+#def harpFrenzyHighRelease=  %r28
+#def harpFrenzyLowRelease=   %r26
+#def harpBuildupHighRelease= %r27
+#def harpBuildupLowRelease=  %r25
+#def harpLateHighRelease=    %r26
+#def harpLateLowRelease=     %r24
+#def harpEarlyEcho=   %e1
+#def harpFrenzyEcho=  %e0
+#def harpBuildupEcho= %e1
+#def harpLateEcho=    %e1
+#def harpLateOneTimeSetup= 'harpLateVol' p70
+
+## Use the octave of the first note here
+#def icicleCommon= |E o6 %r28 %e1 m
+#def icicleHighNote1= b-32.
+#def icicleHighNote2= a32.
+## The expectation is that the low notes run an octave lower, but the high notes we would want just don't play properly.
+## This causes both to be at the same octave, but we can afford  to put octave changes in these macros
+#def icicleLowNote1=  <f32.
+#def icicleLowNote2=  e32.>
+#def icicleAttack15= %a15
+#def icicleAttack14= %a15
+#def icicleAttack13= %a14
+#def icicleAttack12= %a13
+#def icicleAttack11= %a12
+#def icicleAttack10= %a11
+#def icicleAttack9 = %a10
+#def icicleAttack8 = %a9
+
+#DRUM "t"= 3d |9 p64 'snowStepBaseVol*v1.17' %a6 %r17
+#DRUM "s"= 3d |9 p64 'snowStepBaseVol*v1.26' %a7 %r17
+
+#DRUM "u"= 3d |9 p64 'snowStepBaseVol*v1.27' %a6 %r17
+#DRUM "v"= 3d |9 p64 'snowStepBaseVol*v1.12' %a7 %r17
+#DRUM "w"= 3d |9 p64 'snowStepBaseVol*v1.21' %a6 %r17
+
+#DRUM "x"= 3d |9 p64 'snowStepBaseVol*v1.27' %a11 %r29
+
+#DRUM "y"= 3d |9 p64 'snowStepBaseVol*v1.11' %a8 %r7
+
+#DRUM "k"= 3d |9 p64 'snowStepBaseVol*v1.27' %a8 %r17
+#DRUM "l"= 3d |9 p64 'snowStepBaseVol*v1.27' %a7 %r20
+#DRUM "m"= 3d |9 p64 'snowStepBaseVol*v1.27' %a8 %r7
+
+## Use r with the separate volume fade macro
+#def snowStepRFade= 'snowStepBaseVol*v1.12' 'snowStepFade*v36,1.27'
+#DRUM "r"= 3d |9 p64 %a7 %r17
+
+
+#DRUM "a"= 6c |B p64 'electronicPercussionVol' %a15 %r30 %e1 m
+#DRUM "b"= 6c |B p64 'electronicPercussionVol' %a14 %r30 %e1 m
+
+
+#DRUM "z"= 7a |E p64 'clickVol' %r30 %e0  m
+
+
+#DRUM "c"= 5e |A p61 'kickBaseVol*v1.34' %a15 %r29 %e0 m
+#DRUM "d"= 5e |A p65 'kickBaseVol*v1.3'  %a13 %r29 %e0 m
+#DRUM "e"= 5e |A p60 'kickBaseVol*v1.25' %a12 %r29 %e0 m
+#DRUM "f"= 5e |A p66 'kickBaseVol*v1.25' %a11 %r29 %e0 m
+
+
+#DRUM "g"= 3d @4 p65 'shakerBaseVol*v1.23' %a10 %r29 %e0 m
+#DRUM "h"= 3d @4 p59 'shakerBaseVol*v1.4'  %a10 %r29 %e0 m
+#DRUM "i"= 3d @4 p64 'shakerBaseVol*v1.09' %a9  %r29 %e0 m
+#DRUM "j"= 3d @4 p59 'shakerBaseVol*v1.12' %a9  %r29 %e0 m
+
+## Timbale drum macros
+#DRUM "o"= 4e |C p60 %a13 %r27 %e0 m
+#DRUM "p"= 4e |C p60 %a14 %r27 %e0 m
+#DRUM "q"= 4e |C p60 %a10 %r27 %e0 m
+
+
+
+{1}
+'init'
+## Creaking, originally channel 1
+'creaking' 'creakingVolPan1' l64
+## 1
+r1
+## 2
+r2^4.'creakingNote''creakingNote'r32'creakingNote'r'creakingNote'r
+## 3
+  ## Beat 1
+  r'creakingNote'r8'creakingVolPan2''creakingNote''creakingNote''creakingNote'r32.
+  ## Beat 2
+  'creakingNote'r'creakingNote''creakingNote''creakingNote''creakingNote'r'creakingNote'r'creakingNote''creakingNote'r16^64
+  ## Beat 3
+  r4
+  ## Beat 4
+  r8.'creakingVolPan3''creakingNote''creakingNote''creakingNote''creakingNote'
+## 4
+  ## Beat 1
+  r32'creakingNote'r'creakingNote''creakingNote'r'creakingNote'r32'creakingNote''creakingNote''creakingNote'%k1'creakingNote''creakingNote'r
+  ## Beat 2
+  %k2'creakingNote'%k3'creakingNote'%k4'creakingNote'r%k3'creakingNote'r%k-2'creakingNote'%k1'creakingNote'r32.%k2'creakingNote'r'creakingVolPan4'%k0'creakingNote''creakingVolPan5'%k1'creakingNote''creakingNote'
+  ## Beat 3
+  'creakingNote'r32.'creakingNote'r'creakingNote'r'creakingNote''creakingNote''creakingNote''creakingNote'r'creakingNote'r'creakingNote'
+  ## Beat 4
+  r4
+## 5
+  ## Beat 1
+  r32'creakingVolPan6'%k2'creakingNote''creakingNote'%k3'creakingNote''creakingNote'r%k4'creakingNote'%k5'creakingNote'%k6'creakingNote'r%k5'creakingNote'r%k0'creakingNote'r32
+  ## Beat 2
+  r'creakingVolPan7'%k3'creakingNote''creakingNote''creakingNote''creakingNote'r32'creakingNote'r'creakingNote''creakingNote''creakingNote'r32.'creakingNote'
+  ## Beat 3
+  r%k4'creakingNote'r32.%k5'creakingNote'r32r8
+  ## Beat 4
+  r4
+  %k0
+## 6
+r1
+## 7
+$
+## Snow Steps, originally channel 8
+"s2^16t4.."
+[2
+  ## 8 / 14
+  r2
+  ## Harp, originally channel 1
+  'harpCommon-o1'
+  'harpEarlyRelease''harpEarlyEcho'
+  'harpEarlyVolPan1'
+  'harpAttack15'c16.'harpAttack13'e-16.d16.e-16.
+  'harpEarlyVolPan2'
+  'harpAttack14'c16.'harpAttack12'e-16.d16.e-16.
+  'harpEarlyVolPan3'
+  'harpAttack13'c16.'harpAttack11'e-16.d16.e-16.
+  'harpEarlyVolPan4'
+  'harpAttack12'c16.'harpAttack10'e-16.d16.e-16.
+  j2
+  ## 10
+  r1
+  ## 11
+  r2
+  'harpAttack15'c16.'harpEarlyVolPan5''harpAttack13'f16.g16.f16.
+  'harpAttack14'c16.'harpEarlyVolPan6''harpAttack12'f16.g16.f16.
+  'harpAttack13'c16.'harpEarlyVolPan7''harpAttack11'f16.g16.f16.
+  'harpAttack12'c16.'harpEarlyVolPan8''harpAttack10'f16.g16.f16.
+  ## 13
+  r1
+]
+## 16
+'harpEarlyVolPan9'
+'harpAttack15'c16.'harpAttack13'e-16.d16.e-16.
+'harpEarlyVolPan10'
+'harpAttack14'c16.'harpAttack12'e-16.d16.e-16.
+'harpEarlyVolPan11'
+'harpAttack13'c16.'harpAttack11'e-16.d16.e-16.
+'harpEarlyVolPan12'
+'harpAttack12'c16.'harpAttack10'e-16.d16.e-16.
+## 17(at beat 3)-21
+[9 r2]
+## 22
+## Atmospheric Flute Chord Early High Note, originally channel 3
+'atmoFluteChordEarlyHigh+o1'
+g1
+## 23-29 (at beat 3)
+[13 ^2]
+## 29 (at beat 3)
+## Harp, originally channel 1
+'harpCommon-o1'
+'harpEarlyVolPan9'
+'harpAttack11''harpFrenzyLowRelease''harpFrenzyVolPan5'g32.'harpAttack9''harpFrenzyHighRelease''harpFrenzyVolPan6'g32.'harpAttack10''harpFrenzyLowRelease''harpFrenzyVolPan5'<e-32.'harpAttack9''harpFrenzyHighRelease''harpFrenzyVolPan6'e-32.
+'harpAttack10''harpFrenzyLowRelease''harpFrenzyVolPan5'd32.'harpAttack9''harpFrenzyHighRelease''harpFrenzyVolPan6'd32.'harpAttack10''harpFrenzyLowRelease''harpFrenzyVolPan5'e-32.'harpAttack9''harpFrenzyHighRelease''harpFrenzyVolPan6'e-32.>
+'harpFrenzyPan7'
+'harpAttack11''harpFrenzyLowRelease'                g+32.'harpAttack9''harpFrenzyHighRelease''harpFrenzyVol8'g+32.'harpAttack10''harpFrenzyLowRelease''harpFrenzyVol7'<e-32.'harpAttack9''harpFrenzyHighRelease''harpFrenzyVol8'e-32.
+'harpAttack10''harpFrenzyLowRelease''harpFrenzyVol7'd32.'harpAttack9''harpFrenzyHighRelease' 'harpFrenzyVol8'd32.'harpAttack10''harpFrenzyLowRelease' 'harpFrenzyVol7'e-32.'harpAttack9''harpFrenzyHighRelease' 'harpFrenzyVol8'e-32.>
+## 30 (at beat 2)
+'harpAttack11''harpFrenzyLowRelease'                g32.'harpAttack9''harpFrenzyHighRelease'                g32.'harpAttack10''harpFrenzyLowRelease'                <e-32.'harpAttack9''harpFrenzyHighRelease'                e-32.
+'harpAttack10''harpFrenzyLowRelease'                d32.'harpAttack9''harpFrenzyHighRelease'                d32.'harpAttack10''harpFrenzyLowRelease'                e-32.'harpAttack9''harpFrenzyHighRelease'                 e-32.>
+'harpFrenzyVolPan9'
+'harpAttack11''harpFrenzyLowRelease'g+32.'harpAttack9''harpFrenzyHighRelease'g+32.'harpAttack10''harpFrenzyLowRelease'<e-32.'harpAttack9''harpFrenzyHighRelease'e-32.
+'harpAttack10''harpFrenzyLowRelease'd32.'harpAttack9''harpFrenzyHighRelease'd32.'harpAttack10''harpFrenzyLowRelease'e-32.'harpAttack9''harpFrenzyHighRelease'e-32.
+## 31
+r1
+## 32
+## High Tone, originally channel 1
+'highToneCommon+o2'
+'highToneAttack1''highToneRelease1'
+r4.r32 b-8^32 m21,2 ^4.^16
+## 33
+^4c2.
+## 34
+>'highToneAttack2''highToneRelease2'b-16^32m15,2 ^2^4.^32
+## 35
+^1
+## 36
+r2.r16
+## Snow Steps, originally channel 1
+"!!!o" 'snowStepRFade' "r32.r32.r32.r32."
+## 37
+## Electronic Percussion, originally channel 4
+## Each iteration lasts .75 beats, for a total of 18 beats (or 4.5 measures) for the loop
+[24 "a32.b32.b32.b32."]
+## 41(at beat 3)
+r1
+## 42(at beat 3)
+r4^16..
+## Melody Atmospheric Flute, originally channel 3
+'atmoFluteMelody'
+g32.<c32.d32.
+## 43
+'atmoFluteFastAttack'e-2^8^32'atmoFluteFasterAttack'd32.e-32.'atmoFluteFastAttack'd2
+## 44(at beat 3)
+^16>b-8.<c2
+## 45
+^1
+## 46
+e-2^16f8.f+4.
+## 47(one 8th in)
+f4.e-1
+## 48(at beat 3)
+^4.^32>b-16.
+## 49
+<c1
+## 50
+^1
+## 51
+^1
+;
+
+
+{2}
+## 1 through 5(at beat 3)
+[9 r2]
+## 5 (at beat 3)
+## High-pitched squeaks, originally channel 4
+'squeakCommon'
+'squeakVolPan1''squeakAttack15' 'squeakNote' 'squeakAttack11' 'squeakNote'
+'squeakVolPan2''squeakAttack15' 'squeakNote' 'squeakAttack11' 'squeakNote'
+'squeakVolPan3''squeakAttack15' 'squeakNote' 'squeakAttack13' 'squeakNote'
+## 6 (one 16th in)
+'squeakVolPan4''squeakAttack15' 'squeakNote' 'squeakAttack12' 'squeakNote'
+'squeakVolPan5''squeakAttack15' 'squeakNote' 'squeakAttack12' 'squeakNote'
+
+'squeakVolPan6''squeakAttack15' 'squeakNote' 'squeakAttack12' 'squeakNote'
+'squeakVolPan7''squeakAttack14' 'squeakNote' 'squeakAttack11' 'squeakNote' 'squeakAttack13' 'squeakNote' 'squeakAttack10' 'squeakNote'
+## 7
+$
+r1
+## 8
+r2
+## Atmospheric Flute (leading), originally channel 2
+'atmoFluteEarlyLeading+o2'
+c1
+## 9(at beat 3)
+^4^16g8.
+## 10
+^1
+## 11
+^2b-2
+## 12
+^1
+## 13
+^4.r8r1
+## 14(at beat 3)
+>b-1
+## 15(at beat 3)
+^4^16<e-8.
+## 16
+^1
+## 17
+^2c+1
+## 18(at beat 3)
+^1
+## 19(at beat 3)
+^4r4
+## 20
+r1
+## 21
+r1
+## 22
+r1r1r1
+## 25
+## Atmospheric Flute Chord Late Note, originally channel 4
+'atmoFluteChordLate+o1'
+g+1
+## 26-29(at beat 3)
+[7 ^2]
+## 29 (at beat 3)
+## Piano, originally channel 3
+'pianoCommon+o2'
+## Each iteration of this loop (and each of the two similar upcoming sections) lasts 3 beats
+[2
+  'pianoFrenzySet1_1FirstNoteSetup'c32.'pianoFrenzySet1_1OtherNotesSetup'g32.g+32.g32.
+  'pianoFrenzySet1_2FirstNoteSetup'c32.'pianoFrenzySet1_2OtherNotesSetup'g32.g+32.g32.
+  'pianoFrenzySet1_3FirstNoteSetup'c32.'pianoFrenzySet1_3OtherNotesSetup'g32.g+32.g32.
+  'pianoFrenzySet1_4FirstNoteSetup'c32.'pianoFrenzySet1_4OtherNotesSetup'g32.f32.g32.
+]
+## 31
+'pianoFrenzySet3_1FirstNoteSetup'c32.'pianoFrenzySet3_1OtherNotesSetup'g32.g+32.g32.
+'pianoFrenzySet3_2FirstNoteSetup'c32.'pianoFrenzySet3_2OtherNotesSetup'g32.g+32.g32.
+'pianoFrenzySet3_3FirstNoteSetup'c32.'pianoFrenzySet3_3OtherNotesSetup'g32.g+32.g32.
+'pianoFrenzySet3_4FirstNoteSetup'c32.'pianoFrenzySet3_4OtherNotesSetup'g32.f32.g32.
+'pianoFrenzySet4_1FirstNoteSetup'c32.'pianoFrenzySet4_1OtherNotesSetup'g32.g+32.g32.
+'pianoFrenzySet4_2FirstNoteSetup'c32.'pianoFrenzySet4_2OtherNotesSetup'g32.g+32.g32.
+'pianoFrenzySet4_3FirstNoteSetup'c32.'pianoFrenzySet4_3OtherNotesSetup'g32.g+32.g32.
+'pianoFrenzySet4_4FirstNoteSetup'c32.'pianoFrenzySet4_4OtherNotesSetup'g32.f32.g32.
+## 32 (at beat 3)
+## Electronic Beat High Note, originally channel 2
+'electronicBeatHighNote+o1'
+## Each iteration lasts 6 beats, for a total of 18 beats (4.5 measures) for the loop
+[3
+  ## Each iteration lasts 1.5 beats, for a total of 6 beats for the loop
+  [4
+    'electronicBeatFastAttack' d8.
+    'electronicBeatSlowAttack' d8.
+  ]
+  %k1
+  j1,234
+  %k0
+  $234
+]
+## 37
+## Harp, originally channel 5
+'harpCommon-o1''harpBuildupEcho'l16
+'harpBuildupVolPan1'
+'harpAttack13''harpSustainMed''harpLateLowRelease'c 'harpAttack11'                'harpLateHighRelease' e-d
+'harpAttack13''harpSustainLow''harpLateLowRelease'c 'harpAttack11''harpSustainMed''harpLateHighRelease' e-d
+'harpAttack14'                'harpLateLowRelease'c 'harpAttack12'                'harpLateHighRelease' e-d
+'harpAttack14''harpSustainLow''harpLateLowRelease'c 'harpAttack12''harpSustainMed''harpLateHighRelease' e-d
+## 37 (at beat 4)
+'harpBuildupVolPan2'
+[2
+  'harpAttack15''harpSustainHigh''harpLateLowRelease'c 'harpAttack13'                 'harpLateHighRelease' e-d
+  'harpAttack15''harpSustainMed' 'harpLateMedRelease'c 'harpAttack13''harpSustainHigh''harpLateHighRelease' e-d
+]
+## 38 (at beat 3)
+[2
+  'harpAttack14''harpSustainMed''harpLateLowRelease'c 'harpAttack12'                 'harpLateHighRelease' e-d
+  'harpAttack14''harpSustainLow''harpLateMedRelease'c 'harpAttack12''harpSustainMed' 'harpLateHighRelease' e-d
+]
+## 39 (at beat 2)
+'harpBuildupVolPan3'
+[2
+  'harpAttack14''harpSustainHigh''harpLateLowRelease'c 'harpAttack12'                 'harpLateHighRelease' e-d
+  'harpAttack14''harpSustainMed' 'harpLateMedRelease'c 'harpAttack12''harpSustainHigh' 'harpLateHighRelease' e-d
+]
+## 40-42
+## Low Tone Harp, originally channel 2
+'lowToneHarpCommon-o1'
+'lowToneHarpOneTimeSetup'
+'harpPattern'
+## 43-45
+## Harp, originally channel 2
+'harpCommon-o1''harpLateEcho'l16
+'harpLateOneTimeSetup'
+'harpPattern'
+## Low Tone Harp, originally channel 2
+'lowToneHarpCommon'
+'lowToneHarpOneTimeSetup'
+%k3'harpPattern'%k0
+## 49-51
+## Synth Harp High Note, originally channel 2
+'synthHarpCommon'l16 'synthHarpHighNoteEcho'
+'synthHarpOneTimeSetup'
+%g1'harpPattern'%g0
+;
+
+
+{3}
+## Low base, originally channel 5
+'lowBase-o2'
+c1
+## 2-7
+[6 ^1]
+## We've had our pre-loop measure 7, jump over the post-loop measure 7
+%j108
+$
+## 7 (After infinite loop point)
+'lowBase-o2'
+c1
+$108
+## 8-21
+[14 ^1]
+## 22-26(at beat 3)
+[9 r2]
+## 26(at beat 3)-29(at beat 3)
+## Atmospheric Flute Chord Latest Note, originally channel 5
+'atmoFluteChordLatest+o2'
+f+1^1^1
+## 29 (at beat 3)
+## Low base, originally channel 5
+'lowBase-o2'
+c2
+## 30 - 35 (at beat 3)
+[11 ^2]
+## 35 (at beat 3)
+'lowBaseAccentSetup' f16. g32^4
+c8
+## 36
+^1
+## This loop lasts 6 beats
+[8
+  ## 37 / 38.5 / 40 / 41.5 / 43 / 44.5 / 46 / 47.5
+  "!!!o k32."
+  ## Low Base, originally channel 1
+  'lowBaseAlternance-o2' c32.
+  ## Snow Steps, originally channel 1
+  "!!!o l32.l32.m32."
+  ## Low Base, originally channel 1
+  'lowBaseAlternance-o2' j3,340 j4,341 c4^64^1
+]
+## 49-51
+## This loop lasts 3 beats. 4 Loops covers 12 beats (so 3 measures)
+[4
+  ## Snow Steps, originally channel 1
+  "!!!o m32"
+  ## Low Base, originally channel 1
+  'lowBaseAlternance-o2' c4^16.
+  ## Snow Steps, originally channel 1
+  "!!!o y32"
+  ## Low Base, originally channel 1
+  'lowBaseAlternance-o2' c4^16.
+]
+;
+
+$340
+## 40, 15 64ths in (i.e. 45 ticks in)
+'lowBaseAlternanceQuietVol'e-4^64^1
+] ## Then back to the loop
+
+$341
+## 41, 2 beats and 15 64ths in (i.e. 141 ticks in)
+'lowBaseAlternanceSemiQuietVol'f4^64^1
+] ## Then back to the loop
+
+
+{4}
+## 1-6
+[6 r1]
+$
+## 7
+r1
+## 8
+r2
+## Atmospheric Flute (trailing), originally channel 4
+'atmoFluteEarlyTrailing+o2'
+r8.
+c16^4
+## 9
+^1
+## 10
+g1
+## 11
+^2^8.b-16^2
+## 12(at beat 2)
+^1
+## 13(at beat 2)
+^8..r32r2
+## 14
+r2'atmoFluteSlowerRelease'f1
+## 15(at beat 3)
+^1
+## 16(at beat 3)
+^1
+## 17(at beat 3)
+'atmoFluteCommonRelease'<c1
+## 18(at beat 3)
+^1
+## 19(at beat 3)
+^4r4
+## 20
+r1
+## 21
+r1
+## 22-27
+[6 r1]
+## 28
+## Harp, originally channel 1
+'harpCommon-o1'
+'harpFrenzyEcho'
+'harpFrenzyVolPan1'
+'harpAttack15''harpFrenzyLowRelease'g32.'harpAttack9''harpFrenzyHighRelease'g32.'harpAttack13''harpFrenzyLowRelease'<e-32.'harpAttack9''harpFrenzyHighRelease'e-32.
+'harpAttack13''harpFrenzyLowRelease'd32.'harpAttack9''harpFrenzyHighRelease'd32.'harpAttack13''harpFrenzyLowRelease'e-32.'harpAttack9''harpFrenzyHighRelease'e-32.>
+'harpFrenzyVolPan2'
+'harpAttack14''harpFrenzyLowRelease'g+32.'harpAttack9''harpFrenzyHighRelease'g+32.'harpAttack12''harpFrenzyLowRelease'<e-32.'harpAttack9''harpFrenzyHighRelease'e-32.
+'harpAttack12''harpFrenzyLowRelease'd32.'harpAttack9''harpFrenzyHighRelease'd32.'harpAttack12''harpFrenzyLowRelease'e-32.'harpAttack9''harpFrenzyHighRelease'e-32.>
+## 28 (at beat 4)
+'harpFrenzyVolPan3'
+'harpAttack13''harpFrenzyLowRelease'g32.'harpAttack9''harpFrenzyHighRelease'g32.'harpAttack11''harpFrenzyLowRelease'<e-32.'harpAttack9''harpFrenzyHighRelease'e-32.
+'harpAttack11''harpFrenzyLowRelease'd32.'harpAttack9''harpFrenzyHighRelease'd32.'harpAttack11''harpFrenzyLowRelease'e-32.'harpAttack9''harpFrenzyHighRelease'e-32.>
+'harpFrenzyVolPan4'
+'harpAttack12''harpFrenzyLowRelease'g+32.'harpAttack9''harpFrenzyHighRelease'g+32.'harpAttack11''harpFrenzyLowRelease'<e-32.'harpAttack9''harpFrenzyHighRelease'e-32.
+'harpAttack11''harpFrenzyLowRelease'd32.'harpAttack9''harpFrenzyHighRelease'd32.'harpAttack11''harpFrenzyLowRelease'e-32.'harpAttack9''harpFrenzyHighRelease'e-32.>
+## 29 (at beat 3)
+r2
+## 30
+r1
+## 31
+## Electronic Beat High Note, originally channel 2
+'electronicBeatHighNote+o1'
+## Each iteration lasts a beat and a half for a total of 6 beats for the loop
+[4
+  'electronicBeatFastAttack' e-8.
+  'electronicBeatSlowAttack' e-8.
+]
+## 32(at beat 3)
+r2
+## 33
+r1
+## 34
+## Electronic Beat Low Note, originally channel 3
+'electronicBeatLowNote'
+## Each iteration lasts 6 beats for a total of 12 beats (3 measures) for the loop
+[2
+  ## Each iteration lasts a beat and a half for a total of 6 beats (1.5 measure) for the loop
+  [4
+    'electronicBeatFastAttack' g+8.
+    'electronicBeatSlowAttack' g+8.
+  ]
+  %k-1
+]
+%k0
+## 37-39
+r1r1r1
+## 40
+## Harp, originally channel 5
+'harpCommon-o1''harpBuildupEcho'l16
+'harpBuildupVolPan4'
+[2
+  'harpAttack14''harpSustainMed' 'harpLateLowRelease'c 'harpAttack12'                 'harpLateHighRelease' e-d
+  'harpAttack14''harpSustainLow' 'harpLateMedRelease'c 'harpAttack12''harpSustainMed' 'harpLateHighRelease' e-d
+]
+## 40 (at beat 4)
+'harpBuildupVolPan5'
+[2
+  'harpAttack14''harpSustainMed' 'harpLateLowRelease'c 'harpAttack12'                 'harpLateHighRelease' fg
+  'harpAttack14''harpSustainLow' 'harpLateMedRelease'c 'harpAttack12''harpSustainMed' 'harpLateHighRelease' fg
+]
+[2
+  'harpBuildupVolPan6'
+  [2
+    ## 41(at beat 3) / 42(at beat 2)
+    'harpAttack13''harpSustainMed' 'harpLateLowRelease'c 'harpAttack11'                 'harpLateHighRelease' g+g
+    'harpAttack13''harpSustainLow' 'harpLateMedRelease'c 'harpAttack11''harpSustainMed' 'harpLateHighRelease' g+g
+  ]
+  'harpBuildupVolPan7'
+]
+## 43
+## Tone Harp, originally channel 5
+'toneHarpCommon' l16
+'toneHarpVol''toneHarpPan'
+'toneHarpAttack13' 'toneHarpSustainMed' 'toneHarpReleaseLow' c 'toneHarpAttack11'                      'toneHarpReleaseHigh' e-d
+'toneHarpAttack13' 'toneHarpSustainLow' 'toneHarpReleaseLow' c 'toneHarpAttack11' 'toneHarpSustainMed' 'toneHarpReleaseHigh' e-d
+'toneHarpAttack14'                      'toneHarpReleaseLow' c 'toneHarpAttack12'                      'toneHarpReleaseHigh' e-d
+'toneHarpAttack14' 'toneHarpSustainLow' 'toneHarpReleaseLow' c 'toneHarpAttack12' 'toneHarpSustainMed' 'toneHarpReleaseHigh' e-d
+## 43(at beat 4) / 45(at beat 2)
+[2
+  [2
+    'toneHarpAttack15' 'toneHarpSustainHigh' 'toneHarpReleaseLow' c 'toneHarpAttack13'                       'toneHarpReleaseHigh' e-d
+    'toneHarpAttack15' 'toneHarpSustainMed'  'toneHarpReleaseLow' c 'toneHarpAttack13' 'toneHarpSustainHigh' 'toneHarpReleaseHigh' e-d
+  ]
+  j2
+  ## 44 (at beat 3)
+                    'toneHarpSustainMed' 'toneHarpReleaseLow' c 'toneHarpAttack11'                       'toneHarpReleaseHigh' e-d
+  'toneHarpAttack13' 'toneHarpSustainLow' 'toneHarpReleaseLow' c 'toneHarpAttack11' 'toneHarpSustainMed'  'toneHarpReleaseHigh' e-d
+  'toneHarpAttack14'                      'toneHarpReleaseLow' c 'toneHarpAttack12'                       'toneHarpReleaseHigh' e-d
+  'toneHarpAttack14' 'toneHarpSustainLow' 'toneHarpReleaseLow' c 'toneHarpAttack12' 'toneHarpSustainMed'  'toneHarpReleaseHigh' e-d
+]
+## 46
+>
+[2
+  'toneHarpAttack15' 'toneHarpSustainHigh' 'toneHarpReleaseLow' e- 'toneHarpAttack13'                       'toneHarpReleaseHigh' f+f
+  'toneHarpAttack15' 'toneHarpSustainMed'  'toneHarpReleaseLow' e- 'toneHarpAttack13' 'toneHarpSustainHigh' 'toneHarpReleaseHigh' f+f
+]
+## 46 (at beat 4)
+[2
+  'toneHarpAttack14' 'toneHarpSustainMed'  'toneHarpReleaseLow' e- 'toneHarpAttack12'                       'toneHarpReleaseHigh' g+b-
+  'toneHarpAttack14'                       'toneHarpReleaseLow' e- 'toneHarpAttack12' 'toneHarpSustainLow'  'toneHarpReleaseHigh' g+b-
+]
+## 47 (at beat 3)
+[4
+  'toneHarpAttack13' 'toneHarpSustainMed'  'toneHarpReleaseLow' e- 'toneHarpAttack11'                       'toneHarpReleaseHigh' bb-
+  'toneHarpAttack13' 'toneHarpSustainLow'  'toneHarpReleaseLow' e- 'toneHarpAttack11'                       'toneHarpReleaseHigh' bb-
+]
+## 49
+## Synth Harp Low Note, originally channel 3
+'synthHarpCommon-o1'l16 'synthHarpLowNoteEcho' 
+'synthHarpOneTimeSetup'
+%g1 %k7 'harpPattern' %k0 %g0
+;
+
+
+{5}
+## 1-6
+[6 r1]
+## 7
+$
+r1
+## 8
+r8
+## Icicle, originally channel 6
+'icicleCommon'
+'icicleEarlyVolPan1'  'icicleAttack15''icicleHighNote1' 'icicleAttack11''icicleHighNote2'
+'icicleEarlyVolPan2'  'icicleAttack14''icicleHighNote1' 'icicleAttack11''icicleHighNote2'
+'icicleEarlyVolPan3'  'icicleAttack14''icicleHighNote1' 'icicleAttack11''icicleHighNote2'
+'icicleEarlyVolPan4'  'icicleAttack14''icicleHighNote1' 'icicleAttack11''icicleHighNote2'
+'icicleEarlyVolPan5'  'icicleAttack14''icicleHighNote1' 'icicleAttack10''icicleHighNote2'
+'icicleEarlyVolPan6'  'icicleAttack14''icicleHighNote1' 'icicleAttack10''icicleHighNote2'
+'icicleEarlyVolPan7'  'icicleAttack13''icicleHighNote1' 'icicleAttack9' 'icicleHighNote2'
+'icicleEarlyVolPan8'  'icicleAttack12''icicleHighNote1' 'icicleAttack11''icicleHighNote2'
+'icicleEarlyVolPan9'                  'icicleHighNote1'                 'icicleHighNote2'
+'icicleEarlyVolPan10'                 'icicleHighNote1'                 'icicleHighNote2'
+'icicleEarlyVolPan11' 'icicleAttack10''icicleHighNote1'                 'icicleHighNote2'
+'icicleEarlyVolPan12'                 'icicleHighNote1' 'icicleAttack9' 'icicleHighNote2'
+## Piano, originally channel 4
+'pianoCommon+o2' l4
+## This loop has a varying duration. Either 9 beats (for iterations 1 and 3) or 15 beats (for iterations 2 and 4). It plays 12 measures in total.
+## Since note setups and durations are identical each loop but the actual note varies, we use transposes to avoid repetition.
+[4
+  ## 9(at beat 2) / 11(at beat 3) / 15(at beat 2) / 17(at beat 3)
+  'pianoTranquilNote1Setup'g'pianoTranquilNote2Setup'g'pianoTranquilNote3Setup'g'pianoTranquilNote4Setup'g'pianoTranquilNote5Setup'g'pianoTranquilNote6Setup'g
+  r2
+  j3,210
+  %k-2
+  j1,210
+  r2^1 %k-7
+  $210
+  j4
+  r
+]
+## 21
+%k0 r1
+## 22
+## Timbale, originally channel 6
+'timbaleLowVol''timbaleFadeToHigh' "!!!o"[4 "o16.q16."]
+## 22 (at beat 4)
+'timbaleSteadyVol'
+## 4 iterations of this lasts 3 beats, so this whole loop is 27 beats (6.75 measures)
+[36 "p16.q16."]
+## 29 (at beat 3)
+## Each iteration lasts 3 beats, for a total of 30 beats (7.5 measures) for the loop
+[10 "!!!o c16.d16.e16.f16. !! g16.h16.i16.j16."]
+## 37-42
+[6 r1]
+## 43
+## Melody Atmospheric Flute Echo, originally channel 7
+'atmoFluteMelodyEcho'
+r32.g32.<c32.d32.'atmoFluteFastAttack'e-2^8^32'atmoFluteFasterAttack'd32.e-32.'atmoFluteFastAttack'd16
+## 44
+^2>b-8.<c16^4
+## 45
+^1
+## 46
+^8.e-16^2f8.f+8
+## 47(one 16th in)
+^4f4.e-8^4
+## 48(one 16th in)
+^1
+## 49(one 16th in)
+^32>b-16.<c16^2.
+## 50
+^1
+## 51
+^1
+;
+
+
+{6}
+## 1-6
+[6 r1]
+## 7
+$
+r1
+## 8-21
+## Snow Steps, originally channel 8
+r2 [9 "s2^16t2..."]
+## 22
+## Atmospheric Flute Chord Early Low Note, originally channel 2
+'atmoFluteChordEarlyLow+o1'
+c1
+## 23-29 (at beat 3)
+[13 ^2]
+## 29(at beat 3)
+r2
+## 30
+r1
+## 31
+## Electronic Beat Middle Note, originally channel 4
+'electronicBeatMidNote+o1'
+## Each iteration lasts 1.5 beats, for a total of 24 beats (6 measures) for the loop
+[16
+  'electronicBeatFastAttack' c8.
+  'electronicBeatSlowAttack' c8.
+]
+## 37
+## Snow Steps, originally channel 8
+"!!!o x32."
+[4
+  ## 37 / 40 / 43 / 46 (3 64ths in)
+  r2...^64
+  ## 38 / 41 / 44 / 47
+  r1
+  j4
+  ## 39 / 42 / 45
+  r2.^16
+   'snowStepRFade'"r32.r32.r32.r32."
+  ## 40 / 43 / 46
+  "r32."
+]
+## 48
+r1
+## 49
+## Electronic Percussion, originally channel 4
+## Each iteration lasts .75 beats, for a total of 12 beats (or 3 measures) for the loop
+[16 "!!!o a32.b32.b32.b32."]
+;
+
+
+{7}
+## 1-6
+[6 r1]
+## 7-22
+$
+[16 r1]
+[3
+  ## 23 / 26 / 29
+  r8
+  ## Icicle, originally channel 7
+  'icicleCommon'
+  'icicleHighNoteVolPan1' 'icicleAttack14''icicleHighNote1' 'icicleAttack10''icicleHighNote2'
+  'icicleHighNoteVolPan2' 'icicleAttack13''icicleHighNote1' 'icicleAttack10''icicleHighNote2'
+  'icicleHighNoteVolPan3' 'icicleAttack13''icicleHighNote1' 'icicleAttack10''icicleHighNote2'
+  'icicleHighNoteVolPan4' 'icicleAttack13''icicleHighNote1' 'icicleAttack10''icicleHighNote2'
+  'icicleHighNoteVolPan5' 'icicleAttack13''icicleHighNote1' 'icicleAttack9' 'icicleHighNote2'
+  'icicleHighNoteVolPan6' 'icicleAttack13''icicleHighNote1' 'icicleAttack9' 'icicleHighNote2'
+  'icicleHighNoteVolPan7' 'icicleAttack12''icicleHighNote1' 'icicleAttack8' 'icicleHighNote2'
+  'icicleHighNoteVolPan8' 'icicleAttack11''icicleHighNote1' 'icicleAttack10''icicleHighNote2'
+  'icicleHighNoteVolPan9' 'icicleAttack11''icicleHighNote1' 'icicleAttack10''icicleHighNote2'
+  'icicleHighNoteVolPan10''icicleAttack11''icicleHighNote1' 'icicleAttack10''icicleHighNote2'
+  'icicleHighNoteVolPan11'                'icicleHighNote1' 'icicleAttack9' 'icicleHighNote2'
+  'icicleHighNoteVolPan12''icicleAttack10''icicleHighNote1' 'icicleAttack9' 'icicleHighNote2'
+  r4
+  j3
+  ## 24 (at beat 3)
+  r8
+  >
+  'icicleLowNoteVolPan1' 'icicleAttack11''icicleLowNote1' 'icicleAttack9' 'icicleLowNote2'
+  'icicleLowNoteVolPan2' 'icicleAttack11''icicleLowNote1' 'icicleAttack9' 'icicleLowNote2'
+  'icicleLowNoteVolPan3' 'icicleAttack10''icicleLowNote1' 'icicleAttack8' 'icicleLowNote2'
+  'icicleLowNoteVolPan4' 'icicleAttack10''icicleLowNote1'                 'icicleLowNote2'
+  'icicleLowNoteVolPan5' 'icicleAttack11''icicleLowNote1' 'icicleAttack10''icicleLowNote2'
+  'icicleLowNoteVolPan6' 'icicleAttack11''icicleLowNote1' 'icicleAttack10''icicleLowNote2'
+  'icicleLowNoteVolPan7'                 'icicleLowNote1' 'icicleAttack9' 'icicleLowNote2'
+  'icicleLowNoteVolPan8' 'icicleAttack10''icicleLowNote1' 'icicleAttack9' 'icicleLowNote2'
+  r8r2
+]
+## 30(at beat 3)
+r1
+## 31(at beat 3)
+r1
+## 32(at beat 3)
+r1
+## 33(at beat 3)
+r4
+[2
+  ## 33(thirteen 16ths in) / 35(five 16ths in)
+  ## High clicks (originally channel 6)
+  "!!!o"r16[5 "z64" r32]
+  ## 34(three 64ths in) / 35(thirty-five 64ths in)
+  r64r8.
+  j2
+  r2.
+  ## 35
+  r4
+]
+## 36(at beat 4)-51
+[65 r4]
+;
+
+
+{8}
+## Low base, originally channel 5
+'lowBaseAdd-o2'
+c1
+## 2-7
+[6 ^1]
+## We've had our pre-loop measure 7, jump over the post-loop measure 7
+%j808
+$
+## 7 (After infinite loop point)
+'lowBaseAdd-o2'
+c1
+$808
+## 8-21
+[14 ^1]
+## 22-29 (first two beats)
+## Snow Steps, originally channel 8
+"!!!o"
+[5 "u16.v4...w2..."]
+## 29 (at beat 3)
+## Low base, originally channel 5
+'lowBaseAdd-o2'
+c2
+## 30 - 35 (at beat 3)
+[11 ^2]
+## 35 (at beat 3)
+'lowBaseAddAccentSetup' f16. g32^4
+c8
+## 36
+^1
+'lowBaseAddAlternanceSetup'
+## This loop lasts 6 beats
+[8
+  ## 37 / 38.5 / 40 / 41.5 / 43 / 44.5 / 46 / 47.5
+  r32.
+  ## Low Base, originally channel 1
+  c32.
+  ## Snow Steps, originally channel 1
+  r8r64
+  ## Low Base, originally channel 1
+  j3,340 j4,341 c4^64^1
+]
+## 49-51
+## This loop lasts 3 beats. 4 Loops covers 12 beats (so 3 measures)
+[4
+  ## Snow Steps, originally channel 1
+  r32
+  ## Low Base, originally channel 1
+  c4^16.
+  ## Snow Steps, originally channel 1
+  r32
+  ## Low Base, originally channel 1
+  c4^16.
+]
+;
+
+
+
+## Plays a pattern of harp notes, lasting 3 measures. The notes are played as in measure 40-42 on the lowToneHarp, but this can be called at different octaves or with a transpose to play other measures of other harp instruments.
+## This must be called with the sample and any one-time setup already done, but it will play the notes and alternate between multiHarpAccentNoteSetup and multiHarpOffNoteSetup (altering the attack and release rate)
+#def harpPattern= [j1,9240]
+$9240
+## 40
+## ## Low tone Harp, originally channel 2
+## 'lowToneHarpCommon-o1'
+## 'lowToneHarpOneTimeSetup'
+l16
+'multiHarpAccentNoteSetup'c'multiHarpOffNoteSetup'e-d
+'multiHarpAccentNoteSetup'c'multiHarpOffNoteSetup'e-f
+'multiHarpAccentNoteSetup'c'multiHarpOffNoteSetup'cb-
+'multiHarpAccentNoteSetup'<c>'multiHarpOffNoteSetup'b-g
+## Measure 40 (at beat 4)
+'multiHarpAccentNoteSetup'>b-<'multiHarpOffNoteSetup'e-d
+'multiHarpAccentNoteSetup'>b-<'multiHarpOffNoteSetup'e-f
+'multiHarpAccentNoteSetup'>b-<'multiHarpOffNoteSetup'cb-
+'multiHarpAccentNoteSetup'<c>'multiHarpOffNoteSetup'b-g
+## Measure 41 (at beat 3)
+'multiHarpAccentNoteSetup'>f<'multiHarpOffNoteSetup'fe-
+'multiHarpAccentNoteSetup'>f<'multiHarpOffNoteSetup'fg
+'multiHarpAccentNoteSetup'>f<'multiHarpOffNoteSetup'cb-
+'multiHarpAccentNoteSetup'<c'multiHarpOffNoteSetup'e-f
+## Measure 42 (at beat 2)
+'multiHarpAccentNoteSetup'c'multiHarpOffNoteSetup'gf
+'multiHarpAccentNoteSetup'c'multiHarpOffNoteSetup'gb-
+'multiHarpAccentNoteSetup'<c>'multiHarpOffNoteSetup'b-g
+'multiHarpAccentNoteSetup'f'multiHarpOffNoteSetup'e->b-
+## Then go back to wherever we came from
+]

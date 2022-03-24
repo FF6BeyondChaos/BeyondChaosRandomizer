@@ -666,9 +666,9 @@ name_text           Dumpster
 description         Muppets' Dumpster
 tier                high
 
-! Run Away!
+! Run Away
 price               1
-itemtype            21
+itemtype            11
 equippable          3fff
 learnrate           14
 learnspell          22
@@ -676,11 +676,11 @@ power               1
 speedvigor          70
 mblockevade         33
 breakeffect         c2
+otherproperties     04
 targeting           02
 hitmdef             c8
 statusacquire3      01
 statboost1          08
-otherproperties     04
 weapon_animation    24 24 1f 0 78 0 a4 0
 name_icon           d9
 name_text           Run Away!

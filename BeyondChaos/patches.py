@@ -1,4 +1,5 @@
-from utils import Substitution
+from utils import Substitution, RANDOM_MULTIPLIER
+from random import Random
 
 
 def allergic_dog(fout):
@@ -157,7 +158,13 @@ def show_coliseum_rewards(fout):
         0x68, 0xC0, 0x60, 0xA9, 0xFF, 0x20, 0x54, 0xF9, 0x60, 0xFF
         ])
     rewards_sub.write(fout)
-    
+
+def sprint_shoes_break(fout):
+    sprint_shoes_sub = Substitution()
+    sprint_shoes_sub.set_location(0x2273D)
+    sprint_shoes_sub.bytestring = bytes([0xE7])
+    sprint_shoes_sub.write(fout)
+
 def cycle_statuses(fout):
     cycles_sub = Substitution()
     cycles_sub.set_location(0x012E4F) #C12E4F
@@ -274,11 +281,45 @@ def cycle_statuses(fout):
     ]) 
     cycles_sub.write(fout)
 
+
 def no_dance_stumbles(fout):
     nds_sub = Substitution()
     nds_sub.set_location(0x0217A0) #C217A0
     nds_sub.bytestring = bytes([0xEA, 0xEA])            #No Op x2
     nds_sub.write(fout)
+
+
+def change_swdtech_speed(fout, random: Random, speed: str = "Vanilla"):
+    swdtech_speed = 0x03
+    if speed.lower() == "fastest":
+        swdtech_speed = 0x00
+    elif speed.lower() == "faster":
+        swdtech_speed = 0x01
+    elif speed.lower() == "fast":
+        swdtech_speed = 0x02
+    elif speed.lower() == "random":
+        swdtech_speed = random.randint(0, 3)
+    css_sub = Substitution()
+    css_sub.set_location(0x017D87)
+    css_sub.bytestring = bytes([swdtech_speed])
+    css_sub.write(fout)
+
+
+def change_cursed_shield_battles(fout, random: Random, amount: int = None):
+    ccsb_sub = Substitution()
+    ccsb_sub.set_location(0x025FF7)  # C25FF7
+    if not amount or amount == "random":
+        base_cursed_shield_battle_amount = 48
+        standard_deviation_number = 16 * RANDOM_MULTIPLIER
+        if standard_deviation_number == 0:
+            # Tierless - could be anything!
+            amount = random.randint(1, 256)
+        else:
+            amount = max(1, int(random.gauss(base_cursed_shield_battle_amount, standard_deviation_number)))
+    else:
+        amount = int(amount)
+    ccsb_sub.bytestring = bytes([amount])
+    ccsb_sub.write(fout)
 
 def fewer_flashes(fout):
     anti_seizure_sub = Substitution()
@@ -518,7 +559,7 @@ def fewer_flashes(fout):
     anti_seizure_sub.bytestring = bytes([0xE0])
     anti_seizure_sub.write(fout)
 
-    anti_seizure_sub.set_location(0x10299C)  # D0299C
+    anti_seizure_sub.set_location(0x10296C)  # D0296C
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
@@ -723,7 +764,7 @@ def fewer_flashes(fout):
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
-    anti_seizure_sub.set_location(0x105A78)  # D05A78
+    anti_seizure_sub.set_location(0x105A7A)  # D05A7A
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
@@ -880,7 +921,7 @@ def fewer_flashes(fout):
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
-    anti_seizure_sub.set_location(0x1074F8)  # D074F8
+    anti_seizure_sub.set_location(0x107508)  # D07508
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 

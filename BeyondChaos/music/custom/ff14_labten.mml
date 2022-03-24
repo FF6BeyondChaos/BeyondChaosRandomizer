@@ -1,0 +1,255 @@
+#TITLE From Below
+#ALBUM Final Fantasy XIV: Endwalker
+#COMPOSER Masayoshi Soken
+#ARRANGED emberling
+
+#WAVE 0x20 0x62 strings
+#WAVE 0x21 0x71 violin
+#WAVE 0x22 0x73 choir
+#WAVE 0x23 0x07 piano
+#WAVE 0x24 0x44 dist guitar 5th
+#WAVE 0x25 0x52 bass
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x4A tom
+#WAVE 0x2C 0x2D crash
+#WAVE 0x2E 0x3D hihat
+#WAVE 0x2F 0x3A hihat2
+
+#def init= t116 %v50 %b0,100 %f0,0 %x240
+
+#def strings= |0 's' o5 %e1
+#def violin=  |1 'v' o4 %e1 'viosus' m24,18,231
+#def choir=   |2 'c' o5 %e1
+#def piano=   |3 'p' o5 %e1 %r12
+#def dist=    |4 'd' o5 %e1
+#def bass=    |5 'b' o6 %e0
+
+#def strenv= %a7%y0%s6%r25
+#def stvienv= %y0%s3%r23
+
+#def viosus= %r7
+#def viorel= %r20
+
+#def s= v75
+#def v= v100
+#def c= v33
+#def p= v100
+#def d= v100
+#def b= v50
+
+#def pf= v1,100
+#def piaslide= 'piano+o2*v.5''pf*v48,1'%r19
+
+#def ahh= v144,29
+#def eyy= v17v144,33
+#def ooh= v11v144,22
+#def aah= v144,33
+
+#drum "k"= 5a |8 v100 p64 %e0 
+#drum "s"= 5a |9 v100 p64 %e1 %a13
+#drum "s-"=5a |9 v50  p64 %e0 %a13
+#drum "t"= 5a |9 v100 p64 %e1 %a15
+#drum "u"= 5a |9 v125 p64 %e1 %y4%s5
+#drum "r"= 6c+ |9 v75 p64 %e0 %r25
+#drum "q"= 6c+ |9 v75 p64 %e0 %r20
+
+#drum "a"= 5f |A v33 p80 %e0
+#drum "b"= 5d |A v33 p64 %e0
+#drum "c"= 4a |A v33 p48 %e0
+
+#def hatvol= v33
+#def pedvol= v50
+#def opevol= v75
+
+#drum "h"= 5a |E 'hatvol*v1.00' p32 %e0 %y5%s0
+#drum "i"= 5a |E 'hatvol*v0.33' p32 %e0 %y5%s0
+#drum "p"= 5g |E 'pedvol*v1.00' p32 %e1 %y4%s0
+#drum "o"= 5g |E 'opevol*v1.00' p32 %e1 %y1%s0
+#drum "j"= 5g |E 'opevol*v0.50' p32 %e1 %y3%s0
+
+#drum "y"= 5f |C v125 p70 %e1 %y0%s5%r23
+#drum "z"= 5a+|C v75  p32 %e1 %y0%s0%r23
+
+#drum "d"= 5c |F v40 p80 %e0
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init' l16
+r4"abc8"
+$## 2
+'piano-o1' p48
+[4 p144,80 [3cdd+g<] p144,48 [3c>gd+d] ]
+## 10
+p72 << l8
+c2>a+<c >g2.<
+c2>a+<c >g2g+4
+g1.
+l16 "!!!o" r4"abc8"
+## 17
+'violin-o1' p56 l8
+r4g4<(cd) m9,1d4f4dm6,1^  dd+d>m4,-2a^2.'viorel'^2'viosus'
+  g4<cd d+4f4dm6,1^  c4.m9,7c^2.'viorel'^4
+## 25
+'piano' p63 d4
+'violin' p72 l8
+a4<dm6,2^12m12,-1^24 m9,1e4g4em6,1^ ef12m8,-1^24e>a4. ^2'viorel'^4
+'piano*v1.25-o1' p59 a+4
+'violin' p72 l8
+a4<dm2,5^ fgfec>a<
+m12,2c1.'viorel'^4
+'piaslide' l12
+p88 d+> p76 d+> p64 d+
+;
+
+{2}
+r4"r4"
+$## 2
+[ 'strings+o1' p88 'strenv' l8 &93
+d+2. d+24d12^ d's*v.25'd's'd's*v.58'd's'
+c2.  c24d12^  d's*v.33'd's'd's*v.58'd ^64]
+## 10
+'choir' p96 c1. c+1.
+'strings+o1' p88 l16 'stvienv'
+[6 d+fd+c] d2
+## 17
+'piano' l16
+p64 d+2. p66 f2. p63 d2. p88'p*v.5''pf*v144,1' <<rd+ p90p120,61 fd+ c>g+gd+ c>g+gd+
+c2. p66 f2. p63 d2. p68 'pf*v144,.67' r p132,87 gg+a+<cdd+fgg+a+<c
+## 25
+'piano-o1' p59 a+4
+'violin*v.67' p40 l8
+m9,2c4m3,-2gm3,-2a m6,2g4a+4ga12m8,-2^24 gag>m12,1b4. ^2'viorel'^4
+'piano-o1' p58 a4
+'violin*v.67-o1' p40 l8
+m12,2a+4<f12m8,-1^24a+12m8,-1^24 m6,2ga+ag(ec)
+m12,1e1.'viorel'^4
+'piaslide' l12
+r48 p87 d> p75 d> p63 d16
+;
+
+{3}
+r2
+$## 2
+'bass-o2' l8 p64
+[c4.g4>a+  a+4.<g+gd    d+4g+d+>b<c  d4d>a+4<d]
+## 10
+[>g+.<d+.g+4d+]
+[c+.g+.<c+4>j2g+]c+
+[cr16cr16crc]
+>g.<g.>g24r12
+## 17
+f.<f.c>f<f>  g.<g.d+dd+
+c.<c.>a+fg   d+m3,-1^fd>a+g
+f.<f.ef>f    g.<g.f+g>g<
+c.<c.>b<c>a+ ff+gd+d>a+
+## 25
+g.<g.d>g<g>  a.<a.g+ae
+d.<d.c+>ga   fegfd>a
+g.<g.f+g>g   a.<a.g+a>a
+<d4d4d4d4    d4c4>a+4a4
+;
+
+{4}
+l16 "ks8s-ts-k8"
+$## 2
+l8 "!!!o" "k.s.ksk" "k.s.ktk" "k.s.kuk" "k.s.kt16b16c"
+l8        "k.s.ksk" "k.s.ktk" "k.s.ksk" "k.s.kt16s16k16s16"
+## 10
+l8        "k.s.ksk" "k.s.ktk" "k.s.kuk" "k.t.kt16b16c"
+l8        "k.s.ktk" "k.s.kt16s16k16s16"
+l16       "ks8s-ts-k8"
+## 17
+l8        "k.s.ksk" "k.s.ksk" "k.s.ktk" "k.s.kt16b16c"
+l8        "k.s.ksk" "k.s.ktk" "k.s.ksk" "k.s.ku16s16b16c16"
+## 25
+l8        "k.s.ksk" "k.s.ksk" "k.s.ktk" "k.s.kt16b16c"
+l8        "k.s.ksk" "k.s.kuk"
+l16       [6"k4"] "ks8s-ts-k8"
+;
+
+{5}
+r2
+$## 2
+'dist-o2' p60 l8
+[<c2.> a+4.a+a+a+ g+2. a+4.a+a+a+]
+## 10
+g+1^4.'d*v.75'g+24'd*v.5'g+24g+24'd'
+<c+2.c+2^c+
+ c2^c c4.c4c>
+g8.r8. k13m24,1b24m16,-5^12k0
+## 17
+'choir' p96
+c2. f2. >g1.<
+c2. d2. c1.
+## 25
+'piano+o2*v.5' l16
+r64 p87 d2. p85 c2. p82 >a2.<
+p89 r32.e p90p120,59'pf*v120,1' fec>fec>afec
+p63 d2. p65 e2.
+<< p87'p*v.2'd4'p*v.28'd4'p*v.36'd4'p*v.44'd4'p*v.52'd4'p*v.60'd4'p*v.68'd4
+'piaslide' l12
+r24 p85 c> p73 c> p61 c24
+;
+
+{6}
+r2
+$## 2
+[ 'strings' p40 'strenv' l8 &92
+c2.  c24>a+12^  a+'s*v.33'a+'s'a+'s*v.67'a+'s'
+g+2.  g+24a+12^ a+'s*v.33'a+'s'a+'s*v.67'a+ ^48<]
+## 10
+'choir*v.75' p88 [([24f16])]
+'strings+' p40 l16 'stvienv'
+[6 gg+gd+] f2
+## 17
+'piano-o1' p56 g2. p59 a+2. p61 <c1^8 p66 f4.
+'choir-o1' p96 g+2.
+'piano-o1' p59 a+2. p56 g1.
+## 25
+g2. p65 <e2. p66 f1.>
+g2. p61 <c2. p66'p*v.80'f4'p*v.60'f4'p*v.85'f4'p*v.65'f4'p*v.90'f4'p*v.70'f4'p*v.95'f4
+'piaslide' l12
+r24. p80 >g p68 >g p56 >g48
+;
+
+{7}
+r2
+$## 2
+'choir' p96 l16
+['ahh'([12c])> 'eyy'([12a+]) 'ooh'([12g+]) 'aah'([12a+]) <]
+## 10
+'piano*v.67' p56 l8
+c2>a+<c >g2.<
+c2>a+<c >g2g+4
+'choir*v1.67' p96 %y0%s6%r23 l8
+cc4 'c*v.4' c4c
+cc4         c4c
+>b2
+## 17
+'piano-o1' p59 a+2. < p63 d2. p56 >g1^8< p63 d4.
+r2. d2. p61 c1.
+## 25
+p58 >a2. a2. p59 a+1.
+"!!!o y2."
+'piano-o1' p58 a2. <p65'p*v.65'e4'p*v.60'e4'p*v.75'e4'p*v.65'e4'p*v.80'e4'p*v.70'e4'p*v.85'e4
+"!!!o" l16 "abc8"
+;
+
+{8}
+r2
+$## 2
+l16 "y8.o8.i8j8i8" "h8po8.i8r8i8" "h8po8.i8q8i8" "h8po8.i8r8i8"
+    "h8po8.i8j8i8" "h8po8.i8r8i8" "h8po8.i8j8i8" "h8po8.i8r8i8"
+## 10
+    "y8.o8.i8j8i8" "h8po8.i8r8i8" "y8.o8.i8r8i8" "h8po8.i8r8i8"
+    "y8.o8.i8r8i8" "h8po8.i8r8i8" r4"r4"
+## 17
+    "y8.od8i8j8d8" "h8po8.d8j8i8" "h8do8.i8r8i8" "d8po8.d8r8i8"
+    "y8.od8i8j8d8" "h8po8.i8d8i8" "h8do8.i8j8i8" "d8po8.d8r8i8"
+## 25
+    "y8.od8i8j8d8" "h8po8.i8d8i8" "h8do8.i8r8i8" "d8po8.d8r8i8"
+    "h8pod8i8j8d8" "h8po8.i8d8i8" [7 "!!!o z4"] "r4"
+;
