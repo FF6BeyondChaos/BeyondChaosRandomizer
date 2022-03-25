@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import configparser
 import multiprocessing
+import customthreadpool
 from hashlib import md5
 import os
 import re
@@ -5280,7 +5281,7 @@ def randomize(**kwargs) -> str:
                     "rom_type": "1.0",
                     "list_of_monsters": get_monsters(outfile)
                 }
-                pool = bcmultiprocessing.Pool()
+                pool = customthreadpool.NonDaemonPool()
                 x = pool.apply_async(func=remonsterate, kwds=kwargs)
                 remonsterate_results = x.get()
                 pool.close()
