@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import configparser
-import multiprocessing
 import customthreadpool
 from hashlib import md5
 import os
@@ -84,6 +83,7 @@ seed, flags = None, None
 seedcounter = 1
 sourcefile, outfile = None, None
 fout = None
+using_console = False
 
 NEVER_REPLACE = ["fight", "item", "magic", "row", "def", "magitek", "lore",
                  "jump", "mimic", "xmagic", "summon", "morph", "revert"]
@@ -5275,17 +5275,32 @@ def randomize(**kwargs) -> str:
 
         while True:
             try:
-                kwargs = {
-                    "outfile": outfile,
-                    "seed": (seed + attempt_number),
-                    "rom_type": "1.0",
-                    "list_of_monsters": get_monsters(outfile)
-                }
-                pool = customthreadpool.NonDaemonPool()
-                x = pool.apply_async(func=remonsterate, kwds=kwargs)
-                remonsterate_results = x.get()
-                pool.close()
-                pool.join()
+                if not using_console:
+                    kwargs = {
+                        "outfile": outfile,
+                        "seed": (seed + attempt_number),
+                        "rom_type": "1.0",
+                        "list_of_monsters": get_monsters(outfile)
+                    }
+                    pool = customthreadpool.NonDaemonPool(1)
+                    x = pool.apply_async(func=remonsterate, kwds=kwargs)
+                    remonsterate_results = x.get()
+                    pool.close()
+                    pool.join()
+
+                elif using_console:
+                    kwargs = {
+                        "outfile": outfile,
+                        "seed": (seed + attempt_number),
+                        "rom_type": "1.0",
+                        "list_of_monsters": get_monsters(outfile)
+                    }
+                    thread = customthreadpool.ThreadWithReturnValue(target=remonsterate, kwargs=kwargs)
+                    thread.start()
+                    remonsterate_results = thread.join()
+                    if not remonsterate_results:
+                        # If there were no results, We can assume remonsterate generated an OverflowError.
+                        raise OverflowError
 
             except OverflowError as e:
                 print("Remonsterate: An error occurred attempting to remonsterate. Trying again...")
@@ -5568,6 +5583,7 @@ def randomize(**kwargs) -> str:
 
 
 if __name__ == "__main__":
+    using_console = True
     args = list(argv)
     # if len(argv) > 3 and argv[3].strip().lower() == "test" or TEST_ON:
     #    randomize(args=args)

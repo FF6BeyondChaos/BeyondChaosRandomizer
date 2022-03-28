@@ -1,4 +1,3 @@
-import imp
 import os
 from .tools.tablereader import (
     set_global_label, set_global_table_filename, determine_global_table,
