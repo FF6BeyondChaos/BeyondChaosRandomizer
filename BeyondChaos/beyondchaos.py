@@ -19,12 +19,12 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
                              QDialogButtonBox)
 
 # Local application imports
-import randomizer
 import utils
 import customthreadpool
 from config import (readFlags, writeFlags)
 from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES)
 from update import (update, update_needed)
+from randomizer import randomize
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. "
@@ -1266,7 +1266,7 @@ class Window(QWidget):
                         }
                         # pool = multiprocessing.Pool()
                         pool = customthreadpool.NonDaemonPool(1)
-                        x = pool.apply_async(func=randomizer.randomize, kwds=kwargs)
+                        x = pool.apply_async(func=randomize, kwds=kwargs)
                         x.get()
                         pool.close()
                         pool.join()
