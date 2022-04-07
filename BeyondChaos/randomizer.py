@@ -74,10 +74,10 @@ VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-#TEST_SEED = "2|normal|bcdefgimnopqrstuwyz makeover partyparty novanillar andombosses supernatural alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent canttouchthis suplexwrecks cursepower:1 |1603333081"
+TEST_SEED = "3|normal|bcdefgimnopqrstuwyz makeover partyparty novanilla randombosses supernatural alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent canttouchthis norng easymodo |1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "3|normal|bcdefgimknopqrstwzmakeoverpartypartyfrenchvanillaelectricboogaloocapslockoffjohnnydmad|2305050"
+#TEST_SEED = "3|normal|bcdefgimknopqrstwzmakeoverpartypartyfrenchvanillaelectricboogaloocapslockoffjohnnydmad|2305050"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -2097,6 +2097,8 @@ def manage_monsters() -> List[MonsterBlock]:
     final_bosses = (list(range(0x157, 0x160)) + list(range(0x127, 0x12b)) + [0x112, 0x11a, 0x17d])
     for m in monsters:
         if "zone eater" in m.name.lower():
+            if Options_.is_code_active("norng"):
+                m.aiscript = [b.replace(b"\x10", b"\xD5") for b in m.aiscript]
             continue
         if not m.name.strip('_') and not m.display_name.strip('_'):
             continue
@@ -3528,7 +3530,6 @@ def manage_tower():
     npc = [n for n in get_npcs() if n.event_addr == 0x2D1FF][0]  # Magic DOES exist Guy
     npc.event_addr = 0x2D1FB  # Follow the Elder Guy event address
 
-
 def manage_strange_events():
     shadow_recruit_sub = Substitution()
     shadow_recruit_sub.set_location(0xB0A9F)
@@ -4078,6 +4079,48 @@ def manage_bingo(bingoflags=[], size=5, difficulty="", numcards=1, target_score=
         f.write(s)
         f.close()
 
+def fix_norng_npcs():
+
+    # move npcs who block you with norng
+    npc = [n for n in get_npcs() if n.event_addr == 0x8F8E][0]  # Nikeah Kid
+    npc.x = 8
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x18251][0]  # Zone Eater Bouncers (All 3)
+    npc.x = 38
+    npc.y = 32
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x18251][1]  # Zone Eater Bouncers (All 3)
+    npc.x = 46
+    npc.y = 30
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x18251][2]  # Zone Eater Bouncers (All 3)
+    npc.x = 33
+    npc.y = 32
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x25AD5][0]  # Frantic Tzen Codger
+    npc.x = 20
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x25AD9][0]  # Frantic Tzen Crone
+    npc.x = 20
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x25BF9][0]  # Albrook Inn Lady
+    npc.x = 55
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x145F3][0]  # Jidoor Item Scholar
+    npc.x = 28
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x8077][0]  # South Figaro Codger
+    npc.x = 23
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x8085][0]  # South Figaro Bandit
+    npc.x = 29
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x25DDD][0]  # Seraphim Thief
+    npc.y = 5
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x26A0E][0]  # Kohlingen WoB Lady
+    npc.x = 2
+    npc.y = 17
 
 def manage_clock():
     hour = random.randint(0, 5)
@@ -5142,6 +5185,8 @@ def randomize(**kwargs) -> str:
         # do this before treasure
         manage_tower()
     reseed()
+    if Options_.is_code_active("norng"):
+        fix_norng_npcs()
 
     if Options_.random_formations or Options_.random_treasure:
         assign_unused_enemy_formations()
