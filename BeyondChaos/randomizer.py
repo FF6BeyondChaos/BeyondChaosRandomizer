@@ -74,10 +74,10 @@ VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "2|normal|bcdefgimnopqrstuwyz makeover partyparty novanillar andombosses supernatural alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent canttouchthis suplexwrecks cursepower:1 |1603333081"
+#TEST_SEED = "2|normal|bcdefgimnopqrstuwyz makeover partyparty novanillar andombosses supernatural alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent canttouchthis suplexwrecks cursepower:1 |1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-#TEST_SEED = "2|normal|bdefgijmnopqrstuwyzmakeoverpartypartynovanillaelectricboogaloorandombossesalasdracojohnnydmadbsiabmimetimedancingmaduinquestionablecontentdancelessons|1639809308"
+TEST_SEED = "3|normal|bcdefgimknopqrstwzmakeoverpartypartyfrenchvanillaelectricboogaloocapslockoffjohnnydmad|2305050"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -4986,6 +4986,7 @@ def randomize(**kwargs) -> str:
         manage_items(items, changed_commands=changed_commands)
         buy_owned_breakable_tools(fout)
         improve_item_display(fout)
+        improve_rage_menu(fout)
     reseed()
 
     if Options_.random_enemy_stats:
