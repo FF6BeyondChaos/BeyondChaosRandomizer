@@ -1015,6 +1015,58 @@ def fewer_flashes(fout):
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
+    #
+    # Duncan Bum Rush Cut Scene Flashes
+    #
+
+    anti_seizure_sub.set_location(0xC03CA)
+    anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0xC0469)
+    anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0xC0D12)
+    anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0xC0D5F)
+    anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0xC0D7F)
+    anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0xC0D9F)
+    anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0xC0DF0)
+    anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0xC0E09)
+    anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0xC0E22)
+    anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0xC0E3B)
+    anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0xC0E65)
+    anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0xC0E74)
+    anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
+    anti_seizure_sub.write(fout)
+
     # ------------- Event Scripts -------------
     # CA/00D6 - White Flash
     # CA/0A35 - White Flash
