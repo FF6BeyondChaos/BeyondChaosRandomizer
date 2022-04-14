@@ -290,20 +290,25 @@ def no_dance_stumbles(fout):
 
 
 def change_swdtech_speed(fout, random: Random, speed: str = "Vanilla"):
-    swdtech_speed = 0x03
-    if speed.lower() == "fastest":
-        swdtech_speed = 0x00
-    elif speed.lower() == "faster":
-        swdtech_speed = 0x01
-    elif speed.lower() == "fast":
-        swdtech_speed = 0x02
-    elif speed.lower() == "random":
-        swdtech_speed = random.randint(0, 3)
-    css_sub = Substitution()
-    css_sub.set_location(0x017D87)
-    css_sub.bytestring = bytes([swdtech_speed])
-    css_sub.write(fout)
 
+    css_sub = Substitution()
+    if speed.lower() == "random":
+        speed = random.choice(["fastest", "faster", "fast", "Vanilla"])
+    if speed.lower() == "fastest":
+        swdtech_speed = 0x04
+        css_sub.set_location(0x017D84)
+        css_sub.bytestring = bytes([0xAD, 0x82, 0x7B, 0x18, 0x69, swdtech_speed, 0x8D, 0x82, 0x7B, 0x80, 0x01, 0xEA])
+        css_sub.write(fout)
+    elif speed.lower() == "faster":
+        swdtech_speed = 0x02
+        css_sub.set_location(0x017D84)
+        css_sub.bytestring = bytes([0xAD, 0x82, 0x7B, 0x18, 0x69, swdtech_speed, 0x8D, 0x82, 0x7B, 0x80, 0x01, 0xEA])
+        css_sub.write(fout)
+    elif speed.lower() == "fast":
+        swdtech_speed = 0x00
+        css_sub.set_location(0x017D87)
+        css_sub.bytestring = bytes([swdtech_speed])
+        css_sub.write(fout)
 
 def change_cursed_shield_battles(fout, random: Random, amount: int = None):
     ccsb_sub = Substitution()

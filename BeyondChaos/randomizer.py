@@ -74,10 +74,10 @@ VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-#TEST_SEED = "3|normal|bcdefgimnopqrstuwyz makeover partyparty novanilla randombosses supernatural alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent canttouchthis norng easymodo |1603333081"
+TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz makeover partyparty novanilla randombosses alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent canttouchthis easymodo suplexwrecks swdtechspeed:random|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz makeover partyparty randombosses alasdraco capslockoff johnnydmad notawaiter mimetime canttouchthis dearestmolulu easymodo worringtriad |1603333900"
+#TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz makeover partyparty randombosses alasdraco capslockoff johnnydmad notawaiter mimetime canttouchthis easymodo removeflashing suplexwrecks swdtechspeed: fastest|1603333900"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
