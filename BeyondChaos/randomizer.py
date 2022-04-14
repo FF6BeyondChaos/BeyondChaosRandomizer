@@ -74,10 +74,10 @@ VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "3|normal|bcdefgimnopqrstuwyz makeover partyparty novanilla randombosses supernatural alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent canttouchthis norng easymodo |1603333081"
+#TEST_SEED = "3|normal|bcdefgimnopqrstuwyz makeover partyparty novanilla randombosses supernatural alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent canttouchthis norng easymodo |1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-#TEST_SEED = "3|normal|bcdefgimknopqrstwzmakeoverpartypartyfrenchvanillaelectricboogaloocapslockoffjohnnydmad|2305050"
+TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz makeover partyparty randombosses alasdraco capslockoff johnnydmad notawaiter mimetime canttouchthis dearestmolulu easymodo worringtriad |1603333900"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -3489,13 +3489,6 @@ def manage_tower():
                     thamasa_map_sub.bytestring = bytes([0x57])
                     thamasa_map_sub.write(fout)
         l.write_data(fout)
-
-    # npc = [n for n in get_npcs() if n.event_addr == 0x233B8][0]
-    # npc.event_addr = 0x233A6
-    # narshe_beginner_sub = Substitution()
-    # narshe_beginner_sub.bytestring = bytes([0x4B, 0xE5, 0x00]) #Keep NPC in front of Beginner's House in World of Balance
-    # narshe_beginner_sub.set_location(0xC33A6)
-    # narshe_beginner_sub.write(fout)
 
     # Moving NPCs in the World of Ruin in the Beginner's House to prevent soft locks
 
