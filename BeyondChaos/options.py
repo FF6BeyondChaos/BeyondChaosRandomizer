@@ -325,7 +325,7 @@ NORMAL_CODES = [
     Code('unbreakable', "UNBREAKABLE ITEMS MODE", "Causes all items to be indestructible when broken for a spell", "beta", "checkbox"),
     Code('remonsterate', "MONSTER SPRITE REPLACEMENT MODE", "Enables monster sprite replacements from sprites in the remonstrate\\sprites folder.", "beta", "checkbox"),
     Code('swdtechspeed', "CHANGE SWDTECH SPEED MODE", "Alters the speed at which the swdtech bar moves.", "beta", "combobox", ("Fastest", "Faster", "Fast", "Vanilla", "Random")),
-    #Code('cursepower', "CHANGE CURSED SHIELD MODE", "Set the number of battles required to uncurse a Cursed Shield. (Vanilla = 256, 0 = Random)", "beta", "numberbox"),
+    Code('cursepower', "CHANGE CURSED SHIELD MODE", "Set the number of battles required to uncurse a Cursed Shield. (Vanilla = 256, 0 = Random)", "beta", "numberbox"),
 ]
 
 #these are all sprite related codes

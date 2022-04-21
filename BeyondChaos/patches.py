@@ -311,8 +311,7 @@ def change_swdtech_speed(fout, random: Random, speed: str = "Vanilla"):
         css_sub.write(fout)
 
 def change_cursed_shield_battles(fout, random: Random, amount: int = None):
-    ccsb_sub = Substitution()
-    ccsb_sub.set_location(0x025FF7)  # C25FF7
+
     if not amount or amount == "random":
         base_cursed_shield_battle_amount = 48
         standard_deviation_number = 16 * RANDOM_MULTIPLIER
@@ -323,7 +322,23 @@ def change_cursed_shield_battles(fout, random: Random, amount: int = None):
             amount = max(1, int(random.gauss(base_cursed_shield_battle_amount, standard_deviation_number)))
     else:
         amount = int(amount)
-    ccsb_sub.bytestring = bytes([amount])
+
+    ccsb_sub = Substitution()
+    ccsb_sub.bytestring = bytes([
+        0xAD, 0xC0, 0x3E, 0xC9, amount, #load curse counter and compare to curse count
+        0x90, 0x04,                     #skip uncurse if less
+        0x22, 0x00, 0xA5, 0xC4,         #Long subroutine to freespace at 0x04A500
+    ])
+    ccsb_sub.set_location(0x26001)
+    ccsb_sub.write(fout)
+
+    ccsb_sub.bytestring = bytes([
+        0x9C, 0xC0, 0x3E,  # set curse counter to 0
+        0xA9, 0x01, 0x04, 0xF0,  # tell the game a shield was uncursed
+        0xA9, 0x67, 0x9D, 0x1F, 0x16,  # replace the cursed shield with a paladin shield
+        0x6B  # return from long subroutine
+    ])
+    ccsb_sub.set_location(0x4A500)
     ccsb_sub.write(fout)
 
 def fewer_flashes(fout):
