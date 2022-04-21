@@ -326,7 +326,6 @@ NORMAL_CODES = [
     Code('remonsterate', "MONSTER SPRITE REPLACEMENT MODE", "Enables monster sprite replacements from sprites in the remonstrate\\sprites folder.", "beta", "checkbox"),
     Code('swdtechspeed', "CHANGE SWDTECH SPEED MODE", "Alters the speed at which the swdtech bar moves.", "beta", "combobox", ("Fastest", "Faster", "Fast", "Vanilla", "Random")),
     #Code('cursepower', "CHANGE CURSED SHIELD MODE", "Set the number of battles required to uncurse a Cursed Shield. (Vanilla = 256, 0 = Random)", "beta", "numberbox"),
-    #Code('sixtytwoqd', "version 62 randomizer", "For quickdraw only, run version 62 of the randomizer", "beta", "checkbox"),
 ]
 
 #these are all sprite related codes
