@@ -47,7 +47,7 @@ from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
-                     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break)
+                     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -73,11 +73,11 @@ BETA = False
 VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
+TEST_ON = True
 #TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz makeover partyparty novanilla randombosses alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent canttouchthis easymodo |1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "3|normal|z worringtriad strangejourney easymodo dearestmolulu canttouchthis|1649633498"
+TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney worringtriad easymodo dearestmolulu canttouchthis|1649633498"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -3588,6 +3588,8 @@ def create_dimensional_vortex():
                 or (k.location.locid == 0x180 and k.entid == 0)  # weird out-of-bounds entrance in the sealed gate cave
                 or (k.location.locid == 0x3B and k.dest & 0x1FF == 0x3A)  # Figaro interior to throne room
                 or (k.location.locid == 0x19A and k.dest & 0x1FF == 0x19A)
+                #or (k.location.locid == 0x0 or k.dest == 0x0) #Exclude World of Balance ; Commented out until we finish fixing strangejourney -DS
+                #or (k.location.locid == 0x1 or k.dest == 0x1) #Exclude World of Ruin
         # Kefka's Tower factory room (bottom level) conveyor/pipe
         ):
             return True
@@ -5490,6 +5492,7 @@ def randomize(**kwargs) -> str:
     cycle_statuses(fout)
     name_swd_techs(fout)
     fix_flash_and_bioblaster(fout)
+    title_gfx(fout)
     if Options_.is_code_active("swdtechspeed"):
         swdtech_speed = Options_.get_code_value('swdtechspeed')
         if type(swdtech_speed) == bool:
