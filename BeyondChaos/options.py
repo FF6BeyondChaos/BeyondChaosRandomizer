@@ -226,15 +226,15 @@ ALL_FLAGS = [
     Flag('d', 'random_final_dungeon', 'Randomize final dungeon.', "checkbox"),
     Flag('e', 'random_espers', 'Randomize esper spells and levelup bonuses.', "checkbox"),
     Flag('f', 'random_formations', 'Randomize enemy formations.', "checkbox"),
-    Flag('g', 'random_dances', 'Randomize dances', "checkbox"),
+    Flag('g', 'random_dances', 'Randomize dances.', "checkbox"),
     Flag('h', 'random_final_party', 'Your party in the Final Kefka fight will be random.', "checkbox"),
     Flag('i', 'random_items', 'Randomize the stats of equippable items.', "checkbox"),
     Flag('j', 'randomize_forest', 'Randomize the phantom forest.', "checkbox"),
-    Flag('k', 'random_clock', 'Randomize the clock in Zozo', "checkbox"),
+    Flag('k', 'random_clock', 'Randomize the clock in Zozo.', "checkbox"),
     Flag('l', 'random_blitz', 'Randomize blitz inputs.', "checkbox"),
     Flag('m', 'random_enemy_stats', 'Randomize enemy stats.', "checkbox"),
     Flag('n', 'random_window', 'Randomize window background colors.', "checkbox"),
-    Flag('o', 'shuffle_commands', "Shuffle characters' in-battle commands", "checkbox"),
+    Flag('o', 'shuffle_commands', "Shuffle characters' in-battle commands.", "checkbox"),
     Flag('p', 'random_animation_palettes', 'Randomize the palettes of spells and weapon animations.', "checkbox"),
     Flag('q', 'random_character_stats', 'Randomize what equipment each character can wear and character stats.', "checkbox"),
     Flag('r', 'shuffle_wor', 'Randomize character locations in the world of ruin.', "checkbox"),
@@ -254,6 +254,7 @@ NORMAL_CODES = [
     Code('kupokupo', "MOOGLE MODE", "All party members are moogles except Mog. With partyparty, all characters are moogles, except Mog, Esper Terra, and Imps.", "sprite", "checkbox"),
     Code('partyparty', "CRAZY PARTY MODE", "Kefka, Trooper, Banon, Leo, Ghost, Merchant, Esper Terra, and Soldier are mixed into the sprites that can be acquired by playable characters. Those sprites are also randomized themselves, allowing Leo to look like Edgar, for example.", "sprite", "checkbox"),
     Code('quikdraw', "QUIKDRAW MODE", "All characters look like imperial soldiers, and none of them have Gau's Rage skill.", "sprite", "checkbox"),
+
     # Aesthetic codes
     Code('alasdraco', "JAM UP YOUR OPERA MODE", "Randomizes the sprites of Maria, Draco, Ralse, the Impresario, the flowers Maria throws from the balcony, and the weight Ultros drops, as well as the singing voices and the names of the factions.", "aesthetic", "checkbox"),
     Code('bingoboingo', "BINGO BONUS", "Generates a Bingo table with spells, items, equipment, and enemy squares to check off. Players can set victory requirements like achieving a line, or acquiring a certain number of points. The ROM does not interact with the bingo card.", "aesthetic", "checkbox"),
@@ -261,71 +262,68 @@ NORMAL_CODES = [
     Code('johnnydmad', "MUSIC REPLACEMENT MODE", "Randomizes music with regard to what would make sense in a given location.", "aesthetic", "checkbox"),
     Code('johnnyachaotic', "MUSIC MANGLING MODE", "Randomizes music with no regard to what would make sense in a given location.", "aesthetic", "checkbox"),
     Code('notawaiter', "CUTSCENE SKIPS", "Up to Kefka at Narshe, the vast majority of mandatory cutscenes are completely removed. Optional cutscenes are not removed.", "aesthetic", "checkbox"),
-    Code('fightclub', "MORE LIKE COLI-DON'T-SEE-'EM", "Does not allow you to see the coliseum rewards before betting, but you can often run from the coliseum battles to keep your item.", "aesthetic", "checkbox"),
-    Code('questionablecontent', "RIDDLER MODE", "When items have significant differences from vanilla, appends a question mark to the item's name to allow at-a-glance identification. Beware: Affects items sold in shops.", "beta", "checkbox"),
-    Code('removeflashing', "NOT SO FLASHY MODE", "Removes some flash effects from the game, such as Bum Rush.", "beta", "checkbox"),
+    Code('removeflashing', "NOT SO FLASHY MODE", "Removes some flash effects from the game, such as Bum Rush.", "aesthetic", "checkbox"),
+    Code('remonsterate', "MONSTER SPRITE REPLACEMENT MODE", "Replaces monster sprites with sprites from other games. Requires sprites in the remonstrate\\sprites folder.", "aesthetic", "checkbox"),
 
     #battle codes
     Code('electricboogaloo', "WILD ITEM BREAK MODE", "Increases the list of spells that items can break and proc for. Items can break for potentially any spell, and weapons can potentially proc any spell excluding SwdTechs, Blitzes, Slots, and a couple other skills.", "battle", "checkbox"),
     Code('collateraldamage', "ITEM BREAK MODE", "All pieces of equipment break for spells. Characters only have the Fight and Item commands, and enemies will use items drastically more often than usual.", "battle", "checkbox"),
     Code('masseffect', "WILD EQUIPMENT EFFECT MODE", "Increases the number of rogue effects on equipment by a large amount.", "battle", "checkbox"),
     Code('randombosses', "RANDOM BOSSES MODE", "Causes boss skills to be randomized similarly to regular enemy skills. Boss skills can change to similarly powerful skills.", "battle", "checkbox"),
-    Code('replaceeverything', "REPLACE ALL SKILLS MODE", "All vanilla skills that can be replaced, are replaced.", "battle", "checkbox"),
-    Code('allcombos', "ALL COMBOS MODE", "All skills that get replaced with something are replaced with combo skills.", "battle", "checkbox"),
-    Code('nocombos', "NO COMBOS MODE", "There will be no combo(dual) skills.", "battle", "checkbox"),
-    Code('endless9', "ENDLESS NINE MODE", "All R-[skills] are automatically changed to 9x[skills]. W-[skills] will become 8x[skills].", "battle", "checkbox"),
-    Code('supernatural', "SUPER NATURAL MAGIC MODE", "Makes it so that any character with the Magic command will have natural magic.", "battle", "checkbox"),
-    Code('canttouchthis', "INVINCIBILITY", "All characters have 255 Defense and 255 Magic Defense, as well as 128 Evasion and Magic Evasion.", "battle", "checkbox"),
-    Code('naturalstats', "NATURAL STATS MODE", "No Espers will grant stat bonuses upon leveling up.", "battle", "checkbox"),
-    Code('expboost', "MULTIPLIED EXP MODE", "All battles will award multiplied exp", "beta", "numberbox"),
-    Code('gpboost', "MULTIPLIED GP MODE", "All battles will award multiplied gp", "beta", "numberbox"),
-    Code('mpboost', "MULTIPLIED MP MODE", "All battles will award multiplied magic points.", "beta", "numberbox"),
-    Code('dancelessons', "NO DANCE FAILURES", "Removes the 50% chance that dances will fail when used on a different terrain.", "beta", "checkbox"),
+    Code('dancingmaduin', "RESTRICTED ESPERS MODE", "Restricts Esper usage such that most Espers can only be equipped by one character. Also usually changes what spell the Paladin Shld teaches.", "battle", "checkbox"),
+    Code('darkworld', "SLASHER'S DELIGHT MODE", "Drastically increases the difficulty of the seed, akin to a hard mode. Mostly meant to be used in conjunction with the madworld code.", "battle", "checkbox"),
+    Code('easymodo', "EASY MODE", "All enemies have 1 HP.", "battle", "checkbox"),
+    Code('madworld', "TIERS FOR FEARS MODE", 'Creates a "true tierless" seed, with enemies having a higher degree of randomization and shops being very randomized as well.', "battle", "checkbox"),
+    Code('playsitself', "AUTOBATTLE MODE", "All characters will act automatically, in a manner similar to when Coliseum fights are fought.", "battle", "checkbox"),
+    Code('rushforpower', "OLD VARGAS FIGHT MODE", "Reverts the Vargas fight to only require that Vargas take any damage to begin his second phase.", "battle", "checkbox"),
+    Code('norng', "NO RNG MODE", "Calls to the RNG are not made. Attacks are always critical hits, everything targets the lead character when applicable, and all attacks hit if they are able to except Instant Death. Many more additional effects occur.", "battle", "checkbox"),
+    Code('expboost', "MULTIPLIED EXP MODE", "All battles will award multiplied exp.", "battle", "numberbox"),
+    Code('gpboost', "MULTIPLIED GP MODE", "All battles will award multiplied gp.", "battle", "numberbox"),
+    Code('mpboost', "MULTIPLIED MP MODE", "All battles will award multiplied magic points.", "battle", "numberbox"),
+    Code('dancelessons', "NO DANCE FAILURES", "Removes the 50% chance that dances will fail when used on a different terrain.", "battle", "checkbox"),
+    Code('nobreaks', "NO ITEM BREAKS MODE", "Causes no items to break for spell effects.", "battle", "checkbox"),
+    Code('unbreakable', "UNBREAKABLE ITEMS MODE", "Causes all items to be indestructible when broken for a spell.", "battle", "checkbox"),
+    Code('swdtechspeed', "CHANGE SWDTECH SPEED MODE", "Alters the speed at which the SwdTech bar moves.", "battle", "combobox", ("Fastest", "Faster", "Fast", "Vanilla", "Random")),
+    Code('cursepower', "CHANGE CURSED SHIELD MODE", "Set the number of battles required to uncurse a Cursed Shield. (Vanilla = 256, 0 = Random)", "battle", "numberbox"),
+
+    #field codes
+    Code('fightclub', "MORE LIKE COLI-DON'T-SEE-'EM",  "Does not allow you to see the coliseum rewards before betting, but you can often run from the coliseum battles to keep your item.",  "field", "checkbox"),
+    Code('bsiab', "UNBALANCED MONSTER CHESTS MODE", "Reverts the monster-in-a-box selection algorithm to be (mostly) the same as versions prior to EX v3.", "field", "checkbox"),
+    Code('mimetime', 'ALTERNATE GOGO MODE', "Gogo will be hidden somewhere in the World of Ruin disguised as another character. Bring that character to him to recruit him.", "field", "checkbox"),
+    Code('dearestmolulu', "ENCOUNTERLESS MODE", "No random encounters occur. Recommend using with exp code. Wearing a Moogle Charm or a piece of equipment with the Moogle Charm effect will cause a battle to occur on every step when encounters can occur.", "field", "checkbox"),
+    Code('randomboost', "RANDOM BOOST MODE",  "Prompts you for a randomness multiplier, which changes the range of items that can be in chests, etc. Choosing a randomness multiplier of 0(or leaving it blank) will allow any item to appear in any treasure chest.", "field", "numberbox"),
+    Code('worringtriad', "START IN WOR", "The player will start in the World of Ruin, with all of the World of Balance treasure chests, along with a guaranteed set of items, and more Lores.", "field", "checkbox"),
+    Code('questionablecontent', "RIDDLER MODE", "When items have significant differences from vanilla, a question mark is appended to the item's name to allow at-a-glance identification, including in shop menus.", "field", "checkbox"),
+    Code('nomiabs', 'NO MIAB MODE', "Chests will never have monster encounters in them.", "field", "checkbox"),
+
+
+    #character codes
+    Code('replaceeverything', "REPLACE ALL SKILLS MODE", "All vanilla skills that can be replaced, are replaced.", "characters", "checkbox"),
+    Code('allcombos', "ALL COMBOS MODE", "All skills that get replaced with something are replaced with combo skills.", "characters", "checkbox"),
+    Code('nocombos', "NO COMBOS MODE", "There will be no combo(dual) skills.", "characters", "checkbox"),
+    Code('endless9', "ENDLESS NINE MODE", "All R-[skills] are automatically changed to 9x[skills]. W-[skills] will become 8x[skills].", "characters", "checkbox"),
+    Code('supernatural', "SUPER NATURAL MAGIC MODE", "Makes it so that any character with the Magic command will have natural magic.", "characters", "checkbox"),
+    Code('canttouchthis', "INVINCIBILITY", "All characters have 255 Defense and 255 Magic Defense, as well as 128 Evasion and Magic Evasion.", "characters", "checkbox"),
+    Code('naturalstats', "NATURAL STATS MODE", "No Espers will grant stat bonuses upon leveling up.", "characters", "checkbox"),
+    Code('metronome', "R-CHAOS MODE", "All characters have Fight, R-Chaos, Magic, and Item as their skillset, except for the Mime, who has Mimic instead of Fight, and the Berserker, who only has R-Chaos.", "characters", "checkbox"),
+    Code('naturalmagic', "NATURAL MAGIC MODE", "No Espers or equipment will teach spells. The only way for characters to learn spells is through leveling up, if they have their own innate magic list.", "characters", "checkbox"),
+    Code('suplexwrecks', "SUPLEX MODE", "All characters use the Sabin sprite, as well as having a name similar to Sabin. All characters have the Blitz and Suplex commands, and every enemy can be hit by Suplex.", "characters", "checkbox"),
+    Code('desperation', "DESPERATION MODE", "Guarantees one character will have R-Limit, and greatly increases the chance of having desperation attacks as commands.", "characters", "checkbox"),
+
+    #gamebreaking codes
 
     Code('airship', "AIRSHIP MODE", "The party will have access to the airship immediately after leaving Narshe. Chocobo stables can also be used to acquire the airship. Doing events out of order can cause softlocks.", "gamebreaking", "checkbox"),
-    
-    Code('bsiab', "UNBALANCED MONSTER CHESTS MODE", "Reverts the monster-in-a-box selection algorithm to be (mostly) the same as versions prior to EX v3.", "major", "checkbox"),
-    #Code('llg', "LOW LEVEL GAME MODE", "Stands for Low Level Game. No encounters will yield any Experience Points.", "major", "checkbox"),
-    Code('mimetime', 'ALTERNATE GOGO MODE', "Gogo will be hidden somewhere in the world of ruin disguised as another character. Bring that character to him to recruit him.", "major", "checkbox"),
-    Code('nomiabs', 'NO MIAB MODE', "Chests will never have monster encounters in them", "beta", "checkbox"),
-
-    Code('dancingmaduin', "RESTRICTED ESPERS MODE", "Restricts Esper usage such that most Espers can only be equipped by one character. Also usually changes what spell the Paladin Shld teaches.", "major", "checkbox"),
-    Code('darkworld', "SLASHER'S DELIGHT MODE", "Drastically increases the difficulty of the seed, akin to a hard mode. Mostly meant to be used in conjunction with the madworld code.", "major", "checkbox"),
-    Code('dearestmolulu', "ENCOUNTERLESS MODE", "No random encounters occur. Recommend using with exp code. Wearing a Moogle Charm or a piece of equipment with the Moogle Charm effect will cause a battle to occur on every step when encounters can be occur.", "major", "checkbox"),
-    Code('easymodo', "EASY MODE", "All enemies have 1 HP.", "major", "checkbox"),
-    Code('sketch', "ENABLE SKETCH GLITCH", "Enables sketch glitch. Not recommended unless you know what you are doing.", "gamebreaking", "checkbox"),
-    
+    Code('sketch', "ENABLE SKETCH GLITCH", "Enables sketch bug. Not recommended unless you know what you are doing.", "gamebreaking", "checkbox"),
     Code('equipanything', "EQUIP ANYTHING MODE", "Items that are not equippable normally can now be equipped as weapons or shields. These often give strange defensive stats or weapon animations.", "gamebreaking", "checkbox"),
-    
-    Code('madworld', "TIERS FOR FEARS MODE", 'Creates a "true tierless" seed, with enemies having a higher degree of randomization and shops being very randomized as well.', "major", "checkbox"),
-    
-    
-    Code('metronome', "R-CHAOS MODE", "All characters have Fight, R-Chaos, Magic, and Item as their skillset, except for the Mime, who has Mimic instead of Fight. Berserker also only has R-Chaos.", "major", "checkbox"),
-    
-    Code('naturalmagic', "NATURAL MAGIC MODE", "No Espers or equipment will teach spells. The only way to learn spells is through Natural Magic.", "major", "checkbox"),
-    
-    Code('norng', "NO RNG MODE", "Calls to the RNG are not made. Attacks are always critical hits, everything targets the lead character when applicable, and all attacks hit if they are able to except Instant Death. Many more additional effects occur. Cannot currently be completed without cheat codes.", "experimental", "checkbox"),
-    
-    
-    Code('playsitself', "AUTOBATTLE MODE", "All characters will act automatically, in a manner similar to when Coliseum fights are fought.", "major", "checkbox"),
-    
-    Code('randomboost', "RANDOM BOOST MODE", "Prompts you for a randomness multiplier, which changes the range of items that can be in chests, etc. Choosing a randomness multiplier of 0(or leaving it blank) will allow any item to appear in any treasure chest.", "major", "numberbox"),
-    
+
+    #experimental codes
+
     Code('repairpalette', "PALETTE REPAIR", "Used for testing changes to palette randomization. Not intended for actual play. Cannot proceed past Banon's scenario.", "experimental", "checkbox"),
-    
-    Code('rushforpower', "OLD VARGAS FIGHT MODE", "Reverts the Vargas fight to the way it was before Beyond Chaos EX.", "major", "checkbox"),
-    Code('strangejourney', "BIZARRE ADVENTURE", "A prototype entrance Randomizer, similar to the ancientcave mode. Includes all maps and event tiles, and is usually extremely hard to beat by itself.", "experimental", "checkbox"),
-    
-    Code('suplexwrecks', "SUPLEX MODE", "All characters use the Sabin sprite, as well as having a name similar to Sabin. All characters have the Blitz and Suplex commands, and every enemy can be hit by Suplex.", "major", "checkbox"),
-    Code('thescenarionottaken', 'DIVERGENT PATHS MODE', "Changes the way the 3 scenarios are split up.", "experimental", "checkbox"),
-    Code('worringtriad', "START IN WOR", "The player will start in the World of Ruin, with all of the World of Balance treasure chests, along with a guaranteed set of items, and more Lores.", "major", "checkbox"),
-    
-    Code('desperation', "DESPERATION MODE", "When the adventurer back is up against the wall. Break the wall.", "beta", "checkbox"),
-    Code('nobreaks', "NO ITEM BREAKS MODE", "Causes no items to break for spell effects.", "beta", "checkbox"),
-    Code('unbreakable', "UNBREAKABLE ITEMS MODE", "Causes all items to be indestructible when broken for a spell", "beta", "checkbox"),
-    Code('remonsterate', "MONSTER SPRITE REPLACEMENT MODE", "Enables monster sprite replacements from sprites in the remonstrate\\sprites folder.", "beta", "checkbox"),
-    Code('swdtechspeed', "CHANGE SWDTECH SPEED MODE", "Alters the speed at which the swdtech bar moves.", "beta", "combobox", ("Fastest", "Faster", "Fast", "Vanilla", "Random")),
-    Code('cursepower', "CHANGE CURSED SHIELD MODE", "Set the number of battles required to uncurse a Cursed Shield. (Vanilla = 256, 0 = Random)", "beta", "numberbox"),
+    Code('strangejourney', "BIZARRE ADVENTURE", "A prototype entrance randomizer, similar to the ancientcave mode. Includes all maps and event tiles, and is usually extremely hard to beat by itself.", "experimental", "checkbox"),
+    Code('thescenarionottaken', 'DIVERGENT PATHS MODE', "Changes the way the 3 scenarios are split up, to resemble PowerPanda's 'Divergent Paths' mod.", "experimental", "checkbox"),
+
+    #beta codes
+
 ]
 
 #these are all sprite related codes

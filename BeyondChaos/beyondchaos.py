@@ -169,13 +169,14 @@ class Window(QWidget):
         self.spriteCategories = {}
         self.experimental = {}
         self.gamebreaking = {}
-        self.major = {}
+        self.field = {}
+        self.characters = {}
         self.flag = {}
         self.battle = {}
         self.beta = {}
         self.dictionaries = [
             self.flag, self.sprite, self.spriteCategories, self.battle,
-            self.aesthetic, self.major, self.experimental, self.gamebreaking,
+            self.aesthetic, self.field, self.characters, self.experimental, self.gamebreaking,
             self.beta
         ]
         # keep a list of all checkboxes
@@ -200,7 +201,7 @@ class Window(QWidget):
         # tabs names for the tabs in flags box
         self.tabNames = [
             "Flags", "Sprites", "SpriteCategories", "Battle", "Aesthetic",
-            "Major", "Experimental", "Gamebreaking", "Beta"
+            "Field", "Characters", "Experimental", "Gamebreaking", "Beta"
         ]
 
         # ui elements
@@ -650,7 +651,7 @@ class Window(QWidget):
         tabs = QTabWidget()
         tabNames = [
             "Flags", "Sprites", "SpriteCategories", "Battle", "Aesthetic",
-            "Major", "Experimental", "Gamebreaking", "Beta"
+            "Field", "Characters", "Experimental", "Gamebreaking", "Beta"
         ]
 
         ########## Checkboxes and inline descriptions ###########
@@ -822,8 +823,10 @@ class Window(QWidget):
                 d = self.experimental
             elif code.category == "gamebreaking":
                 d = self.gamebreaking
-            elif code.category == "major":
-                d = self.major
+            elif code.category == "field":
+                d = self.field
+            elif code.category == "characters":
+                d = self.characters
             elif code.category == "beta":
                 d = self.beta
             elif code.category == "battle":
