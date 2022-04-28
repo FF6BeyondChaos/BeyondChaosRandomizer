@@ -1253,7 +1253,6 @@ class Window(QWidget):
                     QtCore.pyqtRemoveInputHook()
                     # TODO: put this in a new thread
                     try:
-                        print(str(bundle))
                         kwargs = {
                             "sourcefile": self.romText,
                             "seed": bundle,
