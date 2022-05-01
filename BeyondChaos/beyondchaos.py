@@ -22,7 +22,7 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
 import utils
 import customthreadpool
 from config import (readFlags, writeFlags)
-from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES)
+from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES, makeover_groups)
 from update import (update, update_needed)
 from randomizer import randomize
 
@@ -590,8 +590,12 @@ class Window(QWidget):
                         width = max(width, len(choice) * 10)
                     cmbbox.setFixedWidth(width)
                     cmbbox.text = flagname
-                    cmbbox.setCurrentIndex(cmbbox.findText("Vanilla"))
+                    if flagname in makeover_groups:
+                        cmbbox.setCurrentIndex(cmbbox.findText("Normal"))
+                    else:
+                        cmbbox.setCurrentIndex(cmbbox.findText("Vanilla"))
                     flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
+                    print(flagname + " : " + cmbbox.currentText())
                     tablayout.addWidget(cmbbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
                     cmbbox.activated[str].connect(lambda: self.flagButtonClicked())
@@ -984,7 +988,10 @@ class Window(QWidget):
                 elif type(child) == QSpinBox or type(child) == QDoubleSpinBox:
                     child.setValue(child.default)
                 elif type(child) == QComboBox:
-                    child.setCurrentIndex(child.findText("Vanilla"))
+                    if child.text in makeover_groups:
+                        child.setCurrentIndex(child.findText("Normal"))
+                    else:
+                        child.setCurrentIndex(child.findText("Vanilla"))
 
     # When flag UI button is checked, update corresponding
     # dictionary values
@@ -1010,13 +1017,8 @@ class Window(QWidget):
                         else:
                             self.flags.append(c.text + ":" + str(round(c.value(), 2)))
                 children = t.findChildren(QComboBox)
-                flagset = False
                 for c in children:
-                    if c.text == "swdtechspeed":
-                        if not c.currentText() == "Vanilla":
-                            self.swdtechspeed = c.currentText().lower()
-                            flagset = True
-                    if flagset:
+                    if c.currentText() not in ["Vanilla", "Normal"]:
                         self.flags.append(c.text.lower() + ":" + c.currentText().lower())
 
             self.updateFlagString()
