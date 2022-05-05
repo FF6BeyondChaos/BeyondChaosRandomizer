@@ -73,12 +73,12 @@ BETA = False
 VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = True
+TEST_ON = False
 #TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz makeover partyparty novanilla randombosses alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent canttouchthis easymodo |1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
-#TEST_SEED = "3|speedcave|bcefgijmnopqstwz partyparty frenchvanilla electricboogaloo canttouchthis capslockoff johnnyachaotic dearestmolulu easymodo questionablecontent removeflashing dancelessons|1651122160"
+#STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
+TEST_SEED = "3|speedcave|bcefgijmnopqstwz partyparty frenchvanilla electricboogaloo canttouchthis capslockoff johnnyachaotic dearestmolulu easymodo questionablecontent removeflashing dancelessons|1651122160"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -2926,7 +2926,7 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet], mp
             formation.set_music(2)  # change music for Atma fight
         if formation.formid == 0x162:
             formation.ap = 255  # Magimaster
-        elif formation.formid in [0x1d4, 0x1d5, 0x1d6, 0x1e2]:
+        if formation.formid in [0x1d4, 0x1d5, 0x1d6, 0x1e2]:
             formation.ap = 100  # Triad
         formation.write_data(fout)
 
