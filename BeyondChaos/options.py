@@ -339,10 +339,8 @@ makeover_groups = ["anime", "boys", "generic", "girls", "kids", "pets", "potato"
 for mg in makeover_groups:
     no = Code('no'+mg, f"NO {mg.upper()} ALLOWED MODE", f"Do not select {mg} sprites.", "spriteCategories", "checkbox")
     MAKEOVER_MODIFIER_CODES.extend([
-        no,
-        Code('hate' + mg, f"RARE {mg.upper()} MODE", f"Reduce probability of selecting {mg} sprites.", "spriteCategories", "checkbox"),
-        Code('like' + mg, f"COMMON {mg.upper()} MODE", f"Increase probability of selecting {mg} sprites.", "spriteCategories", "checkbox"),
-        Code('only'+mg, f"{mg.upper()} WORLD MODE", f"Select only {mg} sprites.", "spriteCategories", "checkbox")])
+        Code(mg, f"RARE {mg.upper()} MODE", f"Reduce probability of selecting {mg} sprites.",
+             "spriteCategories", "combobox", ("Normal", "No", "Hate", "Like", "Only"))])
     RESTRICTED_VANILLA_SPRITE_CODES.append(no)
 
 
