@@ -77,7 +77,8 @@ TEST_ON = True
 #TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz makeover partyparty novanilla randombosses alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent canttouchthis easymodo |1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney worringtriad easymodo dearestmolulu canttouchthis|1649633498"
+TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
+#TEST_SEED = "3|speedcave|bcefgijmnopqstwz partyparty frenchvanilla electricboogaloo canttouchthis capslockoff johnnyachaotic dearestmolulu easymodo questionablecontent removeflashing dancelessons|1651122160"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -1685,6 +1686,11 @@ def manage_skips():
             return
         handleNormal(split_line)
 
+    def handleStrange(split_line: List[str]):  # Replace extra events that must be trimmed from Strange Journey
+        if not Options_.is_code_active('strangejourney'):
+            return
+        handleNormal(split_line)
+
     for line in open(SKIP_EVENTS_TABLE):
         # If "Foo" precedes a line in skipEvents.txt, call "handleFoo"
         line = line.split('#')[0].strip()  # Ignore everything after '#'
@@ -1694,35 +1700,35 @@ def manage_skips():
         handler = "handle" + split_line[0]
         locals()[handler](split_line[1:])
 
-    flashback_skip_sub = Substitution()
-    flashback_skip_sub.bytestring = bytes([0xB2, 0xB8, 0xA5, 0x00, 0xFE])
-    flashback_skip_sub.set_location(0xAC582)
-    flashback_skip_sub.write(fout)
+    #flashback_skip_sub = Substitution()
+    #flashback_skip_sub.bytestring = bytes([0xB2, 0xB8, 0xA5, 0x00, 0xFE])
+    #flashback_skip_sub.set_location(0xAC582)
+    #flashback_skip_sub.write(fout)
 
-    boat_skip_sub = Substitution()
-    boat_skip_sub.bytestring = bytes([0x97, 0x5C] +  # Fade to black, wait for fade
-                                     [0xD0,
-                                      0x87] +  # Set event bit 0x87, Saw the scene with Locke and Celes at night in Albrook
-                                     [0xD0, 0x83] +  # Set event bit 0x83, Boarded the ship in Albrook
-                                     [0xD0,
-                                      0x86] +  # Set event bit 0x86, Saw the scene with Terra and Leo at night on the ship
-                                     # to Thamasa
-                                     [0x3D, 0x03, 0x3F, 0x03, 0x01,
-                                      0x45] +  # Create Shadow, add Shadow to party 1, refresh objects
-                                     [0xD4, 0xE3, 0x77, 0x03, 0xD4,
-                                      0xF3] +  # Shadow in shop and item menus, level average Shadow, Shadow is available
-                                     [0x88, 0x03, 0x00, 0x40, 0x8B, 0x03, 0x7F, 0x8C, 0x03,
-                                      0x7F] +  # Cure status ailments of Shadow, set HP and MP to max
-                                     [0xB2, 0xBD, 0xCF,
-                                      0x00] +  # Subroutine that cures status ailments and set hp and mp to max.
-                                     # clear NPC bits
-                                     [0xDB, 0x06, 0xDB, 0x07, 0xDB, 0x08, 0xDB, 0x11, 0xDB, 0x13, 0xDB, 0x22, 0xDB,
-                                      0x42, 0xDB, 0x65] + [0xB8, 0x4B] +  # Shadow won't run
-                                     [0x6B, 0x00, 0x04, 0xE8, 0x96, 0x40, 0xFF]
-                                     # Load world map with party near Thamasa, return
-                                     )
-    boat_skip_sub.set_location(0xC615A)
-    boat_skip_sub.write(fout)
+    #boat_skip_sub = Substitution()
+    #boat_skip_sub.bytestring = bytes([0x97, 0x5C] +  # Fade to black, wait for fade
+    #                                 [0xD0,
+    #                                  0x87] +  # Set event bit 0x87, Saw the scene with Locke and Celes at night in Albrook
+    #                                 [0xD0, 0x83] +  # Set event bit 0x83, Boarded the ship in Albrook
+    #                                 [0xD0,
+    #                                  0x86] +  # Set event bit 0x86, Saw the scene with Terra and Leo at night on the ship
+    #                                 # to Thamasa
+    #                                 [0x3D, 0x03, 0x3F, 0x03, 0x01,
+    #                                  0x45] +  # Create Shadow, add Shadow to party 1, refresh objects
+    #                                 [0xD4, 0xE3, 0x77, 0x03, 0xD4,
+    #                                  0xF3] +  # Shadow in shop and item menus, level average Shadow, Shadow is available
+    #                                 [0x88, 0x03, 0x00, 0x40, 0x8B, 0x03, 0x7F, 0x8C, 0x03,
+    #                                  0x7F] +  # Cure status ailments of Shadow, set HP and MP to max
+    #                                 [0xB2, 0xBD, 0xCF,
+    #                                  0x00] +  # Subroutine that cures status ailments and set hp and mp to max.
+    #                                 # clear NPC bits
+    #                                 [0xDB, 0x06, 0xDB, 0x07, 0xDB, 0x08, 0xDB, 0x11, 0xDB, 0x13, 0xDB, 0x22, 0xDB,
+    #                                  0x42, 0xDB, 0x65] + [0xB8, 0x4B] +  # Shadow won't run
+    #                                 [0x6B, 0x00, 0x04, 0xE8, 0x96, 0x40, 0xFF]
+    #                                 # Load world map with party near Thamasa, return
+    #                                 )
+    #boat_skip_sub.set_location(0xC615A)
+    #boat_skip_sub.write(fout)
 
     leo_skip_sub = Substitution()
     leo_skip_sub.bytestring = bytes([0x97, 0x5C] +  # Fade to black, wait for fade
@@ -1799,21 +1805,21 @@ def manage_skips():
                  "For 2500 GP you can send 2 letters, a record, a Tonic, and a book.<line><choice> (Send them)  <choice> (Forget it)")
 
     # skip the flashbacks of Daryl
-    daryl_cutscene_sub = Substitution()
-    daryl_cutscene_sub.set_location(0xA4365)
-    daryl_cutscene_sub.bytestring = bytes([0xF0, 0x4C,  # play song "Searching for Friends"
-                                           0x6B, 0x01, 0x04, 0x9E, 0x33, 0x01,
-                                           # load map World of Ruin, continue playing song, party at (158,51) facing up,
-                                           # in airship
-                                           0xC0, 0x20,  # allow ship to propel without changing facing
-                                           0xC2, 0x64, 0x00,  # set bearing 100
-                                           0xFA,  # show airship emerging from the ocean
-                                           0xD2, 0x11, 0x34, 0x10, 0x08, 0x40,  # load map Falcon upper deck
-                                           0xD7, 0xF3,  # hide Daryl on the Falcon
-                                           0xB2, 0x3F, 0x48, 0x00,
-                                           # jump to part where it sets a bunch of bits then flys to Maranda
-                                           0xFE])
-    daryl_cutscene_sub.write(fout)
+    # daryl_cutscene_sub = Substitution()
+    # daryl_cutscene_sub.set_location(0xA4365)
+    # daryl_cutscene_sub.bytestring = bytes([0xF0, 0x4C,  # play song "Searching for Friends"
+    #                                        0x6B, 0x01, 0x04, 0x9E, 0x33, 0x01,
+    #                                        # load map World of Ruin, continue playing song, party at (158,51) facing up,
+    #                                        # in airship
+    #                                        0xC0, 0x20,  # allow ship to propel without changing facing
+    #                                        0xC2, 0x64, 0x00,  # set bearing 100
+    #                                        0xFA,  # show airship emerging from the ocean
+    #                                        0xD2, 0x11, 0x34, 0x10, 0x08, 0x40,  # load map Falcon upper deck
+    #                                        0xD7, 0xF3,  # hide Daryl on the Falcon
+    #                                        0xB2, 0x3F, 0x48, 0x00,
+    #                                        # jump to part where it sets a bunch of bits then flys to Maranda
+    #                                        0xFE])
+    # daryl_cutscene_sub.write(fout)
 
     # We overwrote some of the event items, so write them again
     if Options_.random_treasure:
@@ -3523,46 +3529,46 @@ def manage_tower():
     npc = [n for n in get_npcs() if n.event_addr == 0x2D1FF][0]  # Magic DOES exist Guy
     npc.event_addr = 0x2D1FB  # Follow the Elder Guy event address
 
-def manage_strange_events():
-    shadow_recruit_sub = Substitution()
-    shadow_recruit_sub.set_location(0xB0A9F)
-    shadow_recruit_sub.bytestring = bytes([0x42, 0x31])  # hide party member in slot 0
-
-    shadow_recruit_sub.write(fout)
-    shadow_recruit_sub.set_location(0xB0A9E)
-    shadow_recruit_sub.bytestring = bytes([0x41, 0x31,  # show party member in slot 0
-                                           0x41, 0x11,  # show object 11
-                                           0x31  # begin queue for party member in slot 0
-                                           ])
-    shadow_recruit_sub.write(fout)
-
-    shadow_recruit_sub.set_location(0xB0AD4)
-    shadow_recruit_sub.bytestring = bytes([0xB2, 0x29, 0xFB, 0x05, 0x45])  # Call subroutine $CFFB29, refresh objects
-    shadow_recruit_sub.write(fout)
-
-    shadow_recruit_sub.set_location(0xFFB29)
-    shadow_recruit_sub.bytestring = bytes(
-        [0xB2, 0xC1, 0xC5, 0x00,  # Call subroutine $CAC5C1 (set CaseWord bit corresponding to number of
-         # characters in party)
-         0xC0, 0xA3, 0x81, 0x38, 0xFB, 0x05,  # If ($1E80($1A3) [$1EB4, bit 3] is set), branch to $CFFB38
-         0x3D, 0x03,  # Create object $03
-         0x3F, 0x03, 0x01,  # Assign character $03 (Actor in stot 3) to party 1
-         0xFE  # return
-         ])
-    shadow_recruit_sub.write(fout)
-
-    # Always remove the boxes in Mobliz basement
-    mobliz_box_sub = Substitution()
-    mobliz_box_sub.set_location(0xC50EE)
-    mobliz_box_sub.bytestring = bytes([0xC0, 0x27, 0x81, 0xB3, 0x5E, 0x00])
-    mobliz_box_sub.write(fout)
-
-    # Always show the door in Fanatics Tower level 1,
-    # and don't change commands.
-    fanatics_sub = Substitution()
-    fanatics_sub.set_location(0xC5173)
-    fanatics_sub.bytestring = bytes([0x45, 0x45, 0xC0, 0x27, 0x81, 0xB3, 0x5E, 0x00])
-    fanatics_sub.write(fout)
+# def manage_strange_events():
+#     shadow_recruit_sub = Substitution()
+#     shadow_recruit_sub.set_location(0xB0A9F)
+#     shadow_recruit_sub.bytestring = bytes([0x42, 0x31])  # hide party member in slot 0
+#
+#     shadow_recruit_sub.write(fout)
+#     shadow_recruit_sub.set_location(0xB0A9E)
+#     shadow_recruit_sub.bytestring = bytes([0x41, 0x31,  # show party member in slot 0
+#                                            0x41, 0x11,  # show object 11
+#                                            0x31  # begin queue for party member in slot 0
+#                                            ])
+#     shadow_recruit_sub.write(fout)
+#
+#     shadow_recruit_sub.set_location(0xB0AD4)
+#     shadow_recruit_sub.bytestring = bytes([0xB2, 0x29, 0xFB, 0x05, 0x45])  # Call subroutine $CFFB29, refresh objects
+#     shadow_recruit_sub.write(fout)
+#
+#     shadow_recruit_sub.set_location(0xFFB29)
+#     shadow_recruit_sub.bytestring = bytes(
+#         [0xB2, 0xC1, 0xC5, 0x00,  # Call subroutine $CAC5C1 (set CaseWord bit corresponding to number of
+#          # characters in party)
+#          0xC0, 0xA3, 0x81, 0x38, 0xFB, 0x05,  # If ($1E80($1A3) [$1EB4, bit 3] is set), branch to $CFFB38
+#          0x3D, 0x03,  # Create object $03
+#          0x3F, 0x03, 0x01,  # Assign character $03 (Actor in stot 3) to party 1
+#          0xFE  # return
+#          ])
+#     shadow_recruit_sub.write(fout)
+#
+#     # Always remove the boxes in Mobliz basement
+#     mobliz_box_sub = Substitution()
+#     mobliz_box_sub.set_location(0xC50EE)
+#     mobliz_box_sub.bytestring = bytes([0xC0, 0x27, 0x81, 0xB3, 0x5E, 0x00])
+#     mobliz_box_sub.write(fout)
+#
+#     # Always show the door in Fanatics Tower level 1,
+#     # and don't change commands.
+#     fanatics_sub = Substitution()
+#     fanatics_sub.set_location(0xC5173)
+#     fanatics_sub.bytestring = bytes([0x45, 0x45, 0xC0, 0x27, 0x81, 0xB3, 0x5E, 0x00])
+#     fanatics_sub.write(fout)
 
 
 def create_dimensional_vortex():
@@ -3588,8 +3594,9 @@ def create_dimensional_vortex():
                 or (k.location.locid == 0x180 and k.entid == 0)  # weird out-of-bounds entrance in the sealed gate cave
                 or (k.location.locid == 0x3B and k.dest & 0x1FF == 0x3A)  # Figaro interior to throne room
                 or (k.location.locid == 0x19A and k.dest & 0x1FF == 0x19A)
-                #or (k.location.locid == 0x0 or k.dest == 0x0) #Exclude World of Balance ; Commented out until we finish fixing strangejourney -DS
-                #or (k.location.locid == 0x1 or k.dest == 0x1) #Exclude World of Ruin
+                or (k.location.locid == 0x1 or k.dest & 0x1FF == 0x1) #World of Ruin Towns
+                or (k.location.locid == 0x0 or k.dest & 0x1FF == 0x0) #World of Balance Towns
+
         # Kefka's Tower factory room (bottom level) conveyor/pipe
         ):
             return True
@@ -3648,6 +3655,17 @@ def create_dimensional_vortex():
     nextpointer = 0x1FBB00 + (len(entrancesets) * 2)
     longnextpointer = 0x2DF480 + (len(entrancesets) * 2) + 2
     total = 0
+
+    locations = get_locations()
+    for l in locations:
+        for e in l.entrances:
+            if l.locid in [0, 1]:
+                e.dest = e.dest | 0x200
+                # turn on bit
+            else:
+                e.dest = e.dest & 0x1FF
+                # turn off bit
+
     for e in entrancesets:
         total += len(e.entrances)
         nextpointer, longnextpointer = e.write_data(fout, nextpointer,
@@ -4933,7 +4951,10 @@ def randomize(**kwargs) -> str:
     rng = Random(seed)
 
     if Options_.is_code_active("thescenarionottaken"):
-        diverge(fout)
+        if Options_.is_code_active("strangejourney"):
+            print("thescenarionottaken code is incompatible with strangejourney")
+        else:
+            diverge(fout)
 
     read_dialogue(fout)
     read_location_names(fout)
@@ -5271,7 +5292,7 @@ def randomize(**kwargs) -> str:
 
     if Options_.is_code_active('strangejourney') and not Options_.is_code_active('ancientcave'):
         create_dimensional_vortex()
-        manage_strange_events()
+        #manage_strange_events()
     reseed()
 
     if Options_.is_code_active('notawaiter') and not Options_.is_code_active('ancientcave'):
