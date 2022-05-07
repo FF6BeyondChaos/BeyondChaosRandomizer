@@ -592,10 +592,11 @@ class Window(QWidget):
                     cmbbox.text = flagname
                     if flagname in makeover_groups:
                         cmbbox.setCurrentIndex(cmbbox.findText("Normal"))
+                        flaglbl = QLabel(f"{flagname} (" + str(makeover_groups[flagname]) +
+                                         ")   -  " + f"{flagdesc['explanation']}")
                     else:
                         cmbbox.setCurrentIndex(cmbbox.findText("Vanilla"))
-                    flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
-                    print(flagname + " : " + cmbbox.currentText())
+                        flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
                     tablayout.addWidget(cmbbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
                     cmbbox.activated[str].connect(lambda: self.flagButtonClicked())
