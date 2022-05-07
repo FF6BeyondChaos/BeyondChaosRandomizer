@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Set, Union
+from appearance import get_makeover_groups
 
 @dataclass(frozen=True)
 class Mode:
@@ -265,7 +266,7 @@ NORMAL_CODES = [
     Code('removeflashing', "NOT SO FLASHY MODE", "Removes some flash effects from the game, such as Bum Rush.", "aesthetic", "checkbox"),
     Code('remonsterate', "MONSTER SPRITE REPLACEMENT MODE", "Replaces monster sprites with sprites from other games. Requires sprites in the remonstrate\\sprites folder.", "aesthetic", "checkbox"),
 
-    #battle codes
+    # battle codes
     Code('electricboogaloo', "WILD ITEM BREAK MODE", "Increases the list of spells that items can break and proc for. Items can break for potentially any spell, and weapons can potentially proc any spell excluding SwdTechs, Blitzes, Slots, and a couple other skills.", "battle", "checkbox"),
     Code('collateraldamage', "ITEM BREAK MODE", "All pieces of equipment break for spells. Characters only have the Fight and Item commands, and enemies will use items drastically more often than usual.", "battle", "checkbox"),
     Code('masseffect', "WILD EQUIPMENT EFFECT MODE", "Increases the number of rogue effects on equipment by a large amount.", "battle", "checkbox"),
@@ -286,7 +287,7 @@ NORMAL_CODES = [
     Code('swdtechspeed', "CHANGE SWDTECH SPEED MODE", "Alters the speed at which the SwdTech bar moves.", "battle", "combobox", ("Fastest", "Faster", "Fast", "Vanilla", "Random")),
     Code('cursepower', "CHANGE CURSED SHIELD MODE", "Set the number of battles required to uncurse a Cursed Shield. (Vanilla = 256, 0 = Random)", "battle", "numberbox"),
 
-    #field codes
+    # field codes
     Code('fightclub', "MORE LIKE COLI-DON'T-SEE-'EM",  "Does not allow you to see the coliseum rewards before betting, but you can often run from the coliseum battles to keep your item.",  "field", "checkbox"),
     Code('bsiab', "UNBALANCED MONSTER CHESTS MODE", "Reverts the monster-in-a-box selection algorithm to be (mostly) the same as versions prior to EX v3.", "field", "checkbox"),
     Code('mimetime', 'ALTERNATE GOGO MODE', "Gogo will be hidden somewhere in the World of Ruin disguised as another character. Bring that character to him to recruit him.", "field", "checkbox"),
@@ -297,7 +298,7 @@ NORMAL_CODES = [
     Code('nomiabs', 'NO MIAB MODE', "Chests will never have monster encounters in them.", "field", "checkbox"),
 
 
-    #character codes
+    # character codes
     Code('replaceeverything', "REPLACE ALL SKILLS MODE", "All vanilla skills that can be replaced, are replaced.", "characters", "checkbox"),
     Code('allcombos', "ALL COMBOS MODE", "All skills that get replaced with something are replaced with combo skills.", "characters", "checkbox"),
     Code('nocombos', "NO COMBOS MODE", "There will be no combo(dual) skills.", "characters", "checkbox"),
@@ -310,23 +311,23 @@ NORMAL_CODES = [
     Code('suplexwrecks', "SUPLEX MODE", "All characters use the Sabin sprite, as well as having a name similar to Sabin. All characters have the Blitz and Suplex commands, and every enemy can be hit by Suplex.", "characters", "checkbox"),
     Code('desperation', "DESPERATION MODE", "Guarantees one character will have R-Limit, and greatly increases the chance of having desperation attacks as commands.", "characters", "checkbox"),
 
-    #gamebreaking codes
+    # gamebreaking codes
 
     Code('airship', "AIRSHIP MODE", "The party will have access to the airship immediately after leaving Narshe. Chocobo stables can also be used to acquire the airship. Doing events out of order can cause softlocks.", "gamebreaking", "checkbox"),
     Code('sketch', "ENABLE SKETCH GLITCH", "Enables sketch bug. Not recommended unless you know what you are doing.", "gamebreaking", "checkbox"),
     Code('equipanything', "EQUIP ANYTHING MODE", "Items that are not equippable normally can now be equipped as weapons or shields. These often give strange defensive stats or weapon animations.", "gamebreaking", "checkbox"),
 
-    #experimental codes
+    # experimental codes
 
     Code('repairpalette', "PALETTE REPAIR", "Used for testing changes to palette randomization. Not intended for actual play. Cannot proceed past Banon's scenario.", "experimental", "checkbox"),
     Code('strangejourney', "BIZARRE ADVENTURE", "A prototype entrance randomizer, similar to the ancientcave mode. Includes all maps and event tiles, and is usually extremely hard to beat by itself.", "experimental", "checkbox"),
     Code('thescenarionottaken', 'DIVERGENT PATHS MODE', "Changes the way the 3 scenarios are split up, to resemble PowerPanda's 'Divergent Paths' mod.", "experimental", "checkbox"),
 
-    #beta codes
+    # beta codes
 
 ]
 
-#these are all sprite related codes
+# these are all sprite related codes
 MAKEOVER_MODIFIER_CODES = [
     Code('novanilla', "COMPLETE MAKEOVER MODE", "Same as 'makeover' except sprites from the vanilla game are guaranteed not to appear.", "sprite", "checkbox"),
     Code('frenchvanilla', "EQUAL RIGHTS MAKEOVER MODE", "Same as 'makeover' except sprites from the vanilla game are selected with equal weight to new sprites rather than some being guaranteed to appear.", "sprite", "checkbox"),
@@ -334,8 +335,9 @@ MAKEOVER_MODIFIER_CODES = [
 ]
 RESTRICTED_VANILLA_SPRITE_CODES = []
 
-#this is used for the makeover variation codes for sprites
-makeover_groups = ["anime", "boys", "generic", "girls", "kids", "pets", "potato", "custom"]
+# this is used for the makeover variation codes for sprites
+# makeover_groups = ["anime", "boys", "generic", "girls", "kids", "pets", "potato", "custom"]
+makeover_groups = get_makeover_groups()
 for mg in makeover_groups:
     no = Code('no'+mg, f"NO {mg.upper()} ALLOWED MODE", f"Do not select {mg} sprites.", "spriteCategories", "checkbox")
     MAKEOVER_MODIFIER_CODES.extend([
