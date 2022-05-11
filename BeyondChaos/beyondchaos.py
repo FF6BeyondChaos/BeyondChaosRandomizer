@@ -1,10 +1,9 @@
 # Standard library imports
 import configparser
 import hashlib
-import multiprocessing
-import multiprocessing.pool
-import os
 import subprocess
+import multiprocessing.process
+import os
 import sys
 import time
 import traceback
@@ -16,14 +15,14 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
                              QLabel, QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QFileDialog,
                              QApplication, QTabWidget, QInputDialog, QScrollArea, QMessageBox,
                              QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox, QDialog,
-                             QDialogButtonBox)
+                             QDialogButtonBox, QMenu, QMainWindow)
 
 # Local application imports
 import utils
 import customthreadpool
 from config import (readFlags, writeFlags)
 from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES, makeover_groups)
-from update import (update, update_needed)
+from update import (update_needed, get_updater)
 from randomizer import randomize
 
 if sys.version_info[0] < 3:
@@ -87,7 +86,7 @@ class BingoPrompts(QDialog):
         self.difficulty_dropdown = QComboBox(self)
         for difficulty in ["Easy", "Normal", "Hard"]:
             self.difficulty_dropdown.addItem(difficulty)
-        self.difficulty_dropdown.setCurrentIndex(1) # Normal
+        self.difficulty_dropdown.setCurrentIndex(1)  # Normal
         self.difficulty_dropdown.currentTextChanged.connect(self._set_difficulty)
         layout.addWidget(difficulty_label)
         layout.addWidget(self.difficulty_dropdown)
@@ -139,8 +138,26 @@ class BingoPrompts(QDialog):
     def _get_is_ok_enabled(self):
         return self.spells or self.items or self.monsters or self.abilities
 
-class Window(QWidget):
 
+def update_bc():
+    update_message = QMessageBox()
+    update_message.setWindowTitle("Beyond Chaos Updater")
+    update_message.setText("Beyond Chaos will check for updates to the core randomizer, character sprites, "
+                           "monster sprites. If updates are performed, BeyondChaos.exe will automatically close.")
+    update_message.setStandardButtons(QMessageBox.Cancel | QMessageBox.Ok)
+    button_clicked = update_message.exec()
+    if button_clicked == QMessageBox.Ok:
+        args = ["-pid " + str(os.getpid())]
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("Starting Beyond Chaos Updater...\n")
+        try:
+            subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
+        except FileNotFoundError:
+            get_updater()
+            subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
+
+
+class Window(QMainWindow):
     def __init__(self):
         super().__init__()
 
@@ -212,6 +229,7 @@ class Window(QWidget):
         self.flagDescription = QLabel("Pick a Flag Set!")
 
         # tabs: Flags, Sprites, Battle, etc...
+        self.central_widget = QWidget()
         self.tab1 = QWidget()
         self.tab2 = QWidget()
         self.tab3 = QWidget()
@@ -273,6 +291,13 @@ class Window(QWidget):
         index = self.presetBox.currentIndex()
 
     def createLayout(self):
+        # Menubar
+        file_menu = QMenu("File", self)
+        file_menu.addAction("Quit", App.quit)
+        self.menuBar().addMenu(file_menu)
+
+        self.menuBar().addAction("Update", update_bc)
+
         # Primary Vertical Box Layout
         vbox = QVBoxLayout()
 
@@ -290,16 +315,8 @@ class Window(QWidget):
         # flags box
         vbox.addWidget(self.flagBoxLayout())
 
-        self.setLayout(vbox)
-
-    def update(self):
-        update()
-        QMessageBox.information(
-            self,
-            "Update Process",
-            "Checking for updates, if found this will automatically close",
-            QMessageBox.Ok
-        )
+        self.central_widget.setLayout(vbox)
+        self.setCentralWidget(self.central_widget)
 
     # Top groupbox consisting of ROM selection, and Seed number input
     def GroupBoxOneLayout(self):
@@ -457,7 +474,7 @@ class Window(QWidget):
         # height = 60
         # updateButton.setMaximumWidth(width)
         # updateButton.setMaximumHeight(height)
-        # updateButton.clicked.connect(lambda: self.update())
+        # updateButton.clicked.connect(lambda: self.update_bc())
         # updateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
         # effect = QGraphicsDropShadowEffect()
         # effect.setBlurRadius(3)
