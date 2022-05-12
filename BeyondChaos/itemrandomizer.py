@@ -1,10 +1,10 @@
 import traceback
+import options
 from utils import (hex2int, write_multi, read_multi, ITEM_TABLE,
                    CUSTOM_ITEMS_TABLE, mutate_index,
                    name_to_bytes, utilrandom as random,
                    Substitution)
 from skillrandomizer import get_ranked_spells, get_spell
-from options import Options_
 
 # future blocks: chests, morphs, shops
 
@@ -738,7 +738,7 @@ class ItemBlock:
             self.mutate_break_effect(unbreakable=unbreakable)
 
     def mutate_name(self):
-        if Options_.is_code_active("questionablecontent") and not self.is_consumable and '?' not in self.name:
+        if options.Options_.is_code_active("questionablecontent") and not self.is_consumable and '?' not in self.name:
             self.name = self.name[:11] + '?'
             # Index on self.dataname is [1:] because the first character determines the
             #   equipment symbol (helmet/shield/etc).

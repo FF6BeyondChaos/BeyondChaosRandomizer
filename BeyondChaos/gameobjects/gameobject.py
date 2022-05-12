@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from options import Options
-
 
 class GameObject(ABC):
 
