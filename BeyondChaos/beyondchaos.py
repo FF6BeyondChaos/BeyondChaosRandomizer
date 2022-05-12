@@ -27,7 +27,7 @@ from randomizer import randomize
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. "
-                    "Report this to Green Knight")
+                    "Report this to https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/issues")
 
 
 # Extended QButton widget to hold flag value - NOT USED PRESENTLY
