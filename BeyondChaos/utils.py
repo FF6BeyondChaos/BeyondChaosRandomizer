@@ -182,43 +182,43 @@ def hex2int(hexstr):
     return int(hexstr, 16)
 
 
-def shuffle_key_values(d):
-    keys = list(d.keys())
-    random.shuffle(keys)
-    shuffled = dict(zip(keys, d.values()))
-    d.update(shuffled)
+# def shuffle_key_values(d):
+#     keys = list(d.keys())
+#     random.shuffle(keys)
+#     shuffled = dict(zip(keys, d.values()))
+#     d.update(shuffled)
 
 
-def dialogue_to_bytes(text, null_terminate=True):
-    bs = []
-    i = 0
-    while i < len(text):
-        if text[i] == " ":
-            spaces = re.match(" +", text[i:]).group(0)
-            count = len(spaces)
-            j = i + count
-            hexstr = dialoguebytetable.get(text[i:j], "")
-            if not hexstr:
-                hexstr = dialoguebytetable.get(text[i])
-                j = i + 1
-            i = j
-        elif text[i] == "<":
-            j = text.find(">", i) + 1
-            hexstr = dialoguetexttable.get(text[i:j], "")
-            i = j
-        elif i < len(text) - 1 and text[i:i + 2] in dialoguetexttable:
-            hexstr = dialoguetexttable[text[i:i + 2]]
-            i += 2
-        else:
-            hexstr = dialoguetexttable[text[i]]
-            i += 1
-
-        if hexstr != "":
-            bs.extend(bytes.fromhex(hexstr))
-
-    if null_terminate and bs[-1] != 0x0:
-        bs.append(0x0)
-    return bytes(bs)
+# def dialogue_to_bytes(text, null_terminate=True):
+#     bs = []
+#     i = 0
+#     while i < len(text):
+#         if text[i] == " ":
+#             spaces = re.match(" +", text[i:]).group(0)
+#             count = len(spaces)
+#             j = i + count
+#             hexstr = dialoguebytetable.get(text[i:j], "")
+#             if not hexstr:
+#                 hexstr = dialoguebytetable.get(text[i])
+#                 j = i + 1
+#             i = j
+#         elif text[i] == "<":
+#             j = text.find(">", i) + 1
+#             hexstr = dialoguetexttable.get(text[i:j], "")
+#             i = j
+#         elif i < len(text) - 1 and text[i:i + 2] in dialoguetexttable:
+#             hexstr = dialoguetexttable[text[i:i + 2]]
+#             i += 2
+#         else:
+#             hexstr = dialoguetexttable[text[i]]
+#             i += 1
+#
+#         if hexstr != "":
+#             bs.extend(bytes.fromhex(hexstr))
+#
+#     if null_terminate and bs[-1] != 0x0:
+#         bs.append(0x0)
+#     return bytes(bs)
 
 
 def bytes_to_dialogue(bs):
@@ -251,43 +251,43 @@ def get_long_battle_text_pointer(f, index):
     return ptr
 
 
-def get_long_battle_text_index(f, address):
-    base = 0x100000
-    ptrs_start = 0x10D000
-    ptrs_end = 0x10D200
-    prev = 0
-    for index, ptr_ptr in enumerate(range(ptrs_start, ptrs_end, 2)):
-        f.seek(ptr_ptr)
-        ptr = read_multi(f) + base
-        if ptr > address:
-            return index - 1
-    return -1
+# def get_long_battle_text_index(f, address):
+#     base = 0x100000
+#     ptrs_start = 0x10D000
+#     ptrs_end = 0x10D200
+#     prev = 0
+#     for index, ptr_ptr in enumerate(range(ptrs_start, ptrs_end, 2)):
+#         f.seek(ptr_ptr)
+#         ptr = read_multi(f) + base
+#         if ptr > address:
+#             return index - 1
+#     return -1
 
 
-def get_dialogue_pointer(f, index):
-    f.seek(0xCE600)
-    increment_index = read_multi(f)
-    base = 0xD0000 if index <= increment_index else 0xE0000
-    ptrs_start = 0xCE602
-    f.seek(ptrs_start + index * 2)
-    ptr = read_multi(f)
-    ptr += base
-    return ptr
+# def get_dialogue_pointer(f, index):
+#     f.seek(0xCE600)
+#     increment_index = read_multi(f)
+#     base = 0xD0000 if index <= increment_index else 0xE0000
+#     ptrs_start = 0xCE602
+#     f.seek(ptrs_start + index * 2)
+#     ptr = read_multi(f)
+#     ptr += base
+#     return ptr
 
 
-def get_dialogue_index(f, address):
-    f.seek(0xCE600)
-    increment_index = read_multi(f)
-    ptrs_start = 0xCE602
-    ptrs_end = 0xD0000
-    prev = 0
-    for index, ptr_ptr in enumerate(range(ptrs_start, ptrs_end, 2)):
-        base = 0xD0000 if index <= increment_index else 0xE0000
-        f.seek(ptr_ptr)
-        ptr = read_multi(f) + base
-        if ptr > address:
-            return index - 1
-    return -1
+# def get_dialogue_index(f, address):
+#     f.seek(0xCE600)
+#     increment_index = read_multi(f)
+#     ptrs_start = 0xCE602
+#     ptrs_end = 0xD0000
+#     prev = 0
+#     for index, ptr_ptr in enumerate(range(ptrs_start, ptrs_end, 2)):
+#         base = 0xD0000 if index <= increment_index else 0xE0000
+#         f.seek(ptr_ptr)
+#         ptr = read_multi(f) + base
+#         if ptr > address:
+#             return index - 1
+#     return -1
 
 
 battlebg_palettes = {}
@@ -912,67 +912,67 @@ def generate_character_palette(skintones_unused=None, char_hues_unused=None, tra
     return new_palette
 
 
-def decompress(bytestring, simple=False, complicated=False, debug=False):
-    result = ""
-    buff = [chr(0)] * 2048
-    buffaddr = 0x7DE
-    while bytestring:
-        flags, bytestring = ord(bytestring[0]), bytestring[1:]
-        for i in range(8):
-            if not bytestring:
-                break
+# def decompress(bytestring, simple=False, complicated=False, debug=False):
+#     result = ""
+#     buff = [chr(0)] * 2048
+#     buffaddr = 0x7DE
+#     while bytestring:
+#         flags, bytestring = ord(bytestring[0]), bytestring[1:]
+#         for i in range(8):
+#             if not bytestring:
+#                 break
+#
+#             if flags & (1 << i):
+#                 byte, bytestring = bytestring[0], bytestring[1:]
+#                 result += byte
+#                 buff[buffaddr] = byte
+#                 buffaddr += 1
+#                 if buffaddr == 0x800:
+#                     buffaddr = 0
+#                 if debug:
+#                     print("%x" % ord(byte), end=' ')
+#             else:
+#                 low, high, bytestring = (
+#                     ord(bytestring[0]), ord(bytestring[1]), bytestring[2:])
+#                 seekaddr = low | ((high & 0x07) << 8)
+#                 length = ((high & 0xF8) >> 3) + 3
+#                 if simple:
+#                     copied = "".join([buff[seekaddr]] * length)
+#                 elif complicated:
+#                     cycle = buffaddr - seekaddr
+#                     if cycle < 0:
+#                         cycle += 0x800
+#                     subbuff = "".join((buff + buff)[seekaddr:seekaddr + cycle])
+#                     while len(subbuff) < length:
+#                         subbuff = subbuff + subbuff
+#                     copied = "".join(subbuff[:length])
+#                 else:
+#                     copied = "".join((buff + buff)[seekaddr:seekaddr + length])
+#                 assert len(copied) == length
+#                 result += copied
+#                 if debug:
+#                     print("%x" % seekaddr, length, end=' ')
+#                 while copied:
+#                     byte, copied = copied[0], copied[1:]
+#                     buff[buffaddr] = byte
+#                     buffaddr += 1
+#                     if buffaddr == 0x800:
+#                         buffaddr = 0
+#                     if debug:
+#                         print("%x" % ord(byte), end=' ')
+#             if debug:
+#                 print()
+#                 import pdb
+#                 pdb.set_trace()
+#     return result
 
-            if flags & (1 << i):
-                byte, bytestring = bytestring[0], bytestring[1:]
-                result += byte
-                buff[buffaddr] = byte
-                buffaddr += 1
-                if buffaddr == 0x800:
-                    buffaddr = 0
-                if debug:
-                    print("%x" % ord(byte), end=' ')
-            else:
-                low, high, bytestring = (
-                    ord(bytestring[0]), ord(bytestring[1]), bytestring[2:])
-                seekaddr = low | ((high & 0x07) << 8)
-                length = ((high & 0xF8) >> 3) + 3
-                if simple:
-                    copied = "".join([buff[seekaddr]] * length)
-                elif complicated:
-                    cycle = buffaddr - seekaddr
-                    if cycle < 0:
-                        cycle += 0x800
-                    subbuff = "".join((buff + buff)[seekaddr:seekaddr + cycle])
-                    while len(subbuff) < length:
-                        subbuff = subbuff + subbuff
-                    copied = "".join(subbuff[:length])
-                else:
-                    copied = "".join((buff + buff)[seekaddr:seekaddr + length])
-                assert len(copied) == length
-                result += copied
-                if debug:
-                    print("%x" % seekaddr, length, end=' ')
-                while copied:
-                    byte, copied = copied[0], copied[1:]
-                    buff[buffaddr] = byte
-                    buffaddr += 1
-                    if buffaddr == 0x800:
-                        buffaddr = 0
-                    if debug:
-                        print("%x" % ord(byte), end=' ')
-            if debug:
-                print()
-                import pdb
-                pdb.set_trace()
-    return result
 
-
-def line_wrap(things, width=16):
-    newthings = []
-    while things:
-        newthings.append(things[:width])
-        things = things[width:]
-    return newthings
+# def line_wrap(things, width=16):
+#     newthings = []
+#     while things:
+#         newthings.append(things[:width])
+#         things = things[width:]
+#     return newthings
 
 
 def get_matrix_reachability(M):

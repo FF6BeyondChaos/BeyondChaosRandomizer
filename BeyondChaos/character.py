@@ -1,8 +1,3 @@
-from typing import List
-
-import options
-from gameobjects.character import Character
-from itemrandomizer import get_ranked_items
 from utils import CHAR_TABLE, hex2int, utilrandom as random
 
 equip_offsets = {"weapon": 15,
@@ -19,6 +14,7 @@ character_list_deprecated = []
 character_list = []
 
 def load_characters(rom_file_name, force_reload=False):
+    from gameobjects.character import Character
     if character_list and not force_reload:
         return
 
@@ -91,7 +87,8 @@ class CharacterBlock:
             s += "Looks like: %s\n" % self.new_appearance
             s += "Originally: %s\n" % self.original_appearance
 
-        if not options.Use_new_randomizer:
+        from options import Use_new_randomizer
+        if not Use_new_randomizer:
             # Using the refactored randomizer will prevent these fields from ever being populated
             from utils import make_table
             statblurbs = {}
@@ -115,6 +112,7 @@ class CharacterBlock:
         return s.strip()
 
     def get_notable_equips(self):
+        from itemrandomizer import get_ranked_items
         items = [i for i in get_ranked_items() if
                  i.equippable & (1 << self.id) and not i.imp_only]
         weapons = [i for i in items if i.is_weapon]

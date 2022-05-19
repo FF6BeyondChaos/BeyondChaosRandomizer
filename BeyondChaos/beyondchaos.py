@@ -607,7 +607,7 @@ class Window(QMainWindow):
                         width = max(width, len(choice) * 10)
                     cmbbox.setFixedWidth(width)
                     cmbbox.text = flagname
-                    if flagname in makeover_groups:
+                    if makeover_groups and flagname in makeover_groups:
                         cmbbox.setCurrentIndex(cmbbox.findText("Normal"))
                         flaglbl = QLabel(f"{flagname} (" + str(makeover_groups[flagname]) +
                                          ")   -  " + f"{flagdesc['explanation']}")
@@ -1006,7 +1006,7 @@ class Window(QMainWindow):
                 elif type(child) == QSpinBox or type(child) == QDoubleSpinBox:
                     child.setValue(child.default)
                 elif type(child) == QComboBox:
-                    if child.text in makeover_groups:
+                    if makeover_groups and child.text in makeover_groups:
                         child.setCurrentIndex(child.findText("Normal"))
                     else:
                         child.setCurrentIndex(child.findText("Vanilla"))

@@ -4,9 +4,6 @@ import string
 import options
 
 from character import get_characters
-from locationrandomizer import get_npcs
-from monsterrandomizer import change_enemy_name
-from dialoguemanager import set_dialogue_var, load_patch_file
 from utils import (CHARACTER_PALETTE_TABLE, EVENT_PALETTE_TABLE, FEMALE_NAMES_TABLE, MALE_NAMES_TABLE,
                    MOOGLE_NAMES_TABLE, RIDING_SPRITE_TABLE, SPRITE_REPLACEMENT_TABLE, CORAL_TABLE,
                    generate_character_palette, get_palette_transformer, hex2int, name_to_bytes,
@@ -202,7 +199,7 @@ def sanitize_coral(names):
 
 
 def manage_coral(fout):
-
+    from dialoguemanager import set_dialogue_var, load_patch_file
     f = open_mei_fallback(CORAL_TABLE)
     coralnames = sorted(set(sanitize_coral([line.strip() for line in f.readlines()])))
     f.close()
@@ -321,6 +318,7 @@ def manage_character_names(fout, change_to, male):
 
     umaro_name = names[13]
     for umaro_id in [0x10f, 0x110]:
+        from monsterrandomizer import change_enemy_name
         change_enemy_name(fout, umaro_id, umaro_name)
 
     if not options.Options_.is_code_active('capslockoff'):
@@ -764,12 +762,14 @@ def manage_character_appearance(fout, preserve_graphics=False):
 
     return sprite_log
 
+
 def manage_palettes(fout, change_to, char_ids):
     sabin_mode = options.Options_.is_code_active('suplexwrecks')
     tina_mode = options.Options_.is_code_active('bravenudeworld')
     christmas_mode = options.Options_.is_code_active('christmas')
     new_palette_mode = not options.Options_.is_code_active('sometimeszombies')
 
+    from locationrandomizer import get_npcs
     characters = get_characters()
     npcs = get_npcs()
     charpal_Options = {}
