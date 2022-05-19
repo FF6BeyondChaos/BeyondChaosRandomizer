@@ -306,7 +306,7 @@ def recruit_gogo_insert(fout, recruit_info):
         0x45, # refresh objects
     ] + name_camera_reverse + [
         0x93, # pause for 45 frames
-        0x3E, 0x0D, # Delete object 0D
+        0x3E, 0x0C, # Delete object 0C
         0x45, # refresh objects
     ]) + extra_bytes + bytes([0xFE])
     name_sub.write(fout)
