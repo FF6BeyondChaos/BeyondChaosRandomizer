@@ -74,11 +74,12 @@ VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-#TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz makeover partyparty novanilla randombosses alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent canttouchthis easymodo |1603333081"
+#TEST_SEED = "3|normal|bcedfghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random halloween|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
-TEST_SEED = "3|speedcave|bcefgijmnopqstwz partyparty frenchvanilla electricboogaloo canttouchthis capslockoff johnnyachaotic dearestmolulu easymodo questionablecontent removeflashing dancelessons|1651122160"
+#TEST_SEED = "3|normal|bcdefghijklmnopqrstyz partyparty novanilla noanime noboys likegirls hatekids nopets nopotato electricboogaloo masseffect randombosses supernatural alasdraco capslockoff johnnydmad notawaiter bsiab remonsterate|1652122298"
+TEST_SEED = "3|normal|bcdefgijklmnopqrstuwyz makeover partyparty randombosses alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dancingmaduin|1614140076"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -1982,17 +1983,6 @@ def manage_balance(newslots: bool = True):
     get_monsters(sourcefile)
     sealed_kefka = get_monster(0x174)
 
-    if not Options_.is_code_active('sketch'):
-        sketch_fix_sub = Substitution()
-        sketch_fix_sub.set_location(0x2F5C6)
-        sketch_fix_sub.bytestring = bytes([0x80, 0xCA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0x4C, 0x09, 0xF8,
-                                           0xA0, 0x00, 0x28, 0x22, 0x09, 0xB1, 0xC1, 0xA9, 0x01, 0x1C, 0x8D, 0x89, 0xA0,
-                                           0x03, 0x00,
-                                           0xB1, 0x76, 0x0A, 0xAA, 0xC2, 0x20, 0xBD, 0x01, 0x20, 0x90, 0x02,
-                                           0x7B, 0x3A, 0xAA, 0x7B, 0xE2, 0x20, 0x22, 0xD1, 0x24, 0xC1, 0x80, 0xD7, ])
-        sketch_fix_sub.write(fout)
-
-
 def manage_magitek():
     spells = get_ranked_spells()
     # exploder = [s for s in spells if s.spellid == 0xA2][0]
@@ -2136,7 +2126,7 @@ def manage_monsters() -> List[MonsterBlock]:
 
     shuffle_monsters(monsters, safe_solo_terra=safe_solo_terra)
     for m in monsters:
-        m.randomize_special_effect(fout)
+        m.randomize_special_effect(fout, halloween=Options_.is_code_active('halloween'))
         m.write_stats(fout)
 
     return monsters
@@ -4309,6 +4299,7 @@ def manage_spookiness():
         nowhere_to_run_bottom_sub.write(fout)
 
 
+
 def manage_dances():
     if Options_.is_code_active('madworld'):
         spells = get_ranked_spells(sourcefile)
@@ -5017,7 +5008,7 @@ def randomize(**kwargs) -> str:
             if dirk is None:
                 items = get_ranked_items(sourcefile)
                 dirk = get_item(0)
-            dirk.become_another()
+            dirk.become_another(halloween=Options_.is_code_active('halloween'))
             dirk.write_stats(fout)
             dummy_item(dirk)
             assert not dummy_item(dirk)
@@ -5378,6 +5369,16 @@ def randomize(**kwargs) -> str:
         if remonsterate_results:
             for result in remonsterate_results:
                 log(str(result) + '\n', section='remonsterate')
+
+    if not Options_.is_code_active('sketch'):
+        sketch_fix_sub = Substitution()
+        sketch_fix_sub.set_location(0x2F5C6)
+        sketch_fix_sub.bytestring = bytes([0x80, 0xCA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0x4C, 0x09, 0xF8,
+                                           0xA0, 0x00, 0x28, 0x22, 0x09, 0xB1, 0xC1, 0xA9, 0x01, 0x1C, 0x8D, 0x89, 0xA0,
+                                           0x03, 0x00,
+                                           0xB1, 0x76, 0x0A, 0xAA, 0xC2, 0x20, 0xBD, 0x01, 0x20, 0x90, 0x02,
+                                           0x7B, 0x3A, 0xAA, 0x7B, 0xE2, 0x20, 0x22, 0xD1, 0x24, 0xC1, 0x80, 0xD7, ])
+        sketch_fix_sub.write(fout)
 
     has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
     if has_music:

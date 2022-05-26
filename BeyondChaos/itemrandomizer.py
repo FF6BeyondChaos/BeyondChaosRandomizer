@@ -217,13 +217,16 @@ class ItemBlock:
     def ban(self):
         self.banned = True
 
-    def become_another(self, customdict=None, tier=None):
+    def become_another(self, customdict=None, tier=None, halloween=False):
         customs = get_custom_items()
         if customdict is None:
-            if tier is None:
-                candidates = [customs[key] for key in sorted(customs)]
+            if halloween:
+                candidates = [customs[key] for key in sorted(customs) if customs[key]["name_text"] == "SORD....."]
             else:
-                candidates = [customs[key] for key in sorted(customs) if customs[key]["tier"] == tier]
+                if tier is None:
+                    candidates = [customs[key] for key in sorted(customs)]
+                else:
+                    candidates = [customs[key] for key in sorted(customs) if customs[key]["tier"] == tier]
             customdict = random.choice(candidates)
 
         for key in self.features:
