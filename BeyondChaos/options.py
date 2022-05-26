@@ -263,7 +263,7 @@ NORMAL_CODES = [
     Code('johnnydmad', "MUSIC REPLACEMENT MODE", "Randomizes music with regard to what would make sense in a given location.", "aesthetic", "checkbox"),
     Code('johnnyachaotic', "MUSIC MANGLING MODE", "Randomizes music with no regard to what would make sense in a given location.", "aesthetic", "checkbox"),
     Code('notawaiter', "CUTSCENE SKIPS", "Up to Kefka at Narshe, the vast majority of mandatory cutscenes are completely removed. Optional cutscenes are not removed.", "aesthetic", "checkbox"),
-    Code('removeflashing', "NOT SO FLASHY MODE", "Removes some flash effects from the game, such as Bum Rush.", "aesthetic", "checkbox"),
+    Code('removeflashing', "NOT SO FLASHY MODE", "Removes most white flashing effects from the game, such as Bum Rush.", "aesthetic", "checkbox"),
     Code('remonsterate', "MONSTER SPRITE REPLACEMENT MODE", "Replaces monster sprites with sprites from other games. Requires sprites in the remonstrate\\sprites folder.", "aesthetic", "checkbox"),
 
     # battle codes
