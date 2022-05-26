@@ -1209,10 +1209,7 @@ class Window(QMainWindow):
 
             flagMode = ""
             for flag in self.flags:
-                if len(flag) > 1:
-                    flagMode += " " + flag
-                else:
-                    flagMode += flag
+                flagMode += " " + flag
 
                 flagMsg = ""
             flagMode = flagMode.strip()
