@@ -337,13 +337,17 @@ RESTRICTED_VANILLA_SPRITE_CODES = []
 
 # this is used for the makeover variation codes for sprites
 # makeover_groups = ["anime", "boys", "generic", "girls", "kids", "pets", "potato", "custom"]
-makeover_groups = get_makeover_groups()
-for mg in makeover_groups:
-    no = Code('no'+mg, f"NO {mg.upper()} ALLOWED MODE", f"Do not select {mg} sprites.", "spriteCategories", "checkbox")
-    MAKEOVER_MODIFIER_CODES.extend([
-        Code(mg, f"RARE {mg.upper()} MODE", f"Adjust probability of selecting {mg} sprites.",
-             "spriteCategories", "combobox", ("Normal", "No", "Hate", "Like", "Only"))])
-    RESTRICTED_VANILLA_SPRITE_CODES.append(no)
+makeover_groups = None
+try:
+    makeover_groups = get_makeover_groups()
+    for mg in makeover_groups:
+        no = Code('no'+mg, f"NO {mg.upper()} ALLOWED MODE", f"Do not select {mg} sprites.", "spriteCategories", "checkbox")
+        MAKEOVER_MODIFIER_CODES.extend([
+            Code(mg, f"RARE {mg.upper()} MODE", f"Adjust probability of selecting {mg} sprites.",
+                 "spriteCategories", "combobox", ("Normal", "No", "Hate", "Like", "Only"))])
+        RESTRICTED_VANILLA_SPRITE_CODES.append(no)
+except FileNotFoundError:
+    print("Error: No spritereplacements.txt found in the custom folder. Spritecategories will be unavailable.")
 
 
 # TODO: do this a better way

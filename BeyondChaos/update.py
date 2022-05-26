@@ -55,4 +55,4 @@ def run_first_time_setup():
     if not os.path.isfile("BeyondChaosUpdater.exe"):
         get_updater()
     time.sleep(3)
-    subprocess.Popen(args=[], executable="BeyondChaosUpdater.exe")
+    subprocess.call(args=[], executable="BeyondChaosUpdater.exe")
