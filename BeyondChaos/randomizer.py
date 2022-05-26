@@ -1984,6 +1984,7 @@ def manage_balance(newslots: bool = True):
     sealed_kefka = get_monster(0x174)
 
 def manage_magitek():
+    magitek_log = ""
     spells = get_ranked_spells()
     # exploder = [s for s in spells if s.spellid == 0xA2][0]
     shockwave = [s for s in spells if s.spellid == 0xE3][0]
@@ -2016,6 +2017,17 @@ def manage_magitek():
 
         terra_used.append(terra_cand)
         others_used.append(others_cand)
+
+    magitek_log += "Terra Magitek skills:\n\n"
+    for s in terra_used:
+        if s is not None:
+            magitek_log += str(s.name) + " \n"
+    magitek_log += "\nOther Magitek skills: \n\n"
+    for s in others_used:
+        if s is not None:
+            if s.name != "Shock Wave":
+                magitek_log += str(s.name) + " \n"
+    log(magitek_log, section="magitek")
 
     terra_used.reverse()
     others_used.reverse()
@@ -5585,7 +5597,7 @@ def randomize(**kwargs) -> str:
 
     f = open(outlog, 'w+')
     f.write(get_logstring(
-        ["characters", "stats", "aesthetics", "commands", "blitz inputs", "slots", "dances", "espers", "item magic",
+        ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers", "item magic",
          "item effects", "command-change relics", "colosseum", "monsters", "music", "remonsterate", "shops",
          "treasure chests", "zozo clock"]))
     f.close()
