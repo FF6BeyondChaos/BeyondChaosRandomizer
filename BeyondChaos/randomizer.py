@@ -2022,7 +2022,7 @@ def manage_magitek():
     for s in terra_used:
         if s is not None:
             magitek_log += str(s.name) + " \n"
-    magitek_log += "\nOther Magitek skills: \n\n"
+    magitek_log += "\nOther Actor Magitek skills: \n\n"
     for s in others_used:
         if s is not None:
             if s.name != "Shock Wave":
