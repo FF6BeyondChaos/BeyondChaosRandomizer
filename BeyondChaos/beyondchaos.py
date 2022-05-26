@@ -209,7 +209,7 @@ class Window(QMainWindow):
 
         # array of preset flags and codes
         self.supportedPresets = [
-            "newplayer", "intermediateplayer", "advancedplayer", "raceeasy",
+            "newplayer", "intermediateplayer", "advancedplayer", "chaoticplayer", "raceeasy",
             "racemedium", "raceinsane"
         ]
         # dictionary of game presets from drop down
@@ -217,7 +217,7 @@ class Window(QMainWindow):
 
         # tabs names for the tabs in flags box
         self.tabNames = [
-            "Flags", "Sprites", "SpriteCategories", "Battle", "Aesthetic",
+            "Flags", "Sprites", "SpriteCategories", "Battle", "Aesthetic/Accessibility",
             "Field", "Characters", "Experimental", "Gamebreaking", "Beta"
         ]
 
@@ -955,19 +955,26 @@ class Window(QMainWindow):
             self.modeBox.setCurrentIndex(0)
         elif index == 4:
             self.flagDescription.setText(
+                "Flags designed for a chaotic player"
+            )
+            self.flagString.setText(flags)
+            self.mode = "normal"
+            self.modeBox.setCurrentIndex(0)
+        elif index == 5:
+            self.flagDescription.setText(
                 "Flags designed for KaN easy difficulty races"
             )
             self.flagString.setText(flags)
             self.mode = "katn"
             self.modeBox.setCurrentIndex(1)
-        elif index == 5:
+        elif index == 6:
             self.flagDescription.setText(
                 "Flags designed for KaN medium difficulty races"
             )
             self.flagString.setText(flags)
             self.mode = "katn"
             self.modeBox.setCurrentIndex(1)
-        elif index == 6:
+        elif index == 7:
             self.flagDescription.setText(
                 "Flags designed for KaN insane difficulty races"
             )
@@ -1091,20 +1098,25 @@ class Window(QMainWindow):
         for mode in self.supportedPresets:
             if mode == "newplayer":
                 self.GamePresets['New Player'] = (
-                    "b c e g i m n o p q r s t w y z alasdraco "
-                    "capslockoff partyparty makeover johnnydmad"
+                    "b c e f g i n o p q r s t w y z alasdraco capslockoff partyparty makeover "
+                    "johnnydmad questionablecontent dancelessons swdtechspeed:faster "
                 )
             elif mode == "intermediateplayer":
                 self.GamePresets['Intermediate Player'] = (
-                    "b c d e g i j k l m n o p q r s t w y z alasdraco "
-                    "capslockoff makeover partyparty johnnydmad notawaiter "
-                    "mimetime"
+                    "b c d e f g i j k m n o p q r s t u w y z alasdraco capslockoff partyparty makeover "
+                    "johnnydmad notawaiter mimetime electricboogaloo dancelessons remonsterate swdtechspeed:random "
                 )
             elif mode == "advancedplayer":
                 self.GamePresets['Advanced Player'] = (
-                    "b c d e f g h i j k l m n o p q r s t u w y z alasdraco "
-                    "capslockoff johnnydmad makeover notawaiter partyparty "
-                    "dancingmaduin bsiab mimetime randombosses"
+                    "b c d e f g h i j k m n o p q r s t u w y z alasdraco capslockoff partyparty makeover "
+                    "johnnydmad notawaiter dancingmaduin bsiab mimetime randombosses electricboogaloo dancelessons "
+                    "questionablecontent remonsterate swdtechspeed:random "
+                )
+            elif mode == "chaoticplayer":
+                self.GamePresets['Chaotic Player'] = (
+                    "b c d e f g h i j k m n o p q r s t u w y z alasdraco capslockoff partyparty makeover "
+                    "johnnyachaotic notawaiter electricboogaloo masseffect allcombos supernatural randomboost:2 "
+                    "bsiab mimetime thescenarionottaken questionablecontent dancelessons remonsterate swdtechspeed:random"
                 )
             elif mode == "raceeasy":
                 self.GamePresets['KaN Race - Easy'] = (
