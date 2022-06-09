@@ -47,7 +47,8 @@ from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
-                     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx, apply_namingway)
+                     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx, apply_namingway,
+                     improved_party_gear)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -74,7 +75,7 @@ VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = True
-TEST_SEED = "3|normal|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons remonsterate swdtechspeed:random|1603333081"
+TEST_SEED = "3|normal|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
@@ -2705,12 +2706,17 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
         # Build a new item list because shop.items is immutable
         new_items = []
         for item in chosen_shop.items:
-            if item == chosen_item:
+            if item == chosen_item.itemid:
                 new_items.append(chain_start_item.itemid)
             else:
                 new_items.append(item)
         chosen_shop.items = new_items
         chosen_shop.write_data(fout)
+        # Look in spoiler log and find the shop that was changed and update spoiler log
+        for i, shop in enumerate(randlog["shops"]):
+            if not shop.split("\n")[0] == str(chosen_shop).split("\n")[0]:
+                continue
+            randlog["shops"][i] = str(chosen_shop)
 
     for wager_obj, opponent_obj, win_obj, hidden in results:
         if wager_obj == striker_wager:
@@ -5579,6 +5585,7 @@ def randomize(**kwargs) -> str:
     name_swd_techs(fout)
     fix_flash_and_bioblaster(fout)
     title_gfx(fout)
+    improved_party_gear(fout)
 
     if Options_.is_code_active("swdtechspeed"):
         swdtech_speed = Options_.get_code_value('swdtechspeed')
