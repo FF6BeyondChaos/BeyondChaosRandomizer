@@ -48,7 +48,8 @@ from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
-                     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break)
+                     change_swdtech_speed, change_cursed_shield_battles,
+                     sprint_shoes_break, patch_doom_gaze)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -2199,6 +2200,10 @@ def manage_monster_appearance(monsters: List[MonsterBlock], preserve_graphics: b
 
     return mgs
 
+def manage_doom_gaze(freespaces):
+    # patch is actually 98 bytes, but just in case
+    addr = get_appropriate_freespace(freespaces, 100)
+    patch_doom_gaze(fout, addr)
 
 def manage_colorize_animations():
     palettes = []
@@ -4987,6 +4992,8 @@ def randomize(**kwargs) -> str:
         buy_owned_breakable_tools(fout)
         improve_item_display(fout)
     reseed()
+    
+    manage_doom_gaze(freespaces)
 
     if Options_.random_enemy_stats:
         aispaces = manage_final_boss(aispaces)
