@@ -47,7 +47,7 @@ from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
-                     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx)
+                     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx, apply_namingway)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -74,12 +74,12 @@ VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-#TEST_SEED = "3|normal|bcedfghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random halloween|1603333081"
+#TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
 #TEST_SEED = "3|normal|bcdefghijklmnopqrstyz partyparty novanilla noanime noboys likegirls hatekids nopets nopotato electricboogaloo masseffect randombosses supernatural alasdraco capslockoff johnnydmad notawaiter bsiab remonsterate|1652122298"
-TEST_SEED = "3|normal|bcdefgijklmnopqrstuwyz makeover partyparty randombosses alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dancingmaduin|1614140076"
+TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz partyparty frenchvanilla electricboogaloo randombosses alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dancingmaduin questionablecontent removeflashing dancelessons remonsterate swdtechspeed:random|1653854831"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -1910,7 +1910,6 @@ def activate_airship_mode(freespaces: list):
 
     return freespaces
 
-
 def set_lete_river_encounters():
     # make lete river encounters consistent within a seed for katn racing
     manage_lete_river_sub = Substitution()
@@ -2671,9 +2670,10 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
         return wager
 
     striker_wager = ensure_striker()
+
     for wager_obj, opponent_obj, win_obj, hidden in results:
         if wager_obj == striker_wager:
-            win_obj = get_item(0x29)
+            winname = get_item(0x29).name
         ##if hidden:
         ##    winname = "????????????"
         else:
@@ -4137,6 +4137,15 @@ def fix_norng_npcs():
     npc.x = 2
     npc.y = 17
 
+#def namingway():
+
+   # apply_namingway(fout)
+
+   # npc = [n for n in get_npcs() if n.event_addr == 0x23B11][0]
+   # npc.locid = 0xC
+   # npc.x = 14
+   # npc.y = 45
+
 def manage_clock():
     hour = random.randint(0, 5)
     minute = random.randint(0, 4)
@@ -5421,6 +5430,7 @@ def randomize(**kwargs) -> str:
     randomize_poem(fout)
     randomize_passwords()
     reseed()
+    #namingway()
 
     # ----- NO MORE RANDOMNESS PAST THIS LINE -----
     if Options_.is_code_active('thescenarionottaken'):
@@ -5519,6 +5529,7 @@ def randomize(**kwargs) -> str:
 
     if Options_.is_code_active('dancelessons'):
         no_dance_stumbles(fout)
+
     banon_life3(fout)
     allergic_dog(fout)
     y_equip_relics(fout)
@@ -5527,6 +5538,7 @@ def randomize(**kwargs) -> str:
     name_swd_techs(fout)
     fix_flash_and_bioblaster(fout)
     title_gfx(fout)
+
     if Options_.is_code_active("swdtechspeed"):
         swdtech_speed = Options_.get_code_value('swdtechspeed')
         if type(swdtech_speed) == bool:
