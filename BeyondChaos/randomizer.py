@@ -73,13 +73,13 @@ BETA = False
 VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
-#TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random|1603333081"
+TEST_ON = True
+TEST_SEED = "3|normal|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons remonsterate swdtechspeed:random|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
 #TEST_SEED = "3|normal|bcdefghijklmnopqrstyz partyparty novanilla noanime noboys likegirls hatekids nopets nopotato electricboogaloo masseffect randombosses supernatural alasdraco capslockoff johnnydmad notawaiter bsiab remonsterate|1652122298"
-TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz partyparty frenchvanilla electricboogaloo randombosses alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dancingmaduin questionablecontent removeflashing dancelessons remonsterate swdtechspeed:random|1653854831"
+#strikerTEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz partyparty frenchvanilla electricboogaloo randombosses alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random|1653854831"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -2645,7 +2645,7 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
     results = randomize_colosseum(outfile, fout, pointer)
     wagers = {a.itemid: c for (a, b, c, d) in results}
 
-    def ensure_striker() -> ItemBlock:
+    def ensure_striker():
         candidates = []
         for b in buyables:
             if b == 0xFF or b not in wagers:
@@ -2661,15 +2661,56 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
         candidates = sorted(candidates, key=lambda c: c.rank())
         candidates = candidates[len(candidates) // 2:]
         wager = random.choice(candidates)
-        buycheck = [get_item(b).name for b in buyables
+        buycheck = [get_item(b).itemid for b in buyables
                     if b in wagers and wagers[b] == wager]
         if not buycheck:
             raise Exception("Striker pickup not ensured.")
         fout.seek(pointer + (wager.itemid * 4) + 2)
         fout.write(b'\x29')
-        return wager
+        return get_item(buycheck[0]), wager
 
-    striker_wager = ensure_striker()
+    chain_start_item, striker_wager = ensure_striker()
+
+    # We now ensure that the item that starts the Striker colosseum chain is available in WoR
+    chain_start_item_found = False
+    all_wor_shops = [shop for shop in get_shops(sourcefile) if 81 >= shop.shopid >= 48 or shop.shopid == 84]
+    for shop in all_wor_shops:
+        for item in shop.items:
+            # shop.items is an 8-length list of bytes
+            if item == chain_start_item.itemid:
+                chain_start_item_found = True
+                break
+    if not chain_start_item_found:
+        # Get a list of shops that are relevant to the item type of the chain start item
+        if chain_start_item.is_weapon:
+            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty == ["weapon", "misc"]]
+        elif chain_start_item.is_armor:
+            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["armor", "misc"]]
+        elif chain_start_item.is_relic:
+            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["relic", "misc"]]
+        else:
+            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["items", "misc"]]
+        # Replace a random lower-tier shop item with striker_wager
+        chosen_shop = random.choice(filtered_shops)
+        itemblocks_in_chosen_shop = []
+        for itemid in chosen_shop.items:
+            item = get_item(itemid)
+            # Double check that the items is not None. None will be returned for itemid 255
+            if item:
+                itemblocks_in_chosen_shop.append(item)
+        chosen_item = random.choice(
+            # Sort the shop's items by rank, then get a random item from the lowest ranked half
+            sorted(itemblocks_in_chosen_shop, key=lambda i: i.rank())[len(itemblocks_in_chosen_shop) // 2:]
+        )
+        # Build a new item list because shop.items is immutable
+        new_items = []
+        for item in chosen_shop.items:
+            if item == chosen_item:
+                new_items.append(chain_start_item.itemid)
+            else:
+                new_items.append(item)
+        chosen_shop.items = new_items
+        chosen_shop.write_data(fout)
 
     for wager_obj, opponent_obj, win_obj, hidden in results:
         if wager_obj == striker_wager:
@@ -4137,14 +4178,14 @@ def fix_norng_npcs():
     npc.x = 2
     npc.y = 17
 
-#def namingway():
+def namingway():
 
-   # apply_namingway(fout)
+    apply_namingway(fout)
 
-   # npc = [n for n in get_npcs() if n.event_addr == 0x23B11][0]
-   # npc.locid = 0xC
-   # npc.x = 14
-   # npc.y = 45
+    npc = [n for n in get_npcs() if n.event_addr == 0x264FA][0]
+    npc.locid = 0xB
+    npc.x = 20
+    npc.y = 20
 
 def manage_clock():
     hour = random.randint(0, 5)
@@ -5430,7 +5471,7 @@ def randomize(**kwargs) -> str:
     randomize_poem(fout)
     randomize_passwords()
     reseed()
-    #namingway()
+    namingway()
 
     # ----- NO MORE RANDOMNESS PAST THIS LINE -----
     if Options_.is_code_active('thescenarionottaken'):
