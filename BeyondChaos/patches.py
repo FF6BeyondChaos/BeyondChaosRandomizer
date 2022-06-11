@@ -321,29 +321,50 @@ def change_cursed_shield_battles(fout, random: Random, amount: int = None):
     ccsb_sub.bytestring = bytes([amount])
     ccsb_sub.write(fout)
     
-def patch_doom_gaze(fout, addr):
-    # Add an option to the Falcon's wheel to search out Doom Gaze
+def patch_doom_gaze(fout, addr, offset=0xA0000):
+    """
+    Add an option to the Falcon's wheel to search out Doom Gaze
+    """
+    rel_addr = addr - offset
+
     sub = Substitution()
-    sub.set_location(0xA00CA)
-    sub.bytestring = b"\xb2\x29\x53\x01"
+
+    dst = rel_addr.to_bytes(3, "little")
+    sub.set_location(0xA009D)
+    sub.bytestring = b"\xb2" + dst
     sub.write(fout)
 
-    # Helper for Doom Gaze airship option
-    sub.set_location(0x0B5229)
-    sub.bytestring = b"\xd0\xe2\x78\x31\x78\x12\xfe" \
-                   + b"\xc1\xe2\x80\xa4\x00\x6e\xf5" \
-                   + b"\x00\x4b\xa5\x86\xb6\x8d\xf5" \
-                   + b"\x00\x46\x52\x01\xb3\x5e\x00\xfe" \
-                   + b"\xB2\x01" + addr.to_bytes(3, "little")
+    sub.set_location(0xAF56E)
+    dst = (rel_addr + 7).to_bytes(3, "little")
+    sub.bytestring = b"\xb2" + dst + b"\xfe" + b"\xfd" * 5
     sub.write(fout)
 
-    # Doom Gaze airship search option helper
-    sub.set_location(addr)
-    sub.bytestring = b"\xd0\xe2\x78\x31\x78\x12\xfe\x6A\x01\x04\x9E\x33\x01\x29" \
-                   + b"\x58\x0C\x30\x4C\x20\x2C\x10\x24\x10\x34\x10\x54\x10\x49\x24\x40\xA0\x24" \
-                   + b"\x30\x34\x40\x54\x30\x40\x80\x49\x60\x40\x80" \
-                   + b"\x24\x30\xD9\xD2\x11\x36\x11\x08\xC0\x4D\x5D\x29" \
-                   + b"\xB2\xA9\x5E\x00\xB7\x48\xE3\x00\x00\x96\xC0\x27\x01\x9D\x00\x00"
+    # displaced code + DG dead bit
+    sub.set_location(rel_addr)
+    sub.bytestring = b"\x3d\x12\x41\x12\xd0\xe2\xfe"
+    sub.write(fout)
+
+    # dialog box manager
+    b1 = (rel_addr + 0x1D).to_bytes(3, "little")
+    b2 = (rel_addr + 0x27).to_bytes(3, "little")
+    sub.set_location(rel_addr + 7)
+    sub.bytestring = b"\xc1\xe2\x80\xa4\x00" + b1 \
+                   + b"\x4b\xa5\x86\xb6\x8d\xf5\x00" + b2 \
+                   + b"\xb3\x5e\x00\xfe"
+    sub.write(fout)
+
+    # lift-off choice handler
+    sub.set_location(int(b1))
+    sub.bytestring = b"\x4b\x2a\x85\xb6\x8d\xf5\x00\xb3\x5e\x00"
+    sub.write(fout)
+
+    # doom gaze encounter event
+    sub.set_location(int(b2))
+    sub.bytestring = b"\x6a\x01\x04\x9e\x33\x01\x29\x58\x0c\x30\x4c\x20\x2c" + \
+                     b"\x10\x24\x10\x34\x10\x54\x10\x49\x24\x40\xa0\x24\x30" + \
+                     b"\x34\x40\x54\x30\x40\x80\x49\x60\x40\x80\x24\x30\xd9" + \
+                     b"\xd2\x11\x36\x11\x08\xc0\x4d\x5d\x29\xb2\xa9\x5e\x00" + \
+                     b"\xb7\x48\xe3\x00\x00\x96\xc0\x27\x01\x9d\x00\x00"
     sub.write(fout)
 
 def fewer_flashes(fout):
