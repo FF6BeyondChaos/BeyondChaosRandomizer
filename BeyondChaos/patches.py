@@ -347,7 +347,7 @@ def patch_doom_gaze(fout, addr, offset=0xA0000):
     # dialog box manager
     b1 = (rel_addr + 0x1D).to_bytes(3, "little")
     b2 = (rel_addr + 0x27).to_bytes(3, "little")
-    sub.set_location(rel_addr + 7)
+    sub.set_location(addr + 0x7)
     sub.bytestring = b"\xc1\xe2\x80\xa4\x00" + b1 \
                    + b"\x4b\xa5\x86\xb6\x8d\xf5\x00" + b2 \
                    + b"\xb3\x5e\x00\xfe"
