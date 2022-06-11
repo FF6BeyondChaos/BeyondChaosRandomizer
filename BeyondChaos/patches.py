@@ -340,7 +340,7 @@ def patch_doom_gaze(fout, addr, offset=0xA0000):
     sub.write(fout)
 
     # displaced code + DG dead bit
-    sub.set_location(rel_addr)
+    sub.set_location(addr)
     sub.bytestring = b"\x3d\x12\x41\x12\xd0\xe2\xfe"
     sub.write(fout)
 
@@ -354,12 +354,12 @@ def patch_doom_gaze(fout, addr, offset=0xA0000):
     sub.write(fout)
 
     # lift-off choice handler
-    sub.set_location(int(b1))
+    sub.set_location(addr + 0x1D)
     sub.bytestring = b"\x4b\x2a\x85\xb6\x8d\xf5\x00\xb3\x5e\x00"
     sub.write(fout)
 
     # doom gaze encounter event
-    sub.set_location(int(b2))
+    sub.set_location(addr + 0x27)
     sub.bytestring = b"\x6a\x01\x04\x9e\x33\x01\x29\x58\x0c\x30\x4c\x20\x2c" + \
                      b"\x10\x24\x10\x34\x10\x54\x10\x49\x24\x40\xa0\x24\x30" + \
                      b"\x34\x40\x54\x30\x40\x80\x49\x60\x40\x80\x24\x30\xd9" + \
