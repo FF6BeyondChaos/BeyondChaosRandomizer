@@ -1,4 +1,4 @@
-from gameobjects.character import Character
+from ...gameobjects.character import Character
 
 
 def read_characters(file_name):

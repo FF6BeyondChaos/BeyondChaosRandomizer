@@ -1,14 +1,16 @@
 import imp
+from hashlib import md5
+from math import ceil
 import os
+
+from PIL import Image, ImageOps
+
 from .tools.tablereader import (
     set_global_label, set_global_table_filename, determine_global_table,
     set_table_specs, set_global_output_filename, sort_good_order,
     get_open_file, close_file, TableObject, addresses, write_patches)
 from .tools.utils import cached_property, get_transparency, utilrandom as random
 from .tools.interface import get_outfile, set_seed, get_seed
-from hashlib import md5
-from PIL import Image, ImageOps
-from math import ceil
 
 
 VERSION = '5.3'

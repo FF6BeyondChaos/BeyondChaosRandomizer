@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from options import Options
+from ..beyondchaos.options import Options
 
 
 class Randomizer(ABC):
