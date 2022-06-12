@@ -37,6 +37,170 @@ Normal A5FC2 3D 00 3D 01 3F 01 01 3F 00 01 B8 41 4D 41 02 B2 A9 5E 00 D7 FE F0 0
 # Cave guard
 Convergent A75F8 13 06 CD E0 03 C9 A0 FF 12 84 DC A0 D1 FF 13 83 9E D1 FF D7 12 D3 CC FE
 Divergent A75F8 11 06 CD E0 03 C9 A0 FF 10 84 DC A0 D1 FF 11 83 9E D1 FF D7 12 D3 CC FE
+# Edgar meets Shadow in South Figaro Cafe
+Strange A7C47 78 31 78 32 78 33 33 02 CD FF 32 04 C2 86 CD FF 31 86 C2 E0 04 82 CD FF 33 04 C2 C7 83 FF 31 83 80 CF FF 32 03 87 C6 FF 31 82 87 C5 91 31 82 63 FF 38 30 83 C1 89 FF 94 42 31 42 32 42 33 42 14 45 B0 1F 50 9F 53 9F 00 3F B1 92 4B C1 C0 92 40 03 03 7F 03 03 37 03 03 43 03 04 98 03 D0 0B 50 BC 53 BC 00 3F 96 94 B0 1F 50 DF 52 DF B1 41 31 41 32 41 33 41 14 45 31 82 CF FF 31 85 62 E0 01 CD FF 30 02 83 FF 32 02 85 FF 31 82 85 FF 93 35 30 32 02 81 FF 33 02 84 FF 92 36 32 36 31 36 33 39 B2 95 CB 00 31 82 CD FF FE
+# Freespace created by skips
+Strange A7CF1 FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FE
+# Narshe WoB (map 20) entrance event, clear ruin flag and set World and map coordinates to Balance, (84, 33) before executing vanilla code.
+Strange C00B6 D1 A4 6C 00 00 54 21 00 C0 27 01 E7 D0 02
+Strange 11FA3C B6 00 02
+# Narshe WoR (map 32) entrance event, set ruin flag and World and map coordinates to Ruin, (115, 33) before executing vanilla code.
+Strange C00C4 D0 A4 6C 01 00 73 22 00 C0 27 01 BD 36 02
+Strange 11FA60 C4 00 02
+# Falcon Deck (map 11) entrance event, set ruin flag before executing vanilla code.
+Strange C00D2 D0 A4 C0 27 01 0B E9 00
+Strange 11FA21 D2 00 02
+# South Figaro Pass WoB Entrance (map 71), clear ruin flag and set World and map coordinates to Balance, (73, 93) before returning.
+Strange C00DA D1 A4 6C 00 00 49 5E 00 FE
+Strange 11FAD5 DA 00 02
+# South Figaro Pass WoB Exit (map 69), clear ruin flag and set World and map coordinates to Balance, (75, 102) before executing vanilla code.
+Strange C00E3 D1 A4 6C 00 00 4B 66 00 C0 21 01 73 EB 00
+Strange 11FACF E3 00 02
+# South Figaro Pass WoR Exit (map 68), set ruin flag and set World and map coordinates to Ruin, (106, 98) before returning.
+Strange C00F1 D0 A4 6C 01 00 6A 62 00 FE
+Strange 11FACC F1 00 02
+# Blackjack Deck (map 6) entrance event, clear ruin flag before executing vanilla code.
+Strange C00FA D1 A4 C0 27 01 F3 29 01
+Strange 11FA12 FA 00 02
+# Chocobo Stable WoB (map 14) entrance event, clear ruin flag and set World and map coordinates to Balance, (125, 150) before returning [Tzen forest].
+#Strange C0102 D1 A4 6C 00 00 7D 96 00 FE
+#Strange 11FA2A 02 01 02
+# Chocobo Stable WoR (map 16) entrance event, set ruin flag and World and map coordinates to Ruin, (112, 165) before returning [Tzen forest].
+#Strange C010B D0 A4 6C 01 00 70 A5 00 FE
+#Strange 11FA30 0B 01 02
+# South Figaro WoB (map 75) entrance event, clear ruin flag and set World and map coordinates to Balance, (86, 111) before executing vanilla code.
+Strange C0114 D1 A4 6C 00 00 56 6F 01 C0 27 01 A1 EB 00
+Strange 11FAE1 14 01 02
+# South Figaro WoR (map 74) entrance event, set ruin flag and World and map coordinates to Ruin, (113, 95) before executing vanilla code.
+Strange C0122 D0 A4 6C 01 00 71 5F 03 C0 27 01 80 EB 00
+Strange 11FADE 22 01 02
+# Sabin's House WoB (map 93) entrance event, clear ruin flag and set World and map coordinates to Balance, (90, 99) before returning.
+Strange C0130 D1 A4 6C 00 00 5A 63 00 FE
+Strange 11FB17 30 01 02
+# Mount Kolts Entrance (map 95) entrance event, clear ruin flag and set World and map coordinates to Balance, (102, 100) before returning.
+Strange C0139 D1 A4 6C 00 00 66 64 00 FE
+Strange 11FB1D 39 01 02
+# Mount Kolts Exit (map 101) entrance event, clear ruin flag and set World and map coordinates to Balance, (98, 92) before returning.
+Strange C0142 D1 A4 6C 00 00 62 5C 00 FE
+Strange 11FB2F 42 01 02
+# Returners (map 108) entrance event, clear ruin flag and set World and map coordinates to Balance, (104, 64) before executing vanilla code. [Divergent (99, 48)]
+Strange C014B D1 A4 6C 00 00 68 40 00 C0 27 01 3A F9 00
+Strange 11FB44 4B 01 02
+# Doma's Castle Outside (map 121) entrance event... check ruin flag, set coordinates to Ruin (172, 75) if so and Balance (157, 84) if not, then execute vanilla code.
+Strange C0159 C0 A4 00 6B 01 02 6C 01 00 AC 4B 00 C0 27 01 7F A0 01 6C 00 00 9D 54 00 C0 27 01 7F A0 01
+Strange 11FB6B 59 01 02
+# Duncan's House WoR (map 127) entrance event, set ruin flag and set World and map coordinates to Ruin, (140, 20) before returning.
+Strange C0177 D0 A4 6C 01 00 8C 14 00 FE
+Strange 11FB7D 77 01 02
+# Gau's Father's House WoR (map 131) entrance event, set ruin flag and set World and map coordinates to Ruin, (178, 45) before executing vanilla code.
+Strange C0180 D0 A4 6C 01 00 B2 2D 00 C0 27 01 65 5F 01
+Strange 11FB89 80 01 02
+# Phantom Forest 1-2 (maps 132-133) entrance event, clear ruin flag and set World and map coordinates to Balance, (178, 82) before returning. [Divergent (174, 52)]
+Strange C018E D1 A4 6C 00 00 B2 52 02 FE
+Strange 11FB8C 8E 01 02
+Strange 11FB8F 8E 01 02
+# Phantom Forest 3-4 (maps 134-135) entrance event, clear ruin flag and set World and map coordinates to Balance, (178, 92) before returning. [Divergent (165, 49)]
+Strange C0197 D1 A4 6C 00 00 B2 5C 02 FE
+Strange 11FB92 97 01 02
+Strange 11FB95 97 01 02
+# Mobliz WoB (map 157) entrance event, clear ruin flag and set World and map coordinates to Balance, (220, 115) before executing vanilla code.
+Strange C01A0 D1 A4 6C 00 00 DC 73 00 C0 27 01 C6 65 02
+Strange 11FBD7 A0 01 02
+# Mobliz WoR (map 158) entrance event, set ruin flag and set World and map coordinates to Ruin, (237, 135) before executing vanilla code.
+Strange C01AE D0 A4 6C 01 00 ED 87 00 C0 27 01 59 51 02
+Strange 11FBDA AE 01 02
+# Waterfall Entrance (map 166) entrance event, clear ruin flag and set World and map coordinates to Balance, (185, 93) before returning.
+Strange C01BC D1 A4 6C 00 00 B9 5D 00 FE
+Strange 11FBF2 BC 01 02
+# Nikeah (map 169) entrance event... check ruin flag, set coordinates to Ruin (172, 75) if so and Balance (117, 61) if not, then execute vanilla code.
+Strange C01C5 C0 A4 00 D7 01 02 6C 01 00 91 4C 01 C0 27 01 8B ED 00 6C 00 00 75 3D 01 C0 27 01 8B ED 00
+Strange 11FBFB C5 01 02
+# Kohlingen WoB (map 188) entrance event, clear ruin flag and set World and map coordinates to Balance, (27, 39) before executing vanilla code.
+Strange C01E3 D1 A4 6C 00 00 1B 27 00 C0 27 01 35 69 02
+Strange 11FC34 E3 01 02
+# Kohlingen WoR (map 189) entrance event, set ruin flag and World and map coordinates to Ruin, (39, 45) before executing vanilla code.
+Strange C01F1 D0 A4 6C 01 00 27 2D 00 C0 27 01 FC 3A 02
+Strange 11FC37 F1 01 02
+# Coliseum House WoB (map 185) entrance event, clear ruin flag and set World and map coordinates to Balance, (33, 9) before returning.
+Strange C01FF D1 A4 6C 00 00 21 09 00 FE
+Strange 11FC2B FF 01 02
+# Jidoor (map 198) entrance event... check ruin flag, set coordinates to Ruin (35, 156) if so and Balance (28, 131) if not, then execute vanilla code.
+Strange C020B C0 A4 00 1D 02 02 6C 01 00 23 9C 00 C0 27 01 E4 43 01 6C 00 00 1C 83 00 C0 27 01 E4 43 01
+Strange 11FC52 0B 02 02
+# Zozo (map 221) entrance event... check ruin flag, set coordinates to Ruin (44, 130) if so and Balance (22, 92) if not, then execute vanilla code.
+Strange C0229 C0 A4 00 3B 02 02 6C 01 00 2C 82 02 C0 27 01 85 EF 00 6C 00 00 16 5C 02 C0 27 01 85 EF 00
+Strange 11FC97 29 02 02
+# Opera house (map 237) entrance event... check ruin flag, set coordinates to Ruin (31, 183) if so and Balance (45, 154) if not, then execute vanilla code.
+Strange C0247 C0 A4 00 59 02 02 6C 01 00 1F B7 00 C0 27 01 82 F1 00 6C 00 00 2D 9A 00 C0 27 01 82 F1 00
+Strange 11FCC7 47 02 02
+# Vector after Magitek (map 240) entrance event, set "rode cart" flag $069 to finish escape event
+Strange C72C6 D0 69
+# Vector (map 242) entrance event, clear ruin flag and set World and map coordinates to Balance, (121, 187), then execute vanilla code.
+Strange C0265 D1 A4 6C 00 00 79 BB 00 C0 27 01 27 95 02
+Strange 11FCD6 65 02 02
+# Magitek Factory (map 262) entrance event, keep the factory open for access to doors.
+Strange C72DC C0 27 01 16 73 02
+# Magitek Dock (map 272) entrance event, sets the minecart to unridden so that the player can pass through
+Strange C801F D1 69
+# Maranda (map 284) entrance event... check ruin flag, set coordinates to Ruin (70, 184) if so and Balance (66, 227) if not, then execute vanilla code.
+Strange C0273 C0 A4 00 85 02 02 6C 01 00 46 B8 00 C0 27 01 68 63 02 6C 00 00 42 E3 00 C0 27 01 68 63 02
+Strange 11FD54 73 02 02
+# Doma Castle Abandoned (map 285) entrance event... check ruin flag, set coordinates to Ruin (172, 75) if so and Balance (157, 84) if not, then execute vanilla code.
+Strange 11FD57 59 01 02
+# Daryl's Tomb (map 297) entrance event, set ruin flag and World and map coordinates to Ruin, (25, 52), then execute vanilla code.
+Strange C0291 D0 A4 6C 01 00 19 34 00 C0 27 01 A2 F1 00
+Strange 11FD7B 91 02 02
+# Tzen WoR (map 305) entrance event, set ruin flag and World and map coordinates to Ruin, (130, 179), then execute vanilla code.
+Strange C029F D0 A4 6C 01 00 82 B3 00 C0 27 01 DA 56 02
+Strange 11FD93 9F 02 02
+Strange C583B FD FD
+# Tzen WoB (map 306) entrance event, clear ruin flag and set World and map coordinates to Balance, (120, 149), then execute vanilla code.
+Strange C02AD D1 A4 6C 00 00 78 95 00 C0 27 01 06 5D 02
+Strange 11FD96 AD 02 02
+# Albrook WoB (map 323) entrance event, clear ruin flag and set World and map coordinates to Balance, (138, 203), then execute vanilla code.
+Strange C02BB D1 A4 6C 00 00 8A CB 02 C0 27 01 3F 5E 02
+Strange 11FDC9 BB 02 02
+# Albrook WoR (map 324) entrance event, set ruin flag and World and map coordinates to Ruin, (141, 209), then execute vanilla code.
+Strange C02C9 D0 A4 6C 01 00 8D D1 02 C0 27 01 01 5B 02
+Strange 11FDCC C9 02 02
+# Thamasa Grave (map 340) entrance event, clear ruin flag and set World and map coordinates to Balance, (250, 128), then execute vanilla code.
+Strange C02D7 D1 A4 6C 00 00 FA 80 01 C0 27 01 70 FF 01
+Strange 11FDFC D7 02 02
+# Thamasa WoB (map 343) entrance event, clear ruin flag and set World and map coordinates to Balance, (250, 128), then execute vanilla code.
+Strange C02E5 D1 A4 6C 00 00 FA 80 01 C0 27 01 1A D4 01
+Strange 11FE05 E5 02 02
+# Thamasa WoR (map 344) entrance event, set ruin flag and World and map coordinates to Ruin, (251, 230), then execute vanilla code.
+Strange C02F3 D0 A4 6C 01 00 FB E6 00 C0 27 01 70 FF 01
+Strange 11FE08 F3 02 02
+# Cave in the Veldt (map 353) entrance event, set ruin flag and World and map coordinates to Ruin, (207, 89), then execute vanilla code.
+Strange C0301 D0 A4 6C 01 00 CF 59 00 C0 27 01 82 79 01
+Strange 11FE23 01 03 02
+# Fanatics Tower (map 362) entrance event, set ruin flag and World and map coordinates to Ruin, (160, 126), then execute vanilla code.
+Strange C030F D0 A4 6C 01 00 A0 7E 00 C0 27 01 8C 51 02
+Strange 11FE3E 0F 03 02
+# Esper Cave (map 375) entrance event, clear ruin flag and set World and map coordinates to Balance, (229, 130), then execute vanilla code.
+Strange C031D D1 A4 6C 00 00 E5 82 00 C0 27 01 A2 F2 01
+Strange 11FE65 1D 03 02
+# Imperial Base (map 377) entrance event, clear ruin flag and return.
+Strange C032B D1 A4 FE
+Strange 11FE6B 2B 03 02
+# Cave of the Sealed Gate (map 382) entrance event, clear ruin flag and set World and map coordinates to Balance, (169, 194), then return.
+Strange C032E D1 A4 6C 00 00 A9 C2 01 FE
+Strange 11FE7A 2E 03 02
+# Lonely House (map 396) entrance event, set ruin flag and World and map coordinates to Ruin, (76, 240), then return.
+Strange C0337 D0 A4 6C 01 00 4C F0 03 FE
+Strange 11FEA4 37 03 02
+# Lonely Cliff (map 399) entrance event, set ruin flag and World and map coordinates to Ruin, (73, 231), then execute vanilla code.
+Strange C0340 D0 A4 6C 01 00 49 E7 03 C0 27 01 68 F4 00
+Strange 11FEAD 40 03 02
+# Coliseum (map 413) entrance event, set ruin flag and World and map coordinates to Ruin, (50, 17), then return.
+Strange C034E D0 A4 6C 01 00 32 11 00 FE
+Strange 11FED7 4E 03 02
+# Gau's Father's house WoB (map 115) entrance event, clear ruin flag and set World and map coordinates to Balance, (192, 106), then execute BC event code.
+Strange C0357 D1 A4 6C 00 00 C0 6A 00 C0 27 01 3F 0B 01 FE
+Strange 11FB59 57 03 02
+# Tidy up remaining freespace from Kefka attacks Thamasa skip
+Strange C0366 FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD
 # Vargas
 Normal A8293 40 05 05 88 05 08 40 8B 05 7F 3D 05 3F 05 00 D4 E5 D4 F5 4D 42 0B B2 A9 5E 00 3F 05 01 42 10 D7 1C D7 06 D0 10 D7 05 47 31 85 C4 87 86 CC FF 96 5C FE FD FD FD FD FD FD FE
 # Returners' Hideout
@@ -51,6 +215,10 @@ Normal AF9CF D2 5A F4 1B FE
 Normal AF9A9 F4 1B FD
 # Sabin Returners' Hideout
 Normal AF9B1 F4 1B FE
+# Banon? He went outside a moment ago.
+Normal AFA83 FD FD FD
+Normal AFA93 FD FD FD
+Normal AFAB4 FD FD FD
 # Banon asks Terra to join
 Normal AFAC3 C0 17 80 CB FA 00 80 D0 B2 A6 FB 00 D0 17 D4 5E D9 97 D8 1C B2 CB FD 00 FE
 # No 1
@@ -112,7 +280,7 @@ Normal A7DE0 31 83 8B CE FF 73 47 64 01 02 BA F7 96 5C D7 07 D2 D0 FE FD FD FD F
 Normal A7BB4 F4 1B FD FD FD FD
 # Secret entrance.
 Normal A7C11 FD FD 14 85 C4
-# mocing through secret passage
+# moving through secret passage
 Normal A7950 FD FD FD FD FD FD FD FD FD FD
 # Replacing KUTAN with Celes
 Normal A86A4 97 5C D6 FE 7F 06 06 40 06 06 88 06 08 40 8B 06 7F 37 06 06 43 06 00 98 06 D6 17 D7 FE 73 23 0C 01 02 06 16 39 D0 1C 3A C0 03 01 DC 86 00 01 85 C4 83 5A C2 FF 96 5C FE 01 85 C4 85 09 C2 FF 96 5C FE
@@ -182,6 +350,10 @@ Normal BBFE9 97 5C B2 AC C6 00 3F 03 00 B2 95 CB 00 D5 F3 3E 03 96 FE
 Convergent BC05A 97 5C C0 3F 80 FB C1 01 D2 CC F0 00 B2 BD CF 00 4D 12 3F B2 A9 5E 00 D3 CC 6B 9F 10 0A 0B 40 F0 09 40 0B 0B 3D 0B 37 0B 0B 43 0B 03 3F 0B 00 D4 EB 7F 0B 0B 98 0B 88 0B 08 40 8B 0B 7F 8C 0B 7F D0 3F 39 3A B2 37 6A 01 96 5C FE
 Normal BC228 D2 84 DB F7 FE
 Normal BC608 D3 BB D0 41 D3 84 D3 85 D3 86 D3 7B D3 7C DB F7 B2 37 6A 01 C0 27 01 E3 8A 00 FE
+# Sabin meets Shadow on the Veldt 
+Strange B0A70 42 31
+Strange B0A9E 41 31 41 11 31
+Strange B0AD4 B2 2F 6A 00 45
 # Boat to Nikeah
 Convergent A8D22 97 5C D0 44 D3 CC D7 2A B2 4C AD 00 FE
 Divergent A8D22 97 5C D0 44 D3 CC D7 2A D7 2D B2 4C AD 00 FE FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FE
@@ -196,10 +368,12 @@ Normal CC611 97 5C 42 31 B2 45 C6 02 FE
 Normal CC6E9 F0 1A D2 CC D4 BC B2 32 C8 02 FE FE
 # Don't fade in start of 3-party battle
 Normal CC850 6B
-# Banon? He went outside a moment ago.
-Normal AFA83 FD FD FD
-Normal AFA93 FD FD FD
-Normal AFAB4 FD FD FD
+# Here, too
+Strange BA39B 31 83 C2 80 FF B5 10 31 8B
+Strange BA3B3 31
+# Shadow recruit party count check
+Strange A6A2F B2 C1 C5 00 C0 A3 81 B3 5E 00 3D 03 3F 03 01 FE
+Strange A6A3F FD FD FD FD FD FD FD FD
 #Ramuh talking
 Normal A9755 10 02 13 FF 3D 12 3D 13 3D 14 3D 15 41 12 41 13 41 14 41 15 45 D6 1F D6 20 D6 21 D6 22 D0 53 F1 40 FF 31 83 81 CE FF FE FD FD FE
 # Ramuh talking when picking up magicite
@@ -211,6 +385,10 @@ Normal AA89F 6A DD 24 39 2D C0
 Normal AA8C7 FD FD FD FD FD FD FD FD FD FD
 Normal AA8EA 96 5C C0 27 01 10 AB 00 FE FD
 Normal AABF0 C0 27 01 65 AC 00 FE
+# Maduin flashback
+Normal AC582 B2 B8 A5 00 FE
+# Boat to Thamasa
+Normal C615A 97 5C D0 87 D0 83 D0 86 3D 03 3F 03 01 45 D4 E3 77 03 D4 F3 88 03 00 40 8B 03 7F 8C 03 7F B2 BD CF 00 DB 06 DB 07 DB 08 DB 11 DB 13 DB 22 DB 42 DB 65 B8 4B 6B 00 04 E8 96 40 FF
 # Crimson robbers
 Normal A918B F4 1B FD
 Normal A9195 F4 1B FD
@@ -235,12 +413,21 @@ Normal A76EF C0 27 01 6A 77 00
 Normal A776C D3 22
 # Instead of setting the bit to show Gerad in Figaro prison, set the bit that his event sets
 Normal A776E D4 6E
+Strange A6A2C D4 6E FE
+# Remove the boxes in Mobliz basement for Strange Journey
+Strange C50EE C0 27 81 B3 5E 00
+Strange C50F4 FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD
+# Reveal the door in Fanatics Tower 1 for Strange Journey, and block the command change
+Strange C5173 45 45 C0 27 81 B3 5E 00
+Strange C517B FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD
 # Tentacles
 Normal A6A4F C0 27 01 AD 6A 00
 Normal A6AAD 3E 1B 3E 1C 3E 1D 3E 1E
 # After Tentacles
 Normal A6AF2 3E 1A 45 31 06 D5 1D 0F C4 9C FF 93 96 5C C0 27 01 07 6B 00 
 Normal A6B0D BE 01 F7 6B 50 F0 0A C0 27 01 DC 6B 00 FE FE
+# Daryl Stairs skip
+Normal A4365 F0 4C 6B 01 04 9E 33 01 C0 20 C2 64 00 FA D2 11 34 10 08 40 D7 F3 B2 3F 48 00 FE
 Palette CA2FB 01
 Palette CA35D 0A
 Palette CA36B 0A

@@ -1,4 +1,3 @@
-import imp
 from hashlib import md5
 from math import ceil
 import os

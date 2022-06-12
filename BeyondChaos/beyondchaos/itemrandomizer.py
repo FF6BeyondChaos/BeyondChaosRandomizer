@@ -217,13 +217,16 @@ class ItemBlock:
     def ban(self):
         self.banned = True
 
-    def become_another(self, customdict=None, tier=None):
+    def become_another(self, customdict=None, tier=None, halloween=False):
         customs = get_custom_items()
         if customdict is None:
-            if tier is None:
-                candidates = [customs[key] for key in sorted(customs)]
+            if halloween:
+                candidates = [customs[key] for key in sorted(customs) if customs[key]["name_text"] == "SORD....."]
             else:
-                candidates = [customs[key] for key in sorted(customs) if customs[key]["tier"] == tier]
+                if tier is None:
+                    candidates = [customs[key] for key in sorted(customs)]
+                else:
+                    candidates = [customs[key] for key in sorted(customs) if customs[key]["tier"] == tier]
             customdict = random.choice(candidates)
 
         for key in self.features:
@@ -361,10 +364,10 @@ class ItemBlock:
 
         features = {
             "statboost1": {e: 1 << i for i, e in
-                      enumerate(["Bat. Pwr +1/4", "Mag. Pwr +1/2", "+1/4 HP",
+                      enumerate(["Bat. Pwr +1/4", "Mag. Pwr +1/4", "+1/4 HP",
                       "+1/2 HP", "+1/8 HP", "+1/4 MP", "+1/2 MP", "+1/8 MP"])},
             "statboost2": {e: 1 << i for i, e in
-                      enumerate(["Better Steal", "Mag. Pwr +1/4",
+                      enumerate(["Better Steal", "",
                       "Better Sketch","Better Control", "100% Hit Rate",
                       "1/2 MP Cost", "MP cost = 1", "Vigor +50%"])},
             "special1": {e: 1 << i for i, e in
@@ -377,9 +380,9 @@ class ItemBlock:
                       "Can equip 2 weapons", "Can equip anything",
                       "Cover", "Step regen"])},
             "special3": {e: 1 << i for i, e in
-                      enumerate(["Fight -> X-Fight", "Can counter", "Random Evade",
-                      "Use weapon 2-handed", "Can equip 2 weapons",
-                      "Can equip anything", "Cover", "Step regen"])},
+                      enumerate(["Low HP Shell", "Low HP Safe", "Low HP Reflect",
+                      "Double EXP", "Double GP",
+                      "", "", "Reverses Cures"])},
             "statusprotect1": {e: 1 << i for i, e in
                       enumerate(["No dark", "No zombie", "No poison",
                       "No magitek", "No clear", "No imp",

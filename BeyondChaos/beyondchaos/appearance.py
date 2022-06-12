@@ -1,17 +1,58 @@
 import itertools
 import os
 import string
+from . import options
 
 from .character import get_characters
-from .options import Options_
 from .locationrandomizer import get_npcs
 from .monsterrandomizer import change_enemy_name
 from .dialoguemanager import set_dialogue_var, load_patch_file
 from .utils import (CHARACTER_PALETTE_TABLE, EVENT_PALETTE_TABLE, FEMALE_NAMES_TABLE, MALE_NAMES_TABLE,
-                    MOOGLE_NAMES_TABLE, RIDING_SPRITE_TABLE, SPRITE_REPLACEMENT_TABLE, CORAL_TABLE,
+                    MOOGLE_NAMES_TABLE, RIDING_SPRITE_TABLE, CORAL_TABLE,
                     generate_character_palette, get_palette_transformer, hex2int, name_to_bytes,
                     open_mei_fallback, read_multi, shuffle_char_hues,
                     Substitution, utilrandom as random, write_multi)
+
+
+class SpriteReplacement:
+    def __init__(self, file, name, gender, riding=None, fallback_portrait_id=0xE, portrait_filename=None,
+                 uniqueids=None, groups=None):
+        self.file = file.strip()
+        self.name = name.strip()
+        self.gender = gender.strip().lower()
+        self.size = 0x16A0 if riding is not None and riding.lower() == "true" else 0x1560
+        self.uniqueids = [s.strip() for s in uniqueids.split('|')] if uniqueids else []
+        self.groups = [s.strip() for s in groups.split('|')] if groups else []
+        if self.gender == "female":
+            self.groups.append("girls")
+        if self.gender == "male":
+            self.groups.append("boys")
+        self.weight = 1.0
+
+        if fallback_portrait_id == '':
+            fallback_portrait_id = 0xE
+        self.fallback_portrait_id = int(fallback_portrait_id)
+        self.portrait_filename = portrait_filename
+        if self.portrait_filename is not None:
+            self.portrait_filename = self.portrait_filename.strip()
+            if self.portrait_filename:
+                self.portrait_palette_filename = portrait_filename.strip()
+                if self.portrait_palette_filename and self.portrait_palette_filename:
+                    if self.portrait_palette_filename[-4:] == ".bin":
+                        self.portrait_palette_filename = self.portrait_palette_filename[:-4]
+                    self.portrait_palette_filename = self.portrait_palette_filename + ".pal"
+            else:
+                self.portrait_filename = None
+
+    def has_custom_portrait(self):
+        return self.portrait_filename is not None and self.portrait_palette_filename is not None
+
+    def is_on(self, checklist):
+        for g in self.uniqueids:
+            if g in checklist:
+                return True
+        return False
+
 
 def recolor_character_palette(fout, pointer, palette=None, flesh=False, middle=True, santa=False, skintones=None, char_hues=None, trance=False):
     fout.seek(pointer)
@@ -45,7 +86,7 @@ def recolor_character_palette(fout, pointer, palette=None, flesh=False, middle=T
 
             if not new_style_palette:
                 new_palette[6:8] = skintone
-            if Options_.is_code_active('christmas'):
+            if options.Options_.is_code_active('christmas'):
                 if santa:
                     # color kefka's palette to make him look santa-ish
                     new_palette = palette
@@ -121,14 +162,16 @@ def sanitize_names(names):
     names = [name.translate(table) for name in names]
     return [name[:6] for name in names if name != ""]
 
+
 def sanitize_coral(names):
     delchars = ''.join(c for c in map(chr, range(256)) if not c.isalnum() and c not in "!?/:\"'-.")
     table = str.maketrans(dict.fromkeys(delchars))
     names = [name.translate(table) for name in names]
     return [name[:12] for name in names if name != ""]
 
-def manage_coral(fout):
 
+def manage_coral(fout):
+    from .dialoguemanager import set_dialogue_var, load_patch_file
     f = open_mei_fallback(CORAL_TABLE)
     coralnames = sorted(set(sanitize_coral([line.strip() for line in f.readlines()])))
     f.close()
@@ -160,14 +203,15 @@ def manage_coral(fout):
 
     return sprite_log
 
+
 def manage_character_names(fout, change_to, male):
     characters = get_characters()
-    wild = Options_.is_code_active('partyparty')
-    sabin_mode = Options_.is_code_active('suplexwrecks')
-    tina_mode = Options_.is_code_active('bravenudeworld')
-    soldier_mode = Options_.is_code_active('quikdraw')
-    moogle_mode = Options_.is_code_active('kupokupo')
-    ghost_mode = Options_.is_code_active('halloween')
+    wild = options.Options_.is_code_active('partyparty')
+    sabin_mode = options.Options_.is_code_active('suplexwrecks')
+    tina_mode = options.Options_.is_code_active('bravenudeworld')
+    soldier_mode = options.Options_.is_code_active('quikdraw')
+    moogle_mode = options.Options_.is_code_active('kupokupo')
+    ghost_mode = options.Options_.is_code_active('halloween')
 
     names = []
     if tina_mode:
@@ -246,9 +290,10 @@ def manage_character_names(fout, change_to, male):
 
     umaro_name = names[13]
     for umaro_id in [0x10f, 0x110]:
+        from .monsterrandomizer import change_enemy_name
         change_enemy_name(fout, umaro_id, umaro_name)
 
-    if not Options_.is_code_active('capslockoff'):
+    if not options.Options_.is_code_active('capslockoff'):
         names = [name.upper() for name in names]
 
     for c in characters:
@@ -262,10 +307,11 @@ def manage_character_names(fout, change_to, male):
         fout.seek(0x478C0 + (6*c))
         fout.write(name)
 
+
 def get_free_portrait_ids(swap_to, change_to, char_ids, char_portraits):
     # get unused portraits so we can overwrite them if needed
-    sprite_swap_mode = Options_.is_code_active('makeover')
-    wild = Options_.is_code_active('partyparty')
+    sprite_swap_mode = options.Options_.is_code_active('makeover')
+    wild = options.Options_.is_code_active('partyparty')
     if not sprite_swap_mode:
         return [], False
 
@@ -312,60 +358,20 @@ def get_free_portrait_ids(swap_to, change_to, char_ids, char_portraits):
 
 
 def get_sprite_swaps(char_ids, male, female, vswaps):
-    sprite_swap_mode = Options_.is_code_active('makeover')
-    wild = Options_.is_code_active('partyparty')
-    clone_mode = Options_.is_code_active('cloneparty')
-    replace_all = Options_.is_code_active('novanilla') or Options_.is_code_active('frenchvanilla')
-    external_vanillas = False if Options_.is_code_active('novanilla') else (Options_.is_code_active('frenchvanilla') or clone_mode)
+    sprite_swap_mode = options.Options_.is_code_active('makeover')
+    wild = options.Options_.is_code_active('partyparty')
+    clone_mode = options.Options_.is_code_active('cloneparty')
+    replace_all = options.Options_.is_code_active('novanilla') or options.Options_.is_code_active('frenchvanilla')
+    external_vanillas = False if options.Options_.is_code_active('novanilla') else (options.Options_.is_code_active('frenchvanilla') or clone_mode)
     if not sprite_swap_mode:
         return []
 
-    class SpriteReplacement:
-        def __init__(self, file, name, gender, riding=None, fallback_portrait_id=0xE, portrait_filename=None, uniqueids=None, groups=None):
-            self.file = file.strip()
-            self.name = name.strip()
-            self.gender = gender.strip().lower()
-            self.size = 0x16A0 if riding is not None and riding.lower() == "true" else 0x1560
-            self.uniqueids = [s.strip() for s in uniqueids.split('|')] if uniqueids else []
-            self.groups = [s.strip() for s in groups.split('|')] if groups else []
-            if self.gender == "female":
-                self.groups.append("girls")
-            if self.gender == "male":
-                self.groups.append("boys")
-            self.weight = 1.0
+    known_replacements = options.get_sprite_replacements()
 
-            if fallback_portrait_id == '':
-                fallback_portrait_id = 0xE
-            self.fallback_portrait_id = int(fallback_portrait_id)
-            self.portrait_filename = portrait_filename
-            if self.portrait_filename is not None:
-                self.portrait_filename = self.portrait_filename.strip()
-                if self.portrait_filename:
-                    self.portrait_palette_filename = portrait_filename.strip()
-                    if self.portrait_palette_filename and self.portrait_palette_filename:
-                        if self.portrait_palette_filename[-4:] == ".bin":
-                            self.portrait_palette_filename = self.portrait_palette_filename[:-4]
-                        self.portrait_palette_filename = self.portrait_palette_filename + ".pal"
-                else:
-                    self.portrait_filename = None
-
-        def has_custom_portrait(self):
-            return self.portrait_filename is not None and self.portrait_palette_filename is not None
-
-        def is_on(self, checklist):
-            for g in self.uniqueids:
-                if g in checklist:
-                    return True
-            return False
-
-    f = open_mei_fallback(SPRITE_REPLACEMENT_TABLE)
-    known_replacements = [SpriteReplacement(*line.strip().split(',')) for line in f.readlines()]
-    f.close()
-
-    #uniqueids for sprites pulled from rom
+    # uniqueids for sprites pulled from rom
     vuids = {0: "terra", 1: "locke", 2: "cyan", 3: "shadow", 4: "edgar", 5: "sabin", 6: "celes", 7: "strago", 8: "relm", 9: "setzer", 10: "moogle", 11: "gau", 12: "gogo6", 13: "umaro", 16: "leo", 17: "banon", 18: "terra", 21: "kefka"}
 
-    #determine which character ids are makeover'd
+    # determine which character ids are makeover'd
     blacklist = set()
     if replace_all:
         num_to_replace = len(char_ids)
@@ -381,7 +387,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
                 blacklist.update([s.strip() for s in vuids[i].split('|')])
 
     if external_vanillas:
-        #include vanilla characters, but using the same system/chances as all others
+        # include vanilla characters, but using the same system/chances as all others
         og_replacements = [
             SpriteReplacement("ogterra.bin", "Terra", "female", "true", 0, None, "terra"),
             SpriteReplacement("oglocke.bin", "Locke", "male", "true", 1, None, "locke"),
@@ -412,8 +418,8 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
             og_replacements = [r for r in og_replacements if r.name not in used_vanilla]
         known_replacements.extend(og_replacements)
 
-    #weight selection based on no*/hate*/like*/only* codes
-    whitelist = [c[4:] for c in Options_.active_codes.keys() if c.startswith("only")]
+    # weight selection based on no*/hate*/like*/only* codes
+    whitelist = [c for c in options.Options_.active_codes.keys() if options.Options_.get_code_value(c) == "only"]
     replace_candidates = []
     for r in known_replacements:
         whitelisted = False
@@ -422,18 +428,18 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
                 break
             if g in whitelist:
                 whitelisted = True
-            if Options_.is_code_active("no"+g):
+            if options.Options_.get_code_value(g) == "no":
                 r.weight = 0
-            elif  Options_.is_code_active("hate"+g):
+            elif options.Options_.get_code_value(g) == "hate":
                 r.weight /= 3
-            elif  Options_.is_code_active("like"+g):
+            elif options.Options_.get_code_value(g) == "like":
                 r.weight *= 2
         if whitelist and not whitelisted:
             r.weight = 0
         if r.weight:
             replace_candidates.append(r)
 
-    #select sprite replacements
+    # select sprite replacements
     if not wild:
         female_candidates = [c for c in replace_candidates if c.gender == "female"]
         male_candidates = [c for c in replace_candidates if c.gender == "male"]
@@ -476,15 +482,15 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
 
 def manage_character_appearance(fout, preserve_graphics=False):
     characters = get_characters()
-    wild = Options_.is_code_active('partyparty')
-    sabin_mode = Options_.is_code_active('suplexwrecks')
-    tina_mode = Options_.is_code_active('bravenudeworld')
-    soldier_mode = Options_.is_code_active('quikdraw')
-    moogle_mode = Options_.is_code_active('kupokupo')
-    ghost_mode = Options_.is_code_active('halloween')
-    christmas_mode = Options_.is_code_active('christmas')
-    sprite_swap_mode = Options_.is_code_active('makeover') and not (sabin_mode or tina_mode or soldier_mode or moogle_mode or ghost_mode)
-    new_palette_mode = not Options_.is_code_active('sometimeszombies')
+    wild = options.Options_.is_code_active('partyparty')
+    sabin_mode = options.Options_.is_code_active('suplexwrecks')
+    tina_mode = options.Options_.is_code_active('bravenudeworld')
+    soldier_mode = options.Options_.is_code_active('quikdraw')
+    moogle_mode = options.Options_.is_code_active('kupokupo')
+    ghost_mode = options.Options_.is_code_active('halloween')
+    christmas_mode = options.Options_.is_code_active('christmas')
+    sprite_swap_mode = options.Options_.is_code_active('makeover') and not (sabin_mode or tina_mode or soldier_mode or moogle_mode or ghost_mode)
+    new_palette_mode = not options.Options_.is_code_active('sometimeszombies')
 
     sprite_log = ""
 
@@ -728,12 +734,14 @@ def manage_character_appearance(fout, preserve_graphics=False):
 
     return sprite_log
 
-def manage_palettes(fout, change_to, char_ids):
-    sabin_mode = Options_.is_code_active('suplexwrecks')
-    tina_mode = Options_.is_code_active('bravenudeworld')
-    christmas_mode = Options_.is_code_active('christmas')
-    new_palette_mode = not Options_.is_code_active('sometimeszombies')
 
+def manage_palettes(fout, change_to, char_ids):
+    sabin_mode = options.Options_.is_code_active('suplexwrecks')
+    tina_mode = options.Options_.is_code_active('bravenudeworld')
+    christmas_mode = options.Options_.is_code_active('christmas')
+    new_palette_mode = not options.Options_.is_code_active('sometimeszombies')
+
+    from .locationrandomizer import get_npcs
     characters = get_characters()
     npcs = get_npcs()
     charpal_Options = {}
@@ -819,7 +827,7 @@ def manage_palettes(fout, change_to, char_ids):
                 fout.write(bytes([byte]))
         character.palette = new_palette
 
-    if Options_.is_code_active('repairpalette'):
+    if options.Options_.is_code_active('repairpalette'):
         make_palette_repair(fout, main_palette_changes)
 
     if new_palette_mode:
@@ -889,9 +897,9 @@ def manage_palettes(fout, change_to, char_ids):
             continue
         line = line.split(' ')
         if len(line) > 1:
-            if line[1] == 'c' and Options_.is_code_active('thescenarionottaken'):
+            if line[1] == 'c' and options.Options_.is_code_active('thescenarionottaken'):
                 return
-            if line[1] == 'd' and not Options_.is_code_active('thescenarionottaken'):
+            if line[1] == 'd' and not options.Options_.is_code_active('thescenarionottaken'):
                 return
         pointer = hex2int(line[0].strip())
         fout.seek(pointer)

@@ -306,7 +306,7 @@ def recruit_gogo_insert(fout, recruit_info):
         0x45, # refresh objects
     ] + name_camera_reverse + [
         0x93, # pause for 45 frames
-        0x3E, 0x0D, # Delete object 0D
+        0x3E, 0x0C, # Delete object 0C
         0x45, # refresh objects
     ]) + extra_bytes + bytes([0xFE])
     name_sub.write(fout)
@@ -488,6 +488,12 @@ def collapsing_house_recruit(unused_fout, unused_char_id):
 def manage_wor_recruitment(fout, shuffle_wor, random_treasure, include_gau, alternate_gogo):
     if alternate_gogo:
         _setup_alternate_zone_eater(fout, include_gau)
+
+        # Change Gogo's textbox if you don't have the right character
+        gogo_text_sub = Substitution()
+        gogo_text_sub.bytestring = bytes([0x4B, 0xE5, 0x00])
+        gogo_text_sub.set_location(0xC33A6)
+        gogo_text_sub.write(fout)
 
     if shuffle_wor:
         wor_free_char, collapsing_house_char = _shuffle_recruit_locations(fout, random_treasure, include_gau, alternate_gogo)

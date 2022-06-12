@@ -1,9 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from ..beyondchaos.options import Options
-
-
 class GameObject(ABC):
 
     def __init__(self, address: int):
