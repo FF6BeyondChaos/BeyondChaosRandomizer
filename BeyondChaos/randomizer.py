@@ -48,7 +48,7 @@ from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
                      change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx, apply_namingway,
-                     improved_party_gear)
+                     improved_party_gear, patch_doom_gaze)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -75,12 +75,13 @@ VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = True
-TEST_SEED = "3|normal|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random|1603333081"
+TEST_SEED = "3|normal|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
 #TEST_SEED = "3|normal|bcdefghijklmnopqrstyz partyparty novanilla noanime noboys likegirls hatekids nopets nopotato electricboogaloo masseffect randombosses supernatural alasdraco capslockoff johnnydmad notawaiter bsiab remonsterate|1652122298"
 #strikerTEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz partyparty frenchvanilla electricboogaloo randombosses alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random|1653854831"
+#TEST_SEED = "3|racecave|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons remonsterate swdtechspeed:random|1649808314"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -327,8 +328,13 @@ class FreeBlock:
 
 
 def get_appropriate_freespace(freespaces: List[FreeBlock],
-                              size: int) -> FreeBlock:
-    candidates = [c for c in freespaces if c.size >= size]
+                              size: int,
+                              minimum_address: int = None) -> FreeBlock:
+    if minimum_address:
+        candidates = [c for c in freespaces if c.size >= size and c.start >= minimum_address]
+    else:
+        candidates = [c for c in freespaces if c.size >= size]
+
     if not candidates:
         raise Exception("Not enough free space")
 
@@ -2684,7 +2690,7 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
     if not chain_start_item_found:
         # Get a list of shops that are relevant to the item type of the chain start item
         if chain_start_item.is_weapon:
-            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty == ["weapon", "misc"]]
+            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["weapon", "misc"]]
         elif chain_start_item.is_armor:
             filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["armor", "misc"]]
         elif chain_start_item.is_relic:
@@ -2729,6 +2735,10 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
                                                          opponent_obj.display_name)
         log(s, section="colosseum")
 
+def manage_doom_gaze(fout):
+    # patch is actually 98 bytes, but just in case
+    patch_doom_gaze(fout)
+    set_dialogue(0x60, "<choice> (Lift-off)<line><choice> (Find Doom Gaze)<line><choice> (Not just yet)")
 
 def manage_chests():
     crazy_prices = Options_.is_code_active('madworld')
@@ -5477,7 +5487,7 @@ def randomize(**kwargs) -> str:
     randomize_poem(fout)
     randomize_passwords()
     reseed()
-    namingway()
+    #namingway()
 
     # ----- NO MORE RANDOMNESS PAST THIS LINE -----
     if Options_.is_code_active('thescenarionottaken'):
@@ -5586,6 +5596,7 @@ def randomize(**kwargs) -> str:
     fix_flash_and_bioblaster(fout)
     title_gfx(fout)
     improved_party_gear(fout)
+    manage_doom_gaze(fout)
 
     if Options_.is_code_active("swdtechspeed"):
         swdtech_speed = Options_.get_code_value('swdtechspeed')
