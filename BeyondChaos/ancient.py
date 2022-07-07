@@ -968,6 +968,19 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None):
                 setattr(partyswitch, key, value)
             l.npcs.append(partyswitch)
 
+        renamer = NPCBlock(pointer=None, locid=l.locid)
+        attributes = {
+            "graphics": 0x24, "palette": 0, "x": 47, "y": 16,
+            "show_on_vehicle": False, "speed": 0,
+            "event_addr": 0x209AB, "facing": 2,
+            "no_turn_when_speaking": False, "layer_priority": 0,
+            "special_anim": 0,
+            "memaddr": 0, "membit": 0, "bg2_scroll": 0,
+            "move_type": 0, "sprite_priority": 0, "vehicle": 0}
+        for key, value in attributes.items():
+            setattr(renamer, key, value)
+        l.npcs.append(renamer)
+
     assert not optional_chars
 
     if pointer >= 0xb6965:

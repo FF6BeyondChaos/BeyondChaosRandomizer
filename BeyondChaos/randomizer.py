@@ -75,13 +75,13 @@ VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo|1603333081"
+#TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
 #TEST_SEED = "3|normal|bcdefghijklmnopqrstyz partyparty novanilla  electricboogaloo masseffect randombosses supernatural alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo dearestmolulu airship|1652122298"
 #strikerTEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz partyparty frenchvanilla electricboogaloo randombosses alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random|1653854831"
-#TEST_SEED = "3|racecave|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons remonsterate swdtechspeed:random|1649808314"
+TEST_SEED = "3|speedcave|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons easymodo canttouchthis dearestmolulu|1649808314"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -4200,33 +4200,35 @@ def namingway():
 
     set_dialogue(0x4E, "Rename lead character?<line><choice> (Yes)<line><choice> (No)")
 
-    wor_airship = get_location(0xC)
-    wor_namer = NPCBlock(pointer=None, locid=wor_airship.locid)
-    attributes = {
-        "graphics": 0x24, "palette": 0, "x": 14, "y": 45,
-        "show_on_vehicle": False, "speed": 0,
-        "event_addr": 0x209AB, "facing": 2,
-        "no_turn_when_speaking": False, "layer_priority": 0,
-        "special_anim": 0,
-        "memaddr": 0, "membit": 0, "bg2_scroll": 0,
-        "move_type": 0, "sprite_priority": 0, "vehicle": 0, "npcid": 15}
-    for key, value in attributes.items():
-        setattr(wor_namer, key, value)
-    wor_airship.npcs.append(wor_namer)
+    if not Options_.is_code_active('ancientcave'):
 
-    wob_airship = get_location(0x7)
-    wob_namer = NPCBlock(pointer=None, locid=wob_airship.locid)
-    attributes = {
-        "graphics": 0x24, "palette": 0, "x": 39, "y": 12,
-        "show_on_vehicle": False, "speed": 0,
-        "event_addr": 0x209AB, "facing": 2,
-        "no_turn_when_speaking": False, "layer_priority": 0,
-        "special_anim": 0,
-        "memaddr": 0, "membit": 0, "bg2_scroll": 0,
-        "move_type": 0, "sprite_priority": 0, "vehicle": 0, "npcid": 22}
-    for key, value in attributes.items():
-        setattr(wob_namer, key, value)
-    wob_airship.npcs.append(wob_namer)
+        wor_airship = get_location(0xC)
+        wor_namer = NPCBlock(pointer=None, locid=wor_airship.locid)
+        attributes = {
+            "graphics": 0x24, "palette": 0, "x": 14, "y": 45,
+            "show_on_vehicle": False, "speed": 0,
+            "event_addr": 0x209AB, "facing": 2,
+            "no_turn_when_speaking": False, "layer_priority": 0,
+            "special_anim": 0,
+            "memaddr": 0, "membit": 0, "bg2_scroll": 0,
+            "move_type": 0, "sprite_priority": 0, "vehicle": 0, "npcid": 15}
+        for key, value in attributes.items():
+            setattr(wor_namer, key, value)
+        wor_airship.npcs.append(wor_namer)
+
+        wob_airship = get_location(0x7)
+        wob_namer = NPCBlock(pointer=None, locid=wob_airship.locid)
+        attributes = {
+            "graphics": 0x24, "palette": 0, "x": 39, "y": 12,
+            "show_on_vehicle": False, "speed": 0,
+            "event_addr": 0x209AB, "facing": 2,
+            "no_turn_when_speaking": False, "layer_priority": 0,
+            "special_anim": 0,
+            "memaddr": 0, "membit": 0, "bg2_scroll": 0,
+            "move_type": 0, "sprite_priority": 0, "vehicle": 0, "npcid": 22}
+        for key, value in attributes.items():
+            setattr(wob_namer, key, value)
+        wob_airship.npcs.append(wob_namer)
 
 def manage_clock():
     hour = random.randint(0, 5)
