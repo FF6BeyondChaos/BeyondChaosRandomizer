@@ -33,7 +33,7 @@ from itemrandomizer import (reset_equippable, get_ranked_items, get_item,
                             reset_cursed_shield, unhardcode_tintinabar,
                             ItemBlock)
 from locationrandomizer import (get_locations, get_location, get_zones,
-                                get_npcs, randomize_forest)
+                                get_npcs, randomize_forest, NPCBlock, EventBlock)
 from menufeatures import (improve_item_display, improve_gogo_status_menu,
                           improve_rage_menu, show_original_names,
                           improve_dance_menu, y_equip_relics, fix_gogo_portrait)
@@ -74,12 +74,12 @@ BETA = False
 VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = True
-TEST_SEED = "3|normal|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo|1603333081"
+TEST_ON = False
+TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
-#TEST_SEED = "3|normal|bcdefghijklmnopqrstyz partyparty novanilla noanime noboys likegirls hatekids nopets nopotato electricboogaloo masseffect randombosses supernatural alasdraco capslockoff johnnydmad notawaiter bsiab remonsterate|1652122298"
+#TEST_SEED = "3|normal|bcdefghijklmnopqrstyz partyparty novanilla  electricboogaloo masseffect randombosses supernatural alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo dearestmolulu airship|1652122298"
 #strikerTEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz partyparty frenchvanilla electricboogaloo randombosses alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random|1653854831"
 #TEST_SEED = "3|racecave|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons remonsterate swdtechspeed:random|1649808314"
 TEST_FILE = "FF3.smc"
@@ -4198,10 +4198,35 @@ def namingway():
 
     apply_namingway(fout)
 
-    npc = [n for n in get_npcs() if n.event_addr == 0x264FA][0]
-    npc.locid = 0xB
-    npc.x = 20
-    npc.y = 20
+    set_dialogue(0x4E, "Rename lead character?<line><choice> (Yes)<line><choice> (No)")
+
+    wor_airship = get_location(0xC)
+    wor_namer = NPCBlock(pointer=None, locid=wor_airship.locid)
+    attributes = {
+        "graphics": 0x24, "palette": 0, "x": 14, "y": 45,
+        "show_on_vehicle": False, "speed": 0,
+        "event_addr": 0x209AB, "facing": 2,
+        "no_turn_when_speaking": False, "layer_priority": 0,
+        "special_anim": 0,
+        "memaddr": 0, "membit": 0, "bg2_scroll": 0,
+        "move_type": 0, "sprite_priority": 0, "vehicle": 0, "npcid": 15}
+    for key, value in attributes.items():
+        setattr(wor_namer, key, value)
+    wor_airship.npcs.append(wor_namer)
+
+    wob_airship = get_location(0x7)
+    wob_namer = NPCBlock(pointer=None, locid=wob_airship.locid)
+    attributes = {
+        "graphics": 0x24, "palette": 0, "x": 39, "y": 12,
+        "show_on_vehicle": False, "speed": 0,
+        "event_addr": 0x209AB, "facing": 2,
+        "no_turn_when_speaking": False, "layer_priority": 0,
+        "special_anim": 0,
+        "memaddr": 0, "membit": 0, "bg2_scroll": 0,
+        "move_type": 0, "sprite_priority": 0, "vehicle": 0, "npcid": 22}
+    for key, value in attributes.items():
+        setattr(wob_namer, key, value)
+    wob_airship.npcs.append(wob_namer)
 
 def manage_clock():
     hour = random.randint(0, 5)
@@ -5091,11 +5116,10 @@ def randomize(**kwargs) -> str:
             dummy_item(dirk)
             assert not dummy_item(dirk)
     if Options_.random_enemy_stats and Options_.random_treasure and Options_.random_character_stats:
-        if random.randint(1, 10) != 10:
-            rename_card = get_item(231)
-            if rename_card is not None:
-                rename_card.become_another(tier="low")
-                rename_card.write_stats(fout)
+        rename_card = get_item(231)
+        if rename_card is not None:
+            rename_card.become_another(tier="low")
+            rename_card.write_stats(fout)
 
             weapon_anim_fix = Substitution()
             weapon_anim_fix.set_location(0x19DB8)
@@ -5487,7 +5511,7 @@ def randomize(**kwargs) -> str:
     randomize_poem(fout)
     randomize_passwords()
     reseed()
-    #namingway()
+    namingway()
 
     # ----- NO MORE RANDOMNESS PAST THIS LINE -----
     if Options_.is_code_active('thescenarionottaken'):
