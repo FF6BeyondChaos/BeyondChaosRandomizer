@@ -9,7 +9,7 @@ a fork of Abyssonym's FF6 Beyond Chaos Randomizer
 
 __Version__: 4.0.0
 <br />
-__Date__: 2022-07-13
+__Date__: 2022-07-20
 <br />
 __URL__: https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest
 <br />
