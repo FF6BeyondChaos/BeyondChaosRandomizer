@@ -1,0 +1,249 @@
+#TITLE Overcome Difficulties
+#ALBUM Tales of Phantasia
+#COMPOSER Motoi Sakuraba, Shinji Tamura
+#ARRANGED emberling
+
+#VARIANT ~_
+#VARIANT ~` tier1
+#VARIANT ?` tier2
+#VARIANT ?_ tier3
+
+#WAVE 0x20 0xD5 overdrive lead
+#WAVE 0x21 0xF2 synth lead
+#WAVE 0x22 0xB0 rotary organ
+#WAVE 0x23 0x73 synth strings
+##WAVE 0x24 0x00 slap bass
+##WAVE 0x28 0x00 kick
+#WAVE 0x29 0x1B snare
+##WAVE 0x2A 0x00 tom
+#WAVE 0x2C 0x2D crash cymbal
+##WAVE 0x2E 0x00 open hihat
+##WAVE 0x2F 0x00 closed hihat
+
+#def init= t120 %v50 %b0,100 %f0,0 %x240
+
+#def lead=    |0 'l' p56 o3 m24,18,207 %a13 %r10
+#def synth=   |1 'y' p60 o4 m24,18,239 
+#def organ=   |2 'o' p56 o4 
+#def strings= |3 's' p78 o5 
+#def bass=    |2 'b' p64 o5 
+
+#def leadEcho=  |0 'l*v.735' p78 o2 m24,18,207 %a12%r10
+#def synthEcho= |1 'y*v.632' p78 o4 m24,18,239 
+
+#def l= v48
+#def y= v72
+#def o= v36
+#def s= v72
+#def b= v72
+
+#def of= v1,36
+
+#def vKick=  v40
+#def vSnare= v50 
+#def vTom=   v40
+#def vCrash= v127
+#def vOpen=  v32
+#def vHihat= v32
+
+#drum "r"= 5r
+
+#drum "k"=  5a  |9 'vKick' p64
+#drum "s"=  5a  |9 'vSnare' p64
+
+#drum "g"=  5f  |9 'vTom*v1.27' p78
+#drum "e"=  5c+ |9 'vTom*v1.27' p64
+#drum "c"=  4f+ |9 'vTom*v1.27' p48
+#drum "g-"= 5f  |9 'vTom*v1.12' p78
+#drum "e-"= 5c+ |9 'vTom*v1.12' p64
+#drum "c-"= 4f+ |9 'vTom*v1.12' p48
+
+#drum "y"=  5a  |C 'vCrash' p64 %y2%s2%r14
+
+#drum "h"=  6a  |9 'vHihat*v1.00' p78
+#drum "i"=  6g+ |9 'vHihat*v1.00' p78
+#drum "o"=  6c  |9 'vOpen'        p78
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} $4441 %e1
+'init'
+'organ+o2*v1.15'
+l16 a+a+.r32 a+a+.r32 a+a+
+l24 'o*v.72''of*v96,1.13' >fg+b g+b<d> b<df dfg+
+$## 2
+'synth+o1' l8
+[ j2,117 $102 [
+e.>a.b<cd    e.>a.ab<c
+e.>a.b<cd    e.>g.ab<c
+l16 >ab<c e12r24>a12r24<c12r24 >ab<c
+>g+ab<c deag+ fede j2
+l8 d.>g.aa+<c l16 dfg+b g+fd>bg+f< ]
+l8 d.g.aa+<c
+   m66,-1 &66d mm12,-1 ^16 m8,-1 ^24 m6,-1 ^32 m8,-2 ^24 m16,-6 ^12^48
+] $117 
+## 18
+'lead+o2' l16
+[ j2,134 $118
+('1.0' c16 '1.6' k7 &2c '1.7' k13 c32 '1.10' k9 &2c
+'1.11' k0 c32 '2.2' k7 &2c '2.3' k13 c48 '2.5' k7 &2c '2.6' k0 c16.
+##'3.3' k11 &2c '3.4' k18 &2c '3.5' k13 &2c '3.6' k11 &2c
+'3.3' k11 &2c '3.4' k18 &2c '3.5,3.6' k12 c48
+'3.7' k9 c48 '3.9' k13 &2c '3.10' k22 c32 '4.1' k13 &2c
+##'4.2' k0 c16 '4.8' k4 &2c '4.9' k7 &2c '4.10' k9 &2c '4.11' k11 &2c
+'4.2' k0 c16 '4.8' k4 &2c '4.9' k7 &2c '4.10,4.11' k10 c48
+##'5.0' k13 c24 '5.4' k16 &2c '5.5' k18 &2c '5.6' k16 &2c '5.7' k11 &2c
+'5.0' k13 c24 '5.4' k16 &2c '5.5,5.6' k17 c48 '5.7' k11 &2c
+'5.8' k7 &2c '5.9' k4 &2c '5.10' k0 c48)>
+a+gfdr c+c>a+gf
+ga+<cdr cfrcg
+gcf8c drcdf
+ga+fga+ <cdf ('5.0' g12 '5.8' k7 &2g '5.9' k11 g48 '5.11' k13 g48
+##'1.1' k16 &2g '1.2' k18 &2g '1.3' k22 g32g48 '1.8' k13 &2g '1.9' k0 g32
+'1.1,1.2' k17 g48 '1.3' k22 g32g48 '1.8' k13 &2g '1.9' k0 g32
+##'2.0' k7 &2g '2.1' k16 &2g '2.2' k18 &2g '2.3' k16 &2g '2.4' k9 &2g '2.5' k0 g48
+'2.0' k7 &2g '2.1,2.2,2.3' k17 g32 '2.4' k9 &2g '2.5' k0 g48
+'2.7' k11 &2g '2.8' k22 g32 '2.11' k9 &2g '3.0' k0 &2g
+'3.1' k2 &2g  '3.2' k11 &2g '3.3' k22 g32 '3.6' k13 &2g
+##'3.7' k2 &2g  '3.8' k0 &2g  '3.9' k11 &2g  '3.10' k22 g48 '4.0' k20 &2g 
+'3.7,3.8' k1 g48  '3.9' k11 &2g  '3.10' k22 g48 '4.0' k20 &2g 
+##'4.1' k4 &2g  '4.2' k0 &2g  '4.3' k2 &2g  '4.4' k11 &2g '4.5' k18 &2g 
+'4.1' k4 &2g  '4.2,4.3' k1 g48  '4.4' k11 &2g '4.5' k18 &2g 
+##'4.6' k13 &2g  '4.7' k11 &2g  '4.8' k9 &2g  '4.9' k4 &2g  '4.10' k0 &2g 
+'4.6,4.7,4.8' k11 g32  '4.9' k4 &2g  '4.10' k0 &2g 
+'4.11' k4 &2g  '5.0' k20 &2g  '5.1' k22 g48 '5.3' k18 &2g  '5.4' k0 g12)>
+b8.a8.g2..
+#
+<cc+dfr32r48 ('3.5' m4,2 &2f '3.6'k22 m0,0 f32 '3.9' k16 &2f '3.10' k2 &2f 
+##'3.11' k0 f32.)r64('4.5' &2d '4.6' k2 &2d '4.7' k0 d24)&2rc+c>
+'3.11' k0 f32.)r64'4.5,4.6,4.7' d16 &2rc+c>
+a+g<c+>a+f <c>a+gf<c>
+l24 a+g[3fga+] [<c>a+gf] ga+<c>a+ f16
+##<('4.2' &2d '4.3' k2 &2d '4.4' k22 d8. '5.10' k16 &2d '5.11' k0 r64)&35>
+<('4.2,4.3' k1 d48 '4.4' k22 d8. '5.10' k16 &2d '5.11' k0 r64)&35>
+r8.('2.6'a+48 '2.8' k22 a+48 '2.10' k13 &2a+ k0 &2a+) gf<c>a+gf(dc+)c
+##>a+gf ('2.0' g24 '2.4' k2 &2g '2.5' k9 &2g  '2.6' k7 &2g '2.7' k0 g24
+>a+gf ('2.0' g24 '2.4' k2 &2g '2.5,2.6' k8 g48 '2.7' k0 g24
+'2.11' k4 &2g  '3.0' k22 g48 '3.2' k18 &2g  '3.3' k2 &2g  '3.4' k0 g48
+'3.6' k11 &2g  '3.7' k22 g48 '3.9' k20 &2g  '3.10' k4 &2g  '3.11' k0 g48
+'4.1' k16 &2g  '4.2' k22 g48 '4.4' k16 &2g  '4.5' k0 g48 '4.7' k22 g24
+'4.11' k4 &2g  '5.0' k0 &2g  '5.1' k13 &2g  '5.2' k22 g32g48 '5.7' k11 &2g 
+'5.8' k2 &2g  '5.9' k0 g32)
+l16 gab12r24 <c12r24 gd12r24 a
+c8 ('2.0' b48 '2.2' k9 &2b '2.3' k22 b32 '2.6' k18 &2b  '2.7' k9 &2b 
+'2.8' k0 b24 '3.0' k2 &2b  '3.1' k22 b32 '3.4' k9 &2b  '3.5' k0 b48
+'3.7' k2 &2b  '3.8' k13 &2b  '3.9' k0 b32 b8.)
+]$134 ^16
+`m:4441`
+;
+
+{2} $4442 %e1 
+'organ+o2*v1.15'
+l16 dd.r32 dd.r32 dd
+l24 'o*v.72''of*v96,1.13' >dfg+ fg+b g+b<d> b<df
+$## 2
+[ 'organ+o1' l16
+[3 cder8 def j3 r>b<cd] >b<cd8
+>b<cdr8 cde >ab<c8
+>ab<cr8 >b<cd r>ab<c
+>b<cdr8 cde r>b<cd
+>a+<cdr8 cdd+ >a+<cd8 j2
+>dfg+b< dfg+b g+f ]
+>fg+b<d12r24> b<dfg+12r24
+## 18
+[ 'strings-o1' l16
+[c<d+cd8 cd+cdc>] [>a+<<d+>a+<d8> a+<d+>a+<d>a+]
+[>g+<<d+>g+<d8> g+<d+>g+<d>g+] [>g<<c>gb8 g<c>gbg]
+]
+`:4442`
+;
+
+{3} $4443 %e1
+'bass-o2' l16
+ gg>g< gg>g< gg
+>ff<f>f ff+gg+
+$## 2
+[ 'bass-o3' l16
+[7a<a8>]g8<g>
+[4a<a8>][3g<g8>]
+[5f<f8>][3e<e8>]e8<e>
+[4g<g8>] j2
+g+g+<g+> g+g+g+<g+> g+g+<g+>]
+g+b<df12r24 dfg+b12r24
+## 18
+[
+cc<c>ca+      <c>c<c>a+<c>
+cc<c>ca+      <c>a+g+gf>
+a+a+<a+>a+<g+  a+>a+<a+g+a+>
+a+a+<a+>a+<g+  a+>a+<<c>a+a>
+g+g+<g+>g+<g   g+>g+<g+gg+>
+g+g+<g+>g+<g   g+>g+<g+a+<c>>
+gg<g>g<f       g>g<gfg>
+gg<g>g<f       g>g<gab ]
+`:4443`
+;
+
+{4} $4444 %e0
+l16 "ss8 ss8 ss8.  ee-cc-s8"
+$## 2
+[ "!!!o"
+[[3 "k8s8kks8sk8s"] j2"k8s8kks8ssss"] j2
+"sssssskkss" ]
+"ssss8ssss8"
+## 18
+[4 ["k8s8kks8s8 k8s8kk"j2"s8ss"]"ssss"]
+`:4444`
+;
+
+{5} $4445 %e1
+'organ+o1*v1.15'
+l16 bb.r32 bb.r32 bb r2
+$## 2
+[ 'organ' l16
+[3 ab<c>r8 b<cd>  j3 rgab] gab8
+gabr8   ab<c>  fga8
+fgar8   gab    rfga
+g+abr8  ab<c>  rg+ab
+gaa+r8  aa+<c> gaa+8 j2
+>b<dfg+ b<dfg+ fd ]
+dfg+b12r24 g+b<df12r24
+## 18
+'strings' l16
+[16 rgrg8 rgrgr]
+`:4445`
+;
+
+{6} $4446 %e1
+l16 "r8k8.k8. gg-r4."
+$## 2
+[ "!!!o"
+ [3"o8"[9"ih"]"o4"]
+   "o8"[5"ih"] j2 "ggeecc^4"]
+            [":h: !o gg-ec8"]
+## 18
+[80"!o o8"]
+`:4446`
+;
+
+{7} $4447 %e1
+"y2..y8"
+$## 2
+"^1^1^1"
+"y1^1..."
+"y1^1^1"
+"y2.."
+[12^1]
+`:4447`
+;
+
+{8} $4448 %e1
+r1 _^32^48_
+$## 2
+`^32^48`
+'synthEcho+o1' [j1,102]
+## 18
+'leadEcho+o2' [j1,118]
+_^16_
+`&2rm:4448`
+;

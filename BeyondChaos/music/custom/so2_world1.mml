@@ -3,7 +3,7 @@
 #COMPOSER Motoi Sakuraba
 #ARRANGED emberling
 
-#VARIANT `
+#VARIANT ` 
 #VARIANT `~ a
 #VARIANT / b
 
@@ -37,7 +37,7 @@
 #def uncy= %k0
 
 #def s= v48
-#def h= v80
+#def h= v69
 #def b= v72
 #def f= v68
 #def p= v24

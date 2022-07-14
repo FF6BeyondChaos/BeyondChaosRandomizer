@@ -1,0 +1,878 @@
+#TITLE Dragon God
+#ALBUM Chrono Cross
+#COMPOSER Yasunori Mitsuda
+#ARRANGED Rushlight
+
+
+#WAVE 0x20 0xA4 ## Piccolo
+#WAVE 0x21 0x72 ## Violin
+#WAVE 0x22 0x82 ## Trumpet
+#WAVE 0x23 0x7E ## Horn
+#WAVE 0x24 0x52 ## Bass
+#WAVE 0x25 0x5A ## Timpani
+#WAVE 0x26 0x28 ## Tubular Bell
+#WAVE 0x27 0x2C ## Orchestra Clash
+#WAVE 0x29 0x71 ## Solo Violin
+#BRR 0x2A; brr/DragonGodVoice1-louder-cropped_8000,  @0bl, a, FFE0
+#BRR 0x2B; brr/DragonGodVoice2-louder_8980,  @0bl, g, FFE0
+#BRR 0x2C; brr/DragonGodVoice3-louder_8980,  @0bl, g, FFE0
+#BRR 0x2D; brr/DragonGodVoice4-louder_8980,  @0bl, g, FFE0
+#WAVE 0x2E 0x6D ## Sleigh Bell
+#WAVE 0x2F 0x4A ## Stick
+
+
+## Note: Song is in 3/4
+#def init= t162 %x %v50 %b0,40 %f0,0
+
+
+#def voxBaseVol= v89
+
+#def piccoloBaseVol= v105
+#def piccolo_90=     'PiccoloBaseVol*v.51'
+#def piccolo_85=     'PiccoloBaseVol*v.46'
+#def piccolo_75=     'PiccoloBaseVol*v.35'
+#def piccolo_70=     'PiccoloBaseVol*v.31'
+#def piccolo_65=     'PiccoloBaseVol*v.27'
+#def piccolo_60=     'PiccoloBaseVol*v.23'
+#def piccolo_55=     'PiccoloBaseVol*v.19'
+
+#def bassBaseVol= v108
+#def bass_100=    'bassBaseVol*v.63'
+#def bass_95=     'bassBaseVol*v.57'
+#def bass_90=     'bassBaseVol*v.51'
+#def bass_85=     'bassBaseVol*v.46'
+#def bass_80=     'bassBaseVol*v.4'
+
+#def bassbBaseVol= v88 ## 
+#def bassb_95=     'bassbBaseVol*v.57'
+
+#def bassaBaseVol= v180 ## Bass solo section pitch modulation source
+#def bassa_90=     'bassaBaseVol*v.51'
+#def bassa_85=     'bassaBaseVol*v.46'
+#def bassa_80=     'bassaBaseVol*v.4'
+
+#def lowBassBaseVol=  v162 ## 50% higher than bassBaseVol because the low notes don't come out as much
+#def lowBass_100=    'LowBassBaseVol*v.63'
+#def lowBass_95=     'LowBassBaseVol*v.57'
+#def lowBass_90=     'LowBassBaseVol*v.51'
+#def lowBass_85=     'LowBassBaseVol*v.46'
+#def lowBass_80=     'LowBassBaseVol*v.4'
+
+#def extraBassBaseVol= v160 ## +0.20 to second layer so that pitch modulation is always present
+#def extraBass_90=     'xtraBassBaseVol*v.51' 'extraBassBaseVol*v.71'
+#def extraBass_85=     'xtraBassBaseVol*v.46' 'extraBassBaseVol*v.66'
+#def extraBass_80=     'xtraBassBaseVol*v.4'  'extraBassBaseVol*v.60'
+#def extraBass_75=     'xtraBassBaseVol*v.35' 'extraBassBaseVol*v.55'
+#def extraBass_70=     'xtraBassBaseVol*v.31' 'extraBassBaseVol*v.51'
+#def extraBass_65=     'xtraBassBaseVol*v.27' 'extraBassBaseVol*v.47'
+#def extraBass_60=     'xtraBassBaseVol*v.23' 'extraBassBaseVol*v.43'
+#def extraBass_55=     'xtraBassBaseVol*v.19' 'extraBassBaseVol*v.39'
+#def extraBass_50=     'xtraBassBaseVol*v.16' 'extraBassBaseVol*v.36'
+#def extraBass_45=     'xtraBassBaseVol*v.13' 'extraBassBaseVol*v.33'
+#def extraBass_40=     'xtraBassBaseVol*v.1'  'extraBassBaseVol*v.30'
+#def extraBass_30=     'xtraBassBaseVol*v.06' 'extraBassBaseVol*v.26'
+#def extraBass_25=     'xtraBassBaseVol*v.04' 'extraBassBaseVol*v.24'
+#def extraBass_00=                            'extraBassBaseVol*v.20'
+
+## highViolinBaseVol is 113. All violin vols based on it should be derived from that.
+#def violin2Vol=      v138 ## highViolinBaseVol*1.22
+#def highViolin3Vol=  v245 ## Should be highViolinBaseVol*1.23, but it's way boosted because that doesn't come out nearly loud enough
+
+
+#def violin2_95=  'violin2Vol*v.57'
+#def violin2_90=  'violin2Vol*v.51'
+#def violin2_85=  'violin2Vol*v.46'
+#def violin2_80=  'violin2Vol*v.4'
+#def violin2_75=  'violin2Vol*v.35'
+
+
+#def highViolin3_90=  'highViolin3Vol*v.51'
+#def highViolin3_85=  'highViolin3Vol*v.46'
+#def highViolin3_80=  'highViolin3Vol*v.4'
+#def highViolin3_75=  'highViolin3Vol*v.35'
+#def highViolin3_70=  'highViolin3Vol*v.31'
+#def highViolin3_65=  'highViolin3Vol*v.27'
+
+
+## violinBaseVol is 113. All violin vols based on it should be derived from that.
+#def violin3Vol=      v120 ## Should be violinBaseVol*1.23, but moved a bit lower  because the high notes are more audible
+#def violin4Vol=      v139 ## violinBaseVol*1.23
+#def violin5Vol=      v128 ## violinBaseVol*1.13
+#def violin5QuietVol= v102 ## Just a quieter volume for violin 5, for used in section 3. We do this because the staccato doesn't sound great at that note, so we bury it a bit.
+#def violin6Vol=      v125 ## Should be violinBaseVol*1.23. but moved a bit lower
+
+
+#def violin3_90=  'violin3Vol*v.51'
+#def violin3_85=  'violin3Vol*v.46'
+#def violin3_80=  'violin3Vol*v.4'
+#def violin3_75=  'violin3Vol*v.35'
+#def violin3_70=  'violin3Vol*v.31'
+#def violin3_65=  'violin3Vol*v.27'
+
+#def violin4_95=  'violin4Vol*v.57'
+#def violin4_90=  'violin4Vol*v.51'
+#def violin4_85=  'violin4Vol*v.46'
+#def violin4_80=  'violin4Vol*v.4'
+#def violin4_75=  'violin4Vol*v.35'
+#def violin4_70=  'violin4Vol*v.31'
+
+#def violin5_100= 'violin5Vol*v.63'
+#def violin5_95=  'violin5Vol*v.57'
+#def violin5_90=  'violin5Vol*v.51'
+#def violin5_85=  'violin5Vol*v.46'
+#def violin5_75=  'violin5Vol*v.35'
+
+#def violin5Quiet_100= 'violin5QuietVol*v.63'
+#def violin5Quiet_95=  'violin5QuietVol*v.57'
+#def violin5Quiet_90=  'violin5QuietVol*v.51'
+#def violin5Quiet_85=  'violin5QuietVol*v.46'
+#def violin5Quiet_75=  'violin5QuietVol*v.35'
+
+#def violin6_100= 'violin6Vol*v.63'
+#def violin6_95=  'violin6Vol*v.57'
+#def violin6_90=  'violin6Vol*v.51'
+#def violin6_85=  'violin6Vol*v.46'
+#def violin6_80=  'violin6Vol*v.4'
+#def violin6_75=  'violin6Vol*v.35'
+#def violin6_70=  'violin6Vol*v.31'
+
+
+#def hornBaseVol= v130
+#def horn_100=    'hornBaseVol*v.63'
+#def horn_95=     'hornBaseVol*v.57'
+#def horn_90=     'hornBaseVol*v.51'
+#def horn_85=     'hornBaseVol*v.46'
+#def horn_80=     'hornBaseVol*v.4'
+#def horn_75=     'hornBaseVol*v.35'
+
+
+#def bellBaseVol= v113
+#def bell_95=     'bellBaseVol*v.57'
+#def bell_90=     'bellBaseVol*v.51'
+#def bell_80=     'bellBaseVol*v.4'
+
+
+#def timpaniBaseVol= v130
+#def timpani_100=    'timpaniBaseVol*v.63'
+#def timpani_95=     'timpaniBaseVol*v.57'
+#def timpani_90=     'timpaniBaseVol*v.51'
+#def timpani_80=     'timpaniBaseVol*v.4'
+#def timpani_70=     'timpaniBaseVol*v.31'
+#def timpani_65=     'timpaniBaseVol*v.27'
+
+
+#def trumpetBaseVol= v146
+#def trumpet_90=     'trumpetBaseVol*v.51'
+#def trumpet_85=     'trumpetBaseVol*v.46'
+#def trumpet_80=     'trumpetBaseVol*v.4'
+#def trumpet_75=     'trumpetBaseVol*v.35'
+#def trumpet_70=     'trumpetBaseVol*v.31'
+#def trumpet_65=     'trumpetBaseVol*v.27'
+
+
+#def stickBaseVol= v120
+#def stick_95=     'stickBaseVol*v.57'
+#def stick_90=     'stickBaseVol*v.51'
+#def stick_85=     'stickBaseVol*v.46'
+#def stick_80=     'stickBaseVol*v.4'
+#def stick_75=     'stickBaseVol*v.35'
+#def stick_70=     'stickBaseVol*v.31'
+#def stick_55=     'stickBaseVol*v.19'
+
+
+#def revCymbalVol= v77
+#def clashVol=     v102
+#def sleighVol=    v65
+
+
+#def violinSustain=      %r0
+#def violinRelease=      %r26
+#def violinSlowRelease1= %r2
+#def violinSlowRelease2= %r5
+#def violinSlowRelease3= %r9
+#def violinSlowRelease4= %r14
+#def violin3Pan=         p20
+
+#def hornSustain= %r0
+#def hornRelease= %r26
+
+
+#def extraBassRightPan=  p72
+#def extraBassCenterPan= p64
+#def extraBassLeftPan=   p56
+#def extraBassPanbrello = p0,96,32
+
+#def staccatoViolin=            %y0 %s6 %r26
+#def softerStaccatoViolin= %a12 %y0 %s6 %r26
+#def staccatoHighViolin=   %a10 %y0 %s5 %r26
+#def staccatoPiccolo=           %y0 %s6 %r30
+
+#def bass=      |4 o5 %y0 %s3 p64 %e0 mv0,6,160 k0 %r3
+#def bassb=     |4 o5 %y2 %s3 p64 %e0 mv0,6,160 k0 %r3
+#def bassa=     @3 o4 %y0 %s3 p64 %e0 mv0,6,160 k0 %r3
+#def basse=     @5 o4 %y0 %s3 p64 %e0 mv0,6,160 k0 %r3 %a11
+#def extraBass= 'basse' k0 m6,12,239
+
+#def piccolo= |0 o3 p64 'staccatoPiccolo' %e1 mv k0
+
+#def highViolin= |9 o4 %e1 mv k0
+#def violin2=     'highViolin' p64                           %e1 m48,18,255v k0
+#def highViolin3= 'highViolin' 'violin3Pan' 'staccatoViolin' %e1 mv k0
+
+#def violin=  |1 o5 %e1 mv k0
+#def violin3= 'violin' 'violin3Pan' 'staccatoViolin'
+#def violin4= 'violin' p42          'staccatoViolin'
+#def violin5= 'violin' p70          'staccatoViolin'
+#def violin6= 'violin' p94          'staccatoViolin'
+
+#def timpani= |5 o5 p80 %e1 mv k0
+
+#def horn=    |3 o4 p84 %e1 mv k0
+
+#def bell=    |6 o4 p34 %e1 mv k0
+
+#def trumpet= |2 o5 p54 %e1 mv k0
+
+#def god1=  |A o2 'voxBaseVol' p64 %e0 mv k0 a1.
+#def god2=  |B o2 'voxBaseVol' p64 %e0 mv k0 a2.
+#def god3=  |C o2 'voxBaseVol' p64 %e0 mv k0 a2.
+#def god4=  |D o2 'voxBaseVol' p64 %e0 mv k0 a2.
+
+#DRUM "r"= 5a  |7 'revCymbalVol' p64 %a4         %r0  %e1 mv k0
+## Shorter reverse cymbal
+#DRUM "q"= 5a  |7 'revCymbalVol' p64 %a5         %r0  %e1 mv k0
+#DRUM "c"= 6c  |7 'clashVol'     p64 %a15        %r18 %e1 mv k0
+## Shorter orchestral clash, for when it has to fit in 1.5 beats
+#DRUM "b"= 6c  |7 'clashVol'     p64 %a15        %r20 %e1 mv k0
+#DRUM "s"= 5g+ |E 'sleighVol'    p84     %s1 %y3 %r18 %e1 mv k-4
+## There are various volumes for the stick, so leave them out of the macros
+#DRUM "t"= 4e- |F                p44     %s2 %y4      %e0 mv k0
+#DRUM "u"= 4f  |F                p44     %s2 %y3      %e0 mv k0
+
+
+{1}
+'init'
+## 1
+r2.
+$
+## Voice clips, channels 13-16 in VGMTrans output
+## 2-3
+'god1'
+## 4
+'god2'
+## 5
+'god3'
+## 6
+'god4'
+## 7
+'god2'
+## 8
+'god3'
+## 9
+'god2'
+## 10
+'god4'
+## 11
+'god2'
+## 12
+'god3'
+## 13
+'god2'
+## Melody Violin, channel 3 in VGMTrans output
+'violin3+o1'
+l8
+[2
+  [3
+    ## 14 / 16 / 18 / 22 / 24 / 26
+    'violin3_90'd'violin3_80'e-16'violin3_75'd16'violin3_80'c'violin3_85'd>'violin3_80'gb-<
+    ## 15 / 17 / 19 / 23 / 25 / 27
+    'violin3_85'c j2,117 'violin3_75'd'violin3_90'e-'violin3_80'd'violin3_75'c'violin3_80'>b-<
+    j3,120
+  ]
+  $117
+  ## 17 / 23 (one 8th note in) then go back to the loop
+  gf'violin3_80'e-d'violin3_90'e-]
+  $120
+  ## 20 / 28
+  'violin3_90'c'violin3_80'>g'violin3_85'a'violin3_90'b-'violin3_75'a24b-24a24'violin3_85'g
+  ## 21 / 29
+  fg j2 e-de-'violin3_80'f<
+]
+## 29 (one beat note in)
+'violin3_80'
+agr4
+## 30-37
+[8 r2.]
+## Solo Violin, channel 2 in VGMTrans output
+'violin2+o1'
+l8
+[2
+  ## 38 / 46
+  'violin2_90'g+2.
+  ## 39 / 47
+  ^8.'violinRelease'^16'violinSustain''violin2_95'e-'violin2_90'g+e-g+
+  ## 40 / 48
+  f+4.'violin2_95'f4.
+  ## 41 / 49
+  'violin2_90'e-4.de-f
+  ## 42 / 50
+  >'violin2_85'b2.
+  ## 43 / 51
+  ^4^16'violinRelease'^16'violinSustain'b-'violin2_75'b'violin2_85'<c+
+  j2
+  ## 44
+  >g+2.
+  ## 45
+  ^2^8..'violinRelease'^32'violinSustain'<
+]
+## 52
+'violin2_95'd4.e-4.
+## 53
+f4.f+4.
+## 54
+'violin2_85''violinSlowRelease1'f2.
+## 55
+'violinSlowRelease2'^2.
+## 56
+'violinSlowRelease3'^2.
+## 57
+'violinSlowRelease4'^2.
+## Staccato Violin, channel 6 in VGMTrans output
+'violin6'
+l8
+[5
+  ## 58 / 62 / 66 / 70 / 74
+  'violin6_95'>b-<'violin6_80'f'violin6_85'f+g+'violin6_80'f'violin6_70'f+
+  ## 59 / 63 / 67 / 70 / 75
+  'violin6_85'>b-<'violin6_75'f'violin6_90'b-'violin6_85'f'violin6_75'g+f+
+  ## 60 / 64 / 68 / 72 / 76
+  'violin6_90'>b-<'violin6_85'f'violin6_75'f+'violin6_85'g+'violin6_75'f'violin6_85'b-
+  ## 61 / 65 / 69 / 73 / 77
+  'violin6_75'f'violin6_90'b'violin6_75'f'violin6_90'b-'violin6_80'f'violin6_85'g+
+]
+;
+
+
+{2}
+## 1
+r2.
+$
+## High Support Violin, channel 5 in VGMTrans output
+'violin5-o1'
+l8
+## 2
+'violin5_100'f'violin5_90'<cde-dc
+## 3
+>g+<e-'violin5_95'g+'violin5_85'b-g+e-
+## 4
+>g<dg'violin5_95'a'violin5_85'gd
+## 5
+'violin5_95'c+'violin5_85'g+b-<e->'violin5_75'b-'violin5_85'g+
+## 6-13
+[12 cfce-]
+## High Rhythm Violin, channel 4 in VGMTrans output
+'violin4'
+l8
+[4
+  [3
+    ## 14-16 / 18-20 / 22-24 / 26-28
+    'violin4_95'd8.'violin4_80'd16'violin4_95'd'violin4_85'ddd
+  ]
+  j2,221
+  j4,229
+  ## 17 / 25
+  'violin4_95'd8.'violin4_80'd16'violin4_95'd'violin4_85'e-d'violin4_95'c
+]
+$221
+## 21 then go back to the loop
+'violin4_95'c'violin4_85'd'violin4_90'c>g'violin4_80'b-<'violin4_90'c]
+$229
+## 29
+'violin4_95'c8.'violin4_90'c16c'violin4_95'c4
+## High Support Horn, channel 9 in VGMTrans
+'horn-o1'
+l8
+'horn_95'a16'horn_100'b-16
+[3
+  [4
+    ## 30 / 32 / 34 / 36 / 38 / 40 / 42 / 44 / 46 / 48 / 50 / 52
+    'horn_95'b4.'horn_100'<c+4^16r16
+    j2
+    j4,137
+    ## 31 / 35 / 39 / 43 / 47 / 51
+    d16.r32rd'horn_95'c+'horn_95'dc+>
+  ]
+  ## 33 / 41 / 49 then back to the loop
+  dr16d16d16^48r24c+16^48r24d16^48r24c+16^48r24>]
+  $137
+  ## 37 / 45 / 53
+  f+16r16f+16r16f+16r16f16r16f16r16f16r16>
+]
+## 54
+## Staccato Violin, channel 6 in VGMTrans output
+'violin6'
+l8
+'violin6_95'>b-<'violin6_80'f'violin6_85'f+g+'violin6_80'f'violin6_70'f+
+## 55
+'violin6_85'>b-<'violin6_75'f'violin6_90'b-'violin6_85'f'violin6_75'g+f+
+## 56
+'violin6_90'>b-<'violin6_85'f'violin6_75'f+'violin6_85'g+'violin6_75'f'violin6_85'b-
+## 57
+'violin6_75'f'violin6_90'b'violin6_75'f'violin6_90'b-'violin6_80'f'violin6_85'g+
+## Rhythm Violin, channel 4 in VGMTrans output
+'violin4'
+k-1 ## Detune slightly to avoid stacking with coinciding notes of staccato violin
+l8
+[5
+  ## 58 / 62 / 66 / 70 / 74
+  'violin4_75'f4f4'violin4_70'ff+
+  ## 59 / 63 / 67 / 71 / 75
+  'violin4_75'f4f4'violin4_70'g+f+
+  ## 60 / 64 / 68 / 72 / 76
+  'violin4_75'f4f+4'violin4_70'ff
+  ## 61 / 65 / 69 / 73 / 77
+  'violin4_75'f4f j5 'violin4_70'rff
+]
+## Reverse Cymbal, channel 20 in VGMTrans output
+"!!!oq4."
+k0
+;
+
+
+{3}
+## 1
+r2.
+$
+## Bass, channel 11 in VGMTrans output
+'bass-o2' 'bass_95'
+## 2
+f2.
+## 3
+g+2.
+## 4
+g2.
+## 5
+<c+2.
+## 6-13
+c1 [5 ^1]
+## 14-29
+'bassb-o1''bassb_95'
+[32 c8...r8r64]
+## This section will play Bass, channel 11 in VGMTrans output.
+## We'll also squeeze notes of High Rhythm Violin, channel 3 in VGMTrans output.
+[12
+  'bass-o2' 'bass_95'
+  ## 30 / 32 / 34 / 36 / 38 / 40 / 42 / 44 / 46 / 48 / 50 / 52
+  g+4.b-4.
+  ## 31 / 33 / 35 / 37 / 39 / 41 / 43 / 45 / 47 / 49 / 51 / 53
+  b8^24r48r16 r8 'violin3''violin3_65'g+8r4
+]
+l8
+'bassa-o2'
+[16 
+  ## 54-69
+  'bassa_90'b-<'bassa_85'f+f'bassa_80'g+'bassa_85'f+f>
+]
+## 70
+'bass-o3'
+'lowBass_100'
+f2.
+## 71-76
+[6 ^2.]
+## 77
+l16
+'lowBass_80'fr'lowBass_95'b8'lowBass_85'fr'lowBass_95'b-8'lowBass_85'fr'lowBass_90'g+8
+;
+
+
+{4}
+## 1
+r2.
+$
+## 2
+## Tubular Bell, channel 20 in VGMTrans output
+'bell' 'bell_95'
+g+2.
+## 3
+^2.
+## 4
+g2.
+## 5
+<c+2.>
+[4
+  ## 6 / 8 / 10 / 12
+  g2.
+  ## 7 / 9 / 11 / 13
+  ^2.
+]
+## 14-29
+[8 g1.]
+## 30-53
+## Low Support Horn, channel 10 in VGMTrans output
+'horn-o1'
+l8
+[3
+  [4
+    ## 30 / 32 / 34 / 36 / 38 / 40 / 42 / 44 / 46 / 48 / 50 / 52
+    'horn_95'g+4.'horn_100'a+4^16r16
+    j2
+    j4,737
+    ## 31 / 35 / 39 / 43 / 47 / 51
+    b16.r32rb'horn_95'a+'horn_95'ba+
+  ]
+  ## 33 / 41 / 49 then back to the loop
+  br16b16b16^48r24g+16^48r24a+16^48r24g+16^48r24]
+  $737
+  ## 37 / 45 / 53
+  <d+16r16d+16r16d+16r16d16r16d16r16d16r16>
+]
+## Timpani, channel 18 in VGMTrans output
+'timpani'>'timpani_95'b-8
+l8
+## Bass extra layer, channel 12 in VGMTrans output
+'extraBass-o1''extraBassRightPan' %p1 'extraBassPanbrello'
+## 3 iterations of this loop, with different pans (right -> center -> left)
+[3
+  j1,854
+  'extraBassCenterPan'
+  j2,854
+  'extraBassLeftPan'
+  $854
+  ## 54 / 59 / 64 (one 8th in)
+                    'extraBass_25'f+'extraBass_30'f'extraBass_40'g+'extraBass_45'f+'extraBass_50'f
+  ## 55 / 60 / 65
+  'extraBass_55'>b-<'extraBass_60'f+'extraBass_65'f'extraBass_70'g+'extraBass_75'f+              f
+  ## 56 / 61 / 66
+  'extraBass_80'>b-<'extraBass_85'f+              f'extraBass_90'g+'extraBass_85'f+              f
+  ## 57 / 62 / 67
+  'extraBass_80'>b-<'extraBass_75'f+              f'extraBass_70'g+'extraBass_65'f+'extraBass_60'f
+  ## 58 / 63 / 68
+  'extraBass_55'>b-<'extraBass_50'f+'extraBass_45'f'extraBass_40'g+'extraBass_30'f+'extraBass_25'f
+  ## 59 / 64 / 69
+  'extraBass_00'>b-<
+]
+'extraBassCenterPan'
+## 69 (one 8th in)
+               'extraBass_25'f+'extraBass_35'f'extraBass_40'g+'extraBass_55'f+
+%p0p
+## Timpani, channel 18 in VGMTrans output
+'timpani-o1' 'timpani_100'f24f24f24
+l8
+## 70
+f4.f4'timpani_70'f
+## 71
+'timpani_80'f'timpani_100'f4f4'timpani_65'f
+## 72
+f'timpani_90'f'timpani_100'ff4'timpani_65'f
+## 73
+'timpani_65'f'timpani_100'f4f4'timpani_70'f
+## 74
+'timpani_85'f4.'timpani_100'f4.
+## 75
+'timpani_75'f'timpani_95'f4'timpani_100'f4'timpani_80'f
+## 76
+'timpani_90'f4.f4.
+## 77
+'timpani_85'f'timpani_80'f'timpani_75'f'timpani_90'f'timpani_100'ff
+;
+
+
+{5}
+## 1
+## High Support Horn, channel 9 in VGMTrans output
+'horn-o1' 'horn_90'
+l16
+r2r8b-b
+$
+## 2
+## High Support Horn, channel 9 in VGMTrans output
+'horn'
+'horn_80'c2.
+## 3
+e-2.
+## 4
+'horn_85'd2.
+## 5
+'horn_80'g+2.
+## Rhythm Violin, channel 4 in VGMTrans output
+'violin4' 
+l16
+[8
+  ## 6-13
+  'violin4_90'g8r'violin4_70'g'violin4_80'grgr'violin4_85'grgr
+]
+## 14-21
+[8 r2.]
+## Piccolo, channel 1 in VGMTrans output
+'piccolo+o3'
+l8
+[3
+  ## 22 / 24 / 26
+  'piccolo_75'd'piccolo_65'e-16'piccolo_60'd16c'piccolo_70'd'piccolo_65'>g'piccolo_60'b-<
+  j2,525
+  ## 23 / 27
+  'piccolo_70'c'piccolo_55'd'piccolo_75'e-'piccolo_65'd'piccolo_60'c'piccolo_65'>b-<
+  j3,528
+]
+$525
+## 25 then back to the loop
+'piccolo_60'c'piccolo_75'g'piccolo_70'f'piccolo_65'e-'piccolo_60'd'piccolo_75'e-]
+$528
+## 28
+'piccolo_75'c>'piccolo_65'g'piccolo_70'a'piccolo_75'b-'piccolo_55'a24'piccolo_60'b-24'piccolo_55'a24'piccolo_65'g
+## 29
+'piccolo_90'f'piccolo_85'gag4.
+## High Rhythm Trumpet, channel 7 in VGMTrans output
+'trumpet'
+[3
+  [2
+    ## 30 / 34 / 38 / 42 / 46 / 50
+    'trumpet_75' [4 e-24r48r16] 'trumpet_70' e-24r48r16 'trumpet_85' e-24r48r16
+    ## 31 / 35 / 39 / 43 / 47 / 51
+    r2.
+    ## 32 / 36 / 40 / 44 / 48 / 52
+    'trumpet_80'e-16r8 'trumpet_75' e-24r48 'trumpet_85'e-24r48r16 'trumpet_80'e-24r48r16 'trumpet_75'e-24r48r16 'trumpet_90'e-24r48r16
+    j2
+    ## 33 / 41 / 49
+    r2.
+  ]
+  ## 37 / 45 / 53
+  'trumpet_70'[3 f+24r48r16] 'trumpet_75'f24r48r16 'trumpet_70'f24r48r16 'trumpet_80'f24r48r16
+]
+## 54
+l8
+## Rhythm Violin, channel 4 in VGMTrans output
+'violin4'
+k-1 ## Detune slightly to avoid stacking with coinciding notes of staccato violin
+'violin4_75'f4f4'violin4_70'ff+
+## 55
+'violin4_75'f4f4'violin4_70'g+f+
+## 56
+'violin4_75'f4f+4'violin4_70'ff
+## 57
+'violin4_75'f4f4'violin4_70'ff
+k0
+## 58
+
+## High Rhythm Horn, channel 9 in VGMTrans output
+'horn'
+'horn_75' ## Original should be horn_95, but it seems to stand out too much
+## 58-75
+[36 b-16^48'hornRelease'^24^4'hornSustain']
+## 76
+## Last Burst Violin, channel 3 in VGMTrans output - using high violin rather than regular violin because notes this high don't sound good with regular violin
+'highViolin3'
+l8
+'highViolin3_90'b-<'highViolin3_85'f'highViolin3_75'f+'highViolin3_85'g+'highViolin3_75'f'highViolin3_85'b-
+## 77
+'highViolin3_75'f'highViolin3_90'b'highViolin3_75'f'highViolin3_90'b-'highViolin3_80'f'highViolin3_85'g+
+;
+
+
+{6}
+## 1
+## Orchestra Clash / Cymbal Crescendo, channels 21-22 in VGMTrans output
+r4 "r2"
+$
+## 2
+"!!!o c2."
+## 3
+^2.
+## 4
+"c2."
+## 5
+"c2."
+[4
+  ## 6 / 8 / 10 / 12
+  "c2."
+  ## 7 / 9 / 11 / 13
+  ^2.
+]
+## Orchestra Clash, channels 21 in VGMTrans output and Sleigh Bell, channel 23 in VGMTrans output
+[2
+  ## 14 / 22
+  "!!!ob4.s4."
+  [4
+    ## 15 / 17 / 19 / 21 / 23 / 25 / 27 / 29
+    ^2.
+    j4
+    ## 16 / 18 / 20 / 24 / 26 / 28
+    ^4."s4."
+  ]
+]
+## Orchestra Clash, channels 21 in VGMTrans output
+[3
+  [4
+    ## 30 / 32 / 34 / 36 / 38 / 40 / 42 / 44 / 46 / 48 / 50 / 52
+    "!!!oc2."
+    j4
+    ## 31 / 33 / 35 / 39 / 41 / 43 / 47 / 49 / 51
+    ^4."c4."
+  ]
+  ## 37 / 45 / 53
+  "c4.c4."
+]
+## Tubular Bell, channel 20 in VGMTrans output
+'bell'
+[8
+  ## 54-69
+  'bell_90'b-1.
+]
+<'bell_80'
+## 70-77
+[4 f1.]
+;
+
+
+{7}
+## 1
+r2.
+$
+## Low Support Violin, channel 6 in VGMTrans output
+'violin6-o2'
+l8
+'violin6_100'f<'violin6_90'cde-dc
+## 3
+>g+<e-g+'violin6_95'b-'violin6_85'g+'violin6_80'e-
+## 4
+'violin6_90'>g<dgagd
+## 5
+'violin6_95'c+'violin6_85'g+'violin6_80'b-'violin6_90'<e->'violin6_75'b-'violin6_85'g+
+'violin6_80'
+[4
+  ## 6-13
+  cfcgcg+cb-cg+cg
+]
+## High Rhythm Horn, channel 9 in VGMTrans output
+'horn+o1' 'horn_75' ## Original should be horn_100, but it seems to stand out too much
+l8
+[4
+  ## 14/16 / 18-20 / 22-24 / 26-28
+  [9 c16^48'hornRelease'^24^'hornSustain']
+  j4,629
+  ## 17 / 21 / 25
+  [3 c16^48'hornRelease'^24 j3 ^'hornSustain']
+  'hornSustain'
+  >b-<
+]
+$629
+## 29
+[4 c16^48'hornRelease'^24'hornSustain'] ^4
+## Tubular Bell, channel 20 in VGMTrans output
+'bell' 'bell_95'
+## 30-53
+[12 g+1.]
+## High Rhythm Horn, channel 9 in VGMTrans output
+'horn'
+'horn_75' ## Original should be horn_95, but it seems to stand out too much
+## 54-57
+[8 b-16^48'hornRelease'^24^4'hornSustain']
+## 58-60
+[3 r2.]
+## Stick, channel 17 in VGMTrans output
+l8
+[3
+  ## 61 / 63 / 65
+  r2r8"!!!o"'stick_55'"u24"'stick_70'"u24"'stick_80'"t24"
+  j3
+  ## 62 / 64
+  'stick_90'"t2."
+]
+## 66
+'stick_90'"t"'stick_70'"u"'stick_90'"t"'stick_80'"t"'stick_90'"t"'stick_80'"t"
+## 67
+r2.
+## 68
+'stick_90'"t"'stick_55'"u24"'stick_70'"u24"'stick_80'"t24t8"'stick_85'"t"'stick_90'"tt"
+## 69
+"t"'stick_80'"t"'stick_90'"tt"'stick_80'"t24t24"'stick_85'"t24"'stick_55'"u24"'stick_70'"u24"'stick_80'"t24"
+## 70
+'stick_90'"t"'stick_70'"u"'stick_90'"t"'stick_80'"t"'stick_90'"t"'stick_80'"t"
+## 71
+'stick_90'"t"'stick_70'"u24"'stick_80'"t24"'stick_70'"u24"'stick_80'"t"'stick_90'"tt"'stick_70'"u"
+## 72
+'stick_90'"t"'stick_70'"u"'stick_80'"t"'stick_90'"t"'stick_70'"u"'stick_90'"t"
+## 73
+"t"'stick_55'"u24"'stick_70'"u24"'stick_80'"t24t"'stick_85'"t"'stick_90'"tt"
+## 74
+"t"'stick_80'"t"'stick_90'"tt"'stick_80'"t24t24"'stick_85'"t24"'stick_90'"t"
+## 75
+"t"'stick_80'"tt"'stick_90'"t"'stick_80'"tt"
+## 76
+'stick_90'"t8^24"'stick_80'"t24t24"'stick_90'"t"'stick_80'"t"'stick_85'"t"'stick_90'"t"
+## 77
+'stick_70'"u"'stick_75'"t"'stick_80'"t"'stick_85'"t"'stick_90'"t"'stick_95'"t"
+;
+
+
+{8}
+## 1
+## Timpani, channel 18 in VGMTrans output
+'timpani-o1' 'timpani_95'
+r2r8f24f24f24
+$
+## 2
+## Timpani, channel 18 in VGMTrans output
+'timpani-o1' 'timpani_95'
+l8
+f2.
+## 3
+^8g+g+<e->g+<e->
+## 4
+g4.<d4.
+## 5
+[3 c+>g+<]
+[4
+  ## 6 / 8 / 10 / 12
+  'timpani_100'c8.'timpani_90'c16'timpani_95'c'timpani_100'c'timpani_90'c'timpani_100'c
+  ## 7 / 9 / 11 / 13
+  c8.'timpani_90'c16'timpani_100'c'timpani_90'c'timpani_100'>g<'timpani_90'c
+]
+l8
+[8
+  ## 14 / 16 / 18 / 20 / 22 / 24 / 26 / 28
+  'timpani_100'c4'timpani_90'c4'timpani_90' j3,818 j8,828 c4
+  $819
+  ## 15 / 17 / 19 / 21 / 23 / 25 / 27
+  'timpani_95'c'timpani_90'c'timpani_100'c>g<'timpani_95'c'timpani_100'c
+]
+$818
+## 18 (last beat) then go back inside the loop
+rc %j819
+
+$828
+## 28 (last beat)
+rc
+## 29
+c'timpani_95'cc'timpani_100'c4.
+## This section will play Timpani, channel 18 in VGMTrans output.
+## We'll also squeeze notes of High Rhythm Violin, channel 3 in VGMTrans output
+[12
+  ## 30 / 32 / 34 / 36 / 38 / 40 / 42 / 44 / 46 / 48 / 50 / 52
+  >g+4.'violin3''violin3_70'g+4.
+  ## 31 / 33 / 35 / 37 / 39 / 41 / 43 / 45 / 47 / 49 / 51 / 53
+  g+4.'timpani''timpani_100'e-8>g+8<e-8
+]
+## 54
+## Orchestra Clash, channel 21 in VGMTrans output
+"!!!o c2."
+## 55-61
+## Seligh Bell, channel 23 in VGMTrans output
+[7 r2.]
+[4
+  ## 62 / 64 / 66 / 68
+  r4."!!!os4."
+  ## 63 / 65 / 67 / 69
+  ^4. j4 ^4.
+]
+## Combo of Reverse Cymbal, Orchestra Clash, and Sleigh Bell, channels 20-21-23 in VGMTrans output
+"q4."
+[3
+  ## 70 / 72 / 74
+  "!!!ob4.s4."
+  ## 71 / 73 / 75
+  ^2.
+]
+## 76-77
+[4 "!!!os4."]
+;

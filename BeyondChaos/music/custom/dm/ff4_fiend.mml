@@ -4,9 +4,6 @@
 #ARRANGED emberling
 ##created with sqspcmml beta 1.1.4
 
-########## ------------------
-#SHORTNAME FF4 Bat.w/4 Fiends
-
 #VARIANT ~_
 #VARIANT ~` tier1
 #VARIANT ?` tier2
@@ -52,7 +49,7 @@
 ## auto percussion  0x25
 #drum "i"= 5a
 
-#def init= t170 %v50 %b0,70 %f0,0
+#def init= t170 %v50 %b0,70 %f0,0 %x255
 
 {4} $4444
 'init''0v*v1.15'p35'0i' %e1

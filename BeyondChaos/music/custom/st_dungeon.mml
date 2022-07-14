@@ -3,18 +3,15 @@
 #COMPOSER Yoshio Hirai
 #ARRANGED emberling
 
-#VARIANT ~ enh
-#VARIANT / nat
-
-#WAVE 0x20 ~0x3E~/0x3E/
-#WAVE 0x22 ~0x92~/0x06/
-#WAVE 0x23 ~0x07~/0x07/
-#WAVE 0x24 ~0x74~/0x08/
-#WAVE 0x25 ~0x69~/0x0A/
-#WAVE 0x26 ~0x80~/0x1C/
-#WAVE 0x2A ~0x2E~/0x2E/
-#WAVE 0x2B ~0x85~/0x15/
-#WAVE 0x2C ~0x2F~/0x2F/
+#WAVE 0x20 0x23 - formerly 0x3E - marimba
+#WAVE 0x22 0x78 - formerly 0x92 - vox
+#WAVE 0x23 0xA7 - formerly 0x07 - flute
+#WAVE 0x24 0x96 - formerly 0x74 - clarinet
+#WAVE 0x25 0x72 - formerly 0x69 - violin
+#WAVE 0x26 0x51 - formerly 0x80 - bass
+#WAVE 0x2A 0x7A - formerly 0x2E - conga.open
+#WAVE 0x2B 0x7B - formerly 0x85 - conga.slap
+#WAVE 0x2C 0x6B - formerly 0x2F - shaker
 
 #def global= t110 %x224 %v40 %b0,85 %f0,0
 
@@ -22,7 +19,7 @@
 #def xyl= |0 o5 %y4%s3 'vx' m
 #def vox= |2 o5 'vv' m24,18,203 %a12%r8
 #def flt= |3 o4 'vf' m24,18,223
-#def cla= |4 ~o5~/o6/ 'vc' m24,18,231
+#def cla= |4 o5 'vc' m24,18,231
 #def fid= |5 o5 'vs' m24,18,239
 #def bas= |6 o6 'vb' %y2%s3 m
 
@@ -30,20 +27,23 @@
 #def vx= v48
 #def vv= v64
 #def vf= v64
-#def vc= v96
+#def vc= v112
 #def vs= v64
-#def vb= ~v112~/v64/
+#def vb= v112
 
-#drum "c"=5c |A v104 %e1 p48
-#drum "b"=4f+ |A v56 %e0 p48
-#drum "s"=5f+ |B ~v80~/v127/ %e1 %y p48
-#drum "p"=4a+ |B ~v56~/v96/ %e0 %y5%s1 p48
-#drum "p+"=4a+ |B ~v64~/v104/ %e0 p48
+#def vOpen= v112
+#def vSlap= v150
+#def vShak= v32
+#drum "c"=5f  |A 'vOpen*v1.04' %e1 p48
+#drum "b"=4a+ |A 'vOpen*v0.56' %e0 p48
+#drum "s"=5g+ |B 'vSlap*v0.80' %e1 %y p48
+#drum "p"=5c  |B 'vSlap*v0.56' %e0 %y5%s1 p48
+#drum "p+"=5c |B 'vSlap*v0.64' %e0 p48
 
-#drum "m"=5f+ |C v48 %r0 p80 %y
-#drum "n"=5c |C v24 %r0 p80 %y
-#drum "o"=5c |C v32 %r1 p80 %y6%s1
-#drum "z"=5c |C v80 %r1 p80 %y
+#drum "m"=5f+ |C 'vShak*v1.00' %e0 p80 %y
+#drum "n"=5c  |C 'vShak*v0.50' %e0 p80 %y
+#drum "o"=5c  |C 'vShak*v0.75' %e1 p80 %y6%s1
+#drum "z"=5c  |C 'vShak*v1.67' %e0 p80 %y
 
 #def f= %r20^16%r5
 #def f8= %r20^8%r5
@@ -59,7 +59,7 @@ d1^1
 <d2 c>a+'f'a'f'a+'f'g    ^2 'f8'aa+'f'a'f'f
 g1^1
 ##
-'cla-o1' %s1%y2%r5 [d+8.d+'f'd+ga+  <d8.c8.>a8   g2'f8'aa+'f'a'f'f]
+'cla-o1' %s1%y2%r5 p48 [d+8.d+'f'd+ga+  <d8.c8.>a8   g2'f8'aa+'f'a'f'f]
 g1^1
 ;
 
