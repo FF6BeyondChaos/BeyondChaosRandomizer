@@ -130,6 +130,9 @@ class Options:
         s = ""
         flags, codes = read_Options_from_string(flag_string, self.mode)
         for code in codes.keys():
+            if code == 'sketch' and ('sketch' in codes.keys() and 'remonsterate' in codes.keys()):
+                s += f"SECRET CODE: 'sketch' is not compatible with remonsterate code.\n"
+                continue
             if code in self.mode.prohibited_codes:
                 s += f"SECRET CODE: '{code}' is not compatible with {self.mode.name} mode.\n"
                 continue

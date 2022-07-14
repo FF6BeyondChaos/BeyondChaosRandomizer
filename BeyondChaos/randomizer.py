@@ -74,8 +74,8 @@ BETA = False
 VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
-TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis remonsterate|1603333081"
+TEST_ON = True
+TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis remonsterate sketch|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
@@ -5474,7 +5474,7 @@ def randomize(**kwargs) -> str:
             for result in remonsterate_results:
                 log(str(result) + '\n', section='remonsterate')
 
-    if not Options_.is_code_active('sketch'):
+    if not Options_.is_code_active('sketch') or Options_.is_code_active('remonsterate'):
 
         #Original C2 sketch fix by Assassin, prevents bad pointers
 
@@ -5525,6 +5525,7 @@ def randomize(**kwargs) -> str:
              0x7B, 0xBF, 0x01, 0x70, 0xD2, 0xE2, 0x20, 0x0A, 0xEB, 0x6A, 0x8D, 0xAC, 0x81,
              0x0A, 0x0A, 0x0A, 0x7B, 0x2A, 0x8D, 0xAB, 0x81, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,])
         sketch_fix_sub.write(fout)
+
 
     has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
     if has_music:
