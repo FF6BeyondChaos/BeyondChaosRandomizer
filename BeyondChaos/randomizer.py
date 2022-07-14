@@ -75,13 +75,13 @@ VERSION_ROMAN = "III"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-#TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo|1603333081"
+TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis remonsterate|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
 #TEST_SEED = "3|normal|bcdefghijklmnopqrstyz partyparty novanilla  electricboogaloo masseffect randombosses supernatural alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo dearestmolulu airship|1652122298"
 #strikerTEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz partyparty frenchvanilla electricboogaloo randombosses alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random|1653854831"
-TEST_SEED = "3|speedcave|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons easymodo canttouchthis dearestmolulu|1649808314"
+#TEST_SEED = "3|speedcave|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons easymodo canttouchthis dearestmolulu|1649808314"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -5475,13 +5475,55 @@ def randomize(**kwargs) -> str:
                 log(str(result) + '\n', section='remonsterate')
 
     if not Options_.is_code_active('sketch'):
+
+        #Original C2 sketch fix by Assassin, prevents bad pointers
+
         sketch_fix_sub = Substitution()
         sketch_fix_sub.set_location(0x2F5C6)
         sketch_fix_sub.bytestring = bytes([0x80, 0xCA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0x4C, 0x09, 0xF8,
                                            0xA0, 0x00, 0x28, 0x22, 0x09, 0xB1, 0xC1, 0xA9, 0x01, 0x1C, 0x8D, 0x89, 0xA0,
                                            0x03, 0x00,
                                            0xB1, 0x76, 0x0A, 0xAA, 0xC2, 0x20, 0xBD, 0x01, 0x20, 0x90, 0x02,
-                                           0x7B, 0x3A, 0xAA, 0x7B, 0xE2, 0x20, 0x22, 0xD1, 0x24, 0xC1, 0x80, 0xD7, ])
+                                           0x7B, 0x3A, 0xAA, 0x7B, 0xE2, 0x20, 0x22, 0xD1, 0x24, 0xC1, 0x80, 0xD7,])
+        sketch_fix_sub.write(fout)
+
+        sketch_fix_sub.set_location(0x12456)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x18, 0xA0, 0x00, 0x00,
+                                       0x86, 0x10, 0xA2, 0x3F, 0xAE,])
+        sketch_fix_sub.write(fout)
+
+        #Additional C1 sketch animation fix by Assassin, handles bad draw instruction
+
+        sketch_fix_sub.set_location(0x12456)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x18, 0xA0, 0x00, 0x00,
+                                           0x86, 0x10, 0xA2, 0x3F, 0xAE,])
+        sketch_fix_sub.write(fout)
+
+        sketch_fix_sub.set_location(0x1246C)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24,])
+        sketch_fix_sub.write(fout)
+
+        sketch_fix_sub.set_location(0x12484)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x14, 0xA0, 0x00, 0x24, 0x80, 0xD0, 0xDA, 0x86, 0x10,
+                                           0x20, 0x20, 0x20, 0x20, 0xF5, 0x24, 0x20, 0xE5, 0x24, 0x20, 0xA5, 0x22, 0xFA, 0x60,
+                                           0xEA, 0xEA, 0xEA, 0xEA, 0xEA,])
+        sketch_fix_sub.write(fout)
+
+        sketch_fix_sub.set_location(0x124A9)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24,])
+        sketch_fix_sub.write(fout)
+
+        sketch_fix_sub.set_location(0x124D1)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xE0, 0xFF, 0xFF, 0xD0, 0x03,
+                                           0x20, 0x20, 0x20, 0xA2, 0x00, 0x20, 0x20, 0x5C, 0x24, 0x6B, 0xEA, 0x6B,])
+        sketch_fix_sub.write(fout)
+
+        sketch_fix_sub.set_location(0x124F9)
+        sketch_fix_sub.bytestring = bytes(
+            [0x1A, 0xF0, 0x01, 0x3A, 0x0A, 0x0A, 0x18, 0x65, 0x10, 0xAA, 0xBF, 0x02, 0x70, 0xD2, 0xEB, 0x29, 0xFF, 0x03,
+             0x0A, 0x0A, 0x0A, 0x0A, 0x8D, 0x69, 0x61, 0xBF, 0x00, 0x70, 0xD2, 0x29, 0xFF, 0x7F, 0x8D, 0xA8, 0x81,
+             0x7B, 0xBF, 0x01, 0x70, 0xD2, 0xE2, 0x20, 0x0A, 0xEB, 0x6A, 0x8D, 0xAC, 0x81,
+             0x0A, 0x0A, 0x0A, 0x7B, 0x2A, 0x8D, 0xAB, 0x81, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,])
         sketch_fix_sub.write(fout)
 
     has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
