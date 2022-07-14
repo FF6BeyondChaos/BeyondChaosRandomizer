@@ -23,12 +23,14 @@ from . import utils
 from . import customthreadpool
 from .config import (readFlags, writeFlags)
 from .options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES)
-from .update import (update, update_needed)
+#from .update import (update, update_needed)
+from .update import update_needed
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. "
                     "Report this to https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/issues")
 
+App = QApplication(sys.argv)
 
 # Extended QButton widget to hold flag value - NOT USED PRESENTLY
 class FlagButton(QPushButton):
@@ -1391,8 +1393,7 @@ class Window(QMainWindow):
     def clearConsole(self):
         os.system('cls' if os.name == 'nt' else 'clear')
 
-
-if __name__ == "__main__":
+def run_gui():
     multiprocessing.freeze_support()
     print(
         "Loading GUI, checking for config file, "
@@ -1400,7 +1401,6 @@ if __name__ == "__main__":
     )
     try:
         if not update_needed():
-            App = QApplication(sys.argv)
             window = Window()
             time.sleep(3)
             sys.exit(App.exec())

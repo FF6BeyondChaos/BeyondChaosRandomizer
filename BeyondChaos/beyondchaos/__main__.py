@@ -2,15 +2,19 @@ import sys
 import os
 import pathlib
 import configparser
+import traceback
 
 from argparse import ArgumentParser
 
 from . import State
 from . import randomizer
+from . import beyondchaos
 from .config import VERSION, BETA, VERSION_ROMAN
 
 argp = ArgumentParser(description=f"Beyond Chaos Randomizer Community Edition, "
                                   "version {VERSION}")
+argp.add_argument("-g", "--use-gui", default=False, action="store_true",
+                  help='open gui to make seed')
 argp.add_argument("source", default=None, nargs="?",
                   help='file path to your unrandomized Final Fantasy 3 v1.0 ROM file')
 argp.add_argument("destination", default=None, nargs="?",
@@ -42,8 +46,14 @@ if __name__ == "__main__":
     if BETA:
         print("WARNING: This version is a beta! Things may not work correctly.")
 
-    state = State()
     args = argp.parse_args()
+
+    import pdb; pdb.set_trace()
+    if args.use_gui:
+        beyondchaos.run_gui()
+        exit()
+
+    state = State()
     args = state._process_args(vars(args))
 
     if state.version and state.version != VERSION:
@@ -61,7 +71,6 @@ if __name__ == "__main__":
         input('Press enter to close this program.')
     except Exception as e:
         print('ERROR: %s' % e, '\nTo view valid keyword arguments, use `python -m BeyondChaos.beyondchaos -h`')
-        import traceback
 
         traceback.print_exc()
         if fout:
