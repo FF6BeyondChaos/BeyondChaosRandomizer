@@ -28,7 +28,7 @@
 #def clarinetBaseVol=   v108
 #def melodyClarinetVol= 'clarinetBaseVol*v.75'
 
-#def hornBaseVol=   v170
+#def hornBaseVol=   v140
 #def melodyHornVol= 'hornBaseVol*v.75'
 
 #def piccoloBaseVol=   v70

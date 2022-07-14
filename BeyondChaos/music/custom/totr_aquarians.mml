@@ -25,8 +25,8 @@
 
 #def 2i=   |2
 #def 2o=   o6
-#def 2v=   v150
-#def 2f= v1,150
+#def 2v=   v130
+#def 2f= v1,130
 
 #def 3i=   |3
 #def 3o=   o6
@@ -50,8 +50,8 @@
 
 #def 7i=   |2
 #def 7o=   o7
-#def 7v=   v24
-#def 7f= v1,24
+#def 7v=   v21
+#def 7f= v1,21
 
 #drum "c"= 5a
 

@@ -16,7 +16,7 @@
 
 #def organVol=            v50
 #def backingOrganVol=     'organVol*v.875'
-#def hornVol=             v105
+#def hornVol=             v80
 #def earlySupportHornVol= 'hornVol*v.87'
 #def earlyMainHornVol=    'hornVol*v.62'
 #def middleMainHornVol=   'hornVol*v.95'

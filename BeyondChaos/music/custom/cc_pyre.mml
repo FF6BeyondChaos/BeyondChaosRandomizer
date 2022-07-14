@@ -3,68 +3,73 @@
 #COMPOSER Yasunori Mitsuda
 #ARRANGED emberling
 
-#VARIANT ~ enh
-#VARIANT / nat
+#WAVE 0x20 0x50 ~ was 0x97 (bass) guitar
+#WAVE 0x21 0x65 ~ was 0x43 strings
+#WAVE 0x22 0x99 ~ was 0x33 bagpipe
+#WAVE 0x23 0x60 ~ was 0x1B harp
+#WAVE 0x28 0x4B ~ was 0x84 tom
+#WAVE 0x29 0x7C ~ was 0x5B m.conga
+#WAVE 0x2A 0x6B ~ was 0x5F shaker
+#WAVE 0x2B 0x6D ~ was 0x37 jingle bells
+#WAVE 0x2C 0x8B ~ was 0x3C stick
 
-#WAVE 0x20 ~0x97~/0x02/
-#WAVE 0x21 ~0x43~/0x06/
-#WAVE 0x22 ~0x33~/0x33/
-#WAVE 0x23 ~0x1B~/0x1B/
-#WAVE 0x28 ~0x84~/0x17/
-#WAVE 0x29 ~0x5B~/0x2E/
-#WAVE 0x2A ~0x5F~/0x2F/
-#WAVE 0x2B ~0x37~/0x37/
-#WAVE 0x2C ~0x3C~/0x3C/
+#def global= t105 %v50 %b0,100 %f0,0
 
-#def global= t105 %x240 %v50 %b0,85 %f0,0
-
-#def gt= %e1 |0 'g' p64 ~o5~/o7/ m48,18,193 %r10 %y3%s3
-#def st= %e1 |1 's' ~o4~/o5/ m6,18,207 %a7
-#def bp= %e1 |2 'p' p64 o5 m48,18,231 %r5
-#def bs= %e0 |0 'b' p64 ~o5~/o7/ m %r8
+#def gl= %e1 |0 'g' p64 o5 m48,18,193 %r10 %y3%s3
+#def gt= %e1 |0 'g' p64 o5 m48,18,193 %a11%y0%s1%r7
+#def st= %e1 |1 's' o5 m6,18,195 %a7
+#def bp= %e1 |2 'p' p64 o5 m48,18,231 %r3
+#def bs= %e0 |0 'b' p64 o5 m %s7%r8
 #def hp= %e1 |3 'h' p0 o5 m
 
-#def g= v80
-#def s= v40
-#def p= v88
-#def b= v96
-#def h= v40
+#def g= v96
+#def s= v29
+#def p= v67
+#def b= v106
+#def h= v48
+
+#def tomVol=    v54
+#def congaVol=  v140 %y4%s3
+#def shakerVol= v108
+#def jingleVol= v120
+#def stickVol=  v160 %a12
 
 #def da= %e1 |8 p40 o4
-#def da1= ~v96~/v72/ ~e4.~/e4./
-#def da2= ~v96~/v72/ ~e16^2~/e16^2/ ~v52~/v36/ ~e16~/e16/
-#def db= %e1 ~|8~/|8/ p80 ~o3~/o3/ %r21
-#def db1= ~v52~/v36/ ~g8g16b8 v36 g16~ /c8c16e8 v24 c16/
-#def db2= 'db1' ~b16g16g16g16~ /e16c16c16c16/
-#def dc= 'da' ~[v96e8>v52g16b8v36g16<]>b16g16g16<v52e16~ /[v72e8>v36c16e8v24c16<]>e16c16c16<v52e16/
+#def da1= 'tomVol*v.96' e4.
+#def da2= 'tomVol*v.96' e16^2 'tomVol*v.52' e16
+#def db= %e1 |8 p80 o3 %r21
+#def db1= 'tomVol*v.52' g8g16b8 'tomVol*v.36' g16 
+#def db2= 'db1' b16g16g16g16 
+#def dc= 'da' ['tomVol*v.96'e8>'tomVol*v.52'g16b8'tomVol*v.36'g16<]>b16g16g16<'tomVol*v.52'e16 
+
+#drum "z"=4e |8 p64 %e1 'tomVol*v1.27'
+#drum "y"=4e |8 p64 %e1 'tomVol*v0.72'
+#drum "x"=4e |8 p64 %e1 'tomVol*v0.52'
+
+#drum "t"=5g  |B p80 %e1 'jingleVol*v.80'
+#drum "s"=5b  |A p40 %e0 'shakerVol*v.32'
+#drum "r"=5b  |A p40 %e0 'shakerVol*v.20'
+#drum "q"=5b  |A p40 %e0 'shakerVol*v.12'
+#drum "m"=5f  |A p40 %e0 'shakerVol*v.32'
+#drum "n"=5f  |A p40 %e0 'shakerVol*v.20'
+
+#drum "a"=7c  |C p72 %e0 'stickVol*v.24' #%r27
+#drum "b"=6g  |C p72 %e0 'stickVol*v.20' #%r26
+#drum "c"=3a |9 p48 %e1 'congaVol*v.70' %r22
+#drum "d"=4e |9 p48 %e1 'congaVol*v.70' %r22
+#drum "e"=4g |9 p48 %e1 'congaVol*v.70' %r22
+#drum "f"=4a |9 p48 %e1 'congaVol*v.70' %r22
+                        
+#drum "g"=4e |9 p48 %e1 'congaVol*v.40' %r20
+#drum "h"=4g |9 p48 %e1 'congaVol*v.40' %r20
+#drum "i"=4a |9 p48 %e1 'congaVol*v.40' %r20
+
 #cdef ( %l1
 #cdef ) %l0
 
-#drum "z"=4e |8 p64 %e1 ~v127~/v96/
-#drum "y"=4e |8 p64 %e1 ~v72~/v52/
-#drum "x"=4e |8 p64 %e1 ~v52~/v36/
-
-#drum "t"=5g |B p80 %e1 v80
-#drum "s"=6e |A p40 %e1 v32
-#drum "r"=6e |A p40 %e1 v20
-#drum "q"=6e |A p40 %e1 v12
-#drum "m"=5a+ |A p40 %e1 v32
-#drum "n"=5a+ |A p40 %e1 v20
-
-#drum "a"=7f+ |C p72 %e1 v24 %r27
-#drum "b"=7c+ |C p72 %e1 v20 %r26
-#drum "c"=4a |9 p48 %e1 v70 %r22
-#drum "d"=5e |9 p48 %e1 v70 %r22
-#drum "e"=5g |9 p48 %e1 v70 %r22
-#drum "f"=5a |9 p48 %e1 v70 %r22
-
-#drum "g"=5e |9 p48 %e1 v40 %r20
-#drum "h"=5g |9 p48 %e1 v40 %r20
-#drum "i"=5a |9 p48 %e1 v40 %r20
-
 {1}
 'global'
-'gt*v1.2-o2' [8a1^1]
+'gl*v1.2-o2' [8a1^1]
 $## 17
 'bp'
 m48,2a1...<c d1...e16>b16<  c4.(g1.a16g16) f+1.d+2
@@ -96,7 +101,7 @@ a1^1 "!!!o" r4."a4b4. ^4.a2b"
 ;   
 
 {3}
-'gt*v.5-o2-p64' r4. [8a1j8^1]^2   %e0'b'p64 g
+'gl*v.5-o2-p64' r4. [8a1j8^1]^2   %e0'b'p64 g
 $## 17
 'bs-o2'
 a4ra1.g a4ra1<a4ega>  a4ra1.g a4r&140a<a48b4a4f+4d+
@@ -105,7 +110,7 @@ ae>a1.^g a4ra1.g  a4ra1.g a4ra1<c4de>g
 ## 33
 a1^1^1^1
 ## 37
-'gt*v1.2-o2' [4a1^1]
+'gl*v1.2-o2' [4a1^1]
 ## 45
 'bs-o2' l32
 [a8<arer g^dra^er  a+8argr d^erg^ar>
@@ -143,7 +148,7 @@ b1b2..<c d1d1 c1>b1 a1a1
 ## 33
 %r7 a1^1^1^1 )
 ## 37
-'gt*v.5-o2-p64' r4. [4a1j4^1]^2^
+'gl*v.5-o2-p64' r4. [4a1j4^1]^2^
 ## 45
 "!!!o"
 "s4rmrsmr srrmrqmr sq16r.mrrmr srrmrrsn16r16" r1r1
@@ -170,7 +175,7 @@ $## 17
 
 
 {7}
-'gt*v.15-o2+p63' r2. [7a1^1]a1^4
+'gl*v.15-o2+p63' r2. [7a1^1]a1^4
 $## 17
 "!!!o" l8
 [4"s4rmtsmr srrmrqmr  sq16r.mtrmr srrmrrsn16r16"]
@@ -194,7 +199,7 @@ e1e1 f1f1 e1e1 e1e1
 ## 33
 %r7 e1^1^1^1 )
 ## 37
-'gt*v.15-o2+p63' r2. [3a1^1]a1^4
+'gl*v.15-o2+p63' r2. [3a1^1]a1^4
 ## 45
 'st-o1' p40 r1r1 (a1a1 %r10 ^1^1)
 ;

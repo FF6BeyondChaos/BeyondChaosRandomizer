@@ -1,0 +1,240 @@
+#TITLE Overcome Difficulties
+#ALBUM Tales of Phantasia
+#COMPOSER Motoi Sakuraba, Shinji Tamura
+#ARRANGED emberling
+
+#WAVE 0x20 0x39 overdrive lead
+#WAVE 0x21 0xC1 synth lead
+#WAVE 0x22 0xB5 rotary organ
+#WAVE 0x23 0xC4 synth strings
+#WAVE 0x24 0x56 slap bass
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1D snare
+#WAVE 0x2A 0x4B tom
+#WAVE 0x2C 0x2D crash cymbal
+#WAVE 0x2E 0x3B open hihat
+#WAVE 0x2F 0x3A closed hihat
+
+#def init= t120 %v30 %b0,100 %f0,0
+
+#def lead=    |0 'l' p56 %e1 o5 m24,18,207 %a13 %r10
+#def synth=   |1 'y' p60 %e1 o5 m24,18,239 %a14 %y2%s5
+#def organ=   |2 'o' p56 %e1 o4 m
+#def strings= |3 's' p78 %e1 o5 m
+#def bass=    |4 'b' p64 %e0 o7 m
+
+#def leadEcho=  |0 'l*v.735' p78 %e1 o5 m24,18,207 %a12%r10
+#def synthEcho= |1 'y*v.632' p78 %e1 o5 m24,18,239 %a9 %y2%s5
+
+#def l= v48
+#def y= v60
+#def o= v48
+#def s= v72
+#def b= v48
+
+#def of= v1,64
+
+#def vKick=  v80
+#def vSnare= v127
+#def vTom=   v48
+#def vCrash= v127
+#def vOpen=  v100
+#def vHihat= v64
+
+#drum "r"= 5r
+
+#drum "k"=  5a  |8 'vKick' %e0 p64
+#drum "s"=  5a  |9 'vSnare' %e1 p64 %y3%s1
+
+#drum "g"=  5a+ |A 'vTom*v1.27' %e1 p78
+#drum "e"=  5f+ |A 'vTom*v1.27' %e1 p64
+#drum "c"=  4b  |A 'vTom*v1.27' %e1 p48
+#drum "g-"= 5a+ |A 'vTom*v1.12' %e1 p78
+#drum "e-"= 5f+ |A 'vTom*v1.12' %e1 p64
+#drum "c-"= 4b  |A 'vTom*v1.12' %e1 p48
+
+#drum "y"=  5a  |C 'vCrash' %e1 p64 %y2%s2%r14
+
+#drum "h"=  5f  |F 'vHihat*v1.00' %e0 p78
+#drum "i"=  5f  |F 'vHihat*v0.92' %e0 p78
+#drum "o"=  5g  |E 'vOpen'        %e1 p78
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init'
+'organ+o2*v1.15'
+l16 a+a+.r32 a+a+.r32 a+a+
+l24 'o*v.72''of*v96,1.13' >fg+b g+b<d> b<df dfg+
+$## 2
+[ 'synth+o1' l8
+e.>a.b<cd    e.>a.ab<c
+e.>a.b<cd    e.>g.ab<c
+l16 >ab<c e12r24>a12r24<c12r24 >ab<c
+>g+ab<c deag+ fede j2
+l8 d.>g.aa+<c l16 dfg+b g+fd>bg+f ]
+l8 d.g.aa+<c
+   m66,-1 &66d mm12,-1 ^16 m8,-1 ^24 m6,-1 ^32 m8,-2 ^24 m16,-6 ^12^48
+## 18
+'lead+o2' l16
+[ j2,134 $118
+('1.0' c16 '1.6' k7 &2c '1.7' k13 c32 '1.10' k9 &2c
+'1.11' k0 c32 '2.2' k7 &2c '2.3' k13 c48 '2.5' k7 &2c '2.6' k0 c16.
+'3.3' k11 &2c '3.4' k18 &2c '3.5' k13 &2c '3.6' k11 &2c
+'3.7' k9 c48 '3.9' k13 &2c '3.10' k22 c32 '4.1' k13 &2c
+'4.2' k0 c16 '4.8' k4 &2c '4.9' k7 &2c '4.10' k9 &2c '4.11' k11 &2c
+'5.0' k13 c24 '5.4' k16 &2c '5.5' k18 &2c '5.6' k16 &2c '5.7' k11 &2c
+'5.8' k7 &2c '5.9' k4 &2c '5.10' k0 c48)>
+a+gfdr c+c>a+gf
+ga+<cdr cfrcg
+gcf8c drcdf
+ga+fga+ <cdf ('5.0' g12 '5.8' k7 &2g '5.9' k11 g48 '5.11' k13 g48
+'1.1' k16 &2g '1.2' k18 &2g '1.3' k22 g32g48 '1.8' k13 &2g '1.9' k0 g32
+'2.0' k7 &2g '2.1' k16 &2g '2.2' k18 &2g '2.3' k16 &2g '2.4' k9 &2g '2.5' k0 g48
+'2.7' k11 &2g '2.8' k22 g32 '2.11' k9 &2g '3.0' k0 &2g
+'3.1' k2 &2g  '3.2' k11 &2g '3.3' k22 g32 '3.6' k13 &2g  '3.7' k2 &2g 
+'3.8' k0 &2g  '3.9' k11 &2g  '3.10' k22 g48 '4.0' k20 &2g 
+'4.1' k4 &2g  '4.2' k0 &2g  '4.3' k2 &2g  '4.4' k11 &2g '4.5' k18 &2g 
+'4.6' k13 &2g  '4.7' k11 &2g  '4.8' k9 &2g  '4.9' k4 &2g  '4.10' k0 &2g 
+'4.11' k4 &2g  '5.0' k20 &2g  '5.1' k22 g48 '5.3' k18 &2g  '5.4' k0 g12)>
+b8.a8.g2..
+#
+<cc+dfr32r48 ('3.5' m4,2 &2f '3.6'k22 m0,0 f32 '3.9' k16 &2f '3.10' k2 &2f 
+'3.11' k0 f32.)r64('4.5' &2d '4.6' k2 &2d '4.7' k0 d24)&2rc+c>
+a+g<c+>a+f <c>a+gf<c>
+l24 a+g[3fga+] [<c>a+gf] ga+<c>a+ f16 <('4.2' &2d
+'4.3' k2 &2d '4.4' k22 d8. '5.10' k16 &2d '5.11' k0 r64)&35>
+r8.('2.6'a+48 '2.8' k22 a+48 '2.10' k13 &2a+ k0 &2a+) gf<c>a+gf(dc+)c
+>a+gf ('2.0' g24 '2.4' k2 &2g '2.5' k9 &2g  '2.6' k7 &2g '2.7' k0 g24
+'2.11' k4 &2g  '3.0' k22 g48 '3.2' k18 &2g  '3.3' k2 &2g  '3.4' k0 g48
+'3.6' k11 &2g  '3.7' k22 g48 '3.9' k20 &2g  '3.10' k4 &2g  '3.11' k0 g48
+'4.1' k16 &2g  '4.2' k22 g48 '4.4' k16 &2g  '4.5' k0 g48 '4.7' k22 g24
+'4.11' k4 &2g  '5.0' k0 &2g  '5.1' k13 &2g  '5.2' k22 g32g48 '5.7' k11 &2g 
+'5.8' k2 &2g  '5.9' k0 g32)
+l16 gab12r24 <c12r24 gd12r24 a
+c8 ('2.0' b48 '2.2' k9 &2b '2.3' k22 b32 '2.6' k18 &2b  '2.7' k9 &2b 
+'2.8' k0 b24 '3.0' k2 &2b  '3.1' k22 b32 '3.4' k9 &2b  '3.5' k0 b48
+'3.7' k2 &2b  '3.8' k13 &2b  '3.9' k0 b32 b4)
+]$134
+;
+
+{2}
+'organ+o2*v1.15'
+l16 dd.r32 dd.r32 dd
+l24 'o*v.72''of*v96,1.13' >dfg+ fg+b g+b<d> b<df
+$## 2
+[ 'organ+o1' l16
+cder8 def r>b<cd
+cder8 def r>b<cd
+cder8 def >b<cd8
+>b<cdr8 cde >ab<c8
+>ab<cr8 >b<cd r>ab<c
+>b<cdr8 cde r>b<cd
+>a+<cdr8 cdd+ >a+<cd8 j2
+>dfg+b< dfg+b g+f ]
+>fg+b<d12r24> b<dfg+12r24
+## 18
+[ 'strings-o1' l16
+[c<d+cd8 cd+cdc>] [>a+<<d+>a+<d8> a+<d+>a+<d>a+]
+[>g+<<d+>g+<d8> g+<d+>g+<d>g+] [>g<<c>gb8 g<c>gbg]
+]
+;
+
+{3}
+'bass-o2' l16
+ gg>g< gg>g< gg
+>ff<f>f ff+gg+
+$## 2
+[ 'bass-o3' l16
+[7a<a8>]g8<g>
+[4a<a8>][3g<g8>]
+[5f<f8>][3e<e8>]e8<e>
+[4g<g8>] j2
+g+g+<g+> g+g+g+<g+> g+g+<g+>]
+g+b<df12r24 dfg+b12r24
+## 18
+[
+cc<c>ca+      <c>c<c>a+<c>
+cc<c>ca+      <c>a+g+gf>
+a+a+<a+>a+<g+  a+>a+<a+g+a+>
+a+a+<a+>a+<g+  a+>a+<<c>a+a>
+g+g+<g+>g+<g   g+>g+<g+gg+>
+g+g+<g+>g+<g   g+>g+<g+a+<c>>
+gg<g>g<f       g>g<gfg>
+gg<g>g<f       g>g<gab ]
+;
+
+{4}
+l16 "ss8 ss8 ss8.  ee-cc-s8"
+$## 2
+[ "!!!o"
+"^8s8kks8s8.s ^8s8kks8s8.s ^8s8kks8s8.s ^8s8kks8ssss"
+"^8s8kks8s8.s ^8s8kks8s8.s ^8s8kks8s8.s" j2
+"ssssss8kss" ]
+"ssss8ssss8"
+## 18
+[4 "^8s8kks8s8 krs8kks8ss"
+   "^8s8kks8s8 krs8kkssss" ]
+;
+
+{5}
+l16 "r8kr8kr8 gg-r4."
+$## 2
+[ 'organ' l16
+ab<c>r8 b<cd>  rgab
+ab<c>r8 b<cd>  rgab
+ab<c>r8 b<cd>  gab8
+gabr8   ab<c>  fga8
+fgar8   gab    rfga
+g+abr8  ab<c>  rg+ab
+gaa+r8  aa+<c> gaa+8 j2
+>b<dfg+ b<dfg+ fd ]
+dfg+b12r24 g+b<df12r24
+## 18
+'strings' l16
+[16 rgrg8 rgrgr]
+;
+
+{6}
+"y2..y8"
+$## 2
+l16 ^4^ "!!!o"
+[8"hi"]"ho8"
+"o8"[9"ih"]"o4"
+"y4"[9"ih"]"o8"
+"o8"[5"ih"] "ggeeccr4"
+## 10
+"y4"[9"ih"]"o8"
+"o8"[9"ih"]"o4"
+"y4"[9"ih"]"o8"
+"o8"[5"ih"] ["!o gg-ec8"]
+## 18
+"o8" [79"o8"]
+;
+
+{7}
+'organ+o1*v1.15'
+l16 bb.r32 bb.r32 bb r2
+$## 2
+[ "!!!o"
+[3"kr8.r8r8.kr8"] "kr8.r8r4."
+[3"kr8.r8r8.kr8"] j2 "r4.kr8." ] r2r8
+## 18
+[8"krr2 r8r2"]
+;
+
+{8}
+r1 &10r
+$## 2
+[ 'synthEcho+o1' l8
+e.>a.b<cd    e.>a.ab<c
+e.>a.b<cd    e.>g.ab<c
+l16 >ab<c e12r24>a12r24<c12r24 >ab<c
+>g+ab<c deag+ fede j2
+l8 d.>g.aa+<c l16 dfg+b g+fd>bg+f ]
+l8 d.g.aa+<c
+   m66,-1 &66d mm12,-1 ^16 m8,-1 ^24 m6,-1 ^32 m8,-2 ^24 m16,-6 ^12^48
+## 18
+'leadEcho+o2' [j1,118]
+;
