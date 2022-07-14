@@ -825,9 +825,8 @@ class Window(QMainWindow):
                 elif type(child) in [QComboBox] and str(v).startswith(child.text.lower()):
                     if ":" in v:
                         index_of_value = child.findText(str(v).split(":")[1], QtCore.Qt.MatchFixedString)
-                        if index_of_value > 0:
-                            child.setCurrentIndex(index_of_value)
-                            self.flags.append(v)
+                        child.setCurrentIndex(index_of_value)
+                        self.flags.append(v)
         self.updateFlagString()
         self.flagsChanging = False
 
