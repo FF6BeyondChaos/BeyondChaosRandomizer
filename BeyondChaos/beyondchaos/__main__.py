@@ -48,7 +48,6 @@ if __name__ == "__main__":
 
     args = argp.parse_args()
 
-    import pdb; pdb.set_trace()
     if args.use_gui:
         beyondchaos.run_gui()
         exit()
