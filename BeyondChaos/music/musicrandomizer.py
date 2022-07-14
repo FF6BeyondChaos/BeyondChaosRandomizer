@@ -39,6 +39,8 @@ except ImportError:
 JOHNNYDMAD_FREESPACE = ["53C5F-9FDFF", "310000-37FFFF", "410000-4FFFFF"]
 TRAIN_SAMPLE_ID = 0x3A
 
+# The base path has to be relative, but there's no guarantee where this would
+# be run from, so this_ could break...
 SAMPLE_PATH = 'samples'
 CUSTOM_MUSIC_PATH = 'custom'
 TIERBOSS_MUSIC_PATH = os.path.join(CUSTOM_MUSIC_PATH, 'dm')
