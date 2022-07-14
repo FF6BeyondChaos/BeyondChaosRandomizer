@@ -19,6 +19,8 @@ _KNOWN_HASHES = {
 
 def _find_valid_rom():
     for filename in sorted(os.listdir('.')):
+        if os.path.isdir(filename):
+            continue
         if os.stat(filename).st_size in (0x300000, 0x300200):
             continue
 
