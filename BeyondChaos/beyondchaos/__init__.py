@@ -191,7 +191,7 @@ class State:
     def fout(self):
         return self._writer._fout
 
-    def _process_args(self, args):
+    def _process_args(self, args, interactive=True):
         # Override to test flags
         # FIXME: this needs to be handled differently
         if args["TEST_ON"]:
@@ -216,7 +216,10 @@ class State:
                                              previous_output_directory))
 
         # parse or obtain vital seed information
-        self.fullseed, self.allowed_flags = _process_seed(args["seed"])
+        if interactive:
+            self.fullseed, self.allowed_flags = _process_seed(args["seed"])
+        else:
+            self.fullseed = args["seed"]
 
         self.version, self.mode_num, self.flags, self.seed = _parse_seed(self.fullseed)
         self.flags = self.flags.lower()
