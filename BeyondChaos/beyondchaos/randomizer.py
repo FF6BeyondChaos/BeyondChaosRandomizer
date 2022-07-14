@@ -4830,7 +4830,7 @@ def randomize(state, **kwargs):
         if Options_.is_code_active('dancingmaduin'):
             allocate_espers(Options_.is_code_active('ancientcave'), get_espers(state.sourcefile), get_characters(),
                             state.fout, esper_replacements)
-            nerf_paladin_shield(self.fout)
+            nerf_paladin_shield(state.fout)
         manage_espers(state.fout, get_espers(state.sourcefile), esperrage_spaces, esper_replacements)
     state.reseed()
 
