@@ -10,7 +10,7 @@ import traceback
 
 # Related third-party imports
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtGui import QCursor
+from PyQt5.QtGui import QCursor, QFont
 from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
                              QLabel, QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QFileDialog,
                              QApplication, QTabWidget, QInputDialog, QScrollArea, QMessageBox,
@@ -140,7 +140,7 @@ class BingoPrompts(QDialog):
         return self.spells or self.items or self.monsters or self.abilities
 
 
-def update_bc():
+def update_bc(wait=False):
     update_prompt = QMessageBox()
     update_prompt.setWindowTitle("Beyond Chaos Updater")
     update_prompt.setText("Beyond Chaos will check for updates to the core randomizer, character sprites, and "
@@ -153,10 +153,14 @@ def update_bc():
         os.system('cls' if os.name == 'nt' else 'clear')
         print("Starting Beyond Chaos Updater...\n")
         try:
-            subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
+            update_process = subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
+            if wait:
+                update_process.wait()
         except FileNotFoundError:
             get_updater()
-            subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
+            update_process = subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
+            if wait:
+                update_process.wait()
 
 
 class Window(QMainWindow):
@@ -1407,22 +1411,49 @@ if __name__ == "__main__":
     App = QApplication(sys.argv)
     try:
         validation_result, required_update = validate_files()
+        first_time_setup = False
+        if required_update and 'config.ini' in validation_result:
+            first_time_setup = True
         if required_update or (validation_result and not are_updates_hidden()):
             update_message = QMessageBox()
-            update_message.setIcon(QMessageBox.Information)
-            if required_update:
-                update_message.setWindowTitle("An update is required")
-            else:
-                update_message.setWindowTitle("An update is available")
-
-            if required_update:
+            if first_time_setup:
+                update_message.setIcon(QMessageBox.Information)
+                update_message.setWindowTitle("First Time Setup")
+                update_message.setText("<b>Welcome to Beyond Chaos Community Edition!</b>" +
+                                       "<br>" +
+                                       "<br>" +
+                                       "As part of first time setup, "
+                                       "we need to download some required files and folders."
+                                       "<br>" +
+                                       "<br>" +
+                                       "Press OK to launch the updater to download the required files."
+                                       "<br>" +
+                                       "Press Close to exit the program.")
+            elif required_update:
+                update_message.setIcon(QMessageBox.Warning)
+                update_message.setWindowTitle("Missing Required Files")
                 update_message.setText("Files that are required for the randomizer to function properly are missing "
-                                       "from the randomizer directory: \n" + str(validation_result) + "\n\n"
-                                       "Press Ok to launch the updater or Close to exit the program.")
+                                       "from the randomizer directory:" +
+                                       "<br>" +
+                                       "<br>" +
+                                       str(validation_result) +
+                                       "<br>" +
+                                       "<br>" +
+                                       "Press OK to launch the updater to download the required files." +
+                                       "<br>" +
+                                       "Press Close to exit the program.")
             else:
-                update_message.setText("Updates to Beyond Chaos are available! \n" + str(validation_result) + "\n\n"
-                                       "Press Ok to launch the updater or Close to skip updating. This pop-up will "
+                update_message.setIcon(QMessageBox.Question)
+                update_message.setWindowTitle("Update Available")
+                update_message.setText("Updates to Beyond Chaos are available!" +
+                                       "<br>" +
+                                       "<br>" +
+                                       str(validation_result) +
+                                       "<br>" +
+                                       "<br>" +
+                                       "Press OK to launch the updater or Close to skip updating. This pop-up will "
                                        "only show once per update.")
+
             update_message.setStandardButtons(QMessageBox.Close | QMessageBox.Ok)
             button_clicked = update_message.exec()
             if button_clicked == QMessageBox.Close:
@@ -1442,21 +1473,26 @@ if __name__ == "__main__":
                         update_dismiss_message.close()
                         updates_hidden(True)
             elif button_clicked == QMessageBox.Ok:
-                if required_update:
-                    save_version('core', 'Error')
-                update_bc()
-                sys.exit()
+                if required_update and not first_time_setup:
+                    save_version('core', '0.0')
+                update_bc(wait=True)
         window = Window()
         time.sleep(3)
         sys.exit(App.exec())
     except Exception as e:
         error_message = QMessageBox()
-        error_message.setIcon(QMessageBox.Warning)
+        error_message.setIcon(QMessageBox.Critical)
         error_message.setWindowTitle("A Fatal Error Occurred")
-        error_message.setText(str(e) + "\n\n\n\n\n" +
-                              "Error Traceback for the Devs: \n" +
+        error_message.setText(str(e) +
+                              "<br>" +
+                              "<br>" +
+                              "<br>" +
+                              "<br>" +
+                              "Error Traceback for the Devs:" +
+                              "<br>" +
                               traceback.format_exc())
         error_message.setStandardButtons(QMessageBox.Close)
         button_clicked = error_message.exec()
         if button_clicked == QMessageBox.Close:
             error_message.close()
+        traceback.print_exc()

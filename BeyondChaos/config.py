@@ -3,8 +3,14 @@ import requests
 from configparser import ConfigParser
 from pathlib import Path
 import os
-config = ConfigParser()
 
+try:
+    from sys import _MEIPASS
+    TABLE_PATH = os.path.dirname(os.path.abspath(__file__))
+except ImportError:
+    TABLE_PATH = os.path.join(os.getcwd(), "tables")
+
+config = ConfigParser()
 CONFIG_PATH = Path(os.path.join(os.getcwd(), "config.ini"))
 
 
@@ -134,8 +140,7 @@ def check_custom():
 
 def check_tables():
     missing_files = []
-    tables_directory = Path(os.path.join(os.getcwd(), 'tables'))
-    if not tables_directory.is_dir():
+    if not TABLE_PATH.is_dir():
         missing_files.append('/tables/')
     else:
         # List of all files in /tables/. Some of these may not be required or may depend on chosen flags, but better
@@ -152,9 +157,10 @@ def check_tables():
                                  'treasurerooms.txt', 'unusedlocs.txt', 'usedlocs.txt', 'wobeventbits.txt',
                                  'wobonlytreasure.txt', 'worstartingitems.txt']
         for file in required_table_files:
-            file_path = Path(os.path.join(tables_directory, file))
+            file_path = Path(os.path.join(TABLE_PATH, file))
             if not file_path.exists():
                 missing_files.append("/tables/" + file)
+    print("Hello")
 
     return missing_files
 
@@ -216,7 +222,7 @@ def validate_files():
     # 2) Boolean that indicates whether the update is required or optional
     missing_files = []
     missing_files.extend(check_custom())
-    missing_files.extend(check_tables())
+    # missing_files.extend(check_tables())
     missing_files.extend(check_ini())
     missing_files.extend(check_remonsterate())
 

@@ -9,6 +9,7 @@ try:
 
     MEI = True
     tblpath = path.join(_MEIPASS, "tables")
+    custom_path = "custom"
 except ImportError:
     # This is new
     # this prepends the absolute file path of the parent/calling script
