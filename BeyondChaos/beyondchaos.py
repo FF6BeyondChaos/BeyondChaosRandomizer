@@ -140,18 +140,23 @@ class BingoPrompts(QDialog):
         return self.spells or self.items or self.monsters or self.abilities
 
 
-def update_bc(wait=False):
-    update_prompt = QMessageBox()
-    update_prompt.setWindowTitle("Beyond Chaos Updater")
-    update_prompt.setText("Beyond Chaos will check for updates to the core randomizer, character sprites, and "
-                          "monster sprites. If updates are performed, BeyondChaos.exe will automatically close.")
-    update_prompt.setStandardButtons(QMessageBox.Cancel | QMessageBox.Ok)
-    update_prompt_button_clicked = update_prompt.exec()
-    if update_prompt_button_clicked == QMessageBox.Ok:
+def update_bc(wait=False, suppress_prompt=False):
+    run_updater = False
+    if not suppress_prompt:
+        update_prompt = QMessageBox()
+        update_prompt.setWindowTitle("Beyond Chaos Updater")
+        update_prompt.setText("Beyond Chaos will check for updates to the core randomizer, character sprites, and "
+                              "monster sprites. If updates are performed, BeyondChaos.exe will automatically close.")
+        update_prompt.setStandardButtons(QMessageBox.Cancel | QMessageBox.Ok)
+        update_prompt_button_clicked = update_prompt.exec()
+        if update_prompt_button_clicked == QMessageBox.Ok:
+            run_updater = True
+
+    if run_updater or suppress_prompt:
         updates_hidden(False)
+        print("Starting Beyond Chaos Updater...\n")
         args = ["-pid " + str(os.getpid())]
         os.system('cls' if os.name == 'nt' else 'clear')
-        print("Starting Beyond Chaos Updater...\n")
         try:
             update_process = subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
             if wait:
@@ -1475,7 +1480,7 @@ if __name__ == "__main__":
             elif button_clicked == QMessageBox.Ok:
                 if required_update and not first_time_setup:
                     save_version('core', '0.0')
-                update_bc(wait=True)
+                update_bc(wait=True, suppress_prompt=True)
         window = Window()
         time.sleep(3)
         sys.exit(App.exec())
