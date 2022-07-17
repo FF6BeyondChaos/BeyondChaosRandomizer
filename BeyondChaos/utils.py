@@ -137,13 +137,18 @@ class AutoLearnRageSub(Substitution):
 
 
 texttable = {}
-f = open(TEXT_TABLE)
-for line in f:
-    line = line.strip()
-    char, value = tuple(line.split())
-    texttable[char] = value
-texttable[' '] = 'FE'
-f.close()
+try:
+    f = open(TEXT_TABLE)
+    for line in f:
+        line = line.strip()
+        char, value = tuple(line.split())
+        texttable[char] = value
+    texttable[' '] = 'FE'
+    f.close()
+except FileNotFoundError:
+    print("Error: " + TEXT_TABLE + " was not found in the tables folder.")
+
+
 
 
 def name_to_bytes(name, length):
@@ -155,24 +160,30 @@ def name_to_bytes(name, length):
 
 
 shorttexttable = {}
-f = open(SHORT_TEXT_TABLE)
-for line in f:
-    line = line.strip()
-    char, value = tuple(line.split())
-    shorttexttable[char] = value
-shorttexttable[' '] = 'FF'
-f.close()
+try:
+    f = open(SHORT_TEXT_TABLE)
+    for line in f:
+        line = line.strip()
+        char, value = tuple(line.split())
+        shorttexttable[char] = value
+    shorttexttable[' '] = 'FF'
+    f.close()
+except FileNotFoundError:
+    print("Error: " + SHORT_TEXT_TABLE + " was not found in the tables folder.")
 
 dialoguetexttable = {}
-f = open(DIALOGUE_TEXT_TABLE, encoding='utf8')
-for line in f:
-    line = line.strip('\n')
-    if not line:
-        continue
-    value, string = tuple(line.split('=', 1))
-    if string not in dialoguetexttable:
-        dialoguetexttable[string] = value
-f.close()
+try:
+    f = open(DIALOGUE_TEXT_TABLE, encoding='utf8')
+    for line in f:
+        line = line.strip('\n')
+        if not line:
+            continue
+        value, string = tuple(line.split('=', 1))
+        if string not in dialoguetexttable:
+            dialoguetexttable[string] = value
+    f.close()
+except FileNotFoundError:
+    print("Error: " + DIALOGUE_TEXT_TABLE + " was not found in the tables folder.")
 
 reverse_dialoguetexttable = {v: k for k, v in dialoguetexttable.items()}
 reverse_dialoguetexttable["1104"] = "<wait 60 frames>"
@@ -291,13 +302,16 @@ def get_long_battle_text_pointer(f, index):
 
 
 battlebg_palettes = {}
-f = open(BATTLE_BG_PALETTE_TABLE)
-for line in f:
-    line = line.strip()
-    bg, palette = tuple(line.split())
-    bg, palette = hex2int(bg), hex2int(palette)
-    battlebg_palettes[bg] = palette
-f.close()
+try:
+    f = open(BATTLE_BG_PALETTE_TABLE)
+    for line in f:
+        line = line.strip()
+        bg, palette = tuple(line.split())
+        bg, palette = hex2int(bg), hex2int(palette)
+        battlebg_palettes[bg] = palette
+    f.close()
+except FileNotFoundError:
+    print("Error: " + BATTLE_BG_PALETTE_TABLE + " was not found in the tables folder.")
 
 
 def int2bytes(value, length=2, reverse=True):

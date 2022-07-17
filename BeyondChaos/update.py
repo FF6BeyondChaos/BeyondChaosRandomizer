@@ -41,7 +41,7 @@ def get_updater():
 
 
 def update_needed():
-    up_to_date = config.checkINI() and config.check_remonsterate()
+    up_to_date = config.check_ini() and config.check_remonsterate()
     if not up_to_date:
         print("Running the updater to create necessary files and folders.")
         run_first_time_setup()
