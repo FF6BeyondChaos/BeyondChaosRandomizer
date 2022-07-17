@@ -21,7 +21,7 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
 import utils
 import customthreadpool
 from config import (read_flags, write_flags, validate_files, are_updates_hidden, updates_hidden,
-                    get_input_path, get_output_path)
+                    get_input_path, get_output_path, save_version)
 from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES, makeover_groups)
 from update import (get_updater)
 from randomizer import randomize
@@ -1442,6 +1442,8 @@ if __name__ == "__main__":
                         update_dismiss_message.close()
                         updates_hidden(True)
             elif button_clicked == QMessageBox.Ok:
+                if required_update:
+                    save_version('core', 'Error')
                 update_bc()
                 sys.exit()
         window = Window()

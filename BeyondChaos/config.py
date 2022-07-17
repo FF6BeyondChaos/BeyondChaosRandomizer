@@ -5,9 +5,28 @@ from pathlib import Path
 import os
 config = ConfigParser()
 
+CONFIG_PATH = Path(os.path.join(os.getcwd(), "config.ini"))
+
+
+def set_value(section, option, value):
+    config.read(CONFIG_PATH)
+    if not config.has_section(section):
+        config.add_section(section)
+    config.set(section, option, value)
+    with open(CONFIG_PATH, 'w') as f:
+        config.write(f)
+
+
+def get_value(section, option):
+    config.read(CONFIG_PATH)
+    if config.has_section(section) and config.has_option(section, option):
+        return config.get(section, option)
+    else:
+        return ''
+
 
 def write_flags(name, flags):
-    config.read(Path(os.path.join(os.getcwd(), "config.ini")))
+    config.read(CONFIG_PATH)
     try:
         config.add_section('Flags')    
     except Exception:
@@ -20,7 +39,7 @@ def write_flags(name, flags):
 
 def read_flags():
     print("Loading saved flags.")
-    config.read(Path(os.path.join(os.getcwd(), "config.ini")))
+    config.read(CONFIG_PATH)
     try:
         flags = dict(config.items('Flags'))
     except Exception:
@@ -29,13 +48,9 @@ def read_flags():
     return flags
 
 
-def read_config():
+def read_version_information():
     version_information = {}
-    config.read(Path(os.path.join(os.getcwd(), "config.ini")))
-    # try:
-    #     version_information['updater'] = config.get('Version', 'updater')
-    # except configparser.NoOptionError:
-    #     version_information['updater'] = None
+    config.read(CONFIG_PATH)
     try:
         version_information['core'] = config.get('Version', 'core')
     except configparser.NoOptionError:
@@ -51,54 +66,41 @@ def read_config():
     return version_information
 
 
+def save_version(version_type, value):
+    version_type = str(version_type).lower().replace(' ', '_')
+    valid_version_types = ['core', 'monster_sprites', 'character_sprites', 'updater']
+    if version_type not in valid_version_types:
+        raise ValueError('An invalid version type was specified: ' + version_type + '. Valid version types are ' +
+                         ', '.join(valid_version_types))
+    set_value('Version', version_type, value)
+
+
 def get_input_path():
-    config.read(Path(os.path.join(os.getcwd(), "config.ini")))
-    if config.has_section('Settings') and config.has_option('Settings', 'input_path'):
-        return config.get('Settings', 'input_path')
-    else:
-        return ''
+    return get_value('Settings', 'input_path')
 
 
 def save_input_path(path):
-    config.read(Path(os.path.join(os.getcwd(), "config.ini")))
-    if not config.has_section('Settings'):
-        config.add_section('Settings')
-    config.set('Settings', 'input_path', str(path))
-    with open(Path(os.path.join(os.getcwd(), "config.ini")), 'w') as f:
-        config.write(f)
+    set_value('Settings', 'input_path', str(path))
 
 
 def get_output_path():
-    config.read(Path(os.path.join(os.getcwd(), "config.ini")))
-    if config.has_section('Settings') and config.has_option('Settings', 'output_path'):
-        return config.get('Settings', 'output_path')
-    else:
-        return ''
+    return get_value('Settings', 'output_path')
 
 
 def save_output_path(path):
-    config.read(Path(os.path.join(os.getcwd(), "config.ini")))
-    if not config.has_section('Settings'):
-        config.add_section('Settings')
-    config.set('Settings', 'output_path', str(path))
-    with open(Path(os.path.join(os.getcwd(), "config.ini")), 'w') as f:
-        config.write(f)
-
-
-# def get_updater_version():
-#     return read_config()['updater']
+    set_value('Settings', 'output_path', str(path))
 
 
 def get_core_version():
-    return read_config()['core']
+    return read_version_information()['core']
 
 
 def get_character_sprite_version():
-    return read_config()['character_sprites']
+    return read_version_information()['character_sprites']
 
 
 def get_monster_sprite_version():
-    return read_config()['monster_sprites']
+    return read_version_information()['monster_sprites']
 
 
 def check_custom():
@@ -159,7 +161,7 @@ def check_tables():
 
 def check_ini():
     missing_files = []
-    ini_file = Path(os.path.join(os.getcwd(), "config.ini"))
+    ini_file = CONFIG_PATH
     if not ini_file.is_file():
         missing_files.append('config.ini')
     return missing_files
@@ -190,7 +192,7 @@ def check_remonsterate():
 
 
 def are_updates_hidden():
-    config.read(Path(os.path.join(os.getcwd(), "config.ini")))
+    config.read(CONFIG_PATH)
     if not config.has_section('Settings') or not config.has_option('Settings', 'updates_hidden'):
         # If the config file does not have this setting, write it and then return false
         updates_hidden(False)
@@ -205,12 +207,7 @@ def are_updates_hidden():
 
 
 def updates_hidden(hidden=False):
-    config.read(Path(os.path.join(os.getcwd(), "config.ini")))
-    if not config.has_section('Settings'):
-        config.add_section('Settings')
-    config.set('Settings', 'updates_hidden', str(hidden))
-    with open(Path(os.path.join(os.getcwd(), "config.ini")), 'w') as f:
-        config.write(f)
+    set_value('Settings', 'updates_hidden', str(hidden))
 
 
 def validate_files():
@@ -233,7 +230,7 @@ def validate_files():
     character_sprites_github_url = base_github_url + 'BeyondChaosSprites/releases/latest'
     monster_sprites_github_url = base_github_url + 'BeyondChaosMonsterSprites/releases/latest'
 
-    for type, version in read_config().items():
+    for type, version in read_version_information().items():
         if not version:
             # Catches version information with no recorded information - probably should never happen
             version_errors.append('The ' + type + " version was not recorded in config.ini.")
