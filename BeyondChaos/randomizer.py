@@ -4861,6 +4861,7 @@ def randomize(**kwargs) -> str:
 
 
         if '.' not in fullseed:
+            speeddials = get_items("Speeddial").items()
             mode_num = None
             while mode_num not in range(len(ALL_MODES)):
                 print("Available modes:\n")
@@ -4881,6 +4882,8 @@ def randomize(**kwargs) -> str:
                 print(flag.name, flag.description)
             print(flaghelptext + "\n")
             print("Save frequently used flag sets by adding 0: through 9: before the flags.")
+            for speeddial_number, speeddial_flags in speeddials:
+                print("\t" + speeddial_number + ": " + speeddial_flags)
             print()
             flags = input("Please input your desired flags (blank for "
                           "all of them):\n> ").strip()
@@ -4889,10 +4892,7 @@ def randomize(**kwargs) -> str:
 
             is_speeddialing = re.search("^[0-9]$", flags)
             if is_speeddialing:
-                for speeddial_number, speeddial_flags in get_items("Speeddial").items():
-                    print(str(speeddial_number))
-                    print(str(speeddial_flags))
-                    print(str(flags[:1]))
+                for speeddial_number, speeddial_flags in speeddials:
                     if speeddial_number == flags[:1]:
                         flags = speeddial_flags.strip()
                         break
@@ -4900,6 +4900,8 @@ def randomize(**kwargs) -> str:
             saving_speeddial = re.search("^[0-9]:", flags)
             if saving_speeddial:
                 set_value("Speeddial", flags[:1], flags[3:].strip())
+                print("Flags saved under speeddial number " + str(flags[:1]))
+                flags = flags[3:]
 
             fullseed = "|%i|%s|%s" % (mode_num + 1, flags, fullseed)
             print()
