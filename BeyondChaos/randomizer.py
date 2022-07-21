@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import configparser
 import customthreadpool
 from hashlib import md5
 import os
@@ -19,8 +18,8 @@ from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
 from character import get_characters, get_character, equip_offsets
 from chestrandomizer import mutate_event_items, get_event_items
-from config import (read_flags, write_flags, validate_files, are_updates_hidden, updates_hidden,
-                    get_input_path, get_output_path, save_input_path, save_output_path)
+from config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
+                    set_value)
 from decompress import Decompressor
 from dialoguemanager import (manage_dialogue_patches, get_dialogue,
                              set_dialogue, read_dialogue,
@@ -4858,25 +4857,10 @@ def randomize(**kwargs) -> str:
                          "seed):\n> ").strip()
         print()
 
+
+
+
         if '.' not in fullseed:
-            # config = configparser.ConfigParser()
-            # config.read('bcce.cfg')
-            # if 'speeddial' in config:
-            #    speeddial_opts = config['speeddial']
-            # else:
-            #    try:
-            #        savedflags = []
-            #        with open('savedflags.txt', 'r') as sff:
-            #            savedflags = [l.strip() for l in sff.readlines() if ":" in l]
-            #        for line in savedflags:
-            #            line = line.split(':')
-            #            line[0] = ''.join(c for c in line[0] if c in '0123456789')
-            #            speeddial_opts[line[0]] = ''.join(line[1:]).strip()
-            #    except IOError:
-            #        pass
-
-            #speeddial_opts['!'] = '-dfklu partyparty makeover johnnydmad'
-
             mode_num = None
             while mode_num not in range(len(ALL_MODES)):
                 print("Available modes:\n")
@@ -4896,21 +4880,26 @@ def randomize(**kwargs) -> str:
             for flag in sorted(allowed_flags):
                 print(flag.name, flag.description)
             print(flaghelptext + "\n")
-            # print("Save frequently used flag sets by adding 0: through 9: before the flags.")
-            # for k, v in sorted(speeddial_opts.items()):
-            #    print("    %s: %s" % (k, v))
+            print("Save frequently used flag sets by adding 0: through 9: before the flags.")
             print()
             flags = input("Please input your desired flags (blank for "
                           "all of them):\n> ").strip()
             if flags == "!" :
                 flags = '-dfklu partyparty makeover johnnydmad'
-            # if " " in flags:
-                # flags = flags.split(' ')
-                # dial = ''.join(c for c in flags[0] if c in '0123456789')
-                # if len(dial) == 1:
-                #     speeddial_opts[dial] = flags[1]
-                #     print('\nSaving flags "%s" in slot %s' % (flags[1], dial))
-                #     saveflags = True
+
+            is_speeddialing = re.search("^[0-9]$", flags)
+            if is_speeddialing:
+                for speeddial_number, speeddial_flags in get_items("Speeddial").items():
+                    print(str(speeddial_number))
+                    print(str(speeddial_flags))
+                    print(str(flags[:1]))
+                    if speeddial_number == flags[:1]:
+                        flags = speeddial_flags.strip()
+                        break
+
+            saving_speeddial = re.search("^[0-9]:", flags)
+            if saving_speeddial:
+                set_value("Speeddial", flags[:1], flags[3:].strip())
 
             fullseed = "|%i|%s|%s" % (mode_num + 1, flags, fullseed)
             print()
