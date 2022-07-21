@@ -621,7 +621,7 @@ class MonsterBlock:
         if hp_add[1] > 0 and hp_add[1] > hp_add[0]:
             self.stats['hp'] += random.randint(*hp_add) + random.randint(*hp_add)
 
-    def randomize_special_effect(self, fout):
+    def randomize_special_effect(self, fout, halloween=False):
         attackpointer = 0xFD0D0 + (self.id * 10)
         fout.seek(attackpointer)
         attack = generate_attack()
@@ -635,8 +635,11 @@ class MonsterBlock:
         candidates = list(range(0, 33)) #randomize special animations
         self.attackanimation = random.choice(candidates)
 
-        candidates = sorted(set(range(0, 0x5A)) - set([0, 0x1C])) #randomize battle animations
-        self.battleanimation = random.choice(candidates)
+        if halloween:
+            self.battleanimation = 0x00 #Make enemies scream for Halloween
+        else:
+            candidates = sorted(set(range(0, 0x5A)) - set([0, 0x1C])) #randomize battle animations
+            self.battleanimation = random.choice(candidates)
 
     def mutate_graphics_swap(self, candidates):
         chosen = self.choose_graphics(candidates)
@@ -768,12 +771,12 @@ class MonsterBlock:
             f = s1.abort_on_allies == s2.abort_on_allies
             return a and b and c and d and e and f
 
-        if Options_.mode.name == "katn":
+        if Options_.mode.name == "katn" or Options_.is_code_active("madworld"):
             restricted = [0xEA, 0xC8] #restrict Baba Breath and Seize
-        if Options_.is_code_active("darkworld"):
-            restricted = [] #All skills are fair game sucka
         else:
             restricted = [0x13, 0x14] #restrict Meteor and Ultima for normal playthroughs
+        if Options_.is_code_active("darkworld"):
+            restricted = []  # All skills are fair game sucka
 
         banned = restricted
         # No blizzard, mega volt, or tek laser in solo terra

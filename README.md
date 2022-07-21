@@ -1,15 +1,15 @@
 # BeyondChaos
 
-FF6 Beyond Chaos CE "Commuinity Edition" Randomizer
+FF6 Beyond Chaos CE "Community Edition" Randomizer
 <p>
 a fork of SubtractionSoup's FF6 Beyond Chaos EX Randomizer
 <p>
 a fork of Abyssonym's FF6 Beyond Chaos Randomizer
 <p>
 
-__Version__: 3.1.1
+__Version__: 4.0.0
 <br />
-__Date__: 2022-03-23
+__Date__: 2022-07-20
 <br />
 __URL__: https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest
 <br />
@@ -190,10 +190,6 @@ Q: Yo this is really hard.
 A: Yeah I guess so. I was pretty careful to make sure it was always beatable, though. Obviously the difficulty depends on your specific randomization though, so if you're having trouble, don't feel bad about using savestates or anything. I tried to design the randomizer in such a way that savestates aren't necessary, but I can't account for everything. If you encounter anything that is absolutely absurd in difficulty, please let me know so I can try to adjust the balance for future versions. Also, save often! You never know when you'll randomly encounter a boss on the overworld or in a chest.
 
 Q: I encountered <boss> as a random encounter/monster in a box! Is this a bug?
-<br />
-A: No.
-
-Q: I can't choose my party for the final battle. Is this a bug?
 <br />
 A: No.
 

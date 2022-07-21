@@ -2,18 +2,29 @@
 
 from utils import (ENEMY_NAMES_TABLE, MODIFIERS_TABLE, MOVES_TABLE,
                    NAMEGEN_TABLE, utilrandom as random)
-
-modifiers = [line.strip() for line in open(MODIFIERS_TABLE)]
-moves = [line.strip() for line in open(MOVES_TABLE)]
-enemynames = [line.strip() for line in open(ENEMY_NAMES_TABLE).readlines()]
+try:
+    modifiers = [line.strip() for line in open(MODIFIERS_TABLE).readlines()]
+except FileNotFoundError:
+    print("Error: " + MODIFIERS_TABLE + " was not found in the custom folder.")
+try:
+    moves = [line.strip() for line in open(MOVES_TABLE).readlines()]
+except FileNotFoundError:
+    print("Error: " + MOVES_TABLE + " was not found in the custom folder.")
+try:
+    enemynames = [line.strip() for line in open(ENEMY_NAMES_TABLE).readlines()]
+except FileNotFoundError:
+    print("Error: " + ENEMY_NAMES_TABLE + " was not found in the tables folder.")
 
 generator = {}
 lookback = None
-for line in open(NAMEGEN_TABLE):
-    key, values = tuple(line.strip().split())
-    generator[key] = values
-    if not lookback:
-        lookback = len(key)
+try:
+    for line in open(NAMEGEN_TABLE):
+        key, values = tuple(line.strip().split())
+        generator[key] = values
+        if not lookback:
+            lookback = len(key)
+except FileNotFoundError:
+    print("Error: " + NAMEGEN_TABLE + " was not found in the tables folder.")
 
 
 def generate_name(size=None, maxsize=10):

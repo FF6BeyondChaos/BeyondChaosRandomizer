@@ -39,13 +39,11 @@
 #def f= v64
 #def c= v52
 #def s= v56
-#def h= v64
+#def h= v58
 #def p= v48
 #def g= v64
 #def b= v64
 #def o= v64
-
-#def hf= v1,64
 
 #def or= %r17
 #def sr= %r24^8%r3

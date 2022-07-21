@@ -359,6 +359,18 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None):
         randomize_tower(filename=sourcefile, ancient=True, nummaps=300)
     manage_map_names(fout)
 
+    # remove event pointers so Ancient Cave doesn't overwrite and create some softlock exits
+
+    fix_cave_sub = Substitution()
+    fix_cave_sub.set_location(0x11FC73)  # Owzer's Mansion change to no event
+    fix_cave_sub.bytestring = bytes([0xB3, 0x5E, 0x00])
+    fix_cave_sub.write(fout)
+
+    fix_cave_sub = Substitution()
+    fix_cave_sub.set_location(0x11FB89)  # Gau's Father change to no event
+    fix_cave_sub.bytestring = bytes([0xB3, 0x5E, 0x00])
+    fix_cave_sub.write(fout)
+
     unused_enemies = [u for u in get_monsters() if u.id in REPLACE_ENEMIES]
 
     def safe_boss_validator(formation):
@@ -955,6 +967,19 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None):
             for key, value in attributes.items():
                 setattr(partyswitch, key, value)
             l.npcs.append(partyswitch)
+
+        renamer = NPCBlock(pointer=None, locid=l.locid)
+        attributes = {
+            "graphics": 0x24, "palette": 0, "x": 47, "y": 16,
+            "show_on_vehicle": False, "speed": 0,
+            "event_addr": 0x209AB, "facing": 2,
+            "no_turn_when_speaking": False, "layer_priority": 0,
+            "special_anim": 0,
+            "memaddr": 0, "membit": 0, "bg2_scroll": 0,
+            "move_type": 0, "sprite_priority": 0, "vehicle": 0}
+        for key, value in attributes.items():
+            setattr(renamer, key, value)
+        l.npcs.append(renamer)
 
     assert not optional_chars
 

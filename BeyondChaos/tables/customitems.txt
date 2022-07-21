@@ -123,7 +123,7 @@ magstam             FF
 speedvigor          FF
 mblockevade         AA
 specialaction       50
-weapon_animation    61 61 b4 0 99 0 08,34,63,81,97,b8,b9,bf,f1 0
+weapon_animation    61 61 b4 0 99 0 b9 0
 name_icon           d9
 name_text           SORD.....
 tier                low

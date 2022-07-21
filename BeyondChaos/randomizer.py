@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-import configparser
-import multiprocessing
 import customthreadpool
 from hashlib import md5
 import os
@@ -20,6 +18,8 @@ from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
 from character import get_characters, get_character, equip_offsets
 from chestrandomizer import mutate_event_items, get_event_items
+from config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
+                    set_value)
 from decompress import Decompressor
 from dialoguemanager import (manage_dialogue_patches, get_dialogue,
                              set_dialogue, read_dialogue,
@@ -34,7 +34,7 @@ from itemrandomizer import (reset_equippable, get_ranked_items, get_item,
                             reset_cursed_shield, unhardcode_tintinabar,
                             ItemBlock)
 from locationrandomizer import (get_locations, get_location, get_zones,
-                                get_npcs, randomize_forest)
+                                get_npcs, randomize_forest, NPCBlock, EventBlock)
 from menufeatures import (improve_item_display, improve_gogo_status_menu,
                           improve_rage_menu, show_original_names,
                           improve_dance_menu, y_equip_relics, fix_gogo_portrait)
@@ -48,8 +48,8 @@ from options import ALL_MODES, ALL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
-                     change_swdtech_speed, change_cursed_shield_battles,
-                     sprint_shoes_break, patch_doom_gaze)
+                     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx, apply_namingway,
+                     improved_party_gear, patch_doom_gaze)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -70,21 +70,25 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "3"
+VERSION = "4"
 BETA = False
-VERSION_ROMAN = "III"
+VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "2|normal|bcdefgimnopqrstuwyz makeover partyparty novanillar andombosses supernatural alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent canttouchthis suplexwrecks cursepower:1 |1603333081"
+TEST_SEED = "4|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis remonsterate|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-#TEST_SEED = "2|normal|bdefgijmnopqrstuwyzmakeoverpartypartynovanillaelectricboogaloorandombossesalasdracojohnnydmadbsiabmimetimedancingmaduinquestionablecontentdancelessons|1639809308"
+#STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
+#TEST_SEED = "3|normal|bcdefghijklmnopqrstyz partyparty novanilla  electricboogaloo masseffect randombosses supernatural alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo dearestmolulu airship|1652122298"
+#strikerTEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz partyparty frenchvanilla electricboogaloo randombosses alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random|1653854831"
+#TEST_SEED = "4|katn|bcefghimnopqstuwyz partyparty makeover electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons easymodo canttouchthis dearestmolulu thescenarionottaken|1649808314"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
 sourcefile, outfile = None, None
 fout = None
+using_console = False
 
 NEVER_REPLACE = ["fight", "item", "magic", "row", "def", "magitek", "lore",
                  "jump", "mimic", "xmagic", "summon", "morph", "revert"]
@@ -325,8 +329,13 @@ class FreeBlock:
 
 
 def get_appropriate_freespace(freespaces: List[FreeBlock],
-                              size: int) -> FreeBlock:
-    candidates = [c for c in freespaces if c.size >= size]
+                              size: int,
+                              minimum_address: int = None) -> FreeBlock:
+    if minimum_address:
+        candidates = [c for c in freespaces if c.size >= size and c.start >= minimum_address]
+    else:
+        candidates = [c for c in freespaces if c.size >= size]
+
     if not candidates:
         raise Exception("Not enough free space")
 
@@ -1686,6 +1695,11 @@ def manage_skips():
             return
         handleNormal(split_line)
 
+    def handleStrange(split_line: List[str]):  # Replace extra events that must be trimmed from Strange Journey
+        if not Options_.is_code_active('strangejourney'):
+            return
+        handleNormal(split_line)
+
     for line in open(SKIP_EVENTS_TABLE):
         # If "Foo" precedes a line in skipEvents.txt, call "handleFoo"
         line = line.split('#')[0].strip()  # Ignore everything after '#'
@@ -1695,35 +1709,35 @@ def manage_skips():
         handler = "handle" + split_line[0]
         locals()[handler](split_line[1:])
 
-    flashback_skip_sub = Substitution()
-    flashback_skip_sub.bytestring = bytes([0xB2, 0xB8, 0xA5, 0x00, 0xFE])
-    flashback_skip_sub.set_location(0xAC582)
-    flashback_skip_sub.write(fout)
+    #flashback_skip_sub = Substitution()
+    #flashback_skip_sub.bytestring = bytes([0xB2, 0xB8, 0xA5, 0x00, 0xFE])
+    #flashback_skip_sub.set_location(0xAC582)
+    #flashback_skip_sub.write(fout)
 
-    boat_skip_sub = Substitution()
-    boat_skip_sub.bytestring = bytes([0x97, 0x5C] +  # Fade to black, wait for fade
-                                     [0xD0,
-                                      0x87] +  # Set event bit 0x87, Saw the scene with Locke and Celes at night in Albrook
-                                     [0xD0, 0x83] +  # Set event bit 0x83, Boarded the ship in Albrook
-                                     [0xD0,
-                                      0x86] +  # Set event bit 0x86, Saw the scene with Terra and Leo at night on the ship
-                                     # to Thamasa
-                                     [0x3D, 0x03, 0x3F, 0x03, 0x01,
-                                      0x45] +  # Create Shadow, add Shadow to party 1, refresh objects
-                                     [0xD4, 0xE3, 0x77, 0x03, 0xD4,
-                                      0xF3] +  # Shadow in shop and item menus, level average Shadow, Shadow is available
-                                     [0x88, 0x03, 0x00, 0x40, 0x8B, 0x03, 0x7F, 0x8C, 0x03,
-                                      0x7F] +  # Cure status ailments of Shadow, set HP and MP to max
-                                     [0xB2, 0xBD, 0xCF,
-                                      0x00] +  # Subroutine that cures status ailments and set hp and mp to max.
-                                     # clear NPC bits
-                                     [0xDB, 0x06, 0xDB, 0x07, 0xDB, 0x08, 0xDB, 0x11, 0xDB, 0x13, 0xDB, 0x22, 0xDB,
-                                      0x42, 0xDB, 0x65] + [0xB8, 0x4B] +  # Shadow won't run
-                                     [0x6B, 0x00, 0x04, 0xE8, 0x96, 0x40, 0xFF]
-                                     # Load world map with party near Thamasa, return
-                                     )
-    boat_skip_sub.set_location(0xC615A)
-    boat_skip_sub.write(fout)
+    #boat_skip_sub = Substitution()
+    #boat_skip_sub.bytestring = bytes([0x97, 0x5C] +  # Fade to black, wait for fade
+    #                                 [0xD0,
+    #                                  0x87] +  # Set event bit 0x87, Saw the scene with Locke and Celes at night in Albrook
+    #                                 [0xD0, 0x83] +  # Set event bit 0x83, Boarded the ship in Albrook
+    #                                 [0xD0,
+    #                                  0x86] +  # Set event bit 0x86, Saw the scene with Terra and Leo at night on the ship
+    #                                 # to Thamasa
+    #                                 [0x3D, 0x03, 0x3F, 0x03, 0x01,
+    #                                  0x45] +  # Create Shadow, add Shadow to party 1, refresh objects
+    #                                 [0xD4, 0xE3, 0x77, 0x03, 0xD4,
+    #                                  0xF3] +  # Shadow in shop and item menus, level average Shadow, Shadow is available
+    #                                 [0x88, 0x03, 0x00, 0x40, 0x8B, 0x03, 0x7F, 0x8C, 0x03,
+    #                                  0x7F] +  # Cure status ailments of Shadow, set HP and MP to max
+    #                                 [0xB2, 0xBD, 0xCF,
+    #                                  0x00] +  # Subroutine that cures status ailments and set hp and mp to max.
+    #                                 # clear NPC bits
+    #                                 [0xDB, 0x06, 0xDB, 0x07, 0xDB, 0x08, 0xDB, 0x11, 0xDB, 0x13, 0xDB, 0x22, 0xDB,
+    #                                  0x42, 0xDB, 0x65] + [0xB8, 0x4B] +  # Shadow won't run
+    #                                 [0x6B, 0x00, 0x04, 0xE8, 0x96, 0x40, 0xFF]
+    #                                 # Load world map with party near Thamasa, return
+    #                                 )
+    #boat_skip_sub.set_location(0xC615A)
+    #boat_skip_sub.write(fout)
 
     leo_skip_sub = Substitution()
     leo_skip_sub.bytestring = bytes([0x97, 0x5C] +  # Fade to black, wait for fade
@@ -1800,21 +1814,21 @@ def manage_skips():
                  "For 2500 GP you can send 2 letters, a record, a Tonic, and a book.<line><choice> (Send them)  <choice> (Forget it)")
 
     # skip the flashbacks of Daryl
-    daryl_cutscene_sub = Substitution()
-    daryl_cutscene_sub.set_location(0xA4365)
-    daryl_cutscene_sub.bytestring = bytes([0xF0, 0x4C,  # play song "Searching for Friends"
-                                           0x6B, 0x01, 0x04, 0x9E, 0x33, 0x01,
-                                           # load map World of Ruin, continue playing song, party at (158,51) facing up,
-                                           # in airship
-                                           0xC0, 0x20,  # allow ship to propel without changing facing
-                                           0xC2, 0x64, 0x00,  # set bearing 100
-                                           0xFA,  # show airship emerging from the ocean
-                                           0xD2, 0x11, 0x34, 0x10, 0x08, 0x40,  # load map Falcon upper deck
-                                           0xD7, 0xF3,  # hide Daryl on the Falcon
-                                           0xB2, 0x3F, 0x48, 0x00,
-                                           # jump to part where it sets a bunch of bits then flys to Maranda
-                                           0xFE])
-    daryl_cutscene_sub.write(fout)
+    # daryl_cutscene_sub = Substitution()
+    # daryl_cutscene_sub.set_location(0xA4365)
+    # daryl_cutscene_sub.bytestring = bytes([0xF0, 0x4C,  # play song "Searching for Friends"
+    #                                        0x6B, 0x01, 0x04, 0x9E, 0x33, 0x01,
+    #                                        # load map World of Ruin, continue playing song, party at (158,51) facing up,
+    #                                        # in airship
+    #                                        0xC0, 0x20,  # allow ship to propel without changing facing
+    #                                        0xC2, 0x64, 0x00,  # set bearing 100
+    #                                        0xFA,  # show airship emerging from the ocean
+    #                                        0xD2, 0x11, 0x34, 0x10, 0x08, 0x40,  # load map Falcon upper deck
+    #                                        0xD7, 0xF3,  # hide Daryl on the Falcon
+    #                                        0xB2, 0x3F, 0x48, 0x00,
+    #                                        # jump to part where it sets a bunch of bits then flys to Maranda
+    #                                        0xFE])
+    # daryl_cutscene_sub.write(fout)
 
     # We overwrote some of the event items, so write them again
     if Options_.random_treasure:
@@ -1904,7 +1918,6 @@ def activate_airship_mode(freespaces: list):
 
     return freespaces
 
-
 def set_lete_river_encounters():
     # make lete river encounters consistent within a seed for katn racing
     manage_lete_river_sub = Substitution()
@@ -1917,29 +1930,52 @@ def set_lete_river_encounters():
     manage_lete_river_sub.set_location(0xB048F)
     manage_lete_river_sub.write(fout)
     # call subroutine CB0498 (4 bytes)
-    battle_calls = [0xB066B,
-                    0xB0690,
-                    0xB06A4,
-                    0xB06B4,
-                    0xB06D0,
-                    0xB06E1,
-                    0xB0704,
-                    0xB071B,
-                    0xB0734,
-                    0xB0744,
-                    0xB076A,
-                    0xB077C,
-                    0xB07A0,
-                    0xB07B6,
-                    0xB07DD,
-                    0xB0809,
-                    0xB081E,
-                    0xB082D,
-                    0xB084E,
-                    0xB0873,
-                    0xB08A8,
-                    0xB09E0,
-                    0xB09FC]
+    if Options_.is_code_active('thescenarionottaken'):
+        battle_calls = [0xB066B,
+                        0xB0690,
+                        0xB06A4,
+                        0xB06B4,
+                        0xB06D0,
+                        0xB06E1,
+                        0xB0704,
+                        0xB071B,
+                        0xB0734,
+                        0xB0744,
+                        0xB076A,
+                        0xB077C,
+                        0xB07A0,
+                        0xB07B6,
+                        0xB07DD,
+                        0xB0809,
+                        0xB081E,
+                        0xB082D,
+                        0xB084E,
+                        0xB0873,
+                        0xB08A8,]
+    else:
+        battle_calls = [0xB066B,
+                        0xB0690,
+                        0xB06A4,
+                        0xB06B4,
+                        0xB06D0,
+                        0xB06E1,
+                        0xB0704,
+                        0xB071B,
+                        0xB0734,
+                        0xB0744,
+                        0xB076A,
+                        0xB077C,
+                        0xB07A0,
+                        0xB07B6,
+                        0xB07DD,
+                        0xB0809,
+                        0xB081E,
+                        0xB082D,
+                        0xB084E,
+                        0xB0873,
+                        0xB08A8,
+                        0xB09E0,
+                        0xB09FC]
 
     for addr in battle_calls:
         # call subroutine `addr` (4 bytes)
@@ -1977,18 +2013,8 @@ def manage_balance(newslots: bool = True):
     get_monsters(sourcefile)
     sealed_kefka = get_monster(0x174)
 
-    if not Options_.is_code_active('sketch'):
-        sketch_fix_sub = Substitution()
-        sketch_fix_sub.set_location(0x2F5C6)
-        sketch_fix_sub.bytestring = bytes([0x80, 0xCA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0x4C, 0x09, 0xF8,
-                                           0xA0, 0x00, 0x28, 0x22, 0x09, 0xB1, 0xC1, 0xA9, 0x01, 0x1C, 0x8D, 0x89, 0xA0,
-                                           0x03, 0x00,
-                                           0xB1, 0x76, 0x0A, 0xAA, 0xC2, 0x20, 0xBD, 0x01, 0x20, 0x90, 0x02,
-                                           0x7B, 0x3A, 0xAA, 0x7B, 0xE2, 0x20, 0x22, 0xD1, 0x24, 0xC1, 0x80, 0xD7, ])
-        sketch_fix_sub.write(fout)
-
-
 def manage_magitek():
+    magitek_log = ""
     spells = get_ranked_spells()
     # exploder = [s for s in spells if s.spellid == 0xA2][0]
     shockwave = [s for s in spells if s.spellid == 0xE3][0]
@@ -2021,6 +2047,17 @@ def manage_magitek():
 
         terra_used.append(terra_cand)
         others_used.append(others_cand)
+
+    magitek_log += "Terra Magitek skills:\n\n"
+    for s in terra_used:
+        if s is not None:
+            magitek_log += str(s.name) + " \n"
+    magitek_log += "\nOther Actor Magitek skills: \n\n"
+    for s in others_used:
+        if s is not None:
+            if s.name != "Shock Wave":
+                magitek_log += str(s.name) + " \n"
+    log(magitek_log, section="magitek")
 
     terra_used.reverse()
     others_used.reverse()
@@ -2098,6 +2135,8 @@ def manage_monsters() -> List[MonsterBlock]:
     final_bosses = (list(range(0x157, 0x160)) + list(range(0x127, 0x12b)) + [0x112, 0x11a, 0x17d])
     for m in monsters:
         if "zone eater" in m.name.lower():
+            if Options_.is_code_active("norng"):
+                m.aiscript = [b.replace(b"\x10", b"\xD5") for b in m.aiscript]
             continue
         if not m.name.strip('_') and not m.display_name.strip('_'):
             continue
@@ -2129,7 +2168,7 @@ def manage_monsters() -> List[MonsterBlock]:
 
     shuffle_monsters(monsters, safe_solo_terra=safe_solo_terra)
     for m in monsters:
-        m.randomize_special_effect(fout)
+        m.randomize_special_effect(fout, halloween=Options_.is_code_active('halloween'))
         m.write_stats(fout)
 
     return monsters
@@ -2641,7 +2680,7 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
     results = randomize_colosseum(outfile, fout, pointer)
     wagers = {a.itemid: c for (a, b, c, d) in results}
 
-    def ensure_striker() -> ItemBlock:
+    def ensure_striker():
         candidates = []
         for b in buyables:
             if b == 0xFF or b not in wagers:
@@ -2657,18 +2696,65 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
         candidates = sorted(candidates, key=lambda c: c.rank())
         candidates = candidates[len(candidates) // 2:]
         wager = random.choice(candidates)
-        buycheck = [get_item(b).name for b in buyables
+        buycheck = [get_item(b).itemid for b in buyables
                     if b in wagers and wagers[b] == wager]
         if not buycheck:
             raise Exception("Striker pickup not ensured.")
         fout.seek(pointer + (wager.itemid * 4) + 2)
         fout.write(b'\x29')
-        return wager
+        return get_item(buycheck[0]), wager
 
-    striker_wager = ensure_striker()
+    chain_start_item, striker_wager = ensure_striker()
+
+    # We now ensure that the item that starts the Striker colosseum chain is available in WoR
+    chain_start_item_found = False
+    all_wor_shops = [shop for shop in get_shops(sourcefile) if 81 >= shop.shopid >= 48 or shop.shopid == 84]
+    for shop in all_wor_shops:
+        for item in shop.items:
+            # shop.items is an 8-length list of bytes
+            if item == chain_start_item.itemid:
+                chain_start_item_found = True
+                break
+    if not chain_start_item_found:
+        # Get a list of shops that are relevant to the item type of the chain start item
+        if chain_start_item.is_weapon:
+            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["weapon", "misc"]]
+        elif chain_start_item.is_armor:
+            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["armor", "misc"]]
+        elif chain_start_item.is_relic:
+            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["relic", "misc"]]
+        else:
+            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["items", "misc"]]
+        # Replace a random lower-tier shop item with striker_wager
+        chosen_shop = random.choice(filtered_shops)
+        itemblocks_in_chosen_shop = []
+        for itemid in chosen_shop.items:
+            item = get_item(itemid)
+            # Double check that the items is not None. None will be returned for itemid 255
+            if item:
+                itemblocks_in_chosen_shop.append(item)
+        chosen_item = random.choice(
+            # Sort the shop's items by rank, then get a random item from the lowest ranked half
+            sorted(itemblocks_in_chosen_shop, key=lambda i: i.rank())[len(itemblocks_in_chosen_shop) // 2:]
+        )
+        # Build a new item list because shop.items is immutable
+        new_items = []
+        for item in chosen_shop.items:
+            if item == chosen_item.itemid:
+                new_items.append(chain_start_item.itemid)
+            else:
+                new_items.append(item)
+        chosen_shop.items = new_items
+        chosen_shop.write_data(fout)
+        # Look in spoiler log and find the shop that was changed and update spoiler log
+        for i, shop in enumerate(randlog["shops"]):
+            if not shop.split("\n")[0] == str(chosen_shop).split("\n")[0]:
+                continue
+            randlog["shops"][i] = str(chosen_shop)
+
     for wager_obj, opponent_obj, win_obj, hidden in results:
         if wager_obj == striker_wager:
-            win_obj = get_item(0x29)
+            winname = get_item(0x29).name
         ##if hidden:
         ##    winname = "????????????"
         else:
@@ -2677,6 +2763,10 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
                                                          opponent_obj.display_name)
         log(s, section="colosseum")
 
+def manage_doom_gaze(fout):
+    # patch is actually 98 bytes, but just in case
+    patch_doom_gaze(fout)
+    set_dialogue(0x60, "<choice> (Lift-off)<line><choice> (Find Doom Gaze)<line><choice> (Not just yet)")
 
 def manage_chests():
     crazy_prices = Options_.is_code_active('madworld')
@@ -2923,7 +3013,7 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet], mp
             formation.set_music(2)  # change music for Atma fight
         if formation.formid == 0x162:
             formation.ap = 255  # Magimaster
-        elif formation.formid in [0x1d4, 0x1d5, 0x1d6, 0x1e2]:
+        if formation.formid in [0x1d4, 0x1d5, 0x1d6, 0x1e2]:
             formation.ap = 100  # Triad
         formation.write_data(fout)
 
@@ -3493,13 +3583,6 @@ def manage_tower():
                     thamasa_map_sub.write(fout)
         l.write_data(fout)
 
-    # npc = [n for n in get_npcs() if n.event_addr == 0x233B8][0]
-    # npc.event_addr = 0x233A6
-    # narshe_beginner_sub = Substitution()
-    # narshe_beginner_sub.bytestring = bytes([0x4B, 0xE5, 0x00]) #Keep NPC in front of Beginner's House in World of Balance
-    # narshe_beginner_sub.set_location(0xC33A6)
-    # narshe_beginner_sub.write(fout)
-
     # Moving NPCs in the World of Ruin in the Beginner's House to prevent soft locks
 
     npc = [n for n in get_npcs() if n.event_addr == 0x233AA][0]
@@ -3533,47 +3616,46 @@ def manage_tower():
     npc = [n for n in get_npcs() if n.event_addr == 0x2D1FF][0]  # Magic DOES exist Guy
     npc.event_addr = 0x2D1FB  # Follow the Elder Guy event address
 
-
-def manage_strange_events():
-    shadow_recruit_sub = Substitution()
-    shadow_recruit_sub.set_location(0xB0A9F)
-    shadow_recruit_sub.bytestring = bytes([0x42, 0x31])  # hide party member in slot 0
-
-    shadow_recruit_sub.write(fout)
-    shadow_recruit_sub.set_location(0xB0A9E)
-    shadow_recruit_sub.bytestring = bytes([0x41, 0x31,  # show party member in slot 0
-                                           0x41, 0x11,  # show object 11
-                                           0x31  # begin queue for party member in slot 0
-                                           ])
-    shadow_recruit_sub.write(fout)
-
-    shadow_recruit_sub.set_location(0xB0AD4)
-    shadow_recruit_sub.bytestring = bytes([0xB2, 0x29, 0xFB, 0x05, 0x45])  # Call subroutine $CFFB29, refresh objects
-    shadow_recruit_sub.write(fout)
-
-    shadow_recruit_sub.set_location(0xFFB29)
-    shadow_recruit_sub.bytestring = bytes(
-        [0xB2, 0xC1, 0xC5, 0x00,  # Call subroutine $CAC5C1 (set CaseWord bit corresponding to number of
-         # characters in party)
-         0xC0, 0xA3, 0x81, 0x38, 0xFB, 0x05,  # If ($1E80($1A3) [$1EB4, bit 3] is set), branch to $CFFB38
-         0x3D, 0x03,  # Create object $03
-         0x3F, 0x03, 0x01,  # Assign character $03 (Actor in stot 3) to party 1
-         0xFE  # return
-         ])
-    shadow_recruit_sub.write(fout)
-
-    # Always remove the boxes in Mobliz basement
-    mobliz_box_sub = Substitution()
-    mobliz_box_sub.set_location(0xC50EE)
-    mobliz_box_sub.bytestring = bytes([0xC0, 0x27, 0x81, 0xB3, 0x5E, 0x00])
-    mobliz_box_sub.write(fout)
-
-    # Always show the door in Fanatics Tower level 1,
-    # and don't change commands.
-    fanatics_sub = Substitution()
-    fanatics_sub.set_location(0xC5173)
-    fanatics_sub.bytestring = bytes([0x45, 0x45, 0xC0, 0x27, 0x81, 0xB3, 0x5E, 0x00])
-    fanatics_sub.write(fout)
+# def manage_strange_events():
+#     shadow_recruit_sub = Substitution()
+#     shadow_recruit_sub.set_location(0xB0A9F)
+#     shadow_recruit_sub.bytestring = bytes([0x42, 0x31])  # hide party member in slot 0
+#
+#     shadow_recruit_sub.write(fout)
+#     shadow_recruit_sub.set_location(0xB0A9E)
+#     shadow_recruit_sub.bytestring = bytes([0x41, 0x31,  # show party member in slot 0
+#                                            0x41, 0x11,  # show object 11
+#                                            0x31  # begin queue for party member in slot 0
+#                                            ])
+#     shadow_recruit_sub.write(fout)
+#
+#     shadow_recruit_sub.set_location(0xB0AD4)
+#     shadow_recruit_sub.bytestring = bytes([0xB2, 0x29, 0xFB, 0x05, 0x45])  # Call subroutine $CFFB29, refresh objects
+#     shadow_recruit_sub.write(fout)
+#
+#     shadow_recruit_sub.set_location(0xFFB29)
+#     shadow_recruit_sub.bytestring = bytes(
+#         [0xB2, 0xC1, 0xC5, 0x00,  # Call subroutine $CAC5C1 (set CaseWord bit corresponding to number of
+#          # characters in party)
+#          0xC0, 0xA3, 0x81, 0x38, 0xFB, 0x05,  # If ($1E80($1A3) [$1EB4, bit 3] is set), branch to $CFFB38
+#          0x3D, 0x03,  # Create object $03
+#          0x3F, 0x03, 0x01,  # Assign character $03 (Actor in stot 3) to party 1
+#          0xFE  # return
+#          ])
+#     shadow_recruit_sub.write(fout)
+#
+#     # Always remove the boxes in Mobliz basement
+#     mobliz_box_sub = Substitution()
+#     mobliz_box_sub.set_location(0xC50EE)
+#     mobliz_box_sub.bytestring = bytes([0xC0, 0x27, 0x81, 0xB3, 0x5E, 0x00])
+#     mobliz_box_sub.write(fout)
+#
+#     # Always show the door in Fanatics Tower level 1,
+#     # and don't change commands.
+#     fanatics_sub = Substitution()
+#     fanatics_sub.set_location(0xC5173)
+#     fanatics_sub.bytestring = bytes([0x45, 0x45, 0xC0, 0x27, 0x81, 0xB3, 0x5E, 0x00])
+#     fanatics_sub.write(fout)
 
 
 def create_dimensional_vortex():
@@ -3599,6 +3681,9 @@ def create_dimensional_vortex():
                 or (k.location.locid == 0x180 and k.entid == 0)  # weird out-of-bounds entrance in the sealed gate cave
                 or (k.location.locid == 0x3B and k.dest & 0x1FF == 0x3A)  # Figaro interior to throne room
                 or (k.location.locid == 0x19A and k.dest & 0x1FF == 0x19A)
+                or (k.location.locid == 0x1 or k.dest & 0x1FF == 0x1) #World of Ruin Towns
+                or (k.location.locid == 0x0 or k.dest & 0x1FF == 0x0) #World of Balance Towns
+
         # Kefka's Tower factory room (bottom level) conveyor/pipe
         ):
             return True
@@ -3657,6 +3742,17 @@ def create_dimensional_vortex():
     nextpointer = 0x1FBB00 + (len(entrancesets) * 2)
     longnextpointer = 0x2DF480 + (len(entrancesets) * 2) + 2
     total = 0
+
+    locations = get_locations()
+    for l in locations:
+        for e in l.entrances:
+            if l.locid in [0, 1]:
+                e.dest = e.dest | 0x200
+                # turn on bit
+            else:
+                e.dest = e.dest & 0x1FF
+                # turn off bit
+
     for e in entrancesets:
         total += len(e.entrances)
         nextpointer, longnextpointer = e.write_data(fout, nextpointer,
@@ -4083,6 +4179,84 @@ def manage_bingo(bingoflags=[], size=5, difficulty="", numcards=1, target_score=
         f.write(s)
         f.close()
 
+def fix_norng_npcs():
+
+    # move npcs who block you with norng
+    npc = [n for n in get_npcs() if n.event_addr == 0x8F8E][0]  # Nikeah Kid
+    npc.x = 8
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x18251][0]  # Zone Eater Bouncers (All 3)
+    npc.x = 38
+    npc.y = 32
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x18251][1]  # Zone Eater Bouncers (All 3)
+    npc.x = 46
+    npc.y = 30
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x18251][2]  # Zone Eater Bouncers (All 3)
+    npc.x = 33
+    npc.y = 32
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x25AD5][0]  # Frantic Tzen Codger
+    npc.x = 20
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x25AD9][0]  # Frantic Tzen Crone
+    npc.x = 20
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x25BF9][0]  # Albrook Inn Lady
+    npc.x = 55
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x145F3][0]  # Jidoor Item Scholar
+    npc.x = 28
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x8077][0]  # South Figaro Codger
+    npc.x = 23
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x8085][0]  # South Figaro Bandit
+    npc.x = 29
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x25DDD][0]  # Seraphim Thief
+    npc.y = 5
+
+    npc = [n for n in get_npcs() if n.event_addr == 0x26A0E][0]  # Kohlingen WoB Lady
+    npc.x = 2
+    npc.y = 17
+
+def namingway():
+
+    apply_namingway(fout)
+
+    set_dialogue(0x4E, "Rename lead character?<line><choice> (Yes)<line><choice> (No)")
+
+    if not Options_.is_code_active('ancientcave'):
+
+        wor_airship = get_location(0xC)
+        wor_namer = NPCBlock(pointer=None, locid=wor_airship.locid)
+        attributes = {
+            "graphics": 0x24, "palette": 0, "x": 14, "y": 45,
+            "show_on_vehicle": False, "speed": 0,
+            "event_addr": 0x209AB, "facing": 2,
+            "no_turn_when_speaking": False, "layer_priority": 0,
+            "special_anim": 0,
+            "memaddr": 0, "membit": 0, "bg2_scroll": 0,
+            "move_type": 0, "sprite_priority": 0, "vehicle": 0, "npcid": 15}
+        for key, value in attributes.items():
+            setattr(wor_namer, key, value)
+        wor_airship.npcs.append(wor_namer)
+
+        wob_airship = get_location(0x7)
+        wob_namer = NPCBlock(pointer=None, locid=wob_airship.locid)
+        attributes = {
+            "graphics": 0x24, "palette": 0, "x": 39, "y": 12,
+            "show_on_vehicle": False, "speed": 0,
+            "event_addr": 0x209AB, "facing": 2,
+            "no_turn_when_speaking": False, "layer_priority": 0,
+            "special_anim": 0,
+            "memaddr": 0, "membit": 0, "bg2_scroll": 0,
+            "move_type": 0, "sprite_priority": 0, "vehicle": 0, "npcid": 22}
+        for key, value in attributes.items():
+            setattr(wob_namer, key, value)
+        wob_airship.npcs.append(wob_namer)
 
 def manage_clock():
     hour = random.randint(0, 5)
@@ -4256,6 +4430,7 @@ def manage_spookiness():
     for location in locations:
         nowhere_to_run_bottom_sub.set_location(location)
         nowhere_to_run_bottom_sub.write(fout)
+
 
 
 def manage_dances():
@@ -4582,15 +4757,17 @@ def randomize(**kwargs) -> str:
     # sourcefile = args[1].strip()
     # else:
     if not sourcefile:
-        try:
-            config = configparser.ConfigParser()
-            config.read('bcce.cfg')
-            if 'ROM' in config:
-                previous_rom_path = config['ROM']['Path']
-                previous_output_directory = config['ROM']['Output']
-        except (IOError, KeyError) as e:
-            print(str(e))
-            pass
+        previous_rom_path = get_input_path()
+        previous_output_directory = get_output_path()
+        # try:
+        #     config = configparser.ConfigParser()
+        #     config.read('bcce.cfg')
+        #     if 'ROM' in config:
+        #         previous_rom_path = config['ROM']['Path']
+        #         previous_output_directory = config['ROM']['Output']
+        # except (IOError, KeyError) as e:
+        #     print(str(e))
+        #     pass
 
         previous_input = f" (blank for default: {previous_rom_path})" if previous_rom_path else ""
         sourcefile = input(f"Please input the file name of your copy of "
@@ -4613,7 +4790,7 @@ def randomize(**kwargs) -> str:
     # else:
     if not output_directory:
         # If no previous directory or an invalid directory was obtained from bcce.cfg, default to the ROM's directory
-        if not previous_output_directory or not os.path.isdir(previous_output_directory):
+        if not previous_output_directory or not os.path.isdir(os.path.normpath(previous_output_directory)):
             previous_output_directory = os.path.dirname(sourcefile)
 
         while True:
@@ -4669,10 +4846,6 @@ def randomize(**kwargs) -> str:
         print("Success! Using valid rom file: %s\n" % sourcefile)
     del f
 
-    saveflags = False
-    if sourcefile != previous_rom_path or output_directory != previous_output_directory:
-        saveflags = True
-
     flaghelptext = '''!   Recommended new player flags
 -   Use all flags EXCEPT the ones listed'''
 
@@ -4688,25 +4861,11 @@ def randomize(**kwargs) -> str:
                          "seed):\n> ").strip()
         print()
 
+
+
+
         if '.' not in fullseed:
-            config = configparser.ConfigParser()
-            config.read('bcce.cfg')
-            #if 'speeddial' in config:
-            #    speeddial_opts = config['speeddial']
-            #else:
-            #    try:
-            #        savedflags = []
-            #        with open('savedflags.txt', 'r') as sff:
-            #            savedflags = [l.strip() for l in sff.readlines() if ":" in l]
-            #        for line in savedflags:
-            #            line = line.split(':')
-            #            line[0] = ''.join(c for c in line[0] if c in '0123456789')
-            #            speeddial_opts[line[0]] = ''.join(line[1:]).strip()
-            #    except IOError:
-            #        pass
-
-            #speeddial_opts['!'] = '-dfklu partyparty makeover johnnydmad'
-
+            speeddials = get_items("Speeddial").items()
             mode_num = None
             while mode_num not in range(len(ALL_MODES)):
                 print("Available modes:\n")
@@ -4726,21 +4885,27 @@ def randomize(**kwargs) -> str:
             for flag in sorted(allowed_flags):
                 print(flag.name, flag.description)
             print(flaghelptext + "\n")
-            #print("Save frequently used flag sets by adding 0: through 9: before the flags.")
-            #for k, v in sorted(speeddial_opts.items()):
-            #    print("    %s: %s" % (k, v))
+            print("Save frequently used flag sets by adding 0: through 9: before the flags.")
+            for speeddial_number, speeddial_flags in speeddials:
+                print("\t" + speeddial_number + ": " + speeddial_flags)
             print()
             flags = input("Please input your desired flags (blank for "
                           "all of them):\n> ").strip()
             if flags == "!" :
                 flags = '-dfklu partyparty makeover johnnydmad'
-            #if " " in flags:
-                # flags = flags.split(' ')
-                # dial = ''.join(c for c in flags[0] if c in '0123456789')
-                # if len(dial) == 1:
-                #     speeddial_opts[dial] = flags[1]
-                #     print('\nSaving flags "%s" in slot %s' % (flags[1], dial))
-                #     saveflags = True
+
+            is_speeddialing = re.search("^[0-9]$", flags)
+            if is_speeddialing:
+                for speeddial_number, speeddial_flags in speeddials:
+                    if speeddial_number == flags[:1]:
+                        flags = speeddial_flags.strip()
+                        break
+
+            saving_speeddial = re.search("^[0-9]:", flags)
+            if saving_speeddial:
+                set_value("Speeddial", flags[:1], flags[3:].strip())
+                print("Flags saved under speeddial number " + str(flags[:1]))
+                flags = flags[3:]
 
             fullseed = "|%i|%s|%s" % (mode_num + 1, flags, fullseed)
             print()
@@ -4786,32 +4951,35 @@ def randomize(**kwargs) -> str:
                           '.'.join([os.path.basename(tempname[0]),
                                     str(seed), 'txt']))
 
-    if saveflags:
+    if sourcefile != previous_rom_path or output_directory != previous_output_directory:
         try:
-            config = configparser.ConfigParser()
-            config.read('bcce.cfg')
-            if 'ROM' not in config:
-                config['ROM'] = {}
-            if 'speeddial' not in config:
-                config['speeddial'] = {}
-            config['ROM']['Path'] = sourcefile
+            save_input_path(sourcefile)
+            save_output_path(output_directory)
 
-            # Save the output directory
-            if str(output_directory).lower() == str(os.path.dirname(sourcefile)).lower():
-                # If the output directory is the same as the ROM directory, save an empty string
-                config['ROM']['Output'] = ''
-            else:
-                config['ROM']['Output'] = output_directory
-            #config['speeddial'].update({k: v for k, v in speeddial_opts.items() if k != '!'})
-            with open('bcce.cfg', 'w') as cfg_file:
-                config.write(cfg_file)
+            # config = configparser.ConfigParser()
+            # config.read('bcce.cfg')
+            # if 'ROM' not in config:
+            #     config['ROM'] = {}
+            # if 'speeddial' not in config:
+            #     config['speeddial'] = {}
+            # config['ROM']['Path'] = sourcefile
+
+            # # Save the output directory
+            # if str(output_directory).lower() == str(os.path.dirname(sourcefile)).lower():
+            #     # If the output directory is the same as the ROM directory, save an empty string
+            #     config['ROM']['Output'] = ''
+            # else:
+            #     config['ROM']['Output'] = output_directory
+            # #config['speeddial'].update({k: v for k, v in speeddial_opts.items() if k != '!'})
+            # with open('bcce.cfg', 'w') as cfg_file:
+            #     config.write(cfg_file)
         except:
             print("Couldn't save flag string\n")
-        else:
-            try:
-                os.remove('savedflags.txt')
-            except OSError:
-                pass
+        # else:
+        #     try:
+        #         os.remove('savedflags.txt')
+        #     except OSError:
+        #         pass
 
     if len(data) % 0x400 == 0x200:
         print("NOTICE: Headered ROM detected. Output file will have no header.")
@@ -4900,7 +5068,10 @@ def randomize(**kwargs) -> str:
     rng = Random(seed)
 
     if Options_.is_code_active("thescenarionottaken"):
-        diverge(fout)
+        if Options_.is_code_active("strangejourney"):
+            print("thescenarionottaken code is incompatible with strangejourney")
+        else:
+            diverge(fout)
 
     read_dialogue(fout)
     read_location_names(fout)
@@ -4963,16 +5134,15 @@ def randomize(**kwargs) -> str:
             if dirk is None:
                 items = get_ranked_items(sourcefile)
                 dirk = get_item(0)
-            dirk.become_another()
+            dirk.become_another(halloween=Options_.is_code_active('halloween'))
             dirk.write_stats(fout)
             dummy_item(dirk)
             assert not dummy_item(dirk)
     if Options_.random_enemy_stats and Options_.random_treasure and Options_.random_character_stats:
-        if random.randint(1, 10) != 10:
-            rename_card = get_item(231)
-            if rename_card is not None:
-                rename_card.become_another(tier="low")
-                rename_card.write_stats(fout)
+        rename_card = get_item(231)
+        if rename_card is not None:
+            rename_card.become_another(tier="low")
+            rename_card.write_stats(fout)
 
             weapon_anim_fix = Substitution()
             weapon_anim_fix.set_location(0x19DB8)
@@ -4991,6 +5161,7 @@ def randomize(**kwargs) -> str:
         manage_items(items, changed_commands=changed_commands)
         buy_owned_breakable_tools(fout)
         improve_item_display(fout)
+        improve_rage_menu(fout)
     reseed()
     
     manage_doom_gaze(freespaces)
@@ -5148,6 +5319,8 @@ def randomize(**kwargs) -> str:
         # do this before treasure
         manage_tower()
     reseed()
+    if Options_.is_code_active("norng"):
+        fix_norng_npcs()
 
     if Options_.random_formations or Options_.random_treasure:
         assign_unused_enemy_formations()
@@ -5237,7 +5410,7 @@ def randomize(**kwargs) -> str:
 
     if Options_.is_code_active('strangejourney') and not Options_.is_code_active('ancientcave'):
         create_dimensional_vortex()
-        manage_strange_events()
+        #manage_strange_events()
     reseed()
 
     if Options_.is_code_active('notawaiter') and not Options_.is_code_active('ancientcave'):
@@ -5282,17 +5455,32 @@ def randomize(**kwargs) -> str:
 
         while True:
             try:
-                kwargs = {
-                    "outfile": outfile,
-                    "seed": (seed + attempt_number),
-                    "rom_type": "1.0",
-                    "list_of_monsters": get_monsters(outfile)
-                }
-                pool = customthreadpool.NonDaemonPool()
-                x = pool.apply_async(func=remonsterate, kwds=kwargs)
-                remonsterate_results = x.get()
-                pool.close()
-                pool.join()
+                if not using_console:
+                    kwargs = {
+                        "outfile": outfile,
+                        "seed": (seed + attempt_number),
+                        "rom_type": "1.0",
+                        "list_of_monsters": get_monsters(outfile)
+                    }
+                    pool = customthreadpool.NonDaemonPool(1)
+                    x = pool.apply_async(func=remonsterate, kwds=kwargs)
+                    remonsterate_results = x.get()
+                    pool.close()
+                    pool.join()
+
+                elif using_console:
+                    kwargs = {
+                        "outfile": outfile,
+                        "seed": (seed + attempt_number),
+                        "rom_type": "1.0",
+                        "list_of_monsters": get_monsters(outfile)
+                    }
+                    thread = customthreadpool.ThreadWithReturnValue(target=remonsterate, kwargs=kwargs)
+                    thread.start()
+                    remonsterate_results = thread.join()
+                    if not remonsterate_results:
+                        # If there were no results, We can assume remonsterate generated an OverflowError.
+                        raise OverflowError
 
             except OverflowError as e:
                 print("Remonsterate: An error occurred attempting to remonsterate. Trying again...")
@@ -5308,6 +5496,58 @@ def randomize(**kwargs) -> str:
         if remonsterate_results:
             for result in remonsterate_results:
                 log(str(result) + '\n', section='remonsterate')
+
+    if not Options_.is_code_active('sketch') or Options_.is_code_active('remonsterate'):
+
+        #Original C2 sketch fix by Assassin, prevents bad pointers
+
+        sketch_fix_sub = Substitution()
+        sketch_fix_sub.set_location(0x2F5C6)
+        sketch_fix_sub.bytestring = bytes([0x80, 0xCA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0x4C, 0x09, 0xF8,
+                                           0xA0, 0x00, 0x28, 0x22, 0x09, 0xB1, 0xC1, 0xA9, 0x01, 0x1C, 0x8D, 0x89, 0xA0,
+                                           0x03, 0x00,
+                                           0xB1, 0x76, 0x0A, 0xAA, 0xC2, 0x20, 0xBD, 0x01, 0x20, 0x90, 0x02,
+                                           0x7B, 0x3A, 0xAA, 0x7B, 0xE2, 0x20, 0x22, 0xD1, 0x24, 0xC1, 0x80, 0xD7,])
+        sketch_fix_sub.write(fout)
+
+        sketch_fix_sub.set_location(0x12456)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x18, 0xA0, 0x00, 0x00,
+                                       0x86, 0x10, 0xA2, 0x3F, 0xAE,])
+        sketch_fix_sub.write(fout)
+
+        #Additional C1 sketch animation fix by Assassin, handles bad draw instruction
+
+        sketch_fix_sub.set_location(0x12456)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x18, 0xA0, 0x00, 0x00,
+                                           0x86, 0x10, 0xA2, 0x3F, 0xAE,])
+        sketch_fix_sub.write(fout)
+
+        sketch_fix_sub.set_location(0x1246C)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24,])
+        sketch_fix_sub.write(fout)
+
+        sketch_fix_sub.set_location(0x12484)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x14, 0xA0, 0x00, 0x24, 0x80, 0xD0, 0xDA, 0x86, 0x10,
+                                           0x20, 0x20, 0x20, 0x20, 0xF5, 0x24, 0x20, 0xE5, 0x24, 0x20, 0xA5, 0x22, 0xFA, 0x60,
+                                           0xEA, 0xEA, 0xEA, 0xEA, 0xEA,])
+        sketch_fix_sub.write(fout)
+
+        sketch_fix_sub.set_location(0x124A9)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24,])
+        sketch_fix_sub.write(fout)
+
+        sketch_fix_sub.set_location(0x124D1)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xE0, 0xFF, 0xFF, 0xD0, 0x03,
+                                           0x20, 0x20, 0x20, 0xA2, 0x00, 0x20, 0x20, 0x5C, 0x24, 0x6B, 0xEA, 0x6B,])
+        sketch_fix_sub.write(fout)
+
+        sketch_fix_sub.set_location(0x124F9)
+        sketch_fix_sub.bytestring = bytes(
+            [0x1A, 0xF0, 0x01, 0x3A, 0x0A, 0x0A, 0x18, 0x65, 0x10, 0xAA, 0xBF, 0x02, 0x70, 0xD2, 0xEB, 0x29, 0xFF, 0x03,
+             0x0A, 0x0A, 0x0A, 0x0A, 0x8D, 0x69, 0x61, 0xBF, 0x00, 0x70, 0xD2, 0x29, 0xFF, 0x7F, 0x8D, 0xA8, 0x81,
+             0x7B, 0xBF, 0x01, 0x70, 0xD2, 0xE2, 0x20, 0x0A, 0xEB, 0x6A, 0x8D, 0xAC, 0x81,
+             0x0A, 0x0A, 0x0A, 0x7B, 0x2A, 0x8D, 0xAB, 0x81, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,])
+        sketch_fix_sub.write(fout)
 
     has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
     if has_music:
@@ -5338,6 +5578,7 @@ def randomize(**kwargs) -> str:
     randomize_poem(fout)
     randomize_passwords()
     reseed()
+    namingway()
 
     # ----- NO MORE RANDOMNESS PAST THIS LINE -----
     if Options_.is_code_active('thescenarionottaken'):
@@ -5436,6 +5677,7 @@ def randomize(**kwargs) -> str:
 
     if Options_.is_code_active('dancelessons'):
         no_dance_stumbles(fout)
+
     banon_life3(fout)
     allergic_dog(fout)
     y_equip_relics(fout)
@@ -5443,6 +5685,10 @@ def randomize(**kwargs) -> str:
     cycle_statuses(fout)
     name_swd_techs(fout)
     fix_flash_and_bioblaster(fout)
+    title_gfx(fout)
+    improved_party_gear(fout)
+    manage_doom_gaze(fout)
+
     if Options_.is_code_active("swdtechspeed"):
         swdtech_speed = Options_.get_code_value('swdtechspeed')
         if type(swdtech_speed) == bool:
@@ -5513,7 +5759,7 @@ def randomize(**kwargs) -> str:
 
     f = open(outlog, 'w+')
     f.write(get_logstring(
-        ["characters", "stats", "aesthetics", "commands", "blitz inputs", "slots", "dances", "espers", "item magic",
+        ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers", "item magic",
          "item effects", "command-change relics", "colosseum", "monsters", "music", "remonsterate", "shops",
          "treasure chests", "zozo clock"]))
     f.close()
@@ -5575,6 +5821,7 @@ def randomize(**kwargs) -> str:
 
 
 if __name__ == "__main__":
+    using_console = True
     args = list(argv)
     # if len(argv) > 3 and argv[3].strip().lower() == "test" or TEST_ON:
     #    randomize(args=args)

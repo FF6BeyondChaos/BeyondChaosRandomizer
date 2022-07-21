@@ -1,0 +1,415 @@
+#TITLE Labyrinth
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED Rushlight
+
+
+#WAVE 0x20 0x25 ## Xylophone
+#WAVE 0x21 0x66 ## Strings
+#WAVE 0x22 0x61 ## Harp
+#WAVE 0x23 0x04 ## Bass Piano
+#WAVE 0x24 0x52 ## Bass
+#WAVE 0x25 0x5A ## Timpani
+#WAVE 0x2A 0x2D ## Crash
+
+
+## Note: Song is in 3/4
+#def init= t114 %x255 %v45 %b0,80 %f0,0
+
+
+#def xylophoneBaseVol=              v99
+#def melodyXylophoneEarlyLeft=      'xylophoneBaseVol*v.90' p16
+#def melodyXylophoneEarlyRightHigh= 'xylophoneBaseVol*v.78' p122
+#def melodyXylophoneEarlyRightLow=  'xylophoneBaseVol*v.72' p122
+#def melodyXylophoneLeft=           'xylophoneBaseVol*v1'   p16
+#def melodyXylophoneRightHigh=      'xylophoneBaseVol*v.88' p122
+#def melodyXylophoneRightLow=       'xylophoneBaseVol*v.78' p122
+#def supportXylophoneVol=           'xylophoneBaseVol*v.96'
+
+#def bassPianoVol= v110
+
+#def melodyStringsBaseVol=   v82
+#def melodyStringsEarlyVol=  'melodyStringsBaseVol*v1.1'
+#def melodyStringsVol=       'melodyStringsBaseVol*v1.375'
+#def supportStringsBaseVol=  v55
+#def leftSupportStringsVol=  'supportStringsBaseVol*.82'
+#def rightSupportStringsVol= 'supportStringsBaseVol*.82'
+
+#def timpaniBaseVol=         v82
+#def timpaniFade=          v1,82 ## Keep in line with timpaniBaseVol
+#def timpaniStandardVol=     'timpaniBaseVol*v1.12'
+#def timpaniLowerVol=        'timpaniBaseVol*v.88'
+#def timpaniRollStartVol=    'timpaniBaseVol*v.60'
+#def timpaniAltRollStartVol= 'timpaniBaseVol*v.72'
+#def timpaniRollFade=        'timpaniFade*v42,1.10' ## Should normally be *1.28 volume, but the roll comes out a bit louder because it's spread over 2 channels
+#def timpaniAltRollFade=     'timpaniFade*v36,1.10' ## Should normally be *1.28 volume, but the roll comes out a bit louder because it's spread over 2 channels
+
+#def harpVol= v88
+
+#def bassVol= v55
+
+#def crashVol= v127
+
+
+#def xylophone=           |0 o5                                                      %r22 %e1 m
+#def melodyXylophone=     'xylophone'
+#def supportXylophone=    'xylophone'      'supportXylophoneVol'    p64
+#def bassPiano=           |3 o4            'bassPianoVol'           p64      %y7 %s5      %e0 m
+#def strings=             |1 o5                                                           %e1 m
+#def melodyStrings =      'strings'                                 p64 %a10
+#def earlyMelodyStrings=  'melodyStrings'  'melodyStringsEarlyVol'
+## This is intended to model the louder melody strings from the second loop onwards.
+## It'll stay here in case we want it, but for now it will be unused on the assumption that the higher volume was an unintended a bug.
+#def laterMelodyStrings=  'melodyStrings'  'melodyStringsVol'
+#def supportStrings=      'strings'                                                  %r8
+#def leftSupportStrings=  'supportStrings' 'leftSupportStringsVol'  p16
+#def rightSupportStrings= 'supportStrings' 'rightSupportStringsVol' p102
+#def timpani=             |5 o6                                     p64                   %e1 m
+#def harp=                |2 o5            'harpVol'                p64                   %e1 m
+#def bass=                |4 o6            'bassVol'                p64              %r11 %e0 m
+
+#DRUM "c"=5g+ |a 'crashVol' p80 %r17
+
+{1}
+'init'
+$
+## Melody Xylophone, originally channel 1
+'melodyXylophone+o1'
+l8
+[2
+  ## 1 / 5
+  'melodyXylophoneEarlyLeft'b'melodyXylophoneEarlyRightHigh'b'melodyXylophoneEarlyLeft'b-'melodyXylophoneEarlyRightHigh'b-'melodyXylophoneEarlyLeft'f+'melodyXylophoneEarlyRightHigh'f+
+  ## 2 / 6
+  'melodyXylophoneEarlyLeft'a'melodyXylophoneEarlyRightLow'a'melodyXylophoneEarlyLeft'g+'melodyXylophoneEarlyRightLow'g+'melodyXylophoneEarlyLeft'e'melodyXylophoneEarlyRightLow'e
+  ## 3 / 7
+  'melodyXylophoneEarlyLeft'g'melodyXylophoneEarlyRightLow'g'melodyXylophoneEarlyLeft'f+'melodyXylophoneEarlyRightLow'f+'melodyXylophoneEarlyLeft'd'melodyXylophoneEarlyRightLow'd
+  ## 4 / 8
+  'melodyXylophoneEarlyLeft'e16'melodyXylophoneEarlyRightLow'e16'melodyXylophoneEarlyLeft'c+16'melodyXylophoneEarlyRightLow'c+16'melodyXylophoneEarlyLeft'd16'melodyXylophoneEarlyRightLow'd16
+  'melodyXylophoneEarlyLeft'c+16'melodyXylophoneEarlyRightLow'c+16>'melodyXylophoneEarlyLeft'b'melodyXylophoneEarlyRightLow'b<
+]
+'earlyMelodyStrings'
+l8
+[2
+  ## 9 / 13
+  f+b<f+eag
+  ## 10 / 14
+  <c+2>b4<
+  ## 11 / 15
+  edc+dc+>b
+  ## 12 / 16
+  b-2.>
+]
+## 17-20
+[4 r2.]
+l8
+<
+[2
+  ## 21 / 25
+  dc+>b-b<f+a
+  ## 22 / 26
+  g+2.
+  ## 23 / 27
+  dc+>b-bf+a
+  ## 24 / 28
+  g+2.<
+]
+>
+l8
+[2
+  ## 29 / 33
+  f+b<f+eag
+  ## 30 / 34
+  <c+2>b4
+  j2
+  ## 31
+  f+2eb
+  ## 32
+  f+2.>
+]
+## 35
+<e2de
+## 36
+c+2.
+## 37
+## Melody Xylophone, originally channel 1
+'melodyXylophone+o1'
+l8
+[2
+  ## 37 / 41
+  'melodyXylophoneLeft'b'melodyXylophoneRightHigh'b'melodyXylophoneLeft'b-'melodyXylophoneRightHigh'b-'melodyXylophoneLeft'f+'melodyXylophoneRightHigh'f+
+  ## 38 / 42
+  'melodyXylophoneLeft'a'melodyXylophoneRightLow'a'melodyXylophoneLeft'g+'melodyXylophoneRightLow'g+'melodyXylophoneLeft'e'melodyXylophoneRightLow'e
+  ## 39 / 43
+  'melodyXylophoneLeft'g'melodyXylophoneRightLow'g'melodyXylophoneLeft'f+'melodyXylophoneRightLow'f+'melodyXylophoneLeft'd'melodyXylophoneRightLow'd
+  ## 40 / 44
+  'melodyXylophoneLeft'e16'melodyXylophoneRightLow'e16'melodyXylophoneLeft'c+16'melodyXylophoneRightLow'c+16'melodyXylophoneLeft'd16'melodyXylophoneRightLow'd16
+  'melodyXylophoneLeft'c+16'melodyXylophoneRightLow'c+16>'melodyXylophoneLeft'b'melodyXylophoneRightLow'b<
+]
+## For some reason in the original, channel 1 is louder from the second loop on.
+## Presumably, the intent was to be louder in the outro portion where less things are playing, and the volume never got reset.
+## We could try to reproduce this, but we'll just loop back to the beginning with the same volumes as the first loop
+;
+
+
+{2}
+$
+## Support Xylophone, originally channel 2
+'supportXylophone-o1'
+l8
+[8
+  ## 1-8
+  b j8 <f+gf+bf+>
+]
+^2^
+## Harp, originally channel 2
+'harp-o1'
+l8
+[2
+  ## 9-10 / 13-14
+  [2 g<dga<dc+>>]
+  ## 11 / 15
+  f+<c+f+g+bb->
+  j2
+  ## 12
+  f+<c+f+g+bb->
+]
+## 16
+<f+2.
+[6
+  ## 17 / 19 / 21 / 23 / 25 / 27
+  >b<f+bf+bf+
+  ## 18 / 20 / 22 / 24 / 26 / 28
+  >b<f+<dc+>b-b
+]
+l8
+[2
+  ## 29-30 / 33-34
+  [2 >g<dga<dc+>]
+  ## 31 / 35
+  >f+<c+f+g+bb-
+  j2
+  ## 32
+  >f+<c+f+g+bb-
+]
+$235
+## 36
+<c+2.
+## Timpani, originally channel 6
+'timpani-o2'
+'timpaniStandardVol'
+l4
+## 37-44
+[24 b]
+;
+
+
+{3}
+$
+## Bass Piano, originally channel 3
+'bassPiano-o2'
+## 1-8
+[8 b2.]
+[2
+## Bass, originally channel 3
+  'bass-o2'
+  [2
+    ## 9 / 13 / 29 / 33
+    g2.
+    ## 10 / 14 / 30 / 34
+    ^2g4
+    ## 11 / 15 / 31 / 35
+    f+2.
+    ## 12 / 16 / 32 / 36
+    ^2 j2 f+4
+  ]
+  ## Last beat of 16/36
+  ^4
+  ## Bass Piano, originally channel 3
+  'bassPiano-o2'
+  ## 17-24 / 37-44
+  [8 b2.]
+  j2,345
+  ## 25-28
+  [4 b2.]
+]
+$345
+;
+
+
+{4}
+$
+## Right support strings, originally channel 5
+'rightSupportStrings'
+[2
+  ## 1 / 5
+  r4d8r8e4
+  ## 2 / 6
+  r4c+8r8d4
+  ## 3 / 7
+  r4>b8r8<c+4
+  ## 4 / 8
+  r4>b-8r8b4<
+]
+[2
+  [2
+    ## 9 / 13 / 29 / 33
+    f+2.
+    ## 10 / 14 / 30 / 34
+    ^2.
+    ## 11 / 15 / 31 / 35
+    e2.
+    ## 12 / 16 / 32 / 36
+    ^2.
+  ]
+  j2,437
+  [3
+    ## 17 / 21 / 25
+    [3 b16r8.]
+    ## 18 / 22 / 26
+    <[3 c+16r8.]
+    ## 19 / 23 / 27
+    [3 d16r8.]
+    j3,428
+    ## 20 / 24
+    [3 e16r8.]>
+  ]
+  $428
+  ## 28
+  e16r8.e16r8.e4
+  >
+]
+$437
+## 37-44
+[8 r2.]
+;
+
+
+{5}
+$
+## Left support strings, originally channel 4
+'leftSupportStrings-o1'
+[2
+  ## 1 / 5
+  r4f+8r8g4
+  ## 2 / 6
+  r4e8r8f+4
+  ## 3 / 7
+  r4d8r8e4
+  ## 4 / 8
+  r4c+8r8d4
+]
+<
+[2
+  [2
+    ## 9 / 13 / 29 / 33
+    d2.
+    ## 10 / 14 / 30 / 34
+    ^2.
+    ## 11 / 15 / 31 / 35
+    c+2.
+    ## 12 / 16 / 32 / 36
+    ^2.
+  ]
+  j2,537
+  ## 17-27
+  [33 f+16r8.]
+  ## 28
+  f+16r8.f+16r8.f+4
+]
+$537
+## 37-44
+[8 r2.]
+;
+
+
+{6}
+$
+## Timpani, originally channel 6
+'timpani-o2'
+'timpaniStandardVol'
+l4
+## 1-7
+[21 b]
+[2
+  ## 8 / 12
+  b2
+  ## Timpani, originally channel 6
+  'timpani-o2'
+  'timpaniRollStartVol''timpaniRollFade'[4 b16]
+  ## 9 / 13
+  ## Crash, originally channel 7
+  "!!!oc2."
+  ## 10-11 / 14-15
+  r1.
+  ## Set volume to 0 so the first note at measure 12 has no volume. That way we don't have to bother trying to skip it.
+  v0
+]
+## 16
+r2.
+## Timpani, originally channel 6
+'timpani-o2'
+'timpaniStandardVol'
+## 17-27
+[33 b4]
+'timpaniLowerVol'
+[2
+  ## 28 / 32
+  b4b4
+  ## Timpani, originally channel 6
+  'timpani-o2'
+  'timpaniRollStartVol''timpaniRollFade'[4 b16]
+  ## 29 / 33
+  ## Crash, originally channel 7
+  "!!!oc2."
+  ## 30 / 34
+  r2.
+  ## 31 / 35
+  r2.
+  ## Set volume to 0 so the first two notes at measure 32 have no volume. That way we don't have to bother trying to skip it.
+  v0
+]
+## 36
+r2.
+## 37-44
+[8 r2.]
+;
+
+
+{7}
+$
+## 1-7
+[7 r2.]
+[
+  ## 8 / 12
+  ## Timpani (half of roll), originally channel 6
+  'timpani-o2'
+  r2r32'timpaniAltRollStartVol''timpaniAltRollFade'b16b16b16b32
+  ## 9 / 13
+  b2.
+  ## 10-11 / 14-15
+  r1.
+]
+## 16
+r2.
+## 17-27
+[11 r2.]
+[2
+  ## 28 / 32
+  r2r32'timpaniAltRollStartVol''timpaniAltRollFade'b16b16b16b32
+  ## 29 / 33
+  b2.
+  ## 30 / 34
+  r2.
+  ## 31 / 35
+  r2.
+]
+## 36
+r2.
+## 37-44
+[8 r2.]
+;
+
+
+{8}
+
+;

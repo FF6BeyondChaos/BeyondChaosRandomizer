@@ -1,0 +1,220 @@
+#TITLE Morlia Gallery
+#ALBUM Tales of Phantasia
+#COMPOSER Motoi Sakuraba, Shinji Tamura
+#ARRANGED emberling
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x21 0x96 clarinet
+#WAVE 0x22 0x94 oboe
+#WAVE 0x23 0x51 bass
+#WAVE 0x24 0x08 piano
+#WAVE 0x25 0xC2 synth
+
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x6B shaker
+
+#def init= t120 %v40 %b0,100 %f0,0 %x208
+
+#def strings=  |0 's' %e1 o5 p64 %r1
+#def clarinet= |1 'c' %e1 o5 p58 'cs'
+#def oboe=     |2 'o' %e1 o5 p73 %r8
+#def bass=     |3 'b' %e0 o7 p64 %r12
+#def piano=    |4 'p' %e1 o6 p64 %y0%s4%r12
+#def synth=    |5 'y' %e1 o5 p64 %a8%r5
+
+#def s= v48
+#def c= v76
+#def o= v88
+#def b= v72
+#def p= v112
+#def y= v28
+
+#def cr= %r22
+#def cs= %r5
+
+#def shakerVol= v64
+#def kickVol=   v96
+#def snareVol=  v127
+
+#drum "a"= 4a  |A p80 %e0 'shakerVol*v1.17' %y0%s5%r26
+#drum "b"= 4a  |A p80 %e0 'shakerVol*v0.97' %y0%s5%r26
+#drum "c"= 4a  |A p80 %e0 'shakerVol*v0.80' %y0%s5%r26
+#drum "k"= 5a  |8 p64 %e0 'kickVol'
+#drum "s"= 5f+ |9 p64 %e0 'snareVol'
+#drum "e"= 5^         %e1
+#drum "r"= 5r
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} $
+'init'
+'clarinet+o1*v1.04' m96,18,207 l2 [
+c1 >bg e1 fg
+a+1 af d1 d+f
+l16 g2..f+g      a2f+2
+l8  f2.ef        g2e2
+l16 f4.e4.^4     e4.d2cd
+l16 d+4.g+4.<c4> j2 b4'cr'^8'cs'b<cd2
+## 17
+'c*v1.10' ] b4.b<cd2
+## 33
+'strings-o1*v1.1'm
+a+1 <c1 d1 d+1
+d1 c1 d1 d+1
+## 41
+'clarinet*v1.15' m96,18,207 l8
+g1          f2a+2
+g1          g+2a+2
+<c2.dd+     f2c2
+g.f.gg.f.g  g+2a+2
+## 49
+'strings+o1*v1.1'm l2
+f+f ed+ dc+ c>b
+;
+
+{2} $
+'strings+p4'm l1
+e d e f2g2
+g f d d+2f2
+g a a a+
+g f g g
+## 17
+'clarinet+p15*v1.07' m48,18,207 l16
+ a2..  'cr'^8'cs'  g2d2
+ c2..  'cr'^8'cs'  d2e2
+ g2... 'cr'^16'cs' f2c2
+>a+2.. 'cr'^8'cs'< c2d2
+e2..de     f+2d2
+d2.c8d8    e2c2
+d4.c4.^4   c4.>a+2g+a+<
+c4.d+4.g+4 g4.gab2
+## 33
+'oboe' l16 m20,18,223
+[4 
+  ['o*v.93' c 'o*v1.27'd8 'o*v.93' c 'o*v1.27' d+8
+   'o*v.93' c 'o*v1.27'd8 'o*v.93' c 'o*v1.27' f8
+   'o*v.93' c 'o*v1.27'd8 'o*v.93' c 'o*v1.27' g8
+   'o*v.93' c 'o*v1.27'd8 'o*v.93' c 'o*v1.27' f8]
+   'o*v.93' c 'o*v1.27'd8 'o*v.93' c 'o*v1.27' f8
+   'o*v.93' c 'o*v1.27'd+8'o*v.93' c 'o*v1.27' d8
+   'o*v.93' c 'o*v1.27'g8 'o*v.93' c ]
+## 49
+'strings+o1*v1.1-p4'm l2
+d+d c+c > bb- aa-
+;
+
+{3} $
+'piano-o4' l1
+[4a]<[4g]
+ee dd c>a+g+g
+## 17
+'bass-o3' l16
+[4 aaara8 aara8a aa<a>a]   [4 gggrg8 ggrg8g gg<g>g]
+[2 eeere8 eere8e ee<e>e] < [2 dddrd8 ddrd8d dd>a<d]
+   cccrc8 ccrc8c cc>g<c  >    a+a+a+ra+8 a+a+ra+8a+ a+a+fa+
+g+g+g+rg+8 g+g+rg+8g+ g+g+<g+>g+ gggrg8 ggrg8g gg<g>g
+## 33
+< [8 cccr c8ccr c8cc>a+8.<]
+## 41
+[ cccr c8cc rc8c c>a+8.    fffr f8ff rf8f f<f8.
+  cccr c8cc rc8c c>a+8.    fffr f8gg+ rg+8g+ g+a+8.<]
+## 49
+[32c8]
+;
+
+{4} $
+[16 l16 "acc8c8 ac8c8c accc"]
+## 17
+[16 "!!!o kkk8k8 ac8c8c s32e8.."]
+## 33
+[3 "k4b8k8s32e4..."] "k4b8k8s32e8..s32e8.."
+[3 "k4b8k8s32e4..."] "k4b8k8s32e8..s32e16.s32e16."
+## 41
+[8 "k8b8s32e8..kba8s32e8.."]
+## 49
+[32"k8"]
+;
+
+{5} $
+'strings-p4' l4
+([4c])>([4b])<([8c])
+([4d])([4c])>([8a+])
+([8b])<([8d])
+([4c])>([4a+])<([4c])>([4b])
+## 17
+'strings+p4'
+([4e])([4d])([4e])([2f])([2g])
+([4g])([4f])([4d])([2d+])([2f])
+([4g])([4a])([4a])([4g])
+f.([4g])([5f8])([4g])([4g])
+## 33
+'s*v1.1'
+>([4g])([4a])([4a+])<([4c])
+>([4a+])([4a])([4a+])<([4c])
+## 41
+>([4a+])<([4c])([4d])([4d+])
+([4d])([4c])([4d])([4d+])
+## 49
+l8 < [8 ([4c]) m-1] %k0
+;
+
+{6} $
+'synth-p8' l4
+([4e])([4d])([4e])([2f])([2g])
+([4g])([4f])([4d])([2d+])([2f])
+([4g])([4a])([4a])([4a+])
+([4g])([4f])([4g])([4g])
+## 17
+"!!!o" l16
+[16 "acc8c8 ^4. accc"]
+## 33
+[8 "a4r4a4b4"]
+## 41
+[8 "a8r8a8ba ^r8.b8b8"]
+## 49
+'piano-o3' c1 c1 c1 c1
+;
+
+{7} $
+'synth+p8' l4
+([4c])>([4b])<([8c])
+([4d])([4c])>([8a+])
+([8b])<([8d])
+([4c])>([4a+])<([4c])>([4b])
+## 17
+'strings-p4'
+([4c])>([4b])<([8c])
+([4d])([4c])>([8a+])
+([8b])<([8d])
+([4c])>([4a+])<([4c])>([4b])
+## 33
+'s*v1.1'
+[([4d+])([4f])([4g])([4g+])
+ ([4g])([4f])([4g])([4g+])]
+## 49
+[4r1]
+;
+
+{8} &22r $
+'clarinet+o1*v.84+p6' k-1 l2 [
+c1 >bg e1 fg
+a+1 af d1 d+f
+l16 g2..f+g      a2f+2
+l8  f2.ef        g2e2
+l16 f4.e4.^4     e4.d2cd
+l16 d+4.g+4.<c4> j2 b4r8b<cd2
+## 17
+'c*v.889' ] b4.b<cd2>
+## 33
+[8r1]
+## 41
+'c*v.930' l8
+g1          f2a+2
+g1          g+2a+2
+<c2.dd+     f2c2
+g.f.gg.f.g  g+2a+2
+## 49
+[4r1]
+;

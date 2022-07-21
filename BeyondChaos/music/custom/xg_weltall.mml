@@ -3,28 +3,25 @@
 #COMPOSER Yasunori Mitsuda
 #ARRANGED emberling
 
-#VARIANT ~ enh
-#VARIANT / nat
+#WAVE 0x20 0x65 - formerly 0x43 [strings]
+#WAVE 0x21 0x83 - formerly 0x1A [trombone]
+#WAVE 0x22 0x88 - formerly 0x6A [oct.brass]
+#WAVE 0x23 0x84 - formerly 0x08 [horn]
+#WAVE 0x24 0x60 - formerly 0x1B [harp]
+#WAVE 0x25 0x64 - formerly 0x2C [contrabass]
+#WAVE 0x28 0x5A - formerly 0x16 [timpani]
+#WAVE 0x2A 0x1F - formerly 0x81 [snare]
+#WAVE 0x2B 0x2C - formerly 0x8E [cymbal]
 
-#WAVE 0x20 ~0x43~/0x0D/
-#WAVE 0x21 ~0x1A~/0x1A/
-#WAVE 0x22 ~0x6A~/0x0E/
-#WAVE 0x23 ~0x08~/0x08/
-#WAVE 0x24 ~0x1B~/0x1B/
-#WAVE 0x25 ~0x2C~/0x2C/
-#WAVE 0x28 ~0x16~/0x16/
-#WAVE 0x2A ~0x81~/0x14/
-#WAVE 0x2B ~0x8E~/0x12/
+#def global= t157 %v30 %b0,100 %f0,0 %x248
 
-#def global= t157 %v30 %b0,100 %f0,0 %x240
-
-#def str= |0 ~o4~/o5/
-#def tub= |1 ~o7~/o7/
-#def pet= |2 ~o4~/o6/
+#def str= |0 o5
+#def tub= |1 o6
+#def pet= |2 o5
 #def hrn= |3 o5
 #def hrp= |4 o5 p0 %r15
 #def cbs= |5 o5 ##oct3
-#def tmp= |8 o4
+#def tmp= |8 o5
 
 #def 02= 'pet' p40
 #def 03= 'pet' p40
@@ -53,52 +50,58 @@
 #def s21= %y0%r18
 #def s24= %y0%r15
 #def s0= %y7%r9
-#def fade= v48,8^4
+#def fade= 'globalVf*v48,.08'^4
 #def long= %r8
 #def longer= %r4
 #def longest= %r1
 
-#def v87t= v63
-#def v101t= v73
-#def v113t= v82
-#def v122t= v89 ##mix 93 vel 122 -> 89
-#def v127t= v93 ##mix 93 vel 127 -> 93
-#def v62b= v31
-#def v80b= v40 ##mix 86 vel 80 -> 54
-#def v101b= v36
-#def v102b= v52
-#def v104b= v30 ##mix 74 vel 104 -> 60
-#def v110b= v32 ##mix 74 vel 110 -> 64
-#def v113b= v57
-#def vfb= v168,52
-#def v115b= v33 ##mix 74 vel 115 -> 66
-#def v118h= v44 ##mix 64 vel 118 -> 59
-#def v123h= v53 ##mix 55 vel 123 -> 53
-#def vfh= v144,63
-#def v62s= v43
-#def v84s= v16v120,56 ##mix 25 to 85 vel 84 -> 16 to 56
-#def v85s= v16v96,56
-#def vfs= v144,76
-#def v87s= v40 ##mix 88 vel 87 -> 60
-#def v101s= v69 ##mix 88 vel 101 -> 69
-#def v107s= v74 ##mix 88 vel 107 -> 74
-#def v110s= v80
-#def v113s= v78
-#def v107d= v71
-#def v123d= v82
+#def v87t=  'globalV*v.63'
+
+#def v101t= 'globalV*v.73'
+#def v113t= 'globalV*v.82'
+#def v122t= 'globalV*v.89' ##mix 93 vel 122 -> 89
+#def v127t= 'globalV*v.93' ##mix 93 vel 127 -> 93
+#def v62b=  'globalV*v.31'
+#def v80b=  'globalV*v.40' ##mix 86 vel 80 -> 54
+#def v101b= 'globalV*v.36'
+#def v102b= 'globalV*v.52'
+#def v104b= 'globalV*v.30' ##mix 74 vel 104 -> 60
+#def v110b= 'globalV*v.32' ##mix 74 vel 110 -> 64
+#def v113b= 'globalV*v.57'
+#def vfb= 'globalVf*v168,.52'
+#def v115b= 'globalV*v.33' ##mix 74 vel 115 -> 66
+#def v118h= 'globalV*v.44' ##mix 64 vel 118 -> 59
+#def v123h= 'globalV*v.53' ##mix 55 vel 123 -> 53
+#def vfh= 'globalVf*v144,.63'
+#def v62s= 'globalV*v.43'
+#def v84s= 'globalV*v.16'v120,56 ##mix 25 to 85 vel 84 -> 16 to 56
+#def v85s= 'globalV*v.16'v96,56
+#def vfs= 'globalVf*v144,.76'
+#def v87s=  'globalV*v.40' ##mix 88 vel 87 -> 60
+#def v101s= 'globalV*v.69' ##mix 88 vel 101 -> 69
+#def v107s= 'globalV*v.74' ##mix 88 vel 107 -> 74
+#def v110s= 'globalV*v.80'
+#def v113s= 'globalV*v.78'
+#def v107d= 'globalV*v.71'
+#def v123d= 'globalV*v.82'
 #def vi= m48,18,223
 #def vil= m16,16,223
 
-#drum "y"=5f |B v80 p40 %a%r17
-#drum "z"=5f |B v80 p70 %a3%r17
-#drum "s"=5a+ |A p64
-#drum "a"=5a+ |A p64 v80 ##127
-#drum "b"=5a+ |A p64 v69 ##111
-#drum "c"=5a+ |A p64 v66 ##105
-#drum "d"=5a+ |A p64 v62 ##99
-#drum "x"=5a+ |A p64 v58 ##92
-#drum "e"=5a+ |A p64 v53 ##85
-#drum "f"=5a+ |A p64 v43 ##69
+#drum "y"=5a |B 'globalV*v.80' p40 %a%r17
+#drum "z"=5a |B 'globalV*v.80' p70 %a3%r17
+#drum "s"=5f+ |A p64
+#drum "a"=5f+ |A p64 'snareV*v.80' ##127
+#drum "b"=5f+ |A p64 'snareV*v.69' ##111
+#drum "c"=5f+ |A p64 'snareV*v.66' ##105
+#drum "d"=5f+ |A p64 'snareV*v.62' ##99
+#drum "x"=5f+ |A p64 'snareV*v.58' ##92
+#drum "e"=5f+ |A p64 'snareV*v.53' ##85
+#drum "f"=5f+ |A p64 'snareV*v.43' ##69
+
+#def snareV=    v85
+#def snareVf= v1,85
+#def globalV=    v133
+#def globalVf= v1,133
 
 #cdef ( %l1
 #cdef ) %l0
@@ -122,7 +125,7 @@ l4 [[['02''v122t''stab''s16'<d+ '12''v87s''stab''s16'<d+d+ m3]m-6
 ;
 
 {2}
-l32 v8v96,90 [16"s"] %e1
+l32 'snareV*v.08''snareVf*v96,.90'  %e1 [16"s"]
 $
 '02''stab' l16
 [[['s10''v87t'a'v101t'a'v113t'a4]^2a+4.j2g4.]<c4.>]
@@ -138,7 +141,7 @@ $
 l4 [[['08''v118h''stab''s24'f+ '13b''v87s''stab''s16'f+f+ m2]m-4
 '08''v118h''stab''s24'f+ '13b''v87s''stab''s16'f+ m-1]%k0]
 ##
-'hrp' l2> v50c <v56d v61g v56g v50g v43g l8 v35gv26d+v23d2^8
+'hrp' l2> 'globalV*v.50'c <'globalV*v.56'd 'globalV*v.61'g 'globalV*v.56'g 'globalV*v.50'g 'globalV*v.43'g l8 'globalV*v.35'g'globalV*v.26'd+'globalV*v.23'd2^8
 '18''v107d'c8
 ;
 
@@ -157,8 +160,8 @@ $330 >[3'v123d'a4.a2'v107d'<e>]'v123d'a4.a4a<e>a
 < l4
 [[d+2.d+2.>a+<d+ %k-1]%k0]
 ##
-c4. 'hrp'l2> v54a+ <v60a+ v54a+ v47a+ v40a+ v31a+8
-'08'v12'vfh''vi'g2.'fade'm
+c4. 'hrp'l2> 'globalV*v.54'a+ <'globalV*v.60'a+ 'globalV*v.54'a+ 'globalV*v.47'a+ 'globalV*v.40'a+ 'globalV*v.31'a+8
+'08''globalV*v.12''vfh''vi'g2.'fade'm
 ;
 
 {4}
@@ -173,8 +176,8 @@ l16 [4"!!!o a8.eb8a4e8b8eb a8e8e8a8e8"j4"e8a8eb"]":e:a8fedb"
 ##
 [4"aeeee8a4e8a8ee eea4eeeea8"j4"a8ee"]"fedb"
 ##
-"a8" 'hrp'l2> v51d+ <v57d+ v56d+ v51d+ v44d+ v37d+4.
-'09'v12'vfh''vi'd+2.'fade'm
+"a8" 'hrp'l2> 'globalV*v.51'd+ <'globalV*v.57'd+ 'globalV*v.56'd+ 'globalV*v.51'd+ 'globalV*v.44'd+ 'globalV*v.37'd+4.
+'09''globalV*v.12''vfh''vi'd+2.'fade'm
 ;
 
 {5}
@@ -189,13 +192,13 @@ j2 'v113b'f'v62b'dc] 'v113b'f'v62b'ff
 's21'g4's12'g's21'g+'v80b'f'v113b'g'v80b''s12'c] %k-3]%k0
 ##
 l4 '14''vi''v101s''longer'>[g+1^1^1b2g+2 j2 a1^1^1eaba]
-l2 '09''long'v61c v64d v65e v67a v70b < v72c v76d v77e m
+l2 '09''long''globalV*v.61'c 'globalV*v.64'd 'globalV*v.65'e 'globalV*v.67'a 'globalV*v.70'b < 'globalV*v.72'c 'globalV*v.76'd 'globalV*v.77'e m
 ##
 l4 '15''stab''s16'>>
 [[[3'v113b'd+'v102b'd+j3d+]%k-1]%k0]
 ##
-r4 'hrp'l2> v52g <v58g v55d v49d v42d v34d4
-'05'v8'vfb'c2..'s18'd+8
+r4 'hrp'l2> 'globalV*v.52'g <'globalV*v.58'g 'globalV*v.55'd 'globalV*v.49'd 'globalV*v.42'd 'globalV*v.34'd4
+'05''globalV*v.08''vfb'c2..'s18'd+8
 ;
 
 {6}
@@ -216,7 +219,7 @@ $
 l4 '14'>'stab''s16'
 [[['v113s'a+'v87s'a+a+m3]m-6'v113s'a+'v87s'a+ m-1]%k0]
 ##
-'13''vil''longer''v85s' ([12d+4])(v16'vfs'a+4a+4a+4'fade')m
+'13''vil''longer''v85s' ([12d+4])('globalV*v.16''vfs'a+4a+4a+4'fade')m
 ;
 
 {7}
@@ -250,5 +253,5 @@ $
 [3"y2.y2.y2"]"y2.y2.z2"
 ##
 '15b'c1^1^1
-'05'v8'vfb'>a+2..'s18'a+8
+'05''globalV*v.08''vfb'>a+2..'s18'a+8
 ;

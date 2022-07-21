@@ -1,6 +1,5 @@
 #! /usr/bin/env python3
 import monsterrandomizer
-from options import Options_
 from math import log, floor
 
 from monsterrandomizer import monsterdict, get_monsters
