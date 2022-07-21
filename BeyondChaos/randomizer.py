@@ -75,13 +75,13 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis remonsterate sketch|1603333081"
+#TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis remonsterate sketch|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
 #TEST_SEED = "3|normal|bcdefghijklmnopqrstyz partyparty novanilla  electricboogaloo masseffect randombosses supernatural alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo dearestmolulu airship|1652122298"
 #strikerTEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz partyparty frenchvanilla electricboogaloo randombosses alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random|1653854831"
-#TEST_SEED = "3|speedcave|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons easymodo canttouchthis dearestmolulu|1649808314"
+TEST_SEED = "4|katn|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons easymodo canttouchthis dearestmolulu thescenarionottaken|1649808314"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -1929,29 +1929,52 @@ def set_lete_river_encounters():
     manage_lete_river_sub.set_location(0xB048F)
     manage_lete_river_sub.write(fout)
     # call subroutine CB0498 (4 bytes)
-    battle_calls = [0xB066B,
-                    0xB0690,
-                    0xB06A4,
-                    0xB06B4,
-                    0xB06D0,
-                    0xB06E1,
-                    0xB0704,
-                    0xB071B,
-                    0xB0734,
-                    0xB0744,
-                    0xB076A,
-                    0xB077C,
-                    0xB07A0,
-                    0xB07B6,
-                    0xB07DD,
-                    0xB0809,
-                    0xB081E,
-                    0xB082D,
-                    0xB084E,
-                    0xB0873,
-                    0xB08A8,
-                    0xB09E0,
-                    0xB09FC]
+    if Options_.is_code_active('thescenarionottaken'):
+        battle_calls = [0xB066B,
+                        0xB0690,
+                        0xB06A4,
+                        0xB06B4,
+                        0xB06D0,
+                        0xB06E1,
+                        0xB0704,
+                        0xB071B,
+                        0xB0734,
+                        0xB0744,
+                        0xB076A,
+                        0xB077C,
+                        0xB07A0,
+                        0xB07B6,
+                        0xB07DD,
+                        0xB0809,
+                        0xB081E,
+                        0xB082D,
+                        0xB084E,
+                        0xB0873,
+                        0xB08A8,]
+    else:
+        battle_calls = [0xB066B,
+                        0xB0690,
+                        0xB06A4,
+                        0xB06B4,
+                        0xB06D0,
+                        0xB06E1,
+                        0xB0704,
+                        0xB071B,
+                        0xB0734,
+                        0xB0744,
+                        0xB076A,
+                        0xB077C,
+                        0xB07A0,
+                        0xB07B6,
+                        0xB07DD,
+                        0xB0809,
+                        0xB081E,
+                        0xB082D,
+                        0xB084E,
+                        0xB0873,
+                        0xB08A8,
+                        0xB09E0,
+                        0xB09FC]
 
     for addr in battle_calls:
         # call subroutine `addr` (4 bytes)
@@ -5526,7 +5549,6 @@ def randomize(**kwargs) -> str:
              0x0A, 0x0A, 0x0A, 0x7B, 0x2A, 0x8D, 0xAB, 0x81, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,])
         sketch_fix_sub.write(fout)
 
-
     has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
     if has_music:
         music_init()
@@ -5664,7 +5686,7 @@ def randomize(**kwargs) -> str:
     name_swd_techs(fout)
     fix_flash_and_bioblaster(fout)
     title_gfx(fout)
-    improved_party_gear(fout)
+    #improved_party_gear(fout)
     manage_doom_gaze(fout)
 
     if Options_.is_code_active("swdtechspeed"):
