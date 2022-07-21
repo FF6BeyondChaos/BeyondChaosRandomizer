@@ -2239,6 +2239,10 @@ def manage_monster_appearance(monsters: List[MonsterBlock], preserve_graphics: b
 
     return mgs
 
+def manage_doom_gaze(freespaces):
+    # patch is actually 98 bytes, but just in case
+    addr = get_appropriate_freespace(freespaces, 100)
+    patch_doom_gaze(fout, addr)
 
 def manage_colorize_animations():
     palettes = []
@@ -5159,6 +5163,8 @@ def randomize(**kwargs) -> str:
         improve_item_display(fout)
         improve_rage_menu(fout)
     reseed()
+    
+    manage_doom_gaze(freespaces)
 
     if Options_.random_enemy_stats:
         aispaces = manage_final_boss(aispaces)
