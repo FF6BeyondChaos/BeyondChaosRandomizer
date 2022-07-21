@@ -19,6 +19,8 @@ from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
 from character import get_characters, get_character, equip_offsets
 from chestrandomizer import mutate_event_items, get_event_items
+from config import (read_flags, write_flags, validate_files, are_updates_hidden, updates_hidden,
+                    get_input_path, get_output_path, save_input_path, save_output_path)
 from decompress import Decompressor
 from dialoguemanager import (manage_dialogue_patches, get_dialogue,
                              set_dialogue, read_dialogue,
@@ -4752,15 +4754,17 @@ def randomize(**kwargs) -> str:
     # sourcefile = args[1].strip()
     # else:
     if not sourcefile:
-        try:
-            config = configparser.ConfigParser()
-            config.read('bcce.cfg')
-            if 'ROM' in config:
-                previous_rom_path = config['ROM']['Path']
-                previous_output_directory = config['ROM']['Output']
-        except (IOError, KeyError) as e:
-            print(str(e))
-            pass
+        previous_rom_path = get_input_path()
+        previous_output_directory = get_output_path()
+        # try:
+        #     config = configparser.ConfigParser()
+        #     config.read('bcce.cfg')
+        #     if 'ROM' in config:
+        #         previous_rom_path = config['ROM']['Path']
+        #         previous_output_directory = config['ROM']['Output']
+        # except (IOError, KeyError) as e:
+        #     print(str(e))
+        #     pass
 
         previous_input = f" (blank for default: {previous_rom_path})" if previous_rom_path else ""
         sourcefile = input(f"Please input the file name of your copy of "
@@ -4783,7 +4787,7 @@ def randomize(**kwargs) -> str:
     # else:
     if not output_directory:
         # If no previous directory or an invalid directory was obtained from bcce.cfg, default to the ROM's directory
-        if not previous_output_directory or not os.path.isdir(previous_output_directory):
+        if not previous_output_directory or not os.path.isdir(os.path.normpath(previous_output_directory)):
             previous_output_directory = os.path.dirname(sourcefile)
 
         while True:
@@ -4839,10 +4843,6 @@ def randomize(**kwargs) -> str:
         print("Success! Using valid rom file: %s\n" % sourcefile)
     del f
 
-    saveflags = False
-    if sourcefile != previous_rom_path or output_directory != previous_output_directory:
-        saveflags = True
-
     flaghelptext = '''!   Recommended new player flags
 -   Use all flags EXCEPT the ones listed'''
 
@@ -4859,11 +4859,11 @@ def randomize(**kwargs) -> str:
         print()
 
         if '.' not in fullseed:
-            config = configparser.ConfigParser()
-            config.read('bcce.cfg')
-            #if 'speeddial' in config:
+            # config = configparser.ConfigParser()
+            # config.read('bcce.cfg')
+            # if 'speeddial' in config:
             #    speeddial_opts = config['speeddial']
-            #else:
+            # else:
             #    try:
             #        savedflags = []
             #        with open('savedflags.txt', 'r') as sff:
@@ -4896,15 +4896,15 @@ def randomize(**kwargs) -> str:
             for flag in sorted(allowed_flags):
                 print(flag.name, flag.description)
             print(flaghelptext + "\n")
-            #print("Save frequently used flag sets by adding 0: through 9: before the flags.")
-            #for k, v in sorted(speeddial_opts.items()):
+            # print("Save frequently used flag sets by adding 0: through 9: before the flags.")
+            # for k, v in sorted(speeddial_opts.items()):
             #    print("    %s: %s" % (k, v))
             print()
             flags = input("Please input your desired flags (blank for "
                           "all of them):\n> ").strip()
             if flags == "!" :
                 flags = '-dfklu partyparty makeover johnnydmad'
-            #if " " in flags:
+            # if " " in flags:
                 # flags = flags.split(' ')
                 # dial = ''.join(c for c in flags[0] if c in '0123456789')
                 # if len(dial) == 1:
@@ -4956,32 +4956,35 @@ def randomize(**kwargs) -> str:
                           '.'.join([os.path.basename(tempname[0]),
                                     str(seed), 'txt']))
 
-    if saveflags:
+    if sourcefile != previous_rom_path or output_directory != previous_output_directory:
         try:
-            config = configparser.ConfigParser()
-            config.read('bcce.cfg')
-            if 'ROM' not in config:
-                config['ROM'] = {}
-            if 'speeddial' not in config:
-                config['speeddial'] = {}
-            config['ROM']['Path'] = sourcefile
+            save_input_path(sourcefile)
+            save_output_path(output_directory)
 
-            # Save the output directory
-            if str(output_directory).lower() == str(os.path.dirname(sourcefile)).lower():
-                # If the output directory is the same as the ROM directory, save an empty string
-                config['ROM']['Output'] = ''
-            else:
-                config['ROM']['Output'] = output_directory
-            #config['speeddial'].update({k: v for k, v in speeddial_opts.items() if k != '!'})
-            with open('bcce.cfg', 'w') as cfg_file:
-                config.write(cfg_file)
+            # config = configparser.ConfigParser()
+            # config.read('bcce.cfg')
+            # if 'ROM' not in config:
+            #     config['ROM'] = {}
+            # if 'speeddial' not in config:
+            #     config['speeddial'] = {}
+            # config['ROM']['Path'] = sourcefile
+
+            # # Save the output directory
+            # if str(output_directory).lower() == str(os.path.dirname(sourcefile)).lower():
+            #     # If the output directory is the same as the ROM directory, save an empty string
+            #     config['ROM']['Output'] = ''
+            # else:
+            #     config['ROM']['Output'] = output_directory
+            # #config['speeddial'].update({k: v for k, v in speeddial_opts.items() if k != '!'})
+            # with open('bcce.cfg', 'w') as cfg_file:
+            #     config.write(cfg_file)
         except:
             print("Couldn't save flag string\n")
-        else:
-            try:
-                os.remove('savedflags.txt')
-            except OSError:
-                pass
+        # else:
+        #     try:
+        #         os.remove('savedflags.txt')
+        #     except OSError:
+        #         pass
 
     if len(data) % 0x400 == 0x200:
         print("NOTICE: Headered ROM detected. Output file will have no header.")

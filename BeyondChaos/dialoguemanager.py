@@ -24,11 +24,14 @@ for i in range(0xFF):
 textdialoguetable["63"] = "'"
 
 dialoguebytetable = {}
-for k, v in dialoguetexttable.items():
-    dialoguebytetable[k] = v
-for i in range(0xFF):
-    dialoguebytetable[f"${i:02X}"] = f"{i:02X}"
-dialoguebytetable["'"] = dialoguebytetable["’"]
+try:
+    for k, v in dialoguetexttable.items():
+        dialoguebytetable[k] = v
+    for i in range(0xFF):
+        dialoguebytetable[f"${i:02X}"] = f"{i:02X}"
+    dialoguebytetable["'"] = dialoguebytetable["’"]
+except KeyError:
+    pass
 
 dialogue_vars = {}
 dialogue_flags = set()
