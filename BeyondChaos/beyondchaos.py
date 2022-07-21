@@ -10,7 +10,7 @@ import traceback
 
 # Related third-party imports
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtGui import QCursor, QFont
+from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
                              QLabel, QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QFileDialog,
                              QApplication, QTabWidget, QInputDialog, QScrollArea, QMessageBox,
@@ -24,7 +24,7 @@ from config import (read_flags, write_flags, validate_files, are_updates_hidden,
                     get_input_path, get_output_path, save_version)
 from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES, makeover_groups)
 from update import (get_updater)
-from randomizer import randomize
+from randomizer import randomize, VERSION, BETA
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. "
@@ -310,7 +310,7 @@ class Window(QMainWindow):
         menu_separator = self.menuBar().addMenu("|")
         menu_separator.setEnabled(False)
 
-        if validation_result:
+        if not BETA and validation_result:
             self.menuBar().addAction("Update Available", update_bc)
         else:
             self.menuBar().addAction("Check for Updates", update_bc)
@@ -835,8 +835,10 @@ class Window(QMainWindow):
                 elif type(child) in [QDoubleSpinBox] and str(v).startswith(child.text.lower()):
                     if ":" in v:
                         try:
-                            child.setValue(float(str(v).split(":")[1]))
-                            self.flags.append(v)
+                            value = float(str(v).split(":")[1])
+                            if value >= 0:
+                                child.setValue(value)
+                                self.flags.append(v)
                         except ValueError:
                             pass
                 elif type(child) in [QComboBox] and str(v).startswith(child.text.lower()):
@@ -1415,72 +1417,75 @@ if __name__ == "__main__":
     )
     App = QApplication(sys.argv)
     try:
-        validation_result, required_update = validate_files()
-        first_time_setup = False
-        if required_update and 'config.ini' in validation_result:
-            first_time_setup = True
-        if required_update or (validation_result and not are_updates_hidden()):
-            update_message = QMessageBox()
-            if first_time_setup:
-                update_message.setIcon(QMessageBox.Information)
-                update_message.setWindowTitle("First Time Setup")
-                update_message.setText("<b>Welcome to Beyond Chaos Community Edition!</b>" +
-                                       "<br>" +
-                                       "<br>" +
-                                       "As part of first time setup, "
-                                       "we need to download some required files and folders."
-                                       "<br>" +
-                                       "<br>" +
-                                       "Press OK to launch the updater to download the required files."
-                                       "<br>" +
-                                       "Press Close to exit the program.")
-            elif required_update:
-                update_message.setIcon(QMessageBox.Warning)
-                update_message.setWindowTitle("Missing Required Files")
-                update_message.setText("Files that are required for the randomizer to function properly are missing "
-                                       "from the randomizer directory:" +
-                                       "<br>" +
-                                       "<br>" +
-                                       str(validation_result) +
-                                       "<br>" +
-                                       "<br>" +
-                                       "Press OK to launch the updater to download the required files." +
-                                       "<br>" +
-                                       "Press Close to exit the program.")
-            else:
-                update_message.setIcon(QMessageBox.Question)
-                update_message.setWindowTitle("Update Available")
-                update_message.setText("Updates to Beyond Chaos are available!" +
-                                       "<br>" +
-                                       "<br>" +
-                                       str(validation_result) +
-                                       "<br>" +
-                                       "<br>" +
-                                       "Press OK to launch the updater or Close to skip updating. This pop-up will "
-                                       "only show once per update.")
-
-            update_message.setStandardButtons(QMessageBox.Close | QMessageBox.Ok)
-            button_clicked = update_message.exec()
-            if button_clicked == QMessageBox.Close:
-                # Update_message informs the user about the update button on the UI.
-                update_message.close()
-                if required_update:
-                    sys.exit()
+        if not BETA:
+            validation_result, required_update = validate_files()
+            first_time_setup = False
+            if required_update and 'config.ini' in validation_result:
+                first_time_setup = True
+            if required_update or (validation_result and not are_updates_hidden()):
+                update_message = QMessageBox()
+                if first_time_setup:
+                    update_message.setIcon(QMessageBox.Information)
+                    update_message.setWindowTitle("First Time Setup")
+                    update_message.setText("<b>Welcome to Beyond Chaos Community Edition!</b>" +
+                                           "<br>" +
+                                           "<br>" +
+                                           "As part of first time setup, "
+                                           "we need to download some required files and folders."
+                                           "<br>" +
+                                           "<br>" +
+                                           "Press OK to launch the updater to download the required files."
+                                           "<br>" +
+                                           "Press Close to exit the program.")
+                elif required_update:
+                    update_message.setIcon(QMessageBox.Warning)
+                    update_message.setWindowTitle("Missing Required Files")
+                    update_message.setText("Files that are required for the randomizer to function properly are missing "
+                                           "from the randomizer directory:" +
+                                           "<br>" +
+                                           "<br>" +
+                                           str(validation_result) +
+                                           "<br>" +
+                                           "<br>" +
+                                           "Press OK to launch the updater to download the required files." +
+                                           "<br>" +
+                                           "Press Close to exit the program.")
                 else:
-                    update_dismiss_message = QMessageBox()
-                    update_dismiss_message.setIcon(QMessageBox.Information)
-                    update_dismiss_message.setWindowTitle("Information")
-                    update_dismiss_message.setText("The update will be available using the Update button on the "
-                                                   "randomizer's menu bar.")
-                    update_dismiss_message.setStandardButtons(QMessageBox.Close)
-                    button_clicked = update_dismiss_message.exec()
-                    if button_clicked == QMessageBox.Close:
-                        update_dismiss_message.close()
-                        updates_hidden(True)
-            elif button_clicked == QMessageBox.Ok:
-                if required_update and not first_time_setup:
-                    save_version('core', '0.0')
-                update_bc(wait=True, suppress_prompt=True)
+                    update_message.setIcon(QMessageBox.Question)
+                    update_message.setWindowTitle("Update Available")
+                    update_message.setText("Updates to Beyond Chaos are available!" +
+                                           "<br>" +
+                                           "<br>" +
+                                           str(validation_result) +
+                                           "<br>" +
+                                           "<br>" +
+                                           "Press OK to launch the updater or Close to skip updating. This pop-up will "
+                                           "only show once per update.")
+
+                update_message.setStandardButtons(QMessageBox.Close | QMessageBox.Ok)
+                button_clicked = update_message.exec()
+                if button_clicked == QMessageBox.Close:
+                    # Update_message informs the user about the update button on the UI.
+                    update_message.close()
+                    if required_update:
+                        sys.exit()
+                    else:
+                        update_dismiss_message = QMessageBox()
+                        update_dismiss_message.setIcon(QMessageBox.Information)
+                        update_dismiss_message.setWindowTitle("Information")
+                        update_dismiss_message.setText("The update will be available using the Update button on the "
+                                                       "randomizer's menu bar.")
+                        update_dismiss_message.setStandardButtons(QMessageBox.Close)
+                        button_clicked = update_dismiss_message.exec()
+                        if button_clicked == QMessageBox.Close:
+                            update_dismiss_message.close()
+                            updates_hidden(True)
+                elif button_clicked == QMessageBox.Ok:
+                    if required_update and not first_time_setup:
+                        save_version('core', '0.0')
+                    elif first_time_setup:
+                        save_version('core', VERSION)
+                    update_bc(wait=True, suppress_prompt=True)
         window = Window()
         time.sleep(3)
         sys.exit(App.exec())
