@@ -31,6 +31,15 @@ def get_value(section, option):
         return ''
 
 
+def get_items(section):
+    config.read(CONFIG_PATH)
+    results = {}
+    if config.has_section(section):
+        for option in config.options(section):
+            results[option] = config.get(section, option)
+    return results
+
+
 def write_flags(name, flags):
     config.read(CONFIG_PATH)
     try:
