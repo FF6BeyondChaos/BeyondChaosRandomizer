@@ -351,6 +351,52 @@ def change_cursed_shield_battles(fout, random: Random, amount: int = None):
     ])
     ccsb_sub.set_location(0x4A500)
     ccsb_sub.write(fout)
+    
+def patch_doom_gaze(fout, addr, offset=0xA0000):
+    """
+    Add an option to the Falcon's wheel to search out Doom Gaze
+    """
+    rel_addr = addr - offset
+
+    sub = Substitution()
+
+    dst = rel_addr.to_bytes(3, "little")
+    sub.set_location(0xA009D)
+    sub.bytestring = b"\xb2" + dst
+    sub.write(fout)
+
+    sub.set_location(0xAF56E)
+    dst = (rel_addr + 7).to_bytes(3, "little")
+    sub.bytestring = b"\xb2" + dst + b"\xfe" + b"\xfd" * 5
+    sub.write(fout)
+
+    # displaced code + DG dead bit
+    sub.set_location(addr)
+    sub.bytestring = b"\x3d\x12\x41\x12\xd0\xe2\xfe"
+    sub.write(fout)
+
+    # dialog box manager
+    b1 = (rel_addr + 0x1D).to_bytes(3, "little")
+    b2 = (rel_addr + 0x27).to_bytes(3, "little")
+    sub.set_location(addr + 0x7)
+    sub.bytestring = b"\xc1\xe2\x80\xa4\x00" + b1 \
+                   + b"\x4b\xa5\x86\xb6\x8d\xf5\x00" + b2 \
+                   + b"\xb3\x5e\x00\xfe"
+    sub.write(fout)
+
+    # lift-off choice handler
+    sub.set_location(addr + 0x1D)
+    sub.bytestring = b"\x4b\x2a\x85\xb6\x8d\xf5\x00\xb3\x5e\x00"
+    sub.write(fout)
+
+    # doom gaze encounter event
+    sub.set_location(addr + 0x27)
+    sub.bytestring = b"\x6a\x01\x04\x9e\x33\x01\x29\x58\x0c\x30\x4c\x20\x2c" + \
+                     b"\x10\x24\x10\x34\x10\x54\x10\x49\x24\x40\xa0\x24\x30" + \
+                     b"\x34\x40\x54\x30\x40\x80\x49\x60\x40\x80\x24\x30\xd9" + \
+                     b"\xd2\x11\x36\x11\x08\xc0\x4d\x5d\x29\xb2\xa9\x5e\x00" + \
+                     b"\xb7\x48\xe3\x00\x00\x96\xc0\x27\x01\x9d\x00\x00"
+    sub.write(fout)
 
 def title_gfx(fout):
     title_gfx_sub = Substitution()				#change title screen graphics by overwritting compressed gfx data
@@ -364,7 +410,7 @@ def improved_party_gear(fout):
     ipg_sub = Substitution()
     ipg_sub.set_location(0x038F04)
     ipg_sub.bytestring = bytes([0x64,
-    0x28, 0x22, 0x01, 0xAF, 0x2E, 0xA9, 0x00, 0xEB, 0xA5, 0x28, 0xAA, 0xB5, 0x69, 0x30, 0x60, 0x48,
+    0x28, 0x22, 0x01, 0xAF, 0xEE, 0xA9, 0x00, 0xEB, 0xA5, 0x28, 0xAA, 0xB5, 0x69, 0x30, 0x60, 0x48,
     0x8A, 0x0A, 0xA8, 0x69, 0x39, 0xEB, 0xA9, 0x0D, 0xB6, 0x6D, 0x86, 0x67, 0xA8, 0x5A, 0xA9, 0x24,
     0x85, 0x29, 0x20, 0xCF, 0x34, 0x7A, 0xA9, 0x28, 0x85, 0x29, 0xC2, 0x21, 0x98, 0x69, 0x10, 0x00,
     0x8F, 0x89, 0x9E, 0x7E, 0xA9, 0x08, 0x00, 0x85, 0xEB, 0xA9, 0xDB, 0x07, 0x85, 0xEF, 0xE2, 0x20,

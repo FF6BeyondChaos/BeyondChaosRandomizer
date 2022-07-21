@@ -1,6 +1,6 @@
 # BeyondChaos
 
-FF6 Beyond Chaos CE "Commuinity Edition" Randomizer
+FF6 Beyond Chaos CE "Community Edition" Randomizer
 <p>
 a fork of SubtractionSoup's FF6 Beyond Chaos EX Randomizer
 <p>

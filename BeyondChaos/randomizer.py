@@ -76,13 +76,13 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-#TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis remonsterate sketch|1603333081"
+TEST_SEED = "4|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis remonsterate|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
 #TEST_SEED = "3|normal|bcdefghijklmnopqrstyz partyparty novanilla  electricboogaloo masseffect randombosses supernatural alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo dearestmolulu airship|1652122298"
 #strikerTEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz partyparty frenchvanilla electricboogaloo randombosses alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random|1653854831"
-TEST_SEED = "4|katn|bcefghimnopqstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons easymodo canttouchthis dearestmolulu thescenarionottaken|1649808314"
+#TEST_SEED = "4|katn|bcefghimnopqstuwyz partyparty makeover electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons easymodo canttouchthis dearestmolulu thescenarionottaken|1649808314"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -2240,6 +2240,10 @@ def manage_monster_appearance(monsters: List[MonsterBlock], preserve_graphics: b
 
     return mgs
 
+def manage_doom_gaze(freespaces):
+    # patch is actually 98 bytes, but just in case
+    addr = get_appropriate_freespace(freespaces, 100)
+    patch_doom_gaze(fout, addr)
 
 def manage_colorize_animations():
     palettes = []
@@ -5160,6 +5164,8 @@ def randomize(**kwargs) -> str:
         improve_item_display(fout)
         improve_rage_menu(fout)
     reseed()
+    
+    manage_doom_gaze(freespaces)
 
     if Options_.random_enemy_stats:
         aispaces = manage_final_boss(aispaces)
@@ -5681,7 +5687,7 @@ def randomize(**kwargs) -> str:
     name_swd_techs(fout)
     fix_flash_and_bioblaster(fout)
     title_gfx(fout)
-    #improved_party_gear(fout)
+    improved_party_gear(fout)
     manage_doom_gaze(fout)
 
     if Options_.is_code_active("swdtechspeed"):
