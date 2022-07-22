@@ -70,7 +70,7 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "4"
+VERSION = "CE-4.0.0"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
@@ -232,7 +232,8 @@ def rewrite_title(text: str):
     fout.seek(0xFFC0)
     fout.write(bytes(text, encoding='ascii'))
     fout.seek(0xFFDB)
-    fout.write(bytes([int(VERSION)]))
+    # Regex gets the first number in the VERSION - the major version number
+    fout.write(bytes([int(re.search(r'\d', VERSION).group())]))
 
 
 def rewrite_checksum(filename: str = None):
