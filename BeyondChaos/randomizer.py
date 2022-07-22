@@ -5165,7 +5165,7 @@ def randomize(**kwargs) -> str:
         improve_rage_menu(fout)
     reseed()
     
-    manage_doom_gaze(freespaces)
+    manage_doom_gaze(fout)
 
     if Options_.random_enemy_stats:
         aispaces = manage_final_boss(aispaces)
