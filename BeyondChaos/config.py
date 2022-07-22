@@ -68,15 +68,15 @@ def read_version_information():
     config.read(CONFIG_PATH)
     try:
         version_information['core'] = config.get('Version', 'core')
-    except configparser.NoOptionError:
+    except (configparser.NoSectionError, configparser.NoOptionError):
         version_information['core'] = ''
     try:
         version_information['character_sprites'] = config.get('Version', 'character_sprites')
-    except configparser.NoOptionError:
+    except (configparser.NoSectionError, configparser.NoOptionError):
         version_information['character_sprites'] = ''
     try:
         version_information['monster_sprites'] = config.get('Version', 'monster_sprites')
-    except configparser.NoOptionError:
+    except (configparser.NoSectionError, configparser.NoOptionError):
         version_information['monster_sprites'] = ''
     return version_information
 
@@ -237,7 +237,7 @@ def validate_files():
 
     # Missing files are required for the randomizer to function properly, so it triggers a forced update
     if missing_files:
-        return '\n'.join(missing_files), True
+        return '<br>'.join(missing_files), True
 
     version_errors = []
     base_github_url = 'https://api.github.com/repos/FF6BeyondChaos/'
@@ -245,27 +245,35 @@ def validate_files():
     character_sprites_github_url = base_github_url + 'BeyondChaosSprites/releases/latest'
     monster_sprites_github_url = base_github_url + 'BeyondChaosMonsterSprites/releases/latest'
 
-    for type, version in read_version_information().items():
+    for version_type, version in read_version_information().items():
         if not version:
-            # Catches version information with no recorded information - probably should never happen
-            version_errors.append('The ' + type + " version was not recorded in config.ini.")
+            error_string = "-" + version_type.replace("_", " ").capitalize() + " have not been downloaded and are available."
+            if version_type == "character_sprites":
+                version_errors.append(error_string + " Character sprites are required for the makeover flag to "
+                                                     "randomize party and NPC sprites with community-made "
+                                                     "custom sprites.")
+            elif version_type == "monster_sprites":
+                version_errors.append(error_string + " Monster sprites are required for the remonsterate flag to "
+                                                     "randomize monster sprites with sprites from various other "
+                                                     "video games and media.")
+
         else:
             # Note: Updater version is not checked.
-            if type == 'core':
+            if version_type == 'core':
                 response = requests.get(core_github_url)
                 if response.ok:
                     github_version = response.json()['tag_name']
                     if not version == github_version:
                         version_errors.append('The core Beyond Chaos files are currently version ' + str(version) + '. '
                                               'Version ' + github_version + ' is available.')
-            if type == 'character_sprites':
+            if version_type == 'character_sprites':
                 response = requests.get(character_sprites_github_url)
                 if response.ok:
                     github_version = response.json()['tag_name']
                     if not version == github_version:
                         version_errors.append('The Character Sprite files are currently version ' + str(version) + '. '
                                               'Version ' + github_version + ' is available.')
-            if type == 'monster_sprites':
+            if version_type == 'monster_sprites':
                 response = requests.get(monster_sprites_github_url)
                 if response.ok:
                     github_version = response.json()['tag_name']
@@ -274,6 +282,6 @@ def validate_files():
                                               'Version ' + github_version + ' is available.')
 
     if version_errors:
-        return '\n'.join(version_errors), False
+        return '<br><br>'.join(version_errors), False
     return None, False
 
