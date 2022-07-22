@@ -2240,10 +2240,10 @@ def manage_monster_appearance(monsters: List[MonsterBlock], preserve_graphics: b
 
     return mgs
 
-def manage_doom_gaze(freespaces):
+def manage_doom_gaze(fout):
     # patch is actually 98 bytes, but just in case
     addr = get_appropriate_freespace(freespaces, 100)
-    patch_doom_gaze(fout, addr)
+    patch_doom_gaze(fout)
 
 def manage_colorize_animations():
     palettes = []
