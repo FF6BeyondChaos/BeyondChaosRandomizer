@@ -70,13 +70,14 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-4.0.1"
+VERSION = "CE-4.0.2"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
 TEST_SEED = "4|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis remonsterate|1603333081"
+#XILHART STRIKER SEED = "4|normal|bcdefgijklmnopqrstuwyzmakeover partyparty frenchvanilla dancingmaduin madworld expboost:5.0 gpboost:5.0 mpboost:5.0 dancelessons swdtechspeed:faster alasdraco johnnyachaotic questionablecontent nomiabs desperation|1658691527"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
@@ -2240,10 +2241,10 @@ def manage_monster_appearance(monsters: List[MonsterBlock], preserve_graphics: b
 
     return mgs
 
-def manage_doom_gaze(freespaces):
+def manage_doom_gaze(fout):
     # patch is actually 98 bytes, but just in case
     addr = get_appropriate_freespace(freespaces, 100)
-    patch_doom_gaze(fout, addr)
+    patch_doom_gaze(fout)
 
 def manage_colorize_animations():
     palettes = []
@@ -2688,7 +2689,7 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
                 continue
             intermediate = wagers[b]
             if intermediate.itemid == 0x29:
-                return get_item(b)
+                return get_item(b), get_item(b)
             if intermediate in candidates:
                 continue
             if intermediate.itemid not in buyables:
@@ -2719,7 +2720,7 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
     if not chain_start_item_found:
         # Get a list of shops that are relevant to the item type of the chain start item
         if chain_start_item.is_weapon:
-            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["weapon", "misc"]]
+            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["weapons", "misc"]]
         elif chain_start_item.is_armor:
             filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["armor", "misc"]]
         elif chain_start_item.is_relic:
@@ -4862,9 +4863,6 @@ def randomize(**kwargs) -> str:
                          "seed):\n> ").strip()
         print()
 
-
-
-
         if '.' not in fullseed:
             speeddials = get_items("Speeddial").items()
             mode_num = None
@@ -5165,7 +5163,7 @@ def randomize(**kwargs) -> str:
         improve_rage_menu(fout)
     reseed()
     
-    manage_doom_gaze(freespaces)
+    manage_doom_gaze(fout)
 
     if Options_.random_enemy_stats:
         aispaces = manage_final_boss(aispaces)
