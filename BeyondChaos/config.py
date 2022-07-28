@@ -147,6 +147,29 @@ def check_custom():
     return missing_files
 
 
+def check_player_sprites():
+    missing_files = []
+    custom_directory = Path(os.path.join(os.getcwd(), 'custom'))
+    if not custom_directory.is_dir():
+        missing_files.append('/custom/')
+    else:
+        # List of all files in /custom/. Some of these may not be required or may depend on chosen flags, but better
+        #   safe than sorry
+        required_custom_files = ['spritereplacements.txt']
+        for file in required_custom_files:
+            file_path = Path(os.path.join(custom_directory, file))
+            if not file_path.exists():
+                missing_files.append("/custom/" + file)
+                print("spritereplacements.txt is missing from the Custom directory. The SpriteReplacements category "
+                      "and custom character sprite flags will be unavailable.")
+
+    character_sprites_directory = Path(os.path.join(custom_directory, 'Sprites'))
+    if not character_sprites_directory.is_dir():
+       missing_files.append('/custom/Sprites/')
+
+    return missing_files
+
+
 def check_tables():
     missing_files = []
     if not TABLE_PATH.is_dir():
@@ -192,16 +215,20 @@ def check_remonsterate():
     if os.path.isdir(base_directory):
         if not os.path.isfile(image_file):
             missing_files.append('/remonsterate/images_and_tags')
-            print("The images_and_tags.txt file is missing from the remonsterate directory.")
+            print("The images_and_tags.txt file is missing from the remonsterate directory. The remonsterate flag "
+                  "will be unavailable.")
         if not os.path.isfile(monster_file):
             missing_files.append('/remonsterate/monsters_and_tags.txt')
-            print("The monsters_and_tags.txt file is missing from the remonsterate directory.")
+            print("The monsters_and_tags.txt file is missing from the remonsterate directory. The remonsterate "
+                  "flag will be unavailable.")
         if not os.path.isdir(sprite_directory):
             missing_files.append('/remonsterate/')
-            print("The sprites folder is missing from the remonsterate directory.")
+            print("The sprites folder is missing from the remonsterate directory. The remonsterate flag will be "
+                  "unavailable.")
     else:
         missing_files.append('/remonsterate/')
-        print("The remonsterate folder is missing from the Beyond Chaos directory.")
+        print("The remonsterate folder is missing from the Beyond Chaos directory. The remonsterate flag will be "
+              "unavailable.")
 
     return missing_files
 

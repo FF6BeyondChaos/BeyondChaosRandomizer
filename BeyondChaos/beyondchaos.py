@@ -21,7 +21,7 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
 import utils
 import customthreadpool
 from config import (read_flags, write_flags, validate_files, are_updates_hidden, updates_hidden,
-                    get_input_path, get_output_path, save_version)
+                    get_input_path, get_output_path, save_version, check_player_sprites, check_remonsterate)
 from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES, makeover_groups)
 from update import (get_updater)
 from randomizer import randomize, VERSION, BETA
@@ -583,6 +583,10 @@ class Window(QMainWindow):
                         f"{flagname}  -  {flagdesc['explanation']}",
                         flagname
                     )
+                    if (flagname == "remonsterate" and not len(check_remonsterate()) == 0) or\
+                       (flagname == "makeover" and not len(check_player_sprites()) == 0):
+                        cbox.setEnabled(False)
+
                     self.checkBoxes.append(cbox)
                     tablayout.addWidget(cbox, currentRow, 1, 1, 2)
                     cbox.clicked.connect(lambda checked: self.flagButtonClicked())
@@ -591,7 +595,6 @@ class Window(QMainWindow):
                         nbox = QDoubleSpinBox()
                     else:
                         nbox = QSpinBox()
-
 
                     if flagname == "cursepower":
                         nbox.setMinimum(0)
@@ -820,32 +823,33 @@ class Window(QMainWindow):
         for t in self.tablist:
             children.extend(t.children())
         for child in children:
-            for v in values:
-                v = str(v).lower()
-                if type(child) == FlagCheckBox and v == child.value:
-                    child.setChecked(True)
-                    self.flags.append(v)
-                elif type(child) in [QSpinBox] and str(v).startswith(child.text.lower()):
-                    if ":" in v:
-                        try:
-                            child.setValue(int(str(v).split(":")[1]))
-                            self.flags.append(v)
-                        except ValueError:
-                            pass
-                elif type(child) in [QDoubleSpinBox] and str(v).startswith(child.text.lower()):
-                    if ":" in v:
-                        try:
-                            value = float(str(v).split(":")[1])
-                            if value >= 0:
-                                child.setValue(value)
-                                self.flags.append(v)
-                        except ValueError:
-                            pass
-                elif type(child) in [QComboBox] and str(v).startswith(child.text.lower()):
-                    if ":" in v:
-                        index_of_value = child.findText(str(v).split(":")[1], QtCore.Qt.MatchFixedString)
-                        child.setCurrentIndex(index_of_value)
+            if child.isEnabled():
+                for v in values:
+                    v = str(v).lower()
+                    if type(child) == FlagCheckBox and v == child.value:
+                        child.setChecked(True)
                         self.flags.append(v)
+                    elif type(child) in [QSpinBox] and str(v).startswith(child.text.lower()):
+                        if ":" in v:
+                            try:
+                                child.setValue(int(str(v).split(":")[1]))
+                                self.flags.append(v)
+                            except ValueError:
+                                pass
+                    elif type(child) in [QDoubleSpinBox] and str(v).startswith(child.text.lower()):
+                        if ":" in v:
+                            try:
+                                value = float(str(v).split(":")[1])
+                                if value >= 0:
+                                    child.setValue(value)
+                                    self.flags.append(v)
+                            except ValueError:
+                                pass
+                    elif type(child) in [QComboBox] and str(v).startswith(child.text.lower()):
+                        if ":" in v:
+                            index_of_value = child.findText(str(v).split(":")[1], QtCore.Qt.MatchFixedString)
+                            child.setCurrentIndex(index_of_value)
+                            self.flags.append(v)
         self.updateFlagString()
         self.flagsChanging = False
 
