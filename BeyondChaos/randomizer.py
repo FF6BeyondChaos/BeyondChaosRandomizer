@@ -70,8 +70,8 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-4.0.1"
-BETA = True
+VERSION = "CE-4.0.2"
+BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
