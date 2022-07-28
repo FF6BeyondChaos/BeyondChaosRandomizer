@@ -353,7 +353,7 @@ try:
                  "spriteCategories", "combobox", ("Normal", "No", "Hate", "Like", "Only"))])
         RESTRICTED_VANILLA_SPRITE_CODES.append(no)
 except FileNotFoundError:
-    print("Error: No spritereplacements.txt found in the custom folder. Spritecategories will be unavailable.")
+    pass
 
 
 # TODO: do this a better way
