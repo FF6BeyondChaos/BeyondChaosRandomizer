@@ -128,7 +128,7 @@ def check_custom():
         #   safe than sorry
         required_custom_files = ['coralnames.txt', 'dancenames.txt', 'femalenames.txt', 'malenames.txt',
                                  'mooglenames.txt', 'moves.txt', 'opera.txt', 'passwords.txt', 'poems.txt',
-                                 'songs.txt', 'spritereplacements.txt']
+                                 'songs.txt']
         for file in required_custom_files:
             file_path = Path(os.path.join(custom_directory, file))
             if not file_path.exists():
@@ -139,9 +139,9 @@ def check_custom():
             missing_files.append('/custom/opera/')
         # Put opera files here, if the opera files are required
 
-        character_sprites_directory = Path(os.path.join(custom_directory, 'Sprites'))
-        if not character_sprites_directory.is_dir():
-            missing_files.append('/custom/Sprites/')
+        #character_sprites_directory = Path(os.path.join(custom_directory, 'Sprites'))
+        #if not character_sprites_directory.is_dir():
+        #    missing_files.append('/custom/Sprites/')
         # Put Sprite files here, if any are required
 
     return missing_files
@@ -233,7 +233,7 @@ def validate_files():
     missing_files.extend(check_custom())
     # missing_files.extend(check_tables())
     missing_files.extend(check_ini())
-    missing_files.extend(check_remonsterate())
+    #missing_files.extend(check_remonsterate())
 
     # Missing files are required for the randomizer to function properly, so it triggers a forced update
     if missing_files:
