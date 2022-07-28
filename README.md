@@ -7,7 +7,7 @@ a fork of SubtractionSoup's FF6 Beyond Chaos EX Randomizer
 a fork of Abyssonym's FF6 Beyond Chaos Randomizer
 <p>
 
-__Version__: 4.0.2
+__Version__: 4.0.3
 <br />
 __Date__: 2022-07-27
 <br />
