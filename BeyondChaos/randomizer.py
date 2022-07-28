@@ -70,20 +70,15 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-4.0.2"
+VERSION = "CE-4.0.3"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
 TEST_SEED = "4|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis remonsterate|1603333081"
-#XILHART STRIKER SEED = "4|normal|bcdefgijklmnopqrstuwyzmakeover partyparty frenchvanilla dancingmaduin madworld expboost:5.0 gpboost:5.0 mpboost:5.0 dancelessons swdtechspeed:faster alasdraco johnnyachaotic questionablecontent nomiabs desperation|1658691527"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-#STRANGEJOURNEY TEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz strangejourney scenarionottaken easymodo dearestmolulu canttouchthis|1649633498"
-#TEST_SEED = "3|normal|bcdefghijklmnopqrstyz partyparty novanilla  electricboogaloo masseffect randombosses supernatural alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo dearestmolulu airship|1652122298"
-#strikerTEST_SEED = "3|normal|bcdefghijklmnopqrstuwyz partyparty frenchvanilla electricboogaloo randombosses alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dancingmaduin questionablecontent removeflashing dancelessons swdtechspeed:random|1653854831"
-#TEST_SEED = "4|katn|bcefghimnopqstuwyz partyparty makeover electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing dancelessons easymodo canttouchthis dearestmolulu thescenarionottaken|1649808314"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
