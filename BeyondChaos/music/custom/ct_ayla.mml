@@ -44,8 +44,8 @@
 
 #def 6i=   |6 %e1
 #def 6o=   o5
-#def 6v=   v115
-#def 6f= v1,115
+#def 6v=   v100
+#def 6f= v1,100
 
 #drum "a"= 3a |2 %e1 p64
 #drum "b"= 5a |5 %e1 p64

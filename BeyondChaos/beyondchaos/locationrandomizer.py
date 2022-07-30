@@ -21,31 +21,40 @@ maplocations_override = {}
 
 
 def init():
-    for line in open(MAP_NAMES_TABLE):
-        key, value = tuple(line.strip().split(':'))
-        key = int(key, 0x10)
-        mapnames[key] = value
-    for line in open(MAP_BATTLE_BG_TABLE):
-        a, b = tuple(line.strip().split())
-        mapbattlebgs[int(a)] = int(b, 0x10)
-    for line in open(LOCATION_MAPS_TABLE):
-        a, b, *c = line.strip().split(':')
-        b = b.strip().strip(',').split(',')
-        locids = []
-        for locid in b:
-            if '+' in locid:
-                l = int(locid.strip('+'))
-                locids.extend([l, l + 1, l + 2, l + 3])
-            else:
-                locids.append(int(locid))
+    try:
+        for line in open(MAP_NAMES_TABLE):
+            key, value = tuple(line.strip().split(':'))
+            key = int(key, 0x10)
+            mapnames[key] = value
+    except FileNotFoundError:
+        print("Error: " + MAP_NAMES_TABLE + " was not found in the tables folder.")
+    try:
+        for line in open(MAP_BATTLE_BG_TABLE):
+            a, b = tuple(line.strip().split())
+            mapbattlebgs[int(a)] = int(b, 0x10)
+    except FileNotFoundError:
+        print("Error: " + MAP_BATTLE_BG_TABLE + " was not found in the tables folder.")
+    try:
+        for line in open(LOCATION_MAPS_TABLE):
+            a, b, *c = line.strip().split(':')
+            b = b.strip().strip(',').split(',')
+            locids = []
+            for locid in b:
+                if '+' in locid:
+                    l = int(locid.strip('+'))
+                    locids.extend([l, l + 1, l + 2, l + 3])
+                else:
+                    locids.append(int(locid))
 
-        if a not in maplocations_reverse:
-            maplocations_reverse[a] = []
-        for locid in sorted(locids):
-            maplocations[locid] = a
-            maplocations_reverse[a].append(locid)
-        if c:
-            maplocations_override[a] = c[0]
+            if a not in maplocations_reverse:
+                maplocations_reverse[a] = []
+            for locid in sorted(locids):
+                maplocations[locid] = a
+                maplocations_reverse[a].append(locid)
+            if c:
+                maplocations_override[a] = c[0]
+    except FileNotFoundError:
+        print("Error: " + LOCATION_MAPS_TABLE + " was not found in the tables folder.")
 
 
 init()

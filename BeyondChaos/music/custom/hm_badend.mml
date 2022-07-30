@@ -12,8 +12,8 @@
 
 #def pianoBaseVol= v140
 #def pianoFade=  v1,140 ## Keep in line with pianoBaseVol
-#def hornVol=    v60
-#def hornFade= v1,60 ## Keep in line with hornVol
+#def hornVol=    v52
+#def hornFade= v1,52 ## Keep in line with hornVol
 #def wrapUpRelease= %r20
 
 

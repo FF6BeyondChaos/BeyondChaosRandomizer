@@ -507,12 +507,14 @@ class ItemBlock:
         self.features['targeting'] = spell.targeting & 0xef
         self.mutate_name()
 
-    def get_element(self, elem_byte):
+    def get_element(self, elem_byte, as_array=False):
         ELEM_FLAGS = {e: 1 << i for i, e in
                       enumerate(["fire", "ice", "lightning", "poison", "wind", "pearl", "earth", "water"])}
-        s = ", ".join([e for e, v in ELEM_FLAGS.items() if v & elem_byte == v])
-
-        return s
+        s = [e for e, v in ELEM_FLAGS.items() if v & elem_byte == v]
+        if as_array:
+            return s
+        else:
+            return ", ".join(s)
 
     def mutate_elements(self):
         if self.is_consumable or self.is_tool:
@@ -529,27 +531,54 @@ class ItemBlock:
                 self.mutate_name()
                 elemcount += -1
             return elements
+        oldelems = self.features['elements']
+        oldabsorbs = self.features['elemabsorbs']
+        oldnulls = self.features['elemnulls']
+        oldweaks = self.features['elemweaks']
 
         self.features['elements'] = elemshuffle(self.features['elements'])
-        if self.is_weapon:
-            if self.features['elements']:
-                self.mutation_log["Elemental damage"] = self.get_element(self.features['elements'])
-        else:
-            if self.features['elements']:
-                self.mutation_log["Halves elemental damage"] = self.get_element(self.features['elements'])
-
+        if self.features['elements'] != oldelems:
+            if self.is_weapon:
+                new_elements = [element for element in self.get_element(self.features['elements'], True) if element not in self.get_element(oldelems, True)]
+                if new_elements:
+                    self.mutation_log["Gained Elemental Damage"] = ",".join(new_elements)
+                old_elements = [element for element in self.get_element(oldelems, True) if element not in self.get_element(self.features['elements'], True)]
+                if old_elements:
+                    self.mutation_log["Lost Elemental Damage"] = ",".join(old_elements)
+            else:
+                if self.features['elements']:
+                    new_elements = [element for element in self.get_element(self.features['elements'], True) if element not in self.get_element(oldelems, True)]
+                    if new_elements:
+                        self.mutation_log["Halves Elemental Damage"] = ",".join(new_elements)
+                    old_elements = [element for element in self.get_element(oldelems, True) if element not in self.get_element(self.features['elements'], True)]
+                    if old_elements:
+                        self.mutation_log["Lost Halving Elemental Damage"] = ",".join(old_elements)
         if self.is_weapon:
             return
-
         self.features['elemabsorbs'] = elemshuffle(self.features['elemabsorbs'])
-        if self.features['elemabsorbs']:
-            self.mutation_log["Absorbs elemental damage"] = self.get_element(self.features['elemabsorbs'])
+        if self.features['elemabsorbs'] != oldabsorbs:
+            new_absorbs = [element for element in self.get_element(self.features['elemabsorbs'], True) if element not in self.get_element(oldabsorbs, True)]
+            if new_absorbs:
+                self.mutation_log["Absorbs Elemental Damage"] = ",".join(new_absorbs)
+            old_absorbs = [element for element in self.get_element(oldabsorbs, True) if element not in self.get_element(self.features['elemabsorbs'], True)]
+            if old_absorbs:
+                self.mutation_log["Lost Elemental Absorption"] = ",".join(old_absorbs)
         self.features['elemnulls'] = elemshuffle(self.features['elemnulls'])
-        if self.features['elemnulls']:
-            self.mutation_log["Nulls elemental damage"] = self.get_element(self.features['elemnulls'])
+        if self.features['elemnulls'] != oldnulls:
+            new_nulls = [element for element in self.get_element(self.features['elemnulls'], True) if element not in self.get_element(oldnulls, True)]
+            if new_nulls:
+                self.mutation_log["Nulls Elemental Damage"] = ",".join(new_nulls)
+            old_nulls = [element for element in self.get_element(oldnulls, True) if element not in self.get_element(self.features['elemnulls'], True)]
+            if old_nulls:
+                self.mutation_log["Lost Elemental Nullification"] = ",".join(old_nulls)
         self.features['elemweaks'] = elemshuffle(self.features['elemweaks'])
-        if self.features['elemweaks']:
-            self.mutation_log["Weak to elemental damage"] = self.get_element(self.features['elemweaks'])
+        if self.features['elemweaks'] != oldweaks:
+            new_weaknesses = [element for element in self.get_element(self.features['elemweaks'], True) if element not in self.get_element(oldweaks, True)]
+            if new_weaknesses:
+                self.mutation_log["Weak To Elemental Damage"] = ",".join(new_weaknesses)
+            old_weaknesses = [element for element in self.get_element(oldweaks, True) if element not in self.get_element(self.features['elemweaks'], True)]
+            if old_weaknesses:
+                self.mutation_log["Lost Elemental Weakness"] = ",".join(old_weaknesses)
 
     def mutate_learning(self):
         if not self.is_armor and not self.is_relic:

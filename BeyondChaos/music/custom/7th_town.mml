@@ -1,0 +1,308 @@
+#TITLE Fortress City
+#ALBUM The 7th Saga
+#COMPOSER Norihiko Yamanuki
+#ARRANGED emberling
+
+#WAVE 0x20 0xA2 pan flute
+#WAVE 0x21 0x14 dulcimer
+#WAVE 0x22 0x50 acoustic bass
+#WAVE 0x23 0xA6 whistle
+#WAVE 0x24 0xA1 recorder
+#WAVE 0x25 0x36 guitar
+#WAVE 0x28 0x0E brush snare
+
+#def init= t117 %v50 %b0,70 %f0,0
+
+#def flutelead= |0 o5 'f'  %e1 p56 m32,18,215 %r7
+#def fluteharm= |4 o5 'f'  %e1 p16 m          %y0%s4%r7
+#def dulcilead= |5 o5 'd'  %e1 p76 m16,10,207 %r0
+#def dulciharm= |1 o5 'dh' %e1 p76 m          %r11
+#def dulcibass= |1 o5 'db' %e1 p76 m          %r0
+#def floorbass= |2 o5 'b'  %e0 p64 m          %y2%s3
+#def whistharm= |3 o5 'w'  %e1 p112m          %r6
+
+#def ff= v1,260
+#def f=  v260
+#def d=  v138
+#def dh= v110
+#def db= v110
+#def b=  v120
+#def w=  v36
+
+#cdef ~ %r23^%r0
+#def _= 'ff*v3,.10'^'f*v.20'
+
+#def drumvol= v136
+#drum "b"= 5a+ |8 p62 'drumvol*v.14' %e1  %a15
+#drum "c"= 5a+ |8 p62 'drumvol*v.145' %e1 %a15
+#drum "d"= 5a+ |8 p62 'drumvol*v.16' %e1  %a15
+#drum "e"= 5a+ |8 p62 'drumvol*v.18' %e1  %a15
+
+{1}
+'init' $
+## Original track 2
+'flutelead*v.20'
+l16 e8f+'_'g8a'_' b4^'_'f+8
+l16 g8f+'_'g8a'_' l8 b4.'_'
+l16 e4a4 g8f+8d8>a8
+l4 b2.'_'<
+## 4.20
+l16 e8f+'_'g8a'_' b4^'_'f+8
+l16 g8f+'_'g8a'_' l8 b4.'_'
+l16 e4a4 g8f+8d8>a8<
+l16 e1
+## 8.40
+l24 >g+8b8<c8d8  e4d12'_'c12'_'
+l16 c8>b'_'<c4  l8 ^4.'_'
+l16 >a4<d4  c8>b8a4<
+l16 c4^'_'>ba  l8 b4.'_'
+## 12.59
+g4<c4>  b8a8g4
+a1
+f+4b4   a8g8f+4
+l8 gef+g ab<cd
+## 16.78
+l8 c>b<cd  l24 e8c12'_'d12'_'e8
+l8 f+4a4  ^2
+l8 ^bag  f+edf+
+   g1
+## 20.97
+l8 '_'>b<cd  e2
+l8 '_'d+ef+  >b2
+l8 '_'<agf+  e>b<d+f+
+l8 e4g4  ^4.'_'
+## 24.116
+l8 c+>ab<c+  d+eff+
+l8 >b2< b2
+l8 ^2. 'ff*v3,.10'^'ff*v3,0'^
+;
+
+{2} $
+## Original track 4
+'dulcibass*v.57-o1' l16
+e8<ererer> e8<ererer>
+d8<drdrdr> g8brbrbr
+c8ererer d8f+rf+rf+r
+g8brbrbr g8brf+8br
+## 4.20
+e8<ererer> e8<ererer>
+d8f+rf+rf+r g8brbrbr
+c8ererer d8f+rf+rf+r
+g8<ererer> g8<er>e8<er>
+## 8.40
+g+8brbrbr g+8brbrbr
+a8<ererer> a8<er>g8<er>
+f+8ararar f+8ardrar
+g8brbrbr g8brg8br
+## 12.59
+c8ererer c8ererer
+d+8f+rf+rf+r d+8f+rf+8f+r
+d+8brbrbr d+8f+rf+rf+r
+e8<ererer> d8<drdrdr>
+## 16.78
+c8<crcrcr> c8grg8gr
+d8f+rf+rf+r d8ararar
+d8f+rf+rf+r d8ararar
+g8brbrbr g8<drdrdr>
+## 20.97
+c8ererer c8grgrgr
+d+8f+rf+rf+r d+8brbrbr
+d+8f+rf+rf+r d+8<d+rd+rd+r>
+e8<ererer> d8<drdrdr>
+## 24.116
+c+8<c+rc+rc+r> c+8<c+rc+rc+r>
+>b8<brbrbr >b8<br<c+8>br
+<d+8>br<f+8>br <b8r8f+8r8
+;
+
+{3} $
+## Original track 6
+'floorbass*v.80-o1' l16
+e4^r<er e4^r>e8
+d4r8d8 g8<g8>f+8<f+8>
+c4r8c12r24 d4^rd8
+g4^r<gr> g8<g8>f+8<f+8>
+## 4.20
+e4^r<er e4^r>e8
+d4r8d8 g8<g8>f+8<f+8>
+c4r8c12r24 d4^rd8
+e4^rer e4b4
+## 8.40
+g+4^rg+r  g+4<e4>
+a4^rar  g4e4
+f+4^rf+r  d4f+4
+g4^rd8  >b4<d4
+## 12.59
+c4^rc8  >a4<c4
+d+4^rf+r  b4d+4
+>b4^rbr< d+4f+4
+e4^rer  d4^rdr
+## 16.78
+c4^rcr  >a4<c4
+d4^rf+.r32 <d4>a4
+f+4^rf+r  d4a4
+g4^rg8  >a4<d4
+## 20.97
+c4^rer  e4c4
+d+4^rf+r  f+4>b4<
+b4^rf+8  d+4f+4
+e4^re8  d4^rd8
+## 24.116
+c+4^rc+r  c+2
+>b4^rbr b2<
+b4.>b.r32 b4<b4
+;
+
+{4} $ l16
+"d8bbe8d8 d8c8e8d8"
+"d8dde8d8 d8d8d8d8"
+;
+
+{5} &2r $
+## Original track 3
+'dulciharm*v.52' l4
+b1
+f+aba
+g2a2
+<d2>ba
+## 4.20
+g1
+^f+da
+g2a2
+b1
+## 8.40
+e1
+a2g2
+f+4d4>a4<d4
+g1
+## 12.59
+e1
+f+1
+>b2<f+4d+4
+e2d2
+## 16.78
+c2.>a4<
+f+4d4  a4f+4
+d2 a4f+4
+g2 b4g4
+## 20.97
+e1
+f+1
+b2f+2
+e4g4 d2
+## 24.116
+c+2>a2
+b2<d+2
+>b4<d+4 f+4d+4
+;
+
+{6} $
+## Original track 5
+'fluteharm*v.16-o1'
+e2>b2 <d2>g4f+4
+c2d2  g1
+## 4.20
+<e2>b2 <d2>g4f+4
+c2d2 e1
+## 8.40
+g+1
+a2g2
+f+2d2
+g2.f+4
+## 12.59
+c1
+d+2f+2
+b2f+2
+e2g2
+## 16.78
+a1
+<d2>a2
+f+2d2
+g1
+## 20.97
+c1
+f+1
+b2f+2
+e2d2
+## 24.116
+c+1
+b1
+^1
+;
+
+{7} &1r $
+## Original track 1
+'dulcilead*v.65'
+l8 ef+ga l8  b~'d*v.42'b'd*v.65'f+
+l8 gf+ga l12 b6~ 'd*v.42'b6~'d*v.65'
+l8 e4a4 gf+d>a
+l8 b~'d*v.42'b~'d*v.32'b~'d*v.20'b~
+## 4.20
+'d*v.65'<
+l8 ef+ga l8  b~'d*v.42'b'd*v.65'f+
+l8 gf+ga l12 b6~ 'd*v.42'b6~'d*v.65'
+l8 e4a4 gf+d>a<
+l8 e~'d*v.42'e~'d*v.32'e~'d*v.20'e~'d*v.65'
+## 8.40
+l8 >g+b<cd           l24 e4d12~c12~
+l24 c8>b12~< l8 c~    l8 'd*v.42'c~'d*v.32'c~'d*v.65'
+l4 >a<d               l8 c>ba4<
+l16 c4.>ba            l8 b~'d*v.42'b~'d*v.65'
+## 12.59
+l4 g<c>          l8 bag4
+l8 a~'d*v.42'a~  l8 'd*v.32'a~'d*v.20'a~'d*v.65'
+l4 f+b           l8 agf+4
+l16 ggeef+f+gg  l16 aabb<ccdd
+## 16.78
+l16 c~>b~<c~d~  e~c~d~e~
+l8 f+4a~  'd*v.42'a~'d*v.32'a~'d*v.65'
+l8 abag  f+edf+
+l8 g~'d*v.42'g~  'd*v.32'g~'d*v.20'g~
+## 20.97
+l8 ^'d*v.65'>b<cd  e~'d*v.42'e~
+l8 ^'d*v.65'd+ef+  >b~'d*v.42'b~
+l8 ^'d*v.65'<agf+  e>b<d+f+
+l8 e4g~  'd*v.42'g~'d*v.32'g~'d*v.65'
+## 24.116
+l8 c+>ab<c+  d+eff+
+l8 >b~'d*v.32'b~<  'd*v.65'b~'d*v.32'b~'d*v.65'
+l8 b~'d*v.42'b~  'd*v.32'b~'d*v.20'b~
+;
+
+{8} $
+## Original track 3
+'whistharm*v.52' l4
+b1
+f+aba
+g2a2
+<d2>b4a4
+## 4.20
+g1
+^f+da
+g2a2
+b1
+## 8.40
+e1
+a2g2
+f+4d4>a4<d4
+g1
+## 12.59
+e1
+f+1
+>b2<f+4d+4
+e2d2
+## 16.78
+c2.>a4<
+f+4d4  a4f+4
+d2 a4f+4
+g2 b4g4
+## 20.97
+e1
+f+1
+b2f+2
+e4g4 d2
+## 24.116
+c+2>a2
+b2<d+2
+>b4<d+4 f+4d+4
+;

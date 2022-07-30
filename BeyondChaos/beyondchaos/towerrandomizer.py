@@ -39,7 +39,10 @@ FIXED_ENTRANCES, REMOVE_ENTRANCES = [], []
 
 locexchange = {}
 old_entrances = {}
-towerlocids = [int(line.strip(), 0x10) for line in open(TOWER_LOCATIONS_TABLE)]
+try:
+    towerlocids = [int(line.strip(), 0x10) for line in open(TOWER_LOCATIONS_TABLE)]
+except FileNotFoundError:
+    print("Error: " + TOWER_LOCATIONS_TABLE + " was not found in the tables folder.")
 map_bans = []
 newfsets = {}
 clusters = None

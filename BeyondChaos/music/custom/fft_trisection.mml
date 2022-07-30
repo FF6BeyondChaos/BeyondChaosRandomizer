@@ -23,8 +23,8 @@
 #def snareVol=         v80
 #def brassMelodyVol=   v65
 #def backBrassVol=     v90
-#def leadHornVol=      v80
-#def hornAccentVol=    v127
+#def leadHornVol=      v68
+#def hornAccentVol=    v108
 #def deepBrassVol=     v90
 #def deepBrassLateVol= v120
 #def leadBrassVol=     v64 ## 67 with a velocity of 123

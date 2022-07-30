@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-import configparser
-import multiprocessing
-from random import Random
+
 import os
 import re
 from shutil import copyfile
@@ -9,6 +7,7 @@ import sys
 from sys import argv
 from time import time, sleep, gmtime
 from typing import BinaryIO, Callable, Dict, List, Set, Tuple
+from random import Random
 
 from . import character, options, customthreadpool, locationrandomizer
 from .monsterrandomizer import MonsterBlock
@@ -31,7 +30,7 @@ from .itemrandomizer import (reset_equippable, get_ranked_items, get_item,
                              reset_cursed_shield, unhardcode_tintinabar,
                              ItemBlock)
 from .locationrandomizer import (get_locations, get_location, get_zones,
-                                 get_npcs, randomize_forest)
+                                get_npcs, randomize_forest, NPCBlock, EventBlock)
 from .menufeatures import (improve_item_display, improve_gogo_status_menu,
                            improve_rage_menu, show_original_names,
                            improve_dance_menu, y_equip_relics, fix_gogo_portrait)
@@ -46,7 +45,8 @@ from .patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                       death_abuse, no_kutan_skip, show_coliseum_rewards,
                       cycle_statuses, no_dance_stumbles, fewer_flashes,
                       change_swdtech_speed, change_cursed_shield_battles,
-                      sprint_shoes_break, title_gfx, improved_party_gear, apply_namingway)
+                      sprint_shoes_break, title_gfx, apply_namingway,
+                      improved_party_gear, patch_doom_gaze)
 from .shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from .sillyclowns import randomize_passwords, randomize_poem
 from .skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -54,15 +54,15 @@ from .skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
                               get_ranked_spells, get_spell)
 from .towerrandomizer import randomize_tower
 from .utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
-                               FINAL_BOSS_AI_TABLE, SKIP_EVENTS_TABLE, DANCE_NAMES_TABLE,
-                               DIVERGENT_TABLE,
-                               get_long_battle_text_pointer,
-                               Substitution, shorttexttable, name_to_bytes,
-                               hex2int, int2bytes, read_multi, write_multi,
-                               generate_swapfunc, shift_middle, get_palette_transformer,
-                               battlebg_palettes, set_randomness_multiplier,
-                               mutate_index, utilrandom as random, open_mei_fallback,
-                               AutoLearnRageSub)
+                    FINAL_BOSS_AI_TABLE, SKIP_EVENTS_TABLE, DANCE_NAMES_TABLE,
+                    DIVERGENT_TABLE,
+                    get_long_battle_text_pointer,
+                    Substitution, shorttexttable, name_to_bytes,
+                    hex2int, int2bytes, read_multi, write_multi,
+                    generate_swapfunc, shift_middle, get_palette_transformer,
+                    battlebg_palettes, set_randomness_multiplier,
+                    mutate_index, utilrandom as random, open_mei_fallback,
+                    AutoLearnRageSub)
 from .wor import manage_wor_recruitment, manage_wor_skip
 from ..remonsterate.remonsterate import remonsterate
 
@@ -196,7 +196,8 @@ def rewrite_title(fout, text):
     fout.seek(0xFFC0)
     fout.write(bytes(text, encoding='ascii'))
     fout.seek(0xFFDB)
-    fout.write(bytes([int(VERSION)]))
+    # Regex gets the first number in the VERSION - the major version number
+    fout.write(bytes([int(re.search(r'\d', VERSION).group())]))
 
 
 def rewrite_checksum(outfile):
@@ -289,8 +290,13 @@ class FreeBlock:
 
 
 def get_appropriate_freespace(freespaces: List[FreeBlock],
-                              size: int) -> FreeBlock:
-    candidates = [c for c in freespaces if c.size >= size]
+                              size: int,
+                              minimum_address: int = None) -> FreeBlock:
+    if minimum_address:
+        candidates = [c for c in freespaces if c.size >= size and c.start >= minimum_address]
+    else:
+        candidates = [c for c in freespaces if c.size >= size]
+
     if not candidates:
         raise Exception("Not enough free space")
 
@@ -1884,29 +1890,52 @@ def set_lete_river_encounters(fout):
     manage_lete_river_sub.set_location(0xB048F)
     manage_lete_river_sub.write(fout)
     # call subroutine CB0498 (4 bytes)
-    battle_calls = [0xB066B,
-                    0xB0690,
-                    0xB06A4,
-                    0xB06B4,
-                    0xB06D0,
-                    0xB06E1,
-                    0xB0704,
-                    0xB071B,
-                    0xB0734,
-                    0xB0744,
-                    0xB076A,
-                    0xB077C,
-                    0xB07A0,
-                    0xB07B6,
-                    0xB07DD,
-                    0xB0809,
-                    0xB081E,
-                    0xB082D,
-                    0xB084E,
-                    0xB0873,
-                    0xB08A8,
-                    0xB09E0,
-                    0xB09FC]
+    if Options_.is_code_active('thescenarionottaken'):
+        battle_calls = [0xB066B,
+                        0xB0690,
+                        0xB06A4,
+                        0xB06B4,
+                        0xB06D0,
+                        0xB06E1,
+                        0xB0704,
+                        0xB071B,
+                        0xB0734,
+                        0xB0744,
+                        0xB076A,
+                        0xB077C,
+                        0xB07A0,
+                        0xB07B6,
+                        0xB07DD,
+                        0xB0809,
+                        0xB081E,
+                        0xB082D,
+                        0xB084E,
+                        0xB0873,
+                        0xB08A8,]
+    else:
+        battle_calls = [0xB066B,
+                        0xB0690,
+                        0xB06A4,
+                        0xB06B4,
+                        0xB06D0,
+                        0xB06E1,
+                        0xB0704,
+                        0xB071B,
+                        0xB0734,
+                        0xB0744,
+                        0xB076A,
+                        0xB077C,
+                        0xB07A0,
+                        0xB07B6,
+                        0xB07DD,
+                        0xB0809,
+                        0xB081E,
+                        0xB082D,
+                        0xB084E,
+                        0xB0873,
+                        0xB08A8,
+                        0xB09E0,
+                        0xB09FC]
 
     for addr in battle_calls:
         # call subroutine `addr` (4 bytes)
@@ -2170,6 +2199,10 @@ def manage_monster_appearance(sourcefile, fout, monsters, preserve_graphics):
 
     return mgs
 
+def manage_doom_gaze(fout):
+    # patch is actually 98 bytes, but just in case
+    addr = get_appropriate_freespace(freespaces, 100)
+    patch_doom_gaze(fout)
 
 def manage_colorize_animations(fout):
     palettes = []
@@ -2614,7 +2647,7 @@ def manage_treasure(fout, sourcefile, outfile, monsters,
                 continue
             intermediate = wagers[b]
             if intermediate.itemid == 0x29:
-                return get_item(b)
+                return get_item(b), get_item(b)
             if intermediate in candidates:
                 continue
             if intermediate.itemid not in buyables:
@@ -2645,7 +2678,7 @@ def manage_treasure(fout, sourcefile, outfile, monsters,
     if not chain_start_item_found:
         # Get a list of shops that are relevant to the item type of the chain start item
         if chain_start_item.is_weapon:
-            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty == ["weapon", "misc"]]
+            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["weapons", "misc"]]
         elif chain_start_item.is_armor:
             filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["armor", "misc"]]
         elif chain_start_item.is_relic:
@@ -2690,6 +2723,10 @@ def manage_treasure(fout, sourcefile, outfile, monsters,
                                                          opponent_obj.display_name)
         log(s, section="colosseum")
 
+def manage_doom_gaze(fout):
+    # patch is actually 98 bytes, but just in case
+    patch_doom_gaze(fout)
+    set_dialogue(0x60, "<choice> (Lift-off)<line><choice> (Find Doom Gaze)<line><choice> (Not just yet)")
 
 def manage_chests(fout, locations):
     crazy_prices = Options_.is_code_active('madworld')
@@ -4149,10 +4186,37 @@ def namingway(fout):
 
     apply_namingway(fout)
 
-    npc = [n for n in get_npcs() if n.event_addr == 0x264FA][0]
-    npc.locid = 0xB
-    npc.x = 20
-    npc.y = 20
+    set_dialogue(0x4E, "Rename lead character?<line><choice> (Yes)<line><choice> (No)")
+
+    if not Options_.is_code_active('ancientcave'):
+
+        wor_airship = get_location(0xC)
+        wor_namer = NPCBlock(pointer=None, locid=wor_airship.locid)
+        attributes = {
+            "graphics": 0x24, "palette": 0, "x": 14, "y": 45,
+            "show_on_vehicle": False, "speed": 0,
+            "event_addr": 0x209AB, "facing": 2,
+            "no_turn_when_speaking": False, "layer_priority": 0,
+            "special_anim": 0,
+            "memaddr": 0, "membit": 0, "bg2_scroll": 0,
+            "move_type": 0, "sprite_priority": 0, "vehicle": 0, "npcid": 15}
+        for key, value in attributes.items():
+            setattr(wor_namer, key, value)
+        wor_airship.npcs.append(wor_namer)
+
+        wob_airship = get_location(0x7)
+        wob_namer = NPCBlock(pointer=None, locid=wob_airship.locid)
+        attributes = {
+            "graphics": 0x24, "palette": 0, "x": 39, "y": 12,
+            "show_on_vehicle": False, "speed": 0,
+            "event_addr": 0x209AB, "facing": 2,
+            "no_turn_when_speaking": False, "layer_priority": 0,
+            "special_anim": 0,
+            "memaddr": 0, "membit": 0, "bg2_scroll": 0,
+            "move_type": 0, "sprite_priority": 0, "vehicle": 0, "npcid": 22}
+        for key, value in attributes.items():
+            setattr(wob_namer, key, value)
+        wob_airship.npcs.append(wob_namer)
 
 def manage_clock(fout):
     hour = random.randint(0, 5)
@@ -4764,11 +4828,10 @@ def randomize(state, **kwargs):
             dummy_item(dirk, state.sourcefile)
             assert not dummy_item(dirk, state.sourcefile)
     if Options_.random_enemy_stats and Options_.random_treasure and Options_.random_character_stats:
-        if random.randint(1, 10) != 10:
-            rename_card = get_item(231)
-            if rename_card is not None:
-                rename_card.become_another(tier="low")
-                rename_card.write_stats(state.fout)
+        rename_card = get_item(231)
+        if rename_card is not None:
+            rename_card.become_another(tier="low")
+            rename_card.write_stats(state.fout)
 
             weapon_anim_fix = Substitution()
             weapon_anim_fix.set_location(0x19DB8)
@@ -4787,7 +4850,10 @@ def randomize(state, **kwargs):
         manage_items(state.fout, items, changed_commands=changed_commands)
         buy_owned_breakable_tools(state.fout)
         improve_item_display(state.fout)
+        improve_rage_menu(state.fout)
     state.reseed()
+    
+    manage_doom_gaze(state.fout)
 
     if Options_.random_enemy_stats:
         aispaces = manage_final_boss(state.fout, aispaces)
@@ -5126,14 +5192,56 @@ def randomize(state, **kwargs):
             for result in remonsterate_results:
                 log(str(result) + '\n', section='remonsterate')
 
-    if not Options_.is_code_active('sketch'):
+    if not Options_.is_code_active('sketch') or Options_.is_code_active('remonsterate'):
+
+        #Original C2 sketch fix by Assassin, prevents bad pointers
+
         sketch_fix_sub = Substitution()
         sketch_fix_sub.set_location(0x2F5C6)
         sketch_fix_sub.bytestring = bytes([0x80, 0xCA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0x4C, 0x09, 0xF8,
                                            0xA0, 0x00, 0x28, 0x22, 0x09, 0xB1, 0xC1, 0xA9, 0x01, 0x1C, 0x8D, 0x89, 0xA0,
                                            0x03, 0x00,
                                            0xB1, 0x76, 0x0A, 0xAA, 0xC2, 0x20, 0xBD, 0x01, 0x20, 0x90, 0x02,
-                                           0x7B, 0x3A, 0xAA, 0x7B, 0xE2, 0x20, 0x22, 0xD1, 0x24, 0xC1, 0x80, 0xD7, ])
+                                           0x7B, 0x3A, 0xAA, 0x7B, 0xE2, 0x20, 0x22, 0xD1, 0x24, 0xC1, 0x80, 0xD7,])
+        sketch_fix_sub.write(state.fout)
+
+        sketch_fix_sub.set_location(0x12456)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x18, 0xA0, 0x00, 0x00,
+                                       0x86, 0x10, 0xA2, 0x3F, 0xAE,])
+        sketch_fix_sub.write(state.fout)
+
+        #Additional C1 sketch animation fix by Assassin, handles bad draw instruction
+
+        sketch_fix_sub.set_location(0x12456)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x18, 0xA0, 0x00, 0x00,
+                                           0x86, 0x10, 0xA2, 0x3F, 0xAE,])
+        sketch_fix_sub.write(state.fout)
+
+        sketch_fix_sub.set_location(0x1246C)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24,])
+        sketch_fix_sub.write(state.fout)
+
+        sketch_fix_sub.set_location(0x12484)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x14, 0xA0, 0x00, 0x24, 0x80, 0xD0, 0xDA, 0x86, 0x10,
+                                           0x20, 0x20, 0x20, 0x20, 0xF5, 0x24, 0x20, 0xE5, 0x24, 0x20, 0xA5, 0x22, 0xFA, 0x60,
+                                           0xEA, 0xEA, 0xEA, 0xEA, 0xEA,])
+        sketch_fix_sub.write(state.fout)
+
+        sketch_fix_sub.set_location(0x124A9)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24,])
+        sketch_fix_sub.write(state.fout)
+
+        sketch_fix_sub.set_location(0x124D1)
+        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xE0, 0xFF, 0xFF, 0xD0, 0x03,
+                                           0x20, 0x20, 0x20, 0xA2, 0x00, 0x20, 0x20, 0x5C, 0x24, 0x6B, 0xEA, 0x6B,])
+        sketch_fix_sub.write(state.fout)
+
+        sketch_fix_sub.set_location(0x124F9)
+        sketch_fix_sub.bytestring = bytes(
+            [0x1A, 0xF0, 0x01, 0x3A, 0x0A, 0x0A, 0x18, 0x65, 0x10, 0xAA, 0xBF, 0x02, 0x70, 0xD2, 0xEB, 0x29, 0xFF, 0x03,
+             0x0A, 0x0A, 0x0A, 0x0A, 0x8D, 0x69, 0x61, 0xBF, 0x00, 0x70, 0xD2, 0x29, 0xFF, 0x7F, 0x8D, 0xA8, 0x81,
+             0x7B, 0xBF, 0x01, 0x70, 0xD2, 0xE2, 0x20, 0x0A, 0xEB, 0x6A, 0x8D, 0xAC, 0x81,
+             0x0A, 0x0A, 0x0A, 0x7B, 0x2A, 0x8D, 0xAB, 0x81, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,])
         sketch_fix_sub.write(state.fout)
 
     has_music = Options_.is_any_code_active(['johnnydmad', 'johnnyachaotic'])
@@ -5263,7 +5371,8 @@ def randomize(state, **kwargs):
         manage_spookiness(state.fout)
 
     if Options_.is_code_active('dancelessons'):
-        no_dance_stumbles(stated.fout)
+        no_dance_stumbles(state.fout)
+
     banon_life3(state.fout)
     allergic_dog(state.fout)
     y_equip_relics(state.fout)
@@ -5273,6 +5382,7 @@ def randomize(state, **kwargs):
     fix_flash_and_bioblaster(state.fout)
     title_gfx(state.fout)
     improved_party_gear(state.fout)
+    manage_doom_gaze(state.fout)
 
     if Options_.is_code_active("swdtechspeed"):
         swdtech_speed = Options_.get_code_value('swdtechspeed')

@@ -21,10 +21,10 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
 from . import randomizer
 from . import utils
 from . import customthreadpool
-from .config import (readFlags, writeFlags)
-from .options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES)
-#from .update import (update, update_needed)
-from .update import update_needed
+from .config import (read_flags, write_flags, validate_files, are_updates_hidden, updates_hidden,
+                     get_input_path, get_output_path, save_version, check_player_sprites, check_remonsterate)
+from .options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES, makeover_groups)
+from .update import get_updater
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. "
@@ -141,22 +141,32 @@ class BingoPrompts(QDialog):
         return self.spells or self.items or self.monsters or self.abilities
 
 
-def update_bc():
-    update_message = QMessageBox()
-    update_message.setWindowTitle("Beyond Chaos Updater")
-    update_message.setText("Beyond Chaos will check for updates to the core randomizer, character sprites, "
-                           "monster sprites. If updates are performed, BeyondChaos.exe will automatically close.")
-    update_message.setStandardButtons(QMessageBox.Cancel | QMessageBox.Ok)
-    button_clicked = update_message.exec()
-    if button_clicked == QMessageBox.Ok:
+def update_bc(wait=False, suppress_prompt=False):
+    run_updater = False
+    if not suppress_prompt:
+        update_prompt = QMessageBox()
+        update_prompt.setWindowTitle("Beyond Chaos Updater")
+        update_prompt.setText("Beyond Chaos will check for updates to the core randomizer, character sprites, and "
+                              "monster sprites. If updates are performed, BeyondChaos.exe will automatically close.")
+        update_prompt.setStandardButtons(QMessageBox.Cancel | QMessageBox.Ok)
+        update_prompt_button_clicked = update_prompt.exec()
+        if update_prompt_button_clicked == QMessageBox.Ok:
+            run_updater = True
+
+    if run_updater or suppress_prompt:
+        updates_hidden(False)
+        print("Starting Beyond Chaos Updater...\n")
         args = ["-pid " + str(os.getpid())]
         os.system('cls' if os.name == 'nt' else 'clear')
-        print("Starting Beyond Chaos Updater...\n")
         try:
-            subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
+            update_process = subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
+            if wait:
+                update_process.wait()
         except FileNotFoundError:
             get_updater()
-            subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
+            update_process = subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
+            if wait:
+                update_process.wait()
 
 
 class Window(QMainWindow):
@@ -173,7 +183,7 @@ class Window(QMainWindow):
         # values to be sent to Randomizer
         self.romText = ""
         self.romOutputDirectory = ""
-        self.version = "3"
+        self.version = "CE-4.0.3"
         self.mode = "normal"
         self.seed = ""
         self.flags = []
@@ -272,17 +282,17 @@ class Window(QMainWindow):
         # build the UI
         self.createLayout()
 
-        previousRomPath = ""
-        previousOutputDirectory = ""
+        previousRomPath = get_input_path()
+        previousOutputDirectory = get_output_path()
 
-        try:
-            config = configparser.ConfigParser()
-            config.read('bcce.cfg')
-            if 'ROM' in config:
-                previousRomPath = config['ROM']['Path']
-                previousOutputDirectory = config['ROM']['Output']
-        except (IOError, KeyError):
-            pass
+        # try:
+        #     config = configparser.ConfigParser()
+        #     config.read('bcce.cfg')
+        #     if 'ROM' in config:
+        #         previousRomPath = config['ROM']['Path']
+        #         previousOutputDirectory = config['ROM']['Output']
+        # except (IOError, KeyError):
+        #     pass
 
         self.romText = previousRomPath
         self.romOutputDirectory = previousOutputDirectory
@@ -298,17 +308,23 @@ class Window(QMainWindow):
         file_menu.addAction("Quit", App.quit)
         self.menuBar().addMenu(file_menu)
 
-        self.menuBar().addAction("Update", update_bc)
+        menu_separator = self.menuBar().addMenu("|")
+        menu_separator.setEnabled(False)
+
+        if not randomizer.BETA and validation_result:
+            self.menuBar().addAction("Update Available", update_bc)
+        else:
+            self.menuBar().addAction("Check for Updates", update_bc)
 
         # Primary Vertical Box Layout
         vbox = QVBoxLayout()
 
-        titleLabel = QLabel("Beyond Chaos Randomizer")
+        title_label = QLabel("Beyond Chaos Randomizer")
         font = QtGui.QFont("Arial", 24, QtGui.QFont.Black)
-        titleLabel.setFont(font)
-        titleLabel.setAlignment(QtCore.Qt.AlignCenter)
-        titleLabel.setMargin(10)
-        vbox.addWidget(titleLabel)
+        title_label.setFont(font)
+        title_label.setAlignment(QtCore.Qt.AlignCenter)
+        title_label.setMargin(10)
+        vbox.addWidget(title_label)
 
         # rom input and output, seed input, generate button
         vbox.addWidget(self.GroupBoxOneLayout())
@@ -568,6 +584,10 @@ class Window(QMainWindow):
                         f"{flagname}  -  {flagdesc['explanation']}",
                         flagname
                     )
+                    if (flagname == "remonsterate" and not len(check_remonsterate()) == 0) or\
+                       (flagname == "makeover" and not len(check_player_sprites()) == 0):
+                        cbox.setEnabled(False)
+
                     self.checkBoxes.append(cbox)
                     tablayout.addWidget(cbox, currentRow, 1, 1, 2)
                     cbox.clicked.connect(lambda checked: self.flagButtonClicked())
@@ -576,7 +596,6 @@ class Window(QMainWindow):
                         nbox = QDoubleSpinBox()
                     else:
                         nbox = QSpinBox()
-
 
                     if flagname == "cursepower":
                         nbox.setMinimum(0)
@@ -805,29 +824,31 @@ class Window(QMainWindow):
         for t in self.tablist:
             children.extend(t.children())
         for child in children:
-            for v in values:
-                v = str(v).lower()
-                if type(child) == FlagCheckBox and v == child.value:
-                    child.setChecked(True)
-                    self.flags.append(v)
-                elif type(child) in [QSpinBox] and str(v).startswith(child.text.lower()):
-                    if ":" in v:
-                        try:
-                            child.setValue(int(str(v).split(":")[1]))
-                            self.flags.append(v)
-                        except ValueError:
-                            pass
-                elif type(child) in [QDoubleSpinBox] and str(v).startswith(child.text.lower()):
-                    if ":" in v:
-                        try:
-                            child.setValue(float(str(v).split(":")[1]))
-                            self.flags.append(v)
-                        except ValueError:
-                            pass
-                elif type(child) in [QComboBox] and str(v).startswith(child.text.lower()):
-                    if ":" in v:
-                        index_of_value = child.findText(str(v).split(":")[1], QtCore.Qt.MatchFixedString)
-                        if index_of_value > 0:
+            if child.isEnabled():
+                for v in values:
+                    v = str(v).lower()
+                    if type(child) == FlagCheckBox and v == child.value:
+                        child.setChecked(True)
+                        self.flags.append(v)
+                    elif type(child) in [QSpinBox] and str(v).startswith(child.text.lower()):
+                        if ":" in v:
+                            try:
+                                child.setValue(int(str(v).split(":")[1]))
+                                self.flags.append(v)
+                            except ValueError:
+                                pass
+                    elif type(child) in [QDoubleSpinBox] and str(v).startswith(child.text.lower()):
+                        if ":" in v:
+                            try:
+                                value = float(str(v).split(":")[1])
+                                if value >= 0:
+                                    child.setValue(value)
+                                    self.flags.append(v)
+                            except ValueError:
+                                pass
+                    elif type(child) in [QComboBox] and str(v).startswith(child.text.lower()):
+                        if ":" in v:
+                            index_of_value = child.findText(str(v).split(":")[1], QtCore.Qt.MatchFixedString)
                             child.setCurrentIndex(index_of_value)
                             self.flags.append(v)
         self.updateFlagString()
@@ -887,7 +908,7 @@ class Window(QMainWindow):
             self.GamePresets[text] = (
                     self.flagString.text() + "|" + self.mode
             )
-            writeFlags(
+            write_flags(
                 text,
                 (self.flagString.text() + "|" + self.mode)
             )
@@ -902,7 +923,7 @@ class Window(QMainWindow):
             self.presetBox.setCurrentIndex(index)
 
     def loadSavedFlags(self):
-        flagset = readFlags()
+        flagset = read_flags()
         if flagset != None:
             for text, flags in flagset.items():
                 self.GamePresets[text] = flags
@@ -1299,7 +1320,7 @@ class Window(QMainWindow):
                         }
                         # pool = multiprocessing.Pool()
                         pool = customthreadpool.NonDaemonPool(1)
-                        x = pool.apply_async(func=randomize, kwds=kwargs)
+                        x = pool.apply_async(func=randomizer.randomize, kwds=kwargs)
                         x.get()
                         pool.close()
                         pool.join()
@@ -1378,7 +1399,6 @@ class Window(QMainWindow):
             #   flag value is true
             for c in children:
                 value = c.value
-                # print(value + str(d[value]['checked']))
                 if d[value]['checked']:
                     c.setProperty('checked', True)
                 else:
@@ -1386,7 +1406,7 @@ class Window(QMainWindow):
 
     def updateRomOutputPlaceholder(self, value):
         try:
-            self.romOutput.setPlaceholderText(os.path.dirname(value))
+            self.romOutput.setPlaceholderText(os.path.dirname(os.path.normpath(value)))
         except ValueError:
             pass
 
@@ -1399,10 +1419,94 @@ def run_gui():
         "Loading GUI, checking for config file, "
         "updater file and updates please wait."
     )
+    App = QApplication(sys.argv)
     try:
-        if not update_needed():
-            window = Window()
-            time.sleep(3)
-            sys.exit(App.exec())
-    except Exception:
+        if not randomizer.BETA:
+            validation_result, required_update = validate_files()
+            first_time_setup = False
+            if required_update and 'config.ini' in validation_result:
+                first_time_setup = True
+            if required_update or (validation_result and not are_updates_hidden()):
+                update_message = QMessageBox()
+                if first_time_setup:
+                    update_message.setIcon(QMessageBox.Information)
+                    update_message.setWindowTitle("First Time Setup")
+                    update_message.setText("<b>Welcome to Beyond Chaos Community Edition!</b>" +
+                                           "<br>" +
+                                           "<br>" +
+                                           "As part of first time setup, "
+                                           "we need to download some required files and folders."
+                                           "<br>" +
+                                           "<br>" +
+                                           "Press OK to launch the updater to download the required files."
+                                           "<br>" +
+                                           "Press Close to exit the program.")
+                elif required_update:
+                    update_message.setIcon(QMessageBox.Warning)
+                    update_message.setWindowTitle("Missing Required Files")
+                    update_message.setText("Files that are required for the randomizer to function properly are missing "
+                                           "from the randomizer directory:" +
+                                           "<br>" +
+                                           "<br>" +
+                                           str(validation_result) +
+                                           "<br>" +
+                                           "<br>" +
+                                           "Press OK to launch the updater to download the required files." +
+                                           "<br>" +
+                                           "Press Close to exit the program.")
+                else:
+                    update_message.setIcon(QMessageBox.Question)
+                    update_message.setWindowTitle("Update Available")
+                    update_message.setText("Updates to Beyond Chaos are available!" +
+                                           "<br>" +
+                                           "<br>" +
+                                           str(validation_result) +
+                                           "<br>" +
+                                           "<br>" +
+                                           "Press OK to launch the updater or Close to skip updating. This pop-up will "
+                                           "only show once per update.")
+
+                update_message.setStandardButtons(QMessageBox.Close | QMessageBox.Ok)
+                button_clicked = update_message.exec()
+                if button_clicked == QMessageBox.Close:
+                    # Update_message informs the user about the update button on the UI.
+                    update_message.close()
+                    if required_update:
+                        sys.exit()
+                    else:
+                        update_dismiss_message = QMessageBox()
+                        update_dismiss_message.setIcon(QMessageBox.Information)
+                        update_dismiss_message.setWindowTitle("Information")
+                        update_dismiss_message.setText("The update will be available using the Update button on the "
+                                                       "randomizer's menu bar.")
+                        update_dismiss_message.setStandardButtons(QMessageBox.Close)
+                        button_clicked = update_dismiss_message.exec()
+                        if button_clicked == QMessageBox.Close:
+                            update_dismiss_message.close()
+                            updates_hidden(True)
+                elif button_clicked == QMessageBox.Ok:
+                    if required_update and not first_time_setup:
+                        save_version('core', '0.0')
+                    elif first_time_setup:
+                        save_version('core', randomizer.VERSION)
+                    update_bc(wait=True, suppress_prompt=True)
+        window = Window()
+        time.sleep(3)
+        sys.exit(App.exec())
+    except Exception as e:
+        error_message = QMessageBox()
+        error_message.setIcon(QMessageBox.Critical)
+        error_message.setWindowTitle("A Fatal Error Occurred")
+        error_message.setText(str(e) +
+                              "<br>" +
+                              "<br>" +
+                              "<br>" +
+                              "<br>" +
+                              "Error Traceback for the Devs:" +
+                              "<br>" +
+                              traceback.format_exc())
+        error_message.setStandardButtons(QMessageBox.Close)
+        button_clicked = error_message.exec()
+        if button_clicked == QMessageBox.Close:
+            error_message.close()
         traceback.print_exc()

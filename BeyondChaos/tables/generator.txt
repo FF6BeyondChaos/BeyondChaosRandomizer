@@ -95,7 +95,7 @@ Ann aeimou
 Ano dimnrtu
 Ans ehw
 Ant aehilow
-Anu bs
+Anu bv
 Any bhmoptw
 Anz au
 Apa crt
@@ -123,7 +123,7 @@ Arr aeio
 Ars eo
 Art efhilsuwy
 Asc eor
-Ase px
+Ase py
 Ash aceilorty
 Asi admn
 Ask aei
@@ -335,12 +335,12 @@ Cro acefmnopqstuwz
 Cru cdeilmnstxz
 Cry bips
 Cub aei
-Cuc ku
+Cuc uv
 Cud dg
 Cue di
 Cui ns
 Cul iloptv
-Cun an
+Cun ap
 Cup bcfiops
 Cur abdefilrstv
 Cus hpst
@@ -385,7 +385,7 @@ Det aehor
 Dev aeio
 Dew abdeily
 Dia bdglmnprstz
-Dic eikt
+Dic eit
 Did adeo
 Die dghmrst
 Dig eginr
@@ -779,7 +779,7 @@ Hus bhkst
 Hut ctuz
 Hya cde
 Hyd er
-Hym en
+Hym ip
 Hyp ehino
 Ibe rx
 Ibi csz
@@ -815,7 +815,7 @@ Int aeioruy
 Inu ginr
 Inv aeio
 Ion ei
-Ira nqt
+Ira pt
 Ire ln
 Iri ds
 Irk eisu
@@ -839,7 +839,6 @@ Jai lmnp
 Jak ae
 Jam abeim
 Jan aeginsu
-Jap aeiu
 Jar egrv
 Jas mop
 Jav aei
@@ -1137,7 +1136,7 @@ Nas achst
 Nat acehitu
 Nau grst
 Nav aeiy
-Naz aci
+Naz ac
 Nea lrt
 Neb ru
 Nec krt
@@ -1179,7 +1178,7 @@ Nov aegio
 Now ahi
 Nox iz
 Noz uz
-Nud egi
+Nud gi
 Nuk ei
 Num bes
 Nun acekn
@@ -1234,7 +1233,7 @@ Ora clnt
 Orc hu
 Ord aeinu
 Ore gos
-Org ay
+Org av
 Ori aefgnoyz
 Orl aeoy
 Orn ae
@@ -1282,7 +1281,7 @@ Pel aeiltv
 Pen acdegiklnostu
 Peo npr
 Pep ipsty
-Per cefhijklmnoprstuv
+Per cefhijklmnoprstu
 Pes ehkot
 Pet aeirtu
 Pew et
@@ -1300,11 +1299,11 @@ Pie bcdirt
 Pig eglmpst
 Pik ei
 Pil acefgilo
-Pim eip
+Pim ei
 Pin abcdeghiknoptuw
 Pio nu
 Pip eips
-Pis ast
+Pis at
 Pit acefhioty
 Pix eiy
 Piz az
@@ -1325,7 +1324,7 @@ Pom amop
 Pon cdeity
 Poo cdhlnr
 Pop cegilopsu
-Por cefiknoprst
+Por cefikoprst
 Pos ehisty
 Pot abefhilopst
 Pou clnrst
@@ -1507,7 +1506,7 @@ Sie gmrsv
 Sig hmnu
 Sik hko
 Sil aeiklotuv
-Sim eimopu
+Sim eimou
 Sin acdefgiknu
 Sip hp
 Sir eilou
@@ -1554,7 +1553,7 @@ Soy abiu
 Spa acdhikmnrstwy
 Spe acdeklnrw
 Sph ei
-Spi cdefgklnrt
+Spi defglnrt
 Spl aeiou
 Spo ciknortu
 Spr aeiouy
@@ -2009,7 +2008,7 @@ ann aehiouy
 anp ou
 ans aefhikmoy
 ant aehilorsuy
-anu abceklmprst
+anu abceklmprt
 any amo
 anz aehio
 aom ai
@@ -3048,7 +3047,7 @@ hwa clry
 hwi fn
 hye rs
 hyl alouy
-hym eiu
+hym aiu
 hyr ouy
 hys eit
 hyt eh
@@ -3884,7 +3883,7 @@ ntz ey
 nua lrt
 nub bei
 nuc hk
-nud eis
+nud is
 nue lnt
 nug agl
 nui nt
@@ -4215,7 +4214,7 @@ pda st
 pdo go
 pea cklnrst
 pec acikt
-ped aeio
+ped aei
 pee cdr
 pef auy
 pel aegilty
@@ -4644,7 +4643,7 @@ sou glnr
 spa cinrst
 spe acdlnrs
 sph aoy
-spi acdeknrst
+spi adenrst
 spl ay
 spo iknorstu
 spr eio

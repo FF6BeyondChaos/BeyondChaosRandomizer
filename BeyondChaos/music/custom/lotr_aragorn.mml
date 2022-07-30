@@ -24,7 +24,7 @@
 #def timpani= |5 o6 'k' m p64
 
 #def s= v64
-#def h= v48
+#def h= v40
 #def t= v48
 #def f= v64
 #def b= v96

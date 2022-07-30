@@ -130,13 +130,19 @@ class Options:
 
         s = ""
         flags, codes = read_Options_from_string(flag_string, self.mode)
-        for code in codes.keys():
+        for code, value in codes.items():
+            if code == 'sketch' and ('sketch' in codes.keys() and 'remonsterate' in codes.keys()):
+                s += f"SECRET CODE: 'sketch' is not compatible with remonsterate code.\n"
+                continue
             if code in self.mode.prohibited_codes:
                 s += f"SECRET CODE: '{code}' is not compatible with {self.mode.name} mode.\n"
                 continue
             for code_object in NORMAL_CODES + MAKEOVER_MODIFIER_CODES:
                 if code_object.name == code:
-                    s += f"SECRET CODE: {code_object.description} ACTIVATED\n"
+                    if code_object.category == "spriteCategories":
+                        s += f"SECRET CODE: {str(value).upper()} {str(code).upper()} MODE ACTIVATED\n"
+                    else:
+                        s += f"SECRET CODE: {code_object.description} ACTIVATED\n"
             self.activate_code(code, codes[code])
 
         if self.is_code_active('strangejourney'):
@@ -345,11 +351,11 @@ try:
     for mg in makeover_groups:
         no = Code('no'+mg, f"NO {mg.upper()} ALLOWED MODE", f"Do not select {mg} sprites.", "spriteCategories", "checkbox")
         MAKEOVER_MODIFIER_CODES.extend([
-            Code(mg, f"RARE {mg.upper()} MODE", f"Adjust probability of selecting {mg} sprites.",
+            Code(mg, f"CUSTOM {mg.upper()} FREQUENCY MODE", f"Adjust probability of selecting {mg} sprites.",
                  "spriteCategories", "combobox", ("Normal", "No", "Hate", "Like", "Only"))])
         RESTRICTED_VANILLA_SPRITE_CODES.append(no)
 except FileNotFoundError:
-    print("Error: No spritereplacements.txt found in the custom folder. Spritecategories will be unavailable.")
+    pass
 
 
 # TODO: do this a better way

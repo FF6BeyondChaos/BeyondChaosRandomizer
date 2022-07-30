@@ -9,11 +9,10 @@
 #WAVE 0x21 0x2C clash cymbal
 #WAVE 0x22 0x65 strings
 #WAVE 0x23 0x32 mandalorian
-#WAVE 0x24 0x86 horn
+#WAVE 0x24 0x85 horn
 #WAVE 0x25 0x5B timpani
 #WAVE 0x26 0x55 synth bass
-#WAVE 0x27 0x1F snare
-#WAVE 0x28 0x85 horn2
+#WAVE 0x27 0x1B snare
 
 #def 0i=   |0
 #def 0o=   o5
@@ -34,10 +33,10 @@
 #def 3v=   v100
 #def 3f= v1,100
 
-#def 4i=   |4
+#def 4i=   |4 %s5 %r1
 #def 4o=   o5
-#def 4v=   v113
-#def 4f= v1,113
+#def 4v=   v125
+#def 4f= v1,125
 
 #def 5i=   |5
 #def 5o=   o5
@@ -54,16 +53,16 @@
 #def 7v=   v88
 #def 7f= v1,88
 
-#def 8i=   |8
+#def 8i=   |4 %s4
 #def 8o=   o5
-#def 8v=   v100
-#def 8f= v1,100
+#def 8v=   v120
+#def 8f= v1,120
 
 ## auto percussion  0x21
 #drum "h"= 5a
 ## auto percussion  0x27
-#drum "i"= 5f+ %a13%r21
-
+##drum "i"= 5f+ %a13%r21
+#drum "i"= 5a
 
 {1}
 t80%b0,100%f0,0%v50

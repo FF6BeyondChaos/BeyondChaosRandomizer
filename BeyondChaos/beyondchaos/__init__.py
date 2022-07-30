@@ -1,4 +1,5 @@
 import random
+import re
 import sys
 from hashlib import md5
 import os
@@ -8,6 +9,8 @@ from shutil import copyfile
 import time
 
 from .options import ALL_MODES, ALL_FLAGS, Options_
+from .config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
+                     set_value)
 from ._testing import _modify_args_for_testing
 
 # to testing?
@@ -99,6 +102,7 @@ def _process_seed(fullseed):
     print()
 
     if '.' not in fullseed:
+        speeddials = get_items("Speeddial").items()
         mode_num = None
         while mode_num not in range(len(ALL_MODES)):
             print("Available modes (default is 'normal'):\n")
@@ -113,38 +117,39 @@ def _process_seed(fullseed):
         print()
         for flag in sorted(allowed_flags):
             print(flag.name, flag.description)
-        print(flaghelptext + "\n\n")
+        print(flaghelptext + "\n")
+        print("Save frequently used flag sets by adding 0: through 9: before the flags.")
+        for speeddial_number, speeddial_flags in speeddials:
+            print("\t" + speeddial_number + ": " + speeddial_flags)
+        print()
         flags = input("Please input your desired flags (blank for "
                       "all of them):\n> ").strip()
         if flags == "!":
             flags = '-dfklu partyparty makeover johnnydmad'
 
+        is_speeddialing = re.search("^[0-9]$", flags)
+        if is_speeddialing:
+            for speeddial_number, speeddial_flags in speeddials:
+                if speeddial_number == flags[:1]:
+                    flags = speeddial_flags.strip()
+                    break
+
+        saving_speeddial = re.search("^[0-9]:", flags)
+        if saving_speeddial:
+            set_value("Speeddial", flags[:1], flags[3:].strip())
+            print("Flags saved under speeddial number " + str(flags[:1]))
+            flags = flags[3:]
+
         fullseed = "|%i|%s|%s" % (mode_num + 1, flags, fullseed)
 
     return fullseed, allowed_flags
 
-def _save_flags(config, sourcefile, output_directory, savedflags="savedflags.txt"):
+def _save_flags(sourcefile, output_directory):
     try:
-        if 'ROM' not in config:
-            config['ROM'] = {}
-        if 'speeddial' not in config:
-            config['speeddial'] = {}
-        config['ROM']['Path'] = str(sourcefile)
-
-        # Save the output directory
-        if str(output_directory).lower() == str(os.path.dirname(sourcefile)).lower():
-            # If the output directory is the same as the ROM directory, save an empty string
-            config['ROM']['Output'] = ''
-        else:
-            config['ROM']['Output'] = str(output_directory)
-        # config['speeddial'].update({k: v for k, v in speeddial_opts.items() if k != '!'})
-        with open('bcce.cfg', 'w') as cfg_file:
-            config.write(cfg_file)
+        save_input_path(sourcefile)
+        save_output_path(output_directory)
     except:
         print("Couldn't save flag string\n")
-    else:
-        if pathlib.Path(savedflags).is_file():
-            os.remove(savedflags)
 
 class State:
     def __init__(self, configfile="bcce.cgf"):
@@ -197,10 +202,8 @@ class State:
         if args["TEST_ON"]:
             args = _modify_args_for_testing(args)
 
-        previous_rom_path, previous_output_directory = '', ''
-        if 'ROM' in self.config:
-            previous_rom_path = self.config['ROM']['Path']
-            previous_output_directory = self.config['ROM']['Output']
+        previous_rom_path = get_input_path()
+        previous_output_directory = get_output_path()
 
         # process the sourcefile args
         args["source_arg"] = self.sourcefile = \
@@ -234,7 +237,7 @@ class State:
 
         # should we save this to the configuration?
         if self.sourcefile != previous_rom_path or output_directory != previous_output_directory:
-            _save_flags(self.config, self.sourcefile, output_directory)
+            _save_flags(self.sourcefile, output_directory)
 
         return args
 

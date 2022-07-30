@@ -3,26 +3,32 @@ from .utils import (hex2int, int2bytes, Substitution, SPELL_TABLE,
 
 spelldict = {}
 spellnames = {}
-f = open(SPELL_TABLE)
-for line in f:
-    line = line.strip()
-    while '  ' in line:
-        line = line.replace('  ', ' ')
-    value, strength, name = tuple(line.split(','))
-    spellnames[hex2int(value)] = name
-f.close()
+try:
+    f = open(SPELL_TABLE)
+    for line in f:
+        line = line.strip()
+        while '  ' in line:
+            line = line.replace('  ', ' ')
+        value, strength, name = tuple(line.split(','))
+        spellnames[hex2int(value)] = name
+    f.close()
+except FileNotFoundError:
+    print("Error: " + SPELL_TABLE + " was not found in the tables folder.")
 
 spellbans = {}
-f = open(SPELLBANS_TABLE)
-for line in f:
-    line = line.strip()
-    if line[0] == '#':
-        continue
-    spellid, modifier, name, ban = tuple(line.split(','))
-    if ban == "ban":
-        modifier = int(modifier) * -1
-    spellbans[hex2int(spellid)] = int(modifier)
-f.close()
+try:
+    f = open(SPELLBANS_TABLE)
+    for line in f:
+        line = line.strip()
+        if line[0] == '#':
+            continue
+        spellid, modifier, name, ban = tuple(line.split(','))
+        if ban == "ban":
+            modifier = int(modifier) * -1
+        spellbans[hex2int(spellid)] = int(modifier)
+    f.close()
+except FileNotFoundError:
+    print("Error: " + SPELLBANS_TABLE + " was not found in the tables folder.")
 
 
 class SpellBlock:

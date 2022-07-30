@@ -1,0 +1,253 @@
+#TITLE Lust for Power
+#ALBUM Final Fantasy XII
+#COMPOSER Hayato Matsuo
+#ARRANGED emberling
+
+#WAVE 0x20 0x65 - formerly 0x46 strings
+#WAVE 0x21 0x86 - formerly 0x08 horn
+#WAVE 0x22 0xA7 - formerly 0x07 flute
+#WAVE 0x23 0x93 - formerly 0x0A oboe
+#WAVE 0x24 0x82 - formerly 0x7F trumpet
+#WAVE 0x25 0x01 - formerly 0x53 piano
+#WAVE 0x26 0x08 - formerly 0x60 low piano
+#WAVE 0x27 0x60 harp
+#WAVE 0x29 0x5C - formerly 0x16 timpani
+#WAVE 0x2A 0x1F - formerly 0x81 snare
+#WAVE 0x2B 0x2F - formerly 0x4C gong
+#WAVE 0x2C 0x7A - formerly 0x2E conga open
+#WAVE 0x2D 0x7B - formerly 0x85 conga slap
+#WAVE 0x2E 0x6D - formerly 0x13 tambourine
+
+#def global= t74 %v50 %b0,100 %f0,0
+
+#def string= |0 o5
+#def horn= |1 o5
+#def flute= |2 o4
+#def oboe= |3 o5
+#def trumpet= |4 o5
+#def piano= |5 o4
+#def lpiano= |6 o5
+#def harp= |7 o5
+#def timp= |9 o3
+
+## midi channels
+#def 02= 'flute' p34 vm48,18,239
+#def 03= 'oboe' p89 vm48,18,223
+#def 04= 'horn' p64 vm48,18,207
+#def 05= 'horn' p64 vm48,18,207
+#def 06= 'trumpet' p89 vm48,18,231 %r10
+#def 07= 'trumpet' p89 vm48,18,231 %r26
+#def 08= 'horn' p64 vm48,18,192
+#def 09= 'timp' p79 vm
+#def 10= 'string' p64 v0,18,255 m
+#def 11= 'timp' p64 vm
+#def 14= 'piano' p64 vm
+#def 14l= 'lpiano' p64 vm 
+#def 15= 'harp' p36 vm #%y4%s2%r16
+#def 16= 'string' p64 vm48,18,207 %a8
+#def 17= 'string' p64 v0,18,255 m
+#def 18= 'string' p64 vm12,18,207
+#def 19= 'string' p94 vm
+#def 20= 'string' p94 v0,18,255m
+#def 21= 'string' p94 vm %r15
+#def 22= 'string' p64 vm %r9
+#def 24= 'string' p64 vm %a8%r20 'sv*v.64'
+
+#def sv=   v100
+#def sf= v1,100
+#def bv=   v100
+#def bf= v1,100
+#def fv=   v50
+#def ff= v1,50
+#def ov=   v120
+#def of= v1,120
+#def tv=   v100
+#def tf= v1,100
+#def pv=   v120
+#def pf= v1,120
+#def lv=   v100
+#def lf= v1,100
+#def hv=   v75
+#def hf= v1,75
+#def kv=   v150
+#def kf= v1,150
+#def dv=   v85
+#def df= v1,85
+
+#def copenv= v48
+#def cslapv= v48
+
+## conga at o4
+#drum "c"=5a+ |D %e0 %a 'cslapv'
+#drum "c+"=5c |D %e0 %a 'cslapv*v.5'
+#drum "f"=5f |D %e1 %a%r29 'cslapv*v.5'
+#drum "f+"=5d |C %e0 %a%r29 'copenv'
+#drum "g"=5e |D %e0 %a12%r30 'cslapv*v.5'
+#drum "g+"=6d+ |D %e0 %a 'cslapv'
+#drum "a+"=5d+ |C %e0 %a 'copenv'
+#drum "b"=5d+ |C %e1 %r%a12 'copenv*v1.25'
+## conga at o3 - prog. 16
+#drum "h"=5a+ |D %e1 %a 'cslapv'     ##c
+#drum "i"=5a+ |C %e0 %a 'copenv*v.5' ##c+
+#drum "j"=5f+ |C %e1 %a 'copenv'     ##f
+#drum "k"=6c+ |C %e1 %a 'copenv'     ##f+
+## conga at o3 - prog. 25
+#drum "l"=5d+ |C %e0 %a14%r30 'copenv*v.5' ##a
+#drum "m"=5a  |C %e0 %a%r29 'copenv' ##a+
+## conga at o5
+#drum "n"=5d+ |C %e1 %a14%r29 'copenv*v.5' ##c
+#drum "o"=5c  |D %e0 %a%r29 'cslapv'##c+
+#drum "p"=5g  |D %e0 %r 'cslapv'##d+
+
+#drum "x"=5a  |E v40 p99 m96,-72
+#drum "y"=4f+ |B v80 p64 %a15%s2%y0%r10
+#drum "z"=5e  |B v60 p64 %a3%s7%r16
+
+#drum (b(= 5a  |A
+#drum (a(= 5g+ |A
+
+#def pmute= %y5%s3
+#def sa= %a%a7
+#def sh= %a%y5%s3%r6
+
+{1}
+'global' %e1 r16
+$
+'pv*v.64' ['14' l8
+[<b>b<a>b<g>b<f+>b <e>b<g>b<f+>b<c+>b]
+<d>f+<e>f+<c+>f+<d>f+bf+<c+>f+<d>'pv*v.96''pf*v216,.80'f+bf+ adbdgdf+dedf+dgded]
+##18
+ef+<f+>g<g>a<a>b <bca>b<g>a<f+>g ef+<f+>g<g>a<a>b <<e>f+<d>e<c>dbc
+##22
+'05''bv*v.40' r2f2 r4f2. 'bv*v.28' f1
+l8 '18''sa''sv*v.20'd 'sh''sv*v.40'd16d16d2^ 'sa''sv*v.32'd
+d+ 'sh''sv*v.64'd+16d+16d+4 'sa''sv*v.32'd+2
+g+ 'sh''sv*v.64'g+16g+16g+4 'sa''sv*v.32'g+2
+b 'sh''sv*v.64'b16b16b1..
+;
+
+{2}
+r16
+$
+'14l' 'lv*v.80' %e1 l1 >>
+b^b^a^g^
+b... '24'>b8
+'14l' 'lv*v.80' >> b^a^g2..
+'17'<'sv*v.10''sf*v126,.28'[25b32]
+&66"!!!o z"
+##18
+^2 '05''bv*v.64'%r6 e^ ba2
+##22
+'16''sv*v.24' f1d+1 '05''bv*v.28'> a+1
+l16 '18''sa''sv*v.20'> a2.. 'sv*v.32'a8 <c2c2
+f8 'sh''sv*v.64'fff4 'sa''sv*v.32'f2
+g+8 'sh''sv*v.64'g+g+g+1..
+;
+
+{7}
+r16
+$
+'16' 'sv*v.24' %e1 l1 >
+f+^^^ a<f+^g
+<c+>abf+ ^g2ab2<c+2d2
+##18
+'20''sv*v.32'> ecec
+##22
+'16''sv*v.24'> c2.... '15''hv*v.32' &2r<d+48 '16''sv*v.24'>>a+1 'sv*v.40'g+1
+l16 '18''sa''sv*v.20'> g8 'sh''sv*v.40'ggg2^8 'sa''sv*v.32'g8
+r8 'sh''sv*v.64'ggg4 'sa''sv*v.32'<g+2
+c+8 'sh''sv*v.64'c+c+c+4 'sa''sv*v.32'<c+2>
+e8 'sh''sv*v.64'eee1..
+;
+
+{5}
+r16
+$
+'16' 'sv*v.32' %e1 l1
+c+ded e^d^
+f+^.ed^.d2.. '02''fv*v.40''ff*v204,.28' < [6%r17<d16>g24%r22^12]
+##18
+'14l' 'pv*v.80' >> e<c>e<c
+##22
+'15''hv*v.32' <a8
+'14''pv*v.72''pmute' a4a4a4a8
+'15''hv*v.32' <g8
+'14''pv*v.72''pmute' g4g4g4g8 'pf*v192,1.00'<c+4>g+2d+4 %s7
+d2..&23d &169d+&23d+ &169g+&23g+ &179b <e32&200b
+;
+
+{3}
+r16 %e1
+$
+"x1" '17''sv*v.33'>b1
+"!!!o x2.." 'tv*v.40''07'b16b16'06'b1
+"!!!o x1" '17''sv*v.24'b1
+"!!!o x2.." '02''fv*v.40''ff*v204,.28' < [6%r17<d16>g24%r22^12]
+"!!!o x2" '05'> 'bv*v.64'%r9 l4 f+<d> a2.b <c+2f+2.r <c+>b
+<d2.c+> f+2.d a2.b g2f+2
+##18
+'03' l8 r2r 'ov*v.28'agb <f+4.e24f+24e24 dc>ba
+b4r<a l16g8^24f+24r24f+e32r32ed32r32
+dec8.rcd >b8^24<c24>b24a8.r32
+'15''hv*v.32' <f32
+##22
+'14''pmute''pv*v.80' l16 < [4a8.c] [4g8.>a+<]
+'pf*v192,1.06'f4c+2>g+4 %s7
+l8 g2..&28g &163g+&29g+ <&163c+c+8 &181eg+24<&196e
+;
+
+{6}
+r16 l8 %e1
+$
+"y1..." '24'>b
+'09''kv*v.64'bb1.^. '18''sv*v.64'>b16<c+16f+16
+"!!!o y1..." '24'>b
+'09''kv*v.64'gg2. '02''fv*v.32''ff*v204,.24' [6%r17<f+16>b32%r30^16.]
+"!!!o y1..." 'tv*v.40''07'b16b16
+'06'b1r2.^16        '18''sv*v.64'>b16<c+16f+16
+"!!!o y1..." '24'>b
+'09''kv*v.64'gg2. '02''fv*v.32''ff*v204,.24' [6%r17<f+16>b32%r30^16.]
+##18
+'02''fv*v.16'v0,18,255< l16 [3e8.re4..re8.r]b8.rb4..rb8.
+'15''hv*v.32' a16
+##22
+^16 '14''pmute''pv*v.64' g4g4g4g8
+'15''hv*v.32' r48a+24^16
+'14''pmute''pv*v.64' f+4f+4f+4f+8. g+4d+2>a+4
+[4'21'>>'sv*v.96' &67g >'sv*v1.03'%r20g8 'sv*v1.15'%r14&101g]
+'10'>>'sv*v.64'g1
+;
+
+{4}
+p64 %g1 l64 %e1
+'dv*v.38'(b('dv*v.30'&2(b( 'dv*v.43'(a('dv*v.35'(a(
+$ %e1 p64 l64 (!!!o(
+[8%g0'dv*v.49'(a8( 'dv*v.43'(b16 a16(  %g1'dv*v.49'(b('dv*v.41'(b( 'dv*v.42'(a('dv*v.34'(a( 'dv*v.43'(b('dv*v.35'(b('dv*v.27'&2(b( 'dv*v.38'(a('dv*v.30'&1(b(  %g0'dv*v.46'(a16( 'dv*v.42'(b16(
+'dv*v.45'(a16( 'dv*v.39'(b16( 'dv*v.49'(a4^16(   %g1'dv*v.38'(b('dv*v.30'(b( 'dv*v.41'(a('dv*v.33'(a(
+%g0'dv*v.50'(a8( 'dv*v.48'(b16( 'dv*v.46'(a16(  %g1'dv*v.50'(b('dv*v.42'(b('dv*v.34'&2(b( 'dv*v.37'(a('dv*v.29'&2(a( 'dv*v.39'(b('dv*v.31'(b('dv*v.29'&2(b( 'dv*v.33'&2(a(&1(b(  %g0'dv*v.45'(a16( 'dv*v.44'(b16(
+'dv*v.43'(a16 b16( 'dv*v.49'j8(a4^16(   &1r%g1'dv*v.38'(b('dv*v.30'&2(b( 'dv*v.43'(a('dv*v.35'(a(](a32(
+'17'<'sv*v.28'v66,10[11b32]
+##18
+%e1'02''fv*v.16'v0,18,255 l16 [3b8.rb4..rb8.r]<d8.rd4..rd8^32
+'15''hv*v.32' c16.
+##22
+'16''sv*v.24'> a2..^32%r25^32 '15''hv*v.32' g16 '16''sv*v.24'> g1 '05''bv*v.28' d+2.. '09''kv*v.40'g16'kv*v.60'g16
+l16 'kv*v.80'g2^8 '24''sv*v.50'>g8 '09''kv*v.70'gg'kv*v.60'g'kv*v.70'g
+'kv*v.80'g2^8 '24'>'sv*v.50'g8 '09''kv*v.70'g'kv*v.60'g'kv*v.70'g'kv*v.65'g
+'kv*v.80'g2^8 '24'>'sv*v.50'g8 '09''kv*v.70'g'kv*v.65'g'kv*v.60'g'kv*v.70'g
+'kv*v.80'g2^8 '24'>'sv*v.50'g4. '14l'>>'lv*v.80'g1
+;
+
+{8}
+r16 l16 p64
+$
+[8 j6,812"h8jk"$813"!!!o j8kj hihl32m32cmlm8" ["!!!o nop8"]"ba+g+gf+fc+"]
+##18
+%e1'02''fv*v.16'v0,18,255 l16 g8.rg4..rg8.r <c8.rc4..rc8.r> g8.rg4..rg8.r <c8.rc4..rc8
+'15''hv*v.32' >f8
+##22
+'16''sv*v.24'>> f2..^24 '15''hv*v.32'> d+12 '16''sv*v.24'>> d+1 '05''bv*v.28'> g+1
+l16 [5"!!!o h8jkj8kj hihl32m32cmlm"]
+;
+
+$812 %e1'09''kv*v.64'b8b8 ;813
