@@ -31,3 +31,11 @@ BeyondChaos/randomizer - Copy.py
 
 .idea/
 *.cfg
+
+config.ini
+
+remonsterate/**/*.png
+remonsterate/*.txt
+custom/**/*.bin
+custom/**/*.pal
+custom/**/*.txt
