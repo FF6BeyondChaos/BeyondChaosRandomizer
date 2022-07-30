@@ -75,7 +75,7 @@ def _parse_seed(fullseed):
     seed = int(seed if seed else time.time())
     seed %= 10 ** 10
 
-    return version, mode_str, flags, seed
+    return version, _parse_mode(mode_str), flags, seed
 
 def _parse_mode(mode_str):
     try:
