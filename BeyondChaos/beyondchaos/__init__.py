@@ -152,7 +152,7 @@ def _save_flags(sourcefile, output_directory):
         print("Couldn't save flag string\n")
 
 class State:
-    def __init__(self, configfile="bcce.cgf"):
+    def __init__(self, configfile="bcce.cfg"):
 
         # Filename for the current ROM being written
         self.outfile = None
