@@ -4,7 +4,8 @@ from utils import (hex2int, write_multi, read_multi, ITEM_TABLE,
                    CUSTOM_ITEMS_TABLE, mutate_index,
                    name_to_bytes, utilrandom as random,
                    Substitution)
-from skillrandomizer import get_ranked_spells, get_spell
+from skillrandomizer import get_ranked_spells
+from copy import deepcopy
 
 # future blocks: chests, morphs, shops
 
@@ -29,7 +30,6 @@ STATPROTECT = {"fieldeffect": 0xdc,
                "statusacquire2": 0x00}
 
 all_spells = None
-effects_used = []
 effects_used = []
 itemdict = {}
 customs = {}
@@ -134,7 +134,7 @@ class ItemBlock:
         self.dataname = bytes()
         self.heavy = False
 
-        self.mutation_log = {}
+        self.vanilla_data = None
 
     @property
     def is_tool(self):
@@ -331,16 +331,6 @@ class ItemBlock:
         mblock = (mblockevade & 0xf0) >> 4
         return mblock
 
-    def get_mutation_log(self):
-        if not self.mutation_log:
-            return None
-        s = self.name + ": \n"
-        for k, v in self.mutation_log.items():
-            s += f"    {k}: {v}\n"
-        return s
-
-
-
     def pick_a_spell(self, magic_only=False, custom=None):
         if magic_only:
             spells = [s for s in all_spells if s.spellid in range(0, 36)]
@@ -360,8 +350,52 @@ class ItemBlock:
 
         return spell, index / float(len(spells))
 
-    def get_feature(self, feature, feature_byte, nochange):
+    def get_feature(self, feature, feature_byte):
+        features = {
+            "statboost1": {1 << i: e for i, e in
+                           enumerate(["Bat. Pwr +1/4", "Mag. Pwr +1/4", "+1/4 HP",
+                                      "+1/2 HP", "+1/8 HP", "+1/4 MP", "+1/2 MP", "+1/8 MP"])},
+            "statboost2": {1 << i: e for i, e in
+                           enumerate(["Better Steal", "",
+                                      "Better Sketch", "Better Control", "100% Hit Rate",
+                                      "1/2 MP Cost", "MP cost = 1", "Vigor +50%"])},
+            "special1": {1 << i: e for i, e in
+                         enumerate(["Initiative", "Vigilance", "Command Changer",
+                                    "Command Changer", "Command Changer", "Command Changer",
+                                    "Command Changer", "Super Jump"])},
+            "special2": {1 << i: e for i, e in
+                         enumerate(["Fight -> X-Fight", "Can counter",
+                                    "Random Evade", "Use weapon 2-handed",
+                                    "Can equip 2 weapons", "Can equip anything",
+                                    "Cover", "Step regen"])},
+            "special3": {1 << i: e for i, e in
+                         enumerate(["Low HP Shell", "Low HP Safe", "Low HP Reflect",
+                                    "Double EXP", "Double GP",
+                                    "", "", "Reverses Cures"])},
+            "statusprotect1": {1 << i: e for i, e in
+                               enumerate(["No dark", "No zombie", "No poison",
+                                          "No magitek", "No clear", "No imp",
+                                          "No petrify", "Death protection"])},
+            "statusprotect2": {1 << i: e for i, e in
+                               enumerate(["No condemned", "Near fatal always",
+                                          "No image", "No mute", "No berserk", "No muddle",
+                                          "No seizure", "No sleep"])},
+            "statusacquire2": {1 << i: e for i, e in
+                               enumerate(["Condemned", "Near fatal", "Image", "Mute",
+                                          "Berserk", "Muddle", "Seizure", "Sleep"])},
+            "statusacquire3": {1 << i: e for i, e in
+                               enumerate(["Auto float", "Auto regen", "Auto slow",
+                                          "Auto haste", "Auto stop", "Auto shell",
+                                          "Auto safe", "Auto reflect"])},
+            "fieldeffect": {1 << i: e for i, e in
+                            enumerate(["1/2 enc.", "No enc.", "", "", "",
+                                       "Sprint", "", ""])},
+            "otherproperties": {1 << i: e for i, e in
+                                enumerate(["", "", "Procs", "Breaks", "", "", "", ""])}
+        }
+        return features[feature][feature_byte]
 
+    def get_new_feature(self, feature, feature_byte, nochange):
         features = {
             "statboost1": {e: 1 << i for i, e in
                       enumerate(["Bat. Pwr +1/4", "Mag. Pwr +1/4", "+1/4 HP",
@@ -416,7 +450,8 @@ class ItemBlock:
         #  otherwise items that break and proc in vanilla will not show up in the log even if they proc/break
         #  a different spell than in vanilla.
         if FEATURE_FLAGS:
-            s = ", ".join([e for e, v in FEATURE_FLAGS.items() if v & feature_byte == v and v & feature_byte != v & nochange])
+            s = ", ".join([e for e, v in FEATURE_FLAGS.items()
+                           if v & feature_byte == v and v & feature_byte != v & nochange])
 
         # Note that this doesn't catch an error if s is not defined.
         return s
@@ -440,17 +475,8 @@ class ItemBlock:
         self.features[feature] = bit_mutate(self.features[feature], op="on",
                                             nochange=nochange)
 
-        new_features = self.get_feature(feature, self.features[feature], nochange)
-
-        if new_features != "":
-            if "Special Feature" in self.mutation_log.keys():
-                for new_feature in new_features.split(", "):
-                    if new_feature not in self.mutation_log["Special Feature"]:
-                        self.mutation_log.update({"Special Feature": self.mutation_log["Special Feature"] + ", " + new_feature})
-            else:
-                self.mutation_log["Special Feature"] = new_features
-        self.mutate_name()
-
+        if not self.vanilla_data.features[feature] == self.features[feature]:
+            self.mutate_name()
 
     def mutate_break_effect(self, always_break=False, wild_breaks=False, no_breaks=False, unbreakable=False):
         global effects_used
@@ -500,7 +526,6 @@ class ItemBlock:
         if self.is_weapon and spell.spellid not in no_proc_ids and (
                 not self.itemtype & 0x20 or random.randint(1, 2) == 2):
             self.features['otherproperties'] |= 0x04
-            self.mutation_log["Proc"] = get_spell(self.features['breakeffect']).name
         else:
             self.features['otherproperties'] &= 0xFB
 
@@ -528,57 +553,29 @@ class ItemBlock:
             elements = 0
             while elemcount > 0:
                 elements = elements | (1 << random.randint(0, 7))
-                self.mutate_name()
                 elemcount += -1
             return elements
-        oldelems = self.features['elements']
-        oldabsorbs = self.features['elemabsorbs']
-        oldnulls = self.features['elemnulls']
-        oldweaks = self.features['elemweaks']
 
+        # Attempt to shuffle weapon elemental damage and armor elemental half-damage
         self.features['elements'] = elemshuffle(self.features['elements'])
-        if self.features['elements'] != oldelems:
-            if self.is_weapon:
-                new_elements = [element for element in self.get_element(self.features['elements'], True) if element not in self.get_element(oldelems, True)]
-                if new_elements:
-                    self.mutation_log["Gained Elemental Damage"] = ",".join(new_elements)
-                old_elements = [element for element in self.get_element(oldelems, True) if element not in self.get_element(self.features['elements'], True)]
-                if old_elements:
-                    self.mutation_log["Lost Elemental Damage"] = ",".join(old_elements)
-            else:
-                if self.features['elements']:
-                    new_elements = [element for element in self.get_element(self.features['elements'], True) if element not in self.get_element(oldelems, True)]
-                    if new_elements:
-                        self.mutation_log["Halves Elemental Damage"] = ",".join(new_elements)
-                    old_elements = [element for element in self.get_element(oldelems, True) if element not in self.get_element(self.features['elements'], True)]
-                    if old_elements:
-                        self.mutation_log["Lost Halving Elemental Damage"] = ",".join(old_elements)
-        if self.is_weapon:
-            return
-        self.features['elemabsorbs'] = elemshuffle(self.features['elemabsorbs'])
-        if self.features['elemabsorbs'] != oldabsorbs:
-            new_absorbs = [element for element in self.get_element(self.features['elemabsorbs'], True) if element not in self.get_element(oldabsorbs, True)]
-            if new_absorbs:
-                self.mutation_log["Absorbs Elemental Damage"] = ",".join(new_absorbs)
-            old_absorbs = [element for element in self.get_element(oldabsorbs, True) if element not in self.get_element(self.features['elemabsorbs'], True)]
-            if old_absorbs:
-                self.mutation_log["Lost Elemental Absorption"] = ",".join(old_absorbs)
-        self.features['elemnulls'] = elemshuffle(self.features['elemnulls'])
-        if self.features['elemnulls'] != oldnulls:
-            new_nulls = [element for element in self.get_element(self.features['elemnulls'], True) if element not in self.get_element(oldnulls, True)]
-            if new_nulls:
-                self.mutation_log["Nulls Elemental Damage"] = ",".join(new_nulls)
-            old_nulls = [element for element in self.get_element(oldnulls, True) if element not in self.get_element(self.features['elemnulls'], True)]
-            if old_nulls:
-                self.mutation_log["Lost Elemental Nullification"] = ",".join(old_nulls)
-        self.features['elemweaks'] = elemshuffle(self.features['elemweaks'])
-        if self.features['elemweaks'] != oldweaks:
-            new_weaknesses = [element for element in self.get_element(self.features['elemweaks'], True) if element not in self.get_element(oldweaks, True)]
-            if new_weaknesses:
-                self.mutation_log["Weak To Elemental Damage"] = ",".join(new_weaknesses)
-            old_weaknesses = [element for element in self.get_element(oldweaks, True) if element not in self.get_element(self.features['elemweaks'], True)]
-            if old_weaknesses:
-                self.mutation_log["Lost Elemental Weakness"] = ",".join(old_weaknesses)
+
+        # If the item is a weapon, it cannot have elemental weaknesses, nulls, or absorptions
+        if not self.is_weapon:
+            # Attempt to shuffle armor elemental absorption
+            self.features['elemabsorbs'] = elemshuffle(self.features['elemabsorbs'])
+
+            # Attempt to shuffle armor elemental nulls
+            self.features['elemnulls'] = elemshuffle(self.features['elemnulls'])
+
+            # Attempt to shuffle armor elemental weaknesses
+            self.features['elemweaks'] = elemshuffle(self.features['elemweaks'])
+
+        # If any changes occurred, mutate the item's name
+        if not self.features['elements'] == self.vanilla_data.features['elements'] or \
+           not self.features['elemabsorbs'] == self.vanilla_data.features['elemabsorbs'] or \
+           not self.features['elemnulls'] == self.vanilla_data.features['elemnulls'] or \
+           not self.features['elemweaks'] == self.vanilla_data.features['elemweaks']:
+            self.mutate_name()
 
     def mutate_learning(self):
         if not self.is_armor and not self.is_relic:
@@ -598,6 +595,9 @@ class ItemBlock:
 
         self.features['learnrate'] = learnrate
         self.features['learnspell'] = spell.spellid
+        if not self.vanilla_data.features['learnrate'] == self.features['learnrate'] or \
+           not self.vanilla_data.features['learnspell'] == self.features['learnspell']:
+            self.mutate_name()
 
     def get_specialaction(self, new_action):
 
@@ -617,8 +617,6 @@ class ItemBlock:
 
         if new_action == 9:  # no random dice effect
             return
-
-        self.mutation_log["Special Effect"] = self.get_specialaction(new_action)
 
         self.features['specialaction'] = (new_action << 4) | (self.features['specialaction'] & 0x0f)
         self.mutate_name()
@@ -745,7 +743,6 @@ class ItemBlock:
                 self.mutate_special_action()
             if 10 <= x < 20 and not learned:
                 self.mutate_learning()
-                self.mutate_name()
             if 20 <= x < 50 and not broken:
                 self.mutate_break_effect(wild_breaks=wild_breaks)
                 broken = True
@@ -769,8 +766,11 @@ class ItemBlock:
         if unbreakable:
             self.mutate_break_effect(unbreakable=unbreakable)
 
-    def mutate_name(self):
-        if options.Options_.is_code_active("questionablecontent") and not self.is_consumable and '?' not in self.name:
+    def mutate_name(self, vanilla=False):
+        if vanilla:
+            self.name = self.vanilla_data.name
+            self.dataname[1:] = name_to_bytes(self.name, len(self.name))
+        elif options.Options_.is_code_active("questionablecontent") and not self.is_consumable and '?' not in self.name:
             self.name = self.name[:11] + '?'
             # Index on self.dataname is [1:] because the first character determines the
             #   equipment symbol (helmet/shield/etc).
@@ -1136,6 +1136,7 @@ def get_items(filename=None, allow_banned=False):
     items = items_from_table(ITEM_TABLE)
     for i in items:
         i.read_stats(filename)
+        i.vanilla_data = deepcopy(i)
 
     for n, i in enumerate(items):
         i.set_degree(n / float(len(items)))

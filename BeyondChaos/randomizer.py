@@ -34,7 +34,7 @@ from itemrandomizer import (reset_equippable, get_ranked_items, get_item,
                             reset_cursed_shield, unhardcode_tintinabar,
                             ItemBlock)
 from locationrandomizer import (get_locations, get_location, get_zones,
-                                get_npcs, randomize_forest, NPCBlock, EventBlock)
+                                get_npcs, randomize_forest, NPCBlock)
 from menufeatures import (improve_item_display, improve_gogo_status_menu,
                           improve_rage_menu, show_original_names,
                           improve_dance_menu, y_equip_relics, fix_gogo_portrait)
@@ -75,11 +75,11 @@ BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
+TEST_ON = True
 #TEST_SEED = "CE-4.0.3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "CE-4.0.3|katn|b c d e f g i j k m n o p q r s t u w y z electricboogaloo randombosses darkworld madworld capslockoff johnnydmad notawaiter bsiab questionablecontent|1658973385"
+TEST_SEED = "CE-4.0.3|katn|b c d e f g i j k m n o p q r s t u w y z electricboogaloo randombosses darkworld madworld capslockoff masseffect johnnydmad notawaiter bsiab questionablecontent|1658973387"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -179,28 +179,149 @@ def log_chests():
         log(chests, section="treasure chests")
 
 
-def log_break_learn_items():
+def log_item_mutations():
     """
     Appends the Item Magic section to the spoiler log.
     """
-    items = sorted(get_ranked_items(), key=lambda i: i.itemid)
-    breakable = [i for i in items if not i.is_consumable and i.itemtype & 0x20]
-    s = "BREAKABLE ITEMS\n"
-    for i in breakable:
-        spell = get_spell(i.features['breakeffect'])
-        indestructible = not i.features['otherproperties'] & 0x08
-        s2 = "{0:13}  {1}".format(i.name + ":", spell.name)
+    items = sorted(get_ranked_items(), key=lambda item: item.name)
+    breakable = [item for item in items if not item.is_consumable and item.itemtype & 0x20]
+    log_string = "BREAKABLE ITEMS\n---------------------------\n"
+    for item in breakable:
+        spell = get_spell(item.features['breakeffect'])
+        indestructible = not item.features['otherproperties'] & 0x08
+        log_string += "{0:15}{1}".format(item.name + ":", spell.name)
         if indestructible:
-            s2 += " (indestructible)"
-        s += s2 + "\n"
-    log(s, "item magic")
-    s = "SPELL-TEACHING ITEMS\n"
-    learnable = [i for i in items if i.features['learnrate'] > 0]
-    for i in learnable:
-        spell = get_spell(i.features['learnspell'])
-        rate = i.features['learnrate']
-        s += "{0:13}  {1} x{2}\n".format(i.name + ":", spell.name, rate)
-    log(s, "item magic")
+            log_string += " (indestructible)"
+        log_string += "\n"
+    log(log_string, "item magic")
+
+    log_string = "SPELL-TEACHING ITEMS\n---------------------------\n"
+    learnable = [item for item in items if item.features['learnrate'] > 0]
+    for item in learnable:
+        spell = get_spell(item.features['learnspell'])
+        rate = item.features['learnrate']
+        log_string += "{0:15}{1} x{2}\n".format(item.name + ":", spell.name, rate)
+    log(log_string, "item magic")
+
+    log_string = "ITEM PROCS\n---------------------------\n"
+    proc_items = [item for item in items if item.is_weapon and item.features['otherproperties'] & 0x04]
+    for item in proc_items:
+        spell = get_spell(item.features['breakeffect'])
+        log_string += "{0:15}{1}\n".format(item.name + ":", spell.name)
+    log(log_string, "item magic")
+
+    """
+    Appends the Item Effects section to the spoiler log.
+    """
+    log_string = "SPECIAL FEATURES\n---------------------------\n"
+    feature_types = ["fieldeffect", "statusprotect1", "statusprotect2", "statusacquire3",
+                     "statboost1", "special1", "statboost2", "special2", "special3",
+                     "statusacquire2"]
+    # Currently Special Features can only be gained, not lost, so there's no reason to specify
+    #   whether a feature was gained or lost. The commented portion of the below code should support
+    #   losing special features, if that is implemented in the future.
+    for item in items:
+        gains = []
+        # losses = []
+        if item.is_weapon or item.is_armor or item.is_relic:
+            for feature_type in feature_types:
+                if item.vanilla_data.features[feature_type] == item.features[feature_type]:
+                    continue
+
+                for index, bits in enumerate(zip(bin(item.features[feature_type])[2:].zfill(8),
+                                                 bin(item.vanilla_data.features[feature_type])[2:].zfill(8))):
+                    if int(bits[0]) and not int(bits[1]):
+                        # Feature was added - get the new feature from the mutated features
+                        feature_name = item.get_feature(feature_type, int(bits[0]) << 7 - index)
+                        if feature_name and not feature_name == "Command Changer":
+                            gains.append(feature_name.capitalize())
+                    # elif not int(bits[0]) and int(bits[1]):
+                    #     # Feature was removed - get the original feature from the vanilla features
+                    #     feature_name = item.get_feature(feature_type, int(bits[1]) << 7 - index)
+                    #     if feature_name and not feature_name == "Command Changer":
+                    #         losses.append(feature_name.capitalize())
+
+
+        if gains:
+            # log_string += "\tGained Special Feature(s): " + ", ".join(gains) + "\n"
+            log_string += "{0:15}{1}\n".format(item.name + ":", ", ".join(gains))
+
+        # if losses:
+        #     log_string += "\tLost Special Feature(s): " + ", ".join(losses) + "\n"
+
+        # log_string += "\n"
+    log(log_string, "item effects")
+
+    log_string = "SPECIAL ACTIONS\n---------------------------\n"
+    # Currently Special Actions can only be gained, and only by items that do not already have a special
+    #   action. The commented code below should support the loss of special actions, if that is ever implemented.
+    for item in items:
+        if not item.vanilla_data.features['specialaction'] == item.features["specialaction"]:
+            # old_special_action = int(item.vanilla_data.features["specialaction"]) >> 4
+            new_special_action = int(item.features["specialaction"]) >> 4
+
+            if new_special_action:
+                # log_string += "\tGained Special Action: " +
+                #               item.get_specialaction(new_special_action) + "\n"
+                log_string += "{0:15}{1}\n".format(item.name + ":", item.get_specialaction(new_special_action))
+
+            # if old_special_action:
+            #     log_string += "\tLost Special Action: " +
+            #                  item.get_specialaction(old_special_action) + "\n"
+    log(log_string, "item effects")
+
+    log_string = "ELEMENTAL PROPERTIES\n---------------------------\n"
+    elemental_properties = {
+        'elements': "Elemental Dmg/Res",
+        'elemabsorbs': "Elemental Absorption",
+        'elemnulls': "Elemental Nullification",
+        'elemweaks': "Elemental Weakness"
+    }
+
+    for item in items:
+        new_item = True
+        for property_name, friendly_property_name in elemental_properties.items():
+            if item.vanilla_data.features[property_name] == item.features[property_name]:
+                continue
+
+            gains = []
+            losses = []
+
+            for index, bits in enumerate(zip(bin(item.features[property_name])[2:].zfill(8),
+                                             bin(item.vanilla_data.features[property_name])[2:].zfill(8))):
+                if int(bits[0]) and not int(bits[1]):
+                    # Element was added - get the new element from the mutated features
+                    element_name = item.get_element(int(bits[0]) << 7 - index)
+                    gains.append(element_name.capitalize())
+                elif not int(bits[0]) and int(bits[1]):
+                    # Element was removed - get the original element from the vanilla features
+                    element_name = item.get_element(int(bits[1]) << 7 - index)
+                    losses.append(element_name.capitalize())
+
+                if property_name == "elements":
+                    if item.is_weapon:
+                        friendly_property_name = "Elemental Damage"
+                    else:
+                        friendly_property_name = "Elemental Half-Damage"
+
+                if new_item and (gains or losses):
+                    log_string += item.name + ":"
+                    new_item = False
+
+                if gains:
+                    # log_string += "\n\tGained " + friendly_property_name + ": " + ", ".join(gains)
+                    log_string += "\n{0:8}{1}{2}".format("", "Gained " +
+                                                          friendly_property_name + ": ", ", ".join(gains))
+                    gains = []
+
+                if losses:
+                    # log_string += "\n\tLost " + friendly_property_name + ": " + ", ".join(losses)
+                    log_string += "\n{0:8}{1}{2}".format("", "Lost " +
+                                                          friendly_property_name + ": ", ", ".join(losses))
+                    losses = []
+        if not new_item:
+            log_string = log_string + "\n"
+    log(log_string, "item effects")
 
 
 def rngstate() -> int:
@@ -2282,8 +2403,6 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int] = None) -> L
         i.write_stats(fout)
         if i.features['special2'] & 0x38 and i.is_relic:
             auto_equip_relics.append(i.itemid)
-        if i.mutation_log != {}:
-            log(str(i.get_mutation_log()), section="item effects")
 
     assert auto_equip_relics
 
@@ -5249,11 +5368,14 @@ def randomize(**kwargs) -> str:
         from itemrandomizer import set_item_changed_commands
         set_item_changed_commands(changed_commands)
         loglist = reset_special_relics(items, characters, fout)
+        log_string = "COMMAND CHANGERS\n---------------------------\n"
+        loglist.sort(key=lambda i: i[0])
         for name, before, after in loglist:
             beforename = [c for c in commands.values() if c.id == before][0].name
             aftername = [c for c in commands.values() if c.id == after][0].name
-            logstr = "{0:13} {1:7} -> {2:7}".format(name + ":", beforename.lower(), aftername.lower())
-            log(logstr, section="command-change relics")
+            log_string += "{0:15}{1:7} -> {2:7}\n".format(name + ":", beforename.lower(), aftername.lower())
+
+        log(log_string, section="item effects")
         reset_cursed_shield(fout)
 
         if options.Use_new_randomizer:
@@ -5750,7 +5872,7 @@ def randomize(**kwargs) -> str:
 
     if not Options_.is_code_active("ancientcave"):
         log_chests()
-    log_break_learn_items()
+    log_item_mutations()
 
     f = open(outlog, 'w+')
     f.write(get_logstring(
