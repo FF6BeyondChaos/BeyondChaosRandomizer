@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-
 class GameObject(ABC):
 
     def __init__(self, address: int):

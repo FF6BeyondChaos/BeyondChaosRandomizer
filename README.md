@@ -17,7 +17,7 @@ __Beyond Chaos Discord__:    https://discord.gg/S3G3UXy
 
 ## Overview
 
-Beyond Chaos CE is a randomizer, a program that remixes game content randomly, for FF6. It is a fork of [Abyssonym](https://github.com/abyssonym/)'s [Beyond Chaos randomizer](https://github.com/abyssonym/beyondchaos) with even more features.
+Beyond Chaos CE is a randomizer, a program that remixes game content randomly, for FF6. It is a fork of [Abyssonym](https://github.com/abyssonym/) 's [Beyond Chaos randomizer](https://github.com/abyssonym/beyondchaos) with even more features.
 Every time you run Beyond Chaos CE, it will generate a completely unique, brand-new mod of FF6 for you to challenge and explore. With the basic flags, there are over 10 billion different possible randomizations!
 
 Nearly everything is randomized, including treasure, enemies, colors, graphics, character abilities, and more.
@@ -52,7 +52,7 @@ Run `BeyondChaos.exe`. If you're using a version prior to Windows 10 and get an 
 ### Other users:
 
 ```bash
-python randomizer.py
+python -m BeyondChaos.beyondchaos
 ```
 
 ### Source ROM file
