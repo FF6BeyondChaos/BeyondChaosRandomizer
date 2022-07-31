@@ -34,8 +34,8 @@ BeyondChaos/randomizer - Copy.py
 
 config.ini
 
-remonsterate/**/*.png
-remonsterate/*.txt
+BeyondChaos/remonsterate/**/*.png
+BeyondChaos/remonsterate/*.txt
 custom/**/*.bin
 custom/**/*.pal
 custom/**/*.txt
