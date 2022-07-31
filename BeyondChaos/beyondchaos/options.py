@@ -1,3 +1,4 @@
+from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import List, Set, Union
 
@@ -81,6 +82,8 @@ class Options:
     randomize_magicite: bool = field(init=False, default=False)
     random_final_party: bool = field(init=False, default=False)
 
+    ignore_conflicts: bool = field(init=False, default=False)
+
     def is_code_active(self, code_name: str):
         if code_name in self.active_codes.keys():
             return True
@@ -110,7 +113,14 @@ class Options:
                 return True
         return False
 
+    def is_conflicting(self, code_name):
+        return not self.ignore_conflicts \
+               or set(self.active_codes) & INCOMPATIBLE_CODES[code_name]
+
     def activate_code(self, code_name: str, code_value=None):
+        if self.is_conflicting(code_name):
+            raise ValueError(f"{code_name} is incompatible with one or more of: "
+                             f"{INCOMPATIBLE_CODES[code_name]}")
         for code in ALL_CODES:
             if code.name == code_name:
                 self.active_codes[code_name] = code_value
@@ -606,6 +616,17 @@ BETA_CODES = [
 ]
 
 ALL_CODES = NORMAL_CODES + MAKEOVER_MODIFIER_CODES + CAVE_CODES + SPECIAL_CODES
+
+INCOMPATIBLE_CODES = defaultdict(set)
+INCOMPATIBLE_CODES.update({
+    "thescenarionottaken": {"strangejourney"}
+})
+# Conflicts are assumed to go both ways
+reverse = defaultdict(set)
+for code, conf in INCOMPATIBLE_CODES.items():
+    for confcode in conf:
+        reverse[confcode].add(code)
+INCOMPATIBLE_CODES.update(reverse)
 
 Options_ = Options(ALL_MODES[0])
 
