@@ -173,7 +173,7 @@ class Window(QMainWindow):
         super().__init__()
 
         # window geometry data
-        self.title = "Beyond Chaos Randomizer"
+        self.title = "Beyond Chaos Randomizer " + VERSION
         self.left = 200
         self.top = 200
         self.width = 1000
