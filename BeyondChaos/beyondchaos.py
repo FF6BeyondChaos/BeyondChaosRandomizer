@@ -1420,6 +1420,8 @@ if __name__ == "__main__":
         "updater file and updates please wait."
     )
     App = QApplication(sys.argv)
+    os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    App.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
     try:
         if not BETA:
             validation_result, required_update = validate_files()
