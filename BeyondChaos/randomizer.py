@@ -1012,6 +1012,10 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
     freespaces = []
     freespaces.append(FreeBlock(0x2A65A, 0x2A800))
     freespaces.append(FreeBlock(0x2FAAC, 0x2FC6D))
+    # NOTE: This depends on using `relocate_cinematic_data`
+    # once this is settled on, we can just prepend this to
+    # the first free block above
+    freespaces.append(FreeBlock(0x28A70, 0x2A659))
 
     multibannedlist = [0x63, 0x58, 0x5B]
 
@@ -5257,6 +5261,8 @@ def randomize(**kwargs) -> str:
         manage_commands(commands)
         improve_gogo_status_menu(fout)
     reseed()
+
+    relocate_cinematic_data(fout, 0xF08A70)
 
     spells = get_ranked_spells(sourcefile)
     if Options_.is_code_active('madworld'):
