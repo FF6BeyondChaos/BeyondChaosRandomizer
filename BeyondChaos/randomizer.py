@@ -471,7 +471,7 @@ def determine_new_freespaces(freespaces: List[FreeBlock],
 
 
 # Based on a document called Ending_Cinematic_Relocation_Notes
-def relocate_ending_cinematic_data(data_blk_dst):
+def relocate_ending_cinematic_data(fout, data_blk_dst):
     cinematic_data_addr, cinematic_data_length = 0x28A70, 7145
     # All the LDAs
     relocate_locations = [
