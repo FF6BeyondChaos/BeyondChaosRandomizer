@@ -9,6 +9,7 @@ import time
 import traceback
 
 # Related third-party imports
+import requests.exceptions
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QCursor
 from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
@@ -141,31 +142,44 @@ class BingoPrompts(QDialog):
 
 
 def update_bc(wait=False, suppress_prompt=False):
-    run_updater = False
-    if not suppress_prompt:
-        update_prompt = QMessageBox()
-        update_prompt.setWindowTitle("Beyond Chaos Updater")
-        update_prompt.setText("Beyond Chaos will check for updates to the core randomizer, character sprites, and "
-                              "monster sprites. If updates are performed, BeyondChaos.exe will automatically close.")
-        update_prompt.setStandardButtons(QMessageBox.Cancel | QMessageBox.Ok)
-        update_prompt_button_clicked = update_prompt.exec()
-        if update_prompt_button_clicked == QMessageBox.Ok:
-            run_updater = True
+    try:
+        # Tests internet connectivity. Throws a ConnectionError if offline.
+        # We want to test connectivity here before firing up BeyondChaosUpdater.
+        requests.head(url='http://www.google.com')
+        run_updater = False
+        if not suppress_prompt:
+            update_prompt = QMessageBox()
+            update_prompt.setWindowTitle("Beyond Chaos Updater")
+            update_prompt.setText("Beyond Chaos will check for updates to the core randomizer, character sprites, and "
+                                  "monster sprites. If updates are performed, BeyondChaos.exe will automatically close.")
+            update_prompt.setStandardButtons(QMessageBox.Cancel | QMessageBox.Ok)
+            update_prompt_button_clicked = update_prompt.exec()
+            if update_prompt_button_clicked == QMessageBox.Ok:
+                run_updater = True
 
-    if run_updater or suppress_prompt:
-        updates_hidden(False)
-        print("Starting Beyond Chaos Updater...\n")
-        args = ["-pid " + str(os.getpid())]
-        os.system('cls' if os.name == 'nt' else 'clear')
-        try:
-            update_process = subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
-            if wait:
-                update_process.wait()
-        except FileNotFoundError:
-            get_updater()
-            update_process = subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
-            if wait:
-                update_process.wait()
+        if run_updater or suppress_prompt:
+            updates_hidden(False)
+            print("Starting Beyond Chaos Updater...\n")
+            args = ["-pid " + str(os.getpid())]
+            os.system('cls' if os.name == 'nt' else 'clear')
+            try:
+                update_process = subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
+                if wait:
+                    update_process.wait()
+            except FileNotFoundError:
+                get_updater()
+                update_process = subprocess.Popen(args=args, executable="BeyondChaosUpdater.exe")
+                if wait:
+                    update_process.wait()
+
+    except requests.exceptions.ConnectionError:
+        update_bc_failure_message = QMessageBox()
+        update_bc_failure_message.setIcon(QMessageBox.Warning)
+        update_bc_failure_message.setWindowTitle("No Internet Connection")
+        update_bc_failure_message.setText("You are currently offline. Please connect to the internet to perform "
+                                          "updates to Beyond Chaos.")
+        update_bc_failure_message.setStandardButtons(QMessageBox.Close)
+        update_bc_failure_message.exec()
 
 
 class Window(QMainWindow):
@@ -173,7 +187,7 @@ class Window(QMainWindow):
         super().__init__()
 
         # window geometry data
-        self.title = "Beyond Chaos Randomizer"
+        self.title = "Beyond Chaos Randomizer " + VERSION
         self.left = 200
         self.top = 200
         self.width = 1000
@@ -182,7 +196,7 @@ class Window(QMainWindow):
         # values to be sent to Randomizer
         self.romText = ""
         self.romOutputDirectory = ""
-        self.version = "CE-4.0.3"
+        self.version = "CE-4.1.0"
         self.mode = "normal"
         self.seed = ""
         self.flags = []
@@ -1419,77 +1433,100 @@ if __name__ == "__main__":
         "Loading GUI, checking for config file, "
         "updater file and updates please wait."
     )
+    QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
     App = QApplication(sys.argv)
+    os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
     try:
         if not BETA:
-            validation_result, required_update = validate_files()
-            first_time_setup = False
-            if required_update and 'config.ini' in validation_result:
-                first_time_setup = True
-            if required_update or (validation_result and not are_updates_hidden()):
-                update_message = QMessageBox()
-                if first_time_setup:
-                    update_message.setIcon(QMessageBox.Information)
-                    update_message.setWindowTitle("First Time Setup")
-                    update_message.setText("<b>Welcome to Beyond Chaos Community Edition!</b>" +
-                                           "<br>" +
-                                           "<br>" +
-                                           "As part of first time setup, "
-                                           "we need to download some required files and folders."
-                                           "<br>" +
-                                           "<br>" +
-                                           "Press OK to launch the updater to download the required files."
-                                           "<br>" +
-                                           "Press Close to exit the program.")
-                elif required_update:
-                    update_message.setIcon(QMessageBox.Warning)
-                    update_message.setWindowTitle("Missing Required Files")
-                    update_message.setText("Files that are required for the randomizer to function properly are missing "
-                                           "from the randomizer directory:" +
-                                           "<br>" +
-                                           "<br>" +
-                                           str(validation_result) +
-                                           "<br>" +
-                                           "<br>" +
-                                           "Press OK to launch the updater to download the required files." +
-                                           "<br>" +
-                                           "Press Close to exit the program.")
-                else:
-                    update_message.setIcon(QMessageBox.Question)
-                    update_message.setWindowTitle("Update Available")
-                    update_message.setText("Updates to Beyond Chaos are available!" +
-                                           "<br>" +
-                                           "<br>" +
-                                           str(validation_result) +
-                                           "<br>" +
-                                           "<br>" +
-                                           "Press OK to launch the updater or Close to skip updating. This pop-up will "
-                                           "only show once per update.")
-
-                update_message.setStandardButtons(QMessageBox.Close | QMessageBox.Ok)
-                button_clicked = update_message.exec()
-                if button_clicked == QMessageBox.Close:
-                    # Update_message informs the user about the update button on the UI.
-                    update_message.close()
-                    if required_update:
-                        sys.exit()
+            required_update = False
+            validation_result = []
+            try:
+                validation_result, required_update = validate_files()
+                first_time_setup = False
+                if required_update and 'config.ini' in validation_result:
+                    first_time_setup = True
+                if required_update or (validation_result and not are_updates_hidden()):
+                    update_message = QMessageBox()
+                    if first_time_setup:
+                        update_message.setIcon(QMessageBox.Information)
+                        update_message.setWindowTitle("First Time Setup")
+                        update_message.setText("<b>Welcome to Beyond Chaos Community Edition!</b>" +
+                                               "<br>" +
+                                               "<br>" +
+                                               "As part of first time setup, "
+                                               "we need to download some required files and folders."
+                                               "<br>" +
+                                               "<br>" +
+                                               "Press OK to launch the updater to download the required files."
+                                               "<br>" +
+                                               "Press Close to exit the program.")
+                    elif required_update:
+                        update_message.setIcon(QMessageBox.Warning)
+                        update_message.setWindowTitle("Missing Required Files")
+                        update_message.setText("Files that are required for the randomizer to function properly are missing "
+                                               "from the randomizer directory:" +
+                                               "<br>" +
+                                               "<br>" +
+                                               str(validation_result) +
+                                               "<br>" +
+                                               "<br>" +
+                                               "Press OK to launch the updater to download the required files." +
+                                               "<br>" +
+                                               "Press Close to exit the program.")
                     else:
-                        update_dismiss_message = QMessageBox()
-                        update_dismiss_message.setIcon(QMessageBox.Information)
-                        update_dismiss_message.setWindowTitle("Information")
-                        update_dismiss_message.setText("The update will be available using the Update button on the "
-                                                       "randomizer's menu bar.")
-                        update_dismiss_message.setStandardButtons(QMessageBox.Close)
-                        button_clicked = update_dismiss_message.exec()
-                        if button_clicked == QMessageBox.Close:
-                            update_dismiss_message.close()
-                            updates_hidden(True)
-                elif button_clicked == QMessageBox.Ok:
-                    if required_update and not first_time_setup:
-                        save_version('core', '0.0')
-                    elif first_time_setup:
-                        save_version('core', VERSION)
-                    update_bc(wait=True, suppress_prompt=True)
+                        update_message.setIcon(QMessageBox.Question)
+                        update_message.setWindowTitle("Update Available")
+                        update_message.setText("Updates to Beyond Chaos are available!" +
+                                               "<br>" +
+                                               "<br>" +
+                                               str(validation_result) +
+                                               "<br>" +
+                                               "<br>" +
+                                               "Press OK to launch the updater or Close to skip updating. This pop-up will "
+                                               "only show once per update.")
+
+                    update_message.setStandardButtons(QMessageBox.Close | QMessageBox.Ok)
+                    button_clicked = update_message.exec()
+                    if button_clicked == QMessageBox.Close:
+                        # Update_message informs the user about the update button on the UI.
+                        update_message.close()
+                        if required_update:
+                            sys.exit()
+                        else:
+                            update_dismiss_message = QMessageBox()
+                            update_dismiss_message.setIcon(QMessageBox.Information)
+                            update_dismiss_message.setWindowTitle("Information")
+                            update_dismiss_message.setText("The update will be available using the Update button on the "
+                                                           "randomizer's menu bar.")
+                            update_dismiss_message.setStandardButtons(QMessageBox.Close)
+                            button_clicked = update_dismiss_message.exec()
+                            if button_clicked == QMessageBox.Close:
+                                update_dismiss_message.close()
+                                updates_hidden(True)
+                    elif button_clicked == QMessageBox.Ok:
+                        if required_update and not first_time_setup:
+                            save_version('core', '0.0')
+                        elif first_time_setup:
+                            save_version('core', VERSION)
+                        if required_update:
+                            # Test internet connectivity. Throws a ConnectionError if offline
+                            requests.head(url='http://www.google.com')
+                        update_bc(wait=True, suppress_prompt=True)
+            except requests.exceptions.ConnectionError:
+                if required_update:
+                    failure_message = QMessageBox()
+                    failure_message.setIcon(QMessageBox.Warning)
+                    failure_message.setWindowTitle("No Internet Connection")
+                    failure_message.setText("Beyond Chaos was unable to perform the required update because " +
+                                            "no internet connection was available." +
+                                            "<br><br>" +
+                                            "Please connect to the internet and then try again.")
+                    failure_message.setStandardButtons(QMessageBox.Close)
+                    failure_message.exec()
+                    sys.exit()
+                else:
+                    print("You are currently offline. Skipping the update check.")
+                pass
         window = Window()
         time.sleep(3)
         sys.exit(App.exec())

@@ -154,7 +154,7 @@
 98: legacy/rd08_lawl,      0000, D700, F 7 7  F
 99: legacy/so2rena3,       1815, F900, F 0 2  0
 9A: legacy/ct24_trumpet,   9C06, E1C6, F 7 7  0
-9B: legacy/ll2A_organ,     E601, 2700, F 7 7  0
+9B: legacy/ll2a_organ,     E601, 2700, F 7 7  0
 9C: legacy/tr10_clavinet,  4F05, D260, F 7 7  F
 9D: legacy/r340_timbale,   0000, 0000, F 7 7  0
 9E: legacy/sm61_steel,     F207, A8A6, F 7 6 13

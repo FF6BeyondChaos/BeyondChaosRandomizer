@@ -34,7 +34,7 @@ from itemrandomizer import (reset_equippable, get_ranked_items, get_item,
                             reset_cursed_shield, unhardcode_tintinabar,
                             ItemBlock)
 from locationrandomizer import (get_locations, get_location, get_zones,
-                                get_npcs, randomize_forest, NPCBlock, EventBlock)
+                                get_npcs, randomize_forest, NPCBlock)
 from menufeatures import (improve_item_display, improve_gogo_status_menu,
                           improve_rage_menu, show_original_names,
                           improve_dance_menu, y_equip_relics, fix_gogo_portrait)
@@ -70,15 +70,16 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-4.0.3"
+VERSION = "CE-4.1.0"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "4|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis remonsterate|1603333081"
+#TEST_SEED = "CE-4.0.3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff notawaiter johnnydmad bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis dearestmolulu|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
+TEST_SEED = "CE-4.0.3|katn|c d e f g i j m o p q s t w z frenchvanilla hateanime hateboys hategeneric hatekids nopotato masseffect randombosses replaceeverything allcombos endless9 supernatural johnnydmad notawaiter thescenarionottaken equipanything questionablecontent removeflashing gpboost:10.0 mpboost:10.0 dancelessons nomiabs desperation nobreaks unbreakable|1658973387"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -178,28 +179,149 @@ def log_chests():
         log(chests, section="treasure chests")
 
 
-def log_break_learn_items():
+def log_item_mutations():
     """
     Appends the Item Magic section to the spoiler log.
     """
-    items = sorted(get_ranked_items(), key=lambda i: i.itemid)
-    breakable = [i for i in items if not i.is_consumable and i.itemtype & 0x20]
-    s = "BREAKABLE ITEMS\n"
-    for i in breakable:
-        spell = get_spell(i.features['breakeffect'])
-        indestructible = not i.features['otherproperties'] & 0x08
-        s2 = "{0:13}  {1}".format(i.name + ":", spell.name)
+    items = sorted(get_ranked_items(), key=lambda item: item.name)
+    breakable = [item for item in items if not item.is_consumable and item.itemtype & 0x20]
+    log_string = "BREAKABLE ITEMS\n---------------------------\n"
+    for item in breakable:
+        spell = get_spell(item.features['breakeffect'])
+        indestructible = not item.features['otherproperties'] & 0x08
+        log_string += "{0:15}{1}".format(item.name + ":", spell.name)
         if indestructible:
-            s2 += " (indestructible)"
-        s += s2 + "\n"
-    log(s, "item magic")
-    s = "SPELL-TEACHING ITEMS\n"
-    learnable = [i for i in items if i.features['learnrate'] > 0]
-    for i in learnable:
-        spell = get_spell(i.features['learnspell'])
-        rate = i.features['learnrate']
-        s += "{0:13}  {1} x{2}\n".format(i.name + ":", spell.name, rate)
-    log(s, "item magic")
+            log_string += " (indestructible)"
+        log_string += "\n"
+    log(log_string, "item magic")
+
+    log_string = "SPELL-TEACHING ITEMS\n---------------------------\n"
+    learnable = [item for item in items if item.features['learnrate'] > 0]
+    for item in learnable:
+        spell = get_spell(item.features['learnspell'])
+        rate = item.features['learnrate']
+        log_string += "{0:15}{1} x{2}\n".format(item.name + ":", spell.name, rate)
+    log(log_string, "item magic")
+
+    log_string = "ITEM PROCS\n---------------------------\n"
+    proc_items = [item for item in items if item.is_weapon and item.features['otherproperties'] & 0x04]
+    for item in proc_items:
+        spell = get_spell(item.features['breakeffect'])
+        log_string += "{0:15}{1}\n".format(item.name + ":", spell.name)
+    log(log_string, "item magic")
+
+    """
+    Appends the Item Effects section to the spoiler log.
+    """
+    log_string = "SPECIAL FEATURES\n---------------------------\n"
+    feature_types = ["fieldeffect", "statusprotect1", "statusprotect2", "statusacquire3",
+                     "statboost1", "special1", "statboost2", "special2", "special3",
+                     "statusacquire2"]
+    # Currently Special Features can only be gained, not lost, so there's no reason to specify
+    #   whether a feature was gained or lost. The commented portion of the below code should support
+    #   losing special features, if that is implemented in the future.
+    for item in items:
+        gains = []
+        # losses = []
+        if item.is_weapon or item.is_armor or item.is_relic:
+            for feature_type in feature_types:
+                if item.vanilla_data.features[feature_type] == item.features[feature_type]:
+                    continue
+
+                for index, bits in enumerate(zip(bin(item.features[feature_type])[2:].zfill(8),
+                                                 bin(item.vanilla_data.features[feature_type])[2:].zfill(8))):
+                    if int(bits[0]) and not int(bits[1]):
+                        # Feature was added - get the new feature from the mutated features
+                        feature_name = item.get_feature(feature_type, int(bits[0]) << 7 - index)
+                        if feature_name and not feature_name == "Command Changer":
+                            gains.append(feature_name.capitalize())
+                    # elif not int(bits[0]) and int(bits[1]):
+                    #     # Feature was removed - get the original feature from the vanilla features
+                    #     feature_name = item.get_feature(feature_type, int(bits[1]) << 7 - index)
+                    #     if feature_name and not feature_name == "Command Changer":
+                    #         losses.append(feature_name.capitalize())
+
+
+        if gains:
+            # log_string += "\tGained Special Feature(s): " + ", ".join(gains) + "\n"
+            log_string += "{0:15}{1}\n".format(item.name + ":", ", ".join(gains))
+
+        # if losses:
+        #     log_string += "\tLost Special Feature(s): " + ", ".join(losses) + "\n"
+
+        # log_string += "\n"
+    log(log_string, "item effects")
+
+    log_string = "SPECIAL ACTIONS\n---------------------------\n"
+    # Currently Special Actions can only be gained, and only by items that do not already have a special
+    #   action. The commented code below should support the loss of special actions, if that is ever implemented.
+    for item in items:
+        if not item.vanilla_data.features['specialaction'] == item.features["specialaction"]:
+            # old_special_action = int(item.vanilla_data.features["specialaction"]) >> 4
+            new_special_action = int(item.features["specialaction"]) >> 4
+
+            if new_special_action:
+                # log_string += "\tGained Special Action: " +
+                #               item.get_specialaction(new_special_action) + "\n"
+                log_string += "{0:15}{1}\n".format(item.name + ":", item.get_specialaction(new_special_action))
+
+            # if old_special_action:
+            #     log_string += "\tLost Special Action: " +
+            #                  item.get_specialaction(old_special_action) + "\n"
+    log(log_string, "item effects")
+
+    log_string = "ELEMENTAL PROPERTIES\n---------------------------\n"
+    elemental_properties = {
+        'elements': "Elemental Dmg/Res",
+        'elemabsorbs': "Elemental Absorption",
+        'elemnulls': "Elemental Nullification",
+        'elemweaks': "Elemental Weakness"
+    }
+
+    for item in items:
+        new_item = True
+        for property_name, friendly_property_name in elemental_properties.items():
+            if item.vanilla_data.features[property_name] == item.features[property_name]:
+                continue
+
+            gains = []
+            losses = []
+
+            for index, bits in enumerate(zip(bin(item.features[property_name])[2:].zfill(8),
+                                             bin(item.vanilla_data.features[property_name])[2:].zfill(8))):
+                if int(bits[0]) and not int(bits[1]):
+                    # Element was added - get the new element from the mutated features
+                    element_name = item.get_element(int(bits[0]) << 7 - index)
+                    gains.append(element_name.capitalize())
+                elif not int(bits[0]) and int(bits[1]):
+                    # Element was removed - get the original element from the vanilla features
+                    element_name = item.get_element(int(bits[1]) << 7 - index)
+                    losses.append(element_name.capitalize())
+
+                if property_name == "elements":
+                    if item.is_weapon:
+                        friendly_property_name = "Elemental Damage"
+                    else:
+                        friendly_property_name = "Elemental Half-Damage"
+
+                if new_item and (gains or losses):
+                    log_string += item.name + ":"
+                    new_item = False
+
+                if gains:
+                    # log_string += "\n\tGained " + friendly_property_name + ": " + ", ".join(gains)
+                    log_string += "\n{0:8}{1}{2}".format("", "Gained " +
+                                                          friendly_property_name + ": ", ", ".join(gains))
+                    gains = []
+
+                if losses:
+                    # log_string += "\n\tLost " + friendly_property_name + ": " + ", ".join(losses)
+                    log_string += "\n{0:8}{1}{2}".format("", "Lost " +
+                                                          friendly_property_name + ": ", ", ".join(losses))
+                    losses = []
+        if not new_item:
+            log_string = log_string + "\n"
+    log(log_string, "item effects")
 
 
 def rngstate() -> int:
@@ -346,6 +468,64 @@ def determine_new_freespaces(freespaces: List[FreeBlock],
     fss = myfs.unfree(myfs.start, size)
     freespaces.extend(fss)
     return freespaces
+
+
+# Based on a document called Ending_Cinematic_Relocation_Notes
+def relocate_ending_cinematic_data(fout, data_blk_dst):
+    cinematic_data_addr, cinematic_data_length = 0x28A70, 7145
+    # All the LDAs
+    relocate_locations = [
+        0x3C703, 0x3C716, 0x3C72A, 0x3C73D, 0x3C751, 0x3C75C, 0x3C767, 0x3C772,
+        0x3C77D, 0x3C788, 0x3C7B1, 0x3C80F, 0x3C833, 0x3C874, 0x3C8C5, 0x3C8F3,
+        0x3CA10, 0x3CA30, 0x3CA57, 0x3CA80, 0x3CC65, 0x3CD59, 0x3CD6E, 0x3CEC9,
+        0x3CF7C, 0x3CFB5, 0x3CFCA, 0x3D018, 0x3D023, 0x3D045, 0x3D050, 0x3D173,
+        0x3D17E, 0x3D189, 0x3D194, 0x3D19F, 0x3D1AA, 0x3D970, 0x3D97B, 0x3D986,
+        0x3D991, 0x3D99C, 0x3D9A7, 0x3D9B2, 0x3D9BD, 0x3D9C8, 0x3D9D3, 0x3D9DE,
+        0x3D9E9, 0x3DA09, 0x3DA14, 0x3DA1F, 0x3DA2A, 0x3DA35, 0x3DA40, 0x3DA4B,
+        0x3DA56, 0x3DA61, 0x3DA6C, 0x3DA77, 0x3DA82, 0x3DA8D, 0x3DA98, 0x3DAA3,
+        0x3DAAE, 0x3DAB9, 0x3DAC4, 0x3DACF, 0x3DADA, 0x3DAE5, 0x3DAF0, 0x3DAFB,
+        0x3DB06, 0x3DB11, 0x3DB1C, 0x3DB27, 0x3DB32, 0x3DB3D, 0x3DB48, 0x3DB53,
+        0x3DB5E, 0x3DB69, 0x3DB74, 0x3DB7F, 0x3DB8A, 0x3DB95, 0x3DBA0, 0x3DD33,
+        0x3E05D, 0x3E07C, 0x3E192, 0x3E1A5, 0x3E1B8, 0x3E1CB, 0x3E1DF, 0x3E1F2,
+        0x3E22D, 0x3E28A, 0x3E468, 0x3E4BF, 0x3E773, 0x3E8B1, 0x3E98D, 0x3E9C1,
+        0x3ED8D, 0x3EDA2, 0x3EDB7, 0x3EE6A, 0x3D286,
+        # Be careful here, you want to change only the C2 part of each of these
+        # five loads to the new bank (the last byte of the command).
+        0x3D4A1, 0x3E032, 0x3E03A, 0x3E042, 0x3E04A,
+    ]
+    
+    # Currently this is only a bank move, if we move it to a different offset
+    # there are probably other instructions we have to change
+    assert data_blk_dst & 0xFFFF == 0x8A70, "Can only change bank, not offset, of cinematic data"
+    new_dst_bnk = data_blk_dst >> 16
+
+    # copy data block
+    fout.seek(cinematic_data_addr)
+    copy_sub = Substitution()
+    copy_sub.bytestring = bytes(fout.read(cinematic_data_length))
+    copy_sub.set_location(data_blk_dst - 0xC00000)
+    copy_sub.write(fout)
+
+    # Blank the data in the newly free'd block
+    copy_sub.set_location(cinematic_data_addr)
+    copy_sub.bytestring = b"\x00" * cinematic_data_length
+    copy_sub.write(fout)
+
+    # Change load instructions to use new bank
+    # LDA #$C2 -> LDA #$xx
+    for addr in relocate_locations[:-5]:
+        copy_sub.set_location(addr + 1)
+        copy_sub.bytestring = bytes([new_dst_bnk])
+        copy_sub.write(fout)
+
+    # LDA $C2____,X -> LDA $xx____,X
+    for addr in relocate_locations[-5:]:
+        copy_sub.set_location(addr + 3)
+        copy_sub.bytestring = bytes([new_dst_bnk])
+        copy_sub.write(fout)
+
+    return FreeBlock(cinematic_data_addr,
+                     cinematic_data_addr + cinematic_data_length)
 
 
 class WindowBlock():
@@ -832,6 +1012,10 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
     freespaces = []
     freespaces.append(FreeBlock(0x2A65A, 0x2A800))
     freespaces.append(FreeBlock(0x2FAAC, 0x2FC6D))
+    # NOTE: This depends on using `relocate_cinematic_data`
+    # once this is settled on, we can just prepend this to
+    # the first free block above
+    freespaces.append(FreeBlock(0x28A70, 0x2A659))
 
     multibannedlist = [0x63, 0x58, 0x5B]
 
@@ -2281,8 +2465,6 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int] = None) -> L
         i.write_stats(fout)
         if i.features['special2'] & 0x38 and i.is_relic:
             auto_equip_relics.append(i.itemid)
-        if i.mutation_log != {}:
-            log(str(i.get_mutation_log()), section="item effects")
 
     assert auto_equip_relics
 
@@ -5069,6 +5251,7 @@ def randomize(**kwargs) -> str:
 
     read_dialogue(fout)
     read_location_names(fout)
+    relocate_ending_cinematic_data(fout, 0xF08A70)
 
     if Options_.shuffle_commands or Options_.replace_commands or Options_.random_treasure:
         auto_recruit_gau(stays_in_wor=not Options_.shuffle_wor and not Options_.is_code_active('mimetime'))
@@ -5216,6 +5399,7 @@ def randomize(**kwargs) -> str:
     manage_ending()
     manage_auction_house()
 
+
     savetutorial_sub = Substitution()
     savetutorial_sub.set_location(0xC9AF1)
     savetutorial_sub.bytestring = [0xD2, 0x33, 0xEA, 0xEA, 0xEA, 0xEA]
@@ -5248,11 +5432,14 @@ def randomize(**kwargs) -> str:
         from itemrandomizer import set_item_changed_commands
         set_item_changed_commands(changed_commands)
         loglist = reset_special_relics(items, characters, fout)
+        log_string = "COMMAND CHANGERS\n---------------------------\n"
+        loglist.sort(key=lambda i: i[0])
         for name, before, after in loglist:
             beforename = [c for c in commands.values() if c.id == before][0].name
             aftername = [c for c in commands.values() if c.id == after][0].name
-            logstr = "{0:13} {1:7} -> {2:7}".format(name + ":", beforename.lower(), aftername.lower())
-            log(logstr, section="command-change relics")
+            log_string += "{0:15}{1:7} -> {2:7}\n".format(name + ":", beforename.lower(), aftername.lower())
+
+        log(log_string, section="item effects")
         reset_cursed_shield(fout)
 
         if options.Use_new_randomizer:
@@ -5749,7 +5936,7 @@ def randomize(**kwargs) -> str:
 
     if not Options_.is_code_active("ancientcave"):
         log_chests()
-    log_break_learn_items()
+    log_item_mutations()
 
     f = open(outlog, 'w+')
     f.write(get_logstring(
