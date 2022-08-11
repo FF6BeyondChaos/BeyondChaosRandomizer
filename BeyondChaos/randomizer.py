@@ -70,16 +70,16 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-4.0.3"
+VERSION = "CE-4.1.0"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = True
-#TEST_SEED = "CE-4.0.3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad notawaiter bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis|1603333081"
+TEST_ON = False
+#TEST_SEED = "CE-4.0.3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff notawaiter johnnydmad bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis dearestmolulu|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "CE-4.0.3|katn|b c d e f g i j k m n o p q r s t u w y z electricboogaloo randombosses darkworld madworld capslockoff masseffect johnnydmad notawaiter bsiab questionablecontent|1658973387"
+TEST_SEED = "CE-4.0.3|katn|c d e f g i j m o p q s t w z frenchvanilla hateanime hateboys hategeneric hatekids nopotato masseffect randombosses replaceeverything allcombos endless9 supernatural johnnydmad notawaiter thescenarionottaken equipanything questionablecontent removeflashing gpboost:10.0 mpboost:10.0 dancelessons nomiabs desperation nobreaks unbreakable|1658973387"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -503,7 +503,7 @@ def relocate_ending_cinematic_data(fout, data_blk_dst):
     fout.seek(cinematic_data_addr)
     copy_sub = Substitution()
     copy_sub.bytestring = bytes(fout.read(cinematic_data_length))
-    copy_sub.set_location(data_blk_dst)
+    copy_sub.set_location(data_blk_dst - 0xC00000)
     copy_sub.write(fout)
 
     # Blank the data in the newly free'd block
@@ -5251,6 +5251,7 @@ def randomize(**kwargs) -> str:
 
     read_dialogue(fout)
     read_location_names(fout)
+    relocate_ending_cinematic_data(fout, 0xF08A70)
 
     if Options_.shuffle_commands or Options_.replace_commands or Options_.random_treasure:
         auto_recruit_gau(stays_in_wor=not Options_.shuffle_wor and not Options_.is_code_active('mimetime'))
@@ -5261,8 +5262,6 @@ def randomize(**kwargs) -> str:
         manage_commands(commands)
         improve_gogo_status_menu(fout)
     reseed()
-
-    relocate_cinematic_data(fout, 0xF08A70)
 
     spells = get_ranked_spells(sourcefile)
     if Options_.is_code_active('madworld'):
@@ -5399,6 +5398,7 @@ def randomize(**kwargs) -> str:
     manage_opening()
     manage_ending()
     manage_auction_house()
+
 
     savetutorial_sub = Substitution()
     savetutorial_sub.set_location(0xC9AF1)
