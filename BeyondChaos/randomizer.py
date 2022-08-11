@@ -70,16 +70,16 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-4.1.0"
+VERSION = "CE-4.1.1"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-#TEST_SEED = "CE-4.0.3|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff notawaiter johnnydmad bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis dearestmolulu|1603333081"
+#TEST_SEED = "CE-4.1.0|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff notawaiter johnnydmad bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis dearestmolulu|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "CE-4.0.3|katn|c d e f g i j m o p q s t w z frenchvanilla hateanime hateboys hategeneric hatekids nopotato masseffect randombosses replaceeverything allcombos endless9 supernatural johnnydmad notawaiter thescenarionottaken equipanything questionablecontent removeflashing gpboost:10.0 mpboost:10.0 dancelessons nomiabs desperation nobreaks unbreakable|1658973387"
+TEST_SEED = "CE-4.1.0|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin dancelessons swdtechspeed:random alasdraco capslockoff notawaiter remonsterate bsiab mimetime questionablecontent|1660190215"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -2901,7 +2901,7 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
         elif chain_start_item.is_armor:
             filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["armor", "misc"]]
         elif chain_start_item.is_relic:
-            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["relic", "misc"]]
+            filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["relics", "misc"]]
         else:
             filtered_shops = [shop for shop in all_wor_shops if shop.shoptype_pretty in ["items", "misc"]]
         # Replace a random lower-tier shop item with striker_wager
