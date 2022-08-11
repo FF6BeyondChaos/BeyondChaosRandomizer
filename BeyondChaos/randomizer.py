@@ -470,6 +470,64 @@ def determine_new_freespaces(freespaces: List[FreeBlock],
     return freespaces
 
 
+# Based on a document called Ending_Cinematic_Relocation_Notes
+def relocate_ending_cinematic_data(fout, data_blk_dst):
+    cinematic_data_addr, cinematic_data_length = 0x28A70, 7145
+    # All the LDAs
+    relocate_locations = [
+        0x3C703, 0x3C716, 0x3C72A, 0x3C73D, 0x3C751, 0x3C75C, 0x3C767, 0x3C772,
+        0x3C77D, 0x3C788, 0x3C7B1, 0x3C80F, 0x3C833, 0x3C874, 0x3C8C5, 0x3C8F3,
+        0x3CA10, 0x3CA30, 0x3CA57, 0x3CA80, 0x3CC65, 0x3CD59, 0x3CD6E, 0x3CEC9,
+        0x3CF7C, 0x3CFB5, 0x3CFCA, 0x3D018, 0x3D023, 0x3D045, 0x3D050, 0x3D173,
+        0x3D17E, 0x3D189, 0x3D194, 0x3D19F, 0x3D1AA, 0x3D970, 0x3D97B, 0x3D986,
+        0x3D991, 0x3D99C, 0x3D9A7, 0x3D9B2, 0x3D9BD, 0x3D9C8, 0x3D9D3, 0x3D9DE,
+        0x3D9E9, 0x3DA09, 0x3DA14, 0x3DA1F, 0x3DA2A, 0x3DA35, 0x3DA40, 0x3DA4B,
+        0x3DA56, 0x3DA61, 0x3DA6C, 0x3DA77, 0x3DA82, 0x3DA8D, 0x3DA98, 0x3DAA3,
+        0x3DAAE, 0x3DAB9, 0x3DAC4, 0x3DACF, 0x3DADA, 0x3DAE5, 0x3DAF0, 0x3DAFB,
+        0x3DB06, 0x3DB11, 0x3DB1C, 0x3DB27, 0x3DB32, 0x3DB3D, 0x3DB48, 0x3DB53,
+        0x3DB5E, 0x3DB69, 0x3DB74, 0x3DB7F, 0x3DB8A, 0x3DB95, 0x3DBA0, 0x3DD33,
+        0x3E05D, 0x3E07C, 0x3E192, 0x3E1A5, 0x3E1B8, 0x3E1CB, 0x3E1DF, 0x3E1F2,
+        0x3E22D, 0x3E28A, 0x3E468, 0x3E4BF, 0x3E773, 0x3E8B1, 0x3E98D, 0x3E9C1,
+        0x3ED8D, 0x3EDA2, 0x3EDB7, 0x3EE6A, 0x3D286,
+        # Be careful here, you want to change only the C2 part of each of these
+        # five loads to the new bank (the last byte of the command).
+        0x3D4A1, 0x3E032, 0x3E03A, 0x3E042, 0x3E04A,
+    ]
+    
+    # Currently this is only a bank move, if we move it to a different offset
+    # there are probably other instructions we have to change
+    assert data_blk_dst & 0xFFFF == 0x8A70, "Can only change bank, not offset, of cinematic data"
+    new_dst_bnk = data_blk_dst >> 16
+
+    # copy data block
+    fout.seek(cinematic_data_addr)
+    copy_sub = Substitution()
+    copy_sub.bytestring = bytes(fout.read(cinematic_data_length))
+    copy_sub.set_location(data_blk_dst)
+    copy_sub.write(fout)
+
+    # Blank the data in the newly free'd block
+    copy_sub.set_location(cinematic_data_addr)
+    copy_sub.bytestring = b"\x00" * cinematic_data_length
+    copy_sub.write(fout)
+
+    # Change load instructions to use new bank
+    # LDA #$C2 -> LDA #$xx
+    for addr in relocate_locations[:-5]:
+        copy_sub.set_location(addr + 1)
+        copy_sub.bytestring = bytes([new_dst_bnk])
+        copy_sub.write(fout)
+
+    # LDA $C2____,X -> LDA $xx____,X
+    for addr in relocate_locations[-5:]:
+        copy_sub.set_location(addr + 3)
+        copy_sub.bytestring = bytes([new_dst_bnk])
+        copy_sub.write(fout)
+
+    return FreeBlock(cinematic_data_addr,
+                     cinematic_data_addr + cinematic_data_length)
+
+
 class WindowBlock():
     def __init__(self, windowid: int):
         self.pointer = 0x2d1c00 + (windowid * 0x20)
@@ -954,6 +1012,10 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
     freespaces = []
     freespaces.append(FreeBlock(0x2A65A, 0x2A800))
     freespaces.append(FreeBlock(0x2FAAC, 0x2FC6D))
+    # NOTE: This depends on using `relocate_cinematic_data`
+    # once this is settled on, we can just prepend this to
+    # the first free block above
+    freespaces.append(FreeBlock(0x28A70, 0x2A659))
 
     multibannedlist = [0x63, 0x58, 0x5B]
 
@@ -5199,6 +5261,8 @@ def randomize(**kwargs) -> str:
         manage_commands(commands)
         improve_gogo_status_menu(fout)
     reseed()
+
+    relocate_cinematic_data(fout, 0xF08A70)
 
     spells = get_ranked_spells(sourcefile)
     if Options_.is_code_active('madworld'):
