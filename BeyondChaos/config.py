@@ -256,6 +256,7 @@ def validate_files():
     # Return values:
     # 1) Array of strings representing missing information
     # 2) Boolean that indicates whether the update is required or optional
+    # May raise requests.exceptions.ConnectionError if the user is offline
     missing_files = []
     missing_files.extend(check_custom())
     # missing_files.extend(check_tables())
