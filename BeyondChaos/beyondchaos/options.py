@@ -205,9 +205,11 @@ def read_Options_from_string(flag_string: str, mode: Union[Mode, str]):
 
 def generate_help(flags=None, codes=None):
     help_str = ""
-    for flag in (flags or ALL_FLAGS):
+    for flag in [f for f in ALL_FLAGS
+                 if flags is None or f.name in flags]:
         help_str += "\n".join(flag.format_help())
-    for code in (codes or ALL_CODES):
+    for code in [f for f in ALL_CODES
+                 if codes is None or f.name in codes]:
         help_str += "\n".join(code.format_help())
     return help_str
 
