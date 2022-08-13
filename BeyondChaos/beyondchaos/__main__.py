@@ -10,11 +10,16 @@ from . import State
 from . import randomizer
 from . import beyondchaos
 from .config import VERSION, BETA, VERSION_ROMAN
+from . import options
 
 argp = ArgumentParser(description=f"Beyond Chaos Randomizer Community Edition, "
                                   "version {VERSION}")
 argp.add_argument("-g", "--use-gui", default=False, action="store_true",
                   help='open gui to make seed')
+argp.add_argument("-l", "--list-options", action="store_true",
+                  help='get a full list all flags and codes')
+argp.add_argument("-H", "--describe-option", action="append",
+                  help='get description of supplied flag or code, can be specified multiple times')
 argp.add_argument("source", default=None, nargs="?",
                   help='file path to your unrandomized Final Fantasy 3 v1.0 ROM file')
 argp.add_argument("destination", default=None, nargs="?",
@@ -47,6 +52,15 @@ if __name__ == "__main__":
         print("WARNING: This version is a beta! Things may not work correctly.")
 
     args = argp.parse_args()
+
+    if args.list_options:
+        print(options.generate_help())
+        exit()
+    if args.describe_option:
+        flags = [f.name for f in options.ALL_FLAGS if f.name in args.describe_option]
+        codes = [f.name for f in options.ALL_CODES if f.name in args.describe_option]
+        print(options.generate_help(flags, codes))
+        exit()
 
     if args.use_gui:
         beyondchaos.run_gui()
