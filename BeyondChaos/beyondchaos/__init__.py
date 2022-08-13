@@ -8,7 +8,7 @@ import configparser
 from shutil import copyfile
 import time
 
-from .options import ALL_MODES, ALL_FLAGS, Options_
+from .options import ALL_MODES, ALL_FLAGS, Options_, generate_help
 from .config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
                      set_value)
 from ._testing import _modify_args_for_testing
@@ -122,10 +122,19 @@ def _process_seed(fullseed):
         for speeddial_number, speeddial_flags in speeddials:
             print("\t" + speeddial_number + ": " + speeddial_flags)
         print()
-        flags = input("Please input your desired flags (blank for "
-                      "all of them):\n> ").strip()
-        if flags == "!":
-            flags = '-dfklu partyparty makeover johnnydmad'
+        while True:
+            print("For a description of a given flag or code, "
+                  "input 'help <name>', e.g. 'help suplexwrecks gpboost'. "
+                  "Input only 'help' for a list of available codes.")
+            flags = input("Please input your desired flags (blank for "
+                          "all of them):\n> ").strip()
+            if flags == "!":
+                flags = '-dfklu partyparty makeover johnnydmad'
+            elif flags.strip().lower().startswith("help"):
+                codes = [f.strip().lower() for f in flags.split(" ")] or None
+                print(generate_help(codes=codes))
+                continue
+            break
 
         is_speeddialing = re.search("^[0-9]$", flags)
         if is_speeddialing:
@@ -183,6 +192,9 @@ class State:
             self.config.read("bcee.cgf")
         except (IOError, KeyError) as e:
             print(str(e))
+
+        # replacement for RANDOM_MULTIPLIER global var
+        self.random_multiplier = 1
 
     class BufferedWriter:
         def __init__(self, fname):
@@ -272,3 +284,29 @@ class State:
     def reseed(self):
         random.seed(self.seed + self.seedcounter)
         self.seedcounter += (self.seedcounter * 2) + 1
+
+    def check_christmas_mode(self):
+        tm = time.gmtime(self.seed)
+        if tm.tm_mon == 12 and (tm.tm_mday == 24 or tm.tm_mday == 25):
+            Options_.activate_code('christmas')
+            return True
+        return False
+
+    def check_halloween_mode(self):
+        tm = time.gmtime(self.seed)
+        if tm.tm_mon == 10 and tm.tm_mday == 31:
+            Options_.activate_code('halloween')
+            return True
+        return False
+
+    def get_random_boost(self):
+        self.random_multiplier = Options_.get_code_value('randomboost')
+        while not isinstance(self.random_multiplier, bool):
+            try:
+                self.random_multiplier = int(input("Please enter a randomness "
+                                                   "multiplier value (blank or "
+                                                   "<=0 for tierless): "))
+            except ValueError:
+                print("The supplied value for the randomness multiplier was not valid.")
+
+        return self.random_multiplier
