@@ -59,6 +59,8 @@ class Code:
         help_str = f"\"{self.name}\" [{self.category}]: {self.long_description}"
         if self.choices is not None:
             help_str += "\n" + " | ".join(self.choices)
+        if self.inputtype == "numberbox":
+            help_str += "\nSupply a number along with the code to activate."
         return help_str
 
 @dataclass
