@@ -56,7 +56,7 @@ class Code:
         return False, False, s
 
     def format_help(self):
-        help_str = f"\"{self.name}\" [{self.category}]: {self.long_description}"
+        help_str = f"\"{self.name}\" [{self.category.upper()}]: {self.long_description}"
         if self.choices is not None:
             help_str += "\n\t" + " | ".join(self.choices)
         if self.inputtype == "numberbox":
