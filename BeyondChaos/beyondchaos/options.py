@@ -114,8 +114,9 @@ class Options:
         return False
 
     def is_conflicting(self, code_name):
-        return not self.ignore_conflicts \
-               or set(self.active_codes) & INCOMPATIBLE_CODES[code_name]
+        if self.ignore_conflicts:
+            return False
+        return set(self.active_codes) & INCOMPATIBLE_CODES[code_name]
 
     def activate_code(self, code_name: str, code_value=None):
         if self.is_conflicting(code_name):
