@@ -23,6 +23,9 @@ class Flag:
     def __post_init__(self):
         object.__setattr__(self, 'name', self.name[0])
 
+    def format_help(self):
+        return f"\"{self.name}\": {self.description}"
+
 
 @dataclass(frozen=True)
 class Code:
@@ -52,6 +55,11 @@ class Code:
                 return True, True, s.replace(name, '')
         return False, False, s
 
+    def format_help(self):
+        help_str = f"\"{self.name}\" [{self.category}]: {self.long_description}"
+        if self.choices is not None:
+            help_str += "\n" + " | ".join(self.choices)
+        return help_str
 
 @dataclass
 class Options:
@@ -192,6 +200,15 @@ def read_Options_from_string(flag_string: str, mode: Union[Mode, str]):
         flags = {f for f in ALL_FLAGS if f not in mode.prohibited_flags}
 
     return flags, codes
+
+def generate_help(flags=None, codes=None):
+    help_str = ""
+    for flag in (flags or ALL_FLAGS):
+        help_str += "\n".join(flag.format_help())
+    for code in (codes or ALL_CODES):
+        help_str += "\n".join(code.format_help())
+    return help_str
+
 
 ANCIENT_CAVE_PROHIBITED_CODES = [
     "airship",
