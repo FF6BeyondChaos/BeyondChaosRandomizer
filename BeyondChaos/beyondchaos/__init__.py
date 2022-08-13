@@ -123,8 +123,8 @@ def _process_seed(fullseed):
             print("\t" + speeddial_number + ": " + speeddial_flags)
         print()
         while True:
-            print("For a description of a given flag or code, "
-                  "input 'help <name>', e.g. 'help suplexwrecks gpboost'. "
+            print("For a description of a given code, "
+                  "input 'help <code>', e.g. 'help suplexwrecks gpboost'. "
                   "Input only 'help' for a list of available codes.")
             flags = input("Please input your desired flags (blank for "
                           "all of them):\n> ").strip()
