@@ -131,8 +131,8 @@ def _process_seed(fullseed):
             if flags == "!":
                 flags = '-dfklu partyparty makeover johnnydmad'
             elif flags.strip().lower().startswith("help"):
-                codes = [f.strip().lower() for f in flags.split(" ")] or None
-                print(generate_help(codes=codes))
+                codes = [f.strip().lower() for f in flags.split(" ")[1:]] or None
+                print(generate_help(flags=[], codes=codes))
                 continue
             break
 
