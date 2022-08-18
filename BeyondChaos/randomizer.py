@@ -79,7 +79,7 @@ TEST_ON = False
 #TEST_SEED = "CE-4.1.0|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff notawaiter johnnydmad bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis dearestmolulu|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "CE-4.1.1|ancientcave|b c d e f g i j k m n o p q r s t u w y z makeover partyparty electricboogaloo dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter mimetime|1660260795"
+TEST_SEED = "CE-4.1.2|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty potato:only electricboogaloo collateraldamage masseffect randombosses dancingmaduin darkworld easymodo madworld playsitself rushforpower norng dancelessons nobreaks unbreakable cursepower:251 expboost:0.1 gpboost:0.1 mpboost:0.1 swdtechspeed:faster alasdraco bingoboingo capslockoff johnnydmad notawaiter removeflashing remonsterate fightclub bsiab mimetime dearestmolulu questionablecontent nomiabs replaceeverything allcombos endless9 supernatural canttouchthis naturalstats metronome naturalmagic suplexwrecks desperation|1660792625"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -5640,26 +5640,26 @@ def randomize(**kwargs) -> str:
         while True:
             try:
                 if not using_console:
-                    kwargs = {
+                    remonsterate_kwargs = {
                         "outfile": outfile,
                         "seed": (seed + attempt_number),
                         "rom_type": "1.0",
                         "list_of_monsters": get_monsters(outfile)
                     }
                     pool = customthreadpool.NonDaemonPool(1)
-                    x = pool.apply_async(func=remonsterate, kwds=kwargs)
+                    x = pool.apply_async(func=remonsterate, kwds=remonsterate_kwargs)
                     remonsterate_results = x.get()
                     pool.close()
                     pool.join()
 
                 elif using_console:
-                    kwargs = {
+                    remonsterate_kwargs = {
                         "outfile": outfile,
                         "seed": (seed + attempt_number),
                         "rom_type": "1.0",
                         "list_of_monsters": get_monsters(outfile)
                     }
-                    thread = customthreadpool.ThreadWithReturnValue(target=remonsterate, kwargs=kwargs)
+                    thread = customthreadpool.ThreadWithReturnValue(target=remonsterate, kwargs=remonsterate_kwargs)
                     thread.start()
                     remonsterate_results = thread.join()
                     if not remonsterate_results:
@@ -6001,6 +6001,7 @@ def randomize(**kwargs) -> str:
 
         manage_bingo(bingoflags=bingoflags, size=size, difficulty=difficulty, numcards=numcards,
                      target_score=target_score)
+        print("Bingo cards generated.")
 
     return outfile
 
