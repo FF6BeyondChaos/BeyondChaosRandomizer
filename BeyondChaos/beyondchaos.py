@@ -1350,12 +1350,24 @@ class Window(QMainWindow):
                             self.seed = str(int(self.seed) + 1)
                     except Exception as e:
                         traceback.print_exc()
-                        QMessageBox.critical(
-                            self,
-                            "Error creating ROM",
-                            str(e),
-                            QMessageBox.Ok
-                        )
+                        randomize_error_message = QMessageBox()
+                        randomize_error_message.setIcon(QMessageBox.Critical)
+                        randomize_error_message.setWindowTitle("Exception: " + str(type(e).__name__))
+                        randomize_error_message.setText("A fatal " + str(type(e).__name__) + " exception occurred: " +
+                                                        str(e) +
+                                                        "<br>" +
+                                                        "<br>" +
+                                                        "<br>" +
+                                                        "<br>" +
+                                                        "<b><u>Error Traceback for the Devs</u></b>:" +
+                                                        "<br>" +
+                                                        "<br>" +
+                                                        "<br>".join(traceback.format_exc().splitlines()))
+                        randomize_error_message.setStandardButtons(QMessageBox.Close)
+                        rem_button_clicked = randomize_error_message.exec()
+                        if rem_button_clicked == QMessageBox.Close:
+                            randomize_error_message.close()
+                        traceback.print_exc()
                     else:
                         resultFiles.append(resultFile)
                         if currentSeed + 1 == seedsToGenerate:
@@ -1533,15 +1545,17 @@ if __name__ == "__main__":
     except Exception as e:
         error_message = QMessageBox()
         error_message.setIcon(QMessageBox.Critical)
-        error_message.setWindowTitle("A Fatal Error Occurred")
-        error_message.setText(str(e) +
+        error_message.setWindowTitle("Exception: " + str(type(e).__name__))
+        error_message.setText("A fatal " + str(type(e).__name__) + " exception occurred: " +
+                              str(e) +
                               "<br>" +
                               "<br>" +
                               "<br>" +
                               "<br>" +
-                              "Error Traceback for the Devs:" +
+                              "<b><u>Error Traceback for the Devs</u></b>:" +
                               "<br>" +
-                              traceback.format_exc())
+                              "<br>" +
+                              "<br>".join(traceback.format_exc().splitlines()))
         error_message.setStandardButtons(QMessageBox.Close)
         button_clicked = error_message.exec()
         if button_clicked == QMessageBox.Close:
