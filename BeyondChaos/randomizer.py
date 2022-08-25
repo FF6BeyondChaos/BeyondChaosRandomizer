@@ -5550,7 +5550,7 @@ def randomize(**kwargs) -> str:
         manage_colorize_dungeons()
 
     if Options_.is_code_active('ancientcave'):
-        manage_ancient(Options_, fout, sourcefile, form_music_overrides=form_music)
+        manage_ancient(Options_, fout, sourcefile, form_music_overrides=form_music, randlog=randlog)
     reseed()
 
     if Options_.shuffle_commands or Options_.replace_commands or Options_.random_enemy_stats:

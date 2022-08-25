@@ -43,7 +43,7 @@ def manage_map_names(fout):
         write_multi(fout, pointer, length=2)
 
 
-def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None):
+def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlog=None):
     if not form_music_overrides:
         form_music_overrides = {}
 
@@ -748,6 +748,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None):
         sub.write(fout)
         return sub
 
+    rest_shops = []
     random.shuffle(restlocs)
     for l in restlocs:
         assert l.ancient_rank == 0
@@ -824,6 +825,8 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None):
 
         shop = shopranks[l.restrank].pop()
         if shop is not None:
+            shop.name = "Rest stop " + str(l.restrank)
+            rest_shops.append(shop)
             shopsub = Substitution()
             shopsub.set_location(pointer)
             shopsub.bytestring = bytes([0x9B, shop.shopid, 0xFE])
@@ -980,6 +983,11 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None):
         for key, value in attributes.items():
             setattr(renamer, key, value)
         l.npcs.append(renamer)
+
+    for s in sorted(rest_shops, key=lambda s: s.name):
+        if "shops"not in randlog:
+            randlog["shops"] = []
+        randlog["shops"].append(str(s))
 
     assert not optional_chars
 
