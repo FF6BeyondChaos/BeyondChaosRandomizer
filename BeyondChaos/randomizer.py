@@ -70,7 +70,7 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-4.1.1"
+VERSION = "CE-4.1.2"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
@@ -79,7 +79,7 @@ TEST_ON = False
 #TEST_SEED = "CE-4.1.0|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff notawaiter johnnydmad bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis dearestmolulu|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "CE-4.1.0|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin dancelessons swdtechspeed:random alasdraco capslockoff notawaiter remonsterate bsiab mimetime questionablecontent|1660190215"
+TEST_SEED = "CE-4.1.1|normal|b c d e f g i j k l m n o p q r s t u w y z electricboogaloo masseffect randombosses dancelessons expboost:2.0 alasdraco capslockoff johnnydmad notawaiter dearestmolulu questionablecontent randomboost:0 supernatural desperation easymodo canttouchthis thescenarionottaken|1660846541"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -2855,6 +2855,9 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
     if shops:
         buyables = manage_shops()
 
+    if Options_.is_code_active("ancientcave") or Options_.mode.name == 'katn':
+        return
+
     pointer = 0x1fb600
     results = randomize_colosseum(outfile, fout, pointer)
     wagers = {a.itemid: c for (a, b, c, d) in results}
@@ -3461,7 +3464,7 @@ def manage_shops() -> Set[int]:
         buyables |= set(s.items)
         descriptions.append(str(s))
 
-    if not Options_.is_code_active("ancientcave"):
+    if not Options_.is_code_active("ancientcave"): #only logs vanilla shops anyways
         for d in sorted(descriptions):
             log(d, section="shops")
 
@@ -4436,6 +4439,22 @@ def namingway():
         for key, value in attributes.items():
             setattr(wob_namer, key, value)
         wob_airship.npcs.append(wob_namer)
+
+def chocobo_merchant():
+
+    baren_falls = get_location(0x9B)
+    chocobo_merchant = NPCBlock(pointer=None, locid=baren_falls.locid)
+    attributes = {
+        "graphics": 0xE, "palette": 0, "x": 9, "y": 6,
+        "show_on_vehicle": True, "speed": 0,
+        "event_addr": 0x10B7E, "facing": 1,
+        "no_turn_when_speaking": True, "layer_priority": 0,
+        "special_anim": 0,
+        "memaddr": 0, "membit": 0, "bg2_scroll": 0,
+        "move_type": 0, "sprite_priority": 0, "vehicle": 1, "npcid": 0}
+    for key, value in attributes.items():
+        setattr(chocobo_merchant, key, value)
+    baren_falls.npcs.append(chocobo_merchant)
 
 def manage_clock():
     hour = random.randint(0, 5)
@@ -5547,7 +5566,7 @@ def randomize(**kwargs) -> str:
         manage_colorize_dungeons()
 
     if Options_.is_code_active('ancientcave'):
-        manage_ancient(Options_, fout, sourcefile, form_music_overrides=form_music)
+        manage_ancient(Options_, fout, sourcefile, form_music_overrides=form_music, randlog=randlog)
     reseed()
 
     if Options_.shuffle_commands or Options_.replace_commands or Options_.random_enemy_stats:
@@ -5637,26 +5656,26 @@ def randomize(**kwargs) -> str:
         while True:
             try:
                 if not using_console:
-                    kwargs = {
+                    remonsterate_kwargs = {
                         "outfile": outfile,
                         "seed": (seed + attempt_number),
                         "rom_type": "1.0",
                         "list_of_monsters": get_monsters(outfile)
                     }
                     pool = customthreadpool.NonDaemonPool(1)
-                    x = pool.apply_async(func=remonsterate, kwds=kwargs)
+                    x = pool.apply_async(func=remonsterate, kwds=remonsterate_kwargs)
                     remonsterate_results = x.get()
                     pool.close()
                     pool.join()
 
                 elif using_console:
-                    kwargs = {
+                    remonsterate_kwargs = {
                         "outfile": outfile,
                         "seed": (seed + attempt_number),
                         "rom_type": "1.0",
                         "list_of_monsters": get_monsters(outfile)
                     }
-                    thread = customthreadpool.ThreadWithReturnValue(target=remonsterate, kwargs=kwargs)
+                    thread = customthreadpool.ThreadWithReturnValue(target=remonsterate, kwargs=remonsterate_kwargs)
                     thread.start()
                     remonsterate_results = thread.join()
                     if not remonsterate_results:
@@ -5752,7 +5771,8 @@ def randomize(**kwargs) -> str:
     reseed()
 
     if Options_.random_enemy_stats or Options_.random_formations:
-        house_hint()
+        if not Options_.is_code_active('ancientcave') or Options_.mode.name == "katn":
+            house_hint()
     reseed()
     reseed()
 
@@ -5760,6 +5780,8 @@ def randomize(**kwargs) -> str:
     randomize_passwords()
     reseed()
     namingway()
+    if Options_.is_code_active('thescenarionottaken'):
+        chocobo_merchant()
 
     # ----- NO MORE RANDOMNESS PAST THIS LINE -----
     if Options_.is_code_active('thescenarionottaken'):
@@ -5997,6 +6019,7 @@ def randomize(**kwargs) -> str:
 
         manage_bingo(bingoflags=bingoflags, size=size, difficulty=difficulty, numcards=numcards,
                      target_score=target_score)
+        print("Bingo cards generated.")
 
     return outfile
 

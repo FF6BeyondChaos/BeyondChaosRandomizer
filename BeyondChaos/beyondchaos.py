@@ -7,6 +7,7 @@ import os
 import sys
 import time
 import traceback
+from hashlib import md5
 
 # Related third-party imports
 import requests.exceptions
@@ -25,7 +26,7 @@ from config import (read_flags, write_flags, validate_files, are_updates_hidden,
                     get_input_path, get_output_path, save_version, check_player_sprites, check_remonsterate)
 from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES, makeover_groups)
 from update import (get_updater)
-from randomizer import randomize, VERSION, BETA
+from randomizer import randomize, VERSION, BETA, MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2
 
 if sys.version_info[0] < 3:
     raise Exception("Python 3 or a more recent version is required. "
@@ -196,7 +197,7 @@ class Window(QMainWindow):
         # values to be sent to Randomizer
         self.romText = ""
         self.romOutputDirectory = ""
-        self.version = "CE-4.1.1"
+        self.version = "CE-4.1.2"
         self.mode = "normal"
         self.seed = ""
         self.flags = []
@@ -366,6 +367,12 @@ class Window(QMainWindow):
         self.romInput.setReadOnly(True)
         gridLayout.addWidget(self.romInput, 1, 2, 1, 3)
 
+        self.labelRomError = QLabel("WARNING! The selected file does not match supported "
+                               "English FF3/FF6 v1.0 ROM files!")
+        self.labelRomError.setStyleSheet("color: darkred;")
+        self.labelRomError.setHidden(True)
+        gridLayout.addWidget(self.labelRomError, 2, 2, 1, 3)
+
         btnRomInput = QPushButton("Browse")
         btnRomInput.setMaximumWidth(self.width)
         btnRomInput.setMaximumHeight(self.height)
@@ -387,11 +394,11 @@ class Window(QMainWindow):
         # ROM OUTPUT
         lblRomOutput = QLabel("Output Directory:")
         lblRomOutput.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
-        gridLayout.addWidget(lblRomOutput, 2, 1)
+        gridLayout.addWidget(lblRomOutput, 3, 1)
 
         self.romOutput = QLineEdit()
-        self.romInput.textChanged[str].connect(self.updateRomOutputPlaceholder)
-        gridLayout.addWidget(self.romOutput, 2, 2, 1, 3)
+        self.romInput.textChanged[str].connect(self.validateInputRom)
+        gridLayout.addWidget(self.romOutput, 3, 2, 1, 3)
 
         btnRomOutput = QPushButton("Browse")
         btnRomOutput.setMaximumWidth(self.width)
@@ -409,29 +416,29 @@ class Window(QMainWindow):
         btnRomOutputStyle.setBlurRadius(3)
         btnRomOutputStyle.setOffset(3, 3)
         btnRomOutput.setGraphicsEffect(btnRomOutputStyle)
-        gridLayout.addWidget(btnRomOutput, 2, 5)
+        gridLayout.addWidget(btnRomOutput, 3, 5)
 
         # SEED INPUT
         lblSeedInput = QLabel("Seed Number:")
         lblSeedInput.setAlignment(QtCore.Qt.AlignRight |
                                   QtCore.Qt.AlignVCenter)
-        gridLayout.addWidget(lblSeedInput, 3, 1)
+        gridLayout.addWidget(lblSeedInput, 4, 1)
 
         self.seedInput = QLineEdit()
         self.seedInput.setPlaceholderText("Optional")
-        gridLayout.addWidget(self.seedInput, 3, 2)
+        gridLayout.addWidget(self.seedInput, 4, 2)
 
         lblSeedCount = QLabel("Number to Generate:")
         lblSeedCount.setAlignment(QtCore.Qt.AlignRight |
                                   QtCore.Qt.AlignVCenter)
-        gridLayout.addWidget(lblSeedCount, 3, 3)
+        gridLayout.addWidget(lblSeedCount, 4, 3)
 
         self.seedCount = QSpinBox()
         self.seedCount.setValue(1)
         self.seedCount.setMinimum(1)
         self.seedCount.setMaximum(99)
         self.seedCount.setFixedWidth(40)
-        gridLayout.addWidget(self.seedCount, 3, 4)
+        gridLayout.addWidget(self.seedCount, 4, 4)
 
         btnGenerate = QPushButton("Generate")
         btnGenerate.setMinimumWidth(125)
@@ -450,7 +457,7 @@ class Window(QMainWindow):
         btnGenerateStyle.setBlurRadius(3)
         btnGenerateStyle.setOffset(3, 3)
         btnGenerate.setGraphicsEffect(btnGenerateStyle)
-        gridLayout.addWidget(btnGenerate, 3, 5)
+        gridLayout.addWidget(btnGenerate, 4, 5)
 
         groupLayout.setLayout(gridLayout)
         return groupLayout
@@ -1350,12 +1357,24 @@ class Window(QMainWindow):
                             self.seed = str(int(self.seed) + 1)
                     except Exception as e:
                         traceback.print_exc()
-                        QMessageBox.critical(
-                            self,
-                            "Error creating ROM",
-                            str(e),
-                            QMessageBox.Ok
-                        )
+                        randomize_error_message = QMessageBox()
+                        randomize_error_message.setIcon(QMessageBox.Critical)
+                        randomize_error_message.setWindowTitle("Exception: " + str(type(e).__name__))
+                        randomize_error_message.setText("A fatal " + str(type(e).__name__) + " exception occurred: " +
+                                                        str(e) +
+                                                        "<br>" +
+                                                        "<br>" +
+                                                        "<br>" +
+                                                        "<br>" +
+                                                        "<b><u>Error Traceback for the Devs</u></b>:" +
+                                                        "<br>" +
+                                                        "<br>" +
+                                                        "<br>".join(traceback.format_exc().splitlines()))
+                        randomize_error_message.setStandardButtons(QMessageBox.Close)
+                        rem_button_clicked = randomize_error_message.exec()
+                        if rem_button_clicked == QMessageBox.Close:
+                            randomize_error_message.close()
+                        traceback.print_exc()
                     else:
                         resultFiles.append(resultFile)
                         if currentSeed + 1 == seedsToGenerate:
@@ -1417,8 +1436,16 @@ class Window(QMainWindow):
                 else:
                     c.setProperty('checked', False)
 
-    def updateRomOutputPlaceholder(self, value):
+    def validateInputRom(self, value):
         try:
+            if not value == "":
+                with open(value, 'rb') as rom_file:
+                    rom_hash = md5(rom_file.read()).hexdigest()
+                if rom_hash in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2]:
+                    self.labelRomError.setHidden(True)
+                else:
+                    self.labelRomError.setHidden(False)
+
             self.romOutput.setPlaceholderText(os.path.dirname(os.path.normpath(value)))
         except ValueError:
             pass
@@ -1533,15 +1560,17 @@ if __name__ == "__main__":
     except Exception as e:
         error_message = QMessageBox()
         error_message.setIcon(QMessageBox.Critical)
-        error_message.setWindowTitle("A Fatal Error Occurred")
-        error_message.setText(str(e) +
+        error_message.setWindowTitle("Exception: " + str(type(e).__name__))
+        error_message.setText("A fatal " + str(type(e).__name__) + " exception occurred: " +
+                              str(e) +
                               "<br>" +
                               "<br>" +
                               "<br>" +
                               "<br>" +
-                              "Error Traceback for the Devs:" +
+                              "<b><u>Error Traceback for the Devs</u></b>:" +
                               "<br>" +
-                              traceback.format_exc())
+                              "<br>" +
+                              "<br>".join(traceback.format_exc().splitlines()))
         error_message.setStandardButtons(QMessageBox.Close)
         button_clicked = error_message.exec()
         if button_clicked == QMessageBox.Close:
