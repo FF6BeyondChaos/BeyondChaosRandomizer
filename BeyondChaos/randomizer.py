@@ -79,7 +79,7 @@ TEST_ON = False
 #TEST_SEED = "CE-4.1.0|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff notawaiter johnnydmad bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis dearestmolulu|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "CE-4.1.2|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty potato:only electricboogaloo collateraldamage masseffect randombosses dancingmaduin darkworld easymodo madworld playsitself rushforpower norng dancelessons nobreaks unbreakable cursepower:251 expboost:0.1 gpboost:0.1 mpboost:0.1 swdtechspeed:faster alasdraco bingoboingo capslockoff johnnydmad notawaiter removeflashing remonsterate fightclub bsiab mimetime dearestmolulu questionablecontent nomiabs replaceeverything allcombos endless9 supernatural canttouchthis naturalstats metronome naturalmagic suplexwrecks desperation|1660792625"
+TEST_SEED = "CE-4.1.1|normal|b c d e f g i j k l m n o p q r s t u w y z electricboogaloo masseffect randombosses dancelessons expboost:2.0 alasdraco capslockoff johnnydmad notawaiter dearestmolulu questionablecontent randomboost:0 supernatural desperation easymodo canttouchthis thescenarionottaken|1660846541"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -4440,6 +4440,22 @@ def namingway():
             setattr(wob_namer, key, value)
         wob_airship.npcs.append(wob_namer)
 
+def chocobo_merchant():
+
+    baren_falls = get_location(0x9B)
+    chocobo_merchant = NPCBlock(pointer=None, locid=baren_falls.locid)
+    attributes = {
+        "graphics": 0xE, "palette": 0, "x": 9, "y": 6,
+        "show_on_vehicle": True, "speed": 0,
+        "event_addr": 0x10B7E, "facing": 1,
+        "no_turn_when_speaking": True, "layer_priority": 0,
+        "special_anim": 0,
+        "memaddr": 0, "membit": 0, "bg2_scroll": 0,
+        "move_type": 0, "sprite_priority": 0, "vehicle": 1, "npcid": 0}
+    for key, value in attributes.items():
+        setattr(chocobo_merchant, key, value)
+    baren_falls.npcs.append(chocobo_merchant)
+
 def manage_clock():
     hour = random.randint(0, 5)
     minute = random.randint(0, 4)
@@ -5764,6 +5780,8 @@ def randomize(**kwargs) -> str:
     randomize_passwords()
     reseed()
     namingway()
+    if Options_.is_code_active('thescenarionottaken'):
+        chocobo_merchant()
 
     # ----- NO MORE RANDOMNESS PAST THIS LINE -----
     if Options_.is_code_active('thescenarionottaken'):
