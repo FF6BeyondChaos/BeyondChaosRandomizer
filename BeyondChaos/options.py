@@ -295,7 +295,7 @@ NORMAL_CODES = [
 
     # field codes
     Code('fightclub', "MORE LIKE COLI-DON'T-SEE-'EM",  "Does not allow you to see the coliseum rewards before betting, but you can often run from the coliseum battles to keep your item.",  "field", "checkbox"),
-    Code('bsiab', "UNBALANCED MONSTER CHESTS MODE", "Reverts the monster-in-a-box selection algorithm to be (mostly) the same as versions prior to EX v3.", "field", "checkbox"),
+    Code('bsiab', "UNBALANCED MONSTER CHESTS MODE", "Greatly increases the variance of monster-in-a-box encounters and removes some sanity checks, allowing them to be much more difficult and volatile, similar to old versions of BC", "field", "checkbox"),
     Code('mimetime', 'ALTERNATE GOGO MODE', "Gogo will be hidden somewhere in the World of Ruin disguised as another character. Bring that character to him to recruit him.", "field", "checkbox"),
     Code('dearestmolulu', "ENCOUNTERLESS MODE", "No random encounters occur. Recommend using with exp code. Wearing a Moogle Charm or a piece of equipment with the Moogle Charm effect will cause a battle to occur on every step when encounters can occur.", "field", "checkbox"),
     Code('randomboost', "RANDOM BOOST MODE",  "Prompts you for a randomness multiplier, which changes the range of items that can be in chests, etc. Choosing a randomness multiplier of 0(or leaving it blank) will allow any item to appear in any treasure chest.", "field", "numberbox"),
