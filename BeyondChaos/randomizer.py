@@ -75,11 +75,11 @@ BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
+TEST_ON = True
 #TEST_SEED = "CE-4.1.0|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff notawaiter johnnydmad bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis dearestmolulu|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "CE-4.1.1|normal|b c d e f g i j k l m n o p q r s t u w y z electricboogaloo masseffect randombosses dancelessons expboost:2.0 alasdraco capslockoff johnnydmad notawaiter dearestmolulu questionablecontent randomboost:0 supernatural desperation easymodo canttouchthis thescenarionottaken|1660846541"
+TEST_SEED = "CE-4.1.2|normal|c e f m n p r t y z masseffect randombosses madworld rushforpower dancelessons cursepower:10 expboost:5.0 gpboost:8.0 mpboost:10.5 swdtechspeed:faster alasdraco johnnyachaotic randomboost:0 endless9 supernatural equipanything canttouchthis easymodo|1660846541"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -386,7 +386,7 @@ class AutoRecruitGauSub(Substitution):
     @property
     def bytestring(self) -> bytes:
         return bytes([0x50, 0xBC, 0x59, 0x10, 0x3F,
-                      0x0B, 0x01, 0xD4, 0xFB, 0xFE])
+                      0x0B, 0x01, 0xD4, 0xFB, 0xB8, 0x49, 0xFE])
 
     def write(self, fout: BinaryIO, stays_in_wor: bool):
         sub_addr = self.location - 0xa0000
@@ -401,7 +401,8 @@ class AutoRecruitGauSub(Substitution):
             gau_stays_wor_sub.set_location(0xA5324)
             gau_stays_wor_sub.write(fout)
 
-        REPLACE_ENEMIES.append(0x172)
+        if Options_.shuffle_commands or Options_.replace_commands:
+            REPLACE_ENEMIES.append(0x172)
         super(AutoRecruitGauSub, self).write(fout)
 
 
@@ -2319,6 +2320,8 @@ def manage_monsters() -> List[MonsterBlock]:
             if Options_.is_code_active("norng"):
                 m.aiscript = [b.replace(b"\x10", b"\xD5") for b in m.aiscript]
             continue
+        #if m.id == 0x370 and not Options_.shuffle_commands or Options_.replace_commands:
+        #    m.aiscript = [b.replace(b"\xFC\x15\x0D\x01", b"\xFC\x0A\x0D\x00") for b in m.aiscript]
         if not m.name.strip('_') and not m.display_name.strip('_'):
             continue
         if m.id in final_bosses:

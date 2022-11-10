@@ -448,5 +448,5 @@ ConvergentPalette B9ABC 02
 DivergentPalette B9AB6 02
 Palette B113A 15
 ConvergentPalette BC085 0B
-Gau CFE1A 3F 0B 01 D4 FB FE
+Gau CFE1A 3F 0B 01 D4 FB B8 49 FE
 Gau BC0A4 B2 1A FE 02 FE
