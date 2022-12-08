@@ -75,11 +75,11 @@ BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = True
-#TEST_SEED = "CE-4.1.0|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff notawaiter johnnydmad bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis dearestmolulu|1603333081"
+TEST_ON = False
+TEST_SEED = "CE-4.1.2|normal|bdefghijklmnopqrstuwyz electricboogaloo capslockoff notawaiter johnnydmad bsiab dancingmaduin questionablecontent removeflashing cursedencounters|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "CE-4.1.2|normal|c e f m n p r t y z masseffect randombosses madworld rushforpower dancelessons cursepower:10 expboost:5.0 gpboost:8.0 mpboost:10.5 swdtechspeed:faster alasdraco johnnyachaotic randomboost:0 endless9 supernatural equipanything canttouchthis easymodo|1660846541"
+#TEST_SEED = "CE-4.1.2|normal|c e f m n p r t y z masseffect randombosses madworld rushforpower dancelessons cursepower:10 expboost:5.0 gpboost:8.0 mpboost:10.5 swdtechspeed:faster alasdraco johnnyachaotic randomboost:0 endless9 supernatural equipanything canttouchthis easymodo|1660846541"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -2320,8 +2320,6 @@ def manage_monsters() -> List[MonsterBlock]:
             if Options_.is_code_active("norng"):
                 m.aiscript = [b.replace(b"\x10", b"\xD5") for b in m.aiscript]
             continue
-        #if m.id == 0x370 and not Options_.shuffle_commands or Options_.replace_commands:
-        #    m.aiscript = [b.replace(b"\xFC\x15\x0D\x01", b"\xFC\x0A\x0D\x00") for b in m.aiscript]
         if not m.name.strip('_') and not m.display_name.strip('_'):
             continue
         if m.id in final_bosses:
@@ -3132,6 +3130,7 @@ def manage_dragons():
 
 def manage_formations(formations: List[Formation], fsets: List[FormationSet], mpMultiplier: float = 1) -> List[
     Formation]:
+
     for fset in fsets:
         if len(fset.formations) == 4:
             for formation in fset.formations:
@@ -5492,6 +5491,11 @@ def randomize(**kwargs) -> str:
                 except ValueError:
                     print("The supplied value for the mp multiplier was not a positive number.")
 
+    good_event_fsets = [256, 257, 258, 259, 260, 261, 263, 264, 268, 269, 270, 271, 272, 273, 275, 276, 277, 278, 279, 281, 282, 283, 285, 286, 287,
+                        297, 303, 400, 382, 402, 403, 404] #event formation sets that can be suhffled  with cursedencounters
+    event_formations = [60, 61, 62, 63, 335, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 420, 435, 458]
+    salt_formations = [57, 58, 59, 332, 333, 334, 381, 382, 383, 417, 418, 419, 432, 433, 434, 455, 456, 457]
+
     if Options_.random_formations:
         formations = get_formations()
         fsets = get_fsets()
@@ -5499,7 +5503,20 @@ def randomize(**kwargs) -> str:
             manage_formations(formations, fsets, mp_boost_value)
         else:
             manage_formations(formations, fsets)
+
         for fset in fsets:
+            if Options_.is_code_active("cursedencounters"): #code that applies FC flag to allow 16 encounters in all zones
+                if fset.setid < 252 or fset.setid in good_event_fsets: #only do regular enemies, don't do sets that can risk Zone Eater or get event encounters
+                    if not [value for value in fset.formids if
+                            value in event_formations or value > 481]:
+                        fset.sixteen_pack = True
+                    elif [value for value in fset.formids if
+                            value in salt_formations]:
+                        for i, v in enumerate(fset.formids):
+                            if fset.formids[i] in salt_formations:
+                                fset.formids[i] -= 3  # any encounter that could turn into an event encounter, reduce by 3 so it can't
+                        fset.sixteen_pack = True
+
             fset.write_data(fout)
 
     if Options_.random_formations or Options_.is_code_active('ancientcave'):

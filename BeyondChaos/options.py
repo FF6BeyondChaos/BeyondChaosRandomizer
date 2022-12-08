@@ -328,6 +328,7 @@ NORMAL_CODES = [
     Code('repairpalette', "PALETTE REPAIR", "Used for testing changes to palette randomization. Not intended for actual play. Cannot proceed past Banon's scenario.", "experimental", "checkbox"),
     Code('strangejourney', "BIZARRE ADVENTURE", "A prototype entrance randomizer, similar to the ancientcave mode. Includes all maps and event tiles, and is usually extremely hard to beat by itself.", "experimental", "checkbox"),
     Code('thescenarionottaken', 'DIVERGENT PATHS MODE', "Changes the way the 3 scenarios are split up, to resemble PowerPanda's 'Divergent Paths' mod.", "experimental", "checkbox"),
+    Code('cursedencounters', "ULTRA SCRAMBLED ENCOUNTERS MODE", "Adds Floating Continent monster encounter logic to all encounters - EXPERIMENTAL - DO NOT USE", "experimental", "checkbox"),
 
     # beta codes
 
