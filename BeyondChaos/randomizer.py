@@ -49,7 +49,7 @@ from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
                      change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx, apply_namingway,
-                     improved_party_gear, patch_doom_gaze)
+                     improved_party_gear, patch_doom_gaze, nicer_poison)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -75,8 +75,8 @@ BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
-TEST_SEED = "CE-4.1.2|normal|bdefghijklmnopqrstuwyz electricboogaloo capslockoff notawaiter johnnydmad bsiab dancingmaduin questionablecontent removeflashing cursedencounters|1603333081"
+TEST_ON = True
+TEST_SEED = "CE-4.1.2|normal|bdefghijklmnopqrstuwyz electricboogaloo capslockoff notawaiter johnnydmad bsiab dancingmaduin questionablecontent removeflashing cursedencounters dearestmolulu|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #TEST_SEED = "CE-4.1.2|normal|c e f m n p r t y z masseffect randombosses madworld rushforpower dancelessons cursepower:10 expboost:5.0 gpboost:8.0 mpboost:10.5 swdtechspeed:faster alasdraco johnnyachaotic randomboost:0 endless9 supernatural equipanything canttouchthis easymodo|1660846541"
@@ -5492,7 +5492,7 @@ def randomize(**kwargs) -> str:
                     print("The supplied value for the mp multiplier was not a positive number.")
 
     good_event_fsets = [256, 257, 258, 259, 260, 261, 263, 264, 268, 269, 270, 271, 272, 273, 275, 276, 277, 278, 279, 281, 282, 283, 285, 286, 287,
-                        297, 303, 400, 382, 402, 403, 404] #event formation sets that can be suhffled  with cursedencounters
+                        297, 303, 400, 382, 402, 403, 404] #event formation sets that can be shuffled  with cursedencounters
     event_formations = [60, 61, 62, 63, 335, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 420, 435, 458]
     salt_formations = [57, 58, 59, 332, 333, 334, 381, 382, 383, 417, 418, 419, 432, 433, 434, 455, 456, 457]
 
@@ -5936,6 +5936,9 @@ def randomize(**kwargs) -> str:
 
     if Options_.is_code_active('removeflashing'):
         fewer_flashes(fout)
+
+    if Options_.is_code_active('nicerpoison'):
+        nicer_poison(fout)
 
     if not Options_.is_code_active('fightclub'):
         show_coliseum_rewards(fout)
