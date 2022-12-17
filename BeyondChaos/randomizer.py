@@ -75,11 +75,12 @@ BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = True
-TEST_SEED = "CE-4.1.2|normal|bdefghijklmnopqrstuwyz electricboogaloo capslockoff notawaiter johnnydmad bsiab dancingmaduin questionablecontent removeflashing cursedencounters dearestmolulu|1603333081"
+TEST_ON = False
+#TEST_SEED = "CE-4.1.2|normal|bdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad bsiab dancingmaduin questionablecontent removeflashing nicerpoison cursedencounters dearestmolulu|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-#TEST_SEED = "CE-4.1.2|normal|c e f m n p r t y z masseffect randombosses madworld rushforpower dancelessons cursepower:10 expboost:5.0 gpboost:8.0 mpboost:10.5 swdtechspeed:faster alasdraco johnnyachaotic randomboost:0 endless9 supernatural equipanything canttouchthis easymodo|1660846541"
+#TEST_SEED = "CE-4.1.2|normal|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin rushforpower dancelessons cursepower:16 swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter removeflashing remonsterate bsiab mimetime questionablecontent cursedencounters|1670473616"
+TEST_SEED = "CE-4.1.2|katn|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla randombosses dancingmaduin madworld alasdraco capslockoff johnnyachaotic notawaiter removeflashing bsiab questionablecontent thescenarionottaken easymodo canttouchthis dearestmolulu|1671237882"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -2166,10 +2167,12 @@ def set_lete_river_encounters():
             manage_lete_river_sub.set_location(addr)
             manage_lete_river_sub.write(fout)
 
-    if random.randint(0, 1) == 0:
-        manage_lete_river_sub.bytestring = bytes([0xFD] * 8)
-        manage_lete_river_sub.set_location(0xB09C8)
-        manage_lete_river_sub.write(fout)
+    if not Options_.is_code_active("thescenarionottaken"):
+        if random.randint(0, 1) == 0:
+            manage_lete_river_sub.bytestring = bytes([0xFD] * 8)
+            manage_lete_river_sub.set_location(0xB09C8)
+            manage_lete_river_sub.write(fout)
+
 
 
 def manage_rng():
@@ -5492,7 +5495,7 @@ def randomize(**kwargs) -> str:
                     print("The supplied value for the mp multiplier was not a positive number.")
 
     good_event_fsets = [256, 257, 258, 259, 260, 261, 263, 264, 268, 269, 270, 271, 272, 273, 275, 276, 277, 278, 279, 281, 282, 283, 285, 286, 287,
-                        297, 303, 400, 382, 402, 403, 404] #event formation sets that can be shuffled  with cursedencounters
+                        297, 303, 400, 382, 402, 403, 404] #event formation sets that can be shuffled with cursedencounters
     event_formations = [60, 61, 62, 63, 335, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 420, 435, 458]
     salt_formations = [57, 58, 59, 332, 333, 334, 381, 382, 383, 417, 418, 419, 432, 433, 434, 455, 456, 457]
 
@@ -5513,7 +5516,8 @@ def randomize(**kwargs) -> str:
                     elif [value for value in fset.formids if
                             value in salt_formations]:
                         for i, v in enumerate(fset.formids):
-                            if fset.formids[i] in salt_formations:
+                            while fset.formids[i].battle_event is True:
+                       #     if fset.formids[i] in salt_formations:
                                 fset.formids[i] -= 3  # any encounter that could turn into an event encounter, reduce by 3 so it can't
                         fset.sixteen_pack = True
 
