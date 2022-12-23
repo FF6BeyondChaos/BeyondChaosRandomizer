@@ -76,11 +76,10 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-#TEST_SEED = "CE-4.1.2|normal|bdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad bsiab dancingmaduin questionablecontent removeflashing nicerpoison cursedencounters dearestmolulu|1603333081"
+TEST_SEED = "CE-4.1.2|normal|bdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad bsiab dancingmaduin questionablecontent removeflashing nicerpoison cursedencounters|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-#TEST_SEED = "CE-4.1.2|normal|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin rushforpower dancelessons cursepower:16 swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter removeflashing remonsterate bsiab mimetime questionablecontent cursedencounters|1670473616"
-TEST_SEED = "CE-4.1.2|katn|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla randombosses dancingmaduin madworld alasdraco capslockoff johnnyachaotic notawaiter removeflashing bsiab questionablecontent thescenarionottaken easymodo canttouchthis dearestmolulu|1671237882"
+#TEST_SEED = "CE-4.1.2|normal|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin rushforpower dancelessons cursepower:16 swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter removeflashing bsiab mimetime questionablecontent cursedencounters|1670473616"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -4747,6 +4746,41 @@ def manage_dances():
     fout.seek(0x2D8E79)
     fout.write(bytes([3]))
 
+def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationSet]):
+
+    good_event_fsets = [256, 257, 258, 259, 260, 261, 263, 264, 268, 269, 270, 271, 272, 273, 275, 276, 277, 278, 279, 281, 282, 283, 285, 286, 287,
+                        297, 303, 400, 382, 402, 403, 404] #event formation sets that can be shuffled with cursedencounters
+    event_formations = set()
+    salt_formations = set()
+
+    for formation in formations:
+        if formation.has_event:
+            event_formations.add(formation.formid)
+            salt_formations.add((formation.formid - 1))
+            salt_formations.add((formation.formid - 2))
+            salt_formations.add((formation.formid - 3))
+        for i, v in enumerate(formation.big_enemy_ids):
+            if formation.big_enemy_ids[i] in [273, 293, 299, 304, 306, 307, 313, 314, 315, 323, 355, 356, 358, 361, 362, 363, 364, 365, 369, 373]: #don't do Zone Eater, Naughty, L.X Magic, Phunbaba, Guardian, Merchant, Officer
+                event_formations.add(formation.formid)
+                salt_formations.add((formation.formid - 1))
+                salt_formations.add((formation.formid - 2))
+                salt_formations.add((formation.formid - 3))
+
+    salt_formations = [id for id in salt_formations if id not in event_formations]
+
+    #print("EVENT FORMATIONS: " + str(event_formations))
+    #print("SALT FORMATIONS: " + str(salt_formations))
+
+    for fset in fsets:
+        if Options_.is_code_active("cursedencounters"): #code that applies FC flag to allow 16 encounters in all zones
+            if fset.setid < 252 or fset.setid in good_event_fsets: #only do regular enemies, don't do sets that can risk Zone Eater or get event encounters
+                if not [value for value in fset.formids if
+                        value in event_formations]:
+                    fset.sixteen_pack = True
+                for i, v in enumerate(fset.formids):
+                    if fset.formids[i] in salt_formations:
+                        fset.formids[i] -= 3  # any encounter that could turn into an event encounter, reduce by 3 so it can't
+                        fset.sixteen_pack = True
 
 def nerf_paladin_shield():
     paladin_shield = get_item(0x67)
@@ -5494,33 +5528,16 @@ def randomize(**kwargs) -> str:
                 except ValueError:
                     print("The supplied value for the mp multiplier was not a positive number.")
 
-    good_event_fsets = [256, 257, 258, 259, 260, 261, 263, 264, 268, 269, 270, 271, 272, 273, 275, 276, 277, 278, 279, 281, 282, 283, 285, 286, 287,
-                        297, 303, 400, 382, 402, 403, 404] #event formation sets that can be shuffled with cursedencounters
-    event_formations = [60, 61, 62, 63, 335, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 420, 435, 458]
-    salt_formations = [57, 58, 59, 332, 333, 334, 381, 382, 383, 417, 418, 419, 432, 433, 434, 455, 456, 457]
-
     if Options_.random_formations:
         formations = get_formations()
         fsets = get_fsets()
         if Options_.is_code_active('mpboost'):
             manage_formations(formations, fsets, mp_boost_value)
+            manage_cursed_encounters(formations, fsets)
         else:
             manage_formations(formations, fsets)
-
+            manage_cursed_encounters(formations, fsets)
         for fset in fsets:
-            if Options_.is_code_active("cursedencounters"): #code that applies FC flag to allow 16 encounters in all zones
-                if fset.setid < 252 or fset.setid in good_event_fsets: #only do regular enemies, don't do sets that can risk Zone Eater or get event encounters
-                    if not [value for value in fset.formids if
-                            value in event_formations or value > 481]:
-                        fset.sixteen_pack = True
-                    elif [value for value in fset.formids if
-                            value in salt_formations]:
-                        for i, v in enumerate(fset.formids):
-                            while fset.formids[i].battle_event is True:
-                       #     if fset.formids[i] in salt_formations:
-                                fset.formids[i] -= 3  # any encounter that could turn into an event encounter, reduce by 3 so it can't
-                        fset.sixteen_pack = True
-
             fset.write_data(fout)
 
     if Options_.random_formations or Options_.is_code_active('ancientcave'):
