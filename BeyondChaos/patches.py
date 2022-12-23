@@ -1081,6 +1081,58 @@ def fewer_flashes(fout):
     anti_seizure_sub.bytestring = bytes([0xF0])
     anti_seizure_sub.write(fout)
 
+    #
+    # Removing Goner Flash
+    #
+    anti_seizure_sub.set_location(0x1000D8)  # D000D8
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1000DA)  # D000DA
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1000DC)  # D000DC
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1000DE)  # D000DE
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1000E0)  # D000E0
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1000E6)  # D000E6
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1000E8)  # D000E8
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x100173)  # D00173
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x100176)  # D00176
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x100179)  # D00179
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    # BG3 horizontal lines fade to black
+    anti_seizure_sub.set_location(0x1001BD)  # D001BD
+    anti_seizure_sub.bytestring = bytes([0xCF])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1001BF)  # D001BF
+    anti_seizure_sub.bytestring = bytes([0xB4])
+    anti_seizure_sub.write(fout)
+
     # ------------- Battle Event Scripts -------------
     #
     # Battle Event Script $15
