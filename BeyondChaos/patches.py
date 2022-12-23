@@ -453,11 +453,17 @@ def patch_doom_gaze(fout):
 
 def nicer_poison(fout):
 
+    #make poison pixelation effect 1/10 of it's vanilla amount in dungeons/towns
     nicer_poison_sub = Substitution()
     nicer_poison_sub.set_location(0x00E82)
     nicer_poison_sub.bytestring = bytes([0x0F, 0x0F, 0x0F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,
                                          0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,
                                          0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x0F, 0x0F, 0x0F])
+    nicer_poison_sub.write(fout)
+
+    #remove poison pixelation on the overworld
+    nicer_poison_sub.set_location(0x2E1864)
+    nicer_poison_sub.bytestring = bytes([0xA9, 0x00])
     nicer_poison_sub.write(fout)
 
 def fewer_flashes(fout):
