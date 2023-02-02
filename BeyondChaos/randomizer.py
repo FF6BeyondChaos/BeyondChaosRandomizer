@@ -76,10 +76,11 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "CE-4.1.2|normal|bdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad bsiab dancingmaduin questionablecontent removeflashing nicerpoison cursedencounters|1603333081"
+#TEST_SEED = "CE-4.1.2|normal|bdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad bsiab dancingmaduin questionablecontent removeflashing nicerpoison cursedencounters dearestmolulu|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-#TEST_SEED = "CE-4.1.2|normal|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin rushforpower dancelessons cursepower:16 swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter removeflashing bsiab mimetime questionablecontent cursedencounters|1670473616"
+#TEST_SEED = "CE-4.1.2|katn|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla randombosses dancingmaduin madworld alasdraco capslockoff johnnyachaotic notawaiter removeflashing bsiab questionablecontent thescenarionottaken|1671237882"
+TEST_SEED = "CE-4.1.2|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent|1672183987"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1

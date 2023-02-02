@@ -143,16 +143,22 @@ def mark_taken_id(taken):
 
 
 def select_monster_in_a_box(rank, value, clock, guarantee_miab_treasure, enemy_limit, old_version):
+    global banned_formids
     formations = get_appropriate_formations()
     formations = [f for f in formations if
                   f.get_guaranteed_drop_value() >= value * 100]
     orphaned_formations = get_orphaned_formations(old_version)
     orphaned_formations = [f for f in orphaned_formations
                            if f not in used_formations]
+
     extra_miabs = get_extra_miabs(0)
 
     normal_rank_limit = lambda rank: 9 / 5 * rank - 150
     special_rank_limit = lambda rank: 5 / 4000 * rank * rank + 7 / 4 * rank - 300
+
+
+    if old_version:
+        banned_formids = [f.formid for f in formations if f.rank() < 2000]
 
     if guarantee_miab_treasure:
         extra_miabs = []
@@ -178,6 +184,8 @@ def select_monster_in_a_box(rank, value, clock, guarantee_miab_treasure, enemy_l
                 max_extra_miab_rank = special_rank_limit(rank)
                 extra_miabs = [f for f in extra_miabs if f.rank() <= max_extra_miab_rank]
         candidates = (orphaned_formations + extra_miabs)
+        if old_version:
+            candidates = extra_miabs
         candidates = [c for c in candidates if c not in used_formations]
         candidates = [c for c in candidates
                       if c.formid not in banned_formids]
@@ -196,7 +204,10 @@ def select_monster_in_a_box(rank, value, clock, guarantee_miab_treasure, enemy_l
     value_divisor = 8
     while not candidates:
         max_rank = max(rank, rank_multiplier * normal_rank_limit(rank))
-        min_value = value * 100 / value_divisor - 1500
+        if old_version:
+            min_value = value * 2500 / value_divisor
+        else:
+            min_value = value * 100 / value_divisor - 1500
         orphaned_formations = get_orphaned_formations(old_version)
         orphaned_formations = [f for f in orphaned_formations
                                if f.rank() <= max_rank and f.get_guaranteed_drop_value() >= min_value / 3 - 1200]
@@ -204,6 +215,8 @@ def select_monster_in_a_box(rank, value, clock, guarantee_miab_treasure, enemy_l
         max_extra_miab_rank = special_rank_limit(rank)
         extra_miabs = [f for f in extra_miabs if f.rank() <= max_extra_miab_rank * rank_multiplier]
         candidates = (orphaned_formations + extra_miabs)
+        if old_version:
+            candidates = extra_miabs
         candidates = [c for c in candidates if c not in used_formations]
         candidates = [c for c in candidates
                       if c.formid not in banned_formids]
@@ -230,6 +243,7 @@ def select_monster_in_a_box(rank, value, clock, guarantee_miab_treasure, enemy_l
             candidates = candidates[index:]
 
     candidates = sorted(candidates, key=lambda f: f.rank())
+
     if orphaned_formations:
         index = max(
             0, len([c for c in candidates if c.rank() <= rank]) - 1)
@@ -465,6 +479,8 @@ class ChestBlock:
 
             if self.is_clock or not rank:
                 rank = min(formations, key=lambda f: f.rank()).rank() if formations else 0
+            if uncapped_monsters:
+                rank = 2500
 
             chosen = select_monster_in_a_box(rank=rank, value=value, clock=self.is_clock or monster is True,
                                              old_version=uncapped_monsters,
@@ -558,7 +574,7 @@ class EventItem:
         # So just make sure it's an item.
         if cannot_show_text:
             while c.content_type != 0x40:
-                c.mutate_contents(monster=False, crazy_prices=crazy_prices)
+                c.mutate_contents(monster=False, crazy_prices=crazy_prices, uncapped_monsters=uncapped_monsters)
 
         self.content_type = c.content_type
         self.contents = c.contents
