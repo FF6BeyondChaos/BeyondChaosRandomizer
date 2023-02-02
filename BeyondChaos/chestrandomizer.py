@@ -480,7 +480,7 @@ class ChestBlock:
             if self.is_clock or not rank:
                 rank = min(formations, key=lambda f: f.rank()).rank() if formations else 0
             if uncapped_monsters:
-                rank = 2500
+                rank = 3000
 
             chosen = select_monster_in_a_box(rank=rank, value=value, clock=self.is_clock or monster is True,
                                              old_version=uncapped_monsters,
