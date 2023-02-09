@@ -5374,11 +5374,11 @@ def randomize(**kwargs) -> str:
             dirk.write_stats(fout)
             dummy_item(dirk)
             assert not dummy_item(dirk)
-            log(s, section="secret item")
+            log(s, section="secret items")
     if Options_.random_enemy_stats and Options_.random_treasure and Options_.random_character_stats:
         rename_card = get_item(231)
         if rename_card is not None:
-            rename_card.become_another(tier="low")
+            s = rename_card.become_another(tier="low")
             rename_card.write_stats(fout)
 
             weapon_anim_fix = Substitution()
@@ -5391,6 +5391,7 @@ def randomize(**kwargs) -> str:
                 [0xE0, 0xE8, 0x02, 0xB0, 0x05, 0xBF, 0x00, 0xE4, 0xEC, 0x6B, 0xDA, 0xC2, 0x20, 0x8A, 0xE9, 0xF0, 0x02,
                  0xAA, 0x29, 0xFF, 0x00, 0xE2, 0x20, 0xBF, 0x00, 0x31, 0xF0, 0xFA, 0x6B])
             weapon_anim_fix.write(fout)
+            log(s, section="secret items")
     reseed()
 
     items = get_ranked_items()
@@ -6010,7 +6011,7 @@ def randomize(**kwargs) -> str:
     f.write(get_logstring(
         ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers", "item magic",
          "item effects", "command-change relics", "colosseum", "monsters", "music", "remonsterate", "shops",
-         "treasure chests", "zozo clock", "secret item"]))
+         "treasure chests", "zozo clock", "secret items"]))
     f.close()
 
     print("Randomization successful. Output filename: %s\n" % outfile)
