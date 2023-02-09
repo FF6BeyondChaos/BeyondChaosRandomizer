@@ -293,6 +293,7 @@ NORMAL_CODES = [
     Code('unbreakable', "UNBREAKABLE ITEMS MODE", "Causes all items to be indestructible when broken for a spell.", "battle", "checkbox"),
     Code('swdtechspeed', "CHANGE SWDTECH SPEED MODE", "Alters the speed at which the SwdTech bar moves.", "battle", "combobox", ("Fastest", "Faster", "Fast", "Vanilla", "Random")),
     Code('cursepower', "CHANGE CURSED SHIELD MODE", "Set the number of battles required to uncurse a Cursed Shield. (Vanilla = 256, 0 = Random)", "battle", "numberbox"),
+    Code('lessfanatical', "EASY FANATIC'S TOWER MODE", "Remove changing all character commands to Magic in the Fanatic's Tower.", "battle", "checkbox"),
 
     # field codes
     Code('fightclub', "MORE LIKE COLI-DON'T-SEE-'EM",  "Does not allow you to see the coliseum rewards before betting, but you can often run from the coliseum battles to keep your item.",  "field", "checkbox"),
