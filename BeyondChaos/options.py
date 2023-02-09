@@ -304,6 +304,7 @@ NORMAL_CODES = [
     Code('worringtriad', "START IN WOR", "The player will start in the World of Ruin, with all of the World of Balance treasure chests, along with a guaranteed set of items, and more Lores.", "field", "checkbox"),
     Code('questionablecontent', "RIDDLER MODE", "When items have significant differences from vanilla, a question mark is appended to the item's name to allow at-a-glance identification, including in shop menus.", "field", "checkbox"),
     Code('nomiabs', 'NO MIAB MODE', "Chests will never have monster encounters in them.", "field", "checkbox"),
+    Code('morefanatical', 'HORROR FANATICS TOWER', "Fanatic's Tower is even more confusing than usual - EXPERTS ONLY.", "field", "checkbox"),
 
 
     # character codes

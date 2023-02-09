@@ -1243,10 +1243,13 @@ def assign_maps(routes, nummaps=None):
             segment.interconnect()
 
 
-def randomize_fanatics(unused_locids):
+def randomize_fanatics(unused_locids, morefanatical=False):
     stairs = [get_location(i) for i in [363, 359, 360, 361]]
     pitstops = [get_location(i) for i in [365, 367, 368, 369]]
-    num_new_levels = random.randint(0, 1) + random.randint(1, 2)
+    if morefanatical:
+        num_new_levels = 3 #force the tallest tower with morefanatical
+    else:
+        num_new_levels = random.randint(0, 1) + random.randint(1, 2)
     unused_locations = [get_location(l) for l in unused_locids]
     fsets = get_new_fsets("fanatics", 10, supplement=False)
     for _ in range(num_new_levels):
@@ -1279,20 +1282,26 @@ def randomize_fanatics(unused_locids):
         upper.dest = (upper.dest & 0xFE00) | (a.locid & 0x1FF)
 
     for stop in pitstops:
-        if random.choice([True, False]):
+
+        if not morefanatical and random.choice([True, False]): #if morefanatical, change every door, otherwise doa 50/50 check
             continue
         index = pitstops.index(stop)
         if index == 0:
             continue
-        index2 = index + random.choice([-1, -1, -2])
+        if morefanatical:
+            index2 = index + random.choice([-2, -1, 0, 1, 2]) #allow FT pitstops to warp up and down with morefanatical
+        else:
+            index2 = index + random.choice([-1, -1, -2])
         if index2 < 0:
             index2 = 0
+        if index2 > len(stairs)-1:
+            index2 = len(stairs)-1
         stair = stairs[index2]
         entrance = stop.entrances[0]
         entrance.dest = (entrance.dest & 0xFE00) | (stair.locid & 0x1FF)
 
 
-def randomize_tower(filename, ancient=False, nummaps=None):
+def randomize_tower(filename, ancient=False, nummaps=None, morefanatical = False):
     global ANCIENT
     ANCIENT = ancient
     if nummaps is None:
@@ -1319,7 +1328,7 @@ def randomize_tower(filename, ancient=False, nummaps=None):
     update_locations(newlocations)
 
     if not ANCIENT:
-        randomize_fanatics(unused_maps)
+        randomize_fanatics(unused_maps, morefanatical=morefanatical)
 
     for route in routes:
         # print route

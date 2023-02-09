@@ -76,7 +76,7 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "CE-4.1.2|normal|bdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad bsiab dancingmaduin questionablecontent removeflashing nicerpoison lessfanatical|1603333081"
+TEST_SEED = "CE-4.1.2|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad bsiab dancingmaduin questionablecontent removeflashing nicerpoison dearestmolulu|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #TEST_SEED = "CE-4.1.2|katn|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla randombosses dancingmaduin madworld alasdraco capslockoff johnnyachaotic notawaiter removeflashing bsiab questionablecontent thescenarionottaken|1671237882"
@@ -3760,7 +3760,7 @@ def manage_encounter_rate() -> None:
 
 def manage_tower():
     locations = get_locations()
-    randomize_tower(filename=sourcefile)
+    randomize_tower(filename=sourcefile, morefanatical=Options_.is_code_active("morefanatical"))
     for l in locations:
         if l.locid in [0x154, 0x155] + list(range(104, 108)):
             # leo's thamasa, etc
