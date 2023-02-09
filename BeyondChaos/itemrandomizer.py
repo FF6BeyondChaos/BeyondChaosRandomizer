@@ -228,7 +228,7 @@ class ItemBlock:
                 else:
                     candidates = [customs[key] for key in sorted(customs) if customs[key]["tier"] == tier]
             customdict = random.choice(candidates)
-
+        s = customdict["name_text"]
         for key in self.features:
             self.features[key] = 0
 
@@ -264,6 +264,8 @@ class ItemBlock:
 
         self.dataname = name
         self.ban()
+
+        return s
 
     def write_stats(self, fout):
         fout.seek(self.pointer)

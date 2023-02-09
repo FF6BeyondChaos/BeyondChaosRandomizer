@@ -5370,10 +5370,11 @@ def randomize(**kwargs) -> str:
             if dirk is None:
                 items = get_ranked_items(sourcefile)
                 dirk = get_item(0)
-            dirk.become_another(halloween=Options_.is_code_active('halloween'))
+            s = dirk.become_another(halloween=Options_.is_code_active('halloween'))
             dirk.write_stats(fout)
             dummy_item(dirk)
             assert not dummy_item(dirk)
+            log(s, section="secret item")
     if Options_.random_enemy_stats and Options_.random_treasure and Options_.random_character_stats:
         rename_card = get_item(231)
         if rename_card is not None:
@@ -6009,7 +6010,7 @@ def randomize(**kwargs) -> str:
     f.write(get_logstring(
         ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers", "item magic",
          "item effects", "command-change relics", "colosseum", "monsters", "music", "remonsterate", "shops",
-         "treasure chests", "zozo clock"]))
+         "treasure chests", "zozo clock", "secret item"]))
     f.close()
 
     print("Randomization successful. Output filename: %s\n" % outfile)
