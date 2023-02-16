@@ -76,7 +76,7 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "CE-4.1.2|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad bsiab dancingmaduin questionablecontent removeflashing nicerpoison dearestmolulu|1603333081"
+TEST_SEED = "CE-4.1.2|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad bsiab dancingmaduin questionablecontent removeflashing nicerpoison dearestmolulu canttouchthis easymodo|1603333081"
 #FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 #REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #TEST_SEED = "CE-4.1.2|katn|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla randombosses dancingmaduin madworld alasdraco capslockoff johnnyachaotic notawaiter removeflashing bsiab questionablecontent thescenarionottaken|1671237882"
@@ -3204,9 +3204,9 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet], mp
         if formation.formid == 0x1e2:
             formation.set_music(2)  # change music for Atma fight
         if formation.formid == 0x162:
-            formation.ap = 255  # Magimaster
+            formation.mp = 255  # Magimaster
         if formation.formid in [0x1d4, 0x1d5, 0x1d6, 0x1e2]:
-            formation.ap = 100  # Triad
+            formation.mp = 100  # Triad
         formation.write_data(fout)
 
     return formations
