@@ -1,0 +1,467 @@
+#TITLE Resistance Base
+#ALBUM Princess Tomato in the Salad Kingdom
+#COMPOSER Tomotsune Maeno
+#ARRANGED Rushlight
+
+#SHORTNAME PTSK Resist. Base
+
+
+#WAVE 0x20 0x65 ## Strings
+#WAVE 0x21 0x58 ## Harp
+#WAVE 0x22 0x04 ## Bass Piano
+
+#WAVE 0x24 0x02 ## Piano 5
+#WAVE 0x25 0x01 ## Piano 6
+#WAVE 0x26 0x57 ## Bass
+#WAVE 0x2A 0x6C ## Tambourine
+#WAVE 0x2B 0x6A ## Shaker
+
+
+#def init= t139 %x230 %v45 %b0,80 %f0,0
+
+
+#def stringsSustain = %r0
+#def stringsRelease = %r12
+
+
+#def piano6MP= v127
+#def piano6P=  'piano6MP*v.85'
+#def piano6PP= 'piano6MP*v.75'
+
+#def extraPiano6MP= v32
+#def extraPiano6P=  'extraPiano6MP*v.85'
+#def extraPiano6PP= 'extraPiano6MP*v.75'
+
+
+#def strings=             |0 o5                          %e1 m
+#def melodyStrings=       'strings' v56         p71     %a6     v0,18,159
+#def rightSupportStrings= 'strings' v53         p78 %r10
+#def echoStrings=         'strings' v44         p40 %r12        v0,18,151
+#def melodyStringsEcho=   'strings' v13         p40     %a6
+#def harp=                |1 o5     v75         p57      %e1 m
+#def bass=                |6 o6     v50         p78      %e1 m
+#def piano5=              |4 o5                          %e1 m
+#def secondaryPiano5=     'piano5'  v107        p57
+#def rightSupportPiano5=  'piano5'  v90         p78
+#def piano6=              |5 o4                     %r10 %e1 m
+#def melodyPiano6=        'piano6'  'piano6MP'  p71            v
+#def echoPiano6=          'piano6'  v67         p40            v
+#def bassPiano=           |2 o5     v107        p64      %e0 m
+
+
+#DRUM "t"= 5a |A v56 p74 %e1 m
+#DRUM "r"= 4g |B v50 p54 %e0 m
+#DRUM "s"= 4g |B v25 p54 %e0 m
+
+{1}
+'init'
+$
+'melodyPiano6+o1'
+l8
+## 1
+e2>a2
+## 2
+^2<'piano6P'c>bag
+## 3
+'piano6MP'f4.<'piano6P'c'piano6MP'c2
+## 4
+^1
+## 5
+f2>b2
+## 6
+^2'piano6P'b<cdf
+## 7
+'piano6MP'e1
+## 8
+^1
+## 9
+a2e2
+## 10
+^2'piano6P'cdec
+## 11
+'piano6MP'g4.'piano6PP'f16e16'piano6MP'f2
+## 12
+^2>'piano6P'b<cdf
+## 13
+'piano6MP'f4.'piano6PP'e16d16'piano6MP'e2
+## 14
+^2>e4<c4
+## 15
+>a1
+## 16
+^1
+'melodyStrings+o1'
+l8
+## 17
+e4'stringsRelease'^4'stringsSustain'>a4'stringsRelease'^4
+## 18
+^2'stringsSustain'<c>bag
+## 19
+f4'stringsRelease'^8'stringsSustain'<cc4'stringsRelease'^4
+## 20
+^1'stringsSustain'
+## 21
+f4'stringsRelease'^4'stringsSustain'>b4'stringsRelease'^4
+## 22
+^2'stringsSustain'b<cdf
+## 23
+e4'stringsRelease'^2.
+## 24
+^1'stringsSustain'
+## 25
+a4'stringsRelease'^4'stringsSustain'e4'stringsRelease'^4
+## 26
+^2'stringsSustain'cdec
+## 27
+g4'stringsRelease'^8'stringsSustain'%l1f16e16%l0f4'stringsRelease'^4
+## 28
+^2'stringsSustain'>b<cdf
+## 29
+f4'stringsRelease'^8'stringsSustain'%l1e16d16%l0e4'stringsRelease'^4
+## 30
+^2'stringsSustain'>e4<c4
+## 31
+>a4'stringsRelease'^2.
+## 32
+^1
+;
+
+
+{2}
+$
+'secondaryPiano5-o1'
+l8
+## 1-2
+[4 a<ece>]
+## 3-4
+[4 f<c>a<c>]
+## 5-6
+[4 b<fdf>]
+## 7
+[2 g+<e>b<e>]
+## 8
+g+<edece>b<e>
+## 9-10
+[4 a<ece>]
+## 11-12
+[4 a<fdf>]
+## 13
+[2 g+<e>b<e>]
+## 14
+g+<e>b<e>g+<ece>
+## 15
+[2 a<ece>]
+## 16
+a<edece>b<e>
+'harp-o1'
+l8
+## 17-18
+[4 a<ece>]
+## 19-20
+[4 f<c>a<c>]
+## 21-22
+[4 b<fdf>]
+## 23
+[2 g+<e>b<e>]
+## 24
+g+<edece>b<e>
+## 25-26
+[4 a<ece>]
+## 27-28
+[4 a<fdf>]
+## 29
+[2 g+<e>b<e>]
+## 30
+g+<e>b<e>g+<ece>
+## 31
+[2 a<ece>]
+## 32
+a<edece>b<e>
+;
+
+
+{3}
+$
+'bassPiano-o3'
+l4
+## 1-2
+[4 a<e>]
+## 3-4
+[4 f<c>]
+## 5-6
+[4 b<f>]
+## 7
+[2 g+<e>]
+## 8
+g+<ec>b
+## 9-10
+[4 a<e>]
+## 11-12
+[4 a<f>]
+## 13
+[2 g+<e>]
+## 14
+g+<e>g+<e>
+## 15
+[2 a<e>]
+## 16
+a<ec>b
+'bass-o3'
+l4
+## 17-18
+[4 a<e>]
+## 19-20
+[4 f<c>]
+## 21-22
+[4 b<f>]
+## 23
+[2 g+<e>]
+## 24
+g+<ec>b
+## 25-26
+[4 a<e>]
+## 27-28
+[4 a<f>]
+## 29
+[2 g+<e>]
+## 30
+g+<e>g+<e>
+## 31
+[2 a<e>]
+## 32
+a<ec>b
+;
+
+
+{5}
+$
+'rightSupportStrings-o1'
+l4
+## 1
+a2<c2
+## 2
+^4>bae
+## 3
+f2<c2
+## 4
+^1>
+## 5
+b2<d2
+## 6
+^4efd
+## 7
+e2d2
+## 8
+c2>b2
+## 9
+a2<c2
+## 10
+^4> ba<e
+## 11
+f1
+## 12
+d1>
+## 13
+g+2b2
+## 14
+^4ag+<c>
+## 15
+a1
+## 16
+^1
+'rightSupportPiano5-o1'
+l4
+## 17
+a2<c2
+## 18
+^4>bae
+## 19
+f2<c2
+## 20
+^1>
+## 21
+b2<d2
+## 22
+^4efd
+## 23
+e2d2
+## 24
+c2>b2
+## 25
+a2<c2
+## 26
+^4> ba<e
+## 27
+f1
+## 28
+d1>
+## 29
+g+2b2
+## 30
+^4ag+<c>
+## 31
+a1
+## 32
+^1
+;
+
+
+{4}
+## Delay by 2 beats to set the echo's timing
+r2
+$
+'echoStrings+o1'
+l8
+## 1
+e2>a2
+## 2
+^2<c>bag
+## 3
+f4.<cc2
+## 4
+^1
+## 5
+f2>b2
+## 6
+^2b<cdf
+## 7
+e1
+## 8
+^1
+## 9
+a2e2
+## 10
+^2cdec
+## 11
+g4.f16e16f2
+## 12
+^2>b<cdf
+## 13
+f4.e16d16e2
+## 14
+^2>e4<c4
+## 15
+>a1
+## 16
+^1
+'echoPiano6+o1'
+l8
+## 17
+e2>a2
+## 18
+^2<c>bag
+## 19
+f4.<cc2
+## 20
+^1
+## 21
+f2>b2
+## 22
+^2b<cdf
+## 23
+e1
+## 24
+^1
+## 25
+a2e2
+## 26
+^2cdec
+## 27
+g4.f16e16f2
+## 28
+^2>b<cdf
+## 29
+f4.e16d16e2
+## 30
+^2>e4<c4
+## 31
+>a1
+## 32
+^1
+;
+
+
+{6}
+$
+'melodyPiano6+o1' 'extraPiano6MP'
+l8
+## 1
+e2>a2
+## 2
+^2<'extraPiano6P'c>bag
+## 3
+'extraPiano6MP'f4.<'extraPiano6P'c'extraPiano6MP'c2
+## 4
+^1
+## 5
+f2>b2
+## 6
+^2'extraPiano6P'b<cdf
+## 7
+'extraPiano6MP'e1
+## 8
+^1
+## 9
+a2e2
+## 10
+^2'extraPiano6P'cdec
+## 11
+'extraPiano6MP'g4.'extraPiano6PP'f16e16'extraPiano6MP'f2
+## 12
+^2>'extraPiano6P'b<cdf
+## 13
+'extraPiano6MP'f4.'extraPiano6PP'e16d16'extraPiano6MP'e2
+## 14
+^2>e4<c4
+## 15
+>a1
+## 16
+^1
+'melodyStringsEcho+o1'
+l8 r8
+## 17
+e4'stringsRelease'^4'stringsSustain'>a4'stringsRelease'^4
+## 18
+^2'stringsSustain'<c>bag
+## 19
+f4'stringsRelease'^8'stringsSustain'<cc4'stringsRelease'^4
+## 20
+^1'stringsSustain'
+## 21
+f4'stringsRelease'^4'stringsSustain'>b4'stringsRelease'^4
+## 22
+^2'stringsSustain'b<cdf
+## 23
+e4'stringsRelease'^2.
+## 24
+^1'stringsSustain'
+## 25
+a4'stringsRelease'^4'stringsSustain'e4'stringsRelease'^4
+## 26
+^2'stringsSustain'cdec
+## 27
+g4'stringsRelease'^8'stringsSustain'%l1f16e16%l0f4'stringsRelease'^4
+## 28
+^2'stringsSustain'>b<cdf
+## 29
+f4'stringsRelease'^8'stringsSustain'%l1e16d16%l0e4'stringsRelease'^4
+## 30
+^2'stringsSustain'>e4<c4
+## 31
+>a4'stringsRelease'^2.
+## 32
+^2..
+;
+
+
+{7}
+$
+[15 r2."!!!ot4"] r1
+;
+
+
+{8}
+$
+l8
+"sr"
+;

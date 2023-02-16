@@ -1,0 +1,278 @@
+#TITLE Hill of Destiny
+#ALBUM Final Fantasy Mystic Quest
+#COMPOSER Ryuji Sasai
+#ARRANGED emberling
+##created with sqspcmml beta 1.1.6
+
+#SHORTNAME Hill of Fate
+
+#WAVE 0x2A 0x39
+#WAVE 0x2B 0x20
+#WAVE 0x20 0x0A
+#WAVE 0x21 0x1F
+#WAVE 0x23 0x4A
+#WAVE 0x24 0x5A
+#WAVE 0x25 0x2D
+#WAVE 0x26 0x54
+#WAVE 0x27 0xB2
+#WAVE 0x28 0x65
+
+#def 4@i=   |A %a10
+#def 4@o=   o7
+#def 4@v=   v75
+#def 4@f= v1,75
+
+#def p@i=   |A
+#def p@o=   o6
+#def p@v=   v150
+#def p@f= v1,150
+
+#def 7@i=   |B %a11
+#def 7@o=   o6
+#def 7@v=   v112
+#def 7@f= v1,112
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v50
+#def 0f= v1,50
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v50
+#def 1f= v1,50
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v30
+#def 3f= v1,30
+
+#def 4i=   |4
+#def 4o=   o5
+#def 4v=   v75
+#def 4f= v1,75
+
+#def 5i=   |5 %r17
+#def 5o=   o5
+#def 5v=   v75
+#def 5f= v1,75
+
+#def 6i=   |6
+#def 6o=   o6
+#def 6v=   v90
+#def 6f= v1,90
+
+#def 7i=   |7
+#def 7o=   o5
+#def 7v=   v188
+#def 7f= v1,188
+
+#def 8i=   |8
+#def 8o=   o6
+#def 8v=   v150
+#def 8f= v1,150
+
+## auto percussion  0x20
+#drum "h"= 5a
+## auto percussion  0x21
+#drum "i"= 5f+
+## auto percussion  0x23
+#drum "j"= 5c
+#drum "k"= 5d
+#drum "l"= 5e
+#drum "m"= 5f
+## auto percussion  0x25
+#drum "n"= 5f+
+#drum "o"= 5g
+
+#def init= t162 %v50 %b0,70 %f0,0
+
+## INTRO
+
+#def introBass= '6i''6v*v.85'p64 %e0'6o-o1' c4.>b4.a+8a8
+#def introOrgan= '7i''7v*v.30'p96 %e1'7o-o1' a+4.b4.<c8c+8
+#def introBell= '7@i''7@v*v.40'p64 %e1 %r17'7@o-o1'c16f+16c16a+16c16<c16c+8>a+16g16c+16d+16<d+16>a16g16f+16
+#def introStHi= '8i''8v*v.25'p32 %e1 '8o-o1'f+4.g4.g+8a8
+#def introStLo= '8i''8v*v.25'p32 %e1 '8o-o2'c4.c+4.d8d+8
+#def introSilent = r1
+
+## MAIN
+#def mainStHi= '8i'p32 %e1'8o-o1''8v*v.25'[6g8g8g8g8g+8g+8g+8g+8a8a8a8a8g+8g+8g+8g+8]
+#def mainStLo= '8i'p32 %e1'8o-o1''8v*v.25'[32c8][32c+8][32c8]
+#def mainOrgan= '7i'p96 %e1'7o-o1''7v*v.30'[[g16d+16c16>g16<][g+16d+16c16>g+16<][a16d+16c16>a16<][g+16d+16c16>g+16<]][[g16e16c+16>g+16<][g+16e16c+16>g+16<][a16e16c+16>a16<][g+16e16c+16>g+16<]][[g16d+16c16>g16<][g+16d+16c16>g+16<][a16d+16c16>a16<][g+16d+16c16>g+16<]]
+#def mainBass= '6i'p64 %e0'6o-o1''6v*v.85'[32c8][32c+8][32c8]
+#def mainLeadSrcA= 'mainLeadSrc1''mainLeadShared' k0m
+#def mainLeadSrcB= 'mainLeadSrc2''mainLeadShared' k0m
+#def mainLeadModA= 'mainLeadMod1''mainLeadShared' k0m%p0
+#def mainLeadModB= 'mainLeadMod2''mainLeadShared' k0m%p0
+#def mainLeadShared= 'mainLead02''mainLead03''mainLead04''mainLead05''mainLead06''mainLead07''mainLead08''mainLead09''mainLead10''mainLead11''mainLead12'
+
+#def mainLeadSrc1= m12,12,231 p64'4@i' '4@v*v.32''4@o'   k2 g16f+16d+16c16<c2^8^8>
+#def mainLeadMod1= m08,12,231 p64'p@i' 'p@v*v.32''p@o'%p1 g16f+16d+16c16<%l1c8m0,12,231k-1c8k-2c8k-4c8k-6c8k-9m48,1c8m0,0>k0m8,12,231
+#def mainLeadSrc2= m12,12,231 p64'4@i' '4@v*v.32''4@o-o1'k2 g16f+16d+16c16<%l1c8m0,12,231k1c8k0c8k-2c8k-4c8k-7m48,1c8m0,0>k2m12,12,231
+#def mainLeadMod2= m08,12,231 p64'p@i' 'p@v*v.32''p@o'%p1   g16f+16d+16c16<c2^8^8>
+#def mainLead02= a16g+16a16r16a16g+16a16r16d+16f16d+16d16c16>b16<c16d16
+#def mainLead03= c16g16f+16f16d+16c16>b16<c16d+16d16d+16r16c16>b16<c16r16
+#def mainLead04= g16f+16g8d+16d16c16>g16<<c8>b8a+8a8
+#def mainLead05= g+16g16c+16g+16g16c+16g16g+16c+16e16d+16>g+16<d+16e16c16c+16
+#def mainLead06= e16c+16d+16e16g+16c+16e16g+16d+16e16c16c+16>g+4
+#def mainLead07= <c+16>g16<d+16>g16<e16>g16<c+16>g16<d+16>g16<e16>g16<c+16>g16<g+16c+16
+#def mainLead08= g16c+16e16c+16g+16c+16a16c+16g+16g16f+16e16c+4
+#def mainLead09= <c16>b16a+16a16g+16b16a+16g+16a16g16f+16e16f+16e16d+16c16
+#def mainLead10= d+16e16d+16c16d+16e16d+16c16g+16a16d+16g+16d+16g+16c16>g16<
+#def mainLead11= d+16d16c16r16g16d+16c16r16f+16f16d+16d16c16>a+16<c16d16
+#def mainLead12= d16d+16d16d+16>b16<c16>b16<c16>g16g+16g16g+16<g16g+16g16g+16
+
+## INTRO REPRISE
+#def repStHi= '8i'p32 %e1'8o-o1''8v*v.25'f+4.g4.g+8a8g4.g+4.a8a+8g+4.a4.a+8b8
+#def repStLo= '8i'p32 %e1'8o-o1''8v*v.25'c4.c+4.d8d+8c+4.d4.d+8e8d4.d+4.e8f8
+#def repBell= '7@i'p64 %e1'7@o-o1'%r17'7@v*v.40' 'tranBell1''tranBell2''tranBell3'
+#def repOrgan= '7i'p96 %e1'7o-o1''7v*v.30' a+4.b4.<c8c+8>b4.<c4.c+8d8c4.c+4.d8d+8
+#def repBass= '6i'p64 %e0'6o-o1''6v*v.85' c4.c+4.d8d+8c+4.d4.d+8e8d4.d+4.e8f8
+#def repSilent= r1r1r1
+
+#def tranBell1= c16f+16c16a+16c16<c16c+8>a+16g16c+16d+16<d+16>a16g+16g16
+#def tranBell2= c+16g16c+16b16c+16<c+16d8>b16g+16d16e16<e16>a+16a16g+16
+#def tranBell3= d16g+16d16<c16>d16<d16d+8c16>a16d+16f16<f16>b16a+16a16
+#def tranBell4= d+16a16d+16<c+16>d+16<d+16e8c+16>a+16e16f+16<f+16c16>b16a+16
+
+## TRANSITION
+# Previous high and middle string channels are duplicates, merging into just one here
+#def tranStMid= '8i'p32 %e1'8o-o2''8v*v.50'd+16a16d+16<c+16>d+16<d+16e8c+16>a+16e16f+16<f+16c16>b16a+16
+#def tranBell= '7@i'p64 %e1'7@o-o1'%r17'7@v*v.40' 'tranBell4'
+#def tranBass= '6i'p64 %e0'6o-o2''6v*v.85' d+16a16d+16<c+16>d+16<d+16e8c+16>a+16e16f+16<f+16c16>b16a+16
+#def tranSilent= r1
+
+#def tranSrc= p96'4@i''4@v*v.32''4@o-o2'm12,12,231 d+16a16d+16<c+16>d+16<d+16e8c+16>a+16e16f+16<f+16c16>b16a+16 m
+#def tranMod= p48'p@i''p@v*v.12''p@o'%p1m8,12,231 d+16a16d+16<c+16>d+16<d+16e8c+16>a+16e16f+16<f+16c16>b16a+16 %p0m
+
+## B-SECTION
+#def bsecStHi= '8i'p32 %e1'8o''8v*v.25' r1r1r1 c16>b16<c16d+16f+2.e8d+4.c+8c4.>a+8a4.g8f+4.<c8>b4.<e8d+4.g8f+4.<c8>b4.
+#def bsecStMid= '8i'p96 %e1'8o-o2''8v*v.50'c1>b2<d+2>a1^2^8a8b8<c8e8d+2.^8g8f+2.^8c8>b2.^8^1
+#def bsecStLo= '8i'p32 %e1'8o-o3''8v*v.50'c1>b2<d+2>a1^2^8a8b8<c8e8d+2.^8g8f+2.^8c8>b2.^8^1
+#def bsecBelLo= '7@i'p64 %e1'7@o-o1'%r0'7@v*v.10' [64d+8]
+#def bsecBelHi= '7@i'p64 %e1'7@o-o1'%r17'7@v*v.10' p0,48,127 [64a8] p
+#def bsecOrgan= '7i'p96 %e1'7o''7v*v.30' [4>a4f+4a4<d+4][c4>d+4<c4f+4][>a4f+4a4<d+4]
+
+#def bsecOrgB= '7i'p64 %e1'7o+o1''7v*v.40' r1r1r1 m24,18,223 v0,9,191 c16>b16<c16d+16f+2.e8d+4.c+8c4.>a+8a4.g8f+4.<c8>b4.<e8d+4.g8f+4.<c8>b4. mv
+#def bsecStrB= '8i'p96 %e1'8o-o1''8v*v.50' [4>a4f+4a4<d+4][c4>d+4<c4f+4][>a4f+4a4<d+4]
+#def bsecStMidB= '7i'p32 %e1'7o-o1''7v*v.25'c1>b2<d+2>a1^2^8a8b8<c8e8d+2.^8g8f+2.^8c8>b2.^8^1
+
+#def bsecSrc= p64'4@i''4@v*v.32''4@o-o2' %y5 %r17 p0,64,96 [8 [%s7a8a8%s2a8]%s7a8%s2a8 ] p
+#def bsecMod= p64'p@i''p@v*v.12''p@o'%p1 %y6 %r17 p0,64,96 [8 [3%s7d+8%s2d+8j3d+8] ] %p0p
+
+## - SEQUENCE -
+
+{1} 'init'
+'introOrgan'
+$
+'mainLeadSrcA'
+'repBell'
+'tranBell'
+'bsecStHi'
+
+'mainLeadSrcB'
+'repBell'
+'tranBell'
+'bsecOrgB'
+;
+
+{2}
+'introBell'
+$
+'mainLeadModA'
+'repOrgan'
+'tranStMid'
+'bsecOrgan'
+
+'mainLeadModB'
+'repOrgan'
+'tranStMid'
+'bsecStrB'
+;
+
+{3}
+'introBass'
+$
+'mainBass'
+'repBass'
+'tranBass'
+'bsecStMid'
+
+'mainBass'
+'repBass'
+'tranBass'
+'bsecStMidB'
+;
+
+{5}
+'introStHi'
+$
+'mainStHi'
+'repStHi'
+'tranSilent'
+'bsecStLo'
+
+'mainStHi'
+'repStHi'
+'tranSrc'
+'bsecStLo'
+;
+
+{6}
+'introStLo'
+$
+'mainOrgan'
+'repStLo'
+'tranSilent'
+'bsecBelHi'
+
+'mainOrgan'
+'repStLo'
+'tranMod'
+'bsecSrc'
+;
+
+{7}
+'introSilent'
+$
+'mainStLo'
+'repSilent'
+'tranSilent'
+'bsecBelLo'
+
+'mainStLo'
+'repSilent'
+'tranSilent'
+'bsecMod'
+;
+
+## PERCUSSION
+
+{4}
+'5v*v1.27'p64%e1'5o'
+'5i' " !!!o o4.o4.o8o8"
+'1i' 
+$[12[3'1v*v1.27'" !!!o i8"'1v*v.65'"i16i16"]'1v*v1.27'"i16"'1v*v.65'
+"i16i16i16"]'1v*v1.27'[3["i16i16i16i16i8"]r4]
+'3i' '3v*v1.27'[5" !!!o m16"]"l16k8"
+'1i' '1v*v1.27'" !!!o i16i16i16i16"
+'3i' '3v*v1.27'" !!!o m16l16k16j16"
+'5i' '5v*v1.27'" !!!o n8"
+'1i' '1v*v.65'" !!!o i16i16"'1v*v1.27'"i8"'1v*v.65'"i16i16i8"[6"i16"][7
+[3'1v*v1.27'"i8"'1v*v.65'"i16i16"]'1v*v1.27'"i16"'1v*v.65'"i16i16i16"]
+;
+
+{8}
+'4v*v1.27'p64%e0
+'4i' '4o-o1'f+4.
+'0i' '0v*v1.27'" !!!o h4.h8"
+'4i' '4v*v1.27''4o-o1'c+16c+16
+$[6
+'4i' f+4
+'0i' '0v*v1.27'" !!!o h4h4h4h4h4h4h8"
+'4i' '4v*v1.27''4o-o1'c+16c+16][3f+2.c+16c+16c+8]r1[4f+4
+'0i' '0v*v1.27'" !!!o h4h4h4h4h4h4h8"
+'4i' '4v*v1.27''4o-o1'c+16c+16]
+;
+

@@ -164,8 +164,8 @@ On sounding "right", though, a caveat: this stays within the context of late SNE
 ### PIZZICATO:
 * 58 (octave pizzicato) is another one of those "use this whenever possible, even when inaccurate to the original, but ONLY if it sounds good, which it usually won't" samples. Beyond that, use what works. 57 and 59 both work for most purposes, so pick whichever fits the desired character and the memory limitations.
 ### HARP:
-* 60 (FF6) is the canonical harp.
-* 61 is discouraged in most situations; the exception is when it is a close or exact match to the game's original sound. If the original sound matches 61, then ignore the discouragement and treat 60 and 61 as equal priority, going with what sounds best. I've identified FF4, Lufia 2, RS2, Terranigma, and Rudra no Hihou as using this harp or a very close equivalent, and though the sample differs, I consider Chrono Trigger a close enough sound to consider using this as well.
+* 61 (Lufia 2) is an iconic yet versatile harp that works best in most situations.
+* 60 (FF6) is available if something with a little more punch is needed. This used to be the default but I've since soured on it in favor of 61.
 ### STRING ENSEMBLES:
 * I've identified a few varied considerations with string samples. 65 should be the rough "default" with 66 and 67 as memory-saving fallbacks, but there are other concerns to watch.
 * First is that, to my ear, SNES string samples can be roughly divided into smooth, airy sounds that remind me of fluffy clouds or mist, and rough textured sounds that feel like polished wood grain. On higher notes, the textured style can sound overly noisy, and the smooth style tends to sound indistinct and muddy in medium to low ranges. Chrono Trigger, especially, has only the smooth style of strings, and often high notes will sound weird and breathy with 65. 62 is provided as an attempt to fill this role.
@@ -204,7 +204,7 @@ On sounding "right", though, a caveat: this stays within the context of late SNE
 * 0B and 0C are available for similar sounding or otherwise "extra" sources. You'll particularly want to use one of these for any songs that use multiple bass drum notes. Unlike most percussion, the origin note on these is F5 instead of A5.
 * 0D -- synthetic kick, the oon in oontz. Don't use it unless it matches the source. Do use it if it does. Don't confuse this with the "HiQ" punchy chirp, which is at AC.
 ### PERCUSSION - SNARE
-* Default snare for orchestral style is 1A. Feel free to experiment with 1F instead, particularly if the song is especially martial and/or has a slower tempo, but only use this if it's a solid upgrade. Adding a release rate of roughly 14 to 24 is highly recommended for 1F and optional for 1A. Feel free to lower the pitch a bit with 1F.
+* Default snare for orchestral style is 1F. Feel free to experiment with 1A instead. Adding a release rate of roughly 14 to 24 is highly recommended for 1F and optional for 1A. Feel free to lower the pitch a bit with 1F.
 * 1B is available if neither of the above work out; it's much more suited for unobtrusively sitting in the background.
 * 1C is the default snare for rock styles.
 * 1D is our "hard snare", or gated snare. Many games have one of these, used for particularly intense songs like boss fights. Use this if the original song used something similar. This sample can be dampened significantly with ADSR to either act as a normal rock snare when 1C is too expensive, or to match snares like FF5's hard snare, which lacks the "gated reverb" sound that this and most SNES hard snare samples display.

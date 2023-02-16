@@ -419,7 +419,7 @@ r8
   ## Lead strings, originally channels 2-3
   'strings-o1' 'leadStringsPan' 'leadStrings_125'
   gg+<e-f>b-<cg
-  j2
+  j2,0
   ## 5
   g+e-f<d'leadStrings_110'e-2
   ## 6
@@ -428,7 +428,7 @@ r8
   ## Support Deep Brass Low Note, originally channel 16 or 17
   'supportDeepBrass+o1' 'supportDeepBrass_125'
   c16r16
-]
+$0]
 ## 10
 g+e-f<d'leadStrings_110'e-4..~'stringsRelease'^16~`r16`
 ## 11
@@ -436,7 +436,8 @@ g+e-f<d'leadStrings_110'e-4..~'stringsRelease'^16~`r16`
 'reverseCymbal'
 ## 12
 'crash'
-[2
+[3
+  j3,121
   ## 13 / 18
   ## Support Deep Brass Low Note, originally channel 16 or 17
   'supportDeepBrass+o1' 'supportDeepBrass_125'
@@ -464,12 +465,12 @@ g+e-f<d'leadStrings_110'e-4..~'stringsRelease'^16~`r16`
   ## Lead strings, originally channels 2-3
   'strings-o1' 'leadStringsPan' 'leadStrings_125'
   b-b<f+g+c+e-b-
-  j2
+  j2,0
   ## 16
   bf+g+<f'leadStrings_110'f+2
   ## 17
   ^2'leadStrings_125'f4..~'stringsRelease'^16~`r16`>>
-]
+]$121
 ## 21
 l8
 bf+g+<f'leadStrings_110'f+2
