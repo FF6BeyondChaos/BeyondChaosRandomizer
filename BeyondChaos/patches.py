@@ -116,6 +116,13 @@ def evade_mblock(fout):
     evade_mblock_sub.set_location(0x2232C)
     evade_mblock_sub.write(fout)
 
+def fix_xzone(fout):
+
+    fix_xzone_sub = Substitution()
+    fix_xzone_sub.set_location(0x1064B7) #force draw monsters struck by Life animation (includes reraise)
+    fix_xzone_sub.bytestring = bytes([0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0xF1, 0x81, 0xFF])
+    fix_xzone_sub.write(fout)
+
 
 def death_abuse(fout):
     death_abuse_sub = Substitution()
