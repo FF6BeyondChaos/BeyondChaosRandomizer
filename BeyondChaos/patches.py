@@ -358,52 +358,6 @@ def change_cursed_shield_battles(fout, random: Random, amount: int = None):
     ])
     ccsb_sub.set_location(0x4A500)
     ccsb_sub.write(fout)
-    
-def patch_doom_gaze(fout, addr, offset=0xA0000):
-    """
-    Add an option to the Falcon's wheel to search out Doom Gaze
-    """
-    rel_addr = addr - offset
-
-    sub = Substitution()
-
-    dst = rel_addr.to_bytes(3, "little")
-    sub.set_location(0xA009D)
-    sub.bytestring = b"\xb2" + dst
-    sub.write(fout)
-
-    sub.set_location(0xAF56E)
-    dst = (rel_addr + 7).to_bytes(3, "little")
-    sub.bytestring = b"\xb2" + dst + b"\xfe" + b"\xfd" * 5
-    sub.write(fout)
-
-    # displaced code + DG dead bit
-    sub.set_location(addr)
-    sub.bytestring = b"\x3d\x12\x41\x12\xd0\xe2\xfe"
-    sub.write(fout)
-
-    # dialog box manager
-    b1 = (rel_addr + 0x1D).to_bytes(3, "little")
-    b2 = (rel_addr + 0x27).to_bytes(3, "little")
-    sub.set_location(addr + 0x7)
-    sub.bytestring = b"\xc1\xe2\x80\xa4\x00" + b1 \
-                   + b"\x4b\xa5\x86\xb6\x8d\xf5\x00" + b2 \
-                   + b"\xb3\x5e\x00\xfe"
-    sub.write(fout)
-
-    # lift-off choice handler
-    sub.set_location(addr + 0x1D)
-    sub.bytestring = b"\x4b\x2a\x85\xb6\x8d\xf5\x00\xb3\x5e\x00"
-    sub.write(fout)
-
-    # doom gaze encounter event
-    sub.set_location(addr + 0x27)
-    sub.bytestring = b"\x6a\x01\x04\x9e\x33\x01\x29\x58\x0c\x30\x4c\x20\x2c" + \
-                     b"\x10\x24\x10\x34\x10\x54\x10\x49\x24\x40\xa0\x24\x30" + \
-                     b"\x34\x40\x54\x30\x40\x80\x49\x60\x40\x80\x24\x30\xd9" + \
-                     b"\xd2\x11\x36\x11\x08\xc0\x4d\x5d\x29\xb2\xa9\x5e\x00" + \
-                     b"\xb7\x48\xe3\x00\x00\x96\xc0\x27\x01\x9d\x00\x00"
-    sub.write(fout)
 
 def title_gfx(fout):
     title_gfx_sub = Substitution()				#change title screen graphics by overwritting compressed gfx data
