@@ -7,8 +7,8 @@
 
 #SFXV ` *
 
-#VARIANT _
-#VARIANT ~ orig
+#VARIANT ~
+#VARIANT _ orig
 
 #WAVE 0x21 _0_ ~0x04~ 
 #WAVE 0x22 _0_ ~0xC2~

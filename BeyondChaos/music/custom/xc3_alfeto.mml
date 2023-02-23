@@ -1,0 +1,525 @@
+#TITLE Alfeto Valley
+#ALBUM Xenoblade 3
+#COMPOSER Kenji Hiramatsu
+#ARRANGED emberling
+
+#WAVE 0x20 0x62 violins
+#WAVE 0x21 0x63 orchestra
+#WAVE 0x22 0xA4 piccolo
+#WAVE 0x23 0x95 clarinet
+#WAVE 0x24 0x92 oboe
+#WAVE 0x25 0x86 horn
+#WAVE 0x26 0x61 harp
+#WAVE 0x27 0x09 piano
+#WAVE 0x28 0x8F claps
+#WAVE 0x29 0x5A timpani
+#WAVE 0x2A 0x7B conga slap
+#WAVE 0x2B 0x7A conga
+#WAVE 0x2C 0x2D cymbals
+#WAVE 0x2D 0x3D hihat open
+#WAVE 0x2E 0x6D jingle bells
+#WAVE 0x2F 0x3A hihat closed
+
+#def violins= |0 o5 'v'
+#def strings= |1 o5 's'
+#def flute=   |2 o3 'f'
+#def clari=   |3 o5 'c'
+#def oboe=    |4 o4 'o'
+#def horn=    |5 o5 'h'
+#def harp=    |6 o5 'r'
+#def piano=   |7 o3 'p'
+
+#def cello=   |0 o5 'co'
+
+#def v= v70
+#def s= v70
+#def f= v53
+#def c= v62
+#def o= v62
+#def h= v70
+#def r= v70
+#def p= v80
+#def co= v123
+
+#def vf= v1,70
+#def sf= v1,70
+#def ff= v1,53
+#def hf= v1,70
+
+#def coVib= m24,18,239
+#def oVib= m48,18,223
+#def fVib= m12,22,215
+#def hVib= m48,18,207
+#def vHiVib= m24,18,203
+
+#def coEnvA= %r5
+#def oEnvA= %r8
+#def fEnvA= %r3
+#def cEnv=  %r4
+#def hEnvA= %r4
+
+#def vEnvS= %a6%r7
+#def vRelS= %r7
+#def vIolence= %y0%s6%r24
+#def vIolince= %y0%s6%r21
+#def vIolincer= %y0%s6%r24
+#def cIarity=  %a11%y0%s6%r24
+
+#def fade12= %r24
+#def fade8= %r22
+#def fade4= %r18
+#def fade2= %r14
+#def fade1= %r12
+
+#drum "z"=5f |C v32 %a1
+#drum "y"=5f |C v32 %a2
+#drum "x"=5f |C v32 %a4
+
+#def doofVol= v64
+#drum "d"=3c |9 'doofVol*v2.00' p64 %e1 %r12
+#drum "e"=3f |9 'doofVol*v1.00' p64 %e1 %r17
+#drum "d+"=3c |9 'doofVol*v2.00' p48 %e1 %r12
+#drum "e+"=3f |9 'doofVol*v1.00' p48 %e1 %r19
+
+#def congaVol= v75
+#def slapVol= v50
+#def patVol= v45
+#drum "a-"=5d |B 'congaVol*v0.50' p44 %e1 %r0
+#drum "a+"=5d |B 'congaVol*v1.33' p44 %e1 %r0
+#drum "a"=5d |B 'congaVol*v1.00' p44 %e1  %r0
+#drum "b"=5g |B 'congaVol*v1.00' p44 %e1  %r0
+#drum "c"=5g |B 'congaVol*v0.50' p44 %e1  %r0
+
+#drum "s"=5g |A 'slapVol*v1.00' p44 %e0
+#drum "t"=5a |A 'slapVol*v1.00' p44 %e0
+#drum "s-"=5g |A 'slapVol*v0.75' p44 %e0
+#drum "t-"=5a |A 'slapVol*v0.75' p44 %e0
+
+#drum "u+"=5g+ |B 'patVol*v1.00' p44 %e0 %r20
+#drum "u"= 5g+ |B 'patVol*v1.00' p44 %e0 %r26
+#drum "u-"=5g+ |B 'patVol*v0.50' p44 %e0 %r26
+
+#drum "j"=5a+  |E v72 p80 %e1 %y2%s0%r17
+#drum "i"=5a+  |E v72 p80 %e1 %y2%s0%r7
+#def tamboRollFade= v1,127
+
+#def timpani= |9 o6 'tVol'
+#def tVol= v96
+#def tFade= v1,96
+
+#drum "p"=5d |8 v44 p56 %e1
+
+#drum "h-"=5a |F v12 p84 %e0
+#drum "h"=5a |F v20 p84 %e0
+##drum "g"=5a |D v16 p84 %e0 %r26
+##drum "o"=5a |D v16 p84 %e1 %r0
+#drum "g"=5g+ |D v16 p84 %e0 %y5
+#drum "o"=5g+ |D v16 p84 %e1 %y2
+
+#def init= t85 %v40 %b0,100 %f0,0
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} $
+'init' %e1
+## 2
+'oboe' 'oVib' 'oEnvA' p72 l16
+g4.<d8c4.>a8   a+4.(ag)a4f4
+g2^8g8<d8a+8   a4.gfg1.
+'fade4' ^2.
+## 8 (7:4)
+'flute+o1' 'fVib' 'fEnvA' p80 l16
+g4
+## 8
+<(d+64&165d)c>a+   m12,2g2. 'fade8'^8'fEnvA' (a+16<c32>a+32)
+a2..f8    <(d64&165c) 'fade8'^8
+## loop
+$
+## 12
+'cello-o2' 'coVib' p96 'coEnvA' l8
+[g2<d2  g2^f(ga)  df2.. ^2.. 'fade8'^8'coEnvA'>]
+## 20
+^1
+'horn' 'hVib' p72 'hEnvA'
+l4  cdd+2 'fade4'^1..'hEnvA'
+l16 d4     c4'fade8'^8'hEnvA'cd  d+1'fade8'^8'hEnvA'd+rd+8dc  d1...'fade8'^8
+## (28)
+^2.
+'harp*v.5-o1' p88 l16
+d+a<cf
+## 29
+'horn-o1*v1.33' p72 'hEnvA' l8
+[g2<d2 g2^fga  df2.. ^2.'fade4'^4'hEnvA'>]
+## 37
+'violins*v.67+o1''vHiVib' {p72} 'vEnvS' l2
+fc ga+ <cd ^2.'fade8'^8
+'horn-o1*v1' p52 'hEnvA' 'hVib' l8
+[ g
+## 41
+'hf*v72,1.33' <d4.d+ 'hf*v72,1' j2 c4.> ] c4>g4
+g2e2 a2'fade2'^2
+## 45
+"!!!o" m "e2"
+'violins*v.67+o2''vHiVib' p36 'vEnvS' a+4a4
+## 46
+l2 fc >a+a ag. 'fade4'^4 'vRelS'
+<a+4a4  fd cd c2..'vf*v12,1'^8'v*v.67'd2..'fade8'^8
+## 54
+'cello*v.4' 'coVib' p96 'coEnvA'
+g2..'fade8'^8'coEnvA'
+c2..'fade8'^8'coEnvA'
+l4 dcdf d2a+a
+l8 gaa+<cd>gaa+  faa+<cdfga>
+'co*v.6' c2.>a4 b2..'fade8'^8m
+## 62
+'violins*v.8-o1' p96 'vIolincer' l16 m
+l8 [4 a+g ag]
+;
+
+{2} $ %e1
+'violins*v.1' p48 l16 
+'vf*v192,.25' d1 'vf*v192,1' ^1 ^1 ^1 ^1 'vf*v192,.25' ^1
+## 8
+'strings*v.33-o1' %a7 a+1^1 <c1... 'fade8'^8
+## loop
+$
+## 12
+'harp*v.5' p88 l8 m
+[a+g ag a+g af]
+[<c>a a+a] <c>a a+<c> <c>a a+a
+[a+d+ <c>d+ <d>a+ <c>a+]
+'violins*v.2+o1' 'vHiVib''vEnvS' {p88} l4
+'vf*v96,.5' c2.dd+dd+f
+## 20
+l8 g2.ga  a+2..'fade8'^8'vRelS'
+   a2.aa+<c2.'fade4'^4'vRelS'
+   d2c2f2d4c4
+'strings*v.25+o2' %a5%r7 d1...'fade8'^8
+## (28)
+^2. m
+'harp*v.5-o1' p88 l16
+r48fa+<dg24
+## 29
+'violins*v.67+o1' p40 'vHiVib' [ 'vEnvS'  l8
+g2<d2 g2^fga  j2 a4.f16d16f2 ^2..'fade8'^8> ]
+                 a1.'fade4'^4
+'oboe+o1*v.8' 'oVib' 'oEnvA' p72 l16
+f4
+## 37
+'o'm2,2d+4.(d+d)d+1'fade4'^4'oEnvA'
+>g4<  d+4.(f24d+24c24)d1^4. 'fade8' m144,-1 ^8
+## 41
+'strings*v.4+o1' m p60
+'sf*v96,.6' d2    'sf*v72,.4' %r5 c4. %r0 c8
+'sf*v96,.6' d2    'sf*v96,.4' c2
+'violins*v.5+o2''vHiVib' p52 %y0%s5%r4
+'vf*v144,.75' c2. 'vf*v48,1' l16 cd l24 ef+g a1
+## 45
+'fade8'^1
+## 46
+'cello*v.4' 'coVib' p96 'coEnvA' l4
+a+2g2 a+2af  f2d2 'fade4'^2'coEnvA' df
+g1 a1 <c1> a+4.'fade4'^8
+'flute+o2' 'fVib' 'fEnvA' p80 l16
+(a16a+8)(<c48>a+48<c48>a4)
+## 54
+f2..'f*v.67'd'f'r32.(d+64   dcd4.'fade2'^8 m72,-1 ^8 'fade8' ^8) m0,0 'fEnvA' c8
+>am4,1^^4(aa+)(a+64<&69c>)(a+<c)  (f48&68dm72,-1'fade2'^8)'fEnvA'a+4a4
+(g64&141a+'fade4'^8)'fEnvA'(<c>a+) (g64&87aa+64a64)f2
+(<c64>a+64&186g ^2.. 'fade4'm72,-1^8)
+## 62
+^1^1
+;
+
+{3} $ %e1
+'strings*v.5-o2' p96
+'sf*v192,1' g1 ^1^1^1^1 'sf*v192,.1' ^1
+## 8
+'sf*v192,1' d+1^1 d1... 'fade8' ^8
+## loop
+$
+## 12
+'strings*v.25-o1' p60 'sf*v192,.5' d1^1^1^2..'fade8'^8 %r0 >
+'sf*v192,1' d+1...'fade8'^8 %r0
+            d1... 'fade8'^8 %r0
+## 20
+c1... 'fade8'^8 %r0 >
+a+1...'fade8'^8 %r0
+g+1...'fade8'^8 %r0 <
+d1d1
+## (28)
+"!!!o d1"
+## 29
+'strings*v1.5-o3' p96
+g1^1^1^1 <d+1^1 d1^1
+## 37
+c1^1 >a+1^1<
+## 41
+'s*v1' <d+1> g+1 <d1 d1
+## 45
+"!!!o d1"
+## 46
+'violins-o1' p80 %r4
+d+1 f1 g1^1
+d+1 f1 g1^1
+## 54
+'strings-o1' p88 %r2
+d+1 f1 g1^1
+d+1 f1 g1>g1
+## 62
+>g1^1
+;
+
+{4} $ %e1
+'violins*v.05+o2' p56
+'vf*v192,.09' d1 'vf*v192,.12' ^1 'vf*v192,.15' ^1 'vf*v192,.18' ^1 'vf*v192,.33' ^1 v192,0 ^1
+## 8
+'strings*v.33-o1' %a7 g1^1 a1... 'fade8'^8
+## loop
+$
+## 12
+r1r1r1r1
+'clari*v.75-o1' p64 'cEnv' m
+g2<d2  g2^(fg)a  (df2.. ^2.)
+## 20 (19.4)
+'oboe+o1' 'oVib' 'oEnvA' p72 l16
+f4
+## 20
+f4.(d+d)d+1'fade4'^4'oEnvA'
+>g4<d+4.(f24d+24c24)d2'fade2'^1'oEnvA'
+^1^1
+^2>a4<c4d1
+## (28)
+'fade4'^2.
+'harp*v.5-o1' p88 l16 m
+r24gb<d+a48
+## 29
+l16 "!!!o"
+[8 "d+e+^ e+  p ^ e+^   u+u u-b   p ^ e+^        e+^ ^ e+  p ^ e+^   j ^ ^ ^   p g h o" ]
+## 45
+"a+1"
+## 46
+'piano+o2*v.5' p88 'pEnvL' %e1
+d1> a+1 f2 'p*v.4'd2 'p*v.3'd1
+'p*v.5' g1 a2 'p*v.3''pEnvA'<f2 'p*v.5'f2 l8> 'pEnvL' cfg<c> a+2. 'pEnvA''p*v.3'<g4
+## 54
+'p*v.4' l8 <%r17f4%r15>d+d<d>'p*v.35'd'p*v.4'g'p*v.35'<d
+'p*v.4' c>>'p*v.35'cfc'p*v.4'<g>'p*v.3'cfc
+'p*v.4' <gc>a<cf'p*v.3'c>a'p*v.4'f
+>g<dgaa+<'p*v.3'cdf>
+'p*v.4'g<a+<f>a+<d+dc>a+
+a2<c2
+c>>cdg<cdg<c>
+^48&188b
+## 62
+'violins*v.8-o1' p96 'vIolincer' l16 m
+[4 ^a+^g ^a^g]
+;
+
+{5} $ %e1
+'harp*v.5' p88 l8
+[g4a4a+gaf][a+4<c4d>a+<c>f] ^1..
+## 8 (7:4)
+d+8g12a+24
+## 8
+^24d+32<&178d> r1
+d8<c2..
+'violins*v.1+o1' p64 'vf*v96,.33' a2 v96,0 ^2
+## loop
+$
+## 12
+'strings*v.25' p40 'vIolence' l16 m
+[ a+a+gg aagg a+a+gg aaff]
+[4 <cc>aa a+a+ j3,515 aa ]
+[ a+a+d+d+ <cc>d+d+ <dd>a+a+ <cc>a+a+]
+[8 a+a+<cc>]
+## 20
+'s*v.5' [4 ffcc d+d+cc]
+d+d+cc d+d+'s*v.25'd+d+
+[3 's*v.5' ddcc dd's*v.25'dd]
+'clari*v.5' p64 'cEnv'
+g2.f4 a+2g1.f+1
+## (28)
+r2 "!!!o" p76 p255,56 "y2"
+## 29
+^1^1
+'flute+o2' 'fVib' 'fEnvA' p88 l64
+r2.c4(cb<c32^4.)(d48c48>g48)a2 'fade8' ^1^1'fEnvA'
+^4 'f*v.5''ff*v96,.8' c4d4 'ff*v16,1.25' <(c+&33d)'f'(c32>a+32)a2^8
+'f*v.5'c8f4
+## 37
+'piano+o1' p56 l8 m
+g2 gaa+4 g1
+>'pEnvL' f2<  'pEnvA' <dd+f4 d1
+## 41
+'strings*v.8-o1' p68 'vIolence' l16
+[4 a+a+gg] [ 's*v.8' <d+d+>g+g+ <cc 's*v.5' cc> ]
+'flute+o2' 'fVib' 'fEnvA' p88
+g1 (<c48>&188a)
+## 45
+'fade8' ^2 m
+'strings*v.15+o1' p56 'vEnvS-%a1' a+4a4
+## 46
+l2 fc >a+a ag ^4'fade4'^4 'vRelS' <a+4a4
+   fd cd c1 d1
+## 54
+'violins*v.4'p28 &1r %a7 %y0%s5 l16 'vHiVib'
+a+2..'fade4'^8 %r0
+a2..'fade4'^8 %r0
+g4.(fg)g4a4  a+4.^'fade8' &11 ^ %r0
+%a15 <d4f4
+g2...'fade8'^ %r0
+a4..'fade8'^ %r0
+<c4..'fade8'^ %r0
+c1 'fade2' ^1
+## 62
+m "!!!o d1^1"
+;
+
+$515 l16 <cc> ]
+
+{6} $ %e1
+'harp*v.5' p88 l8
+[23r4] r16 f16^24 a12
+## 8
+<c24^64>&181g ^1
+^24 &178f <f32a32f32g16
+'violins*v.05+o1' p72 'vf*v72,.33' f4. 'vf*v96,.1' ^2
+## loop
+$
+## 12
+'strings*v.20-o1' p68 'sf*v192,.4' g1^1 <c1...'fade8'^8 %r0>
+'sf*v192,.6' g1^1 f1...'fade8'^8 %r0
+## 20
+"!!!o" l8
+"d2..a" "a4c2^a16a16"
+"d4.eb.b.a" "ac4e2a16a16"
+"d4.eb.b.a16a16" "ac4e2a16a16"
+"d4.e2a16a16" "a16"
+'timpani*v.33-o2''tFade*v180,1' p72
+ k-8 [15d32d+32] k0 
+## (28)
+d1
+## 29
+'strings*v.75-o1''vIolince' {p72} l16
+[4 a+a+gg aagg]
+[4 <cc>aa a+a+gg]
+[ [ <dd>a+a+ <cc> j2 aa] gg]
+< [4 ffcc ddcc]
+## 37
+'clari*v.5''cIarity' p72 l16
+[ ggaa a+a+gg <cc>aa a+a+gg ]
+[3 a+a+ 'c*v.4' a+a+ 'c*v.5' <cc>aa ]  a+fga a+<cdd+
+## 41
+'violins*v.5-o1' p100
+a+2'fade2'^2 %r <c2'fade2' ^2
+'strings*v.25+o2' p60
+(c1 'sf*v192,.5' c4c4c4c4)
+## 45
+'fade8'^1
+## 46
+'cello*v.3' 'coVib+m1,1,1' p64 'coEnvA' l4 r64
+r1 c2d4k2f4 f2d2k0 a+4.'fade2'^8^2'coEnvA'
+r1 r2f2 a1 &93g2 p96 g4f4
+m
+## 54
+'strings*v.3' p32 l16
+g1 f1 d4.(cd)d4f4 g4..r a+4a4
+g1 f1
+'piano+o2*v.4' p88 g8
+'violins*v0' p40 'vf*v96,.5'
+d8^2c4 >g2.'fade4'^4
+## 62
+'strings*v.05' p40 'vIolence' l16 m
+'sf*v192,.10'[a+a+gg aagg] 'sf*v96,.15'a+a+gg aagg 'sf*v48,.19'a+a+gg 'sf*v48,.25'aagg
+;
+
+{7} $ %e1
+[5r1] p96 p255,64 "z1"
+## 8
+^1
+'violins*v.1' p52
+'vf*v192,.5' f1 v192,0 f1
+'v*v.05''vf*v72,.33' <c4. v68,0 ^4.
+p72 "!!!o x4"
+## loop
+$
+## 12
+[6^1]
+'violins*v.2' 'vHiVib' 'vEnvS' p32 l4
+'vf*v96,.5' a2.a+<c>a+<cd 
+## 20
+l8 >g2.<d+f g2..'fade8'^8'vRelS'
+   >a2.aa f2. 'fade4'^4'vRelS'
+'v*v.3'
+   <d2c2 f2d4c4    'fade2' d2
+'harp*v.5+o1' p88 m
+l8 dga<c> l48 dga &180 <d
+## (28)
+r1
+## 29
+'strings*v.25'  p64 ['vEnvS'
+g2<d2 g1 a1 j2 ^2..'fade8'^8>] 'vRelS''s*v.33' c2..'fade8'^8
+## 37
+'flute+o2*v.5' 'fVib' 'fEnvA' p88
+f4.'fade8'^8^2
+'violins*v.67+o1' p52 'vEnvS' 'vHiVib' l2
+d+g
+'strings*v.5+o1''vEnvS'
+c>a+ ^1 m
+## 41
+'piano''pEnvL' p56
+d+1 >g+1< d1.
+'horn-o1*v.33' p52 'hEnvA' 'hVib'
+d2
+m
+## 45
+r1
+## 46
+'piano+o1*v.5' p88 'pEnvL'
+a+1 f1 d2 'p*v.4'c2 'p*v.3'>a+1<
+'p*v.5' d+1 f2 'p*v.3''pEnvA'<d2 'p*v.5'd1> 'pEnvL' g1
+## 54
+'p*v.3''pEnvA'
+< %r17 a+1 %r15'p*v.4' g2> 'p*v.3'f8r4. <f2r2 r1 r1 'p*v.4'r2g2
+d1 d1
+## 62
+r1.. "!!!o x4"
+;
+
+{8} $ %e1
+[8r1]
+'violins*v.33-o1' p64 %a7  f1... 'fade8'^8
+## loop
+$
+## 12
+[4"!!!o d1^1"]
+## 20
+r1 "j1^1 j1^1 j1^1"
+"i2." 'tamboRollFade*v24,1' ^8
+"a16a16"
+## (28)
+"a1"
+## 29
+'harp*v.5' p88
+a+48<d24^8
+"!!!o" l16
+[8 j1,829 j5,837 "a+^ ^" $829
+ "!!!o"   " b   ^ ^ h o   h ^ ^ u-  h-h-a-a        a+^ u u-  b ^ b c   s ^ s s-  t ^ a-a" ]
+## 45
+r1
+## 46
+'piano+o1*v.5' p88 'pEnvL' %e1
+g1 >a+1 g2 'p*v.4'g2 'p*v.3'g1
+'p*v.5' a+1 <c2 'p*v.3''pEnvA'r2 'p*v.5'a1 
+'strings*v.5-o2' p96 r2g2
+## 54
+'violins*v.2+o2''vHiVib' p44 l2 'vEnvS'
+[([4d])](a+a+)(aa)(g&74g4.'fade8'^8)
+'piano+o2*v.4' m p88 &190g
+## 62
+r1r1
+;
+
+$837 'piano+o1' p56 %e1 c8. ;829

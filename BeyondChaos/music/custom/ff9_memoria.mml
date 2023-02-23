@@ -1,0 +1,375 @@
+#TITLE Memoria
+#ALBUM Final Fantasy IX
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#VARIANT ~
+#VARIANT _ tr 
+
+#WAVE 0x20 0x61 harp
+#WAVE 0x21 0x60 ac.guitar
+#WAVE 0x22 0x28 t.bells
+#WAVE 0x23 0x20 celesta
+#WAVE 0x24 0x64 oct.strings
+#WAVE 0x25 ~0xA5~ _0xA7_ flute
+#WAVE 0x26 0x65 strings
+#WAVE 0x27 0x58 pizzicato
+#WAVE 0x28 0x95 clarinet
+#WAVE 0x29 0x90 bassoon
+#WAVE 0x2A 0x75 vox
+#WAVE 0x2B 0x57 pizzicato layer 2
+#WAVE 0x2C 0x94 oboe
+
+#def init= t75 %v50 %b0,100 %f0,0
+
+#def harp=     |0 o5 p94 %e1 m %r16
+#def guitar=   |1 o5 p64 %e1 m %a13%y4%s5
+#def bells=    |2 o4 p44 %e1 m v72
+#def celesta=  |3 o5 p89 %e1 m
+#def ostrings= |4 o7 p64 %e1 m v80
+#def flute=    |5 o4 p44 %e1 m40,22,202
+#def strings=  |6 o5 p49 %e1 m %y1%s5
+#def pizza=    |7 o5 p64 %e1 m v72
+#def pizzb=    |B o4 p64 %e0 m v40
+#def pizzc=    |B o4 p64 %e1 m v40 %a10
+#def clarinet= |8 o5 p102 %e1 m
+#def bassoob=  |9 o6 p64 %e1 m v32
+#def bassoon=  |C o5 p64 %e1 m v54
+#def voxa=     |A o4 %e1 m %y0%s4%r20
+#def voxb=     @3 o5 %e1 m %r22
+
+#def h= v120
+#def g= v60
+#def f= v100
+#def s= v110
+#def p= v64
+#def c= v100
+#def v= v167
+#def e= v80
+
+#def ss= %r2
+#def sm= %r9
+#def sr= %r30
+
+#def os= %r1
+#def or= %r16
+
+#def ps= %r15
+#def pr= %r26
+
+#def bs= %r1
+#def br= %r27
+#def fs= %r5
+#def fr= %r29
+
+#def va= 'v*v.55' p64
+#def vb= 'v*v.41' p14
+#def vc= 'v*v.27' p114
+#def vd= 'v*v.20' p39
+#def ve= 'v*v.17' p89
+#def ea= 'e*v.55' p64
+#def eb= 'e*v.41' p14
+#def ec= 'e*v.27' p114
+#def ed= 'e*v.20' p39
+#def ee= 'e*v.17' p89
+
+#def oneHarpA= >>a8<e8f8a8<e8d8>b8<d8
+#def oneHarpB= >>a8<e8f8a8<e8d8g8f8
+#def twoHarps1A= >>a4<f4<e4>b4<
+#def twoHarps2A= r8>e4a4<d4d8
+#def twoHarps1B= >>a4<f4<e4g4
+#def twoHarps2B= r8>e4a4<d4f8
+#def threeHarps1A= >>a4.<a4.b4<
+#def threeHarps2A= r8>e4.<e2
+#def threeHarps3A= r4>f4.<d4d8
+#def threeHarps1B= >>a4.<a4.<g4
+#def threeHarps2B= r8>e4.<e4.f8
+#def threeHarps3B= r4>f4.<d4.
+
+
+{6}
+'guitar-o1' l8
+r1r1r1r1
+$
+>'g*v.66'a<'g*v.55'g<cfef>bg
+;
+
+{3}
+'harp''h*v.55' l8
+['threeHarps3A'
+ 'threeHarps3B']
+$
+'oneHarpA' 'oneHarpB'
+;
+
+{1}
+'init'
+'harp''h*v.55' l8
+['threeHarps1A'
+ 'threeHarps1B']
+$ ## 5
+'strings+o1'
+'ss''s*v.11'b64^48'sr'&5^     'ss''s*v.11'b64^48'sr'&5^
+'ss''s*v.16'b64^48'sr'&5^     'ss''s*v.13'b64^48'sr'&5^
+'ss''s*v.19'b64^48'sr'&5^     'ss''s*v.25'b64^48'sr'&5^
+'ss''s*v.18'b64^48'sr'&5^     'ss''s*v.24'b64^48'sr'&5^
+'ss''s*v.30'b64^48'sr'&5^     'ss''s*v.37'b64^48'sr'&5^
+'ss''s*v.38'b64^48'sr'&5^     'ss''s*v.42'b64^48'sr'&5^
+'ss''s*v.52'b64^48'sr'&5^     'ss''s*v.53'b64^48'sr'&5^
+'ss''s*v.59'b64^48'sr'&5^     'ss''s*v.76'b64^48'sr'&5^
+'ss''s*v.79'b2..^32 m18,-2 ^16. ^1 'sm' ^1
+## 9
+'pizza' l8 b<d>f<e^2
+^2 ef>b<b
+^1 ^1
+## 13
+'clarinet' l2
+'c*v.42'a<'c*v.44'c>'c*v.47'b<'c*v.49'd'c*v.53'c'c*v.56'e'c*v.58'd'c*v.61'f
+## 17
+'strings'
+'ss''s*v.13'b64^48'sr'&5^     'ss''s*v.14'b64^48'sr'&5^
+'ss''s*v.13'b64^48'sr'&5^     'ss''s*v.18'b64^48'sr'&5^
+'ss''s*v.19'b64^48'sr'&5^     'ss''s*v.20'b64^48'sr'&5^
+'ss''s*v.27'b64^48'sr'&5^     'ss''s*v.27'b64^48'sr'&5^
+'ss''s*v.29'b64^48'sr'&5^     'ss''s*v.33'b64^48'sr'&5^
+'ss''s*v.39'b64^48'sr'&5^     'ss''s*v.45'b64^48'sr'&5^
+'ss''s*v.59'b64^48'sr'&5^     'ss''s*v.58'b64^48'sr'&5^
+'ss''s*v.60'b64^48'sr'&5^     'ss''s*v.76'b64^48'sr'&5^
+'ss''s*v.83'b1                         
+'ss''s*v.12'a64^48'sr'&5^     'ss''s*v.11'a64^48'sr'&5^
+'ss''s*v.15'a64^48'sr'&5^     'ss''s*v.15'a64^48'sr'&5^
+'ss''s*v.18'a64^48'sr'&5^     'ss''s*v.19'a64^48'sr'&5^
+'ss''s*v.23'a64^48'sr'&5^     'ss''s*v.18'a64^48'sr'&5^
+'ss''s*v.31'a64^48'sr'&5^     'ss''s*v.31'a64^48'sr'&5^
+'ss''s*v.37'a64^48'sr'&5^     'ss''s*v.42'a64^48'sr'&5^
+'ss''s*v.55'a64^48'sr'&5^     'ss''s*v.56'a64^48'sr'&5^
+'ss''s*v.63'a64^48'sr'&5^     'ss''s*v.68'a64^48'sr'&5^
+'ss''s*v.83'a1
+## 21
+'bassoon-o1' l8
+'bs'e'br'^ 'bs'>b'br'^< 'bs'a'br'^ 'bs'd'br'^
+'bs'f1'br'^
+'flute+o1''f*v.55'
+    'fs'f'fr'^4.>'fs'a'fr'^<'fs'd
+'fr'^.>'fs'b64^48'fr'&5^'fs'a2.'fr'
+^'bassoon-o1'
+    'bs'f'br'^ 'bs'b'br'^ 'bs'd'br'^ <'bs'c'br'^1
+'flute+o1''f*v.62'
+'fs'e'fr'^ 'fs''f*v.55'c4.'fr'^> 'fs'b'fr'^
+'fs'&37e'fr'^64 'fs'&5g'fr'^64 'fs'a2.
+## 29
+'voxb' l16 [
+'ea'b8.'eb'b  'ea'<c8>'ec'b'eb'<c>  'ea'a'ed'b'ec'<c>'eb'a  'ee'b<'ed'c>'ec'a8
+'ea'd'ed'a8'eb'd  'ea'f8'ec'd'eb'f  'ea'e'ed'd'ec'f'eb'e  'ee'd'ed'f'ec'e8
+'ea'b'ed'e8'eb'b  'ea'<c8'ec'>b<'eb'c  j2>  'ea'a'ed'b'ec'<c>'eb'a  <'ea'c'ed'c>'ec'a<'eb'c
+'ea'e'ed'>a<'ec'c'eb'e  'ee'>a<'ed'c'ec'e8  'ee'c'ed'e8.  'ee'e4>
+]
+        'ea'd'ed'>b<'ec'c'eb'd  'ea'e'ed'c'ec'd'eb'e
+'ea'>a<'ed'd'ec'e>'eb'a  <'ee'd'ed'e>'ec'a8  <'ee'e>'ed'a8. 'ee'a4
+;
+
+{2}
+'harp''h*v.55' l8
+['threeHarps2A'
+ 'threeHarps2B']
+$ ## 5
+'strings+o2' r32
+'ss''s*v.11'c64^48'sr'&5^     'ss''s*v.09'c64^48'sr'&5^
+'ss''s*v.14'c64^48'sr'&5^     'ss''s*v.14'c64^48'sr'&5^
+'ss''s*v.15'c64^48'sr'&5^     'ss''s*v.19'c64^48'sr'&5^
+'ss''s*v.22'c64^48'sr'&5^     'ss''s*v.19'c64^48'sr'&5^
+'ss''s*v.27'c64^48'sr'&5^     'ss''s*v.36'c64^48'sr'&5^
+'ss''s*v.34'c64^48'sr'&5^     'ss''s*v.47'c64^48'sr'&5^
+'ss''s*v.54'c64^48'sr'&5^     'ss''s*v.60'c64^48'sr'&5^
+'ss''s*v.69'c64^48'sr'&5^     'ss''s*v.77'c64^48'sr'&191^
+'ostrings-o2''os' a1^1 'or'
+## 9
+^1
+'celesta+o1''p*v.34' b<d>f<e 'pr' ^2
+^2 'ps' ef>b<b 'pr' ^1
+## 13
+'ostrings-o2''os' a1^1^1... 'or' ^8
+## 17
+^32 'strings+o1'
+'ss''s*v.11'c64^48'sr'&5^     'ss''s*v.11'c64^48'sr'&5^
+'ss''s*v.13'c64^48'sr'&5^     'ss''s*v.14'c64^48'sr'&5^
+'ss''s*v.13'c64^48'sr'&5^     'ss''s*v.16'c64^48'sr'&5^
+'ss''s*v.23'c64^48'sr'&5^     'ss''s*v.27'c64^48'sr'&5^
+'ss''s*v.28'c64^48'sr'&5^     'ss''s*v.31'c64^48'sr'&5^
+'ss''s*v.33'c64^48'sr'&5^     'ss''s*v.42'c64^48'sr'&5^
+'ss''s*v.49'c64^48'sr'&5^     'ss''s*v.53'c64^48'sr'&5^
+'ss''s*v.72'c64^48'sr'&5^     'ss''s*v.83'c32>
+    's*v.83'd1    'sr'^32
+'ss''s*v.09'b64^48'sr'&5^     'ss''s*v.06'b64^48'sr'&5^
+'ss''s*v.11'b64^48'sr'&5^     'ss''s*v.13'b64^48'sr'&5^
+'ss''s*v.13'b64^48'sr'&5^     'ss''s*v.15'b64^48'sr'&5^
+'ss''s*v.21'b64^48'sr'&5^     'ss''s*v.24'b64^48'sr'&5^
+'ss''s*v.26'b64^48'sr'&5^     'ss''s*v.29'b64^48'sr'&5^
+'ss''s*v.36'b64^48'sr'&5^     'ss''s*v.41'b64^48'sr'&5^
+'ss''s*v.45'b64^48'sr'&5^     'ss''s*v.54'b64^48'sr'&5^
+'ss''s*v.72'b64^48'sr'&5^     'ss''s*v.78'b64^48'sr'&191^
+## 21
+'bassoon-o1' l8
+r 'bs'f'br'^ 'bs'b'br'^ 'bs'g'br'^ 'bs'e'br'^1
+'flute+o1''f*v.62'
+'fs'e'fr'^ 'f*v.55''fs'c4.'fr'^ 'fs'>b'fr'^< 'fs'&37c'fr'&5^ 'fs'>a+64^48'fr'&143^
+'bassoon-o1'
+'bs'e'br'^ 'bs'>b'br'^< 'bs'a'br'^ 'bs'<d'br'^> 'bs'f1'br'
+^ 'flute+o1''f*v.55'
+    'fs'f'fr'^4. 'fs'>a'fr'^ 'fs'f'fr'^. 'fs'&5f+'fr'^64 'fs'&5g+'fr'&143^
+## 29
+'voxa' [
+'va'b4<c4>a4've'b4
+'va'd4f4e4've'd4
+'va'b4<c4j2>a4<c4e4've'>a4c4e4
+] d4e4>a4've'<d4e4>a4
+;
+
+{4}
+'guitar-o2' %r10 l8
+'g*v.66'a1a1a1a1
+$ ## 5
+'strings+o1'
+'ss''s*v.11'd64^48'sr'&5^     'ss''s*v.11'd64^48'sr'&5^
+'ss''s*v.16'd64^48'sr'&5^     'ss''s*v.13'd64^48'sr'&5^
+'ss''s*v.19'd64^48'sr'&5^     'ss''s*v.25'd64^48'sr'&5^
+'ss''s*v.18'd64^48'sr'&5^     'ss''s*v.24'd64^48'sr'&5^
+'ss''s*v.30'd64^48'sr'&5^     'ss''s*v.37'd64^48'sr'&5^
+'ss''s*v.38'd64^48'sr'&5^     'ss''s*v.42'd64^48'sr'&5^
+'ss''s*v.52'd64^48'sr'&5^     'ss''s*v.53'd64^48'sr'&5^
+'ss''s*v.59'd64^48'sr'&5^     'ss''s*v.76'd64^48'sr'&5^
+'ss''s*v.79'd2..^32 m18,-2 ^16. ^1 'sm' ^1
+## 9
+'pizzb' l8 b<d>f<e^2
+^2 ef>b<b
+^1 ^1
+## 13
+'clarinet' l2
+'c*v.42'c 'c*v.44'e 'c*v.47'd 'c*v.49'f'c*v.53'e'c*v.56'g'c*v.58'f'c*v.61'a
+## 17
+'c*v.60'<e1^1
+'strings'
+'ss''s*v.12'c64^48'sr'&5^     'ss''s*v.11'c64^48'sr'&5^
+'ss''s*v.15'c64^48'sr'&5^     'ss''s*v.15'c64^48'sr'&5^
+'ss''s*v.18'c64^48'sr'&5^     'ss''s*v.19'c64^48'sr'&5^
+'ss''s*v.23'c64^48'sr'&5^     'ss''s*v.18'c64^48'sr'&5^
+'ss''s*v.31'c64^48'sr'&5^     'ss''s*v.31'c64^48'sr'&5^
+'ss''s*v.37'c64^48'sr'&5^     'ss''s*v.42'c64^48'sr'&5^
+'ss''s*v.55'c64^48'sr'&5^     'ss''s*v.56'c64^48'sr'&5^
+'ss''s*v.63'c64^48'sr'&5^     'ss''s*v.68'c64^48'sr'&5^
+'ss''s*v.83'c1
+## 21
+'celesta+o1''p*v.55' l8
+ef>b<b agde f1
+'pizza+o1'
+efc4 ^>ab<d c4>a2.
+'celesta+o1''p*v.55' l8
+ef>b<b ad<dc> f1
+'pizza+o1'
+efc4 ^>abf e4a2.
+## 29
+'voxa''vb' r8. [
+b4<c4>a4r4
+d4f4e4r4
+b4<c4j2>a4<c4e4r2.>
+] d4e4>a4r2r16
+;
+
+{5}
+'guitar-o1' l8
+'g*v.55' [4 ^g<cfef>bg]
+$ ## 5
+'strings+o1' r32
+'ss''s*v.11'e64^48'sr'&5^     'ss''s*v.09'e64^48'sr'&5^
+'ss''s*v.14'e64^48'sr'&5^     'ss''s*v.14'e64^48'sr'&5^
+'ss''s*v.15'e64^48'sr'&5^     'ss''s*v.19'e64^48'sr'&5^
+'ss''s*v.22'e64^48'sr'&5^     'ss''s*v.19'e64^48'sr'&5^
+'ss''s*v.27'e64^48'sr'&5^     'ss''s*v.36'e64^48'sr'&5^
+'ss''s*v.34'e64^48'sr'&5^     'ss''s*v.47'e64^48'sr'&5^
+'ss''s*v.54'e64^48'sr'&5^     'ss''s*v.60'e64^48'sr'&5^
+'ss''s*v.69'e64^48'sr'&5^     'ss''s*v.78'e64^48'sr'&191^
+r1r1
+## 9
+^1
+'celesta''p*v.34' b<d>f<e 'pr' ^2
+^2 'ps' ef>b<b 'pr' ^1
+## 13
+r1r1r1r1
+## 17
+'clarinet''c*v.60' a1^1
+'strings' r32
+'ss''s*v.09'd64^48'sr'&5^     'ss''s*v.06'd64^48'sr'&5^
+'ss''s*v.11'd64^48'sr'&5^     'ss''s*v.13'd64^48'sr'&5^
+'ss''s*v.13'd64^48'sr'&5^     'ss''s*v.15'd64^48'sr'&5^
+'ss''s*v.21'd64^48'sr'&5^     'ss''s*v.24'd64^48'sr'&5^
+'ss''s*v.26'd64^48'sr'&5^     'ss''s*v.29'd64^48'sr'&5^
+'ss''s*v.36'd64^48'sr'&5^     'ss''s*v.41'd64^48'sr'&5^
+'ss''s*v.45'd64^48'sr'&5^     'ss''s*v.54'd64^48'sr'&5^
+'ss''s*v.72'd64^48'sr'&5^     'ss''s*v.78'd64^48'sr'&191^
+## 21
+'bassoob-o1''bs' l8
+ef>b<b agde f1
+'pizzb+o1'
+efc4 ^>ab<d c4>a2.
+'bassoob-o1''bs'
+ef>b<b ad<dc> f1
+'pizzb+o1'
+efc4 ^>abf e4a2.
+## 29
+'voxa''vc' r4. [
+b4<c4>a4r4
+d4f4e4r4
+b4<c4j2>a4<c4e4r2.>
+] d4e4>a4r4.
+;
+
+{7}
+r1r1r1r1
+$ ## 5
+'bells' a1^1 a1^1
+## 9
+'pizzc' l8 b<d>f<e^2
+^2 ef>b<b
+^1 ^1
+## 13
+r1r1r1r1
+## 17
+'bells' a1^1 a1^1
+## 21
+r1r1 l8
+'pizzc+o1'
+efc4 ^>ab<d c4>a2.<
+r1r1
+efc4 ^>abf e4a2.
+## 29
+'bells' [4 a1^1 ]
+;
+
+{8}
+r1r1r1r1
+$ ## 5
+r1r1r1r1
+## 9
+r1r1r1r1
+## 13
+r1r1r1r1
+## 17
+'strings''ss'
+'s*v.13'd32's*v.11'e32   's*v.14'd32's*v.11'e32
+'s*v.13'd32's*v.13'e32   's*v.18'd32's*v.14'e32
+'s*v.19'd32's*v.13'e32   's*v.20'd32's*v.16'e32
+'s*v.27'd32's*v.23'e32   's*v.27'd32's*v.27'e32
+'s*v.29'd32's*v.28'e32   's*v.33'd32's*v.31'e32
+'s*v.39'd32's*v.33'e32   's*v.45'd32's*v.42'e32
+'s*v.59'd32's*v.49'e32   's*v.58'd32's*v.53'e32
+'s*v.60'd32's*v.72'e32   's*v.76'd32's*v.83'e64^48'sr'&191^ ^1^1
+## 21
+[8r1]
+## 29
+'voxa''vd' r2r16 [
+b4<c4>a4r4
+d4f4e4r4
+b4<c4j2>a4<c4e4r2.>
+] d4e4>a4r8.
+;
+

@@ -1,0 +1,498 @@
+#TITLE Those Who Stand Against Evil
+#ALBUM Pathfinder: Wrath of the Righteous
+#COMPOSER Dmitriy V. Silantyev
+#ARRANGED emberling
+
+#SHORTNAME PFWR Stand vs Evil
+
+#VARIANT _ nointro
+#VARIANT ~ 
+
+#WAVE 0x20 0x63 strings(oct)
+#WAVE 0x21 0x72 violin
+#WAVE 0x22 0x73 tenor choir
+#WAVE 0x23 0x75 soprano choir
+#WAVE 0x24 0x95 clarinet
+#WAVE 0x25 0xA4 piccolo
+#WAVE 0x26 0x83 trombone
+#WAVE 0x27 0x84 horn
+#WAVE 0x28 0x89 brass section
+#WAVE 0x29 0x61 harp
+#WAVE 0x2A 0x1F snare
+#WAVE 0x2B 0x29 tubular bells
+#WAVE 0x2C 0x2D crash cymbal
+#WAVE 0x2D 0x5A timpani
+
+#def init= t164 %v40 %b0,85 %f0,0
+
+#def strings= 'ostrings'
+#def ostrings= |0 's' o5 m
+#def violin=   |1 'v' o5 m24,18,239
+#def tenor=    |2 'm' o5 m
+#def soprano=  |3 'o' o4 m
+#def clarinet= |4 'c' o5 m72,18,215
+#def flute=    |5 'f' o3 m48,18,231
+#def trombone= |6 'n' o6 m48,18,215
+#def horn=     |7 'r' o5 m48,18,223
+#def brass=    |8 'b' o6 m24,18,207
+#def harp=     |9 'h' o5 m %a13%r15
+#def bells=    |B 'l' o5 m
+#def timpani=  |D 'k' o6 m
+#def epiano=   @3 'e' o5 m %r16
+
+#def s= v85
+#def v= v53
+#def m= v85
+#def o= v85
+#def c= v96
+#def f= v85
+#def n= v64
+#def r= v64
+#def b= v43
+#def h= v53
+#def l= v43
+#def k= v127
+#def e= v37
+
+#def sf= v1,85
+#def vf= v1,53
+#def mf= v1,85
+#def of= v1,85
+#def cf= v1,96
+#def ff= v1,85
+#def nf= v1,64
+#def rf= v1,64
+#def kf= v1,127
+
+#def str16th= %a11%y1%s6%r21
+#def strTrem= v0,12,32
+#def strLowHit= %y1%s5 'stlSus'
+#def stlSus= %r5
+#def stlFade= %r16
+#def sthSus= %s7%r5
+#def sthHit= %s6%r21
+#def sH= 's*v.4'
+#def sM= 's*v.33'
+#def sL= 's*v.25'
+
+#def kH= 'k'
+#def kM= 'k*v.67'
+#def kL= 'k*v.33'
+
+#def tenorIntro= %a6
+#def tenorSus= %r3
+#def tenorFade= %r15
+
+#def sopSus= %r5
+#def sopSuss= %r9
+#def sopFade= %r15
+#def sopFads= %r19
+
+#def hnSus= %r5
+#def hnFade= %r18
+
+#def snareVol= v37
+#drum "q"= 5e |A 'snareVol*v0.33' p56
+#drum "r"= 5e |A 'snareVol*v0.67' p56
+#drum "s"= 5e |A 'snareVol*v0.84' p56
+#drum "q+"= 5e |A 'snareVol*v0.50' p56
+#drum "r+"= 5e |A 'snareVol*v0.75' p56
+
+#def minorCymbal= v127 p84 
+#drum "a"= 5e |C 'minorCymbal*v.2' %y6%s1%r17 m
+#drum "b"= 5e |C 'minorCymbal*v.4' %y6%s1%r17 m
+#drum "c"= 5e |C 'minorCymbal*v.6' %y6%s1%r17 m
+#drum "d"= 5e |C 'minorCymbal*v.8' %y6%s1%r17 m
+#drum "e"= 5e |C 'minorCymbal*v1'  %y6%s1%r17 m
+#drum "e-"= 5e |C 'minorCymbal*v1' %y6%s1%r17 m
+
+#drum "x"= 5g |C v106 p80 %a4%r16  m
+#drum "y"= 5c |C v96  p40 %r14     m
+#drum "z"= 5g |C v106 p80 %a15%r16 m
+
+#cdef ( %l1
+#cdef ) %l0
+
+~{1}
+'init' %e1
+'ostrings*v.67''str16th' l8 p32
+e4e's*v.33'e
+[4 's*v.67'e4's*v.6'e's*v.53'e  j4 's*v.67'e4's*v.53'e's*v.6'e]
+## 5
+'s*v.6'e4's*v.5'e's*v.4'e 's*v.6' [e4ee] f+4f+f+
+'sf*v255,.47'[3 g4gg] 'sf*v255,.33' f+4f+f+ [4e4ee] 'sf*v255,.2' [4f+4f+f+]
+## 13
+v96,0 e4ee
+'flute*v.33+o1' p52 'ff*v255,1' l8
+e2.agf+4d4  b1 ^4<d4>a4gf+
+e2.ef+ g4agf+4d4 e2. %r19 ^4
+'tenor''tenorSus' p64 %a6 c2d2
+## 21
+'brass-o2*v1.5' p64 e8 %r20 ^8
+~$'violinTune'
+_{1} 'init' %e1_
+##25
+'trombone-o1*v1.2''hnSus' p80 l8
+[
+e1'hnFade'^4'hnSus'a16r16g16r16f+rdr
+b1'hnFade'^4'hnSus'<dr>arg16r16f+16r16  j2,137
+e1'hnFade'^4'hnSus'brard16r16e16r16
+f+1'hnFade'^4'hnSus'f+16r16e16r16drf+r ]
+## 33
+$137 #^
+[e2'hnFade'^4'hnSus' l16 erf+r  g8r8argrf+8r8d8r8]
+## 41
+e1'hnFade'^1^1^1
+## 45
+'strings*v.75' p56 %a8%r7 l8
+e2.^12(g12a12) b4g4a2    <c2.(dc)> b4a4b2
+e2.(ef+) g4e4a2   g2.a4 b1
+## 53
+"!!!o z2."
+'strings*v.25' p56 %a8%r7 'sf*v240,.75'(e12g12a12) b4g4a2    <c2.(dc)> b4a4b2
+e2.(ef+) g4e4a2
+'str16th' l8 <[8's*v.5'<m4,1d+>'s*v.2'b]
+## 61
+'ostrings-o2' 'strLowHit''stlFade' p88
+l8 [3e4ee]f+4f+f+
+   [3g4gg]<d4dd
+   [3c4cc]d4dd>
+   [a4aa]<c4ccd16
+'epiano-o2' p52 b<b<b<b16
+## 69
+^4
+;
+
+{2} %e1 ~
+'ostrings-o1*v0' p96
+r1. 'sf*v96,.5' e2 'sf*v192,.75' ^1 'sf*v192,1' ^1
+## 5
+%r15 ^1^4
+'violin*v.27-o1' p76 %r5 l8
+                 'vf*v192,.29'   agf+4d4
+'vf*v192,.31' b1 'vf*v192,.33' ^4<d4>a4gf+
+'vf*v192,.35' e1 'vf*v192,.37' ^4b4a4de
+'vf*v192,.39' f+1'vf*v192,.41' ^4f+ed4f+4
+## 13
+'ostrings-o1*v.1' p88 %r3 l2
+'sf*v192,.3'e1'sf*v192,.5'^f+ g1.d c1.d >a1cd
+## 21
+<e1^1^1^1
+~$
+##25
+'tenor-o1' p64 ['tenorSus' l8
+e1  ^'tenorFade'^'tenorSus'agf+'tenorFade'^'tenorSus'd'tenorFade'^'tenorSus'
+b1  ^'tenorFade'^'tenorSus'<d'tenorFade'^'tenorSus'>a'tenorFade'^'tenorSus'gf+   j2,237
+g1  ^'tenorFade'^'tenorSus'b'tenorFade'^'tenorSus'a'tenorFade'^'tenorSus'de
+f+1 'tenorFade'^4'tenorSus'f+da'tenorFade'^'tenorSus'f+'tenorFade'^ ]
+## 33
+$237 #^
+'brass' p96 l8 %r5
+[e2'hnFade'^4'hnSus' l16 erf+r  g8r8argrf+8r8d8r8]
+## 41
+"!!!o e-4" 'violinTune'
+## 45
+'soprano' p32 'sopSuss' l8 %a6
+e2.^12(g12a12) b4g4a2    <c2.dc> b4a4b2
+e2.ef+ g4e4a2   g2.a4 b1
+## 53
+'o*v1.33' %a7
+<e1 [d4'sopFads'^4'sopSuss'] c1.>b4'sopFads'^4'sopSuss'
+e2^8'sopFads'^8'sopSuss'ef+g4e4a2
+<[e2^8'sopFads'^4.'sopSuss']
+## 61
+'tenor-o1' p64 l8
+'tenorSus'e1 ^'tenorFade'^4.['tenorSus'a'tenorFade'^]
+'tenorSus'g1 ^'tenorFade'^8<'m*v.7'['tenorSus'd'tenorFade'^]dd'm'>
+'tenorSus'e2 'tenorFade'^4'tenorSus'ef+g'tenorFade'^'tenorSus'agf+'tenorFade'^'tenorSus'd'tenorFade'^
+'strings*v.67'p96 %r3 l2 dc>gb
+## 69
+'sf*v255,.5' e1^1^1^1
+;
+
+~{3} %e1
+'tenor' p80 'tenorIntro''tenorSus'
+r2e2'tenorFade'^2>'tenorSus'b2'tenorFade'^1'tenorSus'b2'tenorFade'^2
+## 5
+'clarinet*v.5' p64 %r8 l8
+'cf*v192,1' e1 ^4agf+4d4 b1 ^4<d4>a4gf+
+            e1 ^4b4a4de  f+1 ^4f+ed4f+4
+## 13
+%r12 e1 %r17 ^1 r1r1
+'horn*v.2' %r5 p80 'rf*v192,.4' e1 'rf*v192,.6' ^2f+2 'rf*v192,.8' e1 'rf*v192,1' ^2f+2
+## 21
+~$'violinharm'
+#'violin-o1*v.67' %r7 p72 l2 [b2b2b2<d2>]
+_{3} %e1_
+##25
+'ostrings-o2*v1.2' p88 'strLowHit'
+l8 [3 e 'stlFade' ^ 'stlSus'] ee    e'stlFade'^4.['stlSus'f+'stlFade'^]
+l4 [3'stlSus' g 'stlFade' ^] 'stlSus' f+ 'stlFade' ^
+   [3'stlSus' e 'stlFade' ^] 'stlSus' f+ 'stlFade' ^
+   'stlSus' d 'stlFade' ^2. 'stlSus' d 'stlFade' ^ 'stlSus' f+ 'stlFade' ^
+## 33
+l8 [3e4ee]f+4f+f+
+   [3g4gg]<d4dd
+   [3c4cc]d4dd>
+   [a4aa]<c4ccd4dd
+## 41
+'violinharm'
+#'violin-o1*v.67' %r7 p72 l2 [b2b2b2<d2>]
+## 45
+'ostrings-o2*v.67' %a8%r3 p88 l2
+c1gd a1.e c1.d e1d1
+## 53
+'s*v.85' c1gd a1.e c1.d
+'horn*v.75' %r6 p48
+c2 %r11 ^4 %r19 ^4 %r6 >b2 %r11 ^4 %r19 ^4
+## 61
+'n*v1.5' 'hnSus' l8 %s3
+e1'hnFade'^4'hnSus'a16r16g16r16f+rdr
+b1'hnFade'^4'hnSus'<dr>arg16r16f+16r16 'n*v1.67'
+[e2'hnFade'^4'hnSus' l16 erf+r  g8r8argrf+8r8 d8r8]
+## 69
+;
+
+{4} %e1 ~
+'tenor' p80 'tenorIntro''tenorSus'
+r1d2'tenorFade'^2'tenorSus'c1'tenorFade'^2'tenorSus'd2
+## 5
+'tenorFade'v96,0 ^1.
+'ostrings*v.10+o2' p48 %a6%r1 'strTrem' l2
+f+ g1. f+ e1. d f+1. %r16 ^ v
+## 13
+'harp-o1' p80 l4
+eb<e>'h*v.5'be'h*v.25'<e>'h'f+'h*v.25'<f+>
+'h'g<dg'h*v.25'b<d>g'h*v.5'd'h*v.25'>f+
+'h*v.5'cg<c'h*v.25'egef+d
+'strings+o1*v.25' p64 %r3 l8
+'sf*v192,.67' e2. ef+ g4agf+4>b4<
+## 21
+%r5 e1^1 %r9 ^1^1
+~$
+##25
+'strings*v.4' p32 'str16th' l8
+[
+[3 g>'sL'b<'sH'e>'sL'b<'sH'] f+df+d
+[3 b'sL'd'sH'g'sL'd'sH'] af+gf+     j2,437
+[3 g>'sL'b<'sH'e>'sL'b<'sH'] f+>'sL'b<'sH'f+e
+[3 f+>'sL'b<'sH'd>'sL'b<'sH'] adf+d
+]
+## 33
+$437 #^
+g4gg g4gg g4ag f+4a4
+'s*v.67'p96 %y%r3 l2 dc>gb
+## 41
+'sf*v255,.5' e1^1^1^1
+## 45
+'strings*v.3' p32 'str16th' l8
+'sf*v255,.4' gcec gcec gdgd f+df+d
+'sf*v255,.5' [3 acec] g>b<e>b<
+[3 gcec] af+af+
+[g's*v.2'e's*v.5'ee]
+l16 ['s*v.4'b's*v.3'b]<['s*v.4'd's*v.3'd]['s*v.4'f+'s*v.3'f+]['s*v.4'b's*v.3'b]
+## 53
+<%r%a7%r3 'sf*v192,.25' e1 'sf*v192,.2' d1 c2.(d8c8)>b4a4b2
+e2.(e8f+8)g4e4a2
+'str16th' l4 's*v.3' [8e]
+## 61
+'sH'(b64<d64e8..)'brass*v.5' p96 %r4 l16
+grgr gr8.er8.  gr8.er8. f+r8.f+rf+r
+r4grar br8.gr8.   br8.gr8. ar8.arar 'b*v.8'
+[e2'hnFade'^4'hnSus' l16 erf+r  g8r8argrf+8j2r8d8r8]
+'epiano-o1' p52 l8 e<e<e
+## 69
+<e1...
+l16 "!!!o qr s1.s4qq+rr+"
+;
+
+~{5} %e1
+'timpani-o2*v.33' p64 l16
+r1r1r1r2 'kf*v96,.67' [8e]
+## 5
+e4
+'harp-o1' p80 l4 b<e1>f+2
+r<dg1>d2 rg<ce2.>d2
+rf+b<dd>f+b>b
+## 13
+'soprano*v0' p88 'sopSus' l8
+'of*v240,1'e1 'sopFade'^4'sopSus'agf+4d4
+b1'sopFade'^4'sopSus'<d4>a4gf+
+e2'sopFade'^4'sopSus'ef+  g4agf+4d4
+e2'sopFade'^4'sopSus'ef+  g4agf+4b4
+## 21
+<e1'sopFade'^1
+'brass-o2*v1.5' p64 e8 %r20 ^2.. r2.
+~$l16 "!!!o abcd"
+_{5} %e1_
+##25
+'timpani-o2' p64 l8
+e2..'kL'e'kH'e1
+e2..'kL'e['kH'e4'kL'ee]
+[4'kH'e4'kL'j4e4e4ee] e8e8'kH'e4'kL''kf*v48,1' l16 eeee
+## 33
+l2 e'kM'eee [3'kH'e1'kM'ej3e]e4
+"!!!o" l16 "abcd"
+## 41
+'timpani-o2' p64 l2
+e'kM'e'KH' e1e1e2 'kM'e
+## 45
+'horn-o1*v.33' %a6%r5 p80 l2
+g1.a <c1.>b g1.a 'h*v.75'<e. %r19 ^4 %r5 d1
+## 53
+'tenor*v.7''mv*v240,.85' %a7 p80 l4
+'tenorSus'c2.'tenorFade'^'tenorSus'>b'tenorFade'^'tenorSus'a'tenorFade'^
+'tenorSus'e1^'tenorFade'^'tenorSus'g'tenorFade'^
+'tenorSus'e1^4.'tenorFade'^8'tenorSus'a'tenorFade'^
+'tenorSus'e1d1
+## 61
+[16 l8 "!!!o s4ss"]
+## 69
+'brass*v.9' p96 %r4 l16 e2 %r15 ^2 %r20 ^1^1^2.
+;
+
+{6} %e1 l16 ~
+'ostrings*v.10+o2' p48 %a6%r1 'strTrem' l2
+([8e] 
+## 5
+eee) r2 (ddd) %r20 ^2^1^1 %r1 >(bbb) %r16 ^2 v
+## 13
+'violin*v.4-o1' p76 %r5 l8
+e1   ^4agf+4d4
+b1   ^4<d4>a4gf+
+e2.ef+  g4agf+4d4
+e2. %r15 ^1^8 "!!!o q16r16"
+## 21
+l16 "s1...qr s1.s4qq+rr+"
+~$
+##25
+"!!!o"
+"s2..qq+r1"
+"r+2..q8"["r4q8q8"]
+"r2..qq+r1"
+"r2..q8"["r4q8q8"]
+## 33
+#[7"s4r8r8"] "s4s8s8" [8":r:s4r8r8"]
+[16"s4" j8,6036 "r8r8"]
+## 41
+[8 "s4s8s8"]
+## 45
+'timpani-o2*v.33' l2 p64 e1gd  a1.e  'k*v.5'e1^1 r'k'e1'kL''kf*v96,1' l16 [8e]
+## 53
+l2 c1gd a1.e c1.d re1e
+## 61
+l4 [7 'kH'e'kL'eee] ['kH'e'kL'e]
+## 69
+'horn-o1*v1.2' %r6 p48 e1 %r15 ^1^1^1
+;
+$6036 ":s: s8s8" ]
+
+{7} %e1 ~
+r1r1r1r1
+## 5
+'harp-o1' p80 l2
+e1.r g1.r c1.r >b1.r
+## 13
+'violin-o2*v.15' p88 %a7%r7 l2
+'vf*v192,.3'b1'vf*v192,.45'^<d> b1.a g1.f+ e1<cd
+## 21
+'horn' %r5 p80 e1 %r17 ^1^1^1
+~$
+##25
+"!!!o e1."
+'strings*v.4-o1' p96 'str16th' l8
+[ [a'sL'f+'sH']
+g'sL'd'sH''sthSus'ga'sthHit'[b'sL'd'sH'g'sL'd'sH']a'sL'f+'sH'gf+   j2,737
+g'sL'>b<'sH''sthSus'ef+'sthHit'[g'sL'>b<'sH'e'sL'>b<'sH']f+'sL'>b<'sH'f+e
+f+'sL'>b<'sH''sthSus'de'sthHit'[f+'sL'>b<'sH'd'sL'>b<'sH']a'sM'd'sH'f+'sM'd
+## 33
+[3'sH'b'sL'ej3'sH'g'sL'e]'sM'ag'sH'
+]$737 #^
+'soprano+o1' p76 l8
+['sopSuss' e2^'sopFads'^'sopSuss'ef+  g'sopFads'^'sopSuss'agf+'sopFads'^'sopSuss'd'sopFads'^]
+## 41
+'sopSuss' e1^1^1^1
+## 45
+"!!!o y1" [11^2]
+'brass-o2*v2.5' %r5 p64 e4 %r18 ^4 %r5 d2. %r18 ^4
+## 53
+'trombone+o1*v.33' %r6 p96
+e1 l4 drdr 'n*v.2''nf*v96,.33'e^.r8 l16 erer l8 e4.re4.r
+'brass-o1*v1' %r5 p64
+c1.d4r4  r2e2r2d2
+## 61
+'soprano*v.25'e1'sopFade'^2['sopSus'a8'sopFads'^8]
+'sopSus'g1'sopFads'^4<'o*v.5'['sopSus'd8'sopFads'^8]d8d8
+'o*v1''sopSuss'
+[e2'sopFads'^4'sopSuss' l16 erf+r  g8r8argrf+8r8d8r8]
+## 69
+'brass-o1*v.8' p96 %r4 l16 b2 %r15 ^2 %r20 ^1^1^1
+;
+
+~{8} %e1
+'bells+o2*v.2' p48 l8
+r1 r4 e'l*v.15'e'l*v.2'e2^1^1
+## 5
+>> p80'l'e1 [27^4]
+'timpani-o2*v.25' p64 'kf*v48,.5' l16 eeee
+## 13
+e1^1 e1^1 e1^1 e1 'k'<c2d4 l16 ^> 'k*v.33''kf*v36,1'eee
+## 21
+~$
+e1^1 'k*v.25'e1. 'k'e4'k*v.33''kf*v48,1' l16 eeee
+_{8} %e1_
+##25
+'brass-o1*v.5' p96 l8 %a9%r4
+e1r2arar
+g1r2ara16r16a16r16
+e1r4arara16r16a16r16
+f+1r4f+16r16e16r16dr
+l16 "!!!o abcd"
+## 33
+"e-4"'brass*v.5' p96 %r4 l16
+grgr gr8.er8.  gr8.er8. f+r8.f+rf+r
+r4grar br8.gr8.   br8.gr8. ar8.arar 'b*v.67'
+#c2^8r8crcr  e8r8f+rer d8r8>a8r8
+#a2^8r8arar  <c8r8crcr d8r8>b8r8
+'brassharm' >b8r8
+## 41
+'b' <e2'hnFade' ^1^1^1
+'ostrings-o1*v.33' a8.r16a8.r16
+## 45
+g1 [6r1]
+'tenor*v.6' p80 %a6%r5 f+1
+## 53
+'trombone+o1*v.33' %r6 p96
+c1 l4 >brar< 'n*v.2''nf*v96,.33'c^.r8 l16 crcr l8 c4.r>b4.r
+'horn-o1*v.33' %a6%r5 p80 l2 g1.a
+r1.. "!!!o x4"
+## 61
+"z1" ^4
+'trombone*v.33-o1' 'hnSus' l8 'nf*v255,.75' p96
+'hnSus'a16r16g16r16f+rdr
+b1'hnFade'^4'hnSus''nf*v144,.4'<dr>arg16r16f+16r16
+'brass*v.75' p96 %r4 l16
+#c2^8r8crcr  e8r8f+rer d8r8>a8r8
+#a2^8r8arar  <c8r8crcr d8r8 d8r8
+'brassharm' d8r8
+## 69
+'timpani-o2' p64
+;
+
+#def violintune= [j1,1041]
+$1041
+'violin*v.9' p40 l8 %r7
+    (ba)g4(f+g) a4(gf+)g4f+4
+e4  (ba)g4(f+g) a4(gf+)e4d4
+]
+
+#def violinharm= [j1,3041]
+$3041
+'violin-o1*v.67' %r7 p72 l2 [b2b2b2<d2>]
+]
+
+#def brassharm= [j1,8037]
+$8037 l16
+c2^8r8crcr  e8r8f+rer d8r8>a8r8
+a2^8r8arar  <c8r8crcr d8r8 
+]

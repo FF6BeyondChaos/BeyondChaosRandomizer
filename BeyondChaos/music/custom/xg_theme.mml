@@ -1,0 +1,274 @@
+#TITLE Faraway Promise (reorchestrated)
+#ALBUM Xenogears
+#COMPOSER Yasunori Mitsuda
+#ARRANGED emberling
+
+#WAVE 0x20 0xC4 strings
+#WAVE 0x21 0xA2 pan flute
+#WAVE 0x22 0xA1 recorder
+#WAVE 0x23 0x51 bass
+#WAVE 0x24 0x35 nylon guitar single
+#BRR 0x25; brr/nylon4th-EAEAE, @168bl, e+20, FFF0, {240}
+#BRR 0x26; brr/nylon5th-EBEBE, @168bl, e+20, FFF0, {216}
+#WAVE 0x27 0x36 classical guitar
+#WAVE 0x28 0xA4 piccolo
+
+#def init= t115 %v50 %b0,70 %f0,0
+
+#def strings= |0 o5     %e1 's' m
+#def flutehi= |8 o3 p40 %e1 'f' m48,18,239 'fsus'
+#def flutepn= |1 o4 p56 %e1 'p' m48,18,207 'psus' %y0%s4
+#def flutelo= |2 o4 p48 %e1 'r' m48,18,223 'rsus'
+#def bass=    |3 o7 p64 %e0 'b' m %a12
+#def guitar=  |4 o6 p80 %e1 'g' m  %y2%s1%r10
+#def fourth=  |5 o5 p80 %e1 'ch' m %y2%s1%r10
+#def fifth=   |6 o5 p80 %e1 'ch' m %y2%s1%r10
+#def lead=    |7 o5 p48 %e1 'l' m96,18,207 %y0%s2%r10
+
+#def s= v18
+#def f= v46
+#def r= v18
+#def p= v74
+#def b= v55
+#def g= v55
+#def ch= v127
+#def l= v74
+
+#def frel= %r22
+#def fsus= %r9
+#def prel= %r19
+#def psus= %r7
+#def rrel= %r20
+#def rsus= %r5
+
+#def mute= %y4%s0%r22
+#def unmute= %y2%s1%r10
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init' 
+'lead' l4 r32
+a1.ga  <c2d2f2ec>
+a2rg8a8 <c2>b2<c1 &186^
+$
+'flutepn+o2' l8
+g.g.gg.f.e    d2c4d4
+f4.ee2        ^2^'prel'^4.'psus'
+g.g.<cc.>b.a  a.g.g4.d4
+e4.g^2        ^4'prel'^2'psus'>b<c
+
+g.g.gg.f.e    d2c4d4
+f4.ee2        ^4.'prel'^^2'psus'
+c.>b.<c4g4g   ge4d4.c>b<
+c1            ^'prel'^^2
+'flutehi+o2' l8  c<c>
+##
+b2<c2>  b2a4.g
+g2.'frel'^'fsus'g  g.e.d>a4<<c4>
+
+b2<c4.'frel'^'fsus'>  b4.'frel'^'fsus'a4.g
+g2.<c4>  b4.<c4.d4
+
+c2>c4e4  b2a4.g
+g2.'frel'^'fsus'g  g.e.d>a4<c>b<
+
+c4'frel'^'fsus'f4'frel'^'fsus'g.'frel'^16'fsus'
+c4'frel'^'fsus'>a4'frel'^'fsus'<de
+c2. 'fsus+%r2' ^4 'fsus+%r5' ^4 'fsus+%r8' ^2.
+;
+
+{2}
+'lead' l4 r64
+f.c.f gfcf    g2bg <c2.>g
+f.c.f g2.d    &93g2^g c1
+$
+'flutehi+o1*v.6' l8
+a2^.g.a     b2g4b4
+<c4.>c16r16c4.'flutelo*v.6+o1'g  <c4.d4c4>g'flutehi+o1*v.6'
+a2^.g.a     <d2>b2
+<c2..>'flutelo*v.6+o1'b     <c4.>b4.g4'flutehi+o1*v.6'
+
+a2^.g.a     b2a4b4
+<c4.>c16r16c4.'flutelo*v.6+o1'g  <c4.d4c4>g'flutehi+o1*v.6'
+a.g.aag4a   b4.a4.g4
+e2.'flutelo*v.6+o1'g4       c4.d4.e4
+##
+'flutelo+o1' l8
+a4.e4.a4  <c4>a<c4.>f4
+e4.<'flutepn+o2*v.6'd4.c4> b2'flutelo+o1'd4g4
+
+a4.e4.a4  <c4>a<c4.>f4
+e4.<'flutepn+o2*v.6'd4.c4> b4.a4.b4
+
+<c4.>'flutelo+o1'e4.a4 <c4dc4.>f4
+e4.<'flutepn+o2*v.6'd4.c4> b4gd4.g4
+
+f4.'flutelo+o1'g4.a4   f4^16'rrel'^16'rsus'c4^16'rrel'^16'rsus'g4
+e4.'flutepn+o1*v.6'd4.e4   g2'prel'^2
+;
+
+{3}
+'lead' l4
+c1^1 d2>b2<c1
+d2.c c2>b.<c8 c1^1
+##
+'bass-o2' l16
+f4^rfr f2    g4^rgr >b4<d4
+c4^rcr c2    c4^rcr <c4>g4
+f4^rfr f8.c8.f8    g8rg8r<c8> b8rg8rd8
+e4^rer c2          >b8<cr8.c8>br8.g8<c8
+
+f4^rfr f8.c8.f8    g4^rgr >b8.<d8.>g8<
+c4^rcr <c4>g4      c4^rcr >b8.<c8.d8
+f8.c8.f8 <c8.>b8.g8  d8rg8r<c8> b8rg8.f8
+e4^rer e4^rer v192,0 [5cr]r4.
+$
+'bass-o3*v1.33'
+a8ra8ra8 ^8a<eae<c>a>
+f8rf8rf8 ^8f8<cd>fa
+<c8rc8rf8 e8cd8>b<c8>
+g8rg8<dg8 fgegd>b<g8>
+
+a8ra8<a<dm3,2^ cr>braber>
+f8rf8r<c8 ^4d8f8
+c8rc8r>g8 rg8r<d8e8>
+g<gr>g<br>g<<d cd>gre8d8
+
+e8r>a8ra8 ^8r8<eac8
+f8r>f8rf8 ^8f<cf>f<<c>f
+c8rc8rcm4,5^ em3,1^crcm4,2^>g8
+bm3,1^rg8rgm4,5^ b8rg8rg8
+
+a8ra8ra8 b8rb8rb8 <c8rc8rc8 d8re8rg8
+c1r1>
+##
+f8rf8rf4f<cem3,1^>b<c>
+g8rg8r<g4em3,1bm3,-1^dg>b<
+c8rc8rc4r8<c>egm3,2^
+c8rc8r<c4>g4em4,3^>
+
+f8rf8r<c8rc8rcfem5,-11^>
+g8r<g8rgm3,2^b<dm3,2^rgre>g>
+a8.a8.<a4r8<gedc>>
+a8rar8a4r8<ecgm4,5^>
+
+f8rf8rf4fa<c>f<fe
+d8r>g8r<g4>g8<<c>bgd
+e8rcrcc8<e>cga<gm3,2^e>g
+<c8r>crccgc2
+
+f8r>f8r<f4gm3,2^frcr>
+gb<grgr>gb<grgm3,2^<c>bgd
+c8rcr8c4r8cf<cm3,2^
+e8rcr8>c8^2
+;
+
+{4}
+'fifth*v.75' f1^1
+'fourth*v.75' g2 'fifth*v.75' g2 <c2. 'fourth*v.75' 'mute' g8g8
+'fourth*v.75' <c2. 'mute' c8c8 'fourth' d2d2
+>g1^1
+##
+'fifth' f1g1<c4.'mute'c8'unmute'c2'mute'c8'unmute'c4c8^2>
+        f1g1 'fourth' e1^1
+'fifth' f1g1<c4.'mute'c8'unmute'c2'mute'c8'unmute'c4c8^2>
+        f1g1 'fourth' g1.g4g4
+$
+l16 [3
+'fourth' e8.e8.e4e8e8ee
+'fifth'  f8.f8.f4f8f8ff
+'fourth' g8.g8.g4g8g8gg
+'fifth'  g8.g8.g8g8.g8.g8
+]
+f8.f8.f4f8f8ff 'fourth' <c8.c8.c4c8c8cc>
+g8.g8.g4g8ggg8 g1
+##
+[ l16
+'fifth'     f8.f8.f4f8f8ff
+            g8.g8gg4g8g8g8
+           <c8.c8.c4c8ccc8
+            c8.c8.c4c8c8cc>
+            f8.f8.f4f8f8ff
+            g8.g8gg4g8g8g8 
+'fourth' j2 e8.e8.e4e8eeee
+            e8.e8ee8.e8.e8ee
+]           g8.g8.g8.g8.ggg8
+            g8.g8gg8^2
+;
+
+{5}
+'guitar*v.75'
+>a1^1<
+d2 >b2< f2e4e4
+>a2.r4< c2>b2<
+e1^1
+##
+'guitar' l16
+>a1b1<f4.e8e2d8e4e8^2
+>a1b1<c1^1
+>a1b1<f4.e8e2d8e4e8^2
+>a1b1<e1.e4e4
+$
+[3
+ c8.c8.c4c8c8cc
+>a8.a8.a4a8a8aa<
+ e8.e8.e4e8e8ee
+>b8.b8.b8b8.b8.b8<
+]
+>[a8.a8.a4a8a8aa]<
+  e8.e8.e4e8eee8 e1
+##
+[
+>a8.a8.a4a8a8a8
+ b8.b8.b4b8b8b8<
+ f8.f8.e4e8e8e8
+ d8e4e4e8e4
+>a8.a8.a4a8a8a8
+ b8.b8.b4b8b8b8< j2
+ c8.c8.c4c8c8.c
+>b<c8c8dc8rc8rcc>b<c ]
+ e8.e8.e8.e8.dfe8
+ e8.d8ec8^2
+;
+
+{6}
+[24r1]
+$
+'strings+o1' %a5%r7 p85 l1
+[3 ([4e4])[([4c4])]>([4b4])< ]
+[([8c4])]
+
+
+([4c4])([4d4])([8c4])
+([4c4])([4d4])([8e4])
+([4c4])([4d4])([8c4])
+([4c4])([4d4])([8c4])
+;
+
+{7}
+[24r1]
+$
+'strings' %a6%r8 p70 l1
+[3 <([4c4])>([4a4])[([4g4])] ]
+([8a4])([8g4])
+
+([4a4])([4b4])([8g4])
+([4a4])([4b4])<([8c4])>
+([4a4])([4b4])([8g4])
+([4a4])([4b4])([8g4])
+;
+
+{8}
+[24r1]
+$
+'strings' %a7%r9 p55 l1
+[3 ([4a4])([4f4])([4e4])([4d4])]
+([8f4])([8e4])
+
+([4f4])([4g4])([8c4])
+([4f4])([4g4])([8a4])
+([4f4])([4g4])([8c4])
+([4f4])([4g4])([8e4])
+;

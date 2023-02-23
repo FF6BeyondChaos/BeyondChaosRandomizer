@@ -1,0 +1,198 @@
+#TITLE Seymour's Ambition
+#ALBUM Final Fantasy X
+#COMPOSER Nobuo Uematsu
+#ARRANGED emberling
+
+#WAVE 0x20 0xC4 synth strings
+#WAVE 0x21 0x39 lead
+#WAVE 0x22 0x73 vox
+#WAVE 0x23 0x31 sitar (banjo)
+#WAVE 0x24 0x52 bass
+#WAVE 0x25 0x01 piano hi
+#WAVE 0x26 0x07 piano mid
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1D snare
+#WAVE 0x2A 0x3B hihat
+#WAVE 0x2C 0xBA cymbal
+
+#def init= t60 %v50 %b0,85 %f0,0 %x248
+
+#def synth= @5 'y' o4 %e1 %y0%s5%r15
+#def fader=   |0 'f' o5 %e1
+#def strings= |0 's' o5 %e1
+#def lead=    |1 'g' o5 %e1 %a12%r9
+#def vox=   |2 'v' o4 %e1
+#def voxh=   |2 'c' o5 %e1
+#def sitar= |3 'j' o5 %e1
+#def bass=  |4 'b' o6 %e0 %a12%r15
+#def pianh= |5 'h' o4 %e1
+#def pianm= |6 'p' o5 %e1
+
+#def y= v64
+#def f= v32
+#def s= v64
+#def g= v56
+#def j= v80
+#def b= v48
+#def v= v100
+#def c= v24
+#def p= v100
+#def h= v100
+
+#def ff= v1,32
+#def vf= v1,100
+#def cf= v1,24
+
+#def fade= 'fader*v.08''ff*v192,.97' p64
+
+#def <= |5
+#def >= |6
+#def piam= |6 o5
+
+#drum "k"= 5a |8 p64 v100 %e0
+#drum "s"= 5a |9 p64 v100 %e1
+#drum "h"= 5g |A p120 v48 %e0 %s0
+#drum "i"= 5g |A p120 v40 %e0 %s0
+#drum "j"= 5g |A p120 v32 %e0 %s0
+#drum "o"= 5a |A p120 v64 %e1 %s7
+#drum "y"= 5c+ |C p64 v45 %e1 %a7%y0%s3%r20
+
+{1}
+'init'
+'pianm-o1' p59 c8 < p76 e8 '<' p81 c8 p91 b8 < p96 b1.
+'piam-o2' p59 b8 << p76 c+8 p81 b8 '<' p91 g+8 < p96 d2
+'fader*v.1' p64 'ff*v192,1.27' f1
+$ ## 5
+'strings+o1' %r3 p80 [
+g8>b8<b1.. f+8>a+8<a+1..
+d+8>g8<g1.. d8>f8<f1.. ]
+## 21
+'pianm-o2' p59 a8 << p76 c+8 p81 a8 '<' p91 g+8 < p96 g+2
+'fader*v.1' p64 'ff*v192,1.23' e1
+'pianm-o2' p59 g+8 < p71 a+8 < p81 g+8 '<' p86 f8 p91 b2
+'fader*v.2' p64 'ff*v192,1.17' d+1
+'pianm-o2' p54 g8 < p71 b8 < p76 g8 '<' p86 f+8 < p96 f+2
+'fader*v.24' p64 'ff*v192,1.17' d1
+'pianm-o2' p54 f+8 < p71 g+8 < p76 f+8 '<' p86 d+8 p91 a2
+'fader*v.24' p64 'ff*v192,1.17' c+1
+;
+
+{2}
+'pianm-o1' r24 p64 g8 < p76 g8 '<' p86 d+8 < p96 e12^1.
+'piam-o1' r24 p64 f+8 < p76 e8 '<' p86 d8 p91 b12^2
+'vox+o1*v.1' p64 'vf*v192,1.27' f1
+$ ## 5
+[[ 'pianm-o1' l24
+p59 c p64 g < p71 c p76 e g p81 b '<' c p86 d+ g p91 b < p96 e g b1.
+'piam-o2' j2
+p59 b < p64 f+ p71 b < p76 c+ e g p81 b '<' p86 d f+ p91 g+ b < p96 c+ d2
+'fade+o1' f1 ]
+p59 b < p64 f+ p71 b < p76 c+ f g p81 b '<' p86 d f p91 g+ b < p96 c+ d2
+'fade+o1' f1 ] l8
+## 21
+'pianm-o1' p64 r24 e < p76 e '<' p81 c < p96 c+12^2
+'vox+o1*v.1' p64 'vf*v192,1.23' e1
+'pianm-o1' p64 r24 d+ < p76 c+ p81 b '<' p91 g+12^2
+'vox+o1*v.2' p64 'vf*v192,1.17' d+1
+'pianm-o1' p64 r24 d < p76 d p81 a+ '<' p91 b12^2
+'vox+o1*v.24' p64 'vf*v192,1.17' d1
+'pianm-o1' p64 r24 c+ p71 b < p81 a '<' p86 f+12^2
+'vox+o1*v.24' p64 'vf*v192,1.17' c+1
+;
+
+{3}
+$
+'pianm' r12 p71 c8 p81 b8 '<' p86 g8 < p96 g24^1.
+'piam-o1' r12 p71 b8 < p76 g8 '<' p86 f+8 < p96 c+24^2 &191
+'voxh+o1*v.1' p64 'cf*v192,1.27' f1
+$ ## 5
+'sitar-o2' p42 [4 [ c2...
+'bass-o2' g16
+'sitar-o2' c16'j*v.5'^16'j'c2..
+%k-1 ] %k0 ] l8 &1r
+## 21
+'pianm-o1' r12 p71 a < p81 g+ '<' p86 e < p96 e24^2
+'voxh+o1*v.1' p64 'cf*v192,1.23' e1
+'pianm-o1'  r12 p71 g+ < p76 e '<' p86 d+ p91 a+24^2
+'voxh+o1*v.2' p64 'cf*v192,1.17' d+1
+'pianm-o1'  r12 p64 g < p76 f+ '<' p86 d < p96 d24^2
+'voxh+o1*v.24' p64 'cf*v192,1.17' d1
+'pianm-o1'  r12 p64 f+ < p76 d '<' p86 c+ p91 g+24^2
+'voxh+o1*v.24' p64 'cf*v192,1.17' &191 c+1
+;
+
+{4}
+'synth' l24 p64
+[8 gd+c ge>b<]
+[4 f+d>b< gc+>b< f+d>b< fc+>b<]
+$ ## 5
+l16 "!!!o" [8
+"k8i8s8j8 h8k8s8jk"
+"k8k8s8j8 h8kks8o8" ]
+## 21
+l8 [4 "hi"[3"hj"] "oi" ["hj"] "ho"]
+;
+
+{5}
+'synth*v.3' l24 p0
+r16. [8 gd+c ge>b<]
+[4 f+d>b< gc+>b< f+d>b< j4 fc+>b<] r32
+$
+'synth' l24 p64 [4
+[8 gd+c ge>b<]
+[4 f+d>b< gc+>b< f+d>b< fc+>b<] ]
+## 21
+'y*v.9'
+[8 ec>a< ec+>g+<]
+[4 d+>bg+< e>a+g+< d+>bg+< d>a+g+<]
+[8 d>a+g< d>bf+<]
+[4 c+>af+< d>g+f+< c+>af+< c>g+f+<]
+;
+
+{6}
+'synth*v.2' l24 p127 r8.
+[8 gd+c ge>b<]
+[4 f+d>b< gc+>b< f+j4d>b< fc+>b<] r48
+$ ## 5
+['lead+o1' m24,18,247
+p55 g8> p45 b8 p55 <b1.. f+8> p45 a+8 p55 <a+2.
+'fade+o1' m d-1
+'lead+o1' m24,18,247
+p55 d+8> p45 g8 p55 <g1.. d8> p45 f8 p55 <f2.
+'fade+o1' m d-1 ]
+## 21
+'synth*v.18' p127
+r48>b<fc+>b<
+[8 ec>a< ec+>g+<]
+[4 d+>bg+< e>a+g+< d+>bg+< d>a+g+<]
+[8 d>a+g< d>bf+<]
+[4 c+>af+< d>g+f+< c+j4>af+< c>g+f+<] r48
+;
+
+{7}
+r1r1r1&186r1
+'synth*v.3' l24 p0 fc+>b<
+$
+'synth*v.3' l24 p0 [4
+[8 gd+c ge>b<]
+[f+d>b< gc+>b< f+d>b< j2 fc+>b<] f32
+'fade+o1' d1 &2r
+'synth*v.3' l24 p0 c+>b<]
+## 21
+'y*v.27'
+[8 ec>a< ec+>g+<]
+[4 d+>bg+< e>a+g+< d+>bg+< d>a+g+<]
+[8 d>a+g< d>bf+<]
+[4 c+>af+< d>g+f+< c+>af+< c>g+f+<]
+;
+
+{8}
+r1r1r1r1
+$
+l8 "!!!o" [8
+"hyh^ ^jh^"
+"oih^ ^jh^" ]
+## 21
+[8r1]
+;
+

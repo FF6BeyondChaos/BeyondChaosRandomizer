@@ -116,6 +116,13 @@ def evade_mblock(fout):
     evade_mblock_sub.set_location(0x2232C)
     evade_mblock_sub.write(fout)
 
+def fix_xzone(fout):
+
+    fix_xzone_sub = Substitution()
+    fix_xzone_sub.set_location(0x1064B7) #force draw monsters struck by Life animation (includes reraise)
+    fix_xzone_sub.bytestring = bytes([0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0xF1, 0x81, 0xFF])
+    fix_xzone_sub.write(fout)
+
 
 def death_abuse(fout):
     death_abuse_sub = Substitution()
@@ -351,52 +358,6 @@ def change_cursed_shield_battles(fout, random: Random, amount: int = None):
     ])
     ccsb_sub.set_location(0x4A500)
     ccsb_sub.write(fout)
-    
-def patch_doom_gaze(fout, addr, offset=0xA0000):
-    """
-    Add an option to the Falcon's wheel to search out Doom Gaze
-    """
-    rel_addr = addr - offset
-
-    sub = Substitution()
-
-    dst = rel_addr.to_bytes(3, "little")
-    sub.set_location(0xA009D)
-    sub.bytestring = b"\xb2" + dst
-    sub.write(fout)
-
-    sub.set_location(0xAF56E)
-    dst = (rel_addr + 7).to_bytes(3, "little")
-    sub.bytestring = b"\xb2" + dst + b"\xfe" + b"\xfd" * 5
-    sub.write(fout)
-
-    # displaced code + DG dead bit
-    sub.set_location(addr)
-    sub.bytestring = b"\x3d\x12\x41\x12\xd0\xe2\xfe"
-    sub.write(fout)
-
-    # dialog box manager
-    b1 = (rel_addr + 0x1D).to_bytes(3, "little")
-    b2 = (rel_addr + 0x27).to_bytes(3, "little")
-    sub.set_location(addr + 0x7)
-    sub.bytestring = b"\xc1\xe2\x80\xa4\x00" + b1 \
-                   + b"\x4b\xa5\x86\xb6\x8d\xf5\x00" + b2 \
-                   + b"\xb3\x5e\x00\xfe"
-    sub.write(fout)
-
-    # lift-off choice handler
-    sub.set_location(addr + 0x1D)
-    sub.bytestring = b"\x4b\x2a\x85\xb6\x8d\xf5\x00\xb3\x5e\x00"
-    sub.write(fout)
-
-    # doom gaze encounter event
-    sub.set_location(addr + 0x27)
-    sub.bytestring = b"\x6a\x01\x04\x9e\x33\x01\x29\x58\x0c\x30\x4c\x20\x2c" + \
-                     b"\x10\x24\x10\x34\x10\x54\x10\x49\x24\x40\xa0\x24\x30" + \
-                     b"\x34\x40\x54\x30\x40\x80\x49\x60\x40\x80\x24\x30\xd9" + \
-                     b"\xd2\x11\x36\x11\x08\xc0\x4d\x5d\x29\xb2\xa9\x5e\x00" + \
-                     b"\xb7\x48\xe3\x00\x00\x96\xc0\x27\x01\x9d\x00\x00"
-    sub.write(fout)
 
 def title_gfx(fout):
     title_gfx_sub = Substitution()				#change title screen graphics by overwritting compressed gfx data
@@ -447,9 +408,24 @@ def patch_doom_gaze(fout):
                             0xB3, 0x5E, 0x00, 0xFE,
                             0x4B, 0x2A, 0x85, 0xB6, 0x8D, 0xF5, 0x00, 0xB3, 0x5E, 0x00,
                             0x5A, 0x08, 0x5C, 0x6B, 0x11, 0x20, 0x11, 0x08, 0xC0,
-                            0x4D, 0x5D, 0x29, 0xF0, 0x4C, 0xB2, 0xA9, 0x5E, 0x00, 0xB7, 0x48,
-                            0xE3, 0x00, 0x00, 0x96, 0xC0, 0x27, 0x01, 0x9D, 0x00, 0x00])
+                            0x4D, 0x5D, 0x29, 0xF0, 0x4C, 0xB2, 0xA9, 0x5E, 0x00,
+                            0xB7, 0x48, 0x83, 0x04, 0x00, 0x96, 0xC0, 0x27, 0x01, 0x9D, 0x00, 0x00])
     sub.write(fout)
+
+def nicer_poison(fout):
+
+    #make poison pixelation effect 1/10 of it's vanilla amount in dungeons/towns
+    nicer_poison_sub = Substitution()
+    nicer_poison_sub.set_location(0x00E82)
+    nicer_poison_sub.bytestring = bytes([0x0F, 0x0F, 0x0F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,
+                                         0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,
+                                         0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x0F, 0x0F, 0x0F])
+    nicer_poison_sub.write(fout)
+
+    #remove poison pixelation on the overworld
+    nicer_poison_sub.set_location(0x2E1864)
+    nicer_poison_sub.bytestring = bytes([0xA9, 0x00])
+    nicer_poison_sub.write(fout)
 
 def fewer_flashes(fout):
     anti_seizure_sub = Substitution()
@@ -1064,6 +1040,58 @@ def fewer_flashes(fout):
 
     anti_seizure_sub.set_location(0x10785D)  # D0785D
     anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    #
+    # Removing Goner Flash
+    #
+    anti_seizure_sub.set_location(0x1000D8)  # D000D8
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1000DA)  # D000DA
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1000DC)  # D000DC
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1000DE)  # D000DE
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1000E0)  # D000E0
+    anti_seizure_sub.bytestring = bytes([0xE0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1000E6)  # D000E6
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1000E8)  # D000E8
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x100173)  # D00173
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x100176)  # D00176
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x100179)  # D00179
+    anti_seizure_sub.bytestring = bytes([0xF0])
+    anti_seizure_sub.write(fout)
+
+    # BG3 horizontal lines fade to black
+    anti_seizure_sub.set_location(0x1001BD)  # D001BD
+    anti_seizure_sub.bytestring = bytes([0xCF])
+    anti_seizure_sub.write(fout)
+
+    anti_seizure_sub.set_location(0x1001BF)  # D001BF
+    anti_seizure_sub.bytestring = bytes([0xB4])
     anti_seizure_sub.write(fout)
 
     # ------------- Battle Event Scripts -------------

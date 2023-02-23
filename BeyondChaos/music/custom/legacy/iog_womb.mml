@@ -15,22 +15,22 @@
 
 {3}
 l16%x240t128%v70%b0,70v92p60%f0,0%e1|0o5~o4~   %y6%s1%r19 ~v104~
-  [c4f4g4f8^^32r32  <c4>f4g4f8^^32r32  
->a+4<f4a+4f8^^32r32  <d4>f4a+4f8^^32r32] c4f4a4f8^^32r32  <c4>f4a4f8^^32r32  
-e4g4<c4>g8^^32r32  <e4>g4<c4>g8^^32r32  >a+4<f4a+4f8^^32r32  <d4>f4a+4f8^^32r32  
-g4a+4<c+4e8^^32r32  >a+4<c+4e4g8^^32r32  c4>f4a4f8^^32r32  <c4>f4a4f8^^32r32  
-e4g4<c4>g8^^32r32  <e4>g4<c4>g8^^32r32  d4f4a+4f8^^32r32  <d4>f4a+4f8^^32r32  
-g4a+4<d4>g8^^32r32   $1 [3a+4a4f4d8^^32r32  d4a4<d4>a8^^32r32  <e4>g4<c4>g8^^32r32  
-e4g4<c4>g8^^32r32  <c4>f4a4<c8^^32r32  >d4f4a+4f8^^32r32  <d4>f4a+4f8^^32r32  
-f4g4a+4<d8^^32r32  >g4a+4<d4f8^^32r32  >d4a4<d4>a8^^32r32  <e4>g4<c4>g8^^32r32  
-e4g4<c4>g8^^32r32  <c4>f4a4<c8^^32r32  >d4f4a+4f8^^32r32  <d4>f4a+4f8^^32r32  
-f4g4a+4<d8^^32r32  >g4a+4<d4f8^^32r32  >d4f4a+4f8^^32r32  <d4>f4a+4f8^^32r32  
-e4g4<c4>g8^^32r32  <e4>g4<c4>g8^^32r32  d4f4a+4f8^^32r32  <d4>f4a+4f8^^32r32  
-c4f4a+4<d8^^32r32  f4e4d4c8^^32r32  >c4f4a4f8^^32r32  <c4>f4a4f8^^32r32  
-e4g4<c4>g8^^32r32  <e4>g4<c4>g8^^32r32  >a+4<f4a+4f8^^32r32  <d4>f4a+4f8^^32r32  
-g4a+4<c+4e8^^32r32  >a+4<c+4e4g8^^32r32  c4>f4a4f8^^32r32  <c4>f4a4f8^^32r32  
-e4g4<c4>g8^^32r32  <e4>g4<c4>g8^^32r32  d4f4a+4f8^^32r32  <d4>f4a+4f8^^32r32  
-g4a+4<d4>g8^^32r32]  
+  [c4f4g4f4  <c4>f4g4f4  
+>a+4<f4a+4f4  <d4>f4a+4f4] c4f4a4f4  <c4>f4a4f4  
+e4g4<c4>g4  <e4>g4<c4>g4  >a+4<f4a+4f4  <d4>f4a+4f4  
+g4a+4<c+4e4  >a+4<c+4e4g4  c4>f4a4f4  <c4>f4a4f4  
+e4g4<c4>g4  <e4>g4<c4>g4  d4f4a+4f4  <d4>f4a+4f4  
+g4a+4<d4>g4   $1 a+4a4f4d4  d4a4<d4>a4  <e4>g4<c4>g4  
+e4g4<c4>g4  <c4>f4a4<c4  >d4f4a+4f4  <d4>f4a+4f4  
+f4g4a+4<d4  >g4a+4<d4f4  >d4a4<d4>a4  <e4>g4<c4>g4  
+e4g4<c4>g4  <c4>f4a4<c4  >d4f4a+4f4  <d4>f4a+4f4  
+f4g4a+4<d4  >g4a+4<d4f4  >d4f4a+4f4  <d4>f4a+4f4  
+e4g4<c4>g4  <e4>g4<c4>g4  d4f4a+4f4  <d4>f4a+4f4  
+c4f4a+4<d4  f4e4d4c4  >c4f4a4f4  <c4>f4a4f4  
+e4g4<c4>g4  <e4>g4<c4>g4  >a+4<f4a+4f4  <d4>f4a+4f4  
+g4a+4<c+4e4  >a+4<c+4e4g4  c4>f4a4f4  <c4>f4a4f4  
+e4g4<c4>g4  <e4>g4<c4>g4  d4f4a+4f4  <d4>f4a+4f4  
+g4a+4<d4>g4
 ;1
 
 l16
@@ -43,7 +43,7 @@ l16v87p34%e1|0o5~o4~   %y6%s1%r19 ~v127~
 <d4>f4a+4f4  g4a+4<c+4e4  >a+4<c+4e4g4  c4>f4a4f4  
 <c4>f4a4f4  e4g4<c4>g4  <e4>g4<c4>g4  d4f4a+4f4  
 <d4>f4a+4f4  g4a+4<d4>g4  a+4a4f4d4  d4a4<d4>a4  
- $2 [3<e4>g4<c4>g4  e4g4<c4>g4  <c4>f4a4<c4  >d4f4a+4f4  
+ $2 <e4>g4<c4>g4  e4g4<c4>g4  <c4>f4a4<c4  >d4f4a+4f4  
 <d4>f4a+4f4  f4g4a+4<d4  >g4a+4<d4f4  >d4a4<d4>a4  
 <e4>g4<c4>g4  e4g4<c4>g4  <c4>f4a4<c4  >d4f4a+4f4  
 <d4>f4a+4f4  f4g4a+4<d4  >g4a+4<d4f4  >d4f4a+4f4  
@@ -52,7 +52,7 @@ l16v87p34%e1|0o5~o4~   %y6%s1%r19 ~v127~
 <c4>f4a4f4  e4g4<c4>g4  <e4>g4<c4>g4  >a+4<f4a+4f4  
 <d4>f4a+4f4  g4a+4<c+4e4  >a+4<c+4e4g4  c4>f4a4f4  
 <c4>f4a4f4  e4g4<c4>g4  <e4>g4<c4>g4  d4f4a+4f4  
-<d4>f4a+4f4  g4a+4<d4>g4  a+4a4f4d4  d4a4<d4>a4  ]
+<d4>f4a+4f4  g4a+4<d4>g4  a+4a4f4d4  d4a4<d4>a4  
 
 ;2
 
@@ -65,7 +65,7 @@ f8^^32r32>a+4<f4a+4  f8^^32r32<d4>f4a+4  f8^^32r32c4f4a4  f8^^32r32<c4>f4a4
 f8^^32r32e4g4<c4  >g8^^32r32<e4>g4<c4  >g8^^32r32>a+4<f4a+4  f8^^32r32<d4>f4a+4  
 f8^^32r32g4a+4<c+4  e8^^32r32>a+4<c+4e4  g8^^32r32c4>f4a4  f8^^32r32<c4>f4a4  
 f8^^32r32e4g4<c4  >g8^^32r32<e4>g4<c4  >g8^^32r32d4f4a+4  f8^^32r32<d4>f4a+4  
-f8^^32r32g4a+4<d4  >g8^^32r32a+4a4f4  d8^^32r32d4a4<d4   $3 [>a8^^32r32<e4>g4<c4  
+f8^^32r32g4a+4<d4  >g8^^32r32a+4a4f4  d8^^32r32d4a4<d4   $3 >a8^^32r32<e4>g4<c4  
 >g8^^32r32e4g4<c4  >g8^^32r32<c4>f4a4  <c8^^32r32>d4f4a+4  f8^^32r32<d4>f4a+4  
 f8^^32r32f4g4a+4  <d8^^32r32>g4a+4<d4  f8^^32r32>d4a4<d4  >a8^^32r32<e4>g4<c4  
 >g8^^32r32e4g4<c4  >g8^^32r32<c4>f4a4  <c8^^32r32>d4f4a+4  f8^^32r32<d4>f4a+4  
@@ -75,7 +75,7 @@ f8^^32r32c4f4a+4  <d8^^32r32f4e4d4  c8^^32r32>c4f4a4  f8^^32r32<c4>f4a4
 f8^^32r32e4g4<c4  >g8^^32r32<e4>g4<c4  >g8^^32r32>a+4<f4a+4  f8^^32r32<d4>f4a+4  
 f8^^32r32g4a+4<c+4  e8^^32r32>a+4<c+4e4  g8^^32r32c4>f4a4  f8^^32r32<c4>f4a4  
 f8^^32r32e4g4<c4  >g8^^32r32<e4>g4<c4  >g8^^32r32d4f4a+4  f8^^32r32<d4>f4a+4  
-f8^^32r32g4a+4<d4  >g8^^32r32a+4a4f4  d8^^32r32d4a4<d4]
+f8^^32r32g4a+4<d4  >g8^^32r32a+4a4f4  d8^^32r32d4a4<d4
 ;3
 
 l16

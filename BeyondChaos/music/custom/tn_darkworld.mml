@@ -102,7 +102,7 @@ $## Starts loop 2 ticks early
 a1 b1 a2.r8 's*v1.008' f+24^64&1r 's*v.8' g+24^64&1r a2..r8
 ## 11 - original channel 4 - trumpet 2
 'trumpet-o1*v.701' p107 m30,36,216 r1r8 a4 < c+16.r32 f+8. g+8. a8
-&66br32 't*v.638' a2^8r8 't*v.701' <&58c+&5c>b48&5a+ a12r24 't*v.638' b8.^64r64 't*v.56' <c+12^64r48r32
+&66br32 't*v.638' a2^8r8 't*v.701' <&58c+&5c>b48&5a+ a12r24 't*v.638' b8.^64r64 't*v.56' <c+12^64r24r64
 't*v.706' d1 > g2 &87dr32. f+1 'tf*v110,.605' ^2^8 r4.
 ## 19 - original channel 1 - strings chord top
 'strings+o1*v.907' %r6 p30

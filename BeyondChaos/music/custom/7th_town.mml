@@ -154,8 +154,9 @@ b4.>b.r32 b4<b4
 ;
 
 {4} $ l16
-"d8bbe8d8 d8c8e8d8"
-"d8dde8d8 d8d8d8d8"
+[14
+"d8bbe8d8 d8c8e8d8" j14
+"d8dde8d8 d8d8d8d8" ]
 ;
 
 {5} &2r $

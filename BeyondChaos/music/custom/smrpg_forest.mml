@@ -1,0 +1,290 @@
+#TITLE Beware the Forest's Mushrooms
+#ALBUM Super Mario RPG
+#COMPOSER Yoko Shimomura
+#ARRANGED HoxNorf
+
+#SHORTNAME SMRPG Forest Maze
+
+#WAVE 0x20 0x94 oboe
+#WAVE 0x21 0x86 horn
+#WAVE 0x22 0x65 strings
+#WAVE 0x23 0x90 bassoon
+#WAVE 0x24 0x58 strings bass
+#WAVE 0x25 0x57 pizzicato
+#WAVE 0x26 0x24 vibraphone
+
+#def 0i=   |0 %r8 m96,18,239
+#def 0o=   o5
+#def 0v=   v70
+
+#def 1i=   |1 %y0%s5 m3,18,199
+#def 1o=   o5
+#def 1v=   v88
+#def 1vf= v1,88
+
+#def 1bi=   |1 %y0%s7 m24,18,199
+#def 1bo=   o5
+#def 1bv=   v88
+
+#def 2i=   |2 %r7 m
+#def 2o=   o5
+#def 2v=   v70
+
+#def 3i=   |3 m
+#def 3o=   o4
+#def 3v=   v70
+
+#def 4i=   |4 m %a11
+#def 4o=   o5
+#def 4v=   v112
+
+#def 5i=   |5 m
+#def 5o=   o4
+#def 5v=   v70
+
+#def 6i=   |6 %a12%y5%s3%r20 m
+#def 6o=   o5
+#def 6v=   v70
+
+#def pzbs= > v70 %a15 p64
+#def pztr= < v70 %a15 p89
+
+{1}
+t94%b0,96%f0,0%v32%x240
+l16%e1$'0v*v1.27''0i''0o'p64
+c+16d+32r32e32r32f+32r32g+32r16.<c+24r12>b24r12g+16r16a+48b48a+8.r48
+b16r16g+32r32a+32r32b16r16a+32r32f+32r32d+32r16.e32r16.d+48e48d+8r12
+c+16d+32r32e32r32f+32r32e16r16d+32r32e32r32f+8e64f+64e32d+32r32c+8.r16
+f+16r16e32r32d+32r32c+16r16d+32r32e32r32f+16r16e64f+64e32f+32r32g+8.r16
+>g+16b32r32<c+32r32d+32r32e32r16.g+24r12g+24r12e16r16f+48g+48f+8.r48
+g+16r16e32r32f+32r32g+16r16f+32r32c+32r32>a+32r16.b32r16.b48<c+48>b8r12
+a16b32r32<c+32r32d+32r32c+16r16c32r32c+32r32d+8c+64d+64c+32>b32r32a8.r16
+b16r16a32r32g+32r32f+16r16g+32r32a32r32b16r16b64<c+64>b32<c+32r32d+8
+'1v*v.8''1i''1o'p94
+g+32r32g+32r32
+'1v*v.5'g+1
+f+2'1vf*v96,.2'^2
+'0v*v1.27''0i''0o+o1'p64
+r1..
+c+16>b24r48a24r48g+24r48
+f+16g+32r32a32r32b32r32<c+32r16.f+24r12e24r12c+16r16d+48e48d+8.r48
+e16r16c+32r32d+32r32e16r16d+32r32>b32r32g+32r16.a32r16.g+48a48g+8r12
+f+16g+32r32a32r32b32r32a16r16g+32r32a32r32b8a64b64a32g+32r32f+8.r16
+b16r16a32r32g+32r32f+16r16g+32r32a32r32b16r16a64b64a32b32r32<c+8.r16
+'1bv*v1.33''1bi''1bo-o1'p94
+f+16'1bv*v1.5'g+24r48a24r48b24r48<c+24r12'1bv*v1.25'f+16r16'1bv*v1'a8g+24r48f+24r48e24r12c+16r16
+f+8e24r48d24r48c+16r16>b16r16a8g+8a8b8
+'0v*v1.27''0i''0o'p64
+f+16g+32r32a32r32b32r32<c+32r16.f+24r12a8g+24r48f+24r48e24r12c+16r16
+f+8e24r48d24r48c+24r12>b16r16a8g+8a8b8
+a+4<c+1^4
+r4>g+16f+24r48e32r32d+32r32;
+
+{2}
+l16%e1$
+'6v*v.5''6i''6o+o1'p94
+c+16d+16e16f+16g+8<c+8>b8g+8a+48b48a+6^24
+b8g+16a+16b8a+16f+16d+8e8d+48e48d+6^24
+c+16d+16e16f+16e8d+16e16f+8e64f+64e32d+16c+4
+f+8e16d+16c+8d+16e16f+8e64f+64e32f+16g+4
+'2v''2i''2o+o1'p34
+c+16d+32r32e32r32f+32r32g+32r16.<c+24r12>b24r12g+16r16a+48b48a+8.r48
+b16r16g+32r32a+32r32b16r16a+32r32f+32r32d+32r16.e32r16.d+48e48d+8r12
+c+16d+32r32e32r32f+32r32e16r16d+32r32e32r32f+8e24r48d+32r32c+8.r16
+f+16r16e32r32d+32r32c+16r16d+32r32e32r32f+16r16e24r48f+32r32g+8
+'1v*v.8''1i''1o'p94
+c+32r32c+32r32'1v*v.5'
+c+1
+>b2'1vf*v96,.2'^2
+'2v''2i''2o+o1'p34
+r1..
+c+16>b24r48a24r48g+24r48
+f+16g+32r32a32r32b32r32<c+32r16.f+24r12e24r12c+16r16d+48e48d+8.r48
+e16r16c+32r32d+32r32e16r16d+32r32>b32r32g+32r16.a32r16.g+48a48g+8r12
+f+16g+32r32a32r32b32r32a16r16g+32r32a32r32b8a24r48g+32r32f+8.r16
+b16r16a32r32g+32r32f+16r16g+32r32a32r32b16r16a24r48b32r32<c+16>b24r48a24r48g+24r48
+f+16g+32r32a32r32b32r32<c+32r16.f+24r12a8g+24r48f+24r48e24r12c+16r16
+f+8e24r48d24r48c+24r12>b16r16a8g+8a8b8
+<c+2>f+4g+4
+a4.g+8f+8f8f+8g+8
+f+2.v144,0^2.r2;
+
+{3}
+l16%e1$'2v*v.3''2i''2o+o1'p14
+c+2>b4a+4
+g+2a+8b8<c+8d+8
+e2c+2
+f+4.'2v*v.4'e8'2v*v.5'd+8e8'2v*v.6'd+8>'2v*v.7'b8'2v*v.3'
+g+2.a+4
+b2a+4b4
+'2v'
+>[a16r16<c+16r16c+16r16>a16r16]
+[b16r16<d+16r16d+16r16>b16r16]
+'2v*v1.14'p24 %r0%y0%s5
+<c+2>b4a4
+g+2f+4e4
+d1
+c+1
+'1v*v.5''1i''1o'p114
+c+2.>b4
+a2b2
+<d1
+e2.f4
+'2v*v.6''2i''2o'p14
+c+2.>b4
+a2g+2
+'1v*v.5''1i''1o-o1'p114
+a2.b4
+<d2c+2
+c+1..
+'2v*v.6''2i''2o'p14
+g+4;
+
+{5}
+l16%e1$'2v*v.3''2i''2o'p114
+e2.f+4
+e2f+8g+8f+8f+8
+a1
+b2.'2v*v.4'g+4'2v*v.3'
+c+1
+e2f+4f+4
+'2v'
+>[e16r16a16r16a16r16e16r16]
+[f+16r16b16r16b16r16f+16r16]
+'2v*v1.07'p104 %r0%y0%s5
+g+2g+4f+4
+d2d4c+4
+>b1
+g+1
+'1v*v.5''1i''1o-o1'p14
+a2.f+4
+e2f+4g+4
+a1
+b1
+'2v*v.6''2i''2o-o1'p114
+a2.g+4
+f+2f2
+'1v*v.5''1i''1o-o1'p14
+f+2.g+4
+a2g+2
+a+1..
+'2v*v.6''2i''2o'p114
+d+4;
+
+{4}
+l16%e1$'3v''3i''3o'p64
+[3c+16r16g+16r16]f+16r16<c+16r16
+>>[e16r16b16r16]f+16r16<c+16r16>b16r16<f+16r16
+[4>a16r16<e16r16]
+[3>b16r16<f+16r16]>g+16r16<d+16r16
+[3c+16r16g+16r16]f+16r16<c+16r16
+>>[e16r16b16r16]f+16r16<c+16r16>b16r16<f+16r16
+[4>a16r16<e16r16]
+[3>b16r16<f+16r16]g+16r16<d+16r16
+>[c+16r16g+16r16g+16r16c+16r16]
+>[b16r16<f+16r16f+16r16>b16r16]
+<[c+16r16g+16r16g+16r16c+16r16]
+[4c+16r16g+16r16]
+[3>f+16r16<c+16r16]>b16r16<f+16r16
+[>a16r16<e16r16]>b16r16<f+16r16e16r16b16r16
+[4d16r16a16r16]
+[3e16r16b16r16]c+16r16g+16r16
+[[3f+16r16<c+16r16>]e16r16<c+16r16
+>[d16r16a16r16][c+16r16g+16r16]]
+[7>f+16r16<c+16r16]g+16r16<d+16r16;
+
+{6}
+l16%e1$
+[3'4v''4i''4o'p64c+8'5v''5i''5o'p39c+8]'4v''4i''4o'p64f+8'5v''5i''5o'p39f+8
+['4v''4i''4o'p64e8'5v''5i''5o'p39e8]'4v''4i''4o'p64f+8'5v''5i''5o'p39f+8'4v''4i''4o-o1'p64b8'5v''5i''5o-o1'p39b8
+[4'4v''4i''4o-o1'p64a8'5v''5i''5o-o1'p39a8]
+[3'4v''4i''4o-o1'p64b8'5v''5i''5o-o1'p39b8]'4v''4i''4o-o1'p64g+8'5v''5i''5o-o1'p39g+8
+[3'4v''4i''4o'p64c+8'5v''5i''5o'p39c+8]'4v''4i''4o'p64f+8'5v''5i''5o'p39f+8
+['4v''4i''4o'p64e8'5v''5i''5o'p39e8]'4v''4i''4o'p64f+8'5v''5i''5o'p39f+8'4v''4i''4o-o1'p64b8'5v''5i''5o-o1'p39b8
+[4'4v''4i''4o-o1'p64a8'5v''5i''5o-o1'p39a8]
+[3'4v''4i''4o-o1'p64b8'5v''5i''5o-o1'p39b8]'4v''4i''4o'p64g+8'5v''5i''5o'p39g+8
+'4v''4i''4o'p64
+r4c+2c+2
+>b2b2
+<c+2c+4
+[4'4v''4i''4o'p64c+8'5v''5i''5o'p39c+8]
+[3'4v''4i''4o'p64f+8'5v''5i''5o'p39f+8]'4v''4i''4o'p64b8'5v''5i''5o'p39b8
+['4v''4i''4o'p64a8'5v''5i''5o'p39a8]'4v''4i''4o'p64b8'5v''5i''5o'p39b8'4v''4i''4o'p64e8'5v''5i''5o'p39e8
+[4'4v''4i''4o'p64d8'5v''5i''5o'p39d8]
+[3'4v''4i''4o'p64e8'5v''5i''5o'p39e8]'4v''4i''4o+o1'p64c+8'5v''5i''5o+o1'p39c+8
+[[3'4v''4i''4o'p64f+8'5v''5i''5o'p39f+8]'4v''4i''4o'p64e8'5v''5i''5o'p39e8
+['4v''4i''4o'p64d8'5v''5i''5o'p39d8]['4v''4i''4o'p64c+8'5v''5i''5o'p39c+8]]
+[4'4v''4i''4o'p64f+8'5v''5i''5o'p39f+8]
+[3'4v''4i''4o'p64f+8'5v''5i''5o+o1'p39f+8]'4v''4i''4o'p64g+8'5v''5i''5o'p39g+8;
+
+{7}
+l16%e1$'5o''5i'
+[3'pzbs'c+8'pztr'g+8] 'pzbs'f+8'pztr'<c+8>
+['pzbs'e8'pztr'b8] 'pzbs'f+8'pztr'<c+8> 'pzbs'>b8<'pztr'f+8
+[4'pzbs'>a8<'pztr'e8]
+[3'pzbs'>b8<'pztr'f+8] 'pzbs'>g+8<'pztr'd+8
+[3'pzbs'c+8'pztr'g+8]'pzbs'f+8'pztr'<c+8>
+['pzbs'e8'pztr'b8]'pzbs'f+8'pztr'<c+8>'pzbs'>b8<'pztr'f+8
+[4'pzbs'>a8<'pztr'e8]
+[3'pzbs'>b8<'pztr'f+8]'pzbs'g+8'pztr'<d+8>
+'pzbs'
+r4c+2c+2
+>b2b2
+<c+2c+4<
+[4'pzbs'c+8'pztr'g+8]
+[3'pzbs'f+8'pztr'<c+8>]'pzbs'b8'pztr'f+8
+['pzbs'a8'pztr'<e8>]'pzbs'b8'pztr'<f+8>'pzbs'e8'pztr'b8
+[4'pzbs'd8'pztr'a8]
+[3'pzbs'e8'pztr'b8]'pzbs'<c+8'pztr'g+8>
+[[3'pzbs'f+8'pztr'<c+8>]'pzbs'e8'pztr'<c+8>
+['pzbs'd8'pztr'a8]['pzbs'c+8'pztr'g+8]]
+[4'pzbs'f+8'pztr'<c+8>]
+[3'pzbs'f+8'pztr'<<c+8>>]'pzbs'g+8'pztr'<d+8>
+;
+
+[3r8g+8]r8<c+8
+r8>b8r8b8r8<c+8r8>f+8
+[4r8e8]
+[3r8f+8]r8d+8
+[3r8g+8]r8<c+8
+r8>b8r8b8r8<c+8r8>f+8
+[4r8e8]
+[3r8f+8]r8<d+8
+r1
+r1
+r1
+>[4r8g+8]
+<[3r8c+8]r8f+8
+r8e8r8e8r8f+8r8>b8
+[4r8a8]
+[3r8b8]r8<g+8
+[[4r8c+8]
+r8>a8r8a8r8g+8r8g+8<]
+[4r8c+8]
+<[3r8c+8]r8>d+8;
+
+{8}
+l16%e1$'6v*v.5''6i''6o+o1'p94
+#c+16d+16e16f+16g+8<c+8>b8g+8a+48b48a+6^24
+#b8g+16a+16b8a+16f+16d+8e8d+48e48d+6^24
+#c+16d+16e16f+16e8d+16e16f+8e64f+64e32d+16c+4
+#f+8e16d+16c+8d+16e16f+8e64f+64e32f+16g+4
+r1r1r1r1
+c+16d+16e16f+16g+8<c+8>b8g+8a+48b48a+6^24
+b8g+16a+16b8a+16f+16d+8e8d+48e48d+6^24
+c+16d+16e16f+16e8d+16e16f+8e64f+64e32d+16c+4
+f+8e16d+16c+8d+16e16f+8e64f+64e32f+16g+4
+d+16e16g+16<c+16>d+16e16g+16<c+16>d+16e16g+16<c+16>d+16e16g+16<c+16
+>c+16d16f+16b16c+16d16f+16b16c+16d16f+16b16c+16d16f+16b16
+f16g+16b16<c+16>f16g+16b16<c+16>f16g+16b16<c+16>f16g+16b16<c+16
+>f16g+16b16<c+16>f16g+16b16<c+16>f16g+16b16<c+16>f16g+16b16<c+16
+r1
+r1
+r1
+r1
+r1
+r1
+r1
+r1
+>f+16g+16a+16b16<c+8f+8>f+16g+16a+16b16<c+8f+8
+>f+16g+16a+16b16<c+8f+8>f+16g+16a+16b16d+8g+8;

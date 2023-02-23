@@ -49,7 +49,7 @@ from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
                      change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx, apply_namingway,
-                     improved_party_gear, patch_doom_gaze)
+                     improved_party_gear, patch_doom_gaze, nicer_poison, fix_xzone)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -70,16 +70,17 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-4.1.2"
+VERSION = "CE-4.2.0"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-#TEST_SEED = "CE-4.1.0|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff notawaiter johnnydmad bsiab dancingmaduin questionablecontent removeflashing easymodo canttouchthis dearestmolulu|1603333081"
-#FLARE GLITCH TEST_SEED = "2|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
-#REMONSTERATE ASSERTION TEST_SEED = "2|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "CE-4.1.1|normal|b c d e f g i j k l m n o p q r s t u w y z electricboogaloo masseffect randombosses dancelessons expboost:2.0 alasdraco capslockoff johnnydmad notawaiter dearestmolulu questionablecontent randomboost:0 supernatural desperation easymodo canttouchthis thescenarionottaken|1660846541"
+TEST_SEED = "CE-4.2.0|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad bsiab questionablecontent removeflashing nicerpoison canttouchthis easymodo mpboost:10.0|1603333081"
+#FLARE GLITCH TEST_SEED = "CE-4.2.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
+#REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
+#TEST_SEED = "CE-4.2.0|katn|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla randombosses dancingmaduin madworld alasdraco capslockoff johnnyachaotic notawaiter removeflashing bsiab questionablecontent thescenarionottaken|1671237882"
+#TEST_SEED = "CE-4.2.0|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent|1672183987"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -386,7 +387,7 @@ class AutoRecruitGauSub(Substitution):
     @property
     def bytestring(self) -> bytes:
         return bytes([0x50, 0xBC, 0x59, 0x10, 0x3F,
-                      0x0B, 0x01, 0xD4, 0xFB, 0xFE])
+                      0x0B, 0x01, 0xD4, 0xFB, 0xB8, 0x49, 0xFE])
 
     def write(self, fout: BinaryIO, stays_in_wor: bool):
         sub_addr = self.location - 0xa0000
@@ -401,7 +402,8 @@ class AutoRecruitGauSub(Substitution):
             gau_stays_wor_sub.set_location(0xA5324)
             gau_stays_wor_sub.write(fout)
 
-        REPLACE_ENEMIES.append(0x172)
+        if Options_.shuffle_commands or Options_.replace_commands:
+            REPLACE_ENEMIES.append(0x172)
         super(AutoRecruitGauSub, self).write(fout)
 
 
@@ -870,6 +872,11 @@ def manage_commands(commands: Dict[str, CommandBlock]):
         fanatics_fix_sub.bytestring = bytes([0xA9, 0x15])
     fanatics_fix_sub.set_location(0x2537E)
     fanatics_fix_sub.write(fout)
+
+    if Options_.is_code_active('lessfanatical'): #remove the magic only tile when entering fanatic's tower
+        fanatics_fix_sub.bytestring = bytes([0x80])
+        fanatics_fix_sub.set_location(0x025352)
+        fanatics_fix_sub.write(fout)
 
     invalid_commands = ["fight", "item", "magic", "xmagic",
                         "def", "row", "summon", "revert"]
@@ -2165,10 +2172,12 @@ def set_lete_river_encounters():
             manage_lete_river_sub.set_location(addr)
             manage_lete_river_sub.write(fout)
 
-    if random.randint(0, 1) == 0:
-        manage_lete_river_sub.bytestring = bytes([0xFD] * 8)
-        manage_lete_river_sub.set_location(0xB09C8)
-        manage_lete_river_sub.write(fout)
+    if not Options_.is_code_active("thescenarionottaken"):
+        if random.randint(0, 1) == 0:
+            manage_lete_river_sub.bytestring = bytes([0xFD] * 8)
+            manage_lete_river_sub.set_location(0xB09C8)
+            manage_lete_river_sub.write(fout)
+
 
 
 def manage_rng():
@@ -2184,6 +2193,7 @@ def manage_rng():
 def manage_balance(newslots: bool = True):
     vanish_doom(fout)
     evade_mblock(fout)
+    fix_xzone(fout)
 
     manage_rng()
     if newslots:
@@ -2421,8 +2431,7 @@ def manage_monster_appearance(monsters: List[MonsterBlock], preserve_graphics: b
     return mgs
 
 def manage_doom_gaze(fout):
-    # patch is actually 98 bytes, but just in case
-    addr = get_appropriate_freespace(freespaces, 100)
+    # patch is 98 bytes
     patch_doom_gaze(fout)
 
 def manage_colorize_animations():
@@ -3129,6 +3138,7 @@ def manage_dragons():
 
 def manage_formations(formations: List[Formation], fsets: List[FormationSet], mpMultiplier: float = 1) -> List[
     Formation]:
+
     for fset in fsets:
         if len(fset.formations) == 4:
             for formation in fset.formations:
@@ -3194,9 +3204,9 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet], mp
         if formation.formid == 0x1e2:
             formation.set_music(2)  # change music for Atma fight
         if formation.formid == 0x162:
-            formation.ap = 255  # Magimaster
+            formation.mp = 255  # Magimaster
         if formation.formid in [0x1d4, 0x1d5, 0x1d6, 0x1e2]:
-            formation.ap = 100  # Triad
+            formation.mp = 100  # Triad
         formation.write_data(fout)
 
     return formations
@@ -3750,7 +3760,7 @@ def manage_encounter_rate() -> None:
 
 def manage_tower():
     locations = get_locations()
-    randomize_tower(filename=sourcefile)
+    randomize_tower(filename=sourcefile, morefanatical=Options_.is_code_active("morefanatical"))
     for l in locations:
         if l.locid in [0x154, 0x155] + list(range(104, 108)):
             # leo's thamasa, etc
@@ -4742,6 +4752,41 @@ def manage_dances():
     fout.seek(0x2D8E79)
     fout.write(bytes([3]))
 
+def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationSet]):
+
+    good_event_fsets = [256, 257, 258, 259, 260, 261, 263, 264, 268, 269, 270, 271, 272, 273, 275, 276, 277, 278, 279, 281, 282, 283, 285, 286, 287,
+                        297, 303, 400, 382, 402, 403, 404] #event formation sets that can be shuffled with cursedencounters
+    event_formations = set()
+    salt_formations = set()
+
+    for formation in formations:
+        if formation.has_event:
+            event_formations.add(formation.formid)
+            salt_formations.add((formation.formid - 1))
+            salt_formations.add((formation.formid - 2))
+            salt_formations.add((formation.formid - 3))
+        for i, v in enumerate(formation.big_enemy_ids):
+            if formation.big_enemy_ids[i] in [273, 293, 299, 304, 306, 307, 313, 314, 315, 323, 355, 356, 358, 361, 362, 363, 364, 365, 369, 373]: #don't do Zone Eater, Naughty, L.X Magic, Phunbaba, Guardian, Merchant, Officer
+                event_formations.add(formation.formid)
+                salt_formations.add((formation.formid - 1))
+                salt_formations.add((formation.formid - 2))
+                salt_formations.add((formation.formid - 3))
+
+    salt_formations = [id for id in salt_formations if id not in event_formations]
+
+    #print("EVENT FORMATIONS: " + str(event_formations))
+    #print("SALT FORMATIONS: " + str(salt_formations))
+
+    for fset in fsets:
+        if Options_.is_code_active("cursedencounters"): #code that applies FC flag to allow 16 encounters in all zones
+            if fset.setid < 252 or fset.setid in good_event_fsets: #only do regular enemies, don't do sets that can risk Zone Eater or get event encounters
+                if not [value for value in fset.formids if
+                        value in event_formations]:
+                    fset.sixteen_pack = True
+                for i, v in enumerate(fset.formids):
+                    if fset.formids[i] in salt_formations:
+                        fset.formids[i] -= 3  # any encounter that could turn into an event encounter, reduce by 3 so it can't
+                        fset.sixteen_pack = True
 
 def nerf_paladin_shield():
     paladin_shield = get_item(0x67)
@@ -5330,14 +5375,15 @@ def randomize(**kwargs) -> str:
             if dirk is None:
                 items = get_ranked_items(sourcefile)
                 dirk = get_item(0)
-            dirk.become_another(halloween=Options_.is_code_active('halloween'))
+            s = dirk.become_another(halloween=Options_.is_code_active('halloween'))
             dirk.write_stats(fout)
             dummy_item(dirk)
             assert not dummy_item(dirk)
+            log(s, section="secret items")
     if Options_.random_enemy_stats and Options_.random_treasure and Options_.random_character_stats:
         rename_card = get_item(231)
         if rename_card is not None:
-            rename_card.become_another(tier="low")
+            s = rename_card.become_another(tier="low")
             rename_card.write_stats(fout)
 
             weapon_anim_fix = Substitution()
@@ -5350,6 +5396,7 @@ def randomize(**kwargs) -> str:
                 [0xE0, 0xE8, 0x02, 0xB0, 0x05, 0xBF, 0x00, 0xE4, 0xEC, 0x6B, 0xDA, 0xC2, 0x20, 0x8A, 0xE9, 0xF0, 0x02,
                  0xAA, 0x29, 0xFF, 0x00, 0xE2, 0x20, 0xBF, 0x00, 0x31, 0xF0, 0xFA, 0x6B])
             weapon_anim_fix.write(fout)
+            log(s, section="secret items")
     reseed()
 
     items = get_ranked_items()
@@ -5494,8 +5541,10 @@ def randomize(**kwargs) -> str:
         fsets = get_fsets()
         if Options_.is_code_active('mpboost'):
             manage_formations(formations, fsets, mp_boost_value)
+            manage_cursed_encounters(formations, fsets)
         else:
             manage_formations(formations, fsets)
+            manage_cursed_encounters(formations, fsets)
         for fset in fsets:
             fset.write_data(fout)
 
@@ -5917,6 +5966,9 @@ def randomize(**kwargs) -> str:
     if Options_.is_code_active('removeflashing'):
         fewer_flashes(fout)
 
+    if Options_.is_code_active('nicerpoison'):
+        nicer_poison(fout)
+
     if not Options_.is_code_active('fightclub'):
         show_coliseum_rewards(fout)
 
@@ -5964,7 +6016,7 @@ def randomize(**kwargs) -> str:
     f.write(get_logstring(
         ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers", "item magic",
          "item effects", "command-change relics", "colosseum", "monsters", "music", "remonsterate", "shops",
-         "treasure chests", "zozo clock"]))
+         "treasure chests", "zozo clock", "secret items"]))
     f.close()
 
     print("Randomization successful. Output filename: %s\n" % outfile)

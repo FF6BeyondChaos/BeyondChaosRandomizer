@@ -90,11 +90,7 @@ l8 [8 "s^ps^sp^"]
 #1
 l8 [16 "^h"]
 #5
-$ [12 "qhqqhqhqqhqqqhqq"]
-#17
-[8 "qhqqhqhqqhqqqhqq"]
-#25
-[4 "qhqqhqhqqhqqqhqq"]
+$ "qhqqhqhqqhqqqhqq"
 ;
 
 {8}

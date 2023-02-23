@@ -197,7 +197,7 @@ class Window(QMainWindow):
         # values to be sent to Randomizer
         self.romText = ""
         self.romOutputDirectory = ""
-        self.version = "CE-4.1.2"
+        self.version = "CE-4.2.0"
         self.mode = "normal"
         self.seed = ""
         self.flags = []
@@ -367,8 +367,7 @@ class Window(QMainWindow):
         self.romInput.setReadOnly(True)
         gridLayout.addWidget(self.romInput, 1, 2, 1, 3)
 
-        self.labelRomError = QLabel("WARNING! The selected file does not match supported "
-                               "English FF3/FF6 v1.0 ROM files!")
+        self.labelRomError = QLabel()
         self.labelRomError.setStyleSheet("color: darkred;")
         self.labelRomError.setHidden(True)
         gridLayout.addWidget(self.labelRomError, 2, 2, 1, 3)
@@ -518,7 +517,7 @@ class Window(QMainWindow):
         # effect.setBlurRadius(3)
         # updateButton.setGraphicsEffect(effect)
         # topHBox.addWidget(
-        #    updateButton, 
+        #    updateButton,
         #    alignment = QtCore.Qt.AlignLeft
         # )
 
@@ -666,7 +665,7 @@ class Window(QMainWindow):
 
         tabVBoxLayout.addWidget(tabs)
 
-        # This is the line in the layout that displays the string 
+        # This is the line in the layout that displays the string
         # of selected flags and the button to save those flags
         widgetV = QWidget()
         widgetVBoxLayout = QVBoxLayout()
@@ -680,7 +679,7 @@ class Window(QMainWindow):
         saveButton.clicked.connect(lambda: self.saveFlags())
         widgetVBoxLayout.addWidget(saveButton)
 
-        # This part makes a group box and adds the selected-flags 
+        # This part makes a group box and adds the selected-flags
         # display and a button to clear the UI
         flagTextWidget = QGroupBox()
         flagTextHBox = QHBoxLayout()
@@ -703,7 +702,7 @@ class Window(QMainWindow):
         return groupBoxTwo
 
     # Middle groupbox of sub-groupboxes.  Consists of left section
-    # (game mode # selection) and right section 
+    # (game mode # selection) and right section
     # (flag selection -> tab-sorted)
     def GroupBoxThreeLayout(self):
         groupBoxTwo = QGroupBox()
@@ -723,23 +722,21 @@ class Window(QMainWindow):
         for t, d, names in zip(self.tablist, self.dictionaries, tabNames):
             tabObj = QScrollArea()
             tabs.addTab(tabObj, names)
-            # We have a horizontal box that can go item1, 
+            # We have a horizontal box that can go item1,
             # item 2 in left-right fashion
             itemLayout = QHBoxLayout()
-            # We then have two vertical boxes, one for normal flags, 
+            # We then have two vertical boxes, one for normal flags,
             # one for flags that have sliders or entry boxes.
             boxOneLayout = QVBoxLayout()
             boxTwoVertLayout = QVBoxLayout()
             boxTwoHorzLayout = QVBoxLayout()
-            # We then have the group boxes the vertical tayouts get 
+            # We then have the group boxes the vertical tayouts get
             # set into
             groupOneBox = QGroupBox()
             groupTwoVertBox = QGroupBox()
             groupTwoHorzBox = QGroupBox()
             flagGroup = QGroupBox()
             for flagname, flagdesc in d.items():
-                # TODO: this can probably be done better once I 
-                # know GUI better...
                 if flagname == "exp":
                     cbox = FlagCheckBox(
                         f"{flagname}  -  {flagdesc['explanation']}",
@@ -754,7 +751,7 @@ class Window(QMainWindow):
                     cbox.clicked.connect(
                         lambda checked: self.flagButtonClicked()
                     )
-                    # Context - adding a second pane to certain tabs 
+                    # Context - adding a second pane to certain tabs
                     # for now for sliders.
                     boxOneLayout.addWidget(cbox)
                     groupOneBox.setLayout(boxOneLayout)
@@ -766,7 +763,7 @@ class Window(QMainWindow):
         tabVBoxLayout.addWidget(tabs)
         # ----------- tabs done --------------
 
-        # This is the line in the layout that displays the string 
+        # This is the line in the layout that displays the string
         # of selected flags and the button to save those flags
         widgetV = QWidget()
         widgetVBoxLayout = QVBoxLayout()
@@ -780,7 +777,7 @@ class Window(QMainWindow):
         saveButton.clicked.connect(lambda: self.saveFlags())
         widgetVBoxLayout.addWidget(saveButton)
 
-        # This part makes a group box and adds the selected-flags 
+        # This part makes a group box and adds the selected-flags
         # display and a button to clear the UI
         flagTextWidget = QGroupBox()
         flagTextHBox = QHBoxLayout()
@@ -806,14 +803,14 @@ class Window(QMainWindow):
         middleRightGroupBox.setLayout(tabVBoxLayout)
         # ------------- Part two (right) end-------------------------
 
-        # Add widgets to HBoxLayout and assign to middle groupbox 
+        # Add widgets to HBoxLayout and assign to middle groupbox
         # layout
         middleHBox.addWidget(middleRightGroupBox)
         groupBoxTwo.setLayout(middleHBox)
 
         return groupBoxTwo
 
-    # Bottom groupbox consisting of saved seeds selection box, and 
+    # Bottom groupbox consisting of saved seeds selection box, and
     # button to generate seed
     def GroupBoxFourLayout(self):
         bottomGroupBox = QGroupBox()
@@ -1179,9 +1176,9 @@ class Window(QMainWindow):
                     "madworld bsiab electricboogaloo randombosses"
                 )
 
-    # Get seed generation parameters from UI to prepare for 
-    # seed generation. This will show a confirmation dialog, 
-    # and call the local Randomizer.py file and pass arguments 
+    # Get seed generation parameters from UI to prepare for
+    # seed generation. This will show a confirmation dialog,
+    # and call the local Randomizer.py file and pass arguments
     # to it
     def generateSeed(self):
 
@@ -1192,7 +1189,7 @@ class Window(QMainWindow):
             # It does, use that directory.
             self.romOutputDirectory = self.romOutput.text()
         elif self.romOutput.text() == '':
-            # It does not, but the text box is blank. Use the 
+            # It does not, but the text box is blank. Use the
             # directory that the ROM file is in.
             self.romOutputDirectory = self.romOutput.placeholderText()
         else:
@@ -1291,7 +1288,7 @@ class Window(QMainWindow):
                 self.bingosize = bingo.grid_size
                 self.bingocards = bingo.num_cards
 
-            # This makes the flag string more readable in 
+            # This makes the flag string more readable in
             # the confirm dialog
             message = (f"Rom: {self.romText}\n"
                        f"Output: {self.romOutputDirectory}\n"
@@ -1318,12 +1315,12 @@ class Window(QMainWindow):
                     bundle = f"{self.version}|{self.mode}|{flagMode}|{self.seed}"
                     # remove spam if the Randomizer asks for input
                     # TODO: guify that stuff
-                    # Hash check can be moved out to when you pick 
-                    # the file. If you delete the file between picking 
-                    # it and running, just spit out an error, no need 
-                    # to prompt. 
-                    # Randomboost could send a signal ask for a number 
-                    # or whatever, but maybe it's better to just remove 
+                    # Hash check can be moved out to when you pick
+                    # the file. If you delete the file between picking
+                    # it and running, just spit out an error, no need
+                    # to prompt.
+                    # Randomboost could send a signal ask for a number
+                    # or whatever, but maybe it's better to just remove
                     # it or pick a fixed number?
                     QtCore.pyqtRemoveInputHook()
                     # TODO: put this in a new thread
@@ -1406,7 +1403,7 @@ class Window(QMainWindow):
                     finally:
                         currentSeed += 1
 
-    # Read each dictionary and update text field 
+    # Read each dictionary and update text field
     # showing flag codes based upon
     # flags denoted as 'True'
     def updateFlagString(self):
@@ -1422,7 +1419,7 @@ class Window(QMainWindow):
     # read through dictionaries and set flag checkboxes as 'checked'
     def updateFlagCheckboxes(self):
         for t, d in zip(self.tablist, self.dictionaries):
-            # create a list of all checkbox objects from the 
+            # create a list of all checkbox objects from the
             # current QTabWidget
             children = t.findChildren(FlagCheckBox)
 
@@ -1439,11 +1436,20 @@ class Window(QMainWindow):
     def validateInputRom(self, value):
         try:
             if not value == "":
-                with open(value, 'rb') as rom_file:
-                    rom_hash = md5(rom_file.read()).hexdigest()
-                if rom_hash in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2]:
-                    self.labelRomError.setHidden(True)
-                else:
+                try:
+                    with open(value, 'rb') as rom_file:
+                        rom_hash = md5(rom_file.read()).hexdigest()
+                    if rom_hash in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2]:
+                        self.labelRomError.setHidden(True)
+                    else:
+                        self.labelRomError.setText("WARNING! The selected file does not match supported "
+                                                   "English FF3/FF6 v1.0 ROM files!")
+                        self.labelRomError.setHidden(False)
+                except FileNotFoundError:
+                    self.romInput.setText("")
+                    self.romInput.setPlaceholderText("")
+                    self.labelRomError.setText("The previously used ROM file could not be found. Please select a "
+                                               "new FF6 ROM file.")
                     self.labelRomError.setHidden(False)
 
             self.romOutput.setPlaceholderText(os.path.dirname(os.path.normpath(value)))

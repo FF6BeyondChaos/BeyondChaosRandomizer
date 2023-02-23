@@ -1,0 +1,303 @@
+#TITLE The Moon
+#ALBUM DuckTales
+#COMPOSER Hiroshige Tonomura
+#ARRANGED emberling
+
+#WAVE 0x20 0x74 vox
+#WAVE 0x21 0xC5 piano pad
+#WAVE 0x22 0x52 bass
+#WAVE 0x23 0x39 overdrive
+#WAVE 0x28 0x0B kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x3B hihat
+
+#def init= t75 %v50 %b0,100 %f0,0 %x228
+
+#def choir= |0 o5 'chVol' m %e1
+#def sparkle= |1 o4 'spVol' m %e1
+#def sparklecho= |1 o4 'spVol' m %e0
+#def spark= |1 o4 'skVol' m %e1 %y1%s5%r22
+#def bass= |2 o3 'bsVol' m %e0
+#def padlead= |1 o4 'plVol' %e1
+#def odlead= |3 o5 'odVol' %e1
+#def vxlead= |0 o5 'vxVol' %e1 'chSus'
+
+#def chVol= v28
+#def spVol= v46
+#def skVol= v46
+#def bsVol= v70
+#def plVol= v49
+#def odVol= v49
+#def vxVol= v49
+
+#def chFade= v1,28
+
+#def chSus= %r2
+#def chRel= %r17
+#def chAtt= %a5
+#def chSlo= %a2
+
+#def plSus= %r10
+#def plRel= %r20
+
+#def leadVib= m1,18,239
+
+#def slide= %p1%r18m12,244^16%r5%p0
+#def slidep= %r18m12,244^16%r5
+
+#def kickVol= v127
+#def snareVol= v96
+#def hatVol= v64
+#drum "k"= 5a  |8 'kickVol' p64 %e0
+#drum "s"= 5a  |9 'snareVol' p64 %e0
+#drum "e"= 5^                    %e1
+#drum "h"= 5f+ |A 'hatVol' p104 %e0 %y5%s0%r28
+#drum "o"= 5a  |A 'hatVol' p104 %e0 %y0%s0%r28
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init' 
+r2...
+'padlead+o1' p56 l8
+c+2^16f+g+b
+b.a+16'leadVib*m36,,'a+4..mg+f+
+<c+4.>f+4.<'leadVib*m72,,'f+8.
+^2.mg+f+16
+##
+'leadVib*m96,,'<c+1
+## 7
+%r17 ^4 $
+'vxLead-o1' p56 l16 'leadVib*m48,,'
+a+b<c+c+8.f+8f8f+8
+g+8a+f+^8^2ff+
+<c+8.>f+f+2^8f+f+
+f+4'chRel'^'chSus'g+f+f^2
+
+>a+4'chRel'^'chSus'g+f+<c+4'chRel'^'chSus'f+8g+8
+b8.a+a+2<c+8>b8
+(a+ba+)f+8c+4g+f+fd+f8.
+f+r8f+r8f+8r2
+## 15
+'padlead*v.8' p56 m l16
+'plSus'f+f+'plRel'^8'plSus'g+g+'plRel'^'plSus'e4c+8e(>b48<c48>b48)a
+b8ab'plRel'^'plSus'a'plRel'^'plSus'<c+2'plRel'^
+'plSus'f+f+'plRel'^8'plSus'g+g+'plRel'^'plSus'a8e8e8eab
+^4.a<c+4.c+c+'leadVib*m60'c+
+^2.m
+>>>d8e8
+f+4
+;
+
+{2}
+r2...
+'odlead+o1' p72 l8 %a8 %p1 k-1
+c+2^16f+g+b
+b.a+16'leadVib*m36,,'a+4..mg+f+
+<c+4.>f+4.<'leadVib*m72,,'f+8.
+^2.mg+f+16
+##
+'leadVib-m1,,40'<%p0k0c+1
+## 7
+%r17 ^4 $
+'odlead' p72 l16 'leadVib*m48,,' %r5
+a+b<c+c+8.f+8f8f+8
+g+8a+f+^8^2ff+
+<c+8.>f+f+2^8f+f+
+f+4m'slide'g+f+'leadVib*m48,,'f^2
+
+>a+4m'slide'g+f+<c+4'slide'f+8g+8
+b8.a+'leadVib*m48,,'a+2<c+8>b8
+a+ba+f+8c+4g+f+fd+f8.
+mf+'slide'rf+'slide+m,5'r'leadVib*m48,,'f+8%r11^2
+## 15
+'padlead+o1' p72 m l16 %p1
+'plSus'f+f+'plRel'^8'plSus'g+g+'plRel'^'plSus'e4c+8e(>b48<c48>b48)a
+b8ab'plRel'^'plSus'a'plRel'^'plSus'<c+2'plRel'^
+'plSus'f+f+'plRel'^8'plSus'g+g+'plRel'^'plSus'a8e8e8eab
+^4.a<c+4.c+c+'leadVib*m60'c+
+^2.m
+>>>d8e8
+## repeat
+%r17 ^4
+'odlead' p72 l16 'leadVib*m48,,' %r5
+a+b<c+c+8.f+8f8f+8
+g+8a+f+^8^2ff+
+<c+8.>f+f+2^8f+f+
+f+4m'slidep'g+f+'leadVib*m48,,'f^2
+
+>a+4m'slidep'g+f+<c+4'slidep'f+8g+8
+b8.a+'leadVib*m48,,'a+2<c+8>b8
+a+ba+f+8c+4g+f+fd+f8.
+mf+'slidep'rf+'slidep+m,5'r'leadVib*m48,,'f+8%r11^2
+## 15
+'padlead+o1*v1.33' p72 m l16 %p0
+'plSus'f+f+'plRel'^8'plSus'g+g+'plRel'^'plSus'e4c+8e(>b48<c48>b48)a
+b8ab'plRel'^'plSus'a'plRel'^'plSus'<c+2'plRel'^
+'plSus'f+f+'plRel'^8'plSus'g+g+'plRel'^'plSus'a8e8e8eab
+^4.a<c+4.c+c+'leadVib*m60'c+
+^2.m
+>>>%p1d8e8
+f+4%p0
+;
+
+{3}
+r2...
+'bass' p64 l8
+f+.<c+.f+2r16>
+e.b.<e2r16>
+d+.a+.<d+2r16>
+d.a.<d2r16
+##
+[16f+16]
+$## 7
+'bass+o1' l16
+[8f+][8f]
+[8d+][8c+]
+>[8b]<[8c]
+[16c+]
+[8f+][8e]
+[8d+][8d]
+[8c+]cccc c+c+c+c+
+dr8er8f+8.>[7f+]
+## 15
+[bbr8<eer>a8[7a]
+[8b]<[8c+]>]
+<[9d]r8.d8e8
+;
+
+{4}
+'sparkle+o1' l16 p64p0,12,127
+[5 f+<c+f+g+ c+f+g+b c+ba+ c+a+g+f+>]
+##
+"!!!o" l16 p
+[3 "kh"&1"s"&11"eh"] "kh"&1"s"&11"e"&2"s"&10"e"
+$## 7
+"!!!o" l16
+[3 "kh"&1"s"&11"eh"] "kh"&1"s"&11"e"&2"s"&10"e" %e0
+## 15
+":h"
+[3 "kh"&1"s"&11"eh"] "kh"&1"s"&11"e"&2"s"&10"e"
+;
+
+{5}
+r2...
+'choir-o1''chAtt' p80p l16
+'chSus'f+2..'chRel'^
+'chSus'e2..'chRel'^
+'chSus'd+2..'chRel'^
+'chSus'd2..'chRel'^
+##
+'spark+o1' l16 p64p0,12,127
+f+<c+f+g+ c+f+g+c+ bc+ba+ c+a+g+f+
+$## 7
+'spark+o1' l16 p64p0,12,127
+[7 f+<c+f+g+ c+f+g+c+ bc+ba+ c+a+g+f+>]
+<f+>a<dg+> b<g+ba+ f+c+>ba+ f+c+>ba+
+## 15
+'padlead-o1*v.8' p56 p l16
+'plSus'aa'plRel'^8'plSus'bb'plRel'^'plSus'a8
+<g+a<erg+a<e>>>
+d8dd'plRel'^'plSus'd'plRel'^'plSus'f2'plRel'^
+'plSus'<dd'plRel'^8'plSus'>bb'plRel'^'plSus'<c+8c+8c+8c+ef+
+^4^'plRel'^'plSus'f+f4.fff+
+'spark+o1' l16 p64p0,12,127
+f+<c+f+g+ c+f+g+c+ bc+ba+ c+a+g+f+>
+;
+
+{6}
+r2...
+'choir''chSlo' p48 l16
+'chSus'c+2..'chRel'^>
+'chSus'b2..'chRel'^
+'chSus'a+2..'chRel'^
+'chSus'a2..'chRel'^
+##
+'chSus''chFade*v192,2'f+1
+$## 7
+'choir''chSlo' p80 l2
+'chSus'f+'chRel'^
+'chSus'd+'chRel'^
+'chSus'>b'chRel'^<
+'chSus'c+'chRel'^
+'chSus'f+'chRel'^
+'chSus'd+'chRel'^
+'chSus'c+'chRel'^
+'chAtt'd8.e8.f+8^2
+## 15
+'padlead' p72 p l16 %p1
+'plSus'aa'plRel'^8'plSus'bb'plRel'^'plSus'a8 %p0
+r24 'plVol*v.67' g+a<erg+a<e48>> 'plVol'
+%p1 d8dd'plRel'^'plSus'd'plRel'^'plSus'f2'plRel'^
+'plSus'<dd'plRel'^8'plSus'>bb'plRel'^'plSus'<c+8c+8c+8c+ef+
+^4^'plRel'^'plSus'f+f4.fff+ %p0
+^2.>>d8e8
+## repeat
+'choir''chSlo' p80 l2
+'chSus'f+'chRel'^
+'chSus'd+'chRel'^
+'chSus'>b'chRel'^<
+'chSus'c+'chRel'^
+'chSus'f+'chRel'^
+'chSus'd+'chRel'^
+'chSus'c+'chRel'^
+'chAtt'd8.e8.f+8^2
+## 15
+'padlead*v1.2' p72 p l16
+'plSus'aa'plRel'^8'plSus'bb'plRel'^'plSus'a8
+r24 'plVol*v.67' g+a<erg+a<e48>> 'plVol*v1.2'
+d8dd'plRel'^'plSus'd'plRel'^'plSus'f2'plRel'^
+'plSus'<dd'plRel'^8'plSus'>bb'plRel'^'plSus'<c+8c+8c+8c+ef+
+^4^'plRel'^'plSus'f+f4.fff+
+^2.>>%p1d8e8%p0
+;
+
+{7}
+r24 
+'sparklecho+o1' l16 p64p0,12,127
+[5 f+<c+f+g+ c+f+g+b c+ba+ c+a+g+f+>]
+##
+'spark+o1*v.5' l16 p64p0,12,127
+f+<c+f+g+ c+f+g+c+ bc+ba+ c+a+g+f+48
+p
+$## 7
+'spark+o1*v.5' l16  r24 p64p0,12,127
+[7 f+<c+f+g+ c+f+g+c+ bc+ba+ c+a+g+f+>]
+<f+>a<dg+> b<g+ba+ f+c+>ba+ f+c+>ba+48
+## 15
+'odlead+o1*v.5' p32 m l16 p
+'plSus'f+f+'plRel'^8'plSus'g+g+'plRel'^'plSus'e4c+8e(>b48<c48>b48)a
+b8ab'plRel'^'plSus'a'plRel'^'plSus'<c+2'plRel'^
+'plSus'f+f+'plRel'^8'plSus'g+g+'plRel'^'plSus'a8e8e8eab
+^4.a<c+4.c+c+'leadVib*m60'c+
+^2.m
+>>>d8e8
+;
+
+{8}
+'choir' l16 p64 'chAtt''chSus'
+[5 f+<c+f+g+ c+f+g+b c+ba+ j5 c+a+g+f+>]
+##
+"!!!o" l16 &1"s"&11"ek"&1"s"&11"ek"
+'odlead+o3*v0' p64 p0,6,32 v192,32
+'leadVib*m96,,'%p1c+1%p0
+p %r17
+$## 7
+^2
+'choir''chSlo' p48 l2 
+'chSus'f'chRel'^
+'chSus'c+'chRel'^
+'chSus'c'chRel'^
+'chSus'c+'chRel'^
+'chSus'e'chRel'^
+'chSus'd'chRel'^
+'chAtt'c4'chRel'^4
+'chAtt'f+8.f+8.>f+8^2
+## 15
+[4 "!!!o" l16
+"h8o8 h8o8 h8h8 o8h8"
+]
+"h8o8 h8o8 h8o8 o8o8"
+;
+

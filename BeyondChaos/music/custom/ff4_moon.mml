@@ -51,6 +51,7 @@
 #def 5v=   v60
 #def 5f= v1,60
 
+#def trest= %r31^16^32%r0
 
 *{7}
 '0v*v1.20'p85
@@ -95,17 +96,17 @@ $'2o-o2' '2i'%r8'2v*v1.27' f1^2. '0i''0o'%r13'0v*v1.2' c4
 {5}
 {'PitchSlideMode delay=0 len=3 depth=2'}
 '3i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e1
-$501[6'3o-o1'p65'3v*v.90'a+32r16r32p115'3v*v.40'<a+32r16r32p15'3v*v.90'
-a32r16r32p65'3v*v.40'<a32r16r32p115'3v*v.90'>>a32r16r32p15'3v*v.40'<a32
-r16r32p65'3v*v.90'>>a32r16r32p15'3v*v.40'<a32r16r32p65'3v*v.90'a+32r16
-r32p115'3v*v.40'<a+32r16r32p15'3v*v.90'a32r16r32p65'3v*v.40'<a32r16r32
-p115'3v*v.90'>>a32r16r32p15'3v*v.40'<a32r16r32p65'3v*v.90'>>a+32r16r32
-p15'3v*v.40'<a+32r16r32][6p65'3v*v.90'a+32r16r32p115'3v*v.40'<a+32r16r32
-p15'3v*v.90'g+32r16r32p65'3v*v.40'<g+32r16r32p115'3v*v.90'>>g+32r16r32
-p15'3v*v.40'<g+32r16r32p65'3v*v.90'>>g+32r16r32p15'3v*v.40'<g+32r16r32
-][p65'3v*v.90'a+32r16r32p115'3v*v.40'<a+32r16r32p15'3v*v.90'f32r16r32p65
-'3v*v.40'<f32r16r32p115'3v*v.90'>>g+32r16r32p15'3v*v.40'<g+32r16r32p65
-'3v*v.90'>>f+32r16r32p15'3v*v.40'<f+32r16r32]
+$501[6'3o-o1'p65'3v*v.90'a+32'trest'p115'3v*v.40'<a+32'trest'p15'3v*v.90'
+a32'trest'p65'3v*v.40'<a32'trest'p115'3v*v.90'>>a32'trest'p15'3v*v.40'<a32
+'trest'p65'3v*v.90'>>a32'trest'p15'3v*v.40'<a32'trest'p65'3v*v.90'a+32'trest'
+p115'3v*v.40'<a+32'trest'p15'3v*v.90'a32'trest'p65'3v*v.40'<a32'trest'
+p115'3v*v.90'>>a32'trest'p15'3v*v.40'<a32'trest'p65'3v*v.90'>>a+32'trest'
+p15'3v*v.40'<a+32'trest'][6p65'3v*v.90'a+32'trest'p115'3v*v.40'<a+32'trest'
+p15'3v*v.90'g+32'trest'p65'3v*v.40'<g+32'trest'p115'3v*v.90'>>g+32'trest'
+p15'3v*v.40'<g+32'trest'p65'3v*v.90'>>g+32'trest'p15'3v*v.40'<g+32'trest'
+][p65'3v*v.90'a+32'trest'p115'3v*v.40'<a+32'trest'p15'3v*v.90'f32'trest'p65
+'3v*v.40'<f32'trest'p115'3v*v.90'>>g+32'trest'p15'3v*v.40'<g+32'trest'p65
+'3v*v.90'>>f+32'trest'p15'3v*v.40'<f+32'trest']
 ;501
 
 {6}

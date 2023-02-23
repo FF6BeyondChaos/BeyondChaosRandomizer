@@ -1,0 +1,744 @@
+#TITLE Norfair Ancient Ruins Area
+#ALBUM Super Metroid
+#COMPOSER Kenji Yamamoto
+#ARRANGED Rushlight
+
+#SHORTNAME MET3 Lower Norfair
+
+
+#BRR  0x20; ../samples/legacy/gh18_ahhs,      5508, 2FF0, F 7 7  0
+#WAVE 0x21 0x85 ## Power Horn
+#WAVE 0x23 0xC4 ## Synth Horn
+
+#WAVE 0x2A 0x0B ## Stomp, using a low note on a bass drum
+#WAVE 0x2B 0x8C ## Ticking sound, using a wood block
+
+#def init= t66 %v67 %b0,16 %f0,0
+
+
+#def melodyChorusBaseVol=          v80
+#def melodyChorusFade=           v1,80 ## Keep in line with melodyChorusBaseVol
+#def earlyMelodyChorusLowVol=      'melodyChorusBaseVol*v.9'
+#def earlyMelodyChorusHighVol=     'melodyChorusBaseVol*v1.15'
+#def chorusDescentHighVol=         'melodyChorusBaseVol*v1'
+#def chorusDescentLowVol=          'melodyChorusBaseVol*v1.25'
+#def lateMelodyChorusVol=          'melodyChorusBaseVol*v1.27'
+#def lateMelodyChorusFadeStartVol= 'melodyChorusBaseVol*v1'
+#def lateMelodyChorusFade=         'melodyChorusFade*v120,0'
+
+#def backingChorusBaseVol= v55
+#def introChorusVol=       'backingChorusBaseVol*v1.25'
+#def backingChorusVol1=    'backingChorusBaseVol*v.9'
+#def backingChorusVol2=    'backingChorusBaseVol*v1.25'
+#def backingChorusVol3=    'backingChorusBaseVol*v1.4'
+#def lateBackingChorusVol= 'backingChorusBaseVol*v1'
+
+#def powerHornBaseVol=             v80
+#def powerHornFade=              v1,80 ## Keep in line with powerBaseVol
+#def powerHornIntroVol=            'powerHornBaseVol*v1.27'
+#def powerHornIntroMaxFade=        'powerHornFade*v6,1'
+#def powerHornIntroMinFade=        'powerHornFade*v6,.35'
+#def backingHornRightVol=          'powerHornBaseVol*v1.1'
+#def backingHornCenterVol=         'powerHornBaseVol*v1.27'
+#def lateBackingHornVol=           'powerHornBaseVol*v.85'
+#def lateBackingHornFadeStart1Vol= 'powerHornBaseVol*v.85'
+#def lateBackingHornFadeStart2Vol= 'powerHornBaseVol*v.9'
+#def lateBackingHornFadeStart3Vol= 'powerHornBaseVol*v1'
+#def lateBackingHornFade1=         'powerHornFade*v192,1.12'
+#def lateBackingHornFade2=         'powerHornFade*v192,1.17'
+#def lateBackingHornFade3=         'powerHornFade*v192,1.27'
+#def supportHornBaseVol=           v50
+#def lateSupportHornLowVol=        'supportHornBaseVol*v.75'
+#def lateSupportHornHighVol=       'supportHornBaseVol*v1.05'
+
+
+#def hornBaseVol=                 v70
+#def hornFade=                  v1,70 ## Keep in line with hornBaseVol
+#def earlyMelodyHornVol=          'hornBaseVol*v1.27'
+#def middleMelodyHighHornVol=     'hornBaseVol*v1.15'
+#def middleMelodyLowHornVol=      'hornBaseVol*v1.2'
+#def lateMelodyHornHighVol=       'hornBaseVol*v1.25'
+#def lateMelodyHornLowVol=        'hornBaseVol*v.8'
+#def lateMelodyHornFadeStart1Vol= 'hornBaseVol*v.85'
+#def lateMelodyHornFadeStart2Vol= 'hornBaseVol*v.9'
+#def lateMelodyHornFadeStart3Vol= 'hornBaseVol*v1'
+#def lateMelodyHornFade1=         'hornFade*v192,1.12'
+#def lateMelodyHornFade2=         'hornFade*v192,1.17'
+#def lateMelodyHornFade3=         'hornFade*v192,1.27'
+
+
+#def synthHornBaseVol=     v133
+#def middleSynthHornVol=   'synthHornBaseVol*v.95'
+#def lateSynthHornHighVol= 'synthHornBaseVol*v.9'
+#def lateSynthHornLowVol=  'synthHornBaseVol*v.8'
+
+
+#def stompBaseVol=     v80
+#def stompFade=      v1,80 ## Keep in line with stompBaseVol
+#def stompFadeToLow=   'stompFade*v255,.7'
+#def stompLowestVol=   'stompBaseVol*v.45'
+#def stompLowerVol=    'stompBaseVol*v.7'
+#def stompLowVol=      'stompBaseVol*v.75'
+#def stompMidVol=      'stompBaseVol*v.8'
+#def stompHighVol=     'stompBaseVol*v1.1'
+#def stompHigherVol=   'stompBaseVol*v1.15'
+
+#def stompEchoBaseVol=     v31 ## stompBaseVol x 50/127
+#def stompEchoFade=      v1,31 ## Keep in line with stompEchoBaseVol
+#def stompEchoFadeToLow=   'stompEchoFade*v255,.7'
+#def stompEchoLowestVol=   'stompEchoBaseVol*v.45'
+#def stompEchoLowerVol=    'stompEchoBaseVol*v.7'
+#def stompEchoLowVol=      'stompEchoBaseVol*v.75'
+#def stompEchoMidVol=      'stompEchoBaseVol*v.8'
+#def stompEchoHighVol=     'stompEchoBaseVol*v1.1'
+#def stompEchoHigherVol=   'stompEchoBaseVol*v1.15'
+
+#def tickBaseVol=        v32
+#def tickFade=         v1,32 ## Keep in line with tickBaseVol
+#def tickFadeToLow=      'tickFade*v255,.7'
+#def tickLowestVol=      'tickBaseVol*v.45'
+#def tickLowerVol=       'tickBaseVol*v.7'
+#def tickLowVol=         'tickBaseVol*v.75'
+#def tickMidVol=         'tickBaseVol*v.8'
+#def alternatingTickVol= 'tickBaseVol*v.95'
+#def tickHighVol=        'tickBaseVol*v1.1'
+
+
+#def chorus= |0 o5 %e1 m
+#def earlyMelodyChorus=                 'chorus'                                                 %r18
+#def earlyMelodyChorus1=                'earlyMelodyChorus' 'earlyMelodyChorusLowVol'      p98
+#def earlyMelodyChorus2=                'earlyMelodyChorus' 'earlyMelodyChorusHighVol'     p107
+#def chorusDescentHigh=                 'chorus'            'chorusDescentHighVol'         p15   %r18
+#def chorusDescentLow=                  'chorus'            'chorusDescentLowVol'          p50   %r18
+#def lateMelodyChorusFarRightPan=                                                          p98
+#def lateMelodyChorusRightPan=                                                             p89
+#def lateMelodyChorusFadeSetup=         'chorus'            'lateMelodyChorusFadeStartVol'       %r0 %y0 %s4 'lateMelodyChorusFade'
+#def lateMelodyChorusFarRightFadeSetup= 'lateMelodyChorusFadeSetup'                        'lateMelodyChorusFarRightPan'
+#def lateMelodyChorusRightFadeSetup=    'lateMelodyChorusFadeSetup'                        'lateMelodyChorusRightPan'
+#def lateMelodyChorus=                  'chorus'            'lateMelodyChorusVol'                %r18
+#def lateMelodyChorusFarRight=          'lateMelodyChorus'                                 'lateMelodyChorusFarRightPan'
+#def lateMelodyChorusRight=             'lateMelodyChorus'                                 'lateMelodyChorusRightPan'
+#def introChorus=                       'chorus'            'introChorusVol'                     %r18
+#def introHighChorus=                   'introChorus'                                      p118
+#def introLowChorus=                    'introChorus'                                      p10
+#def backingChorus=                     'chorus'                                                 %r18
+#def backingChorus1=                    'backingChorus'     'backingChorusVol1'            p10
+#def backingChorus2=                    'backingChorus'     'backingChorusVol2'            p10
+#def backingChorus3=                    'backingChorus'     'backingChorusVol3'            p64
+#def lateBackingChorus=                 'backingChorus'     'lateBackingChorusVol'         p10
+
+#def lateSupportHornLowLeftVolPan=            'lateSupportHornLowVol' p15
+#def lateSupportHornLowRightVolPan=           'lateSupportHornLowVol' p118
+#def lateSupportHornHighLeftVolPan=           'lateSupportHornHighVol' p15
+#def lateSupportHornHighRightVolPan=          'lateSupportHornHighVol' p118
+#def powerHornSlowRelease= %r11
+#def powerHornFastRelease= %r18
+#def powerHorn= |1 o5 %e1 m
+#def introPowerHorn=            'powerHorn'                'powerHornIntroVol'
+#def introLowPowerHorn=         'introPowerHorn'                                          p30
+#def introHighPowerHorn=        'introPowerHorn'                                          p98
+#def middleSupportHorn=         'introHighPowerHorn'                                           'powerHornSlowRelease' m36,20,210
+#def backingHorn=               'powerHorn'                                                    %r18
+#def backingHornRight=          'backingHorn'              'backingHornRightVol'          p118
+#def backingHornCenter=         'backingHorn'              'backingHornCenterVol'         p64
+#def lateSupportHorn=           'powerHorn'                                                    'powerHornSlowRelease' m24,20,210
+#def lateBackingHornFadeSetup=  'powerHorn'                                                    %r11
+#def lateBackingHornFadeSetup1= 'lateBackingHornFadeSetup' 'lateBackingHornFadeStart1Vol' p89                                    'lateBackingHornFade1'
+#def lateBackingHornFadeSetup2= 'lateBackingHornFadeSetup' 'lateBackingHornFadeStart2Vol' p30                                    'lateBackingHornFade2'
+#def lateBackingHornFadeSetup3= 'lateBackingHornFadeSetup' 'lateBackingHornFadeStart3Vol' p30                                    'lateBackingHornFade3'
+
+#def horn=  |1 o5 %e1 m
+#def earlyMelodyHorn=           'horn'                    'earlyMelodyHornVol'               %r18
+#def earlyMelodyHorn1=          'earlyMelodyHorn'                                       p30
+#def earlyMelodyHorn2=          'earlyMelodyHorn'                                       p21
+#def middleMelodyHighHorn=      'horn'                    'middleMelodyHighHornVol'          %r18
+#def middleMelodyHighHornLeft=  'middleMelodyHighHorn'                                  p15
+#def middleMelodyHighHornRight= 'middleMelodyHighHorn'                                  p113
+#def middleMelodyLowHorn=       'horn'                    'middleMelodyLowHornVol'           %r18
+#def middleMelodyLowHornLeft=   'middleMelodyLowHorn'                                   p15
+#def middleMelodyLowHornRight=  'middleMelodyLowHorn'                                   p113
+#def lateMelodyHorn=            'horn'                                                       %r11
+#def lateMelodyHornHigh=        'lateMelodyHorn'          'lateMelodyHornHighVol'       p113
+#def lateMelodyHornLow=         'lateMelodyHorn'          'lateMelodyHornLowVol'        p64
+#def lateMelodyHornFadeSetup=   'lateMelodyHorn'                                        p15
+#def lateMelodyHornFade1Setup=  'lateMelodyHornFadeSetup' 'lateMelodyHornFadeStart1Vol'           'lateMelodyHornFade1'
+#def lateMelodyHornFade2Setup=  'lateMelodyHornFadeSetup' 'lateMelodyHornFadeStart2Vol'           'lateMelodyHornFade2'
+#def lateMelodyHornFade3Setup=  'lateMelodyHornFadeSetup' 'lateMelodyHornFadeStart3Vol'           'lateMelodyHornFade3'
+
+#def synthHorn= |3 o5 p64 %e1 m %y0%s2
+#def middleSynthHorn= 'synthHorn' 'middleSynthHornVol'
+
+#cdef ( v0,24,191
+#cdef ) v
+
+## The stomp is always the same 2 notes, but the volume varies throughout the song so it's excluded from the macro
+#DRUM "s"= 4b |A p64 %e0 m
+#DRUM "t"= 4f |A p64 %e0 m
+
+## The ticking is always the same note (with alternating pans), but the volume varies throughout the song so it's excluded from the macro
+#DRUM "u"= 5e |B p15  %y5 %s2 %e0 m
+#DRUM "v"= 5e |B p113 %y5 %s2 %e0 m
+
+{1}
+'init'
+## The intro is a 3-measure section played twice, but it is played only once the first time around. Start at measure 4.
+[2
+  j1,104
+  j2,106
+]
+$
+[2
+  $104
+  [3
+    ## Low Support Horn, originally channel 1
+    'introLowPowerHorn-o1'
+    l2
+    ## 1 / 2 / 3 / 4 / 5 / 6
+    'powerHornSlowRelease'c8(^4.)
+    'powerHornFastRelease'>b8(^4.)
+  ]
+]
+$106
+## Melody Chorus, originally channel 1
+'earlyMelodyChorus1'
+[2
+  ## 7 / 9
+  c8.>b-16<c8.>b-16<c8c+8e-8 j2 c+24>b-24<c+24
+  ## 8
+  c8(^2..)
+]
+## Remainder of 9
+e-24e-24f24
+## 10
+c8(^2..)
+## Melody Chorus, originally channel 1
+'earlyMelodyChorus2'
+[2
+  ## 11 / 13
+  e-8.c+16e-8.c+16e-8e8f+8 j2 e24c+24e24
+  ## 12
+  e-8(^2..)
+]
+## Remainder of 13
+f+24f+24g+24
+## 14
+e-8(^2..)
+## High Melody Horn, originally channel 1
+'middleMelodyHighHornLeft'
+[2
+  ## 15 / 17
+  f+8.e16f+8.e16f+8g8a8 j2 g24e24g24
+  ## 16
+  f+8(^2..)
+]
+## Remainder of 17
+a24a24b24
+## 18
+f+8(^2..)
+## High Melody Horn, originally channel 1
+'middleMelodyHighHornRight'
+[2
+  ## 19 / 21
+  a8.g16a8.g16a8b-8<c8 j2 >b-24g24b-24
+  ## 20
+  a8(^2..)
+]
+## Remainder of 21
+c24c24d24>
+## 22
+a8(^2..)
+[2
+  ## High Melody Chorus, originally channel 2
+  'chorusDescentHigh'
+  l8
+  ## 23 / 31
+  agfefede
+  ## 24 / 32
+  agfgfede
+  ## 25 / 33
+  ## Melody Chorus, originally channel 2
+  'lateMelodyChorusFarRightFadeSetup-o1'
+  a1
+  ## 26 / 34
+  ## Melody Chorus, originally channel 2
+  'lateMelodyChorusRight-o1'
+  a8.b-32b-32a8.b-32b-32a8b-8<c8
+  ## Melody Chorus, originally channel 2
+  'lateMelodyChorusRightFadeSetup'
+  e8
+  ## 27 / 35
+  ^1
+  ## 28 / 36
+  ## Melody Chorus, originally channel 2
+  'lateMelodyChorusRight'
+  c8.c+32c+32c8.c+32c+32c8c+8e-8
+  ## Melody Chorus, originally channel 2
+  'lateMelodyChorusRightFadeSetup'
+  g8
+  ## 29 / 37
+  ^1
+  ## 30 / 38
+  ## Melody Chorus, originally channel 1
+  'lateMelodyChorusFarRight'
+  e-8.e32e32e-8.e32e32e-8e8f+8b-8
+]
+;
+
+
+{2}
+## The intro is a 3-measure section played twice, but it is played only once the first time around. Start at measure 4.
+[2
+  j1,204
+  j2,206
+]
+$
+[2
+  $204
+  [3
+    ## High Support Horn, originally channel 2
+    'introHighPowerHorn-o2'
+    l2
+    ## 1 / 2 / 3 / 4 / 5 / 6
+    'powerHornSlowRelease' m12,1 b2
+    'powerHornFastRelease'<c+2
+  ]
+]
+$206
+## Melody Horn, originally channel 2
+'earlyMelodyHorn1-o1'
+[2
+  ## 7 / 9
+  g8.f16g8.f16g8g+8b-8 j2 g+24f24g+24
+  ## 8
+  g1
+]
+## Remainder of 9
+b-24b-24<c24>
+## 10
+g1
+## Melody Horn, originally channel 2
+'earlyMelodyHorn2-o1'
+[2
+  ## 11 / 13
+  b-8.g+16b-8.g+16b-8b8<c+8 j2 >b24g+24b24
+  ## 12
+  b-1
+]
+## Remainder of 13
+c+24c+24e-24>
+## 14
+b-1
+## Support Horn, originally channel 3
+'middleSupportHorn-o1'
+k1 ## Detune slightly to avoid a "stacking" effect with the melody horn
+[4
+  ## 15-18
+  m12,1 f2 m12,1 f+2
+]
+
+[4
+  ## 19-22
+  m12,1 g+2 m12,1 a2  
+]
+k0
+[2
+  ## Melody Horn, originally channel 1
+  'lateMelodyHornHigh-o1'
+  [2
+    ## 23-24 / 31-32
+    a8(^4)a12a24 b-8(^4)b-12b-24
+  ]
+  ## 25 / 33
+  ## Melody Horn, originally channel 1
+  'lateMelodyHornFade1Setup-o1'
+  [2 a8(^16)b-32b-32] a8b-8<c8>b-8
+  ## 26 / 34
+  a8(^2..)
+  ## 27 / 35
+  ## Melody Horn, originally channel 1
+  'lateMelodyHornFade2Setup'
+  [2 c8(^16)c+32c+32] c8c+8e8c+8
+  ## 28 / 36
+  c8(^2..)
+  ## 29 / 37
+  ## Melody Horn, originally channel 1
+  'lateMelodyHornFade3Setup'
+  [2 e-8(^16)e32e32] e-8e8f+8e8
+  ## 30 / 38
+  ## Melody Horn, originally channel 1
+  'lateMelodyHornLow'
+  [2 b-8(^16)b32b32] b-8b8<c+8f8
+]
+;
+
+
+{3}
+## The intro starts at measure 4. Measure 1-3 are the same thing but with a lower starting volume and crescendo and only plays after the song loops.
+%j304
+$
+## Stomp, originally channel 4
+'stompLowestVol'
+l8
+'stompFadeToLow'
+[3
+  ## 1-3
+  [4 "st"]
+]
+$304
+## Stomp, originally channel 4
+'stompLowerVol'
+l8
+[3
+  ## 4-6
+  [4 "!!!ost"]
+]
+'stompLowVol'
+[4
+  ## 7-10
+  [4 "st"]
+]
+'stompMidVol'
+[4
+  ## 11-14
+  [4 "st"]
+]
+'stompHighVol'
+[8
+  ## 15-22
+  [4 "st"]
+]
+'stompHigherVol'
+[16
+  ## 23-38
+  [4 "st"]
+]
+;
+
+
+{4}
+## The intro is a 3-measure section played twice, but it is played only once the first time around. Start at measure 4.
+[2
+  j1,404
+  j2,406
+]
+$
+[2
+  $404
+  ## High Backing Chorus, originally channel 3
+  'introHighChorus-o2'
+  l2
+  ## 1 / 4
+  gg+
+  ## 2 / 5
+  gb
+  ## 3 / 6
+  gg+
+]
+$406
+## Support Horn, originally channel 3. Has the same settings as high support horn in the intro
+'introHighPowerHorn-o2' 'powerHornSlowRelease'
+k1 ## Detune slightly to avoid a "stacking" effect with the melody horn
+[4
+  ## 7-10
+  m12,1 b2 <m12,1 c2>
+]
+<
+[4
+  ## 11-14
+  m12,1 d2 m12,1 e-2
+]
+k0
+## Backing Chorus, originally channel 4
+'backingChorus2-o1'
+l4
+[4
+  ## 15-18
+  b-b-bb
+]
+## Backing Chorus, originally channel 4
+'backingChorus3'
+[4
+  ## 19-22
+  c+c+dd
+]
+[2
+  ## Synth Horn, originally channel 4
+  'synthHorn-o2'
+  'lateSynthHornHighVol'
+  [2
+    ## 23-24 / 31-32
+    a4a8a24<c+24d24>b-4b-8b-24<d24e-24>
+  ]
+  'lateSynthHornLowVol'
+  l4
+  ## 25 / 33
+  a<ef>b-
+  ## 26 / 34
+  a<eb-f
+  ## 27 / 35
+  cgg+c+
+  ## 28 / 36
+  cg<c+>g+
+  'lateSynthHornHighVol'
+  l8
+  [2
+    ## 29-30 / 37-38
+    e-e-e-e-24b-24e-24 eeee24b24e24
+  ]
+]
+;
+
+
+{5}
+## The intro starts at measure 4. Measure 1-3 are the same thing but with a lower starting volume and crescendo and only plays after the song loops.
+%j504
+$
+## Ticking, originally channel 6
+'tickLowestVol'
+l8
+'tickFadeToLow'
+[3
+  ## 1-3
+  [4 "vu"]
+]
+$504
+## Ticking, originally channel 6
+'tickLowerVol'
+l8
+[3
+  ## 4-6
+  [4 "!!!ovu"]
+]
+'tickLowVol'
+[4
+  ## 7-10
+  [4 "vu"]
+]
+'tickMidVol'
+[4
+  ## 11-14
+  [4 "vu"]
+]
+'tickHighVol'
+[4
+  ## 15-18
+  [4 "vu"]
+]
+l8
+[4
+  ## 19-22
+  'middleSynthHorn-o2'a'alternatingTickVol'"!!!ou"'middleSynthHorn-o2'a'alternatingTickVol'"!!!ov"
+  'middleSynthHorn-o2'b-'alternatingTickVol'"!!!ou"'middleSynthHorn-o2'b-'alternatingTickVol'"!!!ov"
+]
+[2
+  ## Low Melody Chorus, originally channel 2
+  'chorusDescentLow-o1'
+  l8
+  ## 23 / 31
+  agfefede
+  ## 24 / 32
+  agfgfede
+  ## 25 / 33
+  ## Backing Horn, originally channel 3
+  'lateBackingHornFadeSetup1-o1'
+  l8
+  [2 e8.f32f32] efgf
+  ## 26 / 34
+  e1
+  ## 27 / 35
+  ## Backing Horn, originally channel 3
+  'lateBackingHornFadeSetup2-o1'
+  l8
+  [2 g8.g+32g+32] gg+bg+
+  ## 28 / 36
+  g1
+  ## Backing Horn, originally channel 3
+  'lateBackingHornFadeSetup3-o1'
+  l8
+  [2
+    ## 29-30 / 37-38
+    [2 b-8.b32b32] b-b<c+ j2 >b
+  ]
+  ## Remainder of 30/38
+  f
+]
+;
+
+
+{6}
+## The intro is a 3-measure section played twice, but it is played only once the first time around. Start at measure 4.
+[2
+  j1,604
+  j2,606
+]
+$
+[2
+  $604
+  [3
+    ## Low Backing Chorus, originally channel 5
+    'introLowChorus-o2'
+    l2
+    ## 1 / 2 / 3 / 4 / 5 / 6
+    ef
+  ]
+]
+$606
+## Backing Chorus, originally channel 4
+'backingChorus1-o1'
+l2
+[4
+  ## 7-10
+  ef
+]
+## Backing Chorus, originally channel 4
+'backingChorus2-o1'
+l4
+[4
+  ## 11-14
+  ggg+g+
+]
+## Low Melody Horn, originally channel 2
+'middleMelodyLowHornRight'
+[2
+  ## 15 / 17
+  c+8.>b16<c+8.>b16<c+8d8e8 j2 d24>b24<d24
+  ## 16
+  c+1
+]
+## Remainder of 17
+e24e24f+24
+## 18
+c+1
+## Low Melody Horn, originally channel 2
+'middleMelodyLowHornLeft'
+[2
+  ## 19 / 21
+  e8.d16e8.d16e8f8g8 j2 f24d24f24
+  ## 20
+  e1
+]
+## Remainder of 21
+g24g24a24
+## 22
+e1
+[2
+  ## Backing Chorus, originally channel 7
+  'lateBackingChorus'
+  l2
+  [4
+    ## 23-26 / 31-34
+    c+d
+  ]
+  [2
+    ## 27-28 / 35-36
+    ef
+  ]
+  [2
+    ## 29-30 / 37-38
+    gg+
+  ]
+]
+;
+
+
+{7}
+## The intro is 6 measures of silence, but it is only 3 measures first time around. Start at measure 4.
+%j704
+$
+## 1-3
+r1r1r1
+$704
+## 4-6
+r1r1r1
+
+## Backing Horn, originally channel 6
+'backingHornRight-o2'
+l2
+[4
+  ## 7-10
+  g2b-2
+]
+l4
+[4
+  ## 11-14
+  b-b-<c+c+>
+]
+<
+[4
+  ## 15-18
+  c+c+ee
+]
+## Backing Horn, originally channel 6
+'backingHornCenter-o1'
+l4
+[4
+  ## 19-22
+  eegg
+]
+[2
+  ## Support Horn, originally channel 7
+  'lateSupportHorn-o1'
+  l2
+  'lateSupportHornLowRightVolPan'
+  [3
+    ## 23-25 / 31-33
+    ab-
+  ]
+  ## 26 / 34
+  a'lateSupportHornLowLeftVolPan'b-
+  'lateSupportHornHighRightVolPan' <
+  ## 27 / 35
+  cc+
+  ## 28 / 36
+  c'lateSupportHornHighLeftVolPan'c+
+  'lateSupportHornHighRightVolPan'
+  [2
+    ## 29-30 / 37-38
+    e-e
+  ]
+]
+;
+
+{8}
+## Manual echo track for "stomp" since EDL 5 makes regular echo unusable.
+## The intro starts at measure 4. Measure 1-3 are the same thing but with a lower starting volume and crescendo and only plays after the song loops.
+&2r ## Original echo delay is 32ms, which we can't match exactly - this should be about 37ms
+%j804
+$
+## Stomp, originally channel 4
+'stompEchoLowestVol'
+l8
+'stompEchoFadeToLow'
+[3
+  ## 1-3
+  [4 "st"]
+]
+$804
+## Stomp, originally channel 4
+'stompEchoLowerVol'
+l8
+[3
+  ## 4-6
+  [4 "!!!ost"]
+]
+'stompEchoLowVol'
+[4
+  ## 7-10
+  [4 "st"]
+]
+'stompEchoMidVol'
+[4
+  ## 11-14
+  [4 "st"]
+]
+'stompEchoHighVol'
+[8
+  ## 15-22
+  [4 "st"]
+]
+'stompEchoHigherVol'
+[16
+  ## 23-38
+  [4 "st"]
+]
+;
