@@ -734,7 +734,6 @@ class MonsterPaletteObject(TableObject):
             c = r | (g << 5) | (b << 10)
             palette.append(c)
 
-        print(str(len(palette)))
         assert len(palette) >= 8
         self.colors = palette[:8]
         if not is_8color:

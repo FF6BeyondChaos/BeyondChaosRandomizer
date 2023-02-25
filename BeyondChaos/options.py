@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from typing import List, Set, Union
-from appearance import get_makeover_groups
 
 
 @dataclass(frozen=True)
@@ -708,24 +707,45 @@ RESTRICTED_VANILLA_SPRITE_CODES = []
 # this is used for the makeover variation codes for sprites
 # makeover_groups = ["anime", "boys", "generic", "girls", "kids", "pets", "potato", "custom"]
 makeover_groups = None
-try:
-    makeover_groups = get_makeover_groups()
-    for mg in makeover_groups:
-        no = Code(name='no' + mg,
-                  description="NO {mg.upper()} ALLOWED MODE",
-                  long_description="Do not select {mg} sprites.",
-                  category="spriteCategories",
-                  inputtype="checkbox")
-        MAKEOVER_MODIFIER_CODES.extend([
-            Code(name=mg,
-                 description="CUSTOM {mg.upper()} FREQUENCY MODE",
-                 long_description="Adjust probability of selecting {mg} sprites.",
-                 category="spriteCategories",
-                 inputtype="combobox",
-                 choices=("Normal", "No", "Hate", "Like", "Only"))])
-        RESTRICTED_VANILLA_SPRITE_CODES.append(no)
-except FileNotFoundError:
-    pass
+
+
+def get_makeover_groups():
+    try:
+        global makeover_groups
+        if makeover_groups:
+            return makeover_groups
+
+        from appearance import get_sprite_replacements
+        sprite_replacements = get_sprite_replacements()
+        makeover_groups = {}
+
+        for sr in sprite_replacements:
+            for group in sr.groups:
+                if group in makeover_groups:
+                    makeover_groups[group] = makeover_groups[group] + 1
+                else:
+                    makeover_groups[group] = 1
+
+        # this is used for the makeover variation codes for sprites
+        # makeover_groups = ["anime", "boys", "generic", "girls", "kids", "pets", "potato", "custom"]
+        for mg in makeover_groups:
+            no = Code(name='no' + mg,
+                      description="NO {mg.upper()} ALLOWED MODE",
+                      long_description="Do not select {mg} sprites.",
+                      category="spriteCategories",
+                      inputtype="checkbox")
+            MAKEOVER_MODIFIER_CODES.extend([
+                Code(name=mg,
+                     description="CUSTOM {mg.upper()} FREQUENCY MODE",
+                     long_description="Adjust probability of selecting " + mg + " sprites.",
+                     category="spriteCategories",
+                     inputtype="combobox",
+                     choices=("Normal", "No", "Hate", "Like", "Only"))])
+            RESTRICTED_VANILLA_SPRITE_CODES.append(no)
+    except FileNotFoundError:
+        pass
+    return makeover_groups
+
 
 # TODO: do this a better way
 CAVE_CODES = [
