@@ -41,16 +41,18 @@ class Code:
     def remove_from_string(self, flag_string: str, mode: Mode):
         name = self.name
         invert_simple_flags = flag_string.startswith("-")
-        if name in mode.prohibited_codes:
-            print("The code " + name + " has been deactivated. It is incompatible with " + mode.name + ".")
-            return False, False, re.sub(r'\b' + re.escape(name) + r'\b',
-                                        '',
-                                        flag_string,
-                                        re.IGNORECASE)
+
         if name in flag_string:
+            if name in mode.prohibited_flags or name in mode.prohibited_codes:
+                # The code is prohibited. Notify the user and remove it from the flagstring without activating it.
+                print("The code " + name + " has been deactivated. It is incompatible with " + mode.name + ".")
+                return False, False, re.sub(r'\b' + re.escape(name) + r'\b',
+                                            '',
+                                            flag_string,
+                                            re.IGNORECASE)
             # Search for a match starting with a word boundary, then the flag name, then :
             if re.search(r'\b' + re.escape(name) + r":", flag_string):
-                # A value was supplied, get the value
+                # If the code has a colon after it, we need to get a value
                 string_after_key = flag_string[flag_string.index(name + ":") + len(name + ":"):]
                 try:
                     value = string_after_key[:string_after_key.index(" ")]
@@ -58,50 +60,37 @@ class Code:
                     # A space did not exist after the flag. Get the entire rest of the flag string.
                     value = string_after_key
 
-                # After getting the value, if the code is in prohibited codes, we can just remove it
-                # There's no such thing as a flag with a supplied value, but we can check anyway.
-                if name in mode.prohibited_flags or name in mode.prohibited_codes:
-                    print("The code " + name + " has been deactivated. It is incompatible with " + mode.name + ".")
-                    return False, False, re.sub(r'\b' + re.escape(name) + r':' + re.escape(value) + r'\b',
-                                                '',
-                                                flag_string,
-                                                re.IGNORECASE)
-                else:
-                    return True, value, re.sub(r'\b' + re.escape(name) + r':' + re.escape(value) + r'\b',
-                                               '',
-                                               flag_string,
-                                               re.IGNORECASE)
+                return True, value, re.sub(r'\b' + re.escape(name) + r':' + re.escape(value) + r'\b',
+                                           '',
+                                           flag_string,
+                                           re.IGNORECASE)
 
             # Search for a match starting with a word boundary, then the flag name, then another word boundary
             elif re.search(r'\b' + re.escape(name) + r"\b", flag_string):
-                # Check if the name is in prohibited flags or prohibited codes
-                if name in mode.prohibited_flags or name in mode.prohibited_codes:
-                    print("The flag " + name + " has been deactivated. It is incompatible with " + mode.name + ".")
-                    return False, False, re.sub(r'\b' + re.escape(name) + r'\b',
-                                                '',
-                                                flag_string,
-                                                re.IGNORECASE)
-                elif len(name) == 1 and invert_simple_flags:
+                if len(name) == 1 and invert_simple_flags:
+                    # If the code is a simple flag and we have the dash inverting the codes,
+                    #     remove it instead of add it.
                     return False, False, re.sub(r'\b' + re.escape(name) + r'\b',
                                                 '',
                                                 flag_string,
                                                 re.IGNORECASE)
                 else:
-                    # No value was supplied, return True
+                    # The code being activated has no specific value. Return True.
                     return True, True, re.sub(r'\b' + re.escape(name) + r'\b',
                                               '',
                                               flag_string,
                                               re.IGNORECASE)
         else:
-            # The code was not found in the flag string.
-            # Check if the code is a flag (len = 1) and invert the return value if a dash begins the flag string
+            # The code was not found in the flag string. The only thing we have to worry about here is if
+            #    the flagstring starts with a dash. If it does, we need to activate all of the simple flags
+            #    that weren't found in the flagstring, except if they are prohibited.
             if len(name) == 1 and invert_simple_flags and not \
                     (name in mode.prohibited_flags or name in mode.prohibited_codes):
                 return True, True, re.sub(r'\b' + re.escape(name) + r'\b',
                                           '',
                                           flag_string,
                                           re.IGNORECASE)
-        flag_string = str.strip(flag_string)
+
         return False, False, flag_string
 
 
