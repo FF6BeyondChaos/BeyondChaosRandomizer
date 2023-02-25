@@ -24,7 +24,7 @@ import utils
 import customthreadpool
 from config import (read_flags, write_flags, validate_files, are_updates_hidden, updates_hidden,
                     get_input_path, get_output_path, save_version, check_player_sprites, check_remonsterate)
-from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES, makeover_groups)
+from options import (NORMAL_CODES, MAKEOVER_MODIFIER_CODES, get_makeover_groups)
 from update import (get_updater)
 from randomizer import randomize, VERSION, BETA, MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2
 
@@ -222,6 +222,7 @@ class Window(QMainWindow):
             self.aesthetic, self.field, self.characters, self.experimental, self.gamebreaking,
             self.beta
         ]
+        self.makeover_groups = get_makeover_groups()
         # keep a list of all checkboxes
         self.checkBoxes = []
 
@@ -597,10 +598,10 @@ class Window(QMainWindow):
             tabs.addTab(tabObj, names)
             tablayout = QGridLayout()
             currentRow = 0
-            for flagname, flagdesc in d.items():
-                if flagdesc['inputtype'] == 'checkbox':
+            for flagname, flag in d.items():
+                if flag['object'].inputtype == 'checkbox':
                     cbox = FlagCheckBox(
-                        f"{flagname}  -  {flagdesc['explanation']}",
+                        f"{flagname}  -  {flag['object'].long_description}",
                         flagname
                     )
                     if (flagname == "remonsterate" and not len(check_remonsterate()) == 0) or\
@@ -610,50 +611,79 @@ class Window(QMainWindow):
                     self.checkBoxes.append(cbox)
                     tablayout.addWidget(cbox, currentRow, 1, 1, 2)
                     cbox.clicked.connect(lambda checked: self.flagButtonClicked())
-                elif flagdesc['inputtype'] == 'numberbox':
-                    if flagname in ['expboost', 'gpboost', 'mpboost']:
-                        nbox = QDoubleSpinBox()
-                    else:
-                        nbox = QSpinBox()
-
-                    if flagname == "cursepower":
-                        nbox.setMinimum(0)
-                        nbox.setSpecialValueText("Random")
-                        nbox.setMaximum(255)
-                        nbox.default = 255
-                    elif flagname in ['expboost', 'gpboost', 'mpboost']:
-                        nbox.setMinimum(-0.1)
-                        nbox.setSingleStep(.1)
-                        nbox.setSpecialValueText('Off')
-                        nbox.setSuffix("x")
-                        nbox.default = nbox.minimum()
-                    else:
-                        nbox.setMinimum(-1)
-                        nbox.setSpecialValueText('Off')
-                        nbox.default = nbox.minimum()
-
+                elif flag['object'].inputtype == 'float2':
+                    nbox = QDoubleSpinBox()
+                    nbox.setMinimum(-0.1)
+                    nbox.setSingleStep(.1)
+                    nbox.setSpecialValueText('Off')
+                    nbox.setSuffix("x")
+                    nbox.default = nbox.minimum()
                     nbox.setFixedWidth(70)
                     nbox.setValue(nbox.default)
                     nbox.text = flagname
-                    flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
+                    flaglbl = QLabel(f"{flagname}  -  {flag['object'].long_description}")
                     tablayout.addWidget(nbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
                     nbox.valueChanged.connect(lambda: self.flagButtonClicked())
-                elif flagdesc['inputtype'] == 'combobox':
+                elif flag['object'].inputtype == 'integer':
+                    nbox = QSpinBox()
+                    nbox.default = int(flag['object'].default_value)
+                    nbox.setMinimum(int(flag['object'].minimum_value))
+                    if flagname == "cursepower":
+                        nbox.setSpecialValueText("Random")
+                        nbox.setMaximum(255)
+                        nbox.default = 255
+                    nbox.setFixedWidth(70)
+                    nbox.setValue(nbox.default)
+                    nbox.text = flagname
+                    flaglbl = QLabel(f"{flagname}  -  {flag['object'].long_description}")
+                    tablayout.addWidget(nbox, currentRow, 1)
+                    tablayout.addWidget(flaglbl, currentRow, 2)
+                    nbox.valueChanged.connect(lambda: self.flagButtonClicked())
+                # elif flagdesc['inputtype'] == 'numberbox':
+                #     if flagname in ['expboost', 'gpboost', 'mpboost']:
+                #         nbox = QDoubleSpinBox()
+                #     else:
+                #         nbox = QSpinBox()
+                #
+                #     if flagname == "cursepower":
+                #         nbox.setMinimum(0)
+                #         nbox.setSpecialValueText("Random")
+                #         nbox.setMaximum(255)
+                #         nbox.default = 255
+                #     elif flagname in ['expboost', 'gpboost', 'mpboost']:
+                #         nbox.setMinimum(-0.1)
+                #         nbox.setSingleStep(.1)
+                #         nbox.setSpecialValueText('Off')
+                #         nbox.setSuffix("x")
+                #         nbox.default = nbox.minimum()
+                #     else:
+                #         nbox.setMinimum(-1)
+                #         nbox.setSpecialValueText('Off')
+                #         nbox.default = nbox.minimum()
+                #
+                #     nbox.setFixedWidth(70)
+                #     nbox.setValue(nbox.default)
+                #     nbox.text = flagname
+                #     flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
+                #     tablayout.addWidget(nbox, currentRow, 1)
+                #     tablayout.addWidget(flaglbl, currentRow, 2)
+                #     nbox.valueChanged.connect(lambda: self.flagButtonClicked())
+                elif flag['object'].inputtype == 'combobox':
                     cmbbox = QComboBox()
-                    cmbbox.addItems(flagdesc['choices'])
+                    cmbbox.addItems(flag['object'].choices)
                     width = 50
-                    for choice in flagdesc['choices']:
+                    for choice in flag['object'].choices:
                         width = max(width, len(choice) * 10)
                     cmbbox.setFixedWidth(width)
                     cmbbox.text = flagname
-                    if makeover_groups and flagname in makeover_groups:
+                    if self.makeover_groups and flagname in self.makeover_groups:
                         cmbbox.setCurrentIndex(cmbbox.findText("Normal"))
-                        flaglbl = QLabel(f"{flagname} (" + str(makeover_groups[flagname]) +
-                                         ")   -  " + f"{flagdesc['explanation']}")
+                        flaglbl = QLabel(f"{flagname} (" + str(self.makeover_groups[flagname]) +
+                                         ")   -  " + f"{flag['object'].long_description}")
                     else:
                         cmbbox.setCurrentIndex(cmbbox.findText("Vanilla"))
-                        flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
+                        flaglbl = QLabel(f"{flagname}  -  {flag['object'].long_description}")
                     tablayout.addWidget(cmbbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
                     cmbbox.activated[str].connect(lambda: self.flagButtonClicked())
@@ -875,7 +905,9 @@ class Window(QMainWindow):
     #   puts data into separate dictionaries
     def initCodes(self):
         for code in NORMAL_CODES + MAKEOVER_MODIFIER_CODES:
-            if code.category == "aesthetic":
+            if code.category == "flags":
+                d = self.flag
+            elif code.category == "aesthetic":
                 d = self.aesthetic
             elif code.category == "sprite":
                 d = self.sprite
@@ -897,19 +929,27 @@ class Window(QMainWindow):
                 print(f"Code {code.name} does not have a valid category.")
                 continue
 
+            # d[code.name] = {
+            #     'explanation': code.long_description,
+            #     'inputtype': code.inputtype,
+            #     'checked': False,
+            #     'choices': code.choices
+            # }
             d[code.name] = {
-                'explanation': code.long_description,
-                'inputtype': code.inputtype,
                 'checked': False,
-                'choices': code.choices
+                'object': code
             }
 
-        for flag in sorted(ALL_FLAGS):
-            self.flag[flag.name] = {
-                'explanation': flag.description,
-                'inputtype': flag.inputtype,
-                'checked': True
-            }
+        # for flag in sorted(ALL_FLAGS):
+        #     # self.flag[flag.name] = {
+        #     #     'explanation': flag.description,
+        #     #     'inputtype': flag.inputtype,
+        #     #     'checked': True
+        #     # }
+        #     self.flag[flag.name] = {
+        #         'checked': True,
+        #         'object': flag
+        #     }
 
     # opens input dialog to get a name to assign a desired seed flagset, then
     # saves flags and selected mode to the cfg file
@@ -1053,7 +1093,7 @@ class Window(QMainWindow):
                 elif type(child) == QSpinBox or type(child) == QDoubleSpinBox:
                     child.setValue(child.default)
                 elif type(child) == QComboBox:
-                    if makeover_groups and child.text in makeover_groups:
+                    if self.makeover_groups and child.text in self.makeover_groups:
                         child.setCurrentIndex(child.findText("Normal"))
                     else:
                         child.setCurrentIndex(child.findText("Vanilla"))
