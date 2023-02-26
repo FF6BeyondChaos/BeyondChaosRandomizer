@@ -127,7 +127,7 @@ class Options:
         s = ""
         flags = read_Options_from_string(flag_string, self.mode)
 
-        for flag in flags:
+        for flag in flags.values():
             # Detect incompatible and prohibited flags
             if flag.name in self.mode.prohibited_flags:
                 # The flag is prohibited. Notify the user and do not activate it.
@@ -154,7 +154,7 @@ class Options:
 
 
 def read_Options_from_string(flag_string: str, mode: Union[Mode, str]):
-    flags = set()
+    flags = {}
 
     if isinstance(mode, str):
         mode = [m for m in ALL_MODES if m.name == mode][0]
@@ -165,7 +165,7 @@ def read_Options_from_string(flag_string: str, mode: Union[Mode, str]):
         found, value, flag_string = flag.remove_from_string(flag_string, mode)
         if found:
             flag.value = value
-            flags.add(flag)
+            flags[flag.name] = flag
 
     return flags
 
