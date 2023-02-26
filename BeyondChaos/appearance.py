@@ -89,6 +89,7 @@ def recolor_character_palette(fout, pointer, palette=None, flesh=False, middle=T
         outline, eyes, hair, skintone, outfit1, outfit2, NPC = (
             palette[:2], palette[2:4], palette[4:6], palette[6:8],
             palette[8:10], palette[10:12], palette[12:])
+
         def components_to_color(xxx_todo_changeme):
             (red, green, blue) = xxx_todo_changeme
             return red | (green << 5) | (blue << 10)
@@ -114,7 +115,7 @@ def recolor_character_palette(fout, pointer, palette=None, flesh=False, middle=T
 
             if not new_style_palette:
                 new_palette[6:8] = skintone
-            if options.Options_.is_code_active('christmas'):
+            if options.Options_.is_flag_active('christmas'):
                 if santa:
                     # color kefka's palette to make him look santa-ish
                     new_palette = palette
@@ -234,12 +235,12 @@ def manage_coral(fout):
 
 def manage_character_names(fout, change_to, male):
     characters = get_characters()
-    wild = options.Options_.is_code_active('partyparty')
-    sabin_mode = options.Options_.is_code_active('suplexwrecks')
-    tina_mode = options.Options_.is_code_active('bravenudeworld')
-    soldier_mode = options.Options_.is_code_active('quikdraw')
-    moogle_mode = options.Options_.is_code_active('kupokupo')
-    ghost_mode = options.Options_.is_code_active('halloween')
+    wild = options.Options_.is_flag_active('partyparty')
+    sabin_mode = options.Options_.is_flag_active('suplexwrecks')
+    tina_mode = options.Options_.is_flag_active('bravenudeworld')
+    soldier_mode = options.Options_.is_flag_active('quikdraw')
+    moogle_mode = options.Options_.is_flag_active('kupokupo')
+    ghost_mode = options.Options_.is_flag_active('halloween')
 
     names = []
     if tina_mode:
@@ -321,7 +322,7 @@ def manage_character_names(fout, change_to, male):
         from monsterrandomizer import change_enemy_name
         change_enemy_name(fout, umaro_id, umaro_name)
 
-    if not options.Options_.is_code_active('capslockoff'):
+    if not options.Options_.is_flag_active('capslockoff'):
         names = [name.upper() for name in names]
 
     for c in characters:
@@ -338,8 +339,8 @@ def manage_character_names(fout, change_to, male):
 
 def get_free_portrait_ids(swap_to, change_to, char_ids, char_portraits):
     # get unused portraits so we can overwrite them if needed
-    sprite_swap_mode = options.Options_.is_code_active('makeover')
-    wild = options.Options_.is_code_active('partyparty')
+    sprite_swap_mode = options.Options_.is_flag_active('makeover')
+    wild = options.Options_.is_flag_active('partyparty')
     if not sprite_swap_mode:
         return [], False
 
@@ -386,11 +387,11 @@ def get_free_portrait_ids(swap_to, change_to, char_ids, char_portraits):
 
 
 def get_sprite_swaps(char_ids, male, female, vswaps):
-    sprite_swap_mode = options.Options_.is_code_active('makeover')
-    wild = options.Options_.is_code_active('partyparty')
-    clone_mode = options.Options_.is_code_active('cloneparty')
-    replace_all = options.Options_.is_code_active('novanilla') or options.Options_.is_code_active('frenchvanilla')
-    external_vanillas = False if options.Options_.is_code_active('novanilla') else (options.Options_.is_code_active('frenchvanilla') or clone_mode)
+    sprite_swap_mode = options.Options_.is_flag_active('makeover')
+    wild = options.Options_.is_flag_active('partyparty')
+    clone_mode = options.Options_.is_flag_active('cloneparty')
+    replace_all = options.Options_.is_flag_active('novanilla') or options.Options_.is_flag_active('frenchvanilla')
+    external_vanillas = False if options.Options_.is_flag_active('novanilla') else (options.Options_.is_flag_active('frenchvanilla') or clone_mode)
     if not sprite_swap_mode:
         return []
 
@@ -447,7 +448,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
         known_replacements.extend(og_replacements)
 
     # weight selection based on no*/hate*/like*/only* codes
-    whitelist = [c for c in options.Options_.active_codes.keys() if options.Options_.get_code_value(c) == "only"]
+    whitelist = [c for c in options.Options_.active_flags.keys() if options.Options_.get_flag_value(c) == "only"]
     replace_candidates = []
     for r in known_replacements:
         whitelisted = False
@@ -456,11 +457,11 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
                 break
             if g in whitelist:
                 whitelisted = True
-            if options.Options_.get_code_value(g) == "no":
+            if options.Options_.get_flag_value(g) == "no":
                 r.weight = 0
-            elif options.Options_.get_code_value(g) == "hate":
+            elif options.Options_.get_flag_value(g) == "hate":
                 r.weight /= 3
-            elif options.Options_.get_code_value(g) == "like":
+            elif options.Options_.get_flag_value(g) == "like":
                 r.weight *= 2
         if whitelist and not whitelisted:
             r.weight = 0
@@ -510,15 +511,15 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
 
 def manage_character_appearance(fout, preserve_graphics=False):
     characters = get_characters()
-    wild = options.Options_.is_code_active('partyparty')
-    sabin_mode = options.Options_.is_code_active('suplexwrecks')
-    tina_mode = options.Options_.is_code_active('bravenudeworld')
-    soldier_mode = options.Options_.is_code_active('quikdraw')
-    moogle_mode = options.Options_.is_code_active('kupokupo')
-    ghost_mode = options.Options_.is_code_active('halloween')
-    christmas_mode = options.Options_.is_code_active('christmas')
-    sprite_swap_mode = options.Options_.is_code_active('makeover') and not (sabin_mode or tina_mode or soldier_mode or moogle_mode or ghost_mode)
-    new_palette_mode = not options.Options_.is_code_active('sometimeszombies')
+    wild = options.Options_.is_flag_active('partyparty')
+    sabin_mode = options.Options_.is_flag_active('suplexwrecks')
+    tina_mode = options.Options_.is_flag_active('bravenudeworld')
+    soldier_mode = options.Options_.is_flag_active('quikdraw')
+    moogle_mode = options.Options_.is_flag_active('kupokupo')
+    ghost_mode = options.Options_.is_flag_active('halloween')
+    christmas_mode = options.Options_.is_flag_active('christmas')
+    sprite_swap_mode = options.Options_.is_flag_active('makeover') and not (sabin_mode or tina_mode or soldier_mode or moogle_mode or ghost_mode)
+    new_palette_mode = not options.Options_.is_flag_active('sometimeszombies')
 
     sprite_log = ""
 
@@ -764,10 +765,10 @@ def manage_character_appearance(fout, preserve_graphics=False):
 
 
 def manage_palettes(fout, change_to, char_ids):
-    sabin_mode = options.Options_.is_code_active('suplexwrecks')
-    tina_mode = options.Options_.is_code_active('bravenudeworld')
-    christmas_mode = options.Options_.is_code_active('christmas')
-    new_palette_mode = not options.Options_.is_code_active('sometimeszombies')
+    sabin_mode = options.Options_.is_flag_active('suplexwrecks')
+    tina_mode = options.Options_.is_flag_active('bravenudeworld')
+    christmas_mode = options.Options_.is_flag_active('christmas')
+    new_palette_mode = not options.Options_.is_flag_active('sometimeszombies')
 
     from locationrandomizer import get_npcs
     characters = get_characters()
@@ -855,7 +856,7 @@ def manage_palettes(fout, change_to, char_ids):
                 fout.write(bytes([byte]))
         character.palette = new_palette
 
-    if options.Options_.is_code_active('repairpalette'):
+    if options.Options_.is_flag_active('repairpalette'):
         make_palette_repair(fout, main_palette_changes)
 
     if new_palette_mode:
@@ -925,9 +926,9 @@ def manage_palettes(fout, change_to, char_ids):
             continue
         line = line.split(' ')
         if len(line) > 1:
-            if line[1] == 'c' and options.Options_.is_code_active('thescenarionottaken'):
+            if line[1] == 'c' and options.Options_.is_flag_active('thescenarionottaken'):
                 return
-            if line[1] == 'd' and not options.Options_.is_code_active('thescenarionottaken'):
+            if line[1] == 'd' and not options.Options_.is_flag_active('thescenarionottaken'):
                 return
         pointer = hex2int(line[0].strip())
         fout.seek(pointer)

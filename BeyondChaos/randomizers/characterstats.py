@@ -10,7 +10,7 @@ class CharacterStats(Randomizer):
 
     def __init__(self, rng: random.Random, options: Options, characters: List[Character]):
         super().__init__(options)
-        self._randomize_level = not self._Options.is_code_active('worringtriad')
+        self._randomize_level = not self._Options.is_flag_active('worringtriad')
         self._characters = characters
         self._rng = rng
 

@@ -26,11 +26,11 @@ def music_init():
     
 def randomize_music(fout, Options_, opera=None, form_music_overrides={}):
     events = ""
-    if Options_.is_code_active('christmas'):
+    if Options_.is_flag_active('christmas'):
         events += "W"
-    if Options_.is_code_active('halloween'):
+    if Options_.is_flag_active('halloween'):
         events += "H"
-    f_chaos = Options_.is_code_active('johnnyachaotic')
+    f_chaos = Options_.is_flag_active('johnnyachaotic')
 
     kan_mode = Options_.mode.name == 'katn'
 
@@ -40,7 +40,7 @@ def randomize_music(fout, Options_, opera=None, form_music_overrides={}):
     ## For anyone who wants to add UI for playlist selection:
     ## If a playlist is selected, pass it as process_music(playlist_filename=...)
     data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath="music", freespace=BC_MUSIC_FREESPACE, ext_rng=random)
-    if not Options_.is_any_code_active(['ancientcave', 'speedcave', 'racecave']):
+    if not Options_.is_any_flag_active(['ancientcave', 'speedcave', 'racecave']):
         data = process_map_music(data)
     data = process_formation_music_by_table(data, form_music_overrides=form_music_overrides, kan_mode=kan_mode)
     

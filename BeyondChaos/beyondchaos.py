@@ -24,7 +24,7 @@ import utils
 import customthreadpool
 from config import (read_flags, write_flags, validate_files, are_updates_hidden, updates_hidden,
                     get_input_path, get_output_path, save_version, check_player_sprites, check_remonsterate)
-from options import (NORMAL_CODES, MAKEOVER_MODIFIER_CODES, get_makeover_groups)
+from options import (NORMAL_FLAGS, MAKEOVER_MODIFIER_FLAGS, get_makeover_groups)
 from update import (get_updater)
 from randomizer import randomize, VERSION, BETA, MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2
 
@@ -277,7 +277,7 @@ class Window(QMainWindow):
 
         # Begin buiding program/window
         # pull data from files
-        self.initCodes()
+        self.initFlags()
 
         # create window using geometry data
         self.initWindow()
@@ -903,30 +903,30 @@ class Window(QMainWindow):
 
     # (At startup) Opens reads code flags/descriptions and
     #   puts data into separate dictionaries
-    def initCodes(self):
-        for code in NORMAL_CODES + MAKEOVER_MODIFIER_CODES:
-            if code.category == "flags":
+    def initFlags(self):
+        for flag in NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS:
+            if flag.category == "flags":
                 d = self.flag
-            elif code.category == "aesthetic":
+            elif flag.category == "aesthetic":
                 d = self.aesthetic
-            elif code.category == "sprite":
+            elif flag.category == "sprite":
                 d = self.sprite
-            elif code.category == "spriteCategories":
+            elif flag.category == "spriteCategories":
                 d = self.spriteCategories
-            elif code.category == "experimental":
+            elif flag.category == "experimental":
                 d = self.experimental
-            elif code.category == "gamebreaking":
+            elif flag.category == "gamebreaking":
                 d = self.gamebreaking
-            elif code.category == "field":
+            elif flag.category == "field":
                 d = self.field
-            elif code.category == "characters":
+            elif flag.category == "characters":
                 d = self.characters
-            elif code.category == "beta":
+            elif flag.category == "beta":
                 d = self.beta
-            elif code.category == "battle":
+            elif flag.category == "battle":
                 d = self.battle
             else:
-                print(f"Code {code.name} does not have a valid category.")
+                print(f"Flag {flag.name} does not have a valid category.")
                 continue
 
             # d[code.name] = {
@@ -935,9 +935,9 @@ class Window(QMainWindow):
             #     'checked': False,
             #     'choices': code.choices
             # }
-            d[code.name] = {
+            d[flag.name] = {
                 'checked': False,
-                'object': code
+                'object': flag
             }
 
         # for flag in sorted(ALL_FLAGS):
@@ -1078,7 +1078,7 @@ class Window(QMainWindow):
 
         self.modeBox.setCurrentIndex(0)
         self.presetBox.setCurrentIndex(0)
-        self.initCodes()
+        self.initFlags()
         self.updateFlagCheckboxes()
         self.flagButtonClicked()
         self.flagString.clear()
@@ -1301,7 +1301,7 @@ class Window(QMainWindow):
                 QMessageBox.about(
                     self,
                     "Error",
-                    "You need to select a flag and/or code!"
+                    "You need to select a flag!"
                 )
                 return
 
