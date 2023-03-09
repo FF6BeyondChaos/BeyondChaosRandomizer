@@ -44,7 +44,7 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
                                change_enemy_name, randomize_enemy_name,
                                get_collapsing_house_help_skill)
 from musicinterface import randomize_music, manage_opera, get_music_spoiler, music_init, get_opera_log
-from options import ALL_MODES, ALL_FLAGS, Options_
+from options import ALL_MODES, NORMAL_CODES, Options_
 from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
@@ -4108,7 +4108,7 @@ def manage_opening():
 
     from string import ascii_letters as alpha
     consonants = "".join([c for c in alpha if c not in "aeiouy"])
-    flag_names = [f.name for f in Options_.active_flags]
+    flag_names = [f for f in Options_.active_codes.keys() if len(f) == 1]
     display_flags = sorted([a for a in alpha if a in flag_names])
     text = "".join([consonants[int(i)] for i in str(seed)])
     codestatus = "CODES ON" if Options_.active_codes else "CODES OFF"
@@ -4988,10 +4988,6 @@ def randomize(**kwargs) -> str:
     global outfile, sourcefile, flags, seed, fout, ALWAYS_REPLACE, NEVER_REPLACE
 
     if TEST_ON:
-        # while len(args) < 3:
-        #    args.append(None)
-        # args[1] = TEST_FILE
-        # args[2] = TEST_SEED
         kwargs['sourcefile'] = TEST_FILE
         kwargs['seed'] = TEST_SEED
     sleep(0.5)
@@ -5003,22 +4999,9 @@ def randomize(**kwargs) -> str:
     previous_output_directory = ''
 
     sourcefile = kwargs.get('sourcefile')
-    # if len(args) > 2:
-    # sourcefile = args[1].strip()
-    # else:
     if not sourcefile:
         previous_rom_path = get_input_path()
         previous_output_directory = get_output_path()
-        # try:
-        #     config = configparser.ConfigParser()
-        #     config.read('bcce.cfg')
-        #     if 'ROM' in config:
-        #         previous_rom_path = config['ROM']['Path']
-        #         previous_output_directory = config['ROM']['Output']
-        # except (IOError, KeyError) as e:
-        #     print(str(e))
-        #     pass
-
         previous_input = f" (blank for default: {previous_rom_path})" if previous_rom_path else ""
         sourcefile = input(f"Please input the file name of your copy of "
                            f"the FF3 US 1.0 rom{previous_input}:\n> ").strip()
@@ -5034,10 +5017,6 @@ def randomize(**kwargs) -> str:
     sourcefile = os.path.abspath(sourcefile)
 
     output_directory = kwargs.get('output_directory')
-    # if len(args) > 4:
-    # If a directory was supplied by the GUI, use that directory
-    # output_directory = args[4]
-    # else:
     if not output_directory:
         # If no previous directory or an invalid directory was obtained from bcce.cfg, default to the ROM's directory
         if not previous_output_directory or not os.path.isdir(os.path.normpath(previous_output_directory)):
@@ -5099,11 +5078,7 @@ def randomize(**kwargs) -> str:
     flaghelptext = '''!   Recommended new player flags
 -   Use all flags EXCEPT the ones listed'''
 
-    #speeddial_opts = {}
-
     fullseed = kwargs.get('seed')
-    # if len(args) > 2:
-    # fullseed = args[2].strip()
     if fullseed:
         fullseed = str(fullseed).strip()
     else:
@@ -5127,10 +5102,10 @@ def randomize(**kwargs) -> str:
                             mode_num = i
                             break
             mode = ALL_MODES[mode_num]
-            allowed_flags = [f for f in ALL_FLAGS if f.name not in mode.prohibited_flags]
+            allowed_flags = [f for f in NORMAL_CODES if f.category == "flags" and f.name not in mode.prohibited_flags]
             print()
-            for flag in sorted(allowed_flags):
-                print(flag.name, flag.description)
+            for flag in sorted(allowed_flags, key=lambda f: f.name):
+                print(flag.name, " - ", flag.long_description)
             print(flaghelptext + "\n")
             print("Save frequently used flag sets by adding 0: through 9: before the flags.")
             for speeddial_number, speeddial_flags in speeddials:
@@ -5138,7 +5113,7 @@ def randomize(**kwargs) -> str:
             print()
             flags = input("Please input your desired flags (blank for "
                           "all of them):\n> ").strip()
-            if flags == "!" :
+            if flags == "!":
                 flags = '-dfklu partyparty makeover johnnydmad'
 
             is_speeddialing = re.search("^[0-9]$", flags)
@@ -5174,7 +5149,6 @@ def randomize(**kwargs) -> str:
     if mode_num not in range(len(ALL_MODES)):
         raise Exception("Invalid mode specified")
     Options_.mode = ALL_MODES[mode_num]
-    allowed_flags = [f for f in ALL_FLAGS if f.name not in Options_.mode.prohibited_flags]
 
     seed = seed.strip()
     if not seed:
@@ -5202,31 +5176,8 @@ def randomize(**kwargs) -> str:
         try:
             save_input_path(sourcefile)
             save_output_path(output_directory)
-
-            # config = configparser.ConfigParser()
-            # config.read('bcce.cfg')
-            # if 'ROM' not in config:
-            #     config['ROM'] = {}
-            # if 'speeddial' not in config:
-            #     config['speeddial'] = {}
-            # config['ROM']['Path'] = sourcefile
-
-            # # Save the output directory
-            # if str(output_directory).lower() == str(os.path.dirname(sourcefile)).lower():
-            #     # If the output directory is the same as the ROM directory, save an empty string
-            #     config['ROM']['Output'] = ''
-            # else:
-            #     config['ROM']['Output'] = output_directory
-            # #config['speeddial'].update({k: v for k, v in speeddial_opts.items() if k != '!'})
-            # with open('bcce.cfg', 'w') as cfg_file:
-            #     config.write(cfg_file)
         except:
             print("Couldn't save flag string\n")
-        # else:
-        #     try:
-        #         os.remove('savedflags.txt')
-        #     except OSError:
-        #         pass
 
     if len(data) % 0x400 == 0x200:
         print("NOTICE: Headered ROM detected. Output file will have no header.")
@@ -5248,21 +5199,15 @@ def randomize(**kwargs) -> str:
     copyfile(sourcefile, outfile)
 
     flags = flags.lower()
-    # flags = flags.replace('endless9', 'endless~nine~')
-    # for d in "!0123456789":
-    #    if d in speeddial_opts:
-    #        replacement = speeddial_opts[d]
-    #    else:
-    #        replacement = ''
-    #    flags = flags.replace(d, replacement)
-    #    flags = flags.replace('endless9', 'endless~nine~')
-    # flags = flags.replace('endless~nine~', 'endless9')
+    activation_string = Options_.activate_from_string(flags)
 
     if version and version != VERSION:
         print("WARNING! Version mismatch! "
               "This seed will not produce the expected result!")
-    s = "Using seed: %s|%s|%s|%s" % (VERSION, Options_.mode.name, flags, seed)
-    print(s)
+    s = "Using seed: %s|%s|%s|%s" % (VERSION,
+                                     Options_.mode.name,
+                                     " ".join(Options_.active_codes.keys()),
+                                     seed)
     log(s, section=None)
     log("This is a game guide generated for the Beyond Chaos CE FF6 Randomizer.",
         section=None)
@@ -5274,8 +5219,6 @@ def randomize(**kwargs) -> str:
 
     character.load_characters(original_rom_location, force_reload=True)
     characters = get_characters()
-
-    activation_string = Options_.activate_from_string(flags)
 
     tm = gmtime(seed)
     if tm.tm_mon == 12 and (tm.tm_mday == 24 or tm.tm_mday == 25):
