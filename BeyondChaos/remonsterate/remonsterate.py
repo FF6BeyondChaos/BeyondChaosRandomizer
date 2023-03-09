@@ -826,7 +826,7 @@ def nuke():
 
 
 def prepare_image(image: Image) -> Image:
-    allowed_colors = 0xF
+    allowed_colors = 0x10
     image_filename = image.filename
     palette_indexes = set(image.tobytes())
 
@@ -873,12 +873,16 @@ def prepare_image(image: Image) -> Image:
         image = ImageOps.expand(image, border=(0, 0, 0, border_width), fill=border_color)
 
     # If the image has too many colors, convert it into a form with reduced colors
-    if max(palette_indexes) > allowed_colors:
+    # if max(palette_indexes) > allowed_colors:
+    if not max(palette_indexes) == 8 or max(palette_indexes) == 16:
         if image.mode == "P":
             # Images already in P mode cannot be converted to P mode to shrink their allowed colors, so
             #   temporarily convert them back to RGB
-            image = image.convert("RGB")
-        image = image.convert("P", palette=Image.ADAPTIVE, colors=allowed_colors)
+            image = image.convert("RGBA")
+        if max(palette_indexes) < 8:
+            image = image.convert("P", palette=Image.ADAPTIVE, colors=int(allowed_colors / 2))
+        else:
+            image = image.convert("P", palette=Image.ADAPTIVE, colors=int(allowed_colors))
 
     image.filename = image_filename
     return image

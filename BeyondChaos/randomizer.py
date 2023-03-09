@@ -70,17 +70,17 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-4.2.0"
+VERSION = "CE-4.2.1"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "CE-4.2.0|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad bsiab questionablecontent removeflashing nicerpoison canttouchthis easymodo mpboost:10.0|1603333081"
-#FLARE GLITCH TEST_SEED = "CE-4.2.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
-#REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-#TEST_SEED = "CE-4.2.0|katn|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla randombosses dancingmaduin madworld alasdraco capslockoff johnnyachaotic notawaiter removeflashing bsiab questionablecontent thescenarionottaken|1671237882"
-#TEST_SEED = "CE-4.2.0|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter mimetime questionablecontent|1672183987"
+TEST_SEED = "CE-4.2.1|normal|bcdefghijklmnopqrstuwyz electricboogaloo capslockoff johnnydmad bsiab questionablecontent removeflashing nicerpoison canttouchthis easymodo|1603333081"
+#FLARE GLITCH TEST_SEED = "CE-4.2.1|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
+#REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.1|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
+#TEST_SEED = "CE-4.2.1|katn|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla randombosses dancingmaduin madworld alasdraco capslockoff johnnyachaotic notawaiter removeflashing bsiab questionablecontent thescenarionottaken|1671237882"
+#TEST_SEED = "CE-4.2.1|normal|b d e f g h i j k l m n o p q r s t u w y z makeover partyparty novanilla object:only electricboogaloo randombosses dancingmaduin dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter removeflashing nicerpoison mimetime questionablecontent morefanatical cursedencounters easymodo canttouchthis|1676858417"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -4765,12 +4765,14 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
             salt_formations.add((formation.formid - 1))
             salt_formations.add((formation.formid - 2))
             salt_formations.add((formation.formid - 3))
+            salt_formations.add((formation.formid - 4))
         for i, v in enumerate(formation.big_enemy_ids):
             if formation.big_enemy_ids[i] in [273, 293, 299, 304, 306, 307, 313, 314, 315, 323, 355, 356, 358, 361, 362, 363, 364, 365, 369, 373]: #don't do Zone Eater, Naughty, L.X Magic, Phunbaba, Guardian, Merchant, Officer
                 event_formations.add(formation.formid)
                 salt_formations.add((formation.formid - 1))
                 salt_formations.add((formation.formid - 2))
                 salt_formations.add((formation.formid - 3))
+                salt_formations.add((formation.formid - 4))
 
     salt_formations = [id for id in salt_formations if id not in event_formations]
 
@@ -4780,12 +4782,17 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
     for fset in fsets:
         if Options_.is_code_active("cursedencounters"): #code that applies FC flag to allow 16 encounters in all zones
             if fset.setid < 252 or fset.setid in good_event_fsets: #only do regular enemies, don't do sets that can risk Zone Eater or get event encounters
-                if not [value for value in fset.formids if
-                        value in event_formations]:
-                    fset.sixteen_pack = True
+                for i, v in enumerate(fset.formids):
+                    if not (fset.formids[i] in event_formations or fset.formids[i] in salt_formations):
+                #if not [value for value in fset.formids if
+                #        value in event_formations]:
+                        #print("ENCOUNTER SET:" + str(fset.setid) + " GOOD FORMATION IDS: " + str(fset.formids))
+                        fset.sixteen_pack = True
                 for i, v in enumerate(fset.formids):
                     if fset.formids[i] in salt_formations:
+                        #print("ENCOUNTER SET:" + str(fset.setid) + " PRE SALT FORMATION IDS: " + str(fset.formids))
                         fset.formids[i] -= 3  # any encounter that could turn into an event encounter, reduce by 3 so it can't
+                        #print("ENCOUNTER SET:" + str(fset.setid) + " POST SALT FORMATION IDS: " + str(fset.formids))
                         fset.sixteen_pack = True
 
 def nerf_paladin_shield():

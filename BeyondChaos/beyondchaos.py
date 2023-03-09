@@ -25,6 +25,7 @@ import customthreadpool
 from config import (read_flags, write_flags, validate_files, are_updates_hidden, updates_hidden,
                     get_input_path, get_output_path, save_version, check_player_sprites, check_remonsterate)
 from options import (NORMAL_CODES, MAKEOVER_MODIFIER_CODES, get_makeover_groups)
+
 from update import (get_updater)
 from randomizer import randomize, VERSION, BETA, MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2
 
@@ -197,7 +198,7 @@ class Window(QMainWindow):
         # values to be sent to Randomizer
         self.romText = ""
         self.romOutputDirectory = ""
-        self.version = "CE-4.2.0"
+        self.version = "CE-4.2.1"
         self.mode = "normal"
         self.seed = ""
         self.flags = []
@@ -681,6 +682,7 @@ class Window(QMainWindow):
                         cmbbox.setCurrentIndex(cmbbox.findText("Normal"))
                         flaglbl = QLabel(f"{flagname} (" + str(self.makeover_groups[flagname]) +
                                          ")   -  " + f"{flag['object'].long_description}")
+
                     else:
                         cmbbox.setCurrentIndex(cmbbox.findText("Vanilla"))
                         flaglbl = QLabel(f"{flagname}  -  {flag['object'].long_description}")

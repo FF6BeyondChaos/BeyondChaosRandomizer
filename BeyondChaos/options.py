@@ -38,6 +38,7 @@ class Code:
     minimum_value: int = 0
     maximum_value: int = 255
 
+
     def remove_from_string(self, flag_string: str, mode: Mode):
         name = self.name
         invert_simple_flags = flag_string.startswith("-")
@@ -238,6 +239,7 @@ def read_Options_from_string(flag_string: str, mode: Union[Mode, str]):
     return codes
 
 
+
 ANCIENT_CAVE_PROHIBITED_CODES = [
     "airship",
     "alasdraco",
@@ -247,7 +249,6 @@ ANCIENT_CAVE_PROHIBITED_CODES = [
     "thescenarionottaken",
     "mimetime"
 ]
-
 
 ANCIENT_CAVE_PROHIBITED_FLAGS = {
     "d",
@@ -285,101 +286,6 @@ ALL_MODES = [
          prohibited_codes=["airship", "alasdraco", "thescenarionottaken"],
          prohibited_flags={"j"}),
 ]
-
-# ALL_FLAGS = [
-#     Flag(name='b',
-#          description='fix_exploits',
-#          long_description='Make the game more balanced by removing known exploits.',
-#          inputtype="checkbox"),
-#     Flag(name='c',
-#          description='random_palettes_and_names',
-#          long_description='Randomize palettes and names of various things.',
-#          inputtype="checkbox"),
-#     Flag(name='d',
-#          description='random_final_dungeon',
-#          long_description='Randomize final dungeon.',
-#          inputtype="checkbox"),
-#     Flag(name='e',
-#          description='random_espers',
-#          long_description='Randomize esper spells and levelup bonuses.',
-#          inputtype="checkbox"),
-#     Flag(name='f',
-#          description='random_formations',
-#          long_description='Randomize enemy formations.',
-#          inputtype="checkbox"),
-#     Flag(name='g',
-#          description='random_dances',
-#          long_description='Randomize dances.',
-#          inputtype="checkbox"),
-#     Flag(name='h',
-#          description='random_final_party',
-#          long_description='Your party in the Final Kefka fight will be random.',
-#          inputtype="checkbox"),
-#     Flag(name='i',
-#          description='random_items',
-#          long_description='Randomize the stats of equippable items.',
-#          inputtype="checkbox"),
-#     Flag(name='j',
-#          description='randomize_forest',
-#          long_description='Randomize the phantom forest.',
-#          inputtype="checkbox"),
-#     Flag(name='k',
-#          description='random_clock',
-#          long_description='Randomize the clock in Zozo.',
-#          inputtype="checkbox"),
-#     Flag(name='l',
-#          description='random_blitz',
-#          long_description='Randomize blitz inputs.',
-#          inputtype="checkbox"),
-#     Flag(name='m',
-#          description='random_enemy_stats',
-#          long_description='Randomize enemy stats.',
-#          inputtype="checkbox"),
-#     Flag(name='n',
-#          description='random_window',
-#          long_description='Randomize window background colors.',
-#          inputtype="checkbox"),
-#     Flag(name='o',
-#          description='shuffle_commands',
-#          long_description="Shuffle characters' in-battle commands.",
-#          inputtype="checkbox"),
-#     Flag(name='p',
-#          description='random_animation_palettes',
-#          long_description='Randomize the palettes of spells and weapon animations.',
-#          inputtype="checkbox"),
-#     Flag(name='q',
-#          description='random_character_stats',
-#          long_description='Randomize what equipment each character can wear and character stats.',
-#          inputtype="checkbox"),
-#     Flag(name='r',
-#          description='shuffle_wor',
-#          long_description='Randomize character locations in the world of ruin.',
-#          inputtype="checkbox"),
-#     Flag(name='s',
-#          description='swap_sprites',
-#          long_description='Swap character graphics around.',
-#          inputtype="checkbox"),
-#     Flag(name='t',
-#          description='random_treasure',
-#          long_description='Randomize treasure including chests, colosseum, shops, and enemy drops.',
-#          inputtype="checkbox"),
-#     Flag(name='u',
-#          description='random_zerker',
-#          long_description='Umaro risk. (Random character will be berserk)',
-#          inputtype="checkbox"),
-#     Flag(name='w',
-#          description='replace_commands',
-#          long_description='Generate new commands for characters,replacing old commands.',
-#          inputtype="checkbox"),
-#     Flag(name='y',
-#          description='randomize_magicite',
-#          long_description='Shuffle magicite locations.',
-#          inputtype="checkbox"),
-#     Flag(name='z',
-#          description='sprint',
-#          long_description='Always have "Sprint Shoes" effect.',
-#          inputtype="checkbox"),
-# ]
 
 NORMAL_CODES = [
     # Flags
@@ -647,16 +553,19 @@ NORMAL_CODES = [
          long_description="All battles will award multiplied exp.",
          category="battle",
          inputtype="float2"),
+
     Code(name='gpboost',
          description="MULTIPLIED GP MODE",
          long_description="All battles will award multiplied gp.",
          category="battle",
          inputtype="float2"),
+
     Code(name='mpboost',
          description="MULTIPLIED MP MODE",
          long_description="All battles will award multiplied magic points.",
          category="battle",
          inputtype="float2"),
+
     Code(name='dancelessons',
          description="NO DANCE FAILURES",
          long_description="Removes the 50% chance that dances will fail when used on a different terrain.",
@@ -687,6 +596,7 @@ NORMAL_CODES = [
          inputtype="integer",
          default_value="255",
          maximum_value=255),
+
     Code(name='lessfanatical',
          description="EASY FANATICS TOWER MODE",
          long_description="Disables forced magic command in Fanatic's Tower.",
@@ -724,6 +634,7 @@ NORMAL_CODES = [
          category="field",
          inputtype="integer",
          default_value="0"),
+
     Code(name='worringtriad',
          description="START IN WOR",
          long_description="The player will start in the World of Ruin, with all of the World of Balance "
@@ -922,6 +833,7 @@ def get_makeover_groups():
                      choices=("Normal", "No", "Hate", "Like", "Only"),
                      default_value="Normal",
                      default_index=0)])
+
             RESTRICTED_VANILLA_SPRITE_CODES.append(no)
     except FileNotFoundError:
         pass
