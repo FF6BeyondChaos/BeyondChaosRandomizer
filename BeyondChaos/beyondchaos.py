@@ -24,7 +24,7 @@ import utils
 import customthreadpool
 from config import (read_flags, write_flags, validate_files, are_updates_hidden, updates_hidden,
                     get_input_path, get_output_path, save_version, check_player_sprites, check_remonsterate)
-from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES, makeover_groups)
+from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES, get_makeover_groups)
 from update import (get_updater)
 from randomizer import randomize, VERSION, BETA, MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2
 
@@ -222,6 +222,7 @@ class Window(QMainWindow):
             self.aesthetic, self.field, self.characters, self.experimental, self.gamebreaking,
             self.beta
         ]
+        self.makeover_groups = get_makeover_groups()
         # keep a list of all checkboxes
         self.checkBoxes = []
 
@@ -647,9 +648,9 @@ class Window(QMainWindow):
                         width = max(width, len(choice) * 10)
                     cmbbox.setFixedWidth(width)
                     cmbbox.text = flagname
-                    if makeover_groups and flagname in makeover_groups:
+                    if self.makeover_groups and flagname in self.makeover_groups:
                         cmbbox.setCurrentIndex(cmbbox.findText("Normal"))
-                        flaglbl = QLabel(f"{flagname} (" + str(makeover_groups[flagname]) +
+                        flaglbl = QLabel(f"{flagname} (" + str(self.makeover_groups[flagname]) +
                                          ")   -  " + f"{flagdesc['explanation']}")
                     else:
                         cmbbox.setCurrentIndex(cmbbox.findText("Vanilla"))
@@ -1053,7 +1054,7 @@ class Window(QMainWindow):
                 elif type(child) == QSpinBox or type(child) == QDoubleSpinBox:
                     child.setValue(child.default)
                 elif type(child) == QComboBox:
-                    if makeover_groups and child.text in makeover_groups:
+                    if self.makeover_groups and child.text in self.makeover_groups:
                         child.setCurrentIndex(child.findText("Normal"))
                     else:
                         child.setCurrentIndex(child.findText("Vanilla"))

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Set, Union
-from appearance import get_makeover_groups
+
 
 @dataclass(frozen=True)
 class Mode:
@@ -29,9 +29,9 @@ class Code:
     long_description: str
     category: str
     inputtype: str
-    choices: [str] = None
     key1: str = ''
     key2: str = ''
+    choices: [str] = field(default_factory=list)
 
     def remove_from_string(self, s: str):
         name = self.name
@@ -83,7 +83,7 @@ class Options:
     def is_code_active(self, code_name: str):
         if code_name in self.active_codes.keys():
             return True
-        #for code in self.active_codes:
+        # for code in self.active_codes:
         #    if code.name == code_name:
         #        return True
         return False
@@ -92,7 +92,7 @@ class Options:
         for code in code_names:
             if code in self.active_codes.keys():
                 return True
-        #for code in self.active_codes:
+        # for code in self.active_codes:
         #    if code.name in code_names:
         #        return True
         return False
@@ -181,6 +181,7 @@ def read_Options_from_string(flag_string: str, mode: Union[Mode, str]):
 
     return flags, codes
 
+
 ANCIENT_CAVE_PROHIBITED_CODES = [
     "airship",
     "alasdraco",
@@ -190,7 +191,6 @@ ANCIENT_CAVE_PROHIBITED_CODES = [
     "thescenarionottaken",
     "mimetime"
 ]
-
 
 ANCIENT_CAVE_PROHIBITED_FLAGS = {
     "d",
@@ -217,9 +217,11 @@ ALL_MODES = [
          prohibited_codes=ANCIENT_CAVE_PROHIBITED_CODES,
          prohibited_flags=ANCIENT_CAVE_PROHIBITED_FLAGS),
     Mode(name="katn",
-         description="Play the normal story up to Kefka at Narshe. Intended for racing.", # Static number of encounters on Lete River, No charm drops, Start with random Espers, Curated enemy specials, Banned Baba Breath & Seize
+         description="Play the normal story up to Kefka at Narshe. Intended for racing.",
          prohibited_codes=["airship", "alasdraco", "worringtriad", "mimetime"],
          prohibited_flags={"d", "k", "r"}),
+    # Static number of encounters on Lete River, No charm drops, Start with random Espers,
+    # Curated enemy specials, Banned Baba Breath & Seize
     Mode(name="dragonhunt",
          description="Kill all 8 dragons in the World of Ruin. Intended for racing.",
          forced_codes=["worringtriad"],
@@ -228,111 +230,452 @@ ALL_MODES = [
 ]
 
 ALL_FLAGS = [
-    Flag('b', 'fix_exploits', 'Make the game more balanced by removing known exploits.', "checkbox"),
-    Flag('c', 'random_palettes_and_names', 'Randomize palettes and names of various things.', "checkbox"),
-    Flag('d', 'random_final_dungeon', 'Randomize final dungeon.', "checkbox"),
-    Flag('e', 'random_espers', 'Randomize esper spells and levelup bonuses.', "checkbox"),
-    Flag('f', 'random_formations', 'Randomize enemy formations.', "checkbox"),
-    Flag('g', 'random_dances', 'Randomize dances.', "checkbox"),
-    Flag('h', 'random_final_party', 'Your party in the Final Kefka fight will be random.', "checkbox"),
-    Flag('i', 'random_items', 'Randomize the stats of equippable items.', "checkbox"),
-    Flag('j', 'randomize_forest', 'Randomize the phantom forest.', "checkbox"),
-    Flag('k', 'random_clock', 'Randomize the clock in Zozo.', "checkbox"),
-    Flag('l', 'random_blitz', 'Randomize blitz inputs.', "checkbox"),
-    Flag('m', 'random_enemy_stats', 'Randomize enemy stats.', "checkbox"),
-    Flag('n', 'random_window', 'Randomize window background colors.', "checkbox"),
-    Flag('o', 'shuffle_commands', "Shuffle characters' in-battle commands.", "checkbox"),
-    Flag('p', 'random_animation_palettes', 'Randomize the palettes of spells and weapon animations.', "checkbox"),
-    Flag('q', 'random_character_stats', 'Randomize what equipment each character can wear and character stats.', "checkbox"),
-    Flag('r', 'shuffle_wor', 'Randomize character locations in the world of ruin.', "checkbox"),
-    Flag('s', 'swap_sprites', 'Swap character graphics around.', "checkbox"),
-    Flag('t', 'random_treasure', 'Randomize treasure, including chests, colosseum, shops, and enemy drops.', "checkbox"),
-    Flag('u', 'random_zerker', 'Umaro risk. (Random character will be berserk)', "checkbox"),
-    Flag('w', 'replace_commands', 'Generate new commands for characters, replacing old commands.', "checkbox"),
-    Flag('y', 'randomize_magicite', 'Shuffle magicite locations.', "checkbox"),
-    Flag('z', 'sprint', 'Always have "Sprint Shoes" effect.', "checkbox"),
+    Flag(name='b',
+         attr='fix_exploits',
+         description='Make the game more balanced by removing known exploits.',
+         inputtype="checkbox"),
+    Flag(name='c',
+         attr='random_palettes_and_names',
+         description='Randomize palettes and names of various things.',
+         inputtype="checkbox"),
+    Flag(name='d',
+         attr='random_final_dungeon',
+         description='Randomize final dungeon.',
+         inputtype="checkbox"),
+    Flag(name='e',
+         attr='random_espers',
+         description='Randomize esper spells and levelup bonuses.',
+         inputtype="checkbox"),
+    Flag(name='f',
+         attr='random_formations',
+         description='Randomize enemy formations.',
+         inputtype="checkbox"),
+    Flag(name='g',
+         attr='random_dances',
+         description='Randomize dances.',
+         inputtype="checkbox"),
+    Flag(name='h',
+         attr='random_final_party',
+         description='Your party in the Final Kefka fight will be random.',
+         inputtype="checkbox"),
+    Flag(name='i',
+         attr='random_items',
+         description='Randomize the stats of equippable items.',
+         inputtype="checkbox"),
+    Flag(name='j',
+         attr='randomize_forest',
+         description='Randomize the phantom forest.',
+         inputtype="checkbox"),
+    Flag(name='k',
+         attr='random_clock',
+         description='Randomize the clock in Zozo.',
+         inputtype="checkbox"),
+    Flag(name='l',
+         attr='random_blitz',
+         description='Randomize blitz inputs.',
+         inputtype="checkbox"),
+    Flag(name='m',
+         attr='random_enemy_stats',
+         description='Randomize enemy stats.',
+         inputtype="checkbox"),
+    Flag(name='n',
+         attr='random_window',
+         description='Randomize window background colors.',
+         inputtype="checkbox"),
+    Flag(name='o',
+         attr='shuffle_commands',
+         description="Shuffle characters' in-battle commands.",
+         inputtype="checkbox"),
+    Flag(name='p',
+         attr='random_animation_palettes',
+         description='Randomize the palettes of spells and weapon animations.',
+         inputtype="checkbox"),
+    Flag(name='q',
+         attr='random_character_stats',
+         description='Randomize what equipment each character can wear and character stats.',
+         inputtype="checkbox"),
+    Flag(name='r',
+         attr='shuffle_wor',
+         description='Randomize character locations in the world of ruin.',
+         inputtype="checkbox"),
+    Flag(name='s',
+         attr='swap_sprites',
+         description='Swap character graphics around.',
+         inputtype="checkbox"),
+    Flag(name='t',
+         attr='random_treasure',
+         description='Randomize treasure including chests, colosseum, shops, and enemy drops.',
+         inputtype="checkbox"),
+    Flag(name='u',
+         attr='random_zerker',
+         description='Umaro risk. (Random character will be berserk)',
+         inputtype="checkbox"),
+    Flag(name='w',
+         attr='replace_commands',
+         description='Generate new commands for characters,replacing old commands.',
+         inputtype="checkbox"),
+    Flag(name='y',
+         attr='randomize_magicite',
+         description='Shuffle magicite locations.',
+         inputtype="checkbox"),
+    Flag(name='z',
+         attr='sprint',
+         description='Always have "Sprint Shoes" effect.',
+         inputtype="checkbox"),
 ]
-
 
 NORMAL_CODES = [
     # Sprite codes
-    Code('bravenudeworld', "TINA PARTY MODE", "All characters use the Esper Terra sprite.", "sprite", "checkbox"),
-    Code('makeover', "SPRITE REPLACEMENT MODE", "Some sprites are replaced with new ones (like Cecil or Zero Suit Samus).", "sprite", "checkbox"),
-    Code('kupokupo', "MOOGLE MODE", "All party members are moogles except Mog. With partyparty, all characters are moogles, except Mog, Esper Terra, and Imps.", "sprite", "checkbox"),
-    Code('partyparty', "CRAZY PARTY MODE", "Kefka, Trooper, Banon, Leo, Ghost, Merchant, Esper Terra, and Soldier are included in the pool of sprite randomization", "sprite", "checkbox"),
-    Code('quikdraw', "QUIKDRAW MODE", "All characters look like imperial soldiers, and none of them have Gau's Rage skill.", "sprite", "checkbox"),
+    Code(name='bravenudeworld',
+         description="TINA PARTY MODE",
+         long_description="All characters use the Esper Terra sprite.",
+         category="sprite",
+         inputtype="checkbox"),
+    Code(name='makeover',
+         description="SPRITE REPLACEMENT MODE",
+         long_description="Some sprites are replaced with new ones (like Cecil or Zero Suit Samus).",
+         category="sprite",
+         inputtype="checkbox"),
+    Code(name='kupokupo',
+         description="MOOGLE MODE",
+         long_description="All party members are moogles except Mog. With partyparty, "
+                          "all characters are moogles, except Mog, Esper Terra, and Imps.",
+         category="sprite",
+         inputtype="checkbox"),
+    Code(name='partyparty',
+         description="CRAZY PARTY MODE",
+         long_description="Kefka, Trooper, Banon, Leo, Ghost, Merchant, Esper Terra, "
+                          "and Soldier are included in the pool of sprite randomization",
+         category="sprite",
+         inputtype="checkbox"),
+    Code(name='quikdraw',
+         description="QUIKDRAW MODE",
+         long_description="All characters look like imperial soldiers, and none of them have Gau's Rage skill.",
+         category="sprite",
+         inputtype="checkbox"),
 
     # Aesthetic codes
-    Code('alasdraco', "JAM UP YOUR OPERA MODE", "Randomizes various aesthetic elements of the Opera.", "aesthetic", "checkbox"),
-    Code('bingoboingo', "BINGO BONUS", "Generates a Bingo table with various game elements to witness and check off. The ROM does not interact with the bingo board.", "aesthetic", "checkbox"),
-    Code('capslockoff', "Mixed Case Names Mode", "Names use whatever capitalization is in the name lists instead of all caps.", "aesthetic", "checkbox"),
-    Code('johnnydmad', "MUSIC REPLACEMENT MODE", "Randomizes music with regard to what would make sense in a given location.", "aesthetic", "checkbox"),
-    Code('johnnyachaotic', "MUSIC MANGLING MODE", "Randomizes music with no regard to what would make sense in a given location.", "aesthetic", "checkbox"),
-    Code('notawaiter', "CUTSCENE SKIPS", "Up to Kefka at Narshe, the vast majority of mandatory cutscenes are completely removed. Optional cutscenes are not removed.", "aesthetic", "checkbox"),
-    Code('removeflashing', "NOT SO FLASHY MODE", "Removes most white flashing effects from the game, such as Bum Rush.", "aesthetic", "checkbox"),
-    Code('nicerpoison', "LOW PIXELATION POISON MODE", "Drastically reduces the pixelation effect of poison when in dungeons.", "aesthetic", "checkbox"),
-    Code('remonsterate', "MONSTER SPRITE REPLACEMENT MODE", "Replaces monster sprites with sprites from other games. Requires sprites in the remonstrate\\sprites folder.", "aesthetic", "checkbox"),
+    Code(name='alasdraco',
+         description="JAM UP YOUR OPERA MODE",
+         long_description="Randomizes various aesthetic elements of the Opera.",
+         category="aesthetic",
+         inputtype="checkbox"),
+    Code(name='bingoboingo',
+         description="BINGO BONUS",
+         long_description="Generates a Bingo table with various game elements to witness and check off. "
+                          "The ROM does not interact with the bingo board.",
+         category="aesthetic",
+         inputtype="checkbox"),
+    Code(name='capslockoff',
+         description="Mixed Case Names Mode",
+         long_description="Names use whatever capitalization is in the name lists instead of all caps.",
+         category="aesthetic",
+         inputtype="checkbox"),
+    Code(name='johnnydmad',
+         description="MUSIC REPLACEMENT MODE",
+         long_description="Randomizes music with regard to what would make sense in a given location.",
+         category="aesthetic",
+         inputtype="checkbox"),
+    Code(name='johnnyachaotic',
+         description="MUSIC MANGLING MODE",
+         long_description="Randomizes music with no regard to what would make sense in a given location.",
+         category="aesthetic",
+         inputtype="checkbox"),
+    Code(name='notawaiter',
+         description="CUTSCENE SKIPS",
+         long_description="Up to Kefka at Narshe, the vast majority of mandatory cutscenes are completely removed. "
+                          "Optional cutscenes are not removed.",
+         category="aesthetic",
+         inputtype="checkbox"),
+    Code(name='removeflashing',
+         description="NOT SO FLASHY MODE",
+         long_description="Removes most white flashing effects from the game, such as Bum Rush.",
+         category="aesthetic",
+         inputtype="checkbox"),
+    Code(name='nicerpoison',
+         description="LOW PIXELATION POISON MODE",
+         long_description="Drastically reduces the pixelation effect of poison when in dungeons.",
+         category="aesthetic",
+         inputtype="checkbox"),
+    Code(name='remonsterate',
+         description="MONSTER SPRITE REPLACEMENT MODE",
+         long_description="Replaces monster sprites with sprites from other games. "
+                          "Requires sprites in the remonstrate\\sprites folder.",
+         category="aesthetic",
+         inputtype="checkbox"),
 
     # battle codes
-    Code('electricboogaloo', "WILD ITEM BREAK MODE", "Increases the list of spells that items can break and proc for from just magic and some summons to include almost any skill.", "battle", "checkbox"),
-    Code('collateraldamage', "ITEM BREAK MODE", "All pieces of equipment break for spells. Characters only have the Fight and Item commands, and enemies will use items drastically more often than usual.", "battle", "checkbox"),
-    Code('masseffect', "WILD EQUIPMENT EFFECT MODE", "Increases the number of rogue effects on equipment by a large amount.", "battle", "checkbox"),
-    Code('randombosses', "RANDOM BOSSES MODE", "Causes boss skills to be randomized similarly to regular enemy skills. Boss skills can change to similarly powerful skills.", "battle", "checkbox"),
-    Code('dancingmaduin', "RESTRICTED ESPERS MODE", "Restricts Esper usage such that most Espers can only be equipped by one character. Also usually changes what spell the Paladin Shld teaches.", "battle", "checkbox"),
-    Code('darkworld', "SLASHER'S DELIGHT MODE", "Drastically increases the difficulty of the seed, akin to a hard mode. Mostly meant to be used in conjunction with the madworld code.", "battle", "checkbox"),
-    Code('easymodo', "EASY MODE", "All enemies have 1 HP.", "battle", "checkbox"),
-    Code('madworld', "TIERS FOR FEARS MODE", 'Creates a "true tierless" seed, with enemies having a higher degree of randomization and shops being very randomized as well.', "battle", "checkbox"),
-    Code('playsitself', "AUTOBATTLE MODE", "All characters will act automatically, in a manner similar to when Coliseum fights are fought.", "battle", "checkbox"),
-    Code('rushforpower', "OLD VARGAS FIGHT MODE", "Reverts the Vargas fight to only require that Vargas take any damage to begin his second phase.", "battle", "checkbox"),
-    Code('norng', "NO RNG MODE", "Almost all calls to the RNG are removed, and actions are much less random as a result.", "battle", "checkbox"),
-    Code('expboost', "MULTIPLIED EXP MODE", "All battles will award multiplied exp.", "battle", "numberbox"),
-    Code('gpboost', "MULTIPLIED GP MODE", "All battles will award multiplied gp.", "battle", "numberbox"),
-    Code('mpboost', "MULTIPLIED MP MODE", "All battles will award multiplied magic points.", "battle", "numberbox"),
-    Code('dancelessons', "NO DANCE FAILURES", "Removes the 50% chance that dances will fail when used on a different terrain.", "battle", "checkbox"),
-    Code('nobreaks', "NO ITEM BREAKS MODE", "Causes no items to break for spell effects.", "battle", "checkbox"),
-    Code('unbreakable', "UNBREAKABLE ITEMS MODE", "Causes all items to be indestructible when broken for a spell.", "battle", "checkbox"),
-    Code('swdtechspeed', "CHANGE SWDTECH SPEED MODE", "Alters the speed at which the SwdTech bar moves.", "battle", "combobox", ("Fastest", "Faster", "Fast", "Vanilla", "Random")),
-    Code('cursepower', "CHANGE CURSED SHIELD MODE", "Set the number of battles required to uncurse a Cursed Shield. (Vanilla = 256, 0 = Random)", "battle", "numberbox"),
-    Code('lessfanatical', "EASY FANATICS TOWER MODE", "Disables forced magic command in Fanatic's Tower.", "battle", "checkbox"),
+    Code(name='electricboogaloo',
+         description="WILD ITEM BREAK MODE",
+         long_description="Increases the list of spells that items can break and proc for from just "
+                          "magic and some summons to include almost any skill.",
+         category="battle",
+         inputtype="checkbox"),
+    Code(name='collateraldamage',
+         description="ITEM BREAK MODE",
+         long_description="All pieces of equipment break for spells. Characters only have the Fight and "
+                          "Item commands, and enemies will use items drastically more often than usual.",
+         category="battle",
+         inputtype="checkbox"),
+    Code(name='masseffect',
+         description="WILD EQUIPMENT EFFECT MODE",
+         long_description="Increases the number of rogue effects on equipment by a large amount.",
+         category="battle",
+         inputtype="checkbox"),
+    Code(name='randombosses',
+         description="RANDOM BOSSES MODE",
+         long_description="Causes boss skills to be randomized similarly to regular enemy skills. "
+                          "Boss skills can change to similarly powerful skills.",
+         category="battle",
+         inputtype="checkbox"),
+    Code(name='dancingmaduin',
+         description="RESTRICTED ESPERS MODE",
+         long_description="Restricts Esper usage such that most Espers can only be equipped by one character. "
+                          "Also usually changes what spell the Paladin Shld teaches.",
+         category="battle",
+         inputtype="checkbox"),
+    Code(name='darkworld',
+         description="SLASHER'S DELIGHT MODE",
+         long_description="Drastically increases the difficulty of the seed, akin to a hard mode. "
+                          "Mostly meant to be used in conjunction with the madworld code.",
+         category="battle",
+         inputtype="checkbox"),
+    Code(name='easymodo',
+         description="EASY MODE",
+         long_description="All enemies have 1 HP.",
+         category="battle",
+         inputtype="checkbox"),
+    Code(name='madworld',
+         description="TIERS FOR FEARS MODE",
+         long_description='Creates a "true tierless" seed, with enemies having a higher degree of '
+                          'randomization and shops being very randomized as well.',
+         category="battle",
+         inputtype="checkbox"),
+    Code(name='playsitself',
+         description="AUTOBATTLE MODE",
+         long_description="All characters will act automatically, in a manner similar to "
+                          "when Coliseum fights are fought.",
+         category="battle",
+         inputtype="checkbox"),
+    Code(name='rushforpower',
+         description="OLD VARGAS FIGHT MODE",
+         long_description="Reverts the Vargas fight to only require that Vargas take any "
+                          "damage to begin his second phase.",
+         category="battle",
+         inputtype="checkbox"),
+    Code(name='norng',
+         description="NO RNG MODE",
+         long_description="Almost all calls to the RNG are removed, and actions are much less random as a result.",
+         category="battle",
+         inputtype="checkbox"),
+    Code(name='expboost',
+         description="MULTIPLIED EXP MODE",
+         long_description="All battles will award multiplied exp.",
+         category="battle",
+         inputtype="numberbox"),
+    Code(name='gpboost',
+         description="MULTIPLIED GP MODE",
+         long_description="All battles will award multiplied gp.",
+         category="battle",
+         inputtype="numberbox"),
+    Code(name='mpboost',
+         description="MULTIPLIED MP MODE",
+         long_description="All battles will award multiplied magic points.",
+         category="battle",
+         inputtype="numberbox"),
+    Code(name='dancelessons',
+         description="NO DANCE FAILURES",
+         long_description="Removes the 50% chance that dances will fail when used on a different terrain.",
+         category="battle",
+         inputtype="checkbox"),
+    Code(name='nobreaks',
+         description="NO ITEM BREAKS MODE",
+         long_description="Causes no items to break for spell effects.",
+         category="battle",
+         inputtype="checkbox"),
+    Code(name='unbreakable',
+         description="UNBREAKABLE ITEMS MODE",
+         long_description="Causes all items to be indestructible when broken for a spell.",
+         category="battle",
+         inputtype="checkbox"),
+    Code(name='swdtechspeed',
+         description="CHANGE SWDTECH SPEED MODE",
+         long_description="Alters the speed at which the SwdTech bar moves.",
+         category="battle",
+         inputtype="combobox",
+         choices=("Fastest", "Faster", "Fast", "Vanilla", "Random")),
+    Code(name='cursepower',
+         description="CHANGE CURSED SHIELD MODE",
+         long_description="Set the number of battles required to uncurse a Cursed Shield. (Vanilla = 256, 0 = Random)",
+         category="battle",
+         inputtype="numberbox"),
+    Code(name='lessfanatical',
+         description="EASY FANATICS TOWER MODE",
+         long_description="Disables forced magic command in Fanatic's Tower.",
+         category="battle",
+         inputtype="checkbox"),
 
     # field codes
-    Code('fightclub', "MORE LIKE COLI-DON'T-SEE-'EM",  "Does not allow you to see the coliseum rewards before betting, but you can often run from the coliseum battles to keep your item.",  "field", "checkbox"),
-    Code('bsiab', "UNBALANCED MONSTER CHESTS MODE", "Greatly increases the variance of monster-in-a-box encounters and removes some sanity checks, allowing them to be much more difficult and volatile", "field", "checkbox"),
-    Code('mimetime', 'ALTERNATE GOGO MODE', "Gogo will be hidden somewhere in the World of Ruin disguised as another character. Bring that character to him to recruit him.", "field", "checkbox"),
-    Code('dearestmolulu', "ENCOUNTERLESS MODE", "No random encounters occur. Items that alter encounter rates increase them. EXP code recommended", "field", "checkbox"),
-    Code('randomboost', "RANDOM BOOST MODE",  "Prompts for a multiplier, increasing the range of randomization. (0=uniform randomness)", "field", "numberbox"),
-    Code('worringtriad', "START IN WOR", "The player will start in the World of Ruin, with all of the World of Balance treasure chests, along with a guaranteed set of items, and more Lores.", "field", "checkbox"),
-    Code('questionablecontent', "RIDDLER MODE", "When items have significant differences from vanilla, a question mark is appended to the item's name, including in shop menus.", "field", "checkbox"),
-    Code('nomiabs', 'NO MIAB MODE', "Chests will never have monster encounters in them.", "field", "checkbox"),
-    Code('cursedencounters', "EXPANDED ENCOUNTERS MODE", "Increases all zones to have 16 possible enemy encounters.", "field", "checkbox"),
-    Code('morefanatical', 'HORROR FANATICS TOWER', "Fanatic's Tower is even more confusing than usual.", "field", "checkbox"),
-
+    Code(name='fightclub',
+         description="MORE LIKE COLI-DON'T-SEE-'EM",
+         long_description="Does not allow you to see the coliseum rewards before betting, "
+                          "but you can often run from the coliseum battles to keep your item.",
+         category="field",
+         inputtype="checkbox"),
+    Code(name='bsiab',
+         description="UNBALANCED MONSTER CHESTS MODE",
+         long_description="Greatly increases the variance of monster-in-a-box encounters and removes "
+                          "some sanity checks, allowing them to be much more difficult and volatile",
+         category="field",
+         inputtype="checkbox"),
+    Code(name='mimetime',
+         description='ALTERNATE GOGO MODE',
+         long_description="Gogo will be hidden somewhere in the World of Ruin disguised as another character. "
+                          "Bring that character to him to recruit him.",
+         category="field",
+         inputtype="checkbox"),
+    Code(name='dearestmolulu',
+         description="ENCOUNTERLESS MODE",
+         long_description="No random encounters occur. Items that alter encounter rates increase them. "
+                          "EXP code recommended",
+         category="field",
+         inputtype="checkbox"),
+    Code(name='randomboost',
+         description="RANDOM BOOST MODE",
+         long_description="Prompts for a multiplier, increasing the range of randomization. (0=uniform randomness)",
+         category="field",
+         inputtype="numberbox"),
+    Code(name='worringtriad',
+         description="START IN WOR",
+         long_description="The player will start in the World of Ruin, with all of the World of Balance "
+                          "treasure chests, along with a guaranteed set of items, and more Lores.",
+         category="field",
+         inputtype="checkbox"),
+    Code(name='questionablecontent',
+         description="RIDDLER MODE",
+         long_description="When items have significant differences from vanilla, a question mark "
+                          "is appended to the item's name, including in shop menus.",
+         category="field",
+         inputtype="checkbox"),
+    Code(name='nomiabs',
+         description='NO MIAB MODE',
+         long_description="Chests will never have monster encounters in them.",
+         category="field",
+         inputtype="checkbox"),
+    Code(name='cursedencounters',
+         description="EXPANDED ENCOUNTERS MODE",
+         long_description="Increases all zones to have 16 possible enemy encounters.",
+         category="field",
+         inputtype="checkbox"),
+    Code(name='morefanatical',
+         description='HORROR FANATICS TOWER',
+         long_description="Fanatic's Tower is even more confusing than usual.",
+         category="field",
+         inputtype="checkbox"),
 
     # character codes
-    Code('replaceeverything', "REPLACE ALL SKILLS MODE", "All vanilla skills that can be replaced, are replaced.", "characters", "checkbox"),
-    Code('allcombos', "ALL COMBOS MODE", "All skills that get replaced with something are replaced with combo skills.", "characters", "checkbox"),
-    Code('nocombos', "NO COMBOS MODE", "There will be no combo(dual) skills.", "characters", "checkbox"),
-    Code('endless9', "ENDLESS NINE MODE", "All R-[skills] are automatically changed to 9x[skills]. W-[skills] will become 8x[skills].", "characters", "checkbox"),
-    Code('supernatural', "SUPER NATURAL MAGIC MODE", "Makes it so that any character with the Magic command will have natural magic.", "characters", "checkbox"),
-    Code('canttouchthis', "INVINCIBILITY", "All characters have 255 Defense and 255 Magic Defense, as well as 128 Evasion and Magic Evasion.", "characters", "checkbox"),
-    Code('naturalstats', "NATURAL STATS MODE", "No Espers will grant stat bonuses upon leveling up.", "characters", "checkbox"),
-    Code('metronome', "R-CHAOS MODE", "All characters have Fight, R-Chaos, Magic, and Item as their skillset, except for the Mime, who has Mimic instead of Fight, and the Berserker, who only has R-Chaos.", "characters", "checkbox"),
-    Code('naturalmagic', "NATURAL MAGIC MODE", "No Espers or equipment will teach spells. The only way for characters to learn spells is through leveling up, if they have their own innate magic list.", "characters", "checkbox"),
-    Code('suplexwrecks', "SUPLEX MODE", "All characters use the Sabin sprite, have a name similar to Sabin, have the Blitz and Suplex commands, and can hit every enemy with Suplex.", "characters", "checkbox"),
-    Code('desperation', "DESPERATION MODE", "Guarantees one character will have R-Limit, and greatly increases the chance of having desperation attacks as commands.", "characters", "checkbox"),
+    Code(name='replaceeverything',
+         description="REPLACE ALL SKILLS MODE",
+         long_description="All vanilla skills that can be replaced, are replaced.",
+         category="characters",
+         inputtype="checkbox"),
+    Code(name='allcombos',
+         description="ALL COMBOS MODE",
+         long_description="All skills that get replaced with something are replaced with combo skills.",
+         category="characters",
+         inputtype="checkbox"),
+    Code(name='nocombos',
+         description="NO COMBOS MODE",
+         long_description="There will be no combo(dual) skills.",
+         category="characters",
+         inputtype="checkbox"),
+    Code(name='endless9',
+         description="ENDLESS NINE MODE",
+         long_description="All R-[skills] are automatically changed to 9x[skills]. W-[skills] will become 8x[skills].",
+         category="characters",
+         inputtype="checkbox"),
+    Code(name='supernatural',
+         description="SUPER NATURAL MAGIC MODE",
+         long_description="Makes it so that any character with the Magic command will have natural magic.",
+         category="characters",
+         inputtype="checkbox"),
+    Code(name='canttouchthis',
+         description="INVINCIBILITY",
+         long_description="All characters have 255 Defense and 255 Magic Defense, as well as 128 Evasion "
+                          "and Magic Evasion.",
+         category="characters",
+         inputtype="checkbox"),
+    Code(name='naturalstats',
+         description="NATURAL STATS MODE",
+         long_description="No Espers will grant stat bonuses upon leveling up.",
+         category="characters",
+         inputtype="checkbox"),
+    Code(name='metronome',
+         description="R-CHAOS MODE",
+         long_description="All characters have Fight, R-Chaos, Magic, and Item as their skillset, "
+                          "except for the Mime, who has Mimic instead of Fight, and the Berserker, "
+                          "who only has R-Chaos.",
+         category="characters",
+         inputtype="checkbox"),
+    Code(name='naturalmagic',
+         description="NATURAL MAGIC MODE",
+         long_description="No Espers or equipment will teach spells. The only way for characters to "
+                          "learn spells is through leveling up, if they have their own innate magic list.",
+         category="characters",
+         inputtype="checkbox"),
+    Code(name='suplexwrecks',
+         description="SUPLEX MODE",
+         long_description="All characters use the Sabin sprite, have a name similar to Sabin, have the "
+                          "Blitz and Suplex commands, and can hit every enemy with Suplex.",
+         category="characters",
+         inputtype="checkbox"),
+    Code(name='desperation',
+         description="DESPERATION MODE",
+         long_description="Guarantees one character will have R-Limit, and greatly increases the chance "
+                          "of having desperation attacks as commands.",
+         category="characters",
+         inputtype="checkbox"),
 
     # gamebreaking codes
 
-    Code('airship', "AIRSHIP MODE", "The player can access the airship after leaving Narshe, or from any chocobo stable. Doing events out of order can cause softlocks.", "gamebreaking", "checkbox"),
-    Code('sketch', "ENABLE SKETCH GLITCH", "Enables sketch bug. Not recommended unless you know what you are doing.", "gamebreaking", "checkbox"),
-    Code('equipanything', "EQUIP ANYTHING MODE", "Items that are not equippable normally can now be equipped as weapons or shields. These often give strange defensive stats or weapon animations.", "gamebreaking", "checkbox"),
+    Code(name='airship',
+         description="AIRSHIP MODE",
+         long_description="The player can access the airship after leaving Narshe, or from any chocobo stable. "
+                          "Doing events out of order can cause softlocks.",
+         category="gamebreaking",
+         inputtype="checkbox"),
+    Code(name='sketch',
+         description="ENABLE SKETCH GLITCH",
+         long_description="Enables sketch bug. Not recommended unless you know what you are doing.",
+         category="gamebreaking",
+         inputtype="checkbox"),
+    Code(name='equipanything',
+         description="EQUIP ANYTHING MODE",
+         long_description="Items that are not equippable normally can now be equipped as weapons or shields. "
+                          "These often give strange defensive stats or weapon animations.",
+         category="gamebreaking",
+         inputtype="checkbox"),
 
     # experimental codes
 
-    #Code('repairpalette', "PALETTE REPAIR", "Used for testing changes to palette randomization. Not intended for actual play. Cannot proceed past Banon's scenario.", "experimental", "checkbox"),
-    Code('strangejourney', "BIZARRE ADVENTURE", "A prototype entrance randomizer, similar to the ancientcave mode. Includes all maps and event tiles, and is usually extremely hard to beat by itself.", "experimental", "checkbox"),
-    Code('thescenarionottaken', 'DIVERGENT PATHS MODE', "Changes the way the 3 scenarios are split up, to resemble PowerPanda's 'Divergent Paths' mod.", "experimental", "checkbox"),
-
+    # Code(name='repairpalette',
+    # "PALETTE REPAIR",
+    # long_description="Used for testing changes to palette randomization. Not intended for actual play. "
+    #                  "Cannot proceed past Banon's scenario.",
+    # category="experimental",
+    # "checkbox"),
+    Code(name='strangejourney',
+         description="BIZARRE ADVENTURE",
+         long_description="A prototype entrance randomizer, similar to the ancientcave mode. "
+                          "Includes all maps and event tiles, and is usually extremely hard to beat by itself.",
+         category="experimental",
+         inputtype="checkbox"),
+    Code(name='thescenarionottaken',
+         description='DIVERGENT PATHS MODE',
+         long_description="Changes the way the 3 scenarios are split up, to resemble PowerPanda's "
+                          "'Divergent Paths' mod.",
+         category="experimental",
+         inputtype="checkbox"),
 
     # beta codes
 
@@ -340,42 +683,104 @@ NORMAL_CODES = [
 
 # these are all sprite related codes
 MAKEOVER_MODIFIER_CODES = [
-    Code('novanilla', "COMPLETE MAKEOVER MODE", "Same as 'makeover' except sprites from the vanilla game are guaranteed not to appear.", "sprite", "checkbox"),
-    Code('frenchvanilla', "EQUAL RIGHTS MAKEOVER MODE", "Same as 'makeover' except sprites from the vanilla game are selected with equal weight to new sprites rather than some being guaranteed to appear.", "sprite", "checkbox"),
-    Code('cloneparty', "CLONE COSPLAY MAKEOVER MODE", "Same as 'makeover' except instead of avoiding choosing different versions of the same character, it actively tries to do so.", "sprite", "checkbox")
+    Code(name='novanilla',
+         description="COMPLETE MAKEOVER MODE",
+         long_description="Same as 'makeover' except sprites from the vanilla game are guaranteed "
+                          "not to appear.",
+         category="sprite",
+         inputtype="checkbox"),
+    Code(name='frenchvanilla',
+         description="EQUAL RIGHTS MAKEOVER MODE",
+         long_description="Same as 'makeover' except sprites from the vanilla game are selected "
+                          "with equal weight to new sprites rather than some being guaranteed to appear.",
+         category="sprite",
+         inputtype="checkbox"),
+    Code(name='cloneparty',
+         description="CLONE COSPLAY MAKEOVER MODE",
+         long_description="Same as 'makeover' except instead of avoiding choosing different "
+                          "versions of the same character, it actively tries to do so.",
+         category="sprite",
+         inputtype="checkbox")
 ]
 RESTRICTED_VANILLA_SPRITE_CODES = []
 
 # this is used for the makeover variation codes for sprites
 # makeover_groups = ["anime", "boys", "generic", "girls", "kids", "pets", "potato", "custom"]
 makeover_groups = None
-try:
-    makeover_groups = get_makeover_groups()
-    for mg in makeover_groups:
-        no = Code('no'+mg, f"NO {mg.upper()} ALLOWED MODE", f"Do not select {mg} sprites.", "spriteCategories", "checkbox")
-        MAKEOVER_MODIFIER_CODES.extend([
-            Code(mg, f"CUSTOM {mg.upper()} FREQUENCY MODE", f"Adjust probability of selecting {mg} sprites.",
-                 "spriteCategories", "combobox", ("Normal", "No", "Hate", "Like", "Only"))])
-        RESTRICTED_VANILLA_SPRITE_CODES.append(no)
-except FileNotFoundError:
-    pass
+
+
+def get_makeover_groups():
+    try:
+        global makeover_groups
+        if makeover_groups:
+            return makeover_groups
+
+        from appearance import get_sprite_replacements
+        sprite_replacements = get_sprite_replacements()
+        makeover_groups = {}
+
+        for sr in sprite_replacements:
+            for group in sr.groups:
+                if group in makeover_groups:
+                    makeover_groups[group] = makeover_groups[group] + 1
+                else:
+                    makeover_groups[group] = 1
+
+        # this is used for the makeover variation codes for sprites
+        # makeover_groups = ["anime", "boys", "generic", "girls", "kids", "pets", "potato", "custom"]
+        for mg in makeover_groups:
+            no = Code(name='no' + mg,
+                      description="NO {mg.upper()} ALLOWED MODE",
+                      long_description="Do not select {mg} sprites.",
+                      category="spriteCategories",
+                      inputtype="checkbox")
+            MAKEOVER_MODIFIER_CODES.extend([
+                Code(name=mg,
+                     description="CUSTOM {mg.upper()} FREQUENCY MODE",
+                     long_description="Adjust probability of selecting " + mg + " sprites.",
+                     category="spriteCategories",
+                     inputtype="combobox",
+                     choices=("Normal", "No", "Hate", "Like", "Only"))])
+            RESTRICTED_VANILLA_SPRITE_CODES.append(no)
+    except FileNotFoundError:
+        pass
+    return makeover_groups
 
 
 # TODO: do this a better way
 CAVE_CODES = [
-    Code('ancientcave', "ANCIENT CAVE MODE", "", "cave", "checkbox"),
-    Code('speedcave', "SPEED CAVE MODE", "", "cave", "checkbox"),
-    Code('racecave', "RACE CAVE MODE", "", "cave", "checkbox"),
+    Code(name='ancientcave',
+         description="ANCIENT CAVE MODE",
+         long_description="",
+         category="cave",
+         inputtype="checkbox"),
+    Code(name='speedcave',
+         description="SPEED CAVE MODE",
+         long_description="",
+         category="cave",
+         inputtype="checkbox"),
+    Code(name='racecave',
+         description="RACE CAVE MODE",
+         long_description="",
+         category="cave",
+         inputtype="checkbox"),
 ]
 
-
 SPECIAL_CODES = [
-    Code('christmas', 'CHIRSTMAS MODE', '', 'holiday', "checkbox"),
-    Code('halloween', "ALL HALLOWS' EVE MODE", '', 'holiday', "checkbox")
+    Code(name='christmas',
+         description='CHIRSTMAS MODE',
+         long_description='',
+         category='holiday',
+         inputtype="checkbox"),
+    Code(name='halloween',
+         description="ALL HALLOWS' EVE MODE",
+         long_description='',
+         category='holiday',
+         inputtype="checkbox")
 ]
 
 BETA_CODES = [
-    
+
 ]
 
 ALL_CODES = NORMAL_CODES + MAKEOVER_MODIFIER_CODES + CAVE_CODES + SPECIAL_CODES
