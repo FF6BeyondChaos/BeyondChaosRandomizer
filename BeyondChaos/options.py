@@ -57,7 +57,7 @@ class Flag:
                                           '',
                                           flag_string,
                                           re.IGNORECASE)
-
+                                          
         # The flag was not found. Is it a simple flag and needs to be turned on?
         # We need to account for the possibility of spaces or no spaces
         # spaces = '- p i e' - caught by re.search
@@ -74,8 +74,6 @@ class Flag:
                                       '',
                                       flag_string,
                                       re.IGNORECASE)
-
-        return False, False, flag_string
 
 
 @dataclass
@@ -109,13 +107,11 @@ class Options:
     def is_flag_active(self, flag_name: str):
         if flag_name in self.active_flags.keys():
             return True
-        return False
 
     def is_any_flag_active(self, flag_names: List[str]):
         for flag in flag_names:
             if flag in self.active_flags.keys():
                 return True
-        return False
 
     def get_flag_value(self, flag_name: str):
         try:
@@ -132,7 +128,8 @@ class Options:
                 if flag in RESTRICTED_VANILLA_SPRITE_FLAGS:
                     self.activate_flag("frenchvanilla")
                 return
-
+                
+                
     def activate_from_string(self, flag_string):
         s = ""
         flags = read_Options_from_string(flag_string, self.mode)
@@ -223,7 +220,6 @@ ALL_MODES = [
          forced_flags=["worringtriad"],
          prohibited_flags={"j", "airship", "alasdraco", "thescenarionottaken"}),
 ]
-
 
 NORMAL_FLAGS = [
     # Flags
