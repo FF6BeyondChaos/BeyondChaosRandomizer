@@ -109,10 +109,10 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
     goddess_save_sub.write(fout)
 
     # decrease exp needed for level up
-    if Options_.is_code_active('racecave'):
+    if Options_.is_flag_active('racecave'):
         maxlevel = 49
         divisor = 12.0
-    elif Options_.is_code_active('speedcave'):
+    elif Options_.is_flag_active('speedcave'):
         maxlevel = 49
         divisor = 8.0
     else:
@@ -142,9 +142,9 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         0x3F, 0x0E, 0x00,
         0x3F, 0x0F, 0x00,
     ])
-    if Options_.is_code_active('racecave'):
+    if Options_.is_flag_active('racecave'):
         num_starting = 9 + random.randint(0, 2) + random.randint(0, 1)
-    elif Options_.is_code_active('speedcave'):
+    elif Options_.is_flag_active('speedcave'):
         num_starting = 4 + random.randint(0, 3) + random.randint(0, 2)
     else:
         num_starting = 4 + random.randint(0, 1) + random.randint(0, 1)
@@ -160,7 +160,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         fout.seek(cptr)
         level = ord(fout.read(1))
         level &= 0xF3
-        if i >= 14 or Options_.is_code_active("speedcave") and i not in starting:
+        if i >= 14 or Options_.is_flag_active("speedcave") and i not in starting:
             level |= 0b1000
         fout.seek(cptr)
         fout.write(bytes([level]))
@@ -168,7 +168,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
     fout.write(b'\x00')  # remove Terra's magitek
 
     tempcands = [14, 15, random.choice(list(range(18, 28))), random.choice([32, 33])]
-    if Options_.is_code_active('speedcave'):
+    if Options_.is_flag_active('speedcave'):
         tempcands.append(random.choice([16, 17]))
         tempcands.append(random.choice([41, 42, 43]))
     charcands = list(range(14)) + random.sample(tempcands, 2)
@@ -261,7 +261,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
     espers = list(get_espers(sourcefile))
     num_espers = 3
     for i in range(num_espers):
-        if Options_.is_code_active("speedcave"):
+        if Options_.is_flag_active("speedcave"):
             esperrank = 999
         else:
             esperrank = 0
@@ -351,9 +351,9 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
     pilot_sub.set_location(0xC2110)
     pilot_sub.write(fout)
 
-    if Options_.is_code_active("racecave"):
+    if Options_.is_flag_active("racecave"):
         randomize_tower(filename=sourcefile, ancient=True, nummaps=50)
-    elif Options_.is_code_active("speedcave"):
+    elif Options_.is_flag_active("speedcave"):
         randomize_tower(filename=sourcefile, ancient=True, nummaps=85)
     else:
         randomize_tower(filename=sourcefile, ancient=True, nummaps=300)
@@ -390,7 +390,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         if formation.formid in [0x1a4, 0x1d4, 0x1d5, 0x1d6, 0x1e4,
                                 0x1e2, 0x1ff, 0x1bd, 0x1be]:
             return False
-        if (Options_.is_code_active("racecave")
+        if (Options_.is_flag_active("racecave")
                 and formation.formid in [0x162, 0x1c8, 0x1d3]):
             return False
         return True
@@ -413,7 +413,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                     and f.get_music() != 0]):
                 return False
         best_drop = formation.get_best_drop()
-        if best_drop and (best_drop.price <= 2 or best_drop.price >= 30000 or Options_.is_code_active("madworld")):
+        if best_drop and (best_drop.price <= 2 or best_drop.price >= 30000 or Options_.is_flag_active("madworld")):
             return True
         return False
 
@@ -450,7 +450,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             l.write_data(fout)
 
     pointer = 0xB4E35
-    if Options_.is_code_active('racecave'):
+    if Options_.is_flag_active('racecave'):
         candidates = [c for c in starting if c != runaway]
         leaders = random.sample(candidates, 3)
         subptr = pointer - 0xa0000
@@ -531,7 +531,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
               3: (8000, 0xA5F),
               4: (30000, 0xA64)}
 
-    if Options_.is_code_active("racecave"):
+    if Options_.is_flag_active("racecave"):
         partyswitch_template = [
             0x4B, None, None,
             0x4B, 0x86, 0x83,
@@ -647,7 +647,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
     optional_chars = [c for c in characters if hasattr(c, "slotid")]
     optional_chars = [c for c in optional_chars if c.slotid == runaway or
                       (c.id not in starting and c.id in charcands)]
-    if Options_.is_code_active("speedcave"):
+    if Options_.is_flag_active("speedcave"):
         while len(optional_chars) < 24:
             if random.choice([True, True, False]):
                 supplement = [c for c in optional_chars if c.id >= 14 or
@@ -693,7 +693,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                 allysub.bytestring += [0xD4, 0xF0 | chosen.slotid,
                                        0xD4, 0xE0 | chosen.slotid,
                                        0xD7, mem_addr]
-                if chosen.id >= 14 or Options_.is_code_active("speedcave"):
+                if chosen.id >= 14 or Options_.is_flag_active("speedcave"):
                     allysub.bytestring += [0x77, chosen.slotid,
                                            0x8b, chosen.slotid, 0x7F,
                                            0x8c, chosen.slotid, 0x7F,
@@ -759,7 +759,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         pointer += innsub.size
         savesub = make_paysub(save_template, save_template2, l, pointer)
         pointer += savesub.size
-        if Options_.is_code_active('racecave'):
+        if Options_.is_flag_active('racecave'):
             pswitch_sub = make_paysub(partyswitch_template,
                                       partyswitch_template2, l, pointer)
             pointer += pswitch_sub.size
@@ -875,7 +875,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                 setattr(ally, key, value)
             l.npcs.append(ally)
             if (len(optional_chars) == 12 or (optional_chars and
-                                              Options_.is_code_active('speedcave'))):
+                                              Options_.is_flag_active('speedcave'))):
                 temp = optional_chars.pop()
                 if chosen.id != temp.id:
                     chosen = temp
@@ -906,7 +906,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         for i in range(num_espers):
             if not espers:
                 break
-            if Options_.is_code_active('speedcave'):
+            if Options_.is_flag_active('speedcave'):
                 candidates = espers
             else:
                 esperrank = l.restrank
@@ -956,7 +956,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             setattr(enemy, key, value)
         l.npcs.append(enemy)
 
-        if Options_.is_code_active('racecave'):
+        if Options_.is_flag_active('racecave'):
             event_addr = (pswitch_sub.location - 0xa0000) & 0x3FFFF
             partyswitch = NPCBlock(pointer=None, locid=l.locid)
             attributes = {
@@ -1044,7 +1044,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             def enrank(r):
                 mr = min(maxrank, 0xFF)
                 r = max(0, min(r, mr))
-                if Options_.is_code_active('racecave'):
+                if Options_.is_flag_active('racecave'):
                     half = r//2
                     quarter = half//2
                     r = (half + random.randint(0, quarter) +
@@ -1068,12 +1068,12 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
 
             chosen_enemies = sorted(chosen_enemies, key=lambda f: f.rank())
 
-            if Options_.is_code_active('racecave'):
+            if Options_.is_flag_active('racecave'):
                 bossify = False
             elif rank >= maxrank * 0.9:
                 bossify = True
             else:
-                if Options_.is_code_active('speedcave'):
+                if Options_.is_flag_active('speedcave'):
                     thresh = 0.5
                 else:
                     thresh = 0.1
@@ -1089,7 +1089,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                     chosen_boss = random.choice(candidates)
                     chosen_enemies[3] = chosen_boss
 
-            if Options_.is_code_active('speedcave'):
+            if Options_.is_flag_active('speedcave'):
                 thresh, bossthresh = 2, 1
             else:
                 # allow up to three of the same formation
@@ -1113,7 +1113,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             fset.write_data(fout)
 
         if not (hasattr(l, "secret_treasure") and l.secret_treasure):
-            if Options_.is_code_active('speedcave') or rank == 0:
+            if Options_.is_flag_active('speedcave') or rank == 0:
                 low = random.randint(0, 400)
                 high = random.randint(low, low*5)
                 high = random.randint(low, high)
@@ -1133,7 +1133,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                 enemy_limit = None
             l.unlock_chests(int(low), int(high), monster=monster,
                             guarantee_miab_treasure=True,
-                            enemy_limit=enemy_limit, uncapped_monsters=Options_.is_code_active('bsiab'))
+                            enemy_limit=enemy_limit, uncapped_monsters=Options_.is_flag_active('bsiab'))
 
         l.write_data(fout)
 
@@ -1142,7 +1142,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
     final_cut.bytestring = bytearray([0x3F, 0x0E, 0x00,
                                       0x3F, 0x0F, 0x00,
                                      ])
-    if not Options_.is_code_active("racecave"):
+    if not Options_.is_flag_active("racecave"):
         final_cut.bytestring += bytearray([0x9D,
                                            0x4D, 0x65, 0x33,
                                            0xB2, 0xA9, 0x5E, 0x00])
