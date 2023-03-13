@@ -360,27 +360,25 @@ def rewrite_checksum(filename: str = None):
     if filename is None:
         filename = outfile
     MEGABIT = 0x20000
-    f = open(filename, 'r+b')
-    f.seek(0, 2)
-    file_mbits = f.tell() // MEGABIT
-    f.seek(0)
-    subsums = [sum(f.read(MEGABIT)) for _ in range(file_mbits)]
-    while len(subsums) % 32:
-        subsums.extend(subsums[32:file_mbits])
-        if len(subsums) > 64:
-            subsums = subsums[:64]
-    checksum = sum(subsums) & 0xFFFF
-    f.seek(0xFFDE)
-    write_multi(f, checksum, length=2)
-    f.seek(0xFFDC)
-    write_multi(f, checksum ^ 0xFFFF, length=2)
-    if file_mbits > 32:
-        f.seek(0x40FFDE)
+    with open(filename, 'r+b') as f:
+        f.seek(0, 2)
+        file_mbits = f.tell() // MEGABIT
+        f.seek(0)
+        subsums = [sum(f.read(MEGABIT)) for _ in range(file_mbits)]
+        while len(subsums) % 32:
+            subsums.extend(subsums[32:file_mbits])
+            if len(subsums) > 64:
+                subsums = subsums[:64]
+        checksum = sum(subsums) & 0xFFFF
+        f.seek(0xFFDE)
         write_multi(f, checksum, length=2)
-        f.seek(0x40FFDC)
+        f.seek(0xFFDC)
         write_multi(f, checksum ^ 0xFFFF, length=2)
-
-    f.close()
+        if file_mbits > 32:
+            f.seek(0x40FFDE)
+            write_multi(f, checksum, length=2)
+            f.seek(0x40FFDC)
+            write_multi(f, checksum ^ 0xFFFF, length=2)
 
 
 class AutoRecruitGauSub(Substitution):
@@ -537,24 +535,23 @@ class WindowBlock():
         self.negabit = 0
 
     def read_data(self, filename: str):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.palette = []
-        if Options_.is_flag_active('christmas'):
-            self.palette = [(0x1c, 0x02, 0x04)] * 2 + [(0x19, 0x00, 0x06)] * 2 + [(0x03, 0x0d, 0x07)] * 2 + [
-                (0x18, 0x18, 0x18)] + [(0x04, 0x13, 0x0a)]
-        elif Options_.is_flag_active('halloween'):
-            self.palette = [(0x04, 0x0d, 0x15)] * 2 + [(0x00, 0x00, 0x00)] + [(0x0b, 0x1d, 0x15)] + [
-                (0x00, 0x11, 0x00)] + [(0x1e, 0x00, 0x00)] + [(0x1d, 0x1c, 0x00)] + [(0x1c, 0x1f, 0x1b)]
-        else:
-            for _ in range(0x8):
-                color = read_multi(f, length=2)
-                blue = (color & 0x7c00) >> 10
-                green = (color & 0x03e0) >> 5
-                red = color & 0x001f
-                self.negabit = color & 0x8000
-                self.palette.append((red, green, blue))
-        f.close()
+        with open(filename, 'r+b') as f:
+            f.seek(self.pointer)
+            self.palette = []
+            if Options_.is_flag_active('christmas'):
+                self.palette = [(0x1c, 0x02, 0x04)] * 2 + [(0x19, 0x00, 0x06)] * 2 + [(0x03, 0x0d, 0x07)] * 2 + [
+                    (0x18, 0x18, 0x18)] + [(0x04, 0x13, 0x0a)]
+            elif Options_.is_flag_active('halloween'):
+                self.palette = [(0x04, 0x0d, 0x15)] * 2 + [(0x00, 0x00, 0x00)] + [(0x0b, 0x1d, 0x15)] + [
+                    (0x00, 0x11, 0x00)] + [(0x1e, 0x00, 0x00)] + [(0x1d, 0x1c, 0x00)] + [(0x1c, 0x1f, 0x1b)]
+            else:
+                for _ in range(0x8):
+                    color = read_multi(f, length=2)
+                    blue = (color & 0x7c00) >> 10
+                    green = (color & 0x03e0) >> 5
+                    red = color & 0x001f
+                    self.negabit = color & 0x8000
+                    self.palette.append((red, green, blue))
 
     def write_data(self, fout: BinaryIO):
         fout.seek(self.pointer)
@@ -1663,10 +1660,9 @@ def manage_equip_umaro(freespaces: list):
     equip_umaro_sub.set_location(0x39EF6)
     equip_umaro_sub.write(fout)
 
-    f = open(sourcefile, 'r+b')
-    f.seek(0xC359D)
-    old_unequipper = f.read(218)
-    f.close()
+    with open(sourcefile, 'r+b') as f:
+        f.seek(0xC359D)
+        old_unequipper = f.read(218)
     header = old_unequipper[:7]
     footer = old_unequipper[-3:]
 
@@ -4367,9 +4363,9 @@ def manage_bingo(bingoflags=[], size=5, difficulty="", numcards=1, target_score=
         assert len(grid[0]) == size
         s2 = generate_card(grid)
         s += "\n" + s2
-        f = open(filename, "w+")
-        f.write(s)
-        f.close()
+        with open(filename, "w+") as f:
+            f.write(s)
+
 
 def fix_norng_npcs():
 
@@ -4640,17 +4636,15 @@ def manage_spookiness():
         nowhere_to_run_bottom_sub.write(fout)
 
 
-
 def manage_dances():
     if Options_.is_flag_active('madworld'):
         spells = get_ranked_spells(sourcefile)
         dances = random.sample(spells, 32)
         dances = [s.spellid for s in dances]
     else:
-        f = open(sourcefile, 'rb')
-        f.seek(0x0FFE80)
-        dances = bytes(f.read(32))
-        f.close()
+        with open(sourcefile, 'rb') as f:
+            f.seek(0x0FFE80)
+            dances = bytes(f.read(32))
 
         # Shuffle the geos, plus Fire Dance, Pearl Wind, Lullaby, Acid Rain,
         # and Absolute 0 because why not
@@ -5034,9 +5028,8 @@ def randomize(**kwargs) -> str:
                 print("That output directory does not exist. Please try again.")
 
     try:
-        f = open(sourcefile, 'rb')
-        data = f.read()
-        f.close()
+        with open(sourcefile, 'rb') as f:
+            data = f.read()
 
     except IOError:
         response = input("File not found. Would you like to search the current directory \n"
@@ -5049,12 +5042,11 @@ def randomize(**kwargs) -> str:
                     continue
 
                 try:
-                    f = open(filename, 'r+b')
+                    with open(filename, 'r+b') as f:
+                        data = f.read()
                 except IOError:
                     continue
 
-                data = f.read()
-                f.close()
                 if size == 3145728 + 0x200:
                     data = data[0x200:]
                 h = md5(data).hexdigest()
@@ -5176,9 +5168,8 @@ def randomize(**kwargs) -> str:
         print("NOTICE: Headered ROM detected. Output file will have no header.")
         data = data[0x200:]
         sourcefile = '.'.join([tempname[0], "unheadered", tempname[1]])
-        f = open(sourcefile, 'w+b')
-        f.write(data)
-        f.close()
+        with open(sourcefile, 'w+b') as f:
+            f.write(data)
 
     h = md5(data).hexdigest()
     user_confirmed_proceed_from_gui = kwargs.get("from_gui", False)
@@ -5956,12 +5947,11 @@ def randomize(**kwargs) -> str:
         log_chests()
     log_item_mutations()
 
-    f = open(outlog, 'w+')
-    f.write(get_logstring(
-        ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers", "item magic",
-         "item effects", "command-change relics", "colosseum", "monsters", "music", "remonsterate", "shops",
-         "treasure chests", "zozo clock", "secret items"]))
-    f.close()
+    with open(outlog, 'w+') as f:
+        f.write(get_logstring(
+            ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers",
+             "item magic", "item effects", "command-change relics", "colosseum", "monsters", "music",
+             "remonsterate", "shops", "treasure chests", "zozo clock", "secret items"]))
 
     print("Randomization successful. Output filename: %s\n" % outfile)
 
