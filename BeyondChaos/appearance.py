@@ -65,23 +65,6 @@ def get_sprite_replacements():
     return sprite_replacement_list
 
 
-def get_makeover_groups():
-    global makeover_groups
-    if makeover_groups:
-        return makeover_groups
-
-    sprite_replacements = get_sprite_replacements()
-    makeover_groups = {}
-
-    for sr in sprite_replacements:
-        for group in sr.groups:
-            if group in makeover_groups:
-                makeover_groups[group] = makeover_groups[group] + 1
-            else:
-                makeover_groups[group] = 1
-    return makeover_groups
-
-
 def recolor_character_palette(fout, pointer, palette=None, flesh=False, middle=True, santa=False, skintones=None, char_hues=None, trance=False):
     fout.seek(pointer)
     if palette is None:
