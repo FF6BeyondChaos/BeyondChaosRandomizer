@@ -938,7 +938,7 @@ class Window(QMainWindow):
             d[flag.name] = {
                 'checked': False,
                 'object': flag
-
+            }
         # for flag in sorted(ALL_FLAGS):
         #     # self.flag[flag.name] = {
         #     #     'explanation': flag.description,
