@@ -904,7 +904,7 @@ class Window(QMainWindow):
     # (At startup) Opens reads code flags/descriptions and
     #   puts data into separate dictionaries
     def initFlags(self):
-        for flag in NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS:
+        for flag in sorted(NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS, key=lambda x: (x.name)):
             if flag.category == "flags":
                 d = self.flag
             elif flag.category == "aesthetic":
