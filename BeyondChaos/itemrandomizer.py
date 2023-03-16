@@ -772,7 +772,7 @@ class ItemBlock:
         if vanilla:
             self.name = self.vanilla_data.name
             self.dataname[1:] = name_to_bytes(self.name, len(self.name))
-        elif options.Options_.is_code_active("questionablecontent") and not self.is_consumable and '?' not in self.name:
+        elif options.Options_.is_flag_active("questionablecontent") and not self.is_consumable and '?' not in self.name:
             self.name = self.name[:11] + '?'
             # Index on self.dataname is [1:] because the first character determines the
             #   equipment symbol (helmet/shield/etc).

@@ -754,8 +754,8 @@ class MonsterBlock:
         self.stats['mp'] = int(round(max(self.stats['mp'], factor * max(s.mp for s in skillset))))
 
     def mutate_ai(self, Options_, change_skillset=True, safe_solo_terra=True):
-        itembreaker = Options_.is_code_active("collateraldamage")
-        if self.name[:2] == "L." and not Options_.is_code_active("randombosses"):
+        itembreaker = Options_.is_flag_active("collateraldamage")
+        if self.name[:2] == "L." and not Options_.is_flag_active("randombosses"):
             change_skillset = False
         elif "guardian" in self.name.lower():
             return
@@ -771,11 +771,11 @@ class MonsterBlock:
             f = s1.abort_on_allies == s2.abort_on_allies
             return a and b and c and d and e and f
 
-        if Options_.mode.name == "katn" or Options_.is_code_active("madworld"):
+        if Options_.mode.name == "katn" or Options_.is_flag_active("madworld"):
             restricted = [0xEA, 0xC8] #restrict Baba Breath and Seize
         else:
             restricted = [0x13, 0x14] #restrict Meteor and Ultima for normal playthroughs
-        if Options_.is_code_active("darkworld"):
+        if Options_.is_flag_active("darkworld"):
             restricted = []  # All skills are fair game sucka
 
         banned = restricted
@@ -1684,9 +1684,9 @@ class MonsterBlock:
         self.special = special
 
     def mutate(self, Options_, change_skillset=None, safe_solo_terra=True, katn=False):
-        randombosses = Options_.is_code_active("randombosses")
-        darkworld = Options_.is_code_active("darkworld")
-        madworld = Options_.is_code_active("madworld")
+        randombosses = Options_.is_flag_active("randombosses")
+        darkworld = Options_.is_flag_active("darkworld")
+        madworld = Options_.is_flag_active("madworld")
 
         if change_skillset is None:
             change_skillset = randombosses or not (self.is_boss or self.boss_death)
