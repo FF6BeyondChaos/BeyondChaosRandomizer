@@ -2190,7 +2190,7 @@ def manage_balance(newslots: bool = True):
     vanish_doom(fout)
     evade_mblock(fout)
     fix_xzone(fout)
-    #imp_skimp(fout)
+    imp_skimp(fout)
 
 
     manage_rng()
