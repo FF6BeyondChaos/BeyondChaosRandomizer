@@ -8,7 +8,6 @@ class Mode:
     name: str
     description: str
     forced_flags: List[str] = field(default_factory=list)
-    # prohibited_codes: List[str] = field(default_factory=list)
     prohibited_flags: Set[str] = field(default_factory=set)
 
 
@@ -79,58 +78,38 @@ class Flag:
 @dataclass
 class Options:
     mode: Mode
-    active_flags = {}
-    shuffle_commands: bool = field(init=False, default=False)
-    replace_commands: bool = field(init=False, default=False)
-    sprint: bool = field(init=False, default=False)
-    fix_exploits: bool = field(init=False, default=False)
-    random_enemy_stats: bool = field(init=False, default=False)
-    random_palettes_and_names: bool = field(init=False, default=False)
-    random_items: bool = field(init=False, default=False)
-    random_character_stats: bool = field(init=False, default=False)
-    random_espers: bool = field(init=False, default=False)
-    random_treasure: bool = field(init=False, default=False)
-    random_zerker: bool = field(init=False, default=False)
-    random_blitz: bool = field(init=False, default=False)
-    random_window: bool = field(init=False, default=False)
-    random_formations: bool = field(init=False, default=False)
-    swap_sprites: bool = field(init=False, default=False)
-    random_animation_palettes: bool = field(init=False, default=False)
-    random_final_dungeon: bool = field(init=False, default=False)
-    random_dances: bool = field(init=False, default=False)
-    random_clock: bool = field(init=False, default=False)
-    shuffle_wor: bool = field(init=False, default=False)
-    randomize_forest: bool = field(init=False, default=False)
-    randomize_magicite: bool = field(init=False, default=False)
-    random_final_party: bool = field(init=False, default=False)
+    active_flags: [Flag] = field(default_factory=list)
 
-    def is_flag_active(self, flag_name: str):
-        if flag_name in self.active_flags.keys():
-            return True
+    def is_flag_active(self, flag_attribute: str):
+        for flag in self.active_flags:
+            if flag.name == flag_attribute or flag.description == flag_attribute:
+                return True
 
     def is_any_flag_active(self, flag_names: List[str]):
-        for flag in flag_names:
-            if flag in self.active_flags.keys():
+        for flag in self.active_flags:
+            if flag.name in flag_names:
                 return True
 
     def get_flag_value(self, flag_name: str):
         try:
-            return self.active_flags[flag_name]
+            for flag in self.active_flags:
+                if flag.name == flag_name:
+                    return flag.value
         except KeyError:
             return None
 
     def activate_flag(self, flag_name: str, flag_value=None):
         for flag in ALL_FLAGS:
             if flag.name == flag_name:
-                if len(flag_name) == 1: setattr(self, flag.description, True)
-                self.active_flags[flag_name] = flag_value
+                if flag in self.active_flags:
+                    return
+                self.active_flags.append(flag)
                 if flag in MAKEOVER_MODIFIER_FLAGS:
                     self.activate_flag("makeover")
                 if flag in RESTRICTED_VANILLA_SPRITE_FLAGS:
                     self.activate_flag("frenchvanilla")
                 return
-                
-                
+
     def activate_from_string(self, flag_string):
         s = ""
         flags = read_Options_from_string(flag_string, self.mode)
@@ -177,9 +156,6 @@ def read_Options_from_string(flag_string: str, mode: Union[Mode, str]):
         if found:
             flag.value = value
             flags[flag.name] = flag
-
-    # import sys
-    # sys.exit()
     return flags
 
 
