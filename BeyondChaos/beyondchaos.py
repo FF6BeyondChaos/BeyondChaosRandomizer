@@ -41,6 +41,49 @@ class FlagButton(QPushButton):
         self.value = value
 
 
+class GenConfirmation(QDialog):
+    def __init__(self, header, flag_list):
+        super().__init__()
+        self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowContextHelpButtonHint)
+        screen_size = QDesktopWidget().screenGeometry(-1)
+        self.setMinimumSize(
+            int(min(screen_size.width() / 2, 300)),
+            int(screen_size.height() * .5)
+        )
+        self.left = int(screen_size.width() / 2 - self.width() / 2)
+        self.top = int(screen_size.height() / 2 - self.height() / 2)
+        self.setWindowTitle("Confirm Seed Generation?")
+
+        grid_layout = QGridLayout()
+
+        header_text = QLabel(header)
+
+        flag_list_label = QLabel(flag_list)
+        flag_list_scroll = QScrollArea(self)
+        flag_list_scroll.setWidgetResizable(True)
+        flag_list_scroll.setWidget(flag_list_label)
+        flag_list_scroll.setStyleSheet("margin-bottom: 10px;")
+
+        grid_layout.addWidget(header_text, 1, 0, 1, 9)
+        grid_layout.addWidget(flag_list_scroll, 2, 0, 1, 9)
+
+        self.cancel_pushbutton = QPushButton("Cancel")
+        grid_layout.addWidget(self.cancel_pushbutton, 3, 1, 1, 3)
+        self.cancel_pushbutton.clicked.connect(self.button_pressed)
+
+        self.confirm_pushbutton = QPushButton("Confirm")
+        grid_layout.addWidget(self.confirm_pushbutton, 3, 5, 1, 3)
+        self.confirm_pushbutton.clicked.connect(self.button_pressed)
+
+        self.setLayout(grid_layout)
+
+    def button_pressed(self):
+        if self.sender() == self.cancel_pushbutton:
+            self.reject()
+        elif self.sender() == self.confirm_pushbutton:
+            self.accept()
+
+
 class BingoPrompts(QDialog):
     def __init__(self):
         super().__init__()
@@ -1059,7 +1102,7 @@ class Window(QMainWindow):
             flagMode = flagMode.strip()
             for flag in self.flags:
                 if flagMsg != "":
-                    flagMsg += "\n-"
+                    flagMsg += "\n"
                 flagMsg += flag
             if flagMsg == "":
                 QMessageBox.about(
@@ -1094,20 +1137,24 @@ class Window(QMainWindow):
 
             # This makes the flag string more readable in
             # the confirm dialog
-            message = (f"Rom: {self.romText}\n"
-                       f"Output: {self.romOutputDirectory}\n"
-                       f"Seed: {displaySeed}\n"
-                       f"Number of seeds: {self.seedCount.text()}\n"
-                       f"Mode: {self.mode}\n"
-                       f"Flags: \n-{flagMsg}\n"
-                       f"(Hyphens are not actually used in seed generation)"
-                       )
-            continue_confirmed = QMessageBox.question(
-                self,
-                "Confirm Seed Generation?",
+            message = (
+                "{0: <10} {1}\n"
+                "{2: <9} {3}\n"
+                "{4: <10} {5}\n"
+                "{6: <10} {7}\n"
+                "{8: <10} {9}\n"
+                "{10: <10}".format(
+                    "Rom:", self.romText,
+                    "Output:", self.romOutputDirectory,
+                    "Seed:", displaySeed,
+                    "Batch:", self.seedCount.text(),
+                    "Mode:", self.mode,
+                    "Flags:")
+            )
+            continue_confirmed = GenConfirmation(
                 message,
-                QMessageBox.Yes | QMessageBox.Cancel
-            ) == QMessageBox.Yes
+                f"{flagMsg}"
+            ).exec()
             if continue_confirmed:
                 self.clearConsole()
                 self.seed = self.seed or int(time.time())
