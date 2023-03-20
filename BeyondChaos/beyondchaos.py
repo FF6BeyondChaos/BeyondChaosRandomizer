@@ -563,7 +563,7 @@ class Window(QMainWindow):
             for flagname, flag in d.items():
                 if flag['object'].inputtype == 'boolean':
                     # cbox = FlagCheckBox("", flagname)
-                    cbox = QPushButton("Off")
+                    cbox = QPushButton("No")
                     if (flagname == "remonsterate" and not len(check_remonsterate()) == 0) or\
                        (flagname == "makeover" and not len(check_player_sprites()) == 0):
                         cbox.setEnabled(False)
@@ -697,7 +697,7 @@ class Window(QMainWindow):
                     v = str(v).lower()
                     if type(child) == QPushButton and v == child.value:
                         child.setChecked(True)
-                        child.setText("On")
+                        child.setText("Yes")
                         self.flags.append(v)
                     elif type(child) in [QSpinBox] and str(v).startswith(child.text.lower()):
                         if ":" in v:
@@ -894,7 +894,7 @@ class Window(QMainWindow):
             for child in tab.children():
                 if type(child) == QPushButton:
                     child.setChecked(False)
-                    child.setText("Off")
+                    child.setText("No")
                 elif type(child) == QSpinBox or type(child) == QDoubleSpinBox:
                     child.setValue(child.default)
                 elif type(child) == QComboBox:
@@ -915,11 +915,11 @@ class Window(QMainWindow):
                 children = t.findChildren(QPushButton)
                 for c in children:
                     if c.isChecked():
-                        c.setText("On")
+                        c.setText("Yes")
                         d[c.value]['checked'] = True
                         self.flags.append(c.value)
                     else:
-                        c.setText("Off")
+                        c.setText("No")
                         d[c.value]['checked'] = False
                 children = t.findChildren(QSpinBox) + t.findChildren(QDoubleSpinBox)
                 for c in children:
