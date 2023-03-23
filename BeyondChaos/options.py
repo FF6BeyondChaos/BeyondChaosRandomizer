@@ -8,7 +8,6 @@ class Mode:
     name: str
     description: str
     forced_flags: List[str] = field(default_factory=list)
-    # prohibited_codes: List[str] = field(default_factory=list)
     prohibited_flags: Set[str] = field(default_factory=set)
 
 
@@ -79,58 +78,38 @@ class Flag:
 @dataclass
 class Options:
     mode: Mode
-    active_flags = {}
-    shuffle_commands: bool = field(init=False, default=False)
-    replace_commands: bool = field(init=False, default=False)
-    sprint: bool = field(init=False, default=False)
-    fix_exploits: bool = field(init=False, default=False)
-    random_enemy_stats: bool = field(init=False, default=False)
-    random_palettes_and_names: bool = field(init=False, default=False)
-    random_items: bool = field(init=False, default=False)
-    random_character_stats: bool = field(init=False, default=False)
-    random_espers: bool = field(init=False, default=False)
-    random_treasure: bool = field(init=False, default=False)
-    random_zerker: bool = field(init=False, default=False)
-    random_blitz: bool = field(init=False, default=False)
-    random_window: bool = field(init=False, default=False)
-    random_formations: bool = field(init=False, default=False)
-    swap_sprites: bool = field(init=False, default=False)
-    random_animation_palettes: bool = field(init=False, default=False)
-    random_final_dungeon: bool = field(init=False, default=False)
-    random_dances: bool = field(init=False, default=False)
-    random_clock: bool = field(init=False, default=False)
-    shuffle_wor: bool = field(init=False, default=False)
-    randomize_forest: bool = field(init=False, default=False)
-    randomize_magicite: bool = field(init=False, default=False)
-    random_final_party: bool = field(init=False, default=False)
+    active_flags: [Flag] = field(default_factory=list)
 
-    def is_flag_active(self, flag_name: str):
-        if flag_name in self.active_flags.keys():
-            return True
+    def is_flag_active(self, flag_attribute: str):
+        for flag in self.active_flags:
+            if flag.name == flag_attribute or flag.description == flag_attribute:
+                return True
 
     def is_any_flag_active(self, flag_names: List[str]):
-        for flag in flag_names:
-            if flag in self.active_flags.keys():
+        for flag in self.active_flags:
+            if flag.name in flag_names:
                 return True
 
     def get_flag_value(self, flag_name: str):
         try:
-            return self.active_flags[flag_name]
+            for flag in self.active_flags:
+                if flag.name == flag_name:
+                    return flag.value
         except KeyError:
             return None
 
     def activate_flag(self, flag_name: str, flag_value=None):
         for flag in ALL_FLAGS:
             if flag.name == flag_name:
-                if len(flag_name) == 1: setattr(self, flag.description, True)
-                self.active_flags[flag_name] = flag_value
+                if flag in self.active_flags:
+                    return
+                self.active_flags.append(flag)
                 if flag in MAKEOVER_MODIFIER_FLAGS:
                     self.activate_flag("makeover")
                 if flag in RESTRICTED_VANILLA_SPRITE_FLAGS:
                     self.activate_flag("frenchvanilla")
                 return
-                
-                
+
     def activate_from_string(self, flag_string):
         s = ""
         flags = read_Options_from_string(flag_string, self.mode)
@@ -177,9 +156,6 @@ def read_Options_from_string(flag_string: str, mode: Union[Mode, str]):
         if found:
             flag.value = value
             flags[flag.name] = flag
-
-    # import sys
-    # sys.exit()
     return flags
 
 
@@ -228,196 +204,196 @@ NORMAL_FLAGS = [
          description='fix_exploits',
          long_description='Make the game more balanced by removing known exploits.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='c',
          description='random_palettes_and_names',
          long_description='Randomize palettes and names of various things.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='d',
          description='random_final_dungeon',
          long_description='Randomize final dungeon.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='e',
          description='random_espers',
          long_description='Randomize esper spells and levelup bonuses.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='f',
          description='random_formations',
          long_description='Randomize enemy formations.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='g',
          description='random_dances',
          long_description='Randomize dances.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='h',
          description='random_final_party',
          long_description='Your party in the Final Kefka fight will be random.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='i',
          description='random_items',
          long_description='Randomize the stats of equippable items.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='j',
          description='randomize_forest',
          long_description='Randomize the phantom forest.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='k',
          description='random_clock',
          long_description='Randomize the clock in Zozo.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='l',
          description='random_blitz',
          long_description='Randomize blitz inputs.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='m',
          description='random_enemy_stats',
          long_description='Randomize enemy stats.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='n',
          description='random_window',
          long_description='Randomize window background colors.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='o',
          description='shuffle_commands',
          long_description="Shuffle characters' in-battle commands.",
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='p',
          description='random_animation_palettes',
          long_description='Randomize the palettes of spells and weapon animations.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='q',
          description='random_character_stats',
          long_description='Randomize what equipment each character can wear and character stats.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='r',
          description='shuffle_wor',
          long_description='Randomize character locations in the world of ruin.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='s',
          description='swap_sprites',
          long_description='Swap character graphics around.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='t',
          description='random_treasure',
          long_description='Randomize treasure including chests, colosseum, shops, and enemy drops.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='u',
          description='random_zerker',
          long_description='Umaro risk. (Random character will be berserk)',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='w',
          description='replace_commands',
          long_description='Generate new commands for characters,replacing old commands.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='y',
          description='randomize_magicite',
          long_description='Shuffle magicite locations.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='z',
          description='sprint',
          long_description='Always have "Sprint Shoes" effect.',
          category="flags",
-         inputtype="checkbox"),
+         inputtype="boolean"),
 
     # Sprite codes
     Flag(name='bravenudeworld',
          description="TINA PARTY MODE",
          long_description="All characters use the Esper Terra sprite.",
          category="sprite",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='kupokupo',
          description="MOOGLE MODE",
          long_description="All party members are moogles except Mog. With partyparty, "
                           "all characters are moogles, except Mog, Esper Terra, and Imps.",
          category="sprite",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='makeover',
          description="SPRITE REPLACEMENT MODE",
          long_description="Some sprites are replaced with new ones (like Cecil or Zero Suit Samus).",
          category="sprite",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='partyparty',
          description="CRAZY PARTY MODE",
          long_description="Kefka, Trooper, Banon, Leo, Ghost, Merchant, Esper Terra, "
                           "and Soldier are included in the pool of sprite randomization",
          category="sprite",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='quikdraw',
          description="QUIKDRAW MODE",
          long_description="All characters look like imperial soldiers, and none of them have Gau's Rage skill.",
          category="sprite",
-         inputtype="checkbox"),
+         inputtype="boolean"),
 
     # Aesthetic codes
     Flag(name='alasdraco',
          description="JAM UP YOUR OPERA MODE",
          long_description="Randomizes various aesthetic elements of the Opera.",
          category="aesthetic",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='bingoboingo',
          description="BINGO BONUS",
          long_description="Generates a Bingo table with various game elements to witness and check off. "
                           "The ROM does not interact with the bingo board.",
          category="aesthetic",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='capslockoff',
          description="Mixed Case Names Mode",
          long_description="Names use whatever capitalization is in the name lists instead of all caps.",
          category="aesthetic",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='johnnyachaotic',
          description="MUSIC MANGLING MODE",
          long_description="Randomizes music with no regard to what would make sense in a given location.",
          category="aesthetic",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='johnnydmad',
          description="MUSIC REPLACEMENT MODE",
          long_description="Randomizes music with regard to what would make sense in a given location.",
          category="aesthetic",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='nicerpoison',
          description="LOW PIXELATION POISON MODE",
          long_description="Drastically reduces the pixelation effect of poison when in dungeons.",
          category="aesthetic",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='notawaiter',
          description="CUTSCENE SKIPS",
          long_description="Up to Kefka at Narshe, the vast majority of mandatory cutscenes are completely removed. "
                           "Optional cutscenes are not removed.",
          category="aesthetic",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='remonsterate',
          description="MONSTER SPRITE REPLACEMENT MODE",
          long_description="Replaces monster sprites with sprites from other games. "
                           "Requires sprites in the remonstrate\\sprites folder.",
          category="aesthetic",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='removeflashing',
          description="NOT SO FLASHY MODE",
          long_description="Removes most white flashing effects from the game, such as Bum Rush.",
          category="aesthetic",
-         inputtype="checkbox"),
+         inputtype="boolean"),
 
     # battle codes
     Flag(name='collateraldamage',
@@ -425,7 +401,7 @@ NORMAL_FLAGS = [
          long_description="All pieces of equipment break for spells. Characters only have the Fight and "
                           "Item commands, and enemies will use items drastically more often than usual.",
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='cursepower',
          description="CHANGE CURSED SHIELD MODE",
          long_description="Set the number of battles required to uncurse a Cursed Shield. (Vanilla = 255, 0 = Random)",
@@ -437,30 +413,30 @@ NORMAL_FLAGS = [
          description="NO DANCE FAILURES",
          long_description="Removes the 50% chance that dances will fail when used on a different terrain.",
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='dancingmaduin',
          description="RESTRICTED ESPERS MODE",
          long_description="Restricts Esper usage such that most Espers can only be equipped by one character. "
                           "Also usually changes what spell the Paladin Shld teaches.",
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='darkworld',
          description="SLASHER'S DELIGHT MODE",
          long_description="Drastically increases the difficulty of the seed, akin to a hard mode. "
                           "Mostly meant to be used in conjunction with the madworld flag.",
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='easymodo',
          description="EASY MODE",
          long_description="All enemies have 1 HP.",
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='electricboogaloo',
          description="WILD ITEM BREAK MODE",
          long_description="Increases the list of spells that items can break and proc for from just "
                           "magic and some summons to include almost any skill.",
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='expboost',
          description="MULTIPLIED EXP MODE",
          long_description="All battles will award multiplied exp.",
@@ -475,18 +451,18 @@ NORMAL_FLAGS = [
          description="EASY FANATICS TOWER MODE",
          long_description="Disables forced magic command in Fanatic's Tower.",
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='madworld',
          description="TIERS FOR FEARS MODE",
          long_description='Creates a "true tierless" seed, with enemies having a higher degree of '
                           'randomization and shops being very randomized as well.',
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='masseffect',
          description="WILD EQUIPMENT EFFECT MODE",
          long_description="Increases the number of rogue effects on equipment by a large amount.",
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='mpboost',
          description="MULTIPLIED MP MODE",
          long_description="All battles will award multiplied magic points.",
@@ -496,30 +472,30 @@ NORMAL_FLAGS = [
          description="NO ITEM BREAKS MODE",
          long_description="Causes no items to break for spell effects.",
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='norng',
          description="NO RNG MODE",
          long_description="Almost all calls to the RNG are removed, and actions are much less random as a result.",
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='playsitself',
          description="AUTOBATTLE MODE",
          long_description="All characters will act automatically, in a manner similar to "
                           "when Coliseum fights are fought.",
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='randombosses',
          description="RANDOM BOSSES MODE",
          long_description="Causes boss skills to be randomized similarly to regular enemy skills. "
                           "Boss skills can change to similarly powerful skills.",
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='rushforpower',
          description="OLD VARGAS FIGHT MODE",
          long_description="Reverts the Vargas fight to only require that Vargas take any "
                           "damage to begin his second phase.",
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='swdtechspeed',
          description="CHANGE SWDTECH SPEED MODE",
          long_description="Alters the speed at which the SwdTech bar moves.",
@@ -532,7 +508,7 @@ NORMAL_FLAGS = [
          description="UNBREAKABLE ITEMS MODE",
          long_description="Causes all items to be indestructible when broken for a spell.",
          category="battle",
-         inputtype="checkbox"),
+         inputtype="boolean"),
 
     # field codes
     Flag(name='bsiab',
@@ -540,46 +516,46 @@ NORMAL_FLAGS = [
          long_description="Greatly increases the variance of monster-in-a-box encounters and removes "
                           "some sanity checks, allowing them to be much more difficult and volatile",
          category="field",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='cursedencounters',
          description="EXPANDED ENCOUNTERS MODE",
          long_description="Increases all zones to have 16 possible enemy encounters.",
          category="field",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='dearestmolulu',
          description="ENCOUNTERLESS MODE",
          long_description="No random encounters occur. Items that alter encounter rates increase them. "
                           "EXP flag recommended",
          category="field",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='fightclub',
          description="MORE LIKE COLI-DON'T-SEE-'EM",
          long_description="Does not allow you to see the coliseum rewards before betting, "
                           "but you can often run from the coliseum battles to keep your item.",
          category="field",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='mimetime',
          description='ALTERNATE GOGO MODE',
          long_description="Gogo will be hidden somewhere in the World of Ruin disguised as another character. "
                           "Bring that character to him to recruit him.",
          category="field",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='morefanatical',
          description='HORROR FANATICS TOWER',
          long_description="Fanatic's Tower is even more confusing than usual.",
          category="field",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='nomiabs',
          description='NO MIAB MODE',
          long_description="Chests will never have monster encounters in them.",
          category="field",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='questionablecontent',
          description="RIDDLER MODE",
          long_description="When items have significant differences from vanilla, a question mark "
                           "is appended to the item's name, including in shop menus.",
          category="field",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='randomboost',
          description="RANDOM BOOST MODE",
          long_description="Prompts for a multiplier, increasing the range of randomization. (0=uniform randomness)",
@@ -591,70 +567,70 @@ NORMAL_FLAGS = [
          long_description="The player will start in the World of Ruin, with all of the World of Balance "
                           "treasure chests, along with a guaranteed set of items, and more Lores.",
          category="field",
-         inputtype="checkbox"),
+         inputtype="boolean"),
 
     # character codes
     Flag(name='allcombos',
          description="ALL COMBOS MODE",
          long_description="All skills that get replaced with something are replaced with combo skills.",
          category="characters",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='canttouchthis',
          description="INVINCIBILITY",
          long_description="All characters have 255 Defense and 255 Magic Defense, as well as 128 Evasion "
                           "and Magic Evasion.",
          category="characters",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='desperation',
          description="DESPERATION MODE",
          long_description="Guarantees one character will have R-Limit, and greatly increases the chance "
                           "of having desperation attacks as commands.",
          category="characters",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='endless9',
          description="ENDLESS NINE MODE",
          long_description="All R-[skills] are automatically changed to 9x[skills]. W-[skills] will become 8x[skills].",
          category="characters",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='metronome',
          description="R-CHAOS MODE",
          long_description="All characters have Fight, R-Chaos, Magic, and Item as their skillset, "
                           "except for the Mime, who has Mimic instead of Fight, and the Berserker, "
                           "who only has R-Chaos.",
          category="characters",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='naturalmagic',
          description="NATURAL MAGIC MODE",
          long_description="No Espers or equipment will teach spells. The only way for characters to "
                           "learn spells is through leveling up, if they have their own innate magic list.",
          category="characters",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='naturalstats',
          description="NATURAL STATS MODE",
          long_description="No Espers will grant stat bonuses upon leveling up.",
          category="characters",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='nocombos',
          description="NO COMBOS MODE",
          long_description="There will be no combo(dual) skills.",
          category="characters",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='replaceeverything',
          description="REPLACE ALL SKILLS MODE",
          long_description="All vanilla skills that can be replaced, are replaced.",
          category="characters",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='supernatural',
          description="SUPER NATURAL MAGIC MODE",
          long_description="Makes it so that any character with the Magic command will have natural magic.",
          category="characters",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='suplexwrecks',
          description="SUPLEX MODE",
          long_description="All characters use the Sabin sprite, have a name similar to Sabin, have the "
                           "Blitz and Suplex commands, and can hit every enemy with Suplex.",
          category="characters",
-         inputtype="checkbox"),
+         inputtype="boolean"),
 
     # gamebreaking codes
 
@@ -663,18 +639,18 @@ NORMAL_FLAGS = [
          long_description="The player can access the airship after leaving Narshe, or from any chocobo stable. "
                           "Doing events out of order can cause softlocks.",
          category="gamebreaking",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='equipanything',
          description="EQUIP ANYTHING MODE",
          long_description="Items that are not equippable normally can now be equipped as weapons or shields. "
                           "These often give strange defensive stats or weapon animations.",
          category="gamebreaking",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='sketch',
          description="ENABLE SKETCH GLITCH",
          long_description="Enables sketch bug. Not recommended unless you know what you are doing.",
          category="gamebreaking",
-         inputtype="checkbox"),
+         inputtype="boolean"),
 
     # experimental codes
     Flag(name='strangejourney',
@@ -682,13 +658,13 @@ NORMAL_FLAGS = [
          long_description="A prototype entrance randomizer, similar to the ancientcave mode. "
                           "Includes all maps and event tiles, and is usually extremely hard to beat by itself.",
          category="experimental",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='thescenarionottaken',
          description='DIVERGENT PATHS MODE',
          long_description="Changes the way the 3 scenarios are split up, to resemble PowerPanda's "
                           "'Divergent Paths' mod.",
          category="experimental",
-         inputtype="checkbox"),
+         inputtype="boolean"),
 
     # beta codes
 
@@ -701,19 +677,19 @@ MAKEOVER_MODIFIER_FLAGS = [
          long_description="Same as 'makeover' except sprites from the vanilla game are guaranteed "
                           "not to appear.",
          category="sprite",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='frenchvanilla',
          description="EQUAL RIGHTS MAKEOVER MODE",
          long_description="Same as 'makeover' except sprites from the vanilla game are selected "
                           "with equal weight to new sprites rather than some being guaranteed to appear.",
          category="sprite",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='cloneparty',
          description="CLONE COSPLAY MAKEOVER MODE",
          long_description="Same as 'makeover' except instead of avoiding choosing different "
                           "versions of the same character, it actively tries to do so.",
          category="sprite",
-         inputtype="checkbox")
+         inputtype="boolean")
 ]
 RESTRICTED_VANILLA_SPRITE_FLAGS = []
 
@@ -744,7 +720,7 @@ def get_makeover_groups():
                       description="NO {mg.upper()} ALLOWED MODE",
                       long_description="Do not select {mg} sprites.",
                       category="spriteCategories",
-                      inputtype="checkbox")
+                      inputtype="boolean")
             MAKEOVER_MODIFIER_FLAGS.extend([
                 Flag(name=mg,
                      description="CUSTOM {mg.upper()} FREQUENCY MODE",
@@ -766,17 +742,17 @@ CAVE_FLAGS = [
          description="ANCIENT CAVE MODE",
          long_description="",
          category="cave",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='speedcave',
          description="SPEED CAVE MODE",
          long_description="",
          category="cave",
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='racecave',
          description="RACE CAVE MODE",
          long_description="",
          category="cave",
-         inputtype="checkbox"),
+         inputtype="boolean"),
 ]
 
 SPECIAL_FLAGS = [
@@ -784,12 +760,12 @@ SPECIAL_FLAGS = [
          description='CHIRSTMAS MODE',
          long_description='',
          category='holiday',
-         inputtype="checkbox"),
+         inputtype="boolean"),
     Flag(name='halloween',
          description="ALL HALLOWS' EVE MODE",
          long_description='',
          category='holiday',
-         inputtype="checkbox")
+         inputtype="boolean")
 ]
 
 BETA_FLAGS = [

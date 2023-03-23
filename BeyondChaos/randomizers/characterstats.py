@@ -20,7 +20,7 @@ class CharacterStats(Randomizer):
 
     @property
     def is_active(self):
-        return self._Options.random_character_stats
+        return self._Options.is_flag_active("random_character_stats")
 
     def randomize(self):
         if not self.is_active:
