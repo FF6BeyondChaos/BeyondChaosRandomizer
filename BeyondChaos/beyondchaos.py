@@ -17,7 +17,7 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
                              QLabel, QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QFileDialog,
                              QApplication, QTabWidget, QInputDialog, QScrollArea, QMessageBox,
                              QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox, QDialog,
-                             QDialogButtonBox, QMenu, QMainWindow, QDesktopWidget, QLayout)
+                             QDialogButtonBox, QMenu, QMainWindow, QDesktopWidget, QLayout, QFrame)
 
 # Local application imports
 import utils
@@ -559,7 +559,7 @@ class Window(QMainWindow):
             tabs.addTab(tabObj, names)
             tablayout = QGridLayout()
             tablayout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
-
+            flagcount = 0
             currentRow = 0
             for flagname, flag in d.items():
                 if flag['object'].inputtype == 'boolean':
@@ -575,14 +575,15 @@ class Window(QMainWindow):
                     cbox.value = flagname
 
                     flaglbl = QLabel(f"{flagname}")
-                    flagdesc = QLabel(f" {flag['object'].long_description}")
+                    flagdesc = QLabel(f"{flag['object'].long_description}")
 
                     tablayout.addWidget(cbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
-                    tablayout.addWidget(flagdesc, currentRow, 3)
+                    tablayout.addWidget(flagdesc, currentRow, 4)
                     cbox.clicked.connect(lambda checked:
                                          self.flagButtonClicked()
                                          )
+                    flagcount += 1
                 elif flag['object'].inputtype == 'float2':
                     nbox = QDoubleSpinBox()
                     nbox.setMinimum(0)
@@ -595,12 +596,13 @@ class Window(QMainWindow):
                     nbox.setFixedHeight(control_fixed_height)
 
                     flaglbl = QLabel(f"{flagname}")
-                    flagdesc = QLabel(f" {flag['object'].long_description}")
+                    flagdesc = QLabel(f"{flag['object'].long_description}")
 
                     tablayout.addWidget(nbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
-                    tablayout.addWidget(flagdesc, currentRow, 3)
+                    tablayout.addWidget(flagdesc, currentRow, 4)
                     nbox.valueChanged.connect(lambda: self.flagButtonClicked())
+                    flagcount += 1
                 elif flag['object'].inputtype == 'integer':
                     nbox = QSpinBox()
                     nbox.default = int(flag['object'].default_value)
@@ -617,12 +619,13 @@ class Window(QMainWindow):
                     nbox.text = flagname
 
                     flaglbl = QLabel(f"{flagname}")
-                    flagdesc = QLabel(f" {flag['object'].long_description}")
+                    flagdesc = QLabel(f"{flag['object'].long_description}")
 
                     tablayout.addWidget(nbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
-                    tablayout.addWidget(flagdesc, currentRow, 3)
+                    tablayout.addWidget(flagdesc, currentRow, 4)
                     nbox.valueChanged.connect(lambda: self.flagButtonClicked())
+                    flagcount += 1
                 elif flag['object'].inputtype == 'combobox':
                     cmbbox = QComboBox()
                     cmbbox.addItems(flag['object'].choices)
@@ -633,16 +636,23 @@ class Window(QMainWindow):
                         cmbbox.setCurrentIndex(cmbbox.findText("Normal"))
                         flaglbl = QLabel(f"{flagname} (" + str(self.makeover_groups[flagname]) +
                                          ")")
-                        flagdesc = QLabel(f" {flag['object'].long_description}")
+                        flagdesc = QLabel(f"{flag['object'].long_description}")
                     else:
                         cmbbox.setCurrentIndex(cmbbox.findText("Vanilla"))
                         flaglbl = QLabel(f"{flagname}")
-                        flagdesc = QLabel(f"- {flag['object'].long_description}")
+                        flagdesc = QLabel(f"{flag['object'].long_description}")
                     tablayout.addWidget(cmbbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
-                    tablayout.addWidget(flagdesc, currentRow, 3)
+                    tablayout.addWidget(flagdesc, currentRow, 4)
                     cmbbox.activated[str].connect(lambda: self.flagButtonClicked())
+                    flagcount += 1
                 currentRow += 1
+
+            v_spacer = QFrame()
+            v_spacer.setFrameShape(QFrame.VLine)
+            v_spacer.setFrameShadow(QFrame.Sunken)
+            v_spacer.setFixedWidth(5)
+            tablayout.addWidget(v_spacer, 0, 3, flagcount, 1)
 
             t.setLayout(tablayout)
             tabObj.setWidgetResizable(True)
