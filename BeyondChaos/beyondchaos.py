@@ -55,6 +55,7 @@ class GenConfirmation(QDialog):
         self.setWindowTitle("Confirm Seed Generation?")
 
         grid_layout = QGridLayout()
+        grid_layout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
 
         header_text = QLabel(header)
 
@@ -573,10 +574,12 @@ class Window(QMainWindow):
                     cbox.setCheckable(True)
                     cbox.value = flagname
 
-                    flaglbl = QLabel(f"{flagname}  -  {flag['object'].long_description}")
+                    flaglbl = QLabel(f"{flagname}")
+                    flagdesc = QLabel(f"- {flag['object'].long_description}")
 
                     tablayout.addWidget(cbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
+                    tablayout.addWidget(flagdesc, currentRow, 3)
                     cbox.clicked.connect(lambda checked:
                                          self.flagButtonClicked()
                                          )
@@ -591,10 +594,12 @@ class Window(QMainWindow):
                     nbox.setFixedWidth(control_fixed_width)
                     nbox.setFixedHeight(control_fixed_height)
 
-                    flaglbl = QLabel(f"{flagname}  -  {flag['object'].long_description}")
+                    flaglbl = QLabel(f"{flagname}")
+                    flagdesc = QLabel(f"- {flag['object'].long_description}")
 
                     tablayout.addWidget(nbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
+                    tablayout.addWidget(flagdesc, currentRow, 3)
                     nbox.valueChanged.connect(lambda: self.flagButtonClicked())
                 elif flag['object'].inputtype == 'integer':
                     nbox = QSpinBox()
@@ -611,10 +616,12 @@ class Window(QMainWindow):
                     nbox.setValue(nbox.default)
                     nbox.text = flagname
 
-                    flaglbl = QLabel(f"{flagname}  -  {flag['object'].long_description}")
+                    flaglbl = QLabel(f"{flagname}")
+                    flagdesc = QLabel(f"- {flag['object'].long_description}")
 
                     tablayout.addWidget(nbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
+                    tablayout.addWidget(flagdesc, currentRow, 3)
                     nbox.valueChanged.connect(lambda: self.flagButtonClicked())
                 elif flag['object'].inputtype == 'combobox':
                     cmbbox = QComboBox()
@@ -625,12 +632,15 @@ class Window(QMainWindow):
                     if self.makeover_groups and flagname in self.makeover_groups:
                         cmbbox.setCurrentIndex(cmbbox.findText("Normal"))
                         flaglbl = QLabel(f"{flagname} (" + str(self.makeover_groups[flagname]) +
-                                         ")   -  " + f"{flag['object'].long_description}")
+                                         ")")
+                        flagdesc = QLabel(f"- {flag['object'].long_description}")
                     else:
                         cmbbox.setCurrentIndex(cmbbox.findText("Vanilla"))
-                        flaglbl = QLabel(f"{flagname}  -  {flag['object'].long_description}")
+                        flaglbl = QLabel(f"{flagname}")
+                        flagdesc = QLabel(f"- {flag['object'].long_description}")
                     tablayout.addWidget(cmbbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
+                    tablayout.addWidget(flagdesc, currentRow, 3)
                     cmbbox.activated[str].connect(lambda: self.flagButtonClicked())
                 currentRow += 1
 
@@ -1101,8 +1111,11 @@ class Window(QMainWindow):
                 flagMsg = ""
             flagMode = flagMode.strip()
             for flag in self.flags:
-                if flagMsg != "":
-                    flagMsg += "\n"
+                if flagMsg:
+                    if len(flag) == 1:
+                        flagMsg += " "
+                    else:
+                        flagMsg += "\n"
                 flagMsg += flag
             if flagMsg == "":
                 QMessageBox.about(
