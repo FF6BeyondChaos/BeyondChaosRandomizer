@@ -575,7 +575,7 @@ class Window(QMainWindow):
                     cbox.value = flagname
 
                     flaglbl = QLabel(f"{flagname}")
-                    flagdesc = QLabel(f"- {flag['object'].long_description}")
+                    flagdesc = QLabel(f" {flag['object'].long_description}")
 
                     tablayout.addWidget(cbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
@@ -595,7 +595,7 @@ class Window(QMainWindow):
                     nbox.setFixedHeight(control_fixed_height)
 
                     flaglbl = QLabel(f"{flagname}")
-                    flagdesc = QLabel(f"- {flag['object'].long_description}")
+                    flagdesc = QLabel(f" {flag['object'].long_description}")
 
                     tablayout.addWidget(nbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
@@ -617,7 +617,7 @@ class Window(QMainWindow):
                     nbox.text = flagname
 
                     flaglbl = QLabel(f"{flagname}")
-                    flagdesc = QLabel(f"- {flag['object'].long_description}")
+                    flagdesc = QLabel(f" {flag['object'].long_description}")
 
                     tablayout.addWidget(nbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
@@ -633,7 +633,7 @@ class Window(QMainWindow):
                         cmbbox.setCurrentIndex(cmbbox.findText("Normal"))
                         flaglbl = QLabel(f"{flagname} (" + str(self.makeover_groups[flagname]) +
                                          ")")
-                        flagdesc = QLabel(f"- {flag['object'].long_description}")
+                        flagdesc = QLabel(f" {flag['object'].long_description}")
                     else:
                         cmbbox.setCurrentIndex(cmbbox.findText("Vanilla"))
                         flaglbl = QLabel(f"{flagname}")
