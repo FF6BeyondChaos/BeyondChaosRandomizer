@@ -123,8 +123,53 @@ def fix_xzone(fout):
     fix_xzone_sub.bytestring = bytes([0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0xF1, 0x81, 0xFF])
     fix_xzone_sub.write(fout)
 
-    fix_xzone_sub.set_location(0X105A41)
-    fix_xzone_sub.bytestring = bytes([0xFF, 0xFF]) #remove hiding monsters from xzone's animation
+    fix_xzone_sub = Substitution()
+    fix_xzone_sub.set_location(0x0235A3)  # Hook point in Runic function
+    fix_xzone_sub.bytestring = bytes([0x22, 0xD5, 0xB9, 0xC4,  # JSL $C4B9D5, go to subroutine
+                                      0xEA])  # NOP
+    fix_xzone_sub.write(fout)
+
+    fix_xzone_sub = Substitution()
+    fix_xzone_sub.set_location(0x04B9D5)  # Subroutine hooked from Runic function, sets bit #$04 of $11A7 when a Runic catch has occurred
+    fix_xzone_sub.bytestring = bytes([0xA9, 0x04,  # LDA #$04
+                                      0x0C, 0xA7, 0x11,# TSB $11A7,	formerly unused bit on Monster Text attack byte, now "Don't hide character/monster" bit
+                                      0xA9, 0x03,  # LDA #$03
+                                      0x1C, 0xA7, 0x11, # TRB $11A7, displaced code, turn off text if hits and miss if status isn't set]
+                                      0x6B])  # RTL
+    fix_xzone_sub.write(fout)
+
+    fix_xzone_sub = Substitution()
+    fix_xzone_sub.set_location(0x01E2EE)  # Hook point in Show/Hide Character/Monster animation command, monster branch
+    fix_xzone_sub.bytestring = bytes([0x22, 0xE0, 0xB9, 0xC4,  # JSL $C4B9E0, go to subroutine
+                                      0xEA, 0xEA, 0xEA, 0xEA])  # NOP #4
+    fix_xzone_sub.write(fout)
+
+    fix_xzone_sub = Substitution()
+    fix_xzone_sub.set_location(0x04B9E0)  # Subroutine hooked from Show/Hide Character/Monster animation command, bypasses hide if bit #$04 of $11A7 is set
+    fix_xzone_sub.bytestring = bytes([0xAD, 0xA7, 0x11,  # LDA $11A7
+                                      0x89, 0x04,  # BIT #$04, is our new "Don't hide character/monster" bit set?
+                                      0xD0, 0x08,  # BNE #$08, if so, don't hide monster
+                                      0xAD, 0xAB, 0x61,  # LDA $61AB
+                                      0x25, 0x10,  # AND $10
+                                      0x8D, 0xAB, 0x61,  # STA $61AB
+                                      0x6B])  # RTL
+    fix_xzone_sub.write(fout)
+
+    fix_xzone_sub = Substitution()
+    fix_xzone_sub.set_location(0x01E31C)  # Hook point in Show/Hide Character/Monster animation command, character branch
+    fix_xzone_sub.bytestring = bytes([0x22, 0xF0, 0xB9, 0xC4,  # JSL $C4B9F0, go to subroutine
+                                      0xEA, 0xEA, 0xEA, 0xEA])  # NOP #4
+    fix_xzone_sub.write(fout)
+
+    fix_xzone_sub = Substitution()
+    fix_xzone_sub.set_location(0x04B9F0)  # Subroutine hooked from Show/Hide Character/Monster animation command, bypasses hide if bit #$04 of $11A7 is set
+    fix_xzone_sub.bytestring = bytes([0xAD, 0xA7, 0x11,  # LDA $11A7
+                                      0x89, 0x04,  # BIT #$04, is our new "Don't hide character/monster" bit set?
+                                      0xD0, 0x08,  # BNE #$08, if so, don't hide monster
+                                      0xAD, 0xAC, 0x61,  # LDA $61AC
+                                      0x25, 0x10,  # AND $10
+                                      0x8D, 0xAC, 0x61,  # STA $61AC
+                                      0x6B])  # RTL
     fix_xzone_sub.write(fout)
 
 def imp_skimp(fout):
