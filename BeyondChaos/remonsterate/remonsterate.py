@@ -737,7 +737,9 @@ class MonsterPaletteObject(TableObject):
         assert len(palette) >= 8
         self.colors = palette[:8]
         if not is_8color:
-            assert len(palette) == 16
+            if len(palette) != 16:
+                # Pad the palette with 0s
+                palette += [0] * (16 - len(palette))
             assert self.successor not in MonsterPaletteObject.new_palettes
             self.successor.colors = palette[8:]
             MonsterPaletteObject.new_palettes.append(self.successor)
