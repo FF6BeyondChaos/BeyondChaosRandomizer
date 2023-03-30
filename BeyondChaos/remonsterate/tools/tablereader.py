@@ -1,3 +1,6 @@
+import io
+import string
+
 from .psx_file_extractor import FileManager, SANDBOX_PATH
 from .utils import (read_multi, write_multi, classproperty,
                     random, md5hash, cached_property, clached_property)
@@ -5,9 +8,9 @@ from functools import total_ordering
 from os import path
 from hashlib import md5
 from sys import stdout
-import string
 from copy import copy
 from collections import Counter
+from multiprocessing import Pipe
 
 
 try:
@@ -20,10 +23,10 @@ tblpath = path.join(head, tblpath)
 
 addresses = lambda: None
 names = lambda: None
+global_output_buffer = None
 
 MASTER_FILENAME = "master.txt"
 TABLE_SPECS = {}
-GLOBAL_OUTPUT = None
 GLOBAL_TABLE = None
 GLOBAL_LABEL = None
 GRAND_OBJECT_DICT = {}
@@ -100,14 +103,15 @@ def set_global_label(label):
     global GLOBAL_LABEL
     GLOBAL_LABEL = label
 
+
 def get_global_label():
     global GLOBAL_LABEL
     return GLOBAL_LABEL
 
 
-def set_global_output_filename(filename):
-    global GLOBAL_OUTPUT
-    GLOBAL_OUTPUT = filename
+def set_global_output_file_buffer(outfile_rom_buffer: io.BytesIO):
+    global global_output_buffer
+    global_output_buffer = outfile_rom_buffer
 
 
 def set_global_table_filename(filename):
@@ -125,7 +129,7 @@ def set_seed(seed):
     SEED = seed
 
 
-def determine_global_table(outfile, interactive=True):
+def determine_global_table(outfile_rom_buffer: io.BytesIO, interactive=True):
     global GLOBAL_LABEL
     if GLOBAL_LABEL is not None:
         return GLOBAL_LABEL
@@ -140,7 +144,7 @@ def determine_global_table(outfile, interactive=True):
         label, h2, tablefile = line.split()
         tablefiles[h2] = (label, tablefile)
         labelfiles[label] = tablefile
-    h = md5hash(outfile)
+    h = md5hash(outfile_rom_buffer.getbuffer())
     if h in tablefiles:
         label, filename = tablefiles[h]
     elif interactive:
@@ -171,85 +175,84 @@ def patch_filename_to_bytecode(patchfilename):
     next_address = None
     filename = None
     read_into = patch
-    f = open(patchfilename)
-    for line in f:
-        line = line.strip()
-        if '#' in line:
-            line = line.split('#')[0].strip()
+    with open(patchfilename) as f:
+        for line in f:
+            line = line.strip()
+            if '#' in line:
+                line = line.split('#')[0].strip()
 
-        if not line:
-            continue
+            if not line:
+                continue
 
-        while "  " in line:
-            line = line.replace("  ", " ")
+            while "  " in line:
+                line = line.replace("  ", " ")
 
-        if line.startswith(".def"):
-            _, name, value = line.split(' ', 2)
-            definitions[name] = value
-            continue
+            if line.startswith(".def"):
+                _, name, value = line.split(' ', 2)
+                definitions[name] = value
+                continue
 
-        if line.startswith(".label"):
-            try:
-                _, name, address = line.split(' ')
-                labels[name] = (address, filename)
-            except ValueError:
-                _, name = line.split(' ')
-                address = None
-                labels[name] = None
-            continue
+            if line.startswith(".label"):
+                try:
+                    _, name, address = line.split(' ')
+                    labels[name] = (address, filename)
+                except ValueError:
+                    _, name = line.split(' ')
+                    address = None
+                    labels[name] = None
+                continue
 
-        for name in sorted(definitions, key=lambda d: (-len(d), d)):
-            if name in line:
-                line = line.replace(name, definitions[name])
+            for name in sorted(definitions, key=lambda d: (-len(d), d)):
+                if name in line:
+                    line = line.replace(name, definitions[name])
 
-        if line.upper() == 'VALIDATION':
-            read_into = validation
-            continue
+            if line.upper() == 'VALIDATION':
+                read_into = validation
+                continue
 
-        if ':' not in line:
-            line = ':' + line
+            if ':' not in line:
+                line = ':' + line
 
-        address, code = line.split(':')
-        address = address.strip()
-        if not address:
-            address = next_address
-        else:
-            if '@' in address:
-                address, filename = address.split('@')
-            address = int(address, 0x10)
-        code = code.strip()
-        while '  ' in code:
-            code = code.replace('  ', ' ')
+            address, code = line.split(':')
+            address = address.strip()
+            if not address:
+                address = next_address
+            else:
+                if '@' in address:
+                    address, filename = address.split('@')
+                address = int(address, 0x10)
+            code = code.strip()
+            while '  ' in code:
+                code = code.replace('  ', ' ')
 
-        if (address, filename) in read_into:
-            raise Exception("Multiple %x patches used." % address)
-        if code:
-            read_into[(address, filename)] = code
-        for name in labels:
-            if labels[name] is None:
-                labels[name] = (address, filename)
+            if (address, filename) in read_into:
+                raise Exception("Multiple %x patches used." % address)
+            if code:
+                read_into[(address, filename)] = code
+            for name in labels:
+                if labels[name] is None:
+                    labels[name] = (address, filename)
 
-        next_address = address + len(code.split())
+            next_address = address + len(code.split())
 
-    for read_into in (patch, validation):
-        for (address, filename) in sorted(read_into):
-            code = read_into[address, filename]
-            for name in sorted(labels, key=lambda l: (-len(l), l)):
-                if name in code:
-                    target_address, target_filename = labels[name]
-                    assert target_filename == filename
-                    jump = target_address - (address + 2)
-                    if jump < 0:
-                        jump = 0x100 + jump
-                    if not 0 <= jump <= 0xFF:
-                        raise Exception("Label out of range %x - %s" %
-                                        (address, code))
-                    code = code.replace(name, "%x" % jump)
+        for read_into in (patch, validation):
+            for (address, filename) in sorted(read_into):
+                code = read_into[address, filename]
+                for name in sorted(labels, key=lambda l: (-len(l), l)):
+                    if name in code:
+                        target_address, target_filename = labels[name]
+                        assert target_filename == filename
+                        jump = target_address - (address + 2)
+                        if jump < 0:
+                            jump = 0x100 + jump
+                        if not 0 <= jump <= 0xFF:
+                            raise Exception("Label out of range %x - %s" %
+                                            (address, code))
+                        code = code.replace(name, "%x" % jump)
 
-            code = bytearray(map(lambda s: int(s, 0x10), code.split()))
-            read_into[address, filename] = code
+                code = bytearray(map(lambda s: int(s, 0x10), code.split()))
+                read_into[address, filename] = code
 
-    f.close()
     return patch, validation
 
 
@@ -276,7 +279,7 @@ def select_patches():
         PATCH_FILENAMES.remove(pfn)
 
 
-def write_patch(outfile, patchfilename, noverify=None, force=False):
+def write_patch(patchfilename, noverify=None, force=False):
     if patchfilename in ALREADY_PATCHED and not force:
         return
     if noverify and patchfilename not in NOVERIFY_PATCHES:
@@ -284,22 +287,20 @@ def write_patch(outfile, patchfilename, noverify=None, force=False):
     elif noverify is None and patchfilename in NOVERIFY_PATCHES:
         noverify = True
     patchpath = path.join(tblpath, patchfilename)
-    pf = open(patchpath, 'r+b')
-    magic_word = pf.read(5)
-    pf.close()
-    f = get_open_file(outfile)
+    with open(patchpath, 'r+b') as pf:
+        magic_word = pf.read(5)
     if magic_word == b"\xff\xbcCMP":
         CMP_PATCH_FILENAMES.append(patchfilename)
-        return write_cmp_patch(f, patchpath)
+        return write_cmp_patch(patchpath)
 
     patch, validation = patch_filename_to_bytecode(patchpath)
     for patchdict in (validation, patch):
         for (address, filename), code in sorted(patchdict.items()):
             if filename is None:
-                f = get_open_file(outfile)
+                f = global_output_buffer
             else:
                 if PSX_FILE_MANAGER is None:
-                    create_psx_file_manager(outfile)
+                    create_psx_file_manager(global_output_buffer)
                 f = get_open_file(filename, sandbox=True)
             f.seek(address)
 
@@ -321,10 +322,11 @@ def write_patch(outfile, patchfilename, noverify=None, force=False):
     ALREADY_PATCHED.add(patchfilename)
 
 
-def write_cmp_patch(outfile, patchfilename, verify=False):
-    from .interface import get_sourcefile
+def write_cmp_patch(patchfilename, verify=False):
+    # from .interface import get_sourcefile
+    from ...randomizer import infile_rom_buffer
 
-    sourcefile = open(get_sourcefile(), 'r+b')
+    sourcefile = infile_rom_buffer
     patchfile = open(patchfilename, 'r+b')
     magic_word = patchfile.read(5)
     if magic_word != b"\xFF\xBCCMP":
@@ -338,43 +340,45 @@ def write_cmp_patch(outfile, patchfilename, verify=False):
             break
         if command == b'\x00':
             address = read_multi(patchfile, length=pointer_length)
-            outfile.seek(address)
+            global_output_buffer.seek(address)
         elif command == b'\x01':
             chunksize = read_multi(patchfile, length=2)
             address = read_multi(patchfile, length=pointer_length)
             sourcefile.seek(address)
             s = sourcefile.read(chunksize)
             if not verify:
-                outfile.write(s)
+                global_output_buffer.write(s)
             elif verify:
-                s2 = outfile.read(len(s))
+                s2 = global_output_buffer.read(len(s))
                 if s != s2:
                     raise Exception("Patch write conflict %s %x" % (
-                        patchfilename, outfile.tell()-len(s2)))
+                        patchfilename, global_output_buffer.tell()-len(s2)))
         elif command == b'\x02':
             chunksize = read_multi(patchfile, length=2)
             s = patchfile.read(chunksize)
             if not verify:
-                outfile.write(s)
+                global_output_buffer.write(s)
             elif verify:
-                s2 = outfile.read(len(s))
+                s2 = global_output_buffer.read(len(s))
                 if s != s2:
                     raise Exception("Patch write conflict %s %x" % (
-                        patchfilename, outfile.tell()-len(s2)))
+                        patchfilename, global_output_buffer.tell()-len(s2)))
         else:
             raise Exception("Unexpected EOF")
 
-    sourcefile.close()
     patchfile.close()
 
 
-def write_patches(outfile):
+def write_patches(connection: Pipe = None):
     if not PATCH_FILENAMES:
         return
 
-    print("Remonsterate: Writing patches...")
+    if connection:
+        connection.send("Remonsterate: Writing patches...")
+    else:
+        print("Remonsterate: Writing patches...")
     for patchfilename in PATCH_FILENAMES:
-        write_patch(outfile, patchfilename)
+        write_patch(patchfilename)
 
 
 def verify_patches(outfile):
@@ -579,7 +583,7 @@ class TableObject(object):
             self.filename = path.join(SANDBOX_PATH, self.specs.subfile)
         else:
             self.filename = filename
-        if self.filename != GLOBAL_OUTPUT and PSX_FILE_MANAGER is None:
+        if self.filename != global_output_buffer and PSX_FILE_MANAGER is None:
             create_psx_file_manager(filename)
         self.pointer = pointer
         self.groupindex = groupindex
@@ -606,11 +610,11 @@ class TableObject(object):
         return (self.rank, self.index) < (other.rank, other.index)
 
     @classmethod
-    def create_new(cls, filename=None):
-        if filename is None:
-            filename = GLOBAL_OUTPUT
+    def create_new(cls, outfile_rom_buffer: io.BytesIO = None):
+        if outfile_rom_buffer is None:
+            outfile_rom_buffer = global_output_buffer
         index = max([o.index for o in cls.every]) + 1
-        new = cls(filename=filename, index=index)
+        new = cls(outfile_rom_buffer, index=index)
         #new.old_data = {}
         for name, size, other in new.specs.attributes:
             if other in [None, "int"]:
@@ -1019,12 +1023,12 @@ class TableObject(object):
             raise ValueError("Too many specs attributes.")
         return specsattrs
 
-    def read_data(self, filename=None, pointer=None):
+    def read_data(self, outfile_rom_buffer: io.BytesIO = None, pointer=None):
         if pointer is None:
             pointer = self.pointer
-        if filename is None:
-            filename = self.filename
-        if pointer is None or filename is None:
+        if outfile_rom_buffer is None:
+            outfile_rom_buffer = global_output_buffer
+        if pointer is None or outfile_rom_buffer is None:
             return
 
         if self.variable_size is not None:
@@ -1033,13 +1037,12 @@ class TableObject(object):
             specsattrs = self.specs.attributes
 
         self.old_data = {}
-        f = get_open_file(filename)
-        f.seek(pointer)
+        outfile_rom_buffer.seek(pointer)
         for name, size, other in specsattrs:
             if other in [None, "int"]:
-                value = read_multi(f, length=size)
+                value = read_multi(outfile_rom_buffer, length=size)
             elif other == "str":
-                value = f.read(size)
+                value = outfile_rom_buffer.read(size)
             elif other == "list":
                 if not isinstance(size, int):
                     number, numbytes = size.split('x')
@@ -1048,7 +1051,7 @@ class TableObject(object):
                     number, numbytes = size, 1
                 value = []
                 for i in range(number):
-                    value.append(read_multi(f, numbytes))
+                    value.append(read_multi(outfile_rom_buffer, numbytes))
             self.old_data[name] = copy(value)
             setattr(self, name, value)
 
@@ -1057,12 +1060,11 @@ class TableObject(object):
             value = getattr(another, name)
             setattr(self, name, value)
 
-    def write_data(self, filename=None, pointer=None, syncing=False):
+    def write_data(self, pointer=None, syncing=False):
         if pointer is None:
             pointer = self.pointer
-        if filename is None:
-            filename = self.filename
-        if pointer is None or filename is None:
+        outfile_rom_buffer = global_output_buffer
+        if pointer is None or outfile_rom_buffer is None:
             return
 
         if (not syncing and hasattr(self.specs, 'syncpointers')
@@ -1070,7 +1072,7 @@ class TableObject(object):
             for p in self.specs.syncpointers:
                 offset = p - self.specs.pointer
                 new_pointer = self.pointer + offset
-                self.write_data(filename=filename, pointer=new_pointer,
+                self.write_data(pointer=new_pointer,
                                 syncing=True)
             return
 
@@ -1081,18 +1083,17 @@ class TableObject(object):
         else:
             specsattrs = self.specs.attributes
 
-        f = get_open_file(filename)
         for name, size, other in specsattrs:
             value = getattr(self, name)
             if other in [None, "int"]:
                 assert value >= 0
-                f.seek(pointer)
-                write_multi(f, value, length=size)
+                outfile_rom_buffer.seek(pointer)
+                write_multi(outfile_rom_buffer, value, length=size)
                 pointer += size
             elif other == "str":
                 assert len(value) == size
-                f.seek(pointer)
-                f.write(value)
+                outfile_rom_buffer.seek(pointer)
+                outfile_rom_buffer.write(value)
                 pointer += size
             elif other == "list":
                 if not isinstance(size, int):
@@ -1102,8 +1103,8 @@ class TableObject(object):
                     number, numbytes = size, 1
                 assert len(value) == number
                 for v in value:
-                    f.seek(pointer)
-                    write_multi(f, v, length=numbytes)
+                    outfile_rom_buffer.seek(pointer)
+                    write_multi(outfile_rom_buffer, v, length=numbytes)
                     pointer += numbytes
         return pointer
 
@@ -1218,8 +1219,8 @@ class TableObject(object):
 
     @cached_property
     def signature(self):
-        filename = '/'.join(self.filename.split(path.sep))
-        identifier = '%s%s' % (filename, self.pointer)
+        # filename = '/'.join(self.filename.split(path.sep))
+        identifier = '%s%s' % (global_output_buffer, self.pointer)
         left = '%s%s%s' % (
             get_seed(), identifier, self.__class__.__name__)
         right = '%s%s' % (self.index, get_seed())
@@ -1613,7 +1614,7 @@ def get_table_objects(objtype, filename=None):
         return already_gotten[identifier]
 
     if filename is None:
-        filename = GLOBAL_OUTPUT
+        filename = global_output_buffer
     objects = []
 
     def add_objects(n, groupindex=0, p=None, obj_filename=None):
@@ -1657,7 +1658,10 @@ def get_table_objects(objtype, filename=None):
         counter = 0
         while len(objects) < number:
             if objtype.specs.groupednum is None:
-                f = get_open_file(filename)
+                if not filename == global_output_buffer:
+                    f = get_open_file(filename)
+                else:
+                    f = global_output_buffer
                 f.seek(pointer)
                 value = ord(f.read(1))
                 pointer += 1
@@ -1668,7 +1672,10 @@ def get_table_objects(objtype, filename=None):
     elif pointed and delimit:
         size = objtype.specs.pointedsize
         counter = 0
-        f = get_open_file(filename)
+        if not filename == global_output_buffer:
+            f = get_open_file(filename)
+        else:
+            f = global_output_buffer
         while counter < number:
             f.seek(pointer)
             subpointer = read_multi(f, size) + objtype.specs.pointedpointer
@@ -1686,7 +1693,10 @@ def get_table_objects(objtype, filename=None):
     elif pointed and objtype.specs.total_size > 0:
         size = objtype.specs.pointedsize
         counter = 0
-        f = get_open_file(filename)
+        if not filename == global_output_buffer:
+            f = get_open_file(filename)
+        else:
+            f = global_output_buffer
         while counter < number:
             f.seek(pointer)
             subpointer = read_multi(f, size) + objtype.specs.pointedpointer
@@ -1701,7 +1711,10 @@ def get_table_objects(objtype, filename=None):
     elif pointed and objtype.specs.total_size == 0:
         size = objtype.specs.pointedsize
         counter = 0
-        f = get_open_file(filename)
+        if not filename == global_output_buffer:
+            f = get_open_file(filename)
+        else:
+            f = global_output_buffer
         while counter < number:
             f.seek(pointer + (size*counter))
             subpointer = read_multi(f, size) + objtype.specs.pointedpointer
@@ -1710,7 +1723,10 @@ def get_table_objects(objtype, filename=None):
             add_variable_object(subpointer, subpointer2)
             counter += 1
     elif delimit:
-        f = get_open_file(filename)
+        if not filename == global_output_buffer:
+            f = get_open_file(filename)
+        else:
+            f = global_output_buffer
         for counter in range(number):
             while True:
                 f.seek(pointer)

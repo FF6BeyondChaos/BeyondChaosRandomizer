@@ -1,3 +1,5 @@
+import io
+
 from utils import CHAR_TABLE, hex2int, utilrandom as random
 
 equip_offsets = {"weapon": 15,
@@ -13,12 +15,12 @@ CHARSTATNAMES = ["hp", "mp", "vigor", "speed", "stamina", "m.power",
 character_list_deprecated = []
 character_list = []
 
-def load_characters(rom_file_name, force_reload=False):
+
+def load_characters(rom_file_buffer: io.BytesIO=False, force_reload=False):
     from gameobjects.character import Character
     if character_list and not force_reload:
         return
 
-    rom = open(rom_file_name, "rb")
     character_byte_block_length = 22
     character_id = 1
     for line in open(CHAR_TABLE):
@@ -29,8 +31,8 @@ def load_characters(rom_file_name, force_reload=False):
             line = line.replace('  ', ' ')
         character_address_and_name = line.split(",")
         character_address = int(character_address_and_name[0], 16)
-        rom.seek(character_address)
-        character_data = rom.read(character_byte_block_length)
+        rom_file_buffer.seek(character_address)
+        character_data = rom_file_buffer.read(character_byte_block_length)
         character = Character(character_id, character_address, character_address_and_name[1], character_data)
         character_id += 1
         character_list.append(character)

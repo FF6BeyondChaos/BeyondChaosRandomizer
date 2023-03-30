@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from io import BytesIO
 from sys import argv
 from shutil import copyfile
 
@@ -158,12 +158,11 @@ def recompress(bytestring):
     return result
 
 
-def decompress_at_location(filename, address):
-    f = open(filename, 'r+b')
-    f.seek(address)
-    size = read_multi(f, length=2)
+def decompress_at_location(rom_file_buffer: BytesIO, address):
+    rom_file_buffer.seek(address)
+    size = read_multi(rom_file_buffer, length=2)
     #print "Size is %s" % size
-    bytestring = f.read(size)
+    bytestring = rom_file_buffer.read(size)
     decompressed = decompress(bytestring, complicated=True)
     return decompressed
 
@@ -207,12 +206,12 @@ class Decompressor():
             raise Exception("Recompressed data out of bounds.")
 
 if __name__ == "__main__":
-    sourcefile = argv[1]
-    outfile = argv[2]
-    copyfile(sourcefile, outfile)
+    infile_rom_path = argv[1]
+    outfile_rom_path = argv[2]
+    copyfile(infile_rom_path, outfile_rom_path)
     d = Decompressor(0x2686C, fakeaddress=0x7E5000, maxaddress=0x28A70)
-    d.read_data(sourcefile)
+    d.read_data(infile_rom_path)
     print(["%x" % i for i in d.get_bytestring(0x7E7C43, 0x20)])
     d.writeover(0x7E50F7, [0x0] * 57)
     d.writeover(0x7E501A, [0xEA] * 3)
-    d.compress_and_write(outfile)
+    d.compress_and_write(outfile_rom_path)

@@ -352,11 +352,11 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
     pilot_sub.write(fout)
 
     if Options_.is_flag_active("racecave"):
-        randomize_tower(filename=sourcefile, ancient=True, nummaps=50)
+        randomize_tower(ancient=True, nummaps=50)
     elif Options_.is_flag_active("speedcave"):
-        randomize_tower(filename=sourcefile, ancient=True, nummaps=85)
+        randomize_tower(ancient=True, nummaps=85)
     else:
-        randomize_tower(filename=sourcefile, ancient=True, nummaps=300)
+        randomize_tower(ancient=True, nummaps=300)
     manage_map_names(fout)
 
     # remove event pointers so Ancient Cave doesn't overwrite and create some softlock exits

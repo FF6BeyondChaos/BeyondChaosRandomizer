@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from io import BytesIO
 from copy import copy
 from formationrandomizer import get_fset
 from utils import (read_multi, write_multi, battlebg_palettes, MAP_NAMES_TABLE,
@@ -106,37 +106,35 @@ class NPCBlock():
     def set_id(self, npcid):
         self.npcid = npcid
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        value = read_multi(f, length=4)
+    def read_data(self, rom_file_buffer: BytesIO=False):
+        rom_file_buffer.seek(self.pointer)
+        value = read_multi(rom_file_buffer, length=4)
         self.palette = (value & 0x1C0000) >> 18
         self.bg2_scroll = (value & 0x200000) >> 21
         self.membit = (value & 0x1C00000) >> 22
         self.memaddr = (value & 0xFE000000) >> 25
         self.event_addr = value & 0x3FFFF
 
-        byte4 = ord(f.read(1))
+        byte4 = ord(rom_file_buffer.read(1))
         self.x = byte4 & 0x7f
         self.show_on_vehicle = (byte4 & 0x80) >> 7
 
-        byte5 = ord(f.read(1))
+        byte5 = ord(rom_file_buffer.read(1))
         self.y = byte5 & 0x3F
         self.speed = (byte5 & 0xC0) >> 6
 
-        self.graphics = ord(f.read(1))
+        self.graphics = ord(rom_file_buffer.read(1))
 
-        byte7 = ord(f.read(1))
+        byte7 = ord(rom_file_buffer.read(1))
         self.move_type = byte7 & 0xF
         self.sprite_priority = (byte7 & 0x30) >> 4
         self.vehicle = (byte7 & 0xC0) >> 6
 
-        byte8 = ord(f.read(1))
+        byte8 = ord(rom_file_buffer.read(1))
         self.facing = byte8 & 0x03
         self.no_turn_when_speaking = (byte8 & 0x4) >> 2
         self.layer_priority = (byte8 & 0x18) >> 3
         self.special_anim = (byte8 & 0xe0) >> 5
-        f.close()
 
     def write_data(self, fout, nextpointer):
         fout.seek(nextpointer)
@@ -166,13 +164,11 @@ class EventBlock():
     def set_id(self, eventid):
         self.eventid = eventid
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.x = ord(f.read(1))
-        self.y = ord(f.read(1))
-        self.event_addr = read_multi(f, length=3)
-        f.close()
+    def read_data(self, rom_file_buffer: BytesIO = None):
+        rom_file_buffer.seek(self.pointer)
+        self.x = ord(rom_file_buffer.read(1))
+        self.y = ord(rom_file_buffer.read(1))
+        self.event_addr = read_multi(rom_file_buffer, length=3)
 
     def write_data(self, fout, nextpointer):
         fout.seek(nextpointer)
@@ -191,13 +187,11 @@ class Zone():
         self.setids = []
         self.rates = 0
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.setids = list(f.read(4))
-        f.seek(self.ratepointer)
-        self.rates = ord(f.read(1))
-        f.close()
+    def read_data(self, rom_file_buffer: BytesIO = None):
+        rom_file_buffer.seek(self.pointer)
+        self.setids = list(rom_file_buffer.read(4))
+        rom_file_buffer.seek(self.ratepointer)
+        self.rates = ord(rom_file_buffer.read(1))
 
     @property
     def pretty_rates(self):
@@ -502,42 +496,40 @@ class Location():
     def layer3ptr(self):
         return (self.mapdata >> 20) & 0x3FF
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
+    def read_data(self, rom_file_buffer: BytesIO):
+        rom_file_buffer.seek(self.pointer)
 
-        self.name_id = ord(f.read(1))
-        self.layers_to_animate = ord(f.read(1))
-        self._battlebg = ord(f.read(1))
-        self.unknown0 = ord(f.read(1))
-        self.tileproperties = ord(f.read(1))  # mult by 2
-        self.attacks = ord(f.read(1))
-        self.unknown1 = ord(f.read(1))
-        self.graphic_sets = list(f.read(4))
-        self.tileformations = read_multi(f, length=2, reverse=True)
-        self.mapdata = read_multi(f, length=4)
-        self.unknown2 = ord(f.read(1))
-        self.bgshift = list(f.read(4))
-        self.unknown3 = ord(f.read(1))
-        self.layer12dimensions = ord(f.read(1))
-        self.unknown4 = ord(f.read(1))
-        self.palette_index = read_multi(f, length=3)
-        self.music = ord(f.read(1))
-        self.unknown5 = ord(f.read(1))
-        self.width = ord(f.read(1))
-        self.height = ord(f.read(1))
-        self.layerpriorities = ord(f.read(1))
-        assert f.tell() == self.pointer + 0x21
+        self.name_id = ord(rom_file_buffer.read(1))
+        self.layers_to_animate = ord(rom_file_buffer.read(1))
+        self._battlebg = ord(rom_file_buffer.read(1))
+        self.unknown0 = ord(rom_file_buffer.read(1))
+        self.tileproperties = ord(rom_file_buffer.read(1))  # mult by 2
+        self.attacks = ord(rom_file_buffer.read(1))
+        self.unknown1 = ord(rom_file_buffer.read(1))
+        self.graphic_sets = list(rom_file_buffer.read(4))
+        self.tileformations = read_multi(rom_file_buffer, length=2, reverse=True)
+        self.mapdata = read_multi(rom_file_buffer, length=4)
+        self.unknown2 = ord(rom_file_buffer.read(1))
+        self.bgshift = list(rom_file_buffer.read(4))
+        self.unknown3 = ord(rom_file_buffer.read(1))
+        self.layer12dimensions = ord(rom_file_buffer.read(1))
+        self.unknown4 = ord(rom_file_buffer.read(1))
+        self.palette_index = read_multi(rom_file_buffer, length=3)
+        self.music = ord(rom_file_buffer.read(1))
+        self.unknown5 = ord(rom_file_buffer.read(1))
+        self.width = ord(rom_file_buffer.read(1))
+        self.height = ord(rom_file_buffer.read(1))
+        self.layerpriorities = ord(rom_file_buffer.read(1))
+        assert rom_file_buffer.tell() == self.pointer + 0x21
 
-        f.seek(0xf5600 + self.locid)
-        self.setid = ord(f.read(1))
+        rom_file_buffer.seek(0xf5600 + self.locid)
+        self.setid = ord(rom_file_buffer.read(1))
 
-        f.close()
-        self.entrance_set.read_data(filename)
+        self.entrance_set.read_data(rom_file_buffer)
         self.backup_entrances()
-        self.read_chests(filename)
-        self.read_npcs(filename)
-        self.read_events(filename)
+        self.read_chests(rom_file_buffer)
+        self.read_npcs(rom_file_buffer)
+        self.read_events(rom_file_buffer)
 
     def make_tower_flair(self):
         towerloc = get_location(334)
@@ -639,26 +631,24 @@ class Location():
         eset.copy(location.entrance_set)
         self.copy_chests(location)
 
-    def read_chests(self, filename):
+    def read_chests(self, rom_file_buffer: BytesIO):
         from chestrandomizer import ChestBlock
-        f = open(filename, 'r+b')
-        f.seek(self.chestpointer)
-        begin = read_multi(f, length=2)
-        end = read_multi(f, length=2)
+        rom_file_buffer.seek(self.chestpointer)
+        begin = read_multi(rom_file_buffer, length=2)
+        end = read_multi(rom_file_buffer, length=2)
         numchests = (end - begin) // 5
         self.chests = []
         for i in range(numchests):
             pointer = begin + (i * 5) + 0x2d8634
             c = ChestBlock(pointer, self.locid)
-            c.read_data(filename)
+            c.read_data(rom_file_buffer)
             c.set_id(i)
             self.chests.append(c)
 
-    def read_npcs(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.npcpointer)
-        begin = read_multi(f, length=2)
-        end = read_multi(f, length=2)
+    def read_npcs(self, rom_file_buffer: BytesIO):
+        rom_file_buffer.seek(self.npcpointer)
+        begin = read_multi(rom_file_buffer, length=2)
+        end = read_multi(rom_file_buffer, length=2)
         numnpcs = (end - begin) / 9.0
         assert numnpcs == round(numnpcs)
         numnpcs = int(numnpcs)
@@ -666,15 +656,14 @@ class Location():
         for i in range(numnpcs):
             pointer = begin + (i * 9) + 0x41a10
             e = NPCBlock(pointer, self.locid)
-            e.read_data(filename)
+            e.read_data(rom_file_buffer)
             e.set_id(i)
             self.npcs.append(e)
 
-    def read_events(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.eventpointer)
-        begin = read_multi(f, length=2)
-        end = read_multi(f, length=2)
+    def read_events(self, rom_file_buffer: BytesIO):
+        rom_file_buffer.seek(self.eventpointer)
+        begin = read_multi(rom_file_buffer, length=2)
+        end = read_multi(rom_file_buffer, length=2)
         numevents = (end - begin) / 5.0
         assert numevents == round(numevents)
         numevents = int(numevents)
@@ -682,7 +671,7 @@ class Location():
         for i in range(numevents):
             pointer = begin + (i * 5) + 0x40000
             e = EventBlock(pointer, self.locid)
-            e.read_data(filename)
+            e.read_data(rom_file_buffer)
             e.set_id(i)
             self.events.append(e)
 
@@ -829,15 +818,13 @@ class Entrance():
         self._entrances = []
         self.location = None
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.x = ord(f.read(1))
-        self.y = ord(f.read(1))
-        self.dest = read_multi(f, length=2)
-        self.destx = ord(f.read(1))
-        self.desty = ord(f.read(1))
-        f.close()
+    def read_data(self, rom_file_buffer: BytesIO):
+        rom_file_buffer.seek(self.pointer)
+        self.x = ord(rom_file_buffer.read(1))
+        self.y = ord(rom_file_buffer.read(1))
+        self.dest = read_multi(rom_file_buffer, length=2)
+        self.destx = ord(rom_file_buffer.read(1))
+        self.desty = ord(rom_file_buffer.read(1))
 
     def set_id(self, entid):
         self.entid = entid
@@ -924,16 +911,15 @@ class Entrance():
 
 
 class LongEntrance(Entrance):
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.x = ord(f.read(1))
-        self.y = ord(f.read(1))
-        self.width = ord(f.read(1))
-        self.dest = read_multi(f, length=2)
-        self.destx = ord(f.read(1))
-        self.desty = ord(f.read(1))
-        f.close()
+    def read_data(self, rom_file_buffer: BytesIO):
+        rom_file_buffer.seek(self.pointer)
+        self.x = ord(rom_file_buffer.read(1))
+        self.y = ord(rom_file_buffer.read(1))
+        self.width = ord(rom_file_buffer.read(1))
+        self.dest = read_multi(rom_file_buffer, length=2)
+        self.destx = ord(rom_file_buffer.read(1))
+        self.desty = ord(rom_file_buffer.read(1))
+
 
     def write_data(self, fout, nextpointer):
         if nextpointer >= 0x2DFE00:
@@ -963,12 +949,11 @@ class EntranceSet():
     def destinations(self):
         return {e.destination for e in self.entrances}
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        start = read_multi(f, length=2)
-        end = read_multi(f, length=2)
-        f.close()
+    def read_data(self, rom_file_buffer: BytesIO):
+        rom_file_buffer.seek(self.pointer)
+        start = read_multi(rom_file_buffer, length=2)
+        end = read_multi(rom_file_buffer, length=2)
+
         n = (end - start) // 6
         assert end == start + (6 * n)
         self.entrances = []
@@ -977,14 +962,13 @@ class EntranceSet():
             e.set_id(i)
             self.entrances.append(e)
         for e in self.entrances:
-            e.read_data(filename)
+            e.read_data(rom_file_buffer)
             e.set_location(self.location)
 
-        f = open(filename, 'r+b')
-        f.seek(self.longpointer)
-        start = read_multi(f, length=2)
-        end = read_multi(f, length=2)
-        f.close()
+        rom_file_buffer.seek(self.longpointer)
+        start = read_multi(rom_file_buffer, length=2)
+        end = read_multi(rom_file_buffer, length=2)
+
         n = (end - start) // 7
         assert end == start + (7 * n)
         self.longentrances = []
@@ -993,7 +977,7 @@ class EntranceSet():
             e.set_id(i)
             self.longentrances.append(e)
         for e in self.longentrances:
-            e.read_data(filename)
+            e.read_data(rom_file_buffer)
             e.set_location(self.location)
 
         self.location.uniqify_entrances()
@@ -1041,14 +1025,14 @@ class EntranceSet():
             longentrance.desty = e.y
 
 
-def get_locations(filename=None):
+def get_locations(rom_file_buffer: BytesIO = None):
     global locations
     if locations is None:
         locations = [Location(i) for i in range(415)]
-        if filename is None:
+        if rom_file_buffer is None:
             raise ValueError("Please supply a filename for new locations.")
         for l in locations:
-            l.read_data(filename)
+            l.read_data(rom_file_buffer)
             l.fill_battle_bg()
             locdict[l.locid] = l
     return locations
@@ -1066,14 +1050,14 @@ def update_locations(newlocs):
         l.new = True
 
 
-def get_zones(filename=None):
+def get_zones(rom_file_buffer: BytesIO = None):
     global zones
     if zones is None:
         zones = [Zone(i) for i in range(0x100)]
-        if filename is None:
+        if rom_file_buffer is None:
             raise Exception("Please supply a filename for new zones.")
         for z in zones:
-            z.read_data(filename)
+            z.read_data(rom_file_buffer)
         return get_zones()
     assert len(zones) == 0x100
     return zones
@@ -1086,7 +1070,7 @@ def get_location(locid):
     return locdict[locid]
 
 
-def get_unused_locations(filename=None):
+def get_unused_locations():
     global unused_locs
     if unused_locs:
         return unused_locs
@@ -1188,11 +1172,14 @@ if __name__ == "__main__":
     from formationrandomizer import get_formations, get_fsets
     from monsterrandomizer import get_monsters
 
-    get_monsters(filename)
-    get_formations(filename)
-    get_fsets(filename)
-    locations = get_locations(filename)
-    zones = get_zones(filename)
+    with open(filename, "rb") as infile:
+        input_file_buffer = infile.read()
+    get_monsters(input_file_buffer)
+    get_formations(input_file_buffer)
+    get_fsets(input_file_buffer)
+    locations = get_locations(input_file_buffer)
+    zones = get_zones(input_file_buffer)
+
     for l in locations:
         print("%x" % (l.layers_to_animate & 2), l, end=' ')
         print()

@@ -1,3 +1,4 @@
+from io import BytesIO
 from utils import SHOP_TABLE, utilrandom as random
 from itemrandomizer import get_ranked_items, get_item
 
@@ -24,12 +25,10 @@ class ShopBlock:
     def set_id(self, shopid):
         self.shopid = shopid
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.misc = ord(f.read(1))
-        self.items = bytes(f.read(8))
-        f.close()
+    def read_data(self, rom_file_buffer: BytesIO=False):
+        rom_file_buffer.seek(self.pointer)
+        self.misc = ord(rom_file_buffer.read(1))
+        self.items = bytes(rom_file_buffer.read(8))
 
     def write_data(self, fout):
         fout.seek(self.pointer)

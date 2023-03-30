@@ -1,20 +1,25 @@
 import os
+import io
 from .tools.tablereader import (
     set_global_label, set_global_table_filename, determine_global_table,
-    set_table_specs, set_global_output_filename, sort_good_order,
-    get_open_file, close_file, TableObject, addresses, write_patches)
+    set_table_specs, set_global_output_file_buffer, sort_good_order,
+    get_open_file, TableObject, addresses, write_patches)
 from .tools.utils import cached_property, get_transparency, utilrandom as random
 from .tools.interface import get_outfile, set_seed, get_seed
 from hashlib import md5
 from PIL import Image, ImageOps
 from math import ceil
-
+from time import time
+from multiprocessing import Pipe
 
 VERSION = '5.3'
+randomize_connection = None
 ALL_OBJECTS = None
 file_paths = os.path.join(os.getcwd(), "remonsterate")
 sprite_paths = os.path.join(os.getcwd(), "remonsterate", "sprites")
 monster_list = None
+outfile_rom_buffer = None
+seed = None
 
 
 def sig_func(c):
@@ -34,8 +39,8 @@ class MouldObject(TableObject):
     # tiles in a given length/width. Note also that only 256 tiles
     # is the maximum for any mould.
 
-    def read_data(self, filename, pointer):
-        super().read_data(filename, pointer)
+    def read_data(self, outfile_rom_buffer: io.BytesIO = None, pointer=None):
+        super().read_data(outfile_rom_buffer, pointer)
 
     @property
     def successor(self):
@@ -230,11 +235,10 @@ class MonsterSpriteObject(TableObject):
         else:
             num_bytes = 32
 
-        f = get_open_file(self.filename)
         tiles = []
         for i in range(self.num_tiles):
-            f.seek(self.sprite_pointer + (num_bytes * i))
-            tiles.append(self.deinterleave_tile(f.read(num_bytes)))
+            outfile_rom_buffer.seek(self.sprite_pointer + (num_bytes * i))
+            tiles.append(self.deinterleave_tile(outfile_rom_buffer.read(num_bytes)))
 
         self._tiles = tiles
         return self.tiles
@@ -363,8 +367,8 @@ class MonsterSpriteObject(TableObject):
             monster_original_name = list_of_monsters[self.get_index()].name.strip("_")
         if self.is_protected:
             if monster_original_name:
-                print("Remonsterate: " + monster_original_name +
-                      " is protected and did not receive a randomized sprite.")
+                randomize_connection.send("Remonsterate: " + monster_original_name +
+                                          " is protected and did not receive a randomized sprite.")
             self.load_image(self.image)
             return True
 
@@ -388,10 +392,10 @@ class MonsterSpriteObject(TableObject):
             if not candidates:
                 # There were no eligible sprites matching the whitelistd tags
                 if monster_original_name:
-                    print("Remonsterate: " + monster_original_name +
-                          " was not sprite randomized: "
-                          "No eligible sprites matching the whitelist tags '" +
-                          str(self.whitelist) + "' were found.")
+                    randomize_connection.send("Remonsterate: " + monster_original_name +
+                                           " was not sprite randomized: "
+                                           "No eligible sprites matching the whitelist tags '" +
+                                        str(self.whitelist) + "' were found.")
                 self.load_image(self.image)
                 return True
 
@@ -400,18 +404,18 @@ class MonsterSpriteObject(TableObject):
             (hasattr(c, 'tags') and c.tags & self.blacklist)]
             if not candidates:
                 if monster_original_name:
-                    print("Remonsterate: " + monster_original_name +
-                          " was not sprite randomized: "
-                          "No eligible sprites were left after processing blacklisted tags '" +
-                          str(self.blacklist) + "'.")
+                    randomize_connection.send("Remonsterate: " + monster_original_name +
+                                           " was not sprite randomized: "
+                                           "No eligible sprites were left after processing blacklisted tags '" +
+                                        str(self.blacklist) + "'.")
                 self.load_image(self.image)
                 return True
 
         if not candidates:
             self.load_image(self.image)
             if monster_original_name:
-                print("Remonsterate: " + monster_original_name +
-                      " was not sprite randomized: No suitable sprite was found.")
+                randomize_connection.send("Remonsterate: " + monster_original_name +
+                                       " was not sprite randomized: No suitable sprite was found.")
             return True
 
         def sort_func(c):
@@ -481,7 +485,8 @@ class MonsterSpriteObject(TableObject):
         palette_indexes = set(image.tobytes())
         if max(palette_indexes) > 0xf:
             # This should no longer happen after prepare_image()
-            print('Remonsterate: %s had too many colors and was excluded from use.' % image.filename)
+            randomize_connection.send('Remonsterate: %s had too many colors and was excluded from use.'
+                                      % image.filename)
             return False
 
         is_8color = max(palette_indexes) <= 7
@@ -583,9 +588,8 @@ class MonsterSpriteObject(TableObject):
 
         return True
 
-    def write_data(self, filename=None):
-        if filename is None:
-            filename = self.filename
+    def write_data(self, pointer=None, syncing=False):
+        global outfile_rom_buffer
 
         self.image
 
@@ -614,7 +618,7 @@ class MonsterSpriteObject(TableObject):
             self.stencil_index = mco.new_index
         if not self.stencil_index <= 0xff:
             raise OverflowError()
-        #assert self.stencil_index <= 0xff
+        # assert self.stencil_index <= 0xff
 
         if not hasattr(MonsterSpriteObject, 'free_space'):
             MonsterSpriteObject.free_space = addresses.new_monster_graphics
@@ -649,18 +653,17 @@ class MonsterSpriteObject(TableObject):
             if remainder:
                 MonsterSpriteObject.free_space += (DIVISION_FACTOR - remainder)
 
-            f = get_open_file(filename)
-            f.seek(MonsterSpriteObject.free_space)
+            outfile_rom_buffer.seek(MonsterSpriteObject.free_space)
             data = bytes([v for tile in self.tiles
                           for v in self.interleave_tile(tile)])
-            f.write(data)
+            outfile_rom_buffer.write(data)
 
             if self.is_8color:
                 MonsterSpriteObject.free_space += (len(self.tiles) * 24)
             else:
                 MonsterSpriteObject.free_space += (len(self.tiles) * 32)
 
-            assert f.tell() == MonsterSpriteObject.free_space
+            assert outfile_rom_buffer.tell() == MonsterSpriteObject.free_space
             assert MonsterSpriteObject.free_space < addresses.new_comp8_pointer
 
         if self.pair_protected is not None:
@@ -669,7 +672,7 @@ class MonsterSpriteObject(TableObject):
                          'misc_palette_index', 'low_palette_index']:
                 setattr(self, attr, getattr(self.pair_protected, attr))
 
-        super().write_data(filename)
+        super().write_data()
         self.written = True
 
 
@@ -737,7 +740,9 @@ class MonsterPaletteObject(TableObject):
         assert len(palette) >= 8
         self.colors = palette[:8]
         if not is_8color:
-            assert len(palette) == 16
+            if not len(palette) == 16:
+                # Pad the palette with 0s
+                palette += [0] * (16 - len(palette))
             assert self.successor not in MonsterPaletteObject.new_palettes
             self.successor.colors = palette[8:]
             MonsterPaletteObject.new_palettes.append(self.successor)
@@ -755,16 +760,14 @@ class MonsterPaletteObject(TableObject):
                 MonsterPaletteObject.new_palettes.append(mpo)
                 return mpo
 
-    def write_data(self, filename=None):
-        if filename is None:
-            filename = self.filename
+    def write_data(self, pointer=None, syncing=False):
         if (self.index < addresses.previous_max_palettes
                 or self in self.new_palettes):
             new_pointer = (addresses.new_palette_pointer
                            + (self.index * len(self.colors) * 2))
             assert (new_pointer + (len(self.colors) * 2)
                     < addresses.new_code_pointer)
-            super().write_data(filename, pointer=new_pointer)
+            super().write_data(pointer=new_pointer)
 
 
 class MonsterCompMixin(TableObject):
@@ -776,38 +779,35 @@ class MonsterCompMixin(TableObject):
 class MonsterComp8Object(MonsterCompMixin):
     after_order = [MonsterSpriteObject]
 
-    def write_data(self, filename=None):
-        if filename is None:
-            filename = self.filename
+    def write_data(self, pointer=None, syncing=False):
+        global outfile_rom_buffer
         if self.new_index >= 0:
             assert self.pointer is None
             self.pointer = addresses.new_comp8_pointer + 4 + (
                     self.new_index * len(self.stencil))
             assert (addresses.new_comp8_pointer + 4 <= self.pointer
                     < addresses.new_palette_pointer - len(self.stencil))
-        super().write_data(filename)
+        super().write_data()
         self.written = True
 
 
 class MonsterComp16Object(MonsterCompMixin):
     after_order = [MonsterComp8Object]
 
-    def write_data(self, filename=None):
-        if filename is None:
-            filename = self.filename
+    def write_data(self, pointer=None, syncing=False):
+        global outfile_rom_buffer
         if not hasattr(MonsterComp16Object, 'new_base_address'):
             for mc8 in MonsterComp8Object.every:
                 assert mc8.written
             MonsterComp16Object.new_base_address = max(
                 [mc8.pointer for mc8 in MonsterComp8Object.every]) + 8
 
-            f = get_open_file(filename)
-            f.seek(addresses.new_comp8_pointer)
+            outfile_rom_buffer.seek(addresses.new_comp8_pointer)
             pointer = MonsterComp8Object.get(0).pointer & 0xffff
-            f.write(pointer.to_bytes(2, byteorder='little'))
-            f.seek(addresses.new_comp16_pointer)
+            outfile_rom_buffer.write(pointer.to_bytes(2, byteorder='little'))
+            outfile_rom_buffer.seek(addresses.new_comp16_pointer)
             pointer = MonsterComp16Object.new_base_address & 0xffff
-            f.write(pointer.to_bytes(2, byteorder='little'))
+            outfile_rom_buffer.write(pointer.to_bytes(2, byteorder='little'))
 
         if self.new_index >= 0:
             self.pointer = MonsterComp16Object.new_base_address + (
@@ -815,7 +815,7 @@ class MonsterComp16Object(MonsterCompMixin):
             assert (MonsterComp16Object.new_base_address <= self.pointer
                     < addresses.new_palette_pointer - len(self.stencil))
 
-        super().write_data(filename)
+        super().write_data()
 
 
 def nuke():
@@ -828,7 +828,6 @@ def nuke():
 def prepare_image(image: Image) -> Image:
     allowed_colors = 0x10
     image_filename = image.filename
-    palette_indexes = set(image.tobytes())
 
     # If the image had transparent rows or columns, crop them out for efficiency
     border_color = get_transparency(image)
@@ -874,29 +873,34 @@ def prepare_image(image: Image) -> Image:
 
     # If the image has too many colors, convert it into a form with reduced colors
     # if max(palette_indexes) > allowed_colors:
-    if not max(palette_indexes) == 8 or max(palette_indexes) == 16:
+    palette_indexes = set(image.tobytes())
+    if max(palette_indexes) != 8 and max(palette_indexes) != 16:
         if image.mode == "P":
             # Images already in P mode cannot be converted to P mode to shrink their allowed colors, so
             #   temporarily convert them back to RGB
             image = image.convert("RGBA")
-        if max(palette_indexes) < 8:
-            image = image.convert("P", palette=Image.ADAPTIVE, colors=int(allowed_colors / 2))
-        else:
-            image = image.convert("P", palette=Image.ADAPTIVE, colors=int(allowed_colors))
+        image = image.convert("P", palette=Image.ADAPTIVE, colors=int(allowed_colors))
 
     image.filename = image_filename
     return image
 
 
-def remonsterate(outfile, seed, images_tags_filename="images_and_tags.txt",
-                 monsters_tags_filename="monsters_and_tags.txt", rom_type=None,
-                 list_of_monsters=None):
-    if not outfile:
-        raise FileNotFoundError("Remonsterate was not supplied an output file.")
+def remonsterate(connection: Pipe, **kwargs):
+    if "outfile_rom_buffer" not in kwargs.keys():
+        connection.send(RuntimeError("Remonsterate was not supplied an output file."))
 
-    if not seed:
-        seed = int(seed)
+    global outfile_rom_buffer
+    global seed
+    outfile_rom_buffer = kwargs.get("outfile_rom_buffer")
+    seed = kwargs.get("seed", int(time()))
 
+    images_tags_filename = kwargs.get("images_tags_filename", "images_and_tags.txt")
+    monsters_tags_filename = kwargs.get("monsters_tags_filename", "monsters_and_tags.txt")
+    rom_type = kwargs.get("rom_type", None)
+    list_of_monsters = kwargs.get("list_of_monsters", None)
+
+    global randomize_connection
+    randomize_connection = connection
     images = []
     try:
         for line in open(os.path.join(file_paths, images_tags_filename)):
@@ -913,20 +917,23 @@ def remonsterate(outfile, seed, images_tags_filename="images_and_tags.txt",
                 image_filename, tags = line, set([])
             try:
                 image = prepare_image(Image.open(os.path.join(sprite_paths, image_filename)))
-                image.tags = tags
-                # image.close()
-                images.append(image)
+                if image:
+                    image.tags = tags
+                    # image.close()
+                    images.append(image)
             except FileNotFoundError:
-                print("Remonsterate: %s was listed in images_and_tags.txt, but was not found in the sprites directory."
-                      % image_filename)
+                connection.send("Remonsterate: %s was listed in images_and_tags.txt, "
+                                "but was not found in the sprites directory." % image_filename)
         if len(images) == 0:
-            print('''Remonsterate: images_and_tags.txt is empty. To use remonsterate, place .png images into the 
-sprites folder and document the file paths to those images in images_and_tags.txt along with any applicable tags''')
+            connection.send("Remonsterate: images_and_tags.txt is empty. To use remonsterate, "
+                            "place .png images into the sprites folder and document the file paths to those images in "
+                            "images_and_tags.txt along with any applicable tags")
             return
-    except FileNotFoundError:
-        print("Remonsterate: No images_and_tags.txt file was found in the remonsterate directory.")
+    except FileNotFoundError as e:
+        connection.send(e)
+        return
 
-    begin_remonsterate(outfile, seed, rom_type=rom_type)
+    begin_remonsterate(rom_type=rom_type)
 
     try:
         if monsters_tags_filename is not None:
@@ -945,8 +952,7 @@ sprites folder and document the file paths to those images in images_and_tags.tx
                 MonsterSpriteObject.get(index).whitelist = whitelist
                 MonsterSpriteObject.get(index).blacklist = blacklist
     except FileNotFoundError:
-        print("Remonsterate: No monsters_and_tags.txt file was found in the remonsterate directory.")
-
+        connection.send("Remonsterate: No monsters_and_tags.txt file was found in the remonsterate directory.")
     MonsterSpriteObject.import_images = sorted(images,
                                                key=lambda i: i.filename)
 
@@ -954,23 +960,24 @@ sprites folder and document the file paths to those images in images_and_tags.tx
     random.shuffle(msos)
     for mso in msos:
         if not mso.select_image(list_of_monsters=list_of_monsters):
-            print("Remonsterate: All usable images have been exhausted. Some monsters may not be randomized.")
+            connection.send("Remonsterate: All usable images have been exhausted. "
+                            "Some monsters may not be randomized.")
             break
 
     # Wrapped in a try/except/finally block so that even if finish_remonsterate errors, the images are closed
     try:
         results = finish_remonsterate(list_of_monsters)
+        connection.send((outfile_rom_buffer, results))
     except OverflowError as e:
-        raise e
+        connection.send(e)
     finally:
         if images:
             for image in images:
                 # Remonsterate is finished. Close all the image files.
                 image.close()
-    return results
 
 
-def begin_remonsterate(outfile, seed, rom_type=None):
+def begin_remonsterate(rom_type=None):
     global ALL_OBJECTS
 
     if rom_type in ('1.0', '1.1'):
@@ -980,27 +987,22 @@ def begin_remonsterate(outfile, seed, rom_type=None):
                        else 'tables_list_1.1.txt')
         set_global_table_filename(tables_list)
     else:
-        table_list = determine_global_table(outfile)
+        determine_global_table(outfile_rom_buffer)  # Calls set_global_table_filenamew
 
-    f = open(outfile, 'r+b')
-    f.seek(0)
-    block = f.read(0x10000)
-    f.seek(0x400000)
-    f.write(block)
-    f.close()
+    # TODO: Document what this is writing
+    outfile_rom_buffer.seek(0)
+    block = outfile_rom_buffer.read(0x10000)
+    outfile_rom_buffer.seek(0x400000)
+    outfile_rom_buffer.write(block)
 
     set_seed(seed)
     random.seed(seed)
 
-    set_global_output_filename(outfile)
+    set_global_output_file_buffer(outfile_rom_buffer)
 
-    ALL_OBJECTS = [
-        g for g in globals().values()
-        if isinstance(g, type) and issubclass(g, TableObject)
-           and g not in [TableObject]]
-
+    ALL_OBJECTS = [g for g in globals().values() if
+                   isinstance(g, type) and issubclass(g, TableObject) and g not in [TableObject]]
     set_table_specs(ALL_OBJECTS)
-
     ALL_OBJECTS = sort_good_order(ALL_OBJECTS)
     assert ALL_OBJECTS
 
@@ -1012,22 +1014,17 @@ def begin_remonsterate(outfile, seed, rom_type=None):
     for index in MonsterSpriteObject.PROTECTED_INDEXES:
         MonsterSpriteObject.get(index).image
 
-    write_patches(outfile)
+    write_patches(randomize_connection)
 
 
 def finish_remonsterate(list_of_monsters):
-    outfile = MonsterSpriteObject.get(0).filename
     for o in ALL_OBJECTS:
-        o.write_all(outfile)
+        o.write_all(outfile_rom_buffer)
 
-    close_file(outfile)
-
-    f = open(outfile, 'rb')
-    f.seek(0)
-    block1 = f.read(0x10000)
-    f.seek(0x400000)
-    block81 = f.read(0x10000)
-    f.close()
+    outfile_rom_buffer.seek(0)
+    block1 = outfile_rom_buffer.read(0x10000)
+    outfile_rom_buffer.seek(0x400000)
+    block81 = outfile_rom_buffer.read(0x10000)
 
     assert block1 == block81
 

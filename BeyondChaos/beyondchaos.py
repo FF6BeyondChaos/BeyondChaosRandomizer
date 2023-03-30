@@ -21,7 +21,7 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
 
 # Local application imports
 import utils
-import customthreadpool
+from multiprocessing import Process, Pipe
 from config import (read_flags, write_flags, validate_files, are_updates_hidden, updates_hidden,
                     get_input_path, get_output_path, save_version, check_player_sprites, check_remonsterate)
 from options import (NORMAL_FLAGS, MAKEOVER_MODIFIER_FLAGS, get_makeover_groups)
@@ -68,13 +68,13 @@ class GenConfirmation(QDialog):
         grid_layout.addWidget(header_text, 1, 0, 1, 9)
         grid_layout.addWidget(flag_list_scroll, 2, 0, 1, 9)
 
-        self.cancel_pushbutton = QPushButton("Cancel")
-        grid_layout.addWidget(self.cancel_pushbutton, 3, 1, 1, 3)
-        self.cancel_pushbutton.clicked.connect(self.button_pressed)
-
         self.confirm_pushbutton = QPushButton("Confirm")
-        grid_layout.addWidget(self.confirm_pushbutton, 3, 5, 1, 3)
+        grid_layout.addWidget(self.confirm_pushbutton, 3, 1, 1, 3)
         self.confirm_pushbutton.clicked.connect(self.button_pressed)
+
+        self.cancel_pushbutton = QPushButton("Cancel")
+        grid_layout.addWidget(self.cancel_pushbutton, 3, 5, 1, 3)
+        self.cancel_pushbutton.clicked.connect(self.button_pressed)
 
         self.setLayout(grid_layout)
 
@@ -652,6 +652,7 @@ class Window(QMainWindow):
             v_spacer.setFrameShape(QFrame.VLine)
             v_spacer.setFrameShadow(QFrame.Sunken)
             v_spacer.setFixedWidth(5)
+            v_spacer.setStyleSheet("margin: 5px 0 5px 0;")
             tablayout.addWidget(v_spacer, 0, 3, flagcount, 1)
 
             t.setLayout(tablayout)
@@ -1200,21 +1201,34 @@ class Window(QMainWindow):
                     # TODO: put this in a new thread
                     try:
                         kwargs = {
-                            "sourcefile": self.romText,
+                            "infile_rom_path": self.romText,
+                            "outfile_rom_path": self.romOutputDirectory,
                             "seed": bundle,
-                            "output_directory": self.romOutputDirectory,
                             "bingotype": self.bingotype,
                             "bingosize": self.bingosize,
                             "bingodifficulty": self.bingodiff,
                             "bingocards": self.bingocards,
                             "from_gui": True,
                         }
-                        # pool = multiprocessing.Pool()
-                        pool = customthreadpool.NonDaemonPool(1)
-                        x = pool.apply_async(func=randomize, kwds=kwargs)
-                        x.get()
-                        pool.close()
-                        pool.join()
+                        parent_connection, child_connection = Pipe()
+                        randomize_process = Process(
+                            target=randomize,
+                            args=(child_connection,),
+                            kwargs=kwargs
+                        )
+                        randomize_process.start()
+                        while True:
+                            try:
+                                response = parent_connection.recv()
+                                if isinstance(response, str):
+                                    print(response)
+                                elif isinstance(response, Exception):
+                                    raise response
+                                elif isinstance(response, bool):
+                                    break
+                            except EOFError:
+                                break
+
                         # generate the output file name since we're using subprocess now instead of a direct call
                         if '.' in self.romText:
                             tempname = os.path.basename(self.romText).rsplit('.', 1)
@@ -1231,14 +1245,13 @@ class Window(QMainWindow):
                         randomize_error_message = QMessageBox()
                         randomize_error_message.setIcon(QMessageBox.Critical)
                         randomize_error_message.setWindowTitle("Exception: " + str(type(e).__name__))
-                        randomize_error_message.setText("A fatal " + str(type(e).__name__) + " exception occurred: " +
+                        randomize_error_message.setText("A " + str(type(e).__name__) + " exception occurred "
+                                                        "that prevented randomization: " +
+                                                        "<br>" +
                                                         str(e) +
                                                         "<br>" +
                                                         "<br>" +
-                                                        "<br>" +
-                                                        "<br>" +
                                                         "<b><u>Error Traceback for the Devs</u></b>:" +
-                                                        "<br>" +
                                                         "<br>" +
                                                         "<br>".join(traceback.format_exc().splitlines()))
                         randomize_error_message.setStandardButtons(QMessageBox.Close)

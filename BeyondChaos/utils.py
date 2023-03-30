@@ -3,6 +3,7 @@ from os import path
 import random
 import re
 from typing import BinaryIO
+from io import BytesIO
 
 try:
     from sys import _MEIPASS
@@ -331,8 +332,8 @@ def int2bytes(value, length=2, reverse=True):
     return bytes(bs[:length])
 
 
-def read_multi(f, length=2, reverse=True):
-    vals = list(f.read(length))
+def read_multi(rom_file_buffer: BytesIO, length=2, reverse=True):
+    vals = list(rom_file_buffer.read(length))
     if reverse:
         vals = list(reversed(vals))
     value = 0

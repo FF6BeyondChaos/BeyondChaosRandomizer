@@ -1,4 +1,5 @@
 import copy
+from io import BytesIO
 from dataclasses import dataclass, field
 from functools import reduce
 from itertools import chain, repeat
@@ -180,21 +181,19 @@ class EsperBlock:
         s += "\nLOCATION: " + self.location
         return s
 
-    def read_data(self, filename):
+    def read_data(self, rom_file_buffer: BytesIO=False):
         global spells
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
+        rom_file_buffer.seek(self.pointer)
         if spells is None:
-            spells = get_ranked_spells(filename, magic_only=True)
+            spells = get_ranked_spells(rom_file_buffer, magic_only=True)
         self.spells, self.learnrates = [], []
         for _ in range(5):
-            learnrate = ord(f.read(1))
-            spell = ord(f.read(1))
+            learnrate = ord(rom_file_buffer.read(1))
+            spell = ord(rom_file_buffer.read(1))
             if spell != 0xFF and learnrate != 0:
                 self.spells.append(get_spell(spell))
                 self.learnrates.append(learnrate)
-        self.bonus = ord(f.read(1))
-        f.close()
+        self.bonus = ord(rom_file_buffer.read(1))
 
     def write_data(self, fout):
         fout.seek(self.pointer)
@@ -383,20 +382,21 @@ def randomize_magicite(fout, sourcefile):
     for i, e in shuffled_espers.items():
         e.location = locations[i]
 
-    with open(sourcefile, 'br') as s:
-        for line in open(MAGICITE_TABLE, 'r'):
-            line = line.split('#')[0].strip()
-            l = line.split(',')
-            address = int(l[0], 16)
-            dialogue = [int(d, 16) for d in l[1:]]
+    s = sourcefile
+    # with open(sourcefile, 'br') as s:
+    for line in open(MAGICITE_TABLE, 'r'):
+        line = line.split('#')[0].strip()
+        l = line.split(',')
+        address = int(l[0], 16)
+        dialogue = [int(d, 16) for d in l[1:]]
 
-            s.seek(address)
-            instruction = ord(s.read(1))
-            esper_index = ord(s.read(1))
-            if instruction not in [0x86, 0x87] or esper_index < 0x36 or esper_index > 0x50:
-                print("Error in magicite table")
-                return
-            magicite.append(Magicite(address, esper_index - 0x36, dialogue))
+        s.seek(address)
+        instruction = ord(s.read(1))
+        esper_index = ord(s.read(1))
+        if instruction not in [0x86, 0x87] or esper_index < 0x36 or esper_index > 0x50:
+            print("Error in magicite table")
+            return
+        magicite.append(Magicite(address, esper_index - 0x36, dialogue))
 
     for m in magicite:
         original_name = espers[m.original_esper_index].name
