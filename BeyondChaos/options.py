@@ -386,7 +386,7 @@ NORMAL_FLAGS = [
     Flag(name='remonsterate',
          description="MONSTER SPRITE REPLACEMENT MODE",
          long_description="Replaces monster sprites with sprites from other games. "
-                          "Requires sprites in the remonstrate\\sprites folder.",
+                          "Requires sprites in the remonstrate\\sprites folder. May introduce sketch glitching.",
          category="aesthetic",
          inputtype="boolean"),
     Flag(name='removeflashing',
