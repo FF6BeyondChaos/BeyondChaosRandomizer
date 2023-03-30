@@ -80,7 +80,8 @@ TEST_ON = False
 # FLARE GLITCH TEST_SEED = "CE-4.2.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 # TEST_SEED = "CE-4.2.1|katn|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla randombosses dancingmaduin madworld alasdraco capslockoff johnnyachaotic notawaiter removeflashing bsiab questionablecontent thescenarionottaken|1671237882"
-TEST_SEED = "CE-4.2.1|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
+#TEST_SEED = "CE-4.2.1|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
+TEST_SEED = "CE-4.2.1|normal|b c f g i m o q s t z makeover partyparty novanilla object:hate kids:no girls:like anime:no boys:like generic:hate animals:no electricboogaloo dancelessons nobreaks unbreakable lessfanatical cursepower:10 expboost:1.5 gpboost:5.0 mpboost:2.0 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter removeflashing nicerpoison nocombos supernatural|1679026131"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -4772,7 +4773,7 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
             salt_formations.add((formation.formid - 3))
             salt_formations.add((formation.formid - 4))
         for i, v in enumerate(formation.big_enemy_ids):
-            if formation.big_enemy_ids[i] in [273, 293, 299, 304, 306, 307, 313, 314, 315, 323, 355, 356, 358, 361, 362,
+            if formation.big_enemy_ids[i] in [273, 293, 299, 304, 306, 307, 313, 314, 315, 323, 355, 356, 357, 358, 362,
                                               363, 364, 365, 369,
                                               373]:  # don't do Zone Eater, Naughty, L.X Magic, Phunbaba, Guardian, Merchant, Officer
                 event_formations.add(formation.formid)
@@ -5209,7 +5210,7 @@ def randomize(**kwargs) -> str:
               "This seed will not produce the expected result!")
     s = "Using seed: %s|%s|%s|%s" % (VERSION,
                                      Options_.mode.name,
-                                     " ".join([flag.name for flag in Options_.active_flags]),
+                                      " ".join([flag.name if isinstance(flag.value, bool) else flag.name + ":" + flag.value for flag in Options_.active_flags]),
                                      seed)
     print(s)
     log(s, section=None)
