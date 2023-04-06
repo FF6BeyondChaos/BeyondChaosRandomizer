@@ -49,7 +49,7 @@ from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
                      change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx, apply_namingway,
-                     improved_party_gear, patch_doom_gaze, nicer_poison, fix_xzone, imp_skimp)
+                     improved_party_gear, patch_doom_gaze, nicer_poison, fix_xzone, imp_skimp, hidden_relic)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -76,12 +76,12 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-#TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z electricboogaloo capslockoff johnnydmad bsiab questionablecontent removeflashing nicerpoison canttouchthis easymodo mpboost:10.0|1603333081"
+TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z electricboogaloo capslockoff johnnydmad bsiab questionablecontent removeflashing nicerpoison canttouchthis easymodo mpboost:10.0 mementomori:half|1603333081"
 # FLARE GLITCH TEST_SEED = "CE-4.2.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 # TEST_SEED = "CE-4.2.1|katn|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla randombosses dancingmaduin madworld alasdraco capslockoff johnnyachaotic notawaiter removeflashing bsiab questionablecontent thescenarionottaken|1671237882"
 #TEST_SEED = "CE-4.2.1|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
-TEST_SEED = "CE-4.2.1|normal|b c f g i m o q s t z makeover partyparty novanilla object:hate kids:no girls:like anime:no boys:like generic:hate animals:no electricboogaloo dancelessons nobreaks unbreakable lessfanatical cursepower:10 expboost:1.5 gpboost:5.0 mpboost:2.0 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter removeflashing nicerpoison nocombos supernatural|1679026131"
+#TEST_SEED = "CE-4.2.1|normal|b c f g i m o q s t z makeover partyparty novanilla object:hate kids:no girls:like anime:no boys:like generic:hate animals:no electricboogaloo dancelessons nobreaks unbreakable lessfanatical cursepower:10 expboost:1.5 gpboost:5.0 mpboost:2.0 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter removeflashing nicerpoison nocombos supernatural|1679026131"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
@@ -4756,7 +4756,6 @@ def manage_dances():
     fout.seek(0x2D8E79)
     fout.write(bytes([3]))
 
-
 def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationSet]):
     good_event_fsets = [256, 257, 258, 259, 260, 261, 263, 264, 268, 269, 270, 271, 272, 273, 275, 276, 277, 278, 279,
                         281, 282, 283, 285, 286, 287,
@@ -4799,7 +4798,6 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
                             fset.formids[
                                i] -= 3  # any encounter that could turn into an event encounter, reduce by 3 so it can't
                             fset.sixteen_pack = True
-
 
 def nerf_paladin_shield():
     paladin_shield = get_item(0x67)
@@ -5383,6 +5381,20 @@ def randomize(**kwargs) -> str:
         for m in monsters:
             m.screw_tutorial_bosses(old_vargas_fight=Options_.is_flag_active('rushforpower'))
             m.write_stats(fout)
+
+    if Options_.is_flag_active("mementomori"):
+        amount = Options_.get_flag_value('mementomori')
+        if type(amount) == bool:
+            while True:
+                amount = input("\nPlease enter a value for Memento Mori "
+                                      "(none, few, half, most, all):\n")
+                try:
+                    if amount.lower() in ["none", "few", "half", "most", "all"]:
+                        break
+                    raise ValueError
+                except ValueError:
+                    print("The supplied value was not a valid option. Please try again.")
+        hidden_relic(fout, amount)
 
     # This needs to be before manage_monster_appearance or some of the monster
     # palettes will be messed up.

@@ -1,5 +1,6 @@
 from utils import Substitution, RANDOM_MULTIPLIER
 from random import Random
+from character import get_characters
 
 
 def allergic_dog(fout):
@@ -455,6 +456,148 @@ def change_swdtech_speed(fout, random: Random, speed: str = "Vanilla"):
         css_sub.set_location(0x017D87)
         css_sub.bytestring = bytes([swdtech_speed])
         css_sub.write(fout)
+
+def hidden_relic(fout, amount: str = "none"):
+    # Gives characters a random relic when the Memento Mori flag is on
+    hidden_relic_sub = Substitution()
+    hidden_relic_sub.set_location(0x20E9A)
+    hidden_relic_sub.bytestring = bytes([
+        0x48,  # PHA			; Save the character ID on the stack for now
+        0xEB, 0xA9, 0x16, 0x20, 0x81, 0x47, 0xDA, 0xAA, 0xBF, 0xAA, 0x7C, 0xED, 0x8D, 0xAC, 0x11, 0x8D, 0xAD, 0x11,
+        0xC2, 0x20, 0xBF, 0xAB, 0x7C, 0xED, 0x8D, 0xBA, 0x11, 0xBF, 0xAD, 0x7C, 0xED, 0xE2, 0x20, 0x8D, 0xA8, 0x11,
+        0xEB, 0x8D, 0xAA, 0x11, 0xBF, 0xB5, 0x7C, 0xED, 0x29, 0x03, 0x49, 0x03, 0x1A, 0x1A, 0x8D, 0xDC, 0x11, 0xFA,
+        0xA0, 0x06, 0x00,  # ; Code nudged forward by the PHA
+        # 0x20ED4
+        0x68,  # PLA			; Get the character ID back, necessary for stack preservation
+        0x22, 0x5B, 0xB9, 0xC4,  # JSL $C4B95B		; Jump to freespace
+        0x80, 0x08,  # BRA $08
+        # 0x20ED8
+        0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,  # NOP #8	; Created by displacing code
+        # 0x20EE3
+        0x20, 0x9A, 0x0F,  # JSR $0F9A		; Load item properties from character's hidden relic
+        # 0x20EE6
+        # Vanilla
+    ])
+    hidden_relic_sub.write(fout)
+
+    if amount == "none":
+        num = 0
+    if amount == "few":
+        num = 4
+    if amount == "half":
+        num = 7
+    if amount == "most":
+        num = 10
+    if amount == "all":
+        num = 14
+    iteration = 0
+
+    char_list = sorted(get_characters(), key=lambda char: char.id)[:14]
+
+    #All relics not on rare list or command changer
+    relic_list = [0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xC0, 0xC1, 0xC2, 0xC3, 0xC4, 0xC7, 0xC9, 0xCC, 0xCD, 0xD0, 0xD2, 0xD4, 0xD5, 0xD9, 0xE1, 0xE2, 0xE3, 0xE5, 0xE6]
+    #Offering, Merit Award, Economizer, Marvel Shoes, Safety Bit, Memento Ring, Ribbon, Moogle Charm, Charm Bangle, Blizzard Orb, Rage Ring, Genji Glove, Exp. Egg, Relic Ring, Pod Bracelet, Muscle Belt
+    rare_relic_list = [0xD3, 0xDA, 0xCE, 0xE0, 0xDC, 0xDB, 0xCA, 0xDE, 0xDF, 0xC5, 0xC6, 0xD1, 0xE4, 0xDD, 0xC8, 0xCB]
+
+    hidden_relic_sub.set_location(0x4B95B)
+    hidden_relic_sub.bytestring = bytes([
+        0x48,  # PHA			; Store character ID on the stack again
+        0xBD, 0xF5, 0x15, 0x99, 0xA0, 0x11, 0xE8, 0x88, 0x88, 0x10, 0xF5,  # ; Displaced loop to load character stats
+        0xBD, 0xEB, 0x15, 0x85, 0xFE,  # ; Store Status Byte 1 for Imp equipment check
+        0xA0, 0x05, 0x00,  # LDY #$0005		; Displaced Y index for later equipment read loop
+        0x68,  # PLA			; Fetch back the character ID from the stack
+        ])
+    hidden_relic_sub.write(fout)
+
+    while iteration < 14:
+
+        char_selection = char_list.pop(Random().randint(0, len(char_list) - 1))
+        if iteration < num:
+
+            if Random().randint(1,10) == 10:
+                relic_selection = rare_relic_list.pop(Random().randint(0, len(rare_relic_list) - 1))
+            else:
+                relic_selection = relic_list.pop(Random().randint(0, len(relic_list) - 1))
+            char_selection.relic_selection = relic_selection
+        else:
+            char_selection.relic_selection = 0xFF #Set their relic to Empty
+
+        hidden_relic_sub.set_location(0x4B970 + (char_selection.id * 7))
+        hidden_relic_sub.bytestring = bytes([
+        # Character relic checks 0x4B970
+        0xC9, char_selection.id,  # CMP #$00
+        0xD0, 0x03,  # BNE $03
+        0xA9, char_selection.relic_selection,  # LDA
+        0x6B,  # RTL				; JSR to $0F9A, then resume vanilla code
+        ])
+        hidden_relic_sub.write(fout)
+
+        iteration += 1
+
+    hidden_relic_sub.set_location(0x4B9D2)
+    hidden_relic_sub.bytestring = bytes([
+        0xA9, 0xFF,  # LDA Empty
+        0x6B  # RTL	; JSR to $0F9A, then resume vanilla code
+        ])
+    hidden_relic_sub.write(fout)
+
+    hidden_relic_sub.set_location(0x35FC2)
+    hidden_relic_sub.bytestring = bytes([
+        0x22, 0xA1, 0xFF, 0xC3  # JSL $C3FFA5  ; Display hidden relic before reading character stats
+        ])
+    hidden_relic_sub.write(fout)
+
+    hidden_relic_sub.set_location(0x3FFA1)
+    hidden_relic_sub.bytestring = bytes([
+        0x48,  # PHA			; Save Actor on the stack
+        0x22, 0x70, 0xB9, 0xC4,  # JSL $C4B970	; Get actor's hidden relic into A
+        0x48,  # PHA			; Save hidden relic ID on the stack
+        0xA0, 0x1D, 0x39,  # LDY #$391D	; One row higher than statuses/class name
+        0x20, 0x19, 0x35,  # JSR $3519     ; Set pos/WRAM/Y
+        0xA9, 0x20,
+        0x85, 0x29, #Set font to player colour
+        0x68,  # PLA			; Get hidden relic ID back
+        0x20, 0xBF, 0xFF,  # JSR $FFBF		; Freespace at the very end of the C3 bank
+        0x68,  # PLA			; Get Actor back
+        0x22, 0x06, 0x00, 0xC2,  # JSL $C20006	; Code displaced by the hook
+        0x6B,  # RTL
+        # 0x3FFBF
+        0xC9, 0xFF,  # CMP #$FF		; Is the hidden relic empty?
+        0xF0, 0x2C,  # BRA $2C		; If it is, draw a blank string
+        0x08,  # PHP
+        0xC2, 0x20,  # REP #$20		; Set 16-bit A
+        0x48,  # PHA			; Put the hidden relic ID on the stack
+        0x0A, 0x0A, 0x0A,  # ASL A #3      ; x8
+        0x85, 0xE0,  # STA $E0		; Store in scratch
+        0x68,  # PLA           ; Get hidden relic in A again
+        0x48,  # PHA			; And store it on the stack again
+        0x0A, 0x0A,  # ASL A #2      ; x4
+        0x18,  # CLC
+        0x65, 0xE0,  # ADC $E0       ;
+        0x85, 0xE0,  # STA $E0		; $E0 is now hidden relic ID x 12...
+        0x68,  # PLA			; Get hidden relic in A AGAIN
+        0x18,  # CLC
+        0x65, 0xE0,  # ADC $E0		; Now $E0 is hidden relic ID x 13
+        0xAA,  # TAX           ; Index it in X
+        0x28,  # PLP			; Restore P state, so A is 8-bit again
+        0xA0, 0x0D, 0x00,  # LDY #$000D	; Loop counter, item strings are 13 characters long
+        0xBF, 0x00, 0xB3, 0xD2,  # LDA $D2B300,X	; Hidden relic item name
+        0x8D, 0x80, 0x21,  # STA $2180		; Store the current letter in the string
+        0xE8,  # INX
+        0x88,  # DEY
+        0xD0, 0xF5,  # BNE $F5		; Loop until all 13 letters are done
+        0x9C, 0x80, 0x21,  # STZ $2180		; Mark that the string has ended
+        0x4C, 0xD9, 0x7F,  # JMP $7FD9		; Draw the string
+        # Empty string branch
+        0xA0, 0x0D, 0x00,  # LDY $000D		; Loop counter, the empty string is 13 characters too
+        0xA9, 0xFF,  # LDA #$FF		; Empty character
+        0x8D, 0x80, 0x21,  # STA $2180		; Store the current letter as empty
+        0x88,  # DEY
+        0xD0, 0xFA,  # BNE $FA		; Loop until all 13 letters are blanked
+        0x9C, 0x80, 0x21,  # STZ $2180		; Mark that the string has ended
+        0x4C, 0xD9, 0x7F  # JMP $7FD9		; Draw the string
+        ])
+    hidden_relic_sub.write(fout)
 
 def change_cursed_shield_battles(fout, random: Random, amount: int = None):
 
