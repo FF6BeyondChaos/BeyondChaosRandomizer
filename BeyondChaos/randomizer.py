@@ -5417,8 +5417,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     reseed()
 
     if Options_.is_flag_active("random_palettes_and_names") and \
-            Options_.is_flag_active("random_enemy_stats") and not \
-            Options_.is_flag_active("remonsterate"):
+            Options_.is_flag_active("random_enemy_stats"):
         mgs = manage_monster_appearance(monsters,
                                         preserve_graphics=preserve_graphics)
     reseed()
