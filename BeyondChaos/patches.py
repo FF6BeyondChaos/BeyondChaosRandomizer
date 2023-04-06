@@ -1302,12 +1302,16 @@ def fewer_flashes(fout):
     anti_seizure_sub.write(fout)
 
     #
-    # Duncan Bum Rush Cut Scene Flashes
+    # Thamasa Attack - Kefka Kills Espers
     #
 
     anti_seizure_sub.set_location(0xC03CA)
     anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
     anti_seizure_sub.write(fout)
+
+    #
+    # Duncan Bum Rush Cut Scene Flashes
+    #
 
     anti_seizure_sub.set_location(0xC0469)
     anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
