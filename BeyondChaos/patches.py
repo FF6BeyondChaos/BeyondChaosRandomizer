@@ -543,11 +543,11 @@ def hidden_relic(fout, amount: str = "none"):
 
     hidden_relic_sub.set_location(0x35FC2)
     hidden_relic_sub.bytestring = bytes([
-        0x22, 0xA1, 0xFF, 0xC3  # JSL $C3FFA5  ; Display hidden relic before reading character stats
+        0x22, 0xA5, 0xFF, 0xC3  # JSL $C3FFA5  ; Display hidden relic before reading character stats
         ])
     hidden_relic_sub.write(fout)
 
-    hidden_relic_sub.set_location(0x3FFA1)
+    hidden_relic_sub.set_location(0x3FFA5)
     hidden_relic_sub.bytestring = bytes([
         0x48,  # PHA			; Save Actor on the stack
         0x22, 0x70, 0xB9, 0xC4,  # JSL $C4B970	; Get actor's hidden relic into A
