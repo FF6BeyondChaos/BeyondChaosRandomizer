@@ -48,7 +48,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         form_music_overrides = {}
 
     change_battle_commands = [41, 42, 43]
-    if not Options_.shuffle_commands:
+    if not Options_.is_flag_active("shuffle_commands"):
         alrs = AutoLearnRageSub(require_gau=True)
         alrs.set_location(0x23b73)
         alrs.write(fout)
@@ -81,7 +81,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
 
     characters = get_characters()
     gau = [c for c in characters if c.id == 11][0]
-    if not Options_.replace_commands and gau.battle_commands[1] in [0x11, None]:
+    if not Options_.is_flag_active("replace_commands") and gau.battle_commands[1] in [0x11, None]:
         gau.battle_commands[1] = 0xFF
         gau.write_battle_commands(fout)
 
