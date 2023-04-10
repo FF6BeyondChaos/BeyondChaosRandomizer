@@ -2,6 +2,7 @@ import itertools
 import os
 import string
 import options
+import pathlib
 
 from character import get_characters
 from utils import (CHARACTER_PALETTE_TABLE, EVENT_PALETTE_TABLE, FEMALE_NAMES_TABLE, MALE_NAMES_TABLE,
@@ -431,7 +432,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
         known_replacements.extend(og_replacements)
 
     # weight selection based on no*/hate*/like*/only* codes
-    whitelist = [c.name for c in options.Options_.active_flags if options.Options_.get_flag_value(c) == "only"]
+    whitelist = [c for c in options.Options_.active_flags if options.Options_.get_flag_value(c) == "only"]
     replace_candidates = []
     for r in known_replacements:
         whitelisted = False
@@ -512,7 +513,10 @@ def manage_character_appearance(fout, preserve_graphics=False):
                     ("umaro", 0x162620, 0x16A0), ("dancer", 0x1731C0, 0x5C0),
                     ("lady", 0x1748C0, 0x5C0)]
         for rc in recolors:
-            filename = os.path.join("data", "sprites", "RC" + rc[0] + ".bin")
+            filename = os.path.join(pathlib.Path(__file__).parent.absolute(),
+                                    "data",
+                                    "sprites",
+                                    "RC" + rc[0] + ".bin")
             try:
                 with open_mei_fallback(filename, "rb") as f:
                     sprite = f.read()
@@ -616,7 +620,10 @@ def manage_character_appearance(fout, preserve_graphics=False):
         for line in f.readlines():
             char_id, filename = line.strip().split(',', 1)
             try:
-                g = open_mei_fallback(os.path.join("custom", "sprites", filename), "rb")
+                g = open_mei_fallback(os.path.join(pathlib.Path(__file__).parent.absolute(),
+                                                   "custom",
+                                                   "sprites",
+                                                   filename), "rb")
             except IOError:
                 continue
 
@@ -683,8 +690,14 @@ def manage_character_appearance(fout, preserve_graphics=False):
                 use_fallback = False
 
                 try:
-                    g = open_mei_fallback(os.path.join("custom", "sprites", swap_to[c].portrait_filename), "rb")
-                    h = open_mei_fallback(os.path.join("custom", "sprites", swap_to[c].portrait_palette_filename), "rb")
+                    g = open_mei_fallback(os.path.join(pathlib.Path(__file__).parent.absolute(),
+                                                       "custom",
+                                                       "sprites",
+                                                       swap_to[c].portrait_filename), "rb")
+                    h = open_mei_fallback(os.path.join(pathlib.Path(__file__).parent.absolute(),
+                                                       "custom",
+                                                       "sprites",
+                                                       swap_to[c].portrait_palette_filename), "rb")
                 except IOError:
                     use_fallback = True
                     print("failed to load portrait %s for %s, using fallback" %(swap_to[c].portrait_filename, swap_to[c].name))
@@ -719,7 +732,9 @@ def manage_character_appearance(fout, preserve_graphics=False):
 
         if sprite_swap_mode and c in swap_to:
             try:
-                g = open_mei_fallback(os.path.join("custom", "sprites", swap_to[c].file), "rb")
+                g = open_mei_fallback(os.path.join(pathlib.Path(__file__).parent.absolute(),
+                                                   "custom",
+                                                   "sprites", swap_to[c].file), "rb")
             except IOError:
                 newsprite = sprites[change_to[c]]
                 for ch in characters:

@@ -1301,7 +1301,7 @@ def randomize_fanatics(unused_locids, morefanatical=False):
         entrance.dest = (entrance.dest & 0xFE00) | (stair.locid & 0x1FF)
 
 
-def randomize_tower(filename, ancient=False, nummaps=None, morefanatical = False):
+def randomize_tower(ancient=False, nummaps=None, morefanatical=False):
     global ANCIENT
     ANCIENT = ancient
     if nummaps is None:

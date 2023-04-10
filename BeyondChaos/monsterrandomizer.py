@@ -1,5 +1,6 @@
 import copy
 import traceback
+from io import BytesIO
 from utils import (write_multi, read_multi, ENEMY_TABLE,
                    name_to_bytes, get_palette_transformer, mutate_index,
                    make_table, utilrandom as random)
@@ -658,71 +659,68 @@ class MonsterBlock:
         self.graphics.copy_data(chosen.graphics)
         self.copy_visible(chosen)
 
-    def read_stats(self, filename):
+    def read_stats(self, rom_file_buffer: BytesIO=False):
         global all_spells
         global HIGHEST_LEVEL
 
         try:
-            f = open(filename, 'r+b')
-            f.seek(self.pointer)
+            rom_file_buffer.seek(self.pointer)
             for key in stat_order:
-                self.stats[key] = ord(f.read(1))
-            self.stats['hp'] = read_multi(f, length=2)
-            self.stats['mp'] = read_multi(f, length=2)
-            self.stats['xp'] = read_multi(f, length=2)
-            self.stats['gp'] = read_multi(f, length=2)
-            self.stats['level'] = ord(f.read(1))
+                self.stats[key] = ord(rom_file_buffer.read(1))
+            self.stats['hp'] = read_multi(rom_file_buffer, length=2)
+            self.stats['mp'] = read_multi(rom_file_buffer, length=2)
+            self.stats['xp'] = read_multi(rom_file_buffer, length=2)
+            self.stats['gp'] = read_multi(rom_file_buffer, length=2)
+            self.stats['level'] = ord(rom_file_buffer.read(1))
             self.oldlevel = self.stats['level']
             if self.stats['xp'] > 0:
                 xps.append((self.oldlevel, self.stats['xp']))
             if self.stats['gp'] > 0:
                 gps.append((self.oldlevel, self.stats['gp']))
 
-            self.morph = ord(f.read(1))
-            self.misc1 = ord(f.read(1))
-            self.misc2 = ord(f.read(1))
+            self.morph = ord(rom_file_buffer.read(1))
+            self.misc1 = ord(rom_file_buffer.read(1))
+            self.misc2 = ord(rom_file_buffer.read(1))
 
-            f.seek(self.pointer + 20)
-            self.immunities = list(f.read(3))
-            self.absorb = ord(f.read(1))
-            self.null = ord(f.read(1))
-            self.weakness = ord(f.read(1))
+            rom_file_buffer.seek(self.pointer + 20)
+            self.immunities = list(rom_file_buffer.read(3))
+            self.absorb = ord(rom_file_buffer.read(1))
+            self.null = ord(rom_file_buffer.read(1))
+            self.weakness = ord(rom_file_buffer.read(1))
 
-            f.seek(self.attackanimationptr)
-            self.attackanimation = ord(f.read(1))
+            rom_file_buffer.seek(self.attackanimationptr)
+            self.attackanimation = ord(rom_file_buffer.read(1))
 
-            f.seek(self.battleanimationptr)
-            self.battleanimation = ord(f.read(1))
+            rom_file_buffer.seek(self.battleanimationptr)
+            self.battleanimation = ord(rom_file_buffer.read(1))
 
-            f.seek(self.pointer + 27)
-            self.statuses = list(f.read(4))
-            self.special = ord(f.read(1))
+            rom_file_buffer.seek(self.pointer + 27)
+            self.statuses = list(rom_file_buffer.read(4))
+            self.special = ord(rom_file_buffer.read(1))
 
-            f.seek(self.itemptr)
-            self.items = list(f.read(4))
+            rom_file_buffer.seek(self.itemptr)
+            self.items = list(rom_file_buffer.read(4))
             self.original_drops = self.drops
 
-            f.seek(self.controlptr)
-            self.controls = list(f.read(4))
+            rom_file_buffer.seek(self.controlptr)
+            self.controls = list(rom_file_buffer.read(4))
 
-            f.seek(self.sketchptr)
-            self.sketches = list(f.read(2))
+            rom_file_buffer.seek(self.sketchptr)
+            self.sketches = list(rom_file_buffer.read(2))
 
             if not self.is_boss:
-                f.seek(self.rageptr)
-                self.rages = list(f.read(2))
+                rom_file_buffer.seek(self.rageptr)
+                self.rages = list(rom_file_buffer.read(2))
             else:
                 self.rages = None
 
-            f.seek(self.aiptr)
-            self.ai = read_multi(f, length=2)
+            rom_file_buffer.seek(self.aiptr)
+            self.ai = read_multi(rom_file_buffer, length=2)
 
             if all_spells is None:
-                all_spells = get_ranked_spells(filename)
+                all_spells = get_ranked_spells(rom_file_buffer)
 
-            f.close()
-
-            self.read_ai(filename)
+            self.read_ai(rom_file_buffer)
         except Exception as e:
             traceback.print_exc()
 
@@ -958,18 +956,17 @@ class MonsterBlock:
         assert len(b"".join(newscript)) == len(b"".join(self.aiscript))
         self.aiscript = newscript
 
-    def read_ai(self, filename):
+    def read_ai(self, rom_file_buffer: BytesIO):
         try:
-            f = open(filename, 'r+b')
             pointer = self.ai + 0xF8700
-            f.seek(pointer)
+            rom_file_buffer.seek(pointer)
             seen = False
             script = []
             while True:
-                value = f.read(1)
+                value = rom_file_buffer.read(1)
                 try:
                     numargs = AICODES[ord(value)]
-                    args = f.read(numargs)
+                    args = rom_file_buffer.read(numargs)
                 except KeyError:
                     args = b""
                 script.append(bytearray(value + args))
@@ -1831,20 +1828,20 @@ def monsters_from_table(tablefile):
     return monsters
 
 
-def get_monsters(filename=None):
+def get_monsters(rom_file_buffer: BytesIO = None):
     try:
         if monsterdict:
             return sorted(list(monsterdict.values()), key=lambda m: m.id)
 
-        get_ranked_items(filename)
+        get_ranked_items(rom_file_buffer)
         monsters = monsters_from_table(ENEMY_TABLE)
         for m in monsters:
-            m.read_stats(filename)
+            m.read_stats(rom_file_buffer)
 
         mgs = []
         for j, m in enumerate(monsters):
             mg = MonsterGraphicBlock(pointer=0x127000 + (5 * j), name=m.name)
-            mg.read_data(filename)
+            mg.read_data(rom_file_buffer)
             m.set_graphics(graphics=mg)
             mgs.append(mg)
 
@@ -1857,8 +1854,8 @@ def get_monster(monster_id):
     return monsterdict[monster_id]
 
 
-def get_ranked_monsters(filename=None, bosses=True):
-    monsters = get_monsters(filename=filename)
+def get_ranked_monsters(rom_file_buffer: BytesIO = None, bosses=True):
+    monsters = get_monsters(rom_file_buffer)
     if not bosses:
         monsters = [m for m in monsters if m.id <= 0xFF]
     monsters = sorted(monsters, key=lambda m: m.rank())
@@ -1943,31 +1940,29 @@ class MonsterGraphicBlock:
         self.palette_data = []
         self.palette_values = []
 
-    def read_data(self, filename):
+    def read_data(self, rom_file_buffer: BytesIO):
         global palette_pools
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.graphics = read_multi(f, length=2)
-        f.seek(self.pointer + 2)
-        self.palette = read_multi(f, length=2, reverse=False)
+        rom_file_buffer.seek(self.pointer)
+        self.graphics = read_multi(rom_file_buffer, length=2)
+        rom_file_buffer.seek(self.pointer + 2)
+        self.palette = read_multi(rom_file_buffer, length=2, reverse=False)
         self.large = bool(self.palette & 0x8000)
         self.palette_index = self.palette & 0x3FF
         self.palette_pointer = 0x127820 + (self.palette_index * 16)
-        f.seek(self.pointer + 4)
-        self.size_template = ord(f.read(1))
+        rom_file_buffer.seek(self.pointer + 4)
+        self.size_template = ord(rom_file_buffer.read(1))
 
-        f.seek(self.palette_pointer)
+        rom_file_buffer.seek(self.palette_pointer)
         numcolors = 0x20
 
         for i in range(numcolors):
-            color = read_multi(f, length=2)
+            color = read_multi(rom_file_buffer, length=2)
             blue = (color & 0x7c00) >> 10
             green = (color & 0x03e0) >> 5
             red = color & 0x001f
             self.palette_data.append(color)
             self.palette_values.append(int(round(sum([red, green, blue]) / 3.0)))
         self.palette_data = tuple(self.palette_data)
-        f.close()
 
         if self.graphics not in palette_pools:
             palette_pools[self.graphics] = set([])
@@ -2036,11 +2031,9 @@ class MetamorphBlock:
         self.pointer = pointer
         self.items = []
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.items = list(f.read(4))
-        f.close()
+    def read_data(self, rom_file_buffer: BytesIO):
+        rom_file_buffer.seek(self.pointer)
+        self.items = list(rom_file_buffer.read(4))
 
     def write_data(self, fout):
         fout.seek(self.pointer)
@@ -2064,7 +2057,7 @@ class MetamorphBlock:
         return False
 
 
-def get_metamorphs(filename=None):
+def get_metamorphs(rom_file_buffer: BytesIO = None):
     global metamorphs
     if metamorphs is not None:
         return metamorphs
@@ -2073,7 +2066,7 @@ def get_metamorphs(filename=None):
     for i in range(32):
         address = 0x47f40 + (i * 4)
         mm = MetamorphBlock(pointer=address)
-        mm.read_data(filename)
+        mm.read_data(rom_file_buffer)
         mm.id = i
         metamorphs.append(mm)
     return get_metamorphs()

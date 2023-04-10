@@ -1,3 +1,4 @@
+from io import BytesIO
 from utils import (hex2int, int2bytes, Substitution, SPELL_TABLE,
                    SPELLBANS_TABLE, name_to_bytes, utilrandom as random)
 
@@ -32,7 +33,7 @@ except FileNotFoundError:
 
 
 class SpellBlock:
-    def __init__(self, spellid, filename):
+    def __init__(self, spellid, rom_file_buffer: BytesIO):
         self.spellid = spellid
         if self.spellid in spellbans and spellbans[self.spellid] < 0:
             self.valid = False
@@ -40,10 +41,9 @@ class SpellBlock:
             self.valid = True
         self.name = spellnames[self.spellid]
         self.pointer = 0x46AC0 + (14 * spellid)
-        f = open(filename, 'r+b')
 
-        f.seek(self.pointer)
-        targeting = ord(f.read(1))
+        rom_file_buffer.seek(self.pointer)
+        targeting = ord(rom_file_buffer.read(1))
         self.targeting = targeting
         self.target_random = targeting & 0x80
         self.target_enemy_default = targeting & 0x40
@@ -54,12 +54,12 @@ class SpellBlock:
         self.target_one_side_only = targeting & 0x02
         self.target_one = targeting & 0x01
 
-        f.seek(self.pointer+1)
-        self.elements = ord(f.read(1))
+        rom_file_buffer.seek(self.pointer+1)
+        self.elements = ord(rom_file_buffer.read(1))
         self.elemental = self.elements > 0
 
-        f.seek(self.pointer+2)
-        effect1 = ord(f.read(1))
+        rom_file_buffer.seek(self.pointer+2)
+        effect1 = ord(rom_file_buffer.read(1))
         self.physical = effect1 & 0x01
         self.miss_if_death_prot = effect1 & 0x02
         self.target_dead = effect1 & 0x04
@@ -69,8 +69,8 @@ class SpellBlock:
         self.no_split_damage = effect1 & 0x40
         self.abort_on_allies = effect1 & 0x80
 
-        f.seek(self.pointer+3)
-        self.dmgtype = ord(f.read(1))
+        rom_file_buffer.seek(self.pointer+3)
+        self.dmgtype = ord(rom_file_buffer.read(1))
         self.outsidebattle = self.dmgtype & 0x01
         self.unreflectable = self.dmgtype & 0x02
         self.learnifcast = self.dmgtype & 0x04
@@ -80,8 +80,8 @@ class SpellBlock:
         self.casterdies = self.dmgtype & 0x40
         self.concernsmp = self.dmgtype & 0x80
 
-        f.seek(self.pointer+4)
-        effect2 = ord(f.read(1))
+        rom_file_buffer.seek(self.pointer+4)
+        effect2 = ord(rom_file_buffer.read(1))
         self.healing = effect2 & 0x01
         self.draining = effect2 & 0x02
         self.cure_status = effect2 & 0x04
@@ -91,22 +91,21 @@ class SpellBlock:
         self.level_spell = effect2 & 0x40
         self.percentage = effect2 & 0x80
 
-        f.seek(self.pointer+5)
-        self.mp = ord(f.read(1))
-        f.seek(self.pointer+6)
-        self.power = ord(f.read(1))
-        f.seek(self.pointer+8)
-        self.accuracy = ord(f.read(1))
-        f.seek(self.pointer+9)
-        self.special = ord(f.read(1))
-        f.seek(self.pointer+10)
-        statuses = list(f.read(4))
+        rom_file_buffer.seek(self.pointer+5)
+        self.mp = ord(rom_file_buffer.read(1))
+        rom_file_buffer.seek(self.pointer+6)
+        self.power = ord(rom_file_buffer.read(1))
+        rom_file_buffer.seek(self.pointer+8)
+        self.accuracy = ord(rom_file_buffer.read(1))
+        rom_file_buffer.seek(self.pointer+9)
+        self.special = ord(rom_file_buffer.read(1))
+        rom_file_buffer.seek(self.pointer+10)
+        statuses = list(rom_file_buffer.read(4))
         self.death = statuses[0] & 0x80
         self.petrify = statuses[0] & 0x40
         self.condemned = statuses[1] & 0x1
         self.statuses = statuses
         self.has_status = sum([bin(b).count("1") for b in statuses])
-        f.close()
 
         self._rank = None
 
@@ -246,13 +245,11 @@ class CommandBlock:
     def usable_by_gogo(self):
         return self.properties & 0x1
 
-    def read_properties(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.proppointer)
-        self.properties = ord(f.read(1))
+    def read_properties(self, rom_file_buffer: BytesIO):
+        rom_file_buffer.seek(self.proppointer)
+        self.properties = ord(rom_file_buffer.read(1))
         assert not self.properties & 0xF0
-        self.targeting = ord(f.read(1))
-        f.close()
+        self.targeting = ord(rom_file_buffer.read(1))
 
     def write_properties(self, fout):
         fout.seek(self.proppointer)
@@ -307,11 +304,11 @@ class CommandBlock:
         self.set_bit(0x204D4, fout, unset=True)
 
 
-def get_ranked_spells(filename=None, magic_only=False):
+def get_ranked_spells(rom_file_buffer: BytesIO = None, magic_only=False):
     if spelldict:
         spells = sorted(list(spelldict.values()), key=lambda s: s.spellid)
     else:
-        spells = [SpellBlock(i, filename) for i in range(0xFF)]
+        spells = [SpellBlock(i, rom_file_buffer) for i in range(0xFF)]
         for s in spells:
             spelldict[s.spellid] = s
 

@@ -1,6 +1,7 @@
 import re
 from dataclasses import dataclass, field
 from typing import List, Set, Union
+from utils import pipe_print
 
 
 @dataclass(frozen=True)
@@ -98,16 +99,17 @@ class Options:
         except KeyError:
             return None
 
-    def activate_flag(self, flag_name: str, flag_value=None):
+    def activate_flag(self, flag_name: str, flag_value=True):
         for flag in ALL_FLAGS:
             if flag.name == flag_name:
                 if flag in self.active_flags:
                     return
+                flag.value = flag_value
                 self.active_flags.append(flag)
                 if flag in MAKEOVER_MODIFIER_FLAGS:
-                    self.activate_flag("makeover")
+                    self.activate_flag("makeover", True)
                 if flag in RESTRICTED_VANILLA_SPRITE_FLAGS:
-                    self.activate_flag("frenchvanilla")
+                    self.activate_flag("frenchvanilla", True)
                 return
 
     def activate_from_string(self, flag_string):
@@ -118,11 +120,11 @@ class Options:
             # Detect incompatible and prohibited flags
             if flag.name in self.mode.prohibited_flags:
                 # The flag is prohibited. Notify the user and do not activate it.
-                print("The flag '" + flag.name + "' has been deactivated. It is incompatible with " +
+                pipe_print("The flag '" + flag.name + "' has been deactivated. It is incompatible with " +
                       self.mode.name + ".")
                 continue
             if flag.name == 'sketch' and [f for f in flags if f.name == 'remonsterate']:
-                print("The flag '" + flag.name + "' has been deactivated. It is incompatible with remonsterate.")
+                pipe_print("The flag '" + flag.name + "' has been deactivated. It is incompatible with remonsterate.")
                 continue
 
             if len(flag.name) > 1:
@@ -133,9 +135,9 @@ class Options:
             self.activate_flag(flag.name, flag.value)
 
         for flag in [f for f in self.mode.forced_flags if not self.is_flag_active(f)]:
-            self.activate_flag(flag)
+            self.activate_flag(flag, True)
         if self.is_flag_active('strangejourney'):
-            self.activate_flag('notawaiter')
+            self.activate_flag('notawaiter', True)
 
         return s
 
@@ -144,7 +146,7 @@ def read_Options_from_string(flag_string: str, mode: Union[Mode, str]):
     flags = {}
 
     if flag_string.startswith('-'):
-        print("NOTE: Using all flags EXCEPT the specified flags.")
+        pipe_print("NOTE: Using all flags EXCEPT the specified flags.")
 
     if isinstance(mode, str):
         mode = [m for m in ALL_MODES if m.name == mode][0]
@@ -441,12 +443,14 @@ NORMAL_FLAGS = [
          description="MULTIPLIED EXP MODE",
          long_description="All battles will award multiplied exp.",
          category="battle",
-         inputtype="float2"),
+         inputtype="float2",
+         default_value="1.00"),
     Flag(name='gpboost',
          description="MULTIPLIED GP MODE",
          long_description="All battles will award multiplied gp.",
          category="battle",
-         inputtype="float2"),
+         inputtype="float2",
+         default_value="1.00"),
     Flag(name='lessfanatical',
          description="EASY FANATICS TOWER MODE",
          long_description="Disables forced magic command in Fanatic's Tower.",
@@ -467,7 +471,8 @@ NORMAL_FLAGS = [
          description="MULTIPLIED MP MODE",
          long_description="All battles will award multiplied magic points.",
          category="battle",
-         inputtype="float2"),
+         inputtype="float2",
+         default_value="1.00"),
     Flag(name='nobreaks',
          description="NO ITEM BREAKS MODE",
          long_description="Causes no items to break for spell effects.",
@@ -594,12 +599,12 @@ NORMAL_FLAGS = [
          inputtype="boolean"),
     Flag(name='mementomori',
          description="INNATE RELIC MODE",
-         long_description="All characters begin with an innate relic ability.",
+         long_description="Number of characters that begin with an innate relic ability.",
          category="characters",
          inputtype="combobox",
-         choices=("None", "Few", "Half", "Most", "All"),
-         default_value="None",
-         default_index=0),
+         choices=("Random", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"),
+         default_value="0",
+         default_index=1),
     Flag(name='metronome',
          description="R-CHAOS MODE",
          long_description="All characters have Fight, R-Chaos, Magic, and Item as their skillset, "
