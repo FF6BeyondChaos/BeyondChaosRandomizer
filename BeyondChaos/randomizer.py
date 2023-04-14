@@ -6040,7 +6040,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     if not application or application != "web":
         with open(outfile_rom_path, 'wb+') as f:
             f.write(outfile_rom_buffer.getvalue())
-    outfile_rom_buffer.close()
+        outfile_rom_buffer.close()
 
     pipe_print("\nWriting log...")
 
