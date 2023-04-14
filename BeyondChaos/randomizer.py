@@ -5246,11 +5246,11 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         if version and version != VERSION:
             pipe_print("WARNING! Version mismatch! "
                        "This seed will not produce the expected result!")
-        s = "Using seed: %s|%s|%s|%s" % (VERSION,
-                                         Options_.mode.name,
-                                         " ".join([flag.name if isinstance(flag.value, bool) else
-                                                   flag.name + ":" + flag.value for flag in Options_.active_flags]),
-                                         seed)
+    s = "Using seed: %s|%s|%s|%s" % (VERSION,
+                                     Options_.mode.name,
+                                     " ".join([flag.name if isinstance(flag.value, bool) else
+                                               flag.name + ":" + flag.value for flag in Options_.active_flags]),
+                                     seed)
     pipe_print(s)
     log(s, section=None)
     log("This is a game guide generated for the Beyond Chaos CE FF6 Randomizer.",
