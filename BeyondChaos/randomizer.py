@@ -5457,7 +5457,13 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             Options_.is_any_flag_active(
                 ['partyparty', 'bravenudeworld', 'suplexwrecks',
                  'christmas', 'halloween', 'kupokupo', 'quikdraw', 'makeover']):
-        s = manage_character_appearance(outfile_rom_buffer, preserve_graphics=preserve_graphics)
+        s = manage_character_appearance(
+            outfile_rom_buffer,
+            preserve_graphics=preserve_graphics,
+            moogle_names=kwargs.get("moogle_names", None),
+            male_names=kwargs.get("male_names", None),
+            female_names=kwargs.get("female_names", None)
+        )
         log(s, "aesthetics")
         show_original_names(outfile_rom_buffer)
     reseed()
@@ -5764,7 +5770,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                                     isinstance(response, ReferenceError) and gui_connection:
                                 gui_connection.send(response)
                             else:
-                                pipe_print("Response received. No parent process.")
                                 raise response
                     except EOFError:
                         break

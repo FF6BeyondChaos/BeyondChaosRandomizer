@@ -217,7 +217,7 @@ def manage_coral(fout):
     return sprite_log
 
 
-def manage_character_names(fout, change_to, male):
+def manage_character_names(fout, change_to, male, moogle_names=None, male_names=None, female_names=None):
     characters = get_characters()
     wild = options.Options_.is_flag_active('partyparty')
     sabin_mode = options.Options_.is_flag_active('suplexwrecks')
@@ -260,9 +260,12 @@ def manage_character_names(fout, change_to, male):
             elif chance != 1:
                 random_name_ids.append(moogle_id)
 
-        f = open_mei_fallback(MOOGLE_NAMES_TABLE)
-        mooglenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
-        f.close()
+        if not moogle_names:
+            f = open_mei_fallback(MOOGLE_NAMES_TABLE)
+            mooglenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
+            f.close()
+        else:
+            mooglenames = sorted(set(sanitize_names([name.strip() for name in moogle_names.split("\n")])))
 
         random_moogle_names = random.sample(mooglenames, len(random_name_ids))
         for index, moogle_id in enumerate(random_name_ids):
@@ -270,18 +273,27 @@ def manage_character_names(fout, change_to, male):
 
         # Human Mog gets a human name, maybe
         if random.choice([True, True, False]):
-            f = open_mei_fallback(MALE_NAMES_TABLE)
-            malenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
-            f.close()
+            if not male_names:
+                f = open_mei_fallback(MALE_NAMES_TABLE)
+                malenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
+                f.close()
+            else:
+                malenames = sorted(set(sanitize_names([name.strip() for name in male_names.split("\n")])))
 
             names[10] = random.choice(malenames)
     else:
-        f = open_mei_fallback(MALE_NAMES_TABLE)
-        malenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
-        f.close()
-        f = open_mei_fallback(FEMALE_NAMES_TABLE)
-        femalenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
-        f.close()
+        if not male_names:
+            f = open_mei_fallback(MALE_NAMES_TABLE)
+            malenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
+            f.close()
+        else:
+            malenames = sorted(set(sanitize_names([name.strip() for name in male_names.split("\n")])))
+        if not male_names:
+            f = open_mei_fallback(MALE_NAMES_TABLE)
+            femalenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
+            f.close()
+        else:
+            femalenames = sorted(set(sanitize_names([name.strip() for name in female_names.split("\n")])))
         for c in range(14):
             choose_male = False
             if wild or soldier_mode or ghost_mode:
@@ -493,7 +505,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
     return swap_to
 
 
-def manage_character_appearance(fout, preserve_graphics=False):
+def manage_character_appearance(fout, preserve_graphics=False, moogle_names=None, male_names=None, female_names=None):
     characters = get_characters()
     wild = options.Options_.is_flag_active('partyparty')
     sabin_mode = options.Options_.is_flag_active('suplexwrecks')
@@ -578,7 +590,7 @@ def manage_character_appearance(fout, preserve_graphics=False):
             change_to = dict(list(zip(sorted(male), male)) +
                              list(zip(sorted(female), female)))
 
-    manage_character_names(fout, change_to, male)
+    manage_character_names(fout, change_to, male, moogle_names, male_names, female_names)
 
     swap_to = get_sprite_swaps(char_ids, male, female, change_to)
 
