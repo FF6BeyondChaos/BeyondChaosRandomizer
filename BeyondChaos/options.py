@@ -151,6 +151,8 @@ def read_Options_from_string(flag_string: str, mode: Union[Mode, str]):
     if isinstance(mode, str):
         mode = [m for m in ALL_MODES if m.name == mode][0]
 
+    # Ensures the makeover groups are included in MAKEOVER_MODIFIER_FLAGS
+    get_makeover_groups()
     for flag in NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS:
         if len(flag_string) == 0:
             break
@@ -744,6 +746,9 @@ def get_makeover_groups():
                      default_value="Normal",
                      default_index=0)])
             RESTRICTED_VANILLA_SPRITE_FLAGS.append(no)
+
+        global ALL_FLAGS
+        ALL_FLAGS = NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS + CAVE_FLAGS + SPECIAL_FLAGS
     except FileNotFoundError:
         pass
     return makeover_groups
