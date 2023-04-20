@@ -31,8 +31,8 @@ class Flag:
 
         # Search for a match for the flag ending in a colon. If a match is found, it's a flag that
         #     has a value, like swdtechspeed
-        if re.search(r'\b' + re.escape(name) + r":", flag_string):
-            string_after_key = flag_string[flag_string.index(name + ":") + len(name + ":"):]
+        if re.search(r'\b' + re.escape(name.lower()) + r":", flag_string.lower()):
+            string_after_key = flag_string[flag_string.index(name.lower() + ":") + len(name.lower() + ":"):]
             try:
                 value = string_after_key[:string_after_key.index(" ")]
             except ValueError:
@@ -46,7 +46,7 @@ class Flag:
 
         # Search for a match for the flag ending in a word boundary. If a match is found, it's a flag that
         #     is on/off.
-        elif re.search(r'\b' + re.escape(name) + r"\b", flag_string):
+        elif re.search(r'\b' + re.escape(name.lower()) + r"\b", flag_string.lower()):
             if len(name) == 1 and invert_simple_flags:
                 return False, False, re.sub(r'\b' + re.escape(name) + r'\b',
                                             '',
@@ -68,7 +68,7 @@ class Flag:
             flags_before_space = flag_string
 
         if len(name) == 1 and invert_simple_flags and not \
-                (re.search(r'\b' + re.escape(name) + r"\b", flag_string)
+                (re.search(r'\b' + re.escape(name.lower()) + r"\b", flag_string.lower())
                  or name in flags_before_space):
             return True, True, re.sub(r'\b' + re.escape(name) + r'\b',
                                       '',
@@ -83,25 +83,25 @@ class Options:
 
     def is_flag_active(self, flag_attribute: str):
         for flag in self.active_flags:
-            if flag.name == flag_attribute or flag.description == flag_attribute:
+            if flag.name.lower() == flag_attribute.lower() or flag.description.lower() == flag_attribute.lower():
                 return True
 
     def is_any_flag_active(self, flag_names: List[str]):
         for flag in self.active_flags:
-            if flag.name in flag_names:
+            if flag.name.lower() in [flag_name.lower() for flag_name in flag_names]:
                 return True
 
     def get_flag_value(self, flag_name: str):
         try:
             for flag in self.active_flags:
-                if flag.name == flag_name:
+                if flag.name.lower() == flag_name.lower():
                     return flag.value
         except KeyError:
             return None
 
     def activate_flag(self, flag_name: str, flag_value=True):
         for flag in ALL_FLAGS:
-            if flag.name == flag_name:
+            if flag.name.lower() == flag_name.lower():
                 if flag in self.active_flags:
                     return
                 flag.value = flag_value

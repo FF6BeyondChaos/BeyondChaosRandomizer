@@ -444,20 +444,20 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
         known_replacements.extend(og_replacements)
 
     # weight selection based on no*/hate*/like*/only* codes
-    whitelist = [flag.name for flag in options.Options_.active_flags if flag.value == "only"]
+    whitelist = [flag.name.lower() for flag in options.Options_.active_flags if flag.value == "only"]
     replace_candidates = []
     for r in known_replacements:
         whitelisted = False
-        for g in r.groups:
+        for group in [group.lower() for group in r.groups]:
             if not r.weight:
                 break
-            if g in whitelist:
+            if group in whitelist:
                 whitelisted = True
-            if options.Options_.get_flag_value(g) == "no":
+            if options.Options_.get_flag_value(group) == "no":
                 r.weight = 0
-            elif options.Options_.get_flag_value(g) == "hate":
+            elif options.Options_.get_flag_value(group) == "hate":
                 r.weight /= 3
-            elif options.Options_.get_flag_value(g) == "like":
+            elif options.Options_.get_flag_value(group) == "like":
                 r.weight *= 2
         if whitelist and not whitelisted:
             r.weight = 0
