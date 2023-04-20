@@ -508,7 +508,7 @@ def hidden_relic(output_rom_buffer: BytesIO, amount):
     while iteration < 14:
 
         char_selection = char_list.pop(random.randint(0, len(char_list) - 1))
-        if iteration < amount:
+        if iteration < int(amount):
 
             if random.randint(1, 10) == 10:
                 relic_selection = rare_relic_list.pop(random.randint(0, len(rare_relic_list) - 1))
