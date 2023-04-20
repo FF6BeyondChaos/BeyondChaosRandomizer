@@ -76,7 +76,7 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z electricboogaloo capslockoff johnnydmad bsiab questionablecontent removeflashing nicerpoison canttouchthis easymodo mpboost:10.0 mementomori:half|1603333081"
+TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z electricboogaloo capslockoff johnnydmad bsiab questionablecontent removeflashing nicerpoison canttouchthis easymodo mpboost:10.0 mementomori:3|1603333081"
 # FLARE GLITCH TEST_SEED = "CE-4.2.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 # TEST_SEED = "CE-4.2.1|katn|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla randombosses dancingmaduin madworld alasdraco capslockoff johnnyachaotic notawaiter removeflashing bsiab questionablecontent thescenarionottaken|1671237882"
@@ -4995,6 +4995,10 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
     application = kwargs.get("application", None)
 
+    if TEST_ON:
+        kwargs['infile_rom_path'] = TEST_FILE
+        kwargs['seed'] = TEST_SEED
+
     if not application or application == "console":
         # The console should supply these kwargs
         infile_rom_path = kwargs.get('infile_rom_path')
@@ -5012,9 +5016,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         set_parent_pipe(connection)
     fullseed = kwargs.get('seed')
 
-    if TEST_ON:
-        kwargs['infile_rom_path'] = TEST_FILE
-        kwargs['seed'] = TEST_SEED
     sleep(0.5)
     pipe_print('You are using Beyond Chaos CE Randomizer version "%s".' % VERSION)
     if BETA:
