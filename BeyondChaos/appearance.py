@@ -465,7 +465,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
             replace_candidates.append(r)
 
     # select sprite replacements
-    if not wild:
+    if not wild or sprite_swap_mode:
         female_candidates = [c for c in replace_candidates if c.gender == "female"]
         male_candidates = [c for c in replace_candidates if c.gender == "male"]
         neutral_candidates = [c for c in replace_candidates if c.gender != "male" and c.gender != "female"]
