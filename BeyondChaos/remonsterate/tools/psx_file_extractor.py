@@ -464,10 +464,10 @@ if __name__ == "__main__":
     dirname, _ = filename.rsplit('.', 1)
     dirname = "%s.root" % dirname
 
-    outfile = "modified.%s" % filename
-    call(["cp", "-n", filename, outfile])
+    outfile_rom_path = "modified.%s" % filename
+    call(["cp", "-n", filename, outfile_rom_path])
     filename = None
 
-    f = FileManager(outfile, dirname, minute, second, sector)
+    f = FileManager(outfile_rom_path, dirname, minute, second, sector)
     print(f.report)
     #f.write_all()

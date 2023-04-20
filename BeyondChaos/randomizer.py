@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-import customthreadpool
 from hashlib import md5
 import os
 import re
-from shutil import copyfile
 import sys
+from io import BytesIO
 from sys import argv
 from time import time, sleep, gmtime
-from typing import BinaryIO, Callable, Dict, List, Set, Tuple
+from typing import Callable, Dict, List, Set, Tuple
+from multiprocessing import Pipe, Process
 
 import character
 import locationrandomizer
@@ -65,7 +65,7 @@ from utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    generate_swapfunc, shift_middle, get_palette_transformer,
                    battlebg_palettes, set_randomness_multiplier,
                    mutate_index, utilrandom as random, open_mei_fallback,
-                   AutoLearnRageSub)
+                   AutoLearnRageSub, pipe_print, set_parent_pipe)
 from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
@@ -85,9 +85,11 @@ TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z elect
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
-sourcefile, outfile = None, None
-fout = None
-using_console = False
+infile_rom_path = None
+outfile_rom_path = None
+infile_rom_buffer = None
+outfile_rom_buffer = None
+gui_connection = None
 
 NEVER_REPLACE = ["fight", "item", "magic", "row", "def", "magitek", "lore",
                  "jump", "mimic", "xmagic", "summon", "morph", "revert"]
@@ -348,37 +350,34 @@ def rewrite_title(text: str):
     while len(text) < 20:
         text += ' '
     text = text[:20]
-    fout.seek(0xFFC0)
-    fout.write(bytes(text, encoding='ascii'))
-    fout.seek(0xFFDB)
+    outfile_rom_buffer.seek(0xFFC0)
+    outfile_rom_buffer.write(bytes(text, encoding='ascii'))
+    outfile_rom_buffer.seek(0xFFDB)
     # Regex gets the first number in the VERSION - the major version number
-    fout.write(bytes([int(re.search(r'\d', VERSION).group())]))
+    outfile_rom_buffer.write(bytes([int(re.search(r'\d', VERSION).group())]))
 
 
-def rewrite_checksum(filename: str = None):
+def rewrite_checksum():
     # This assumes the file is 32, 40, 48, or 64 Mbit.
-    if filename is None:
-        filename = outfile
     MEGABIT = 0x20000
-    with open(filename, 'r+b') as f:
-        f.seek(0, 2)
-        file_mbits = f.tell() // MEGABIT
-        f.seek(0)
-        subsums = [sum(f.read(MEGABIT)) for _ in range(file_mbits)]
-        while len(subsums) % 32:
-            subsums.extend(subsums[32:file_mbits])
-            if len(subsums) > 64:
-                subsums = subsums[:64]
-        checksum = sum(subsums) & 0xFFFF
-        f.seek(0xFFDE)
-        write_multi(f, checksum, length=2)
-        f.seek(0xFFDC)
-        write_multi(f, checksum ^ 0xFFFF, length=2)
-        if file_mbits > 32:
-            f.seek(0x40FFDE)
-            write_multi(f, checksum, length=2)
-            f.seek(0x40FFDC)
-            write_multi(f, checksum ^ 0xFFFF, length=2)
+    outfile_rom_buffer.seek(0, 2)
+    file_mbits = outfile_rom_buffer.tell() // MEGABIT
+    outfile_rom_buffer.seek(0)
+    subsums = [sum(outfile_rom_buffer.read(MEGABIT)) for _ in range(file_mbits)]
+    while len(subsums) % 32:
+        subsums.extend(subsums[32:file_mbits])
+        if len(subsums) > 64:
+            subsums = subsums[:64]
+    checksum = sum(subsums) & 0xFFFF
+    outfile_rom_buffer.seek(0xFFDE)
+    write_multi(outfile_rom_buffer, checksum, length=2)
+    outfile_rom_buffer.seek(0xFFDC)
+    write_multi(outfile_rom_buffer, checksum ^ 0xFFFF, length=2)
+    if file_mbits > 32:
+        outfile_rom_buffer.seek(0x40FFDE)
+        write_multi(outfile_rom_buffer, checksum, length=2)
+        outfile_rom_buffer.seek(0x40FFDC)
+        write_multi(outfile_rom_buffer, checksum ^ 0xFFFF, length=2)
 
 
 class AutoRecruitGauSub(Substitution):
@@ -387,22 +386,22 @@ class AutoRecruitGauSub(Substitution):
         return bytes([0x50, 0xBC, 0x59, 0x10, 0x3F,
                       0x0B, 0x01, 0xD4, 0xFB, 0xB8, 0x49, 0xFE])
 
-    def write(self, fout: BinaryIO, stays_in_wor: bool):
+    def write(self, outfile_rom_buffer: BytesIO, stays_in_wor: bool):
         sub_addr = self.location - 0xa0000
         call_recruit_sub = Substitution()
         call_recruit_sub.bytestring = bytes([0xB2]) + int2bytes(sub_addr, length=3)
         call_recruit_sub.set_location(0xBC19C)
-        call_recruit_sub.write(fout)
+        call_recruit_sub.write(outfile_rom_buffer)
 
         if stays_in_wor:
             gau_stays_wor_sub = Substitution()
             gau_stays_wor_sub.bytestring = bytes([0xD4, 0xFB])
             gau_stays_wor_sub.set_location(0xA5324)
-            gau_stays_wor_sub.write(fout)
+            gau_stays_wor_sub.write(outfile_rom_buffer)
 
         if Options_.is_flag_active("shuffle_commands") or Options_.is_flag_active("replace_commands"):
             REPLACE_ENEMIES.append(0x172)
-        super(AutoRecruitGauSub, self).write(fout)
+        super(AutoRecruitGauSub, self).write(outfile_rom_buffer)
 
 
 class EnableEsperMagicSub(Substitution):
@@ -415,12 +414,12 @@ class EnableEsperMagicSub(Substitution):
                       0xE8,
                       0xA9, 0x24, 0x60])
 
-    def write(self, fout: BinaryIO):
+    def write(self, output_rom_buffer: BytesIO):
         jsr_sub = Substitution()
         jsr_sub.bytestring = bytes([0x20]) + int2bytes(self.location, length=2) + bytes([0xEA])
         jsr_sub.set_location(0x34D3D)
-        jsr_sub.write(fout)
-        super(EnableEsperMagicSub, self).write(fout)
+        jsr_sub.write(output_rom_buffer)
+        super(EnableEsperMagicSub, self).write(output_rom_buffer)
 
 
 class FreeBlock:
@@ -471,7 +470,7 @@ def determine_new_freespaces(freespaces: List[FreeBlock],
 
 
 # Based on a document called Ending_Cinematic_Relocation_Notes
-def relocate_ending_cinematic_data(fout, data_blk_dst):
+def relocate_ending_cinematic_data(output_rom_buffer: BytesIO, data_blk_dst):
     cinematic_data_addr, cinematic_data_length = 0x28A70, 7145
     # All the LDAs
     relocate_locations = [
@@ -500,29 +499,29 @@ def relocate_ending_cinematic_data(fout, data_blk_dst):
     new_dst_bnk = data_blk_dst >> 16
 
     # copy data block
-    fout.seek(cinematic_data_addr)
+    output_rom_buffer.seek(cinematic_data_addr)
     copy_sub = Substitution()
-    copy_sub.bytestring = bytes(fout.read(cinematic_data_length))
+    copy_sub.bytestring = bytes(output_rom_buffer.read(cinematic_data_length))
     copy_sub.set_location(data_blk_dst - 0xC00000)
-    copy_sub.write(fout)
+    copy_sub.write(output_rom_buffer)
 
     # Blank the data in the newly free'd block
     copy_sub.set_location(cinematic_data_addr)
     copy_sub.bytestring = b"\x00" * cinematic_data_length
-    copy_sub.write(fout)
+    copy_sub.write(output_rom_buffer)
 
     # Change load instructions to use new bank
     # LDA #$C2 -> LDA #$xx
     for addr in relocate_locations[:-5]:
         copy_sub.set_location(addr + 1)
         copy_sub.bytestring = bytes([new_dst_bnk])
-        copy_sub.write(fout)
+        copy_sub.write(output_rom_buffer)
 
     # LDA $C2____,X -> LDA $xx____,X
     for addr in relocate_locations[-5:]:
         copy_sub.set_location(addr + 3)
         copy_sub.bytestring = bytes([new_dst_bnk])
-        copy_sub.write(fout)
+        copy_sub.write(output_rom_buffer)
 
     return FreeBlock(cinematic_data_addr,
                      cinematic_data_addr + cinematic_data_length)
@@ -534,30 +533,29 @@ class WindowBlock():
         self.palette = [(0, 0, 0)] * 8
         self.negabit = 0
 
-    def read_data(self, filename: str):
-        with open(filename, 'r+b') as f:
-            f.seek(self.pointer)
-            self.palette = []
-            if Options_.is_flag_active('christmas'):
-                self.palette = [(0x1c, 0x02, 0x04)] * 2 + [(0x19, 0x00, 0x06)] * 2 + [(0x03, 0x0d, 0x07)] * 2 + [
-                    (0x18, 0x18, 0x18)] + [(0x04, 0x13, 0x0a)]
-            elif Options_.is_flag_active('halloween'):
-                self.palette = [(0x04, 0x0d, 0x15)] * 2 + [(0x00, 0x00, 0x00)] + [(0x0b, 0x1d, 0x15)] + [
-                    (0x00, 0x11, 0x00)] + [(0x1e, 0x00, 0x00)] + [(0x1d, 0x1c, 0x00)] + [(0x1c, 0x1f, 0x1b)]
-            else:
-                for _ in range(0x8):
-                    color = read_multi(f, length=2)
-                    blue = (color & 0x7c00) >> 10
-                    green = (color & 0x03e0) >> 5
-                    red = color & 0x001f
-                    self.negabit = color & 0x8000
-                    self.palette.append((red, green, blue))
+    def read_data(self, rom_file_buffer: BytesIO):
+        rom_file_buffer.seek(self.pointer)
+        self.palette = []
+        if Options_.is_flag_active('christmas'):
+            self.palette = [(0x1c, 0x02, 0x04)] * 2 + [(0x19, 0x00, 0x06)] * 2 + [(0x03, 0x0d, 0x07)] * 2 + [
+                (0x18, 0x18, 0x18)] + [(0x04, 0x13, 0x0a)]
+        elif Options_.is_flag_active('halloween'):
+            self.palette = [(0x04, 0x0d, 0x15)] * 2 + [(0x00, 0x00, 0x00)] + [(0x0b, 0x1d, 0x15)] + [
+                (0x00, 0x11, 0x00)] + [(0x1e, 0x00, 0x00)] + [(0x1d, 0x1c, 0x00)] + [(0x1c, 0x1f, 0x1b)]
+        else:
+            for _ in range(0x8):
+                color = read_multi(rom_file_buffer, length=2)
+                blue = (color & 0x7c00) >> 10
+                green = (color & 0x03e0) >> 5
+                red = color & 0x001f
+                self.negabit = color & 0x8000
+                self.palette.append((red, green, blue))
 
-    def write_data(self, fout: BinaryIO):
-        fout.seek(self.pointer)
+    def write_data(self, outfile_rom_buffer: BytesIO):
+        outfile_rom_buffer.seek(self.pointer)
         for (red, green, blue) in self.palette:
             color = (blue << 10) | (green << 5) | red
-            write_multi(fout, color, length=2)
+            write_multi(outfile_rom_buffer, color, length=2)
 
     def mutate(self):
         if Options_.is_flag_active('halloween'):
@@ -624,9 +622,9 @@ def commands_from_table(tablefile: str) -> List:
     return commands
 
 
-def randomize_colosseum(filename: str, fout: BinaryIO, pointer: int) -> List:
-    item_objs = get_ranked_items(filename)
-    monster_objs = get_ranked_monsters(filename, bosses=False)
+def randomize_colosseum(pointer: int) -> List:
+    item_objs = get_ranked_items(infile_rom_buffer)
+    monster_objs = get_ranked_monsters(infile_rom_buffer, bosses=False)
     items = [i.itemid for i in item_objs]
     monsters = [m.id for m in monster_objs]
     results = []
@@ -652,17 +650,17 @@ def randomize_colosseum(filename: str, fout: BinaryIO, pointer: int) -> List:
         wager_obj = [j for j in item_objs if j.itemid == i][0]
         opponent_obj = [m for m in monster_objs if m.id == opponent][0]
         win_obj = [j for j in item_objs if j.itemid == trade][0]
-        fout.seek(pointer + (i * 4))
-        fout.write(bytes([opponent]))
-        fout.seek(pointer + (i * 4) + 2)
-        fout.write(bytes([trade]))
+        outfile_rom_buffer.seek(pointer + (i * 4))
+        outfile_rom_buffer.write(bytes([opponent]))
+        outfile_rom_buffer.seek(pointer + (i * 4) + 2)
+        outfile_rom_buffer.write(bytes([trade]))
 
         if abs(wager_obj.rank() - win_obj.rank()) >= 5000 and random.randint(1, 2) == 2:
             hidden = True
-            fout.write(b'\xFF')
+            outfile_rom_buffer.write(b'\xFF')
         else:
             hidden = False
-            fout.write(b'\x00')
+            outfile_rom_buffer.write(b'\x00')
         results.append((wager_obj, opponent_obj, win_obj, hidden))
 
     results = sorted(results, key=lambda a_b_c_d: a_b_c_d[0].name)
@@ -671,13 +669,13 @@ def randomize_colosseum(filename: str, fout: BinaryIO, pointer: int) -> List:
         coliseum_run_sub = Substitution()
         coliseum_run_sub.bytestring = [0xEA] * 2
         coliseum_run_sub.set_location(0x25BEF)
-        coliseum_run_sub.write(fout)
+        coliseum_run_sub.write(outfile_rom_buffer)
 
     return results
 
 
-def randomize_slots(filename: str, fout: BinaryIO, pointer: int):
-    spells = get_ranked_spells(filename)
+def randomize_slots(pointer: int):
+    spells = get_ranked_spells(infile_rom_buffer)
     spells = [s for s in spells if s.spellid >= 0x36]
     attackspells = [s for s in spells if s.target_enemy_default]
     quarter = len(attackspells) // 4
@@ -722,25 +720,25 @@ def randomize_slots(filename: str, fout: BinaryIO, pointer: int):
             slotString = "%s: %s" % (slotNames[i], spellnames[spell.spellid])
             log(slotString, "slots")
             used.append(spell.spellid)
-            fout.seek(pointer + i)
-            fout.write(bytes([spell.spellid]))
+            outfile_rom_buffer.seek(pointer + i)
+            outfile_rom_buffer.write(bytes([spell.spellid]))
 
 
 def auto_recruit_gau(stays_in_wor: bool):
     args = AutoRecruitGauSub()
     args.set_location(0xcfe1a)
-    args.write(fout, stays_in_wor)
+    args.write(outfile_rom_buffer, stays_in_wor)
 
     recruit_gau_sub = Substitution()
     recruit_gau_sub.bytestring = bytes([0x89, 0xFF])
     recruit_gau_sub.set_location(0x24856)
-    recruit_gau_sub.write(fout)
+    recruit_gau_sub.write(outfile_rom_buffer)
 
 
 def auto_learn_rage():
     alrs = AutoLearnRageSub(require_gau=False)
     alrs.set_location(0x23b73)
-    alrs.write(fout)
+    alrs.write(outfile_rom_buffer)
 
 
 def manage_commands(commands: Dict[str, CommandBlock]):
@@ -764,12 +762,12 @@ def manage_commands(commands: Dict[str, CommandBlock]):
     learn_lore_sub = Substitution()
     learn_lore_sub.bytestring = bytes([0xEA, 0xEA, 0xF4, 0x00, 0x00, 0xF4, 0x00, 0x00])
     learn_lore_sub.set_location(0x236E4)
-    learn_lore_sub.write(fout)
+    learn_lore_sub.write(outfile_rom_buffer)
 
     learn_dance_sub = Substitution()
     learn_dance_sub.bytestring = bytes([0xEA] * 2)
     learn_dance_sub.set_location(0x25EE8)
-    learn_dance_sub.write(fout)
+    learn_dance_sub.write(outfile_rom_buffer)
 
     learn_swdtech_sub = Substitution()
     learn_swdtech_sub.bytestring = bytes([0xEB,  # XBA
@@ -777,53 +775,53 @@ def manage_commands(commands: Dict[str, CommandBlock]):
                                           0xEB,  # XBA
                                           0xEA])
     learn_swdtech_sub.set_location(0x261C7)
-    learn_swdtech_sub.write(fout)
+    learn_swdtech_sub.write(outfile_rom_buffer)
     learn_swdtech_sub.bytestring = bytes([0x4C, 0xDA, 0xA1, 0x60])
     learn_swdtech_sub.set_location(0xA18A)
-    learn_swdtech_sub.write(fout)
+    learn_swdtech_sub.write(outfile_rom_buffer)
 
     learn_blitz_sub = Substitution()
     learn_blitz_sub.bytestring = bytes([0xF0, 0x09])
     learn_blitz_sub.set_location(0x261CE)
-    learn_blitz_sub.write(fout)
+    learn_blitz_sub.write(outfile_rom_buffer)
     learn_blitz_sub.bytestring = bytes([0xD0, 0x04])
     learn_blitz_sub.set_location(0x261D3)
-    learn_blitz_sub.write(fout)
+    learn_blitz_sub.write(outfile_rom_buffer)
     learn_blitz_sub.bytestring = bytes([0x68,  # PLA
                                         0xEB,  # XBA
                                         0xEA, 0xEA, 0xEA, 0xEA, 0xEA])
     learn_blitz_sub.set_location(0x261D9)
-    learn_blitz_sub.write(fout)
+    learn_blitz_sub.write(outfile_rom_buffer)
     learn_blitz_sub.bytestring = bytes([0xEA] * 4)
     learn_blitz_sub.set_location(0x261E3)
-    learn_blitz_sub.write(fout)
+    learn_blitz_sub.write(outfile_rom_buffer)
     learn_blitz_sub.bytestring = bytes([0xEA])
     learn_blitz_sub.set_location(0xA200)
-    learn_blitz_sub.write(fout)
+    learn_blitz_sub.write(outfile_rom_buffer)
 
     learn_multiple_sub = Substitution()
     learn_multiple_sub.set_location(0xA1B4)
     reljump = 0xFE - (learn_multiple_sub.location - 0xA186)
     learn_multiple_sub.bytestring = bytes([0xF0, reljump])
-    learn_multiple_sub.write(fout)
+    learn_multiple_sub.write(outfile_rom_buffer)
 
     learn_multiple_sub.set_location(0xA1D6)
     reljump = 0xFE - (learn_multiple_sub.location - 0xA18A)
     learn_multiple_sub.bytestring = bytes([0xF0, reljump])
-    learn_multiple_sub.write(fout)
+    learn_multiple_sub.write(outfile_rom_buffer)
 
     learn_multiple_sub.set_location(0x261DD)
     learn_multiple_sub.bytestring = bytes([0xEA] * 3)
-    learn_multiple_sub.write(fout)
+    learn_multiple_sub.write(outfile_rom_buffer)
 
     rage_blank_sub = Substitution()
     rage_blank_sub.bytestring = bytes([0x01] + ([0x00] * 31))
     rage_blank_sub.set_location(0x47AA0)
-    rage_blank_sub.write(fout)
+    rage_blank_sub.write(outfile_rom_buffer)
 
     eems = EnableEsperMagicSub()
     eems.set_location(0x3F09F)
-    eems.write(fout)
+    eems.write(outfile_rom_buffer)
 
     # Let x-magic user use magic menu.
     enable_xmagic_menu_sub = Substitution()
@@ -835,32 +833,32 @@ def manage_commands(commands: Dict[str, CommandBlock]):
                                                0x6b  # RTL
                                                ])
     enable_xmagic_menu_sub.set_location(0x3F091)
-    enable_xmagic_menu_sub.write(fout)
+    enable_xmagic_menu_sub.write(outfile_rom_buffer)
 
     enable_xmagic_menu_sub.bytestring = bytes([0x22, 0x91, 0xF0, 0xC3])
     enable_xmagic_menu_sub.set_location(0x34d56)
-    enable_xmagic_menu_sub.write(fout)
+    enable_xmagic_menu_sub.write(outfile_rom_buffer)
 
     # Prevent Runic, SwdTech, and Capture from being disabled/altered
     protect_battle_commands_sub = Substitution()
     protect_battle_commands_sub.bytestring = bytes([0x03, 0xFF, 0xFF, 0x0C, 0x17, 0x02, 0xFF, 0x00])
     protect_battle_commands_sub.set_location(0x252E9)
-    protect_battle_commands_sub.write(fout)
+    protect_battle_commands_sub.write(outfile_rom_buffer)
 
     enable_morph_sub = Substitution()
     enable_morph_sub.bytestring = bytes([0xEA] * 2)
     enable_morph_sub.set_location(0x25410)
-    enable_morph_sub.write(fout)
+    enable_morph_sub.write(outfile_rom_buffer)
 
     enable_mpoint_sub = Substitution()
     enable_mpoint_sub.bytestring = bytes([0xEA] * 2)
     enable_mpoint_sub.set_location(0x25E38)
-    enable_mpoint_sub.write(fout)
+    enable_mpoint_sub.write(outfile_rom_buffer)
 
     ungray_statscreen_sub = Substitution()
     ungray_statscreen_sub.bytestring = bytes([0x20, 0x6F, 0x61, 0x30, 0x26, 0xEA, 0xEA, 0xEA])
     ungray_statscreen_sub.set_location(0x35EE1)
-    ungray_statscreen_sub.write(fout)
+    ungray_statscreen_sub.write(outfile_rom_buffer)
 
     fanatics_fix_sub = Substitution()
     if Options_.is_flag_active('metronome'):
@@ -868,12 +866,12 @@ def manage_commands(commands: Dict[str, CommandBlock]):
     else:
         fanatics_fix_sub.bytestring = bytes([0xA9, 0x15])
     fanatics_fix_sub.set_location(0x2537E)
-    fanatics_fix_sub.write(fout)
+    fanatics_fix_sub.write(outfile_rom_buffer)
 
     if Options_.is_flag_active('lessfanatical'):  # remove the magic only tile when entering fanatic's tower
         fanatics_fix_sub.bytestring = bytes([0x80])
         fanatics_fix_sub.set_location(0x025352)
-        fanatics_fix_sub.write(fout)
+        fanatics_fix_sub.write(outfile_rom_buffer)
 
     invalid_commands = ["fight", "item", "magic", "xmagic",
                         "def", "row", "summon", "revert"]
@@ -904,14 +902,14 @@ def manage_commands(commands: Dict[str, CommandBlock]):
             c.set_battle_command(1, command_id=0x1D)
             c.set_battle_command(2, command_id=2)
             c.set_battle_command(3, command_id=1)
-            c.write_battle_commands(fout)
+            c.write_battle_commands(outfile_rom_buffer)
             continue
 
         if Options_.is_flag_active('collateraldamage'):
             c.set_battle_command(1, command_id=0xFF)
             c.set_battle_command(2, command_id=0xFF)
             c.set_battle_command(3, command_id=1)
-            c.write_battle_commands(fout)
+            c.write_battle_commands(outfile_rom_buffer)
             continue
 
         if c.id <= 11:
@@ -937,17 +935,17 @@ def manage_commands(commands: Dict[str, CommandBlock]):
                         morph_char_sub = Substitution()
                         morph_char_sub.bytestring = bytes([0xC9, c.id])
                         morph_char_sub.set_location(0x25E32)
-                        morph_char_sub.write(fout)
+                        morph_char_sub.write(outfile_rom_buffer)
             for i, command in enumerate(reversed(using)):
                 c.set_battle_command(i + 1, command=command)
         else:
             c.set_battle_command(1, command_id=0xFF)
             c.set_battle_command(2, command_id=0xFF)
-        c.write_battle_commands(fout)
+        c.write_battle_commands(outfile_rom_buffer)
 
-    magitek_skills = [SpellBlock(i, sourcefile) for i in range(0x83, 0x8B)]
+    magitek_skills = [SpellBlock(i, infile_rom_buffer) for i in range(0x83, 0x8B)]
     for ms in magitek_skills:
-        ms.fix_reflect(fout)
+        ms.fix_reflect(outfile_rom_buffer)
 
     return commands
 
@@ -981,7 +979,7 @@ def manage_tempchar_commands():
         chardict[i].set_battle_command(1, command_id=a)
         chardict[i].set_battle_command(2, command_id=b)
         chardict[i].set_battle_command(3, command_id=0x1)
-        chardict[i].write_battle_commands(fout)
+        chardict[i].write_battle_commands(outfile_rom_buffer)
 
     for i in range(0xE, 0x1C):
         c = chardict[i]
@@ -989,7 +987,7 @@ def manage_tempchar_commands():
             c.set_battle_command(1, command_id=c.battle_commands[2])
         if c.battle_commands[1] == c.battle_commands[2]:
             c.set_battle_command(2, command_id=0xFF)
-        c.write_battle_commands(fout)
+        c.write_battle_commands(outfile_rom_buffer)
 
 
 def manage_commands_new(commands: Dict[str, CommandBlock]):
@@ -1032,7 +1030,7 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
     valid = set(list(commands))
     valid = sorted(valid - set(["row", "def"]))
     used = []
-    all_spells = get_ranked_spells(sourcefile)
+    all_spells = get_ranked_spells(infile_rom_path)
     randomskill_names = set([])
     limitCounter = 0
     for c in commands.values():
@@ -1094,7 +1092,7 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
             return power
 
         while True:
-            c.read_properties(sourcefile)
+            c.read_properties(infile_rom_buffer)
             if not (random_skill or combo_skill):
                 power = get_random_power()
 
@@ -1146,8 +1144,8 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
                 c.properties = 3
                 if sb.spellid in [0x23, 0xA3]:
                     c.properties |= 0x4  # enable while imped
-                c.unset_retarget(fout)
-                c.write_properties(fout)
+                c.unset_retarget(outfile_rom_buffer)
+                c.write_properties(outfile_rom_buffer)
 
                 if scount == 1 or multibanned(sb.spellid):
                     s = SpellSub(spellid=sb.spellid)
@@ -1164,7 +1162,7 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
             elif random_skill:
                 power = 10000
                 c.properties = 3
-                c.set_retarget(fout)
+                c.set_retarget(outfile_rom_buffer)
                 valid_spells = [v for v in all_spells if
                                 v.spellid <= 0xED and v.valid]
                 if Options_.is_flag_active('desperation'):
@@ -1237,7 +1235,7 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
                     if all([spell.target_enemy_default for spell in s.spells]):
                         c.targeting = 0x6e
 
-                c.write_properties(fout)
+                c.write_properties(outfile_rom_buffer)
                 newname = s.name
             elif combo_skill:
                 ALWAYS_FIRST = []
@@ -1301,7 +1299,7 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
                                                    for s in myspells]):
                         myspells = []
 
-                c.unset_retarget(fout)
+                c.unset_retarget(outfile_rom_buffer)
                 # if random.choice([True, False]):
                 #    nopowers = [s for s in myspells if not s.power]
                 #    powers = [s for s in myspells if s.power]
@@ -1368,7 +1366,7 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
                     c.targeting ^= 2  # allow targeting either side
 
                 c.targeting = c.targeting & (0xFF ^ 0x10)  # never autotarget
-                c.write_properties(fout)
+                c.write_properties(outfile_rom_buffer)
 
                 scount = max(1, scount - 1)
                 if autotarget_warning and targeting_conflict:
@@ -1409,8 +1407,8 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
         s.set_location(myfs.start)
         if not hasattr(s, "bytestring") or not s.bytestring:
             s.generate_bytestring()
-        s.write(fout)
-        c.setpointer(s.location, fout)
+        s.write(outfile_rom_buffer)
+        c.setpointer(s.location, outfile_rom_buffer)
         freespaces = determine_new_freespaces(freespaces, myfs, s.size)
 
         if len(newname) > 7:
@@ -1432,56 +1430,56 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
         # Disable menu screens for replaced commands.
         for i, name in enumerate(['swdtech', 'blitz', 'lore', 'rage', 'dance']):
             if c.name == name:
-                fout.seek(0x34D7A + i)
-                fout.write(b'\xEE')
+                outfile_rom_buffer.seek(0x34D7A + i)
+                outfile_rom_buffer.write(b'\xEE')
 
-        c.newname(newname, fout)
-        c.unsetmenu(fout)
-        c.allow_while_confused(fout)
+        c.newname(newname, outfile_rom_buffer)
+        c.unsetmenu(outfile_rom_buffer)
+        c.allow_while_confused(outfile_rom_buffer)
         if Options_.is_flag_active('playsitself'):
-            c.allow_while_berserk(fout)
+            c.allow_while_berserk(outfile_rom_buffer)
         else:
-            c.disallow_while_berserk(fout)
+            c.disallow_while_berserk(outfile_rom_buffer)
 
         command_descr = "{0}\n-------\n{1}".format(c.name, str(s))
         log(command_descr, 'commands')
 
     if Options_.is_flag_active('metronome'):
         magitek = [c for c in commands.values() if c.name == "magitek"][0]
-        magitek.read_properties(sourcefile)
+        magitek.read_properties(infile_rom_buffer)
         magitek.targeting = 0x04
-        magitek.set_retarget(fout)
+        magitek.set_retarget(outfile_rom_buffer)
         if Options_.is_flag_active("endless9"):
             s = MultipleSpellSub()
             s.set_count(9)
-            magitek.newname("9xChaos", fout)
+            magitek.newname("9xChaos", outfile_rom_buffer)
             s.set_spells([])
         else:
             s = RandomSpellSub()
-            magitek.newname("R-Chaos", fout)
+            magitek.newname("R-Chaos", outfile_rom_buffer)
             s.set_spells([], "Chaos", [])
-        magitek.write_properties(fout)
-        magitek.unsetmenu(fout)
-        magitek.allow_while_confused(fout)
-        magitek.allow_while_berserk(fout)
+        magitek.write_properties(outfile_rom_buffer)
+        magitek.unsetmenu(outfile_rom_buffer)
+        magitek.allow_while_confused(outfile_rom_buffer)
+        magitek.allow_while_berserk(outfile_rom_buffer)
 
         myfs = get_appropriate_freespace(freespaces, s.size)
         s.set_location(myfs.start)
         if not hasattr(s, "bytestring") or not s.bytestring:
             s.generate_bytestring()
-        s.write(fout)
-        magitek.setpointer(s.location, fout)
+        s.write(outfile_rom_buffer)
+        magitek.setpointer(s.location, outfile_rom_buffer)
         freespaces = determine_new_freespaces(freespaces, myfs, s.size)
 
     gogo_enable_all_sub = Substitution()
     gogo_enable_all_sub.bytestring = bytes([0xEA] * 2)
     gogo_enable_all_sub.set_location(0x35E58)
-    gogo_enable_all_sub.write(fout)
+    gogo_enable_all_sub.write(outfile_rom_buffer)
 
     cyan_ai_sub = Substitution()
     cyan_ai_sub.bytestring = bytes([0xF0, 0xEE, 0xEE, 0xEE, 0xFF])
     cyan_ai_sub.set_location(0xFBE85)
-    cyan_ai_sub.write(fout)
+    cyan_ai_sub.write(outfile_rom_buffer)
 
     return commands, freespaces
 
@@ -1494,13 +1492,13 @@ def manage_suplex(commands: Dict[str, CommandBlock], monsters: List[MonsterBlock
     c = [d for d in commands.values() if d.id == 5][0]
     myfs = freespaces.pop()
     s = SpellSub(spellid=0x5F)
-    sb = SpellBlock(0x5F, sourcefile)
+    sb = SpellBlock(0x5F, infile_rom_buffer)
     s.set_location(myfs.start)
-    s.write(fout)
+    s.write(outfile_rom_buffer)
     c.targeting = sb.targeting
-    c.setpointer(s.location, fout)
-    c.newname(sb.name, fout)
-    c.unsetmenu(fout)
+    c.setpointer(s.location, outfile_rom_buffer)
+    c.newname(sb.name, outfile_rom_buffer)
+    c.unsetmenu(outfile_rom_buffer)
     fss = myfs.unfree(s.location, s.size)
     freespaces.extend(fss)
     for c in characters:
@@ -1508,19 +1506,19 @@ def manage_suplex(commands: Dict[str, CommandBlock], monsters: List[MonsterBlock
         c.set_battle_command(1, command_id=5)
         c.set_battle_command(2, command_id=0xA)
         c.set_battle_command(3, command_id=1)
-        c.write_battle_commands(fout)
+        c.write_battle_commands(outfile_rom_buffer)
 
     for m in monsters:
         m.misc2 &= 0xFB
-        m.write_stats(fout)
+        m.write_stats(outfile_rom_buffer)
 
     learn_blitz_sub = Substitution()
     learn_blitz_sub.bytestring = [0xEA] * 2
     learn_blitz_sub.set_location(0x261E5)
-    learn_blitz_sub.write(fout)
+    learn_blitz_sub.write(outfile_rom_buffer)
     learn_blitz_sub.bytestring = [0xEA] * 4
     learn_blitz_sub.set_location(0xA18E)
-    learn_blitz_sub.write(fout)
+    learn_blitz_sub.write(outfile_rom_buffer)
 
 
 def beta_manageDesperation():
@@ -1556,11 +1554,11 @@ def manage_natural_magic():
     natmag_learn_sub = Substitution()
     natmag_learn_sub.set_location(0xa182)
     natmag_learn_sub.bytestring = bytes([0x22, 0x73, 0x08, 0xF0] + [0xEA] * 4)
-    natmag_learn_sub.write(fout)
+    natmag_learn_sub.write(outfile_rom_buffer)
 
     natmag_learn_sub.set_location(0x261b6)
     natmag_learn_sub.bytestring = bytes([0x22, 0x4B, 0x08, 0xF0] + [0xEA] * 10)
-    natmag_learn_sub.write(fout)
+    natmag_learn_sub.write(outfile_rom_buffer)
 
     natmag_learn_sub.set_location(0x30084B)
     natmag_learn_sub.bytestring = bytes(
@@ -1573,15 +1571,15 @@ def manage_natural_magic():
          0x4A, 0x4A, 0xAA, 0xA9, 0x00, 0x00, 0xE2, 0x20, 0xBF, 0xE1, 0x08, 0xF0, 0xC5, 0x0B, 0xF0, 0x02, 0xB0, 0x11,
          0x5A, 0xBF, 0xE0, 0x08, 0xF0, 0xA8, 0xB1, 0x09, 0xC9, 0xFF, 0xF0, 0x04, 0xA5, 0x0C, 0x91, 0x09, 0x7A, 0xE8,
          0xE8, 0x88, 0xD0, 0xE0, 0x6B] + [0xFF] * 2 * 16 * 12)
-    natmag_learn_sub.write(fout)
+    natmag_learn_sub.write(outfile_rom_buffer)
 
-    spells = get_ranked_spells(sourcefile, magic_only=True)
+    spells = get_ranked_spells(infile_rom_buffer, magic_only=True)
     spellids = [s.spellid for s in spells]
     address = 0x2CE3C0
 
     def mutate_spell(pointer: int, used: List) -> Tuple[SpellBlock, int]:
-        fout.seek(pointer)
-        spell, level = tuple(fout.read(2))
+        outfile_rom_buffer.seek(pointer)
+        spell, level = tuple(outfile_rom_buffer.read(2))
 
         while True:
             index = spellids.index(spell)
@@ -1613,18 +1611,18 @@ def manage_natural_magic():
         candidate.natural_magic = sorted(candidate.natural_magic, key=lambda s: (s[0], s[1].spellid))
         for i, (level, newspell) in enumerate(candidate.natural_magic):
             pointer = 0x3008e0 + candidate.id * 32 + (2 * i)
-            fout.seek(pointer)
-            fout.write(bytes([newspell.spellid]))
-            fout.write(bytes([level]))
+            outfile_rom_buffer.seek(pointer)
+            outfile_rom_buffer.write(bytes([newspell.spellid]))
+            outfile_rom_buffer.write(bytes([level]))
         usedspells = random.sample(usedspells, 12)
 
-    lores = get_ranked_spells(sourcefile, magic_only=False)
+    lores = get_ranked_spells(infile_rom_buffer, magic_only=False)
     lores = [s for s in lores if 0x8B <= s.spellid <= 0xA2]
     lore_ids = [l.spellid for l in lores]
     lores_in_order = sorted(lore_ids)
     address = 0x26F564
-    fout.seek(address)
-    known_lores = read_multi(fout, length=3)
+    outfile_rom_buffer.seek(address)
+    known_lores = read_multi(outfile_rom_buffer, length=3)
     known_lore_ids = []
     for i in range(24):
         if (1 << i) & known_lores:
@@ -1646,8 +1644,8 @@ def manage_natural_magic():
         order = lores_in_order.index(new_lore.spellid)
         new_known_lores |= (1 << order)
 
-    fout.seek(address)
-    write_multi(fout, new_known_lores, length=3)
+    outfile_rom_buffer.seek(address)
+    write_multi(outfile_rom_buffer, new_known_lores, length=3)
 
 
 def manage_equip_umaro(freespaces: list):
@@ -1655,14 +1653,14 @@ def manage_equip_umaro(freespaces: list):
     equip_umaro_sub = Substitution()
     equip_umaro_sub.bytestring = [0xC9, 0x0E]
     equip_umaro_sub.set_location(0x31E6E)
-    equip_umaro_sub.write(fout)
+    equip_umaro_sub.write(outfile_rom_buffer)
     equip_umaro_sub.bytestring = [0xEA] * 2
     equip_umaro_sub.set_location(0x39EF6)
-    equip_umaro_sub.write(fout)
+    equip_umaro_sub.write(outfile_rom_buffer)
 
-    with open(sourcefile, 'r+b') as f:
-        f.seek(0xC359D)
-        old_unequipper = f.read(218)
+    infile_rom_buffer.seek(0xC359D)
+    old_unequipper = infile_rom_buffer.read(218)
+
     header = old_unequipper[:7]
     footer = old_unequipper[-3:]
 
@@ -1691,17 +1689,17 @@ def manage_equip_umaro(freespaces: list):
     unequip_umaro_sub = Substitution()
     unequip_umaro_sub.bytestring = generate_unequipper(0xC351E)
     unequip_umaro_sub.set_location(0xC351E)
-    unequip_umaro_sub.write(fout)
+    unequip_umaro_sub.write(outfile_rom_buffer)
 
     myfs = get_appropriate_freespace(freespaces, 234)
     pointer = myfs.start
     unequip_umaro_sub.bytestring = generate_unequipper(pointer, not_current_party=True)
     freespaces = determine_new_freespaces(freespaces, myfs, unequip_umaro_sub.size)
     unequip_umaro_sub.set_location(pointer)
-    unequip_umaro_sub.write(fout)
+    unequip_umaro_sub.write(outfile_rom_buffer)
     unequip_umaro_sub.bytestring = [pointer & 0xFF, (pointer >> 8) & 0xFF, (pointer >> 16) - 0xA]
     unequip_umaro_sub.set_location(0xC3514)
-    unequip_umaro_sub.write(fout)
+    unequip_umaro_sub.write(outfile_rom_buffer)
 
     return freespaces
 
@@ -1742,7 +1740,7 @@ def manage_umaro(commands: Dict[str, CommandBlock]):
         base_command = random.choice(cands)
         commands = list(commands.values())
         base_command = [c for c in commands if c.id == base_command][0]
-        base_command.allow_while_berserk(fout)
+        base_command.allow_while_berserk(outfile_rom_buffer)
         umaro_risk.battle_commands = [base_command.id, 0xFF, 0xFF, 0xFF]
 
     umaro.beserk = False
@@ -1751,17 +1749,17 @@ def manage_umaro(commands: Dict[str, CommandBlock]):
     if Options_.is_flag_active('metronome'):
         umaro_risk.battle_commands = [0x1D, 0xFF, 0xFF, 0xFF]
 
-    umaro_risk.write_battle_commands(fout)
-    umaro.write_battle_commands(fout)
+    umaro_risk.write_battle_commands(outfile_rom_buffer)
+    umaro.write_battle_commands(outfile_rom_buffer)
 
     umaro_exchange_sub = Substitution()
     umaro_exchange_sub.bytestring = [0xC9, umaro_risk.id]
     umaro_exchange_sub.set_location(0x21617)
-    umaro_exchange_sub.write(fout)
+    umaro_exchange_sub.write(outfile_rom_buffer)
     umaro_exchange_sub.set_location(0x20926)
-    umaro_exchange_sub.write(fout)
+    umaro_exchange_sub.write(outfile_rom_buffer)
 
-    spells = get_ranked_spells(sourcefile)
+    spells = get_ranked_spells(infile_rom_buffer)
     spells = [x for x in spells if x.target_enemy_default]
     spells = [x for x in spells if x.valid]
     spells = [x for x in spells if x.rank() < 1000]
@@ -1775,7 +1773,7 @@ def manage_umaro(commands: Dict[str, CommandBlock]):
     storm_sub = Substitution()
     storm_sub.bytestring = bytes([0xA9, spell_id])
     storm_sub.set_location(0x21710)
-    storm_sub.write(fout)
+    storm_sub.write(outfile_rom_buffer)
 
     return umaro_risk
 
@@ -1784,10 +1782,10 @@ def manage_sprint():
     autosprint = Substitution()
     autosprint.set_location(0x4E2D)
     autosprint.bytestring = bytes([0x80, 0x00])
-    autosprint.write(fout)
+    autosprint.write(outfile_rom_buffer)
 
 
-def name_swd_techs(fout):
+def name_swd_techs(outfile_rom_buffer: BytesIO):
     swd_tech_sub = Substitution()
     swd_tech_sub.set_location(0x26F7E1)
     swd_tech_sub.bytestring = bytes(
@@ -1803,12 +1801,12 @@ def name_swd_techs(fout):
          0x9d, 0xfe, 0x92, 0xa5, 0xa2, 0x9c, 0x9e,
          0x82, 0xa5, 0x9e, 0x9a, 0xaf, 0x9e, 0xff,
          0xff, 0xff, 0xff, ])
-    swd_tech_sub.write(fout)
+    swd_tech_sub.write(outfile_rom_buffer)
 
     repoint_jokerdoom_sub = Substitution()
     repoint_jokerdoom_sub.set_location(0x0236B9)
     repoint_jokerdoom_sub.bytestring = bytes([0x94])
-    repoint_jokerdoom_sub.write(fout)
+    repoint_jokerdoom_sub.write(outfile_rom_buffer)
 
 
 def manage_skips():
@@ -1824,7 +1822,7 @@ def manage_skips():
         for byte in event:
             event_skip_sub.bytestring.append(int(byte, 16))
         event_skip_sub.set_location(int(address, 16))
-        event_skip_sub.write(fout)
+        event_skip_sub.write(outfile_rom_buffer)
 
     def handleNormal(split_line: List[str]):  # Replace events that should always be replaced
         writeToAddress(split_line[0], split_line[1:])
@@ -1844,7 +1842,7 @@ def manage_skips():
                 palette_correct_sub = Substitution()
                 palette_correct_sub.bytestring = bytes([character.palette])
                 palette_correct_sub.set_location(int(split_line[0], 16))
-                palette_correct_sub.write(fout)
+                palette_correct_sub.write(outfile_rom_buffer)
 
     def handleConvergentPalette(split_line: List[str]):
         if Options_.is_flag_active('thescenarionottaken'):
@@ -1898,7 +1896,7 @@ def manage_skips():
     # flashback_skip_sub = Substitution()
     # flashback_skip_sub.bytestring = bytes([0xB2, 0xB8, 0xA5, 0x00, 0xFE])
     # flashback_skip_sub.set_location(0xAC582)
-    # flashback_skip_sub.write(fout)
+    # flashback_skip_sub.write(outfile_rom_buffer)
 
     # boat_skip_sub = Substitution()
     # boat_skip_sub.bytestring = bytes([0x97, 0x5C] +  # Fade to black, wait for fade
@@ -1923,7 +1921,7 @@ def manage_skips():
     #                                 # Load world map with party near Thamasa, return
     #                                 )
     # boat_skip_sub.set_location(0xC615A)
-    # boat_skip_sub.write(fout)
+    # boat_skip_sub.write(outfile_rom_buffer)
 
     leo_skip_sub = Substitution()
     leo_skip_sub.bytestring = bytes([0x97, 0x5C] +  # Fade to black, wait for fade
@@ -1947,7 +1945,7 @@ def manage_skips():
                                     # call Thamasa entrance event CB/FFA6 to place NPCs, end.
                                     )
     leo_skip_sub.set_location(0xBF2BB)
-    leo_skip_sub.write(fout)
+    leo_skip_sub.write(outfile_rom_buffer)
 
     kefkaWins_skip_sub = Substitution()
     kefkaWins_skip_sub.bytestring = bytes(
@@ -1987,14 +1985,14 @@ def manage_skips():
         [0xC7, 0xF9, 0x7F, 0xFF]  # place airship, end
     )
     kefkaWins_skip_sub.set_location(0xBFFF4)
-    kefkaWins_skip_sub.write(fout)
+    kefkaWins_skip_sub.write(outfile_rom_buffer)
 
     tintinabar_sub = Substitution()
     tintinabar_sub.set_location(0xC67CF)
     tintinabar_sub.bytestring = bytes(
         [0xC1, 0x7F, 0x02, 0x88, 0x82, 0x74, 0x68, 0x02, 0x4B, 0xFF, 0x02, 0xB6, 0xE2, 0x67, 0x02, 0xB3, 0x5E, 0x00,
          0xFE, 0x85, 0xC4, 0x09, 0xC0, 0xBE, 0x81, 0xFF, 0x69, 0x01, 0xD4, 0x88])
-    tintinabar_sub.write(fout)
+    tintinabar_sub.write(outfile_rom_buffer)
 
     set_dialogue(0x2ff,
                  "For 2500 GP you can send 2 letters, a record, a Tonic, and a book.<line><choice> (Send them)  <choice> (Forget it)")
@@ -2014,13 +2012,13 @@ def manage_skips():
     #                                        0xB2, 0x3F, 0x48, 0x00,
     #                                        # jump to part where it sets a bunch of bits then flys to Maranda
     #                                        0xFE])
-    # daryl_cutscene_sub.write(fout)
+    # daryl_cutscene_sub.write(outfile_rom_buffer)
 
     # We overwrote some of the event items, so write them again
     if Options_.is_flag_active("random_treasure"):
         for items in get_event_items().values():
             for e in items:
-                e.write_data(fout, cutscene_skip=True)
+                e.write_data(outfile_rom_buffer, cutscene_skip=True)
 
 
 def activate_airship_mode(freespaces: list):
@@ -2039,11 +2037,11 @@ def activate_airship_mode(freespaces: list):
     freespaces = determine_new_freespaces(freespaces, myfs, set_airship_sub.size)
 
     set_airship_sub.set_location(pointer)
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
 
     set_airship_sub.bytestring = bytes([0xD2, 0xB9])  # airship appears in WoR
     set_airship_sub.set_location(0xA532A)
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
 
     set_airship_sub.bytestring = bytes([0x6B, 0x01, 0x04, 0x4A, 0x16, 0x01] +  # load WoR, place party
                                        [0xDD] +  # hide minimap
@@ -2052,55 +2050,55 @@ def activate_airship_mode(freespaces: list):
                                        [0xC7, 0x4E, 0xf0] +  # place airship
                                        [0xD2, 0x8E, 0x25, 0x07, 0x07, 0x40])  # load beach with fish
     set_airship_sub.set_location(0xA51E9)
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
 
     # point to airship-placing script
     set_airship_sub.bytestring = bytes([0xB2, pointer & 0xFF, (pointer >> 8) & 0xFF,
                                         (pointer >> 16) - 0xA, 0xFE])
     set_airship_sub.set_location(0xCB046)
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
 
     # always access floating continent
     set_airship_sub.bytestring = bytes([0xC0, 0x27, 0x01, 0x79, 0xF5, 0x00])
     set_airship_sub.set_location(0xAF53A)  # need first branch for button press
     # ...  except in the World of Ruin
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
     set_airship_sub.bytestring = bytes([0xC0, 0xA4, 0x80, 0x6E, 0xF5, 0x00])
     set_airship_sub.set_location(0xAF579)  # need first branch for button press
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
 
     # always exit airship
     set_airship_sub.bytestring = bytes([0xFD] * 6)
     set_airship_sub.set_location(0xAF4B1)
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
     set_airship_sub.bytestring = bytes([0xFD] * 8)
     set_airship_sub.set_location(0xAF4E3)
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
 
     # chocobo stables are airship stables now
     set_airship_sub.bytestring = bytes([0xB6, 0x8D, 0xF5, 0x00, 0xB3, 0x5E, 0x00])
     set_airship_sub.set_location(0xA7A39)
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
     set_airship_sub.set_location(0xA8FB7)
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
     set_airship_sub.set_location(0xB44D0)
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
     set_airship_sub.set_location(0xC3335)
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
 
     # don't force Locke and Celes at party select
     set_airship_sub.bytestring = bytes([0x99, 0x01, 0x00, 0x00])
     set_airship_sub.set_location(0xAAB67)
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
     set_airship_sub.set_location(0xAF60F)
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
     set_airship_sub.set_location(0xCC2F3)
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
 
     # Daryl is not such an airship hog
     set_airship_sub.bytestring = bytes([0x6E, 0xF5])
     set_airship_sub.set_location(0x41F41)
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
 
     return freespaces
 
@@ -2111,11 +2109,11 @@ def set_lete_river_encounters():
     # force pseudo random jump to have a battle (4 bytes)
     manage_lete_river_sub.bytestring = bytes([0xFD] * 4)
     manage_lete_river_sub.set_location(0xB0486)
-    manage_lete_river_sub.write(fout)
+    manage_lete_river_sub.write(outfile_rom_buffer)
     # force pseudo random jump to have a battle (4 bytes)
     manage_lete_river_sub.bytestring = bytes([0xFD] * 4)
     manage_lete_river_sub.set_location(0xB048F)
-    manage_lete_river_sub.write(fout)
+    manage_lete_river_sub.write(outfile_rom_buffer)
     # call subroutine CB0498 (4 bytes)
     if Options_.is_flag_active('thescenarionottaken'):
         battle_calls = [0xB066B,
@@ -2169,38 +2167,38 @@ def set_lete_river_encounters():
         if random.randint(0, 1) == 0:
             manage_lete_river_sub.bytestring = bytes([0xFD] * 4)
             manage_lete_river_sub.set_location(addr)
-            manage_lete_river_sub.write(fout)
+            manage_lete_river_sub.write(outfile_rom_buffer)
 
     if not Options_.is_flag_active("thescenarionottaken"):
         if random.randint(0, 1) == 0:
             manage_lete_river_sub.bytestring = bytes([0xFD] * 8)
             manage_lete_river_sub.set_location(0xB09C8)
-            manage_lete_river_sub.write(fout)
+            manage_lete_river_sub.write(outfile_rom_buffer)
 
 
 def manage_rng():
-    fout.seek(0xFD00)
+    outfile_rom_buffer.seek(0xFD00)
     if Options_.is_flag_active('norng'):
         numbers = [0 for _ in range(0x100)]
     else:
         numbers = list(range(0x100))
     random.shuffle(numbers)
-    fout.write(bytes(numbers))
+    outfile_rom_buffer.write(bytes(numbers))
 
 
 def manage_balance(newslots: bool = True):
-    vanish_doom(fout)
-    evade_mblock(fout)
-    fix_xzone(fout)
-    imp_skimp(fout)
+    vanish_doom(outfile_rom_buffer)
+    evade_mblock(outfile_rom_buffer)
+    fix_xzone(outfile_rom_buffer)
+    imp_skimp(outfile_rom_buffer)
 
     manage_rng()
     if newslots:
-        randomize_slots(outfile, fout, 0x24E4A)
+        randomize_slots(0x24E4A)
 
-    death_abuse(fout)
+    death_abuse(outfile_rom_buffer)
 
-    get_monsters(sourcefile)
+    get_monsters(infile_rom_buffer)
     sealed_kefka = get_monster(0x174)
 
 
@@ -2252,17 +2250,17 @@ def manage_magitek():
 
     terra_used.reverse()
     others_used.reverse()
-    fout.seek(target_pointer + 3)
+    outfile_rom_buffer.seek(target_pointer + 3)
     for s in terra_used:
-        fout.write(bytes([s.targeting]))
-    fout.seek(terra_pointer + 3)
+        outfile_rom_buffer.write(bytes([s.targeting]))
+    outfile_rom_buffer.seek(terra_pointer + 3)
     for s in terra_used:
-        fout.write(bytes([s.spellid - 0x83]))
-    fout.seek(others_pointer + 3)
+        outfile_rom_buffer.write(bytes([s.spellid - 0x83]))
+    outfile_rom_buffer.seek(others_pointer + 3)
     for s in others_used:
         if s is None:
             break
-        fout.write(bytes([s.spellid - 0x83]))
+        outfile_rom_buffer.write(bytes([s.spellid - 0x83]))
 
 
 def manage_final_boss(freespaces: list):
@@ -2294,7 +2292,7 @@ def manage_final_boss(freespaces: list):
     monsters = [m for m in monsters if has_graphics(m)]
     m = random.choice(monsters)
     kefka1.graphics.copy_data(m.graphics)
-    change_enemy_name(fout, kefka1.id, m.name.strip('_'))
+    change_enemy_name(outfile_rom_buffer, kefka1.id, m.name.strip('_'))
 
     k1formation = get_formation(0x202)
     k2formation = get_formation(KEFKA_EXTRA_FORMATION)
@@ -2312,13 +2310,13 @@ def manage_final_boss(freespaces: list):
         m.set_relative_ai(pointer)
         freespaces = determine_new_freespaces(freespaces, myfs, m.aiscriptsize)
 
-    kefka1.write_stats(fout)
-    kefka2.write_stats(fout)
+    kefka1.write_stats(outfile_rom_buffer)
+    kefka2.write_stats(outfile_rom_buffer)
     return freespaces
 
 
 def manage_monsters() -> List[MonsterBlock]:
-    monsters = get_monsters(sourcefile)
+    monsters = get_monsters(infile_rom_buffer)
     safe_solo_terra = not Options_.is_flag_active("ancientcave")
     darkworld = Options_.is_flag_active("darkworld")
     change_skillset = None
@@ -2355,12 +2353,12 @@ def manage_monsters() -> List[MonsterBlock]:
         m.tweak_fanatics()
         m.relevel_specifics()
 
-    change_enemy_name(fout, 0x166, "L.255Magic")
+    change_enemy_name(outfile_rom_buffer, 0x166, "L.255Magic")
 
     shuffle_monsters(monsters, safe_solo_terra=safe_solo_terra)
     for m in monsters:
-        m.randomize_special_effect(fout, halloween=Options_.is_flag_active('halloween'))
-        m.write_stats(fout)
+        m.randomize_special_effect(outfile_rom_buffer, halloween=Options_.is_flag_active('halloween'))
+        m.write_stats(outfile_rom_buffer)
 
     return monsters
 
@@ -2372,7 +2370,7 @@ def manage_monster_appearance(monsters: List[MonsterBlock], preserve_graphics: b
     espers = []
     for j in range(32):
         mg = MonsterGraphicBlock(pointer=esperptr + (5 * j), name="")
-        mg.read_data(sourcefile)
+        mg.read_data(infile_rom_buffer)
         espers.append(mg)
         mgs.append(mg)
 
@@ -2398,7 +2396,7 @@ def manage_monster_appearance(monsters: List[MonsterBlock], preserve_graphics: b
             m.update_size(8, 8)
         candidates = nonbosses[i:]
         m.mutate_graphics_swap(candidates)
-        name = randomize_enemy_name(fout, m.id)
+        name = randomize_enemy_name(outfile_rom_buffer, m.id)
         m.changed_name = name
 
     done = {}
@@ -2418,39 +2416,39 @@ def manage_monster_appearance(monsters: List[MonsterBlock], preserve_graphics: b
             mg.mutate_palette()
             done[idpair] = freepointer
             freepointer += len(mg.palette_data)
-            mg.write_data(fout, palette_pointer=done[idpair])
+            mg.write_data(outfile_rom_buffer, palette_pointer=done[idpair])
         else:
-            mg.write_data(fout, palette_pointer=done[idpair],
+            mg.write_data(outfile_rom_buffer, palette_pointer=done[idpair],
                           no_palette=True)
 
     for mg in espers:
         mg.mutate_palette()
-        mg.write_data(fout, palette_pointer=freepointer)
+        mg.write_data(outfile_rom_buffer, palette_pointer=freepointer)
         freepointer += len(mg.palette_data)
 
     return mgs
 
 
-def manage_doom_gaze(fout):
+def manage_doom_gaze(outfile_rom_buffer: BytesIO):
     # patch is 98 bytes
-    patch_doom_gaze(fout)
+    patch_doom_gaze(outfile_rom_buffer)
 
 
 def manage_colorize_animations():
     palettes = []
     for i in range(240):
         pointer = 0x126000 + (i * 16)
-        fout.seek(pointer)
-        palette = [read_multi(fout, length=2) for _ in range(8)]
+        outfile_rom_buffer.seek(pointer)
+        palette = [read_multi(outfile_rom_buffer, length=2) for _ in range(8)]
         palettes.append(palette)
 
     for i, palette in enumerate(palettes):
         transformer = get_palette_transformer(basepalette=palette)
         palette = transformer(palette)
         pointer = 0x126000 + (i * 16)
-        fout.seek(pointer)
+        outfile_rom_buffer.seek(pointer)
         for c in palette:
-            write_multi(fout, c, length=2)
+            write_multi(outfile_rom_buffer, c, length=2)
 
 
 def manage_items(items: List[ItemBlock], changed_commands: Set[int] = None) -> List[ItemBlock]:
@@ -2463,9 +2461,9 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int] = None) -> L
     unbreakable = Options_.is_flag_active('unbreakable')
 
     set_item_changed_commands(changed_commands)
-    unhardcode_tintinabar(fout)
-    sprint_shoes_break(fout)
-    extend_item_breaks(fout)
+    unhardcode_tintinabar(outfile_rom_buffer)
+    sprint_shoes_break(outfile_rom_buffer)
+    extend_item_breaks(outfile_rom_buffer)
 
     auto_equip_relics = []
 
@@ -2473,7 +2471,7 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int] = None) -> L
         i.mutate(always_break=always_break, crazy_prices=crazy_prices, extra_effects=extra_effects,
                  wild_breaks=wild_breaks, no_breaks=no_breaks, unbreakable=unbreakable)
         i.unrestrict()
-        i.write_stats(fout)
+        i.write_stats(outfile_rom_buffer)
         if i.features['special2'] & 0x38 and i.is_relic:
             auto_equip_relics.append(i.itemid)
 
@@ -2482,7 +2480,7 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int] = None) -> L
     auto_equip_sub = Substitution()
     auto_equip_sub.set_location(0x39EF9)
     auto_equip_sub.bytestring = bytes([0xA0, 0xF1, ])
-    auto_equip_sub.write(fout)
+    auto_equip_sub.write(outfile_rom_buffer)
 
     auto_equip_sub.set_location(0x3F1A0)
     auto_equip_sub.bytestring = bytes([0x20, 0xF2, 0x93,
@@ -2523,7 +2521,7 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int] = None) -> L
                                        0xF0, 0x02,
                                        0xE6, 0x99,
                                        0x60])
-    auto_equip_sub.write(fout)
+    auto_equip_sub.write(outfile_rom_buffer)
     return items
 
 
@@ -2546,9 +2544,9 @@ def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
             lefthanded = random.randint(1, 10) == 10
             for equiptype in ['weapon', 'shield', 'helm', 'armor',
                               'relic1', 'relic2']:
-                fout.seek(c.address + equip_offsets[equiptype])
-                equipid = ord(fout.read(1))
-                fout.seek(c.address + equip_offsets[equiptype])
+                outfile_rom_buffer.seek(c.address + equip_offsets[equiptype])
+                equipid = ord(outfile_rom_buffer.read(1))
+                outfile_rom_buffer.seek(c.address + equip_offsets[equiptype])
                 if lefthanded and equiptype == 'weapon':
                     equiptype = 'shield'
                 elif lefthanded and equiptype == 'shield':
@@ -2570,7 +2568,7 @@ def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
                             equipid = random.randint(0, 0xFF)
                     if equipid != 0xFF or len(equippable_items) == 0:
                         break
-                fout.write(bytes([equipid]))
+                outfile_rom_buffer.write(bytes([equipid]))
             continue
 
         equippable_items = [i for i in items if i.equippable & (1 << c.id)]
@@ -2585,9 +2583,9 @@ def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
             weakest = 0xFF
             if equippable:
                 weakest = min(equippable, key=lambda i: i.rank()).itemid
-            c.write_default_equipment(fout, weakest, equiptype)
+            c.write_default_equipment(outfile_rom_buffer, weakest, equiptype)
     for i in items:
-        i.write_stats(fout)
+        i.write_stats(outfile_rom_buffer)
     return items
 
 
@@ -2603,7 +2601,7 @@ def manage_reorder_rages(freespaces: List[FreeBlock]) -> List[FreeBlock]:
     reordered_rages_sub = Substitution()
     reordered_rages_sub.bytestring = monster_order
     reordered_rages_sub.set_location(pointer)
-    reordered_rages_sub.write(fout)
+    reordered_rages_sub.write(outfile_rom_buffer)
     hirage, midrage, lorage = ((pointer >> 16) & 0x3F) + 0xC0, (pointer >> 8) & 0xFF, pointer & 0xFF
 
     rage_reorder_sub = Substitution()
@@ -2646,14 +2644,14 @@ def manage_reorder_rages(freespaces: List[FreeBlock]) -> List[FreeBlock]:
     pointer = myfs.start
     freespaces = determine_new_freespaces(freespaces, myfs, rage_reorder_sub.size)
     rage_reorder_sub.set_location(pointer)
-    rage_reorder_sub.write(fout)
+    rage_reorder_sub.write(outfile_rom_buffer)
 
     rage_reorder_sub = Substitution()
     rage_reorder_sub.bytestring = [0x20, pointer & 0xFF, (pointer >> 8) & 0xFF,  # JSR
                                    0x60,  # RTS
                                    ]
     rage_reorder_sub.set_location(0x25847)
-    rage_reorder_sub.write(fout)
+    rage_reorder_sub.write(outfile_rom_buffer)
 
     return freespaces
 
@@ -2773,31 +2771,31 @@ def manage_esper_boosts(freespaces: List[FreeBlock]) -> List[FreeBlock]:
                 esper_boost_sub.bytestring[index:index + 2] = [a, b]
             assert None not in esper_boost_sub.bytestring
 
-        boost_sub.write(fout)
+        boost_sub.write(outfile_rom_buffer)
 
     esper_boost_sub = Substitution()
     esper_boost_sub.set_location(0x2615C)
     pointer1, pointer2 = (boost_subs[0].location, boost_subs[1].location)
     esper_boost_sub.bytestring = [pointer2 & 0xFF, (pointer2 >> 8) & 0xFF,
                                   pointer1 & 0xFF, (pointer1 >> 8) & 0xFF, ]
-    esper_boost_sub.write(fout)
+    esper_boost_sub.write(outfile_rom_buffer)
 
     esper_boost_sub.set_location(0xFFEED)
     desc = [hex2int(shorttexttable[c]) for c in "LV - 1   "]
     esper_boost_sub.bytestring = desc
-    esper_boost_sub.write(fout)
+    esper_boost_sub.write(outfile_rom_buffer)
     esper_boost_sub.set_location(0xFFEF6)
     desc = [hex2int(shorttexttable[c]) for c in "LV + 50% "]
     esper_boost_sub.bytestring = desc
-    esper_boost_sub.write(fout)
+    esper_boost_sub.write(outfile_rom_buffer)
 
-    death_abuse(fout)
+    death_abuse(outfile_rom_buffer)
 
     return freespaces
 
 
 def manage_espers(freespaces: List[FreeBlock], replacements: dict = None) -> List[FreeBlock]:
-    espers = get_espers(sourcefile)
+    espers = get_espers(infile_rom_buffer)
     random.shuffle(espers)
     for e in espers:
         e.generate_spells(tierless=Options_.is_flag_active('madworld'))
@@ -2811,14 +2809,14 @@ def manage_espers(freespaces: List[FreeBlock], replacements: dict = None) -> Lis
     bonus_espers[0].bonus = 7
     bonus_espers[1].add_spell(0x2B, 1)
     for e in sorted(espers, key=lambda e: e.name):
-        e.write_data(fout)
+        e.write_data(outfile_rom_buffer)
 
     ragnarok_id = replacements[16].id if replacements else 16
     ragnarok_id += 0x36  # offset by spell ids
     ragnarok_sub = Substitution()
     ragnarok_sub.set_location(0xC0B37)
     ragnarok_sub.bytestring = bytes([0xB2, 0x58, 0x0B, 0x02, 0xFE])
-    ragnarok_sub.write(fout)
+    ragnarok_sub.write(outfile_rom_buffer)
     pointer = ragnarok_sub.location + len(ragnarok_sub.bytestring) + 1
     a, b = pointer & 0xFF, (pointer >> 8) & 0xFF
     c = 2
@@ -2827,7 +2825,7 @@ def manage_espers(freespaces: List[FreeBlock], replacements: dict = None) -> Lis
                                      0xDD, 0x99,
                                      0x6B, 0x6C, 0x21, 0x08, 0x08, 0x80,
                                      0xB2, a, b, c])
-    ragnarok_sub.write(fout)
+    ragnarok_sub.write(outfile_rom_buffer)
     ragnarok_sub.set_location(pointer)
     # CA5EA9
     ragnarok_sub.bytestring = bytes([0xB2, 0xA9, 0x5E, 0x00,  # event stuff
@@ -2839,7 +2837,7 @@ def manage_espers(freespaces: List[FreeBlock], replacements: dict = None) -> Lis
                                      0xF4, 0x8D,  # SFX
                                      0x86, ragnarok_id,  # receive esper
                                      0xFE, ])
-    ragnarok_sub.write(fout)
+    ragnarok_sub.write(outfile_rom_buffer)
 
     freespaces = manage_esper_boosts(freespaces)
 
@@ -2852,7 +2850,7 @@ def manage_espers(freespaces: List[FreeBlock], replacements: dict = None) -> Lis
 def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=False, katnFlag=False):
     for mm in get_metamorphs():
         mm.mutate_items()
-        mm.write_data(fout)
+        mm.write_data(outfile_rom_buffer)
 
     for m in monsters:
         m.mutate_items(katnFlag)
@@ -2861,7 +2859,7 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
             while any(x in m.items for x in charms):
                 m.mutate_items()
         m.mutate_metamorph()
-        m.write_stats(fout)
+        m.write_stats(outfile_rom_buffer)
 
     if shops:
         buyables = manage_shops()
@@ -2870,7 +2868,7 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
         return
 
     pointer = 0x1fb600
-    results = randomize_colosseum(outfile, fout, pointer)
+    results = randomize_colosseum(pointer)
     wagers = {a.itemid: c for (a, b, c, d) in results}
 
     def ensure_striker():
@@ -2893,15 +2891,15 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
                     if b in wagers and wagers[b] == wager]
         if not buycheck:
             raise Exception("Striker pickup not ensured.")
-        fout.seek(pointer + (wager.itemid * 4) + 2)
-        fout.write(b'\x29')
+        outfile_rom_buffer.seek(pointer + (wager.itemid * 4) + 2)
+        outfile_rom_buffer.write(b'\x29')
         return get_item(buycheck[0]), wager
 
     chain_start_item, striker_wager = ensure_striker()
 
     # We now ensure that the item that starts the Striker colosseum chain is available in WoR
     chain_start_item_found = False
-    all_wor_shops = [shop for shop in get_shops(sourcefile) if 81 >= shop.shopid >= 48 or shop.shopid == 84]
+    all_wor_shops = [shop for shop in get_shops(infile_rom_buffer) if 81 >= shop.shopid >= 48 or shop.shopid == 84]
     for shop in all_wor_shops:
         for item in shop.items:
             # shop.items is an 8-length list of bytes
@@ -2938,7 +2936,7 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
             else:
                 new_items.append(item)
         chosen_shop.items = new_items
-        chosen_shop.write_data(fout)
+        chosen_shop.write_data(outfile_rom_buffer)
         # Look in spoiler log and find the shop that was changed and update spoiler log
         for i, shop in enumerate(randlog["shops"]):
             if not shop.split("\n")[0] == str(chosen_shop).split("\n")[0]:
@@ -2957,9 +2955,9 @@ def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=Fal
         log(s, section="colosseum")
 
 
-def manage_doom_gaze(fout):
+def manage_doom_gaze(outfile_rom_buffer: BytesIO):
     # patch is actually 98 bytes, but just in case
-    patch_doom_gaze(fout)
+    patch_doom_gaze(outfile_rom_buffer)
     set_dialogue(0x60, "<choice> (Lift-off)<line><choice> (Find Doom Gaze)<line><choice> (Not just yet)")
 
 
@@ -2967,7 +2965,7 @@ def manage_chests():
     crazy_prices = Options_.is_flag_active('madworld')
     no_monsters = Options_.is_flag_active('nomiabs')
     uncapped_monsters = Options_.is_flag_active('bsiab')
-    locations = get_locations(sourcefile)
+    locations = get_locations(infile_rom_buffer)
     locations = sorted(locations, key=lambda l: l.rank())
     for l in locations:
         # if the Zozo clock is randomized, upgrade the chest from chain saw to
@@ -2982,7 +2980,7 @@ def manage_chests():
     locations = sorted(locations, key=lambda l: l.locid)
 
     for m in get_monsters():
-        m.write_stats(fout)
+        m.write_stats(outfile_rom_buffer)
 
 
 def write_all_locations_misc():
@@ -2998,7 +2996,7 @@ def write_all_chests():
 
     nextpointer = 0x2d8634
     for l in locations:
-        nextpointer = l.write_chests(fout, nextpointer=nextpointer)
+        nextpointer = l.write_chests(outfile_rom_buffer, nextpointer=nextpointer)
 
 
 def write_all_npcs():
@@ -3008,10 +3006,10 @@ def write_all_npcs():
     nextpointer = 0x41d52
     for l in locations:
         if hasattr(l, "restrank"):
-            nextpointer = l.write_npcs(fout, nextpointer=nextpointer,
+            nextpointer = l.write_npcs(outfile_rom_buffer, nextpointer=nextpointer,
                                        ignore_order=True)
         else:
-            nextpointer = l.write_npcs(fout, nextpointer=nextpointer)
+            nextpointer = l.write_npcs(outfile_rom_buffer, nextpointer=nextpointer)
 
 
 def write_all_events():
@@ -3020,7 +3018,7 @@ def write_all_events():
 
     nextpointer = 0x40342
     for l in locations:
-        nextpointer = l.write_events(fout, nextpointer=nextpointer)
+        nextpointer = l.write_events(outfile_rom_buffer, nextpointer=nextpointer)
 
 
 def write_all_entrances():
@@ -3031,12 +3029,12 @@ def write_all_entrances():
     total = 0
     for e in entrancesets:
         total += len(e.entrances)
-        nextpointer, longnextpointer = e.write_data(fout, nextpointer,
+        nextpointer, longnextpointer = e.write_data(outfile_rom_buffer, nextpointer,
                                                     longnextpointer)
-    fout.seek(e.pointer + 2)
-    write_multi(fout, (nextpointer - 0x1fbb00), length=2)
-    fout.seek(e.longpointer + 2)
-    write_multi(fout, (longnextpointer - 0x2df480), length=2)
+    outfile_rom_buffer.seek(e.pointer + 2)
+    write_multi(outfile_rom_buffer, (nextpointer - 0x1fbb00), length=2)
+    outfile_rom_buffer.seek(e.longpointer + 2)
+    write_multi(outfile_rom_buffer, (longnextpointer - 0x2df480), length=2)
 
 
 def manage_blitz():
@@ -3070,8 +3068,8 @@ def manage_blitz():
     for i in range(1, 8):
         # skip pummel
         current = blitzspecptr + (i * 12)
-        fout.seek(current + 11)
-        length = ord(fout.read(1)) // 2
+        outfile_rom_buffer.seek(current + 11)
+        length = ord(outfile_rom_buffer.read(1)) // 2
         halflength = max(length // 2, 2)
         newlength = (halflength + random.randint(0, halflength) + random.randint(1, halflength))
         newlength = min(newlength, 10)
@@ -3122,8 +3120,8 @@ def manage_blitz():
         blitzstr = "%s. %s" % (i + 1, blitzstr)
         log(blitzstr, section="blitz inputs")
         newcmd += [(newlength + 1) * 2]
-        fout.seek(current)
-        fout.write(bytes(newcmd))
+        outfile_rom_buffer.seek(current)
+        outfile_rom_buffer.write(bytes(newcmd))
 
 
 def manage_dragons():
@@ -3133,11 +3131,11 @@ def manage_dragons():
     assert len(dragon_pointers) == len(dragons) == 8
     random.shuffle(dragons)
     for pointer, dragon in zip(dragon_pointers, dragons):
-        fout.seek(pointer)
-        c = ord(fout.read(1))
+        outfile_rom_buffer.seek(pointer)
+        c = ord(outfile_rom_buffer.read(1))
         assert c == 0x4D
-        fout.seek(pointer + 1)
-        fout.write(bytes([dragon]))
+        outfile_rom_buffer.seek(pointer + 1)
+        outfile_rom_buffer.write(bytes([dragon]))
 
 
 def manage_formations(formations: List[Formation], fsets: List[FormationSet], mpMultiplier: float = 1) -> List[
@@ -3147,7 +3145,7 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet], mp
             for formation in fset.formations:
                 formation.set_music(6)
                 formation.set_continuous_music()
-                formation.write_data(fout)
+                formation.write_data(outfile_rom_buffer)
 
     for formation in formations:
         if formation.get_music() != 6:
@@ -3156,7 +3154,7 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet], mp
                 # additional floating continent formations
                 formation.set_music(6)
                 formation.set_continuous_music()
-                formation.write_data(fout)
+                formation.write_data(outfile_rom_buffer)
 
     ranked_fsets = sorted(fsets, key=lambda fs: fs.rank())
     ranked_fsets = [fset for fset in ranked_fsets if not fset.has_boss]
@@ -3210,7 +3208,7 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet], mp
             formation.mp = 255  # Magimaster
         if formation.formid in [0x1d4, 0x1d5, 0x1d6, 0x1e2]:
             formation.mp = 100  # Triad
-        formation.write_data(fout)
+        formation.write_data(outfile_rom_buffer)
 
     return formations
 
@@ -3353,12 +3351,12 @@ def manage_formations_hidden(formations: List[Formation],
             ue.mutate(change_skillset=True, Options_=Options_, katn=katn)
         ue.treasure_boost()
         ue.graphics.mutate_palette()
-        name = randomize_enemy_name(fout, ue.id)
+        name = randomize_enemy_name(outfile_rom_buffer, ue.id)
         ue.changed_name = name
         ue.misc1 &= (0xFF ^ 0x4)  # always show name
-        ue.write_stats(fout)
-        fout.flush()
-        ue.read_ai(outfile)
+        ue.write_stats(outfile_rom_buffer)
+        outfile_rom_buffer.flush()
+        ue.read_ai(outfile_rom_buffer)
         mutated_ues.append(ue.id)
         for m in get_monsters():
             if m.id != ue.id:
@@ -3372,9 +3370,9 @@ def manage_formations_hidden(formations: List[Formation],
         uf.set_appearing(random.choice(appearances))
         uf.get_special_mp()
         uf.mouldbyte = 0x60
-        ue.graphics.write_data(fout)
+        ue.graphics.write_data(outfile_rom_buffer)
         uf.misc1 &= 0xCF  # allow front and back attacks
-        uf.write_data(fout)
+        uf.write_data(outfile_rom_buffer)
         repurposed_formations.append(uf)
 
     lobo_formation = get_formation(0)
@@ -3436,7 +3434,7 @@ def manage_formations_hidden(formations: List[Formation],
                                                        replacement=f)
                 if not result:
                     continue
-                fs.write_data(fout)
+                fs.write_data(outfile_rom_buffer)
                 if not fscands:
                     break
                 if random.randint(1, 5) != 5:
@@ -3470,10 +3468,10 @@ def manage_shops() -> Set[int]:
     descriptions = []
     crazy_shops = Options_.is_flag_active("madworld")
 
-    for s in get_shops(sourcefile):
-        s.mutate_items(fout, crazy_shops)
+    for s in get_shops(infile_rom_buffer):
+        s.mutate_items(outfile_rom_buffer, crazy_shops)
         s.mutate_misc()
-        s.write_data(fout)
+        s.write_data(outfile_rom_buffer)
         buyables |= set(s.items)
         descriptions.append(str(s))
 
@@ -3517,7 +3515,7 @@ def manage_colorize_dungeons(locations=None, freespaces=None):
             formation = [f for f in get_fsets() if f.setid == l.setid][0]
             if set(formation.formids) != set([0]):
                 paldict[l.field_palette].add(l)
-        l.write_data(fout)
+        l.write_data(outfile_rom_buffer)
 
     from itertools import product
     if freespaces is None:
@@ -3566,11 +3564,11 @@ def manage_colorize_dungeons(locations=None, freespaces=None):
         for bg in battlebgs:
             palettenum = battlebg_palettes[bg]
             pointer = 0x270150 + (palettenum * 0x60)
-            fout.seek(pointer)
+            outfile_rom_buffer.seek(pointer)
             if pointer in done:
                 # raise Exception("Already recolored palette %x" % pointer)
                 continue
-            raw_palette = [read_multi(fout, length=2) for i in range(0x30)]
+            raw_palette = [read_multi(outfile_rom_buffer, length=2) for i in range(0x30)]
             if transformer is None:
                 if bg in [0x33, 0x34, 0x35, 0x36]:
                     transformer = get_palette_transformer(always=True)
@@ -3578,20 +3576,20 @@ def manage_colorize_dungeons(locations=None, freespaces=None):
                     transformer = get_palette_transformer(basepalette=raw_palette, use_luma=True)
             new_palette = transformer(raw_palette)
 
-            fout.seek(pointer)
+            outfile_rom_buffer.seek(pointer)
             for c in new_palette:
-                write_multi(fout, c, length=2)
+                write_multi(outfile_rom_buffer, c, length=2)
             done.append(pointer)
 
         for p in palettes:
             if p in done:
                 raise Exception("Already recolored palette %x" % p)
-            fout.seek(p)
-            raw_palette = [read_multi(fout, length=2) for i in range(0x80)]
+            outfile_rom_buffer.seek(p)
+            raw_palette = [read_multi(outfile_rom_buffer, length=2) for i in range(0x80)]
             new_palette = transformer(raw_palette)
-            fout.seek(p)
+            outfile_rom_buffer.seek(p)
             for c in new_palette:
-                write_multi(fout, c, length=2)
+                write_multi(outfile_rom_buffer, c, length=2)
             done.append(p)
 
     if Options_.is_flag_active("random_animation_palettes") or \
@@ -3603,53 +3601,53 @@ def manage_colorize_dungeons(locations=None, freespaces=None):
 
 def manage_colorize_wor():
     transformer = get_palette_transformer(always=True)
-    fout.seek(0x12ed00)
-    raw_palette = [read_multi(fout, length=2) for i in range(0x80)]
+    outfile_rom_buffer.seek(0x12ed00)
+    raw_palette = [read_multi(outfile_rom_buffer, length=2) for i in range(0x80)]
     new_palette = transformer(raw_palette)
-    fout.seek(0x12ed00)
+    outfile_rom_buffer.seek(0x12ed00)
     for c in new_palette:
-        write_multi(fout, c, length=2)
+        write_multi(outfile_rom_buffer, c, length=2)
 
-    fout.seek(0x12ef40)
-    raw_palette = [read_multi(fout, length=2) for i in range(0x60)]
+    outfile_rom_buffer.seek(0x12ef40)
+    raw_palette = [read_multi(outfile_rom_buffer, length=2) for i in range(0x60)]
     new_palette = transformer(raw_palette)
-    fout.seek(0x12ef40)
+    outfile_rom_buffer.seek(0x12ef40)
     for c in new_palette:
-        write_multi(fout, c, length=2)
+        write_multi(outfile_rom_buffer, c, length=2)
 
-    fout.seek(0x12ef00)
-    raw_palette = [read_multi(fout, length=2) for i in range(0x12)]
+    outfile_rom_buffer.seek(0x12ef00)
+    raw_palette = [read_multi(outfile_rom_buffer, length=2) for i in range(0x12)]
     airship_transformer = get_palette_transformer(basepalette=raw_palette)
     new_palette = airship_transformer(raw_palette)
-    fout.seek(0x12ef00)
+    outfile_rom_buffer.seek(0x12ef00)
     for c in new_palette:
-        write_multi(fout, c, length=2)
+        write_multi(outfile_rom_buffer, c, length=2)
 
     for battlebg in [1, 5, 0x29, 0x2F]:
         palettenum = battlebg_palettes[battlebg]
         pointer = 0x270150 + (palettenum * 0x60)
-        fout.seek(pointer)
-        raw_palette = [read_multi(fout, length=2) for i in range(0x30)]
+        outfile_rom_buffer.seek(pointer)
+        raw_palette = [read_multi(outfile_rom_buffer, length=2) for i in range(0x30)]
         new_palette = transformer(raw_palette)
-        fout.seek(pointer)
+        outfile_rom_buffer.seek(pointer)
         for c in new_palette:
-            write_multi(fout, c, length=2)
+            write_multi(outfile_rom_buffer, c, length=2)
 
     for palette_index in [0x16, 0x2c, 0x2d, 0x29]:
         field_palette = 0x2dc480 + (256 * palette_index)
-        fout.seek(field_palette)
-        raw_palette = [read_multi(fout, length=2) for i in range(0x80)]
+        outfile_rom_buffer.seek(field_palette)
+        raw_palette = [read_multi(outfile_rom_buffer, length=2) for i in range(0x80)]
         new_palette = transformer(raw_palette)
-        fout.seek(field_palette)
+        outfile_rom_buffer.seek(field_palette)
         for c in new_palette:
-            write_multi(fout, c, length=2)
+            write_multi(outfile_rom_buffer, c, length=2)
 
 
 def manage_colorize_esper_world():
     loc = get_location(217)
     chosen = random.choice([1, 22, 25, 28, 34, 38, 43])
     loc.palette_index = (loc.palette_index & 0xFFFFC0) | chosen
-    loc.write_data(fout)
+    loc.write_data(outfile_rom_buffer)
 
 
 def manage_encounter_rate() -> None:
@@ -3667,10 +3665,10 @@ def manage_encounter_rate() -> None:
         encrate_sub = Substitution()
         encrate_sub.set_location(0xC29F)
         encrate_sub.bytestring = overworld_rates
-        encrate_sub.write(fout)
+        encrate_sub.write(outfile_rom_buffer)
         encrate_sub.set_location(0xC2BF)
         encrate_sub.bytestring = dungeon_rates
-        encrate_sub.write(fout)
+        encrate_sub.write(outfile_rom_buffer)
         return
 
     get_namelocdict()
@@ -3714,7 +3712,7 @@ def manage_encounter_rate() -> None:
                 if s in z.names and z.names[s] in encrates:
                     rate = encrates[z.names[s]]
                     z.set_formation_rate(s, rate)
-        z.write_data(fout)
+        z.write_data(outfile_rom_buffer)
 
     def rates_cleaner(rates: List[float]) -> List[int]:
         rates = [max(int(round(o)), 1) for o in rates]
@@ -3731,7 +3729,7 @@ def manage_encounter_rate() -> None:
     encrate_sub = Substitution()
     encrate_sub.set_location(0xC29F)
     encrate_sub.bytestring = bytes(overworld_rates)
-    encrate_sub.write(fout)
+    encrate_sub.write(outfile_rom_buffer)
 
     # dungeon encounters: normal, strongly affected by charms,
     # weakly affected by charms, and unaffected by charms
@@ -3760,12 +3758,12 @@ def manage_encounter_rate() -> None:
     encrate_sub = Substitution()
     encrate_sub.set_location(0xC2BF)
     encrate_sub.bytestring = bytes(dungeon_rates)
-    encrate_sub.write(fout)
+    encrate_sub.write(outfile_rom_buffer)
 
 
 def manage_tower():
     locations = get_locations()
-    randomize_tower(filename=sourcefile, morefanatical=Options_.is_flag_active("morefanatical"))
+    randomize_tower(morefanatical=Options_.is_flag_active("morefanatical"))
     for l in locations:
         if l.locid in [0x154, 0x155] + list(range(104, 108)):
             # leo's thamasa, etc
@@ -3777,8 +3775,8 @@ def manage_tower():
                                  0xBD3CC, 0xBD3ED, 0xBD414]:
                     thamasa_map_sub.set_location(location)
                     thamasa_map_sub.bytestring = bytes([0x57])
-                    thamasa_map_sub.write(fout)
-        l.write_data(fout)
+                    thamasa_map_sub.write(outfile_rom_buffer)
+        l.write_data(outfile_rom_buffer)
 
     # Moving NPCs in the World of Ruin in the Beginner's House to prevent soft locks
 
@@ -3819,17 +3817,17 @@ def manage_tower():
 #     shadow_recruit_sub.set_location(0xB0A9F)
 #     shadow_recruit_sub.bytestring = bytes([0x42, 0x31])  # hide party member in slot 0
 #
-#     shadow_recruit_sub.write(fout)
+#     shadow_recruit_sub.write(outfile_rom_buffer)
 #     shadow_recruit_sub.set_location(0xB0A9E)
 #     shadow_recruit_sub.bytestring = bytes([0x41, 0x31,  # show party member in slot 0
 #                                            0x41, 0x11,  # show object 11
 #                                            0x31  # begin queue for party member in slot 0
 #                                            ])
-#     shadow_recruit_sub.write(fout)
+#     shadow_recruit_sub.write(outfile_rom_buffer)
 #
 #     shadow_recruit_sub.set_location(0xB0AD4)
 #     shadow_recruit_sub.bytestring = bytes([0xB2, 0x29, 0xFB, 0x05, 0x45])  # Call subroutine $CFFB29, refresh objects
-#     shadow_recruit_sub.write(fout)
+#     shadow_recruit_sub.write(outfile_rom_buffer)
 #
 #     shadow_recruit_sub.set_location(0xFFB29)
 #     shadow_recruit_sub.bytestring = bytes(
@@ -3840,27 +3838,27 @@ def manage_tower():
 #          0x3F, 0x03, 0x01,  # Assign character $03 (Actor in stot 3) to party 1
 #          0xFE  # return
 #          ])
-#     shadow_recruit_sub.write(fout)
+#     shadow_recruit_sub.write(outfile_rom_buffer)
 #
 #     # Always remove the boxes in Mobliz basement
 #     mobliz_box_sub = Substitution()
 #     mobliz_box_sub.set_location(0xC50EE)
 #     mobliz_box_sub.bytestring = bytes([0xC0, 0x27, 0x81, 0xB3, 0x5E, 0x00])
-#     mobliz_box_sub.write(fout)
+#     mobliz_box_sub.write(outfile_rom_buffer)
 #
 #     # Always show the door in Fanatics Tower level 1,
 #     # and don't change commands.
 #     fanatics_sub = Substitution()
 #     fanatics_sub.set_location(0xC5173)
 #     fanatics_sub.bytestring = bytes([0x45, 0x45, 0xC0, 0x27, 0x81, 0xB3, 0x5E, 0x00])
-#     fanatics_sub.write(fout)
+#     fanatics_sub.write(outfile_rom_buffer)
 
 
 def create_dimensional_vortex():
     entrancesets = [l.entrance_set for l in get_locations()]
     entrances = []
     for e in entrancesets:
-        e.read_data(sourcefile)
+        e.read_data(infile_rom_buffer)
         entrances.extend(e.entrances)
 
     entrances = sorted(set(entrances), key=lambda x: (
@@ -3953,12 +3951,12 @@ def create_dimensional_vortex():
 
     for e in entrancesets:
         total += len(e.entrances)
-        nextpointer, longnextpointer = e.write_data(fout, nextpointer,
+        nextpointer, longnextpointer = e.write_data(outfile_rom_buffer, nextpointer,
                                                     longnextpointer)
-    fout.seek(e.pointer + 2)
-    write_multi(fout, (nextpointer - 0x1fbb00), length=2)
-    fout.seek(e.longpointer + 2)
-    write_multi(fout, (longnextpointer - 0x2df480), length=2)
+    outfile_rom_buffer.seek(e.pointer + 2)
+    write_multi(outfile_rom_buffer, (nextpointer - 0x1fbb00), length=2)
+    outfile_rom_buffer.seek(e.longpointer + 2)
+    write_multi(outfile_rom_buffer, (longnextpointer - 0x2df480), length=2)
 
 
 def randomize_final_party_order():
@@ -3995,8 +3993,8 @@ def randomize_final_party_order():
 
                   0x60,  # RTS
                   ])
-    fout.seek(0x3AA25)
-    fout.write(code)
+    outfile_rom_buffer.seek(0x3AA25)
+    outfile_rom_buffer.write(code)
 
 
 def dummy_item(item: ItemBlock) -> bool:
@@ -4004,7 +4002,7 @@ def dummy_item(item: ItemBlock) -> bool:
     for m in get_monsters():
         dummied = m.dummy_item(item) or dummied
 
-    for mm in get_metamorphs(sourcefile):
+    for mm in get_metamorphs(infile_rom_buffer):
         dummied = mm.dummy_item(item) or dummied
 
     for l in get_locations():
@@ -4017,25 +4015,25 @@ def manage_equip_anything():
     equip_anything_sub = Substitution()
     equip_anything_sub.set_location(0x39b8b)
     equip_anything_sub.bytestring = bytes([0x80, 0x04])
-    equip_anything_sub.write(fout)
+    equip_anything_sub.write(outfile_rom_buffer)
     equip_anything_sub.set_location(0x39b99)
     equip_anything_sub.bytestring = bytes([0xEA, 0xEA])
-    equip_anything_sub.write(fout)
+    equip_anything_sub.write(outfile_rom_buffer)
 
 
 def manage_full_umaro():
     full_umaro_sub = Substitution()
     full_umaro_sub.bytestring = bytes([0x80])
     full_umaro_sub.set_location(0x20928)
-    full_umaro_sub.write(fout)
+    full_umaro_sub.write(outfile_rom_buffer)
     if Options_.is_flag_active("random_zerker"):
         full_umaro_sub.set_location(0x21619)
-        full_umaro_sub.write(fout)
+        full_umaro_sub.write(outfile_rom_buffer)
 
 
 def manage_opening():
     d = Decompressor(0x2686C, fakeaddress=0x5000, maxaddress=0x28A60)
-    d.read_data(sourcefile)
+    d.read_data(infile_rom_buffer)
 
     # removing white logo screen
     d.writeover(0x501A, [0xEA] * 3)
@@ -4083,7 +4081,7 @@ def manage_opening():
     def replace_credits_text(address: int, text: str, split=False):
         original = d.get_bytestring(address, 0x40)
         length = original.index(0)
-        # print("Length of line: " + str(length) + ". Length of credit:  " + str(len(text)) + ".")
+        # print_to_connection("Length of line: " + str(length) + ". Length of credit:  " + str(len(text)) + ".")
         original = original[:length]
         if 0xFE in original and not split:
             linebreak = original.index(0xFE)
@@ -4152,14 +4150,14 @@ def manage_opening():
                     0x6991, 0x69A9, 0x69B8]:
         replace_credits_text(address, "")
 
-    d.compress_and_write(fout)
+    d.compress_and_write(outfile_rom_buffer)
 
 
 def manage_ending():
     ending_sync_sub = Substitution()
     ending_sync_sub.bytestring = bytes([0xC0, 0x07])
     ending_sync_sub.set_location(0x3CF93)
-    ending_sync_sub.write(fout)
+    ending_sync_sub.write(outfile_rom_buffer)
 
 
 def manage_auction_house():
@@ -4186,8 +4184,8 @@ def manage_auction_house():
     for key in new_format:
         pointer = 0xb0000 | key
         for dest in new_format[key]:
-            fout.seek(pointer)
-            value = ord(fout.read(1))
+            outfile_rom_buffer.seek(pointer)
+            value = ord(outfile_rom_buffer.read(1))
             if value in [0xb2, 0xbd]:
                 pointer += 1
             elif value == 0xc0:
@@ -4196,12 +4194,12 @@ def manage_auction_house():
                 pointer += 5
             else:
                 raise Exception("Unknown auction house byte %x %x" % (pointer, value))
-            fout.seek(pointer)
-            oldaddr = read_multi(fout, 2)
+            outfile_rom_buffer.seek(pointer)
+            oldaddr = read_multi(outfile_rom_buffer, 2)
             assert oldaddr in new_format
             assert dest in new_format
-            fout.seek(pointer)
-            write_multi(fout, dest, 2)
+            outfile_rom_buffer.seek(pointer)
+            write_multi(outfile_rom_buffer, dest, 2)
             pointer += 3
 
     if not Options_.is_flag_active("random_treasure"):
@@ -4225,7 +4223,7 @@ def manage_auction_house():
         auction_sub = Substitution()
         auction_sub.set_location(auction_item[2])
         auction_sub.bytestring = bytes([0x6d, item.itemid, 0x45, 0x45, 0x45])
-        auction_sub.write(fout)
+        auction_sub.write(outfile_rom_buffer)
 
         addr = 0x302000 + i * 6
         auction_sub.set_location(addr)
@@ -4233,7 +4231,7 @@ def manage_auction_house():
                                         # Show text auction_item[3] with item item.itemid
                                         0x94,  # Pause 60 frames
                                         0xFE])  # return
-        auction_sub.write(fout)
+        auction_sub.write(outfile_rom_buffer)
 
         addr -= 0xA0000
         addr_lo = addr & 0xff
@@ -4241,7 +4239,7 @@ def manage_auction_house():
         addr_hi = (addr & 0xff0000) >> 16
         auction_sub.set_location(auction_item[1])
         auction_sub.bytestring = bytes([0xB2, addr_lo, addr_mid, addr_hi])
-        auction_sub.write(fout)
+        auction_sub.write(outfile_rom_buffer)
 
         opening_bid = str(auction_item[4])
 
@@ -4421,7 +4419,7 @@ def fix_norng_npcs():
 
 
 def namingway():
-    apply_namingway(fout)
+    apply_namingway(outfile_rom_buffer)
 
     set_dialogue(0x4E, "Rename lead character?<line><choice> (Yes)<line><choice> (No)")
 
@@ -4482,19 +4480,19 @@ def manage_clock():
     hour_sub.bytestring = bytearray([0xE4, 0x96, 0x00] * 6)
     hour_sub.bytestring[hour * 3] = 0xE2
     hour_sub.set_location(0xA96CF)
-    hour_sub.write(fout)
+    hour_sub.write(outfile_rom_buffer)
 
     minute_sub = Substitution()
     minute_sub.bytestring = bytearray([0xFA, 0x96, 0x00] * 5)
     minute_sub.bytestring[minute * 3] = 0xF8
     minute_sub.set_location(0xA96E8)
-    minute_sub.write(fout)
+    minute_sub.write(outfile_rom_buffer)
 
     second_sub = Substitution()
     second_sub.bytestring = bytearray([0x16, 0x97, 0x00] * 5)
     second_sub.bytestring[second * 3] = 0x0E
     second_sub.set_location(0xA96FE)
-    second_sub.write(fout)
+    second_sub.write(outfile_rom_buffer)
 
     hour = (hour + 1) * 2
     minute = (minute + 1) * 10
@@ -4591,24 +4589,24 @@ def manage_santa():
     BattleSantasub.bytestring = bytes([0x92, 0x9A, 0xA7, 0xAD, 0x9A])
     for location in [0xFCB54, 0xFCBF4, 0xFCD34]:
         BattleSantasub.set_location(location)
-        BattleSantasub.write(fout)
+        BattleSantasub.write(outfile_rom_buffer)
     for index, offset in [(0x30, 0x4), (0x5F, 0x4), (0x64, 0x1A), (0x66, 0x5), (0x86, 0x14), (0x93, 0xE), (0xCE, 0x59),
                           (0xD9, 0x9), (0xE3, 0xC), (0xE8, 0xD)]:
-        BattleSantasub.set_location(get_long_battle_text_pointer(fout, index) + offset)
-        BattleSantasub.write(fout)
+        BattleSantasub.set_location(get_long_battle_text_pointer(outfile_rom_buffer, index) + offset)
+        BattleSantasub.write(outfile_rom_buffer)
 
     BattleSANTAsub = Substitution()
     BattleSANTAsub.bytestring = bytes([0x92, 0x80, 0x8D, 0x93, 0x80])
     for location in [0x479B6, 0x479BC, 0x479C2, 0x479C8, 0x479CE, 0x479D4, 0x479DA]:
         BattleSANTAsub.set_location(location)
-        BattleSANTAsub.write(fout)
+        BattleSANTAsub.write(outfile_rom_buffer)
     for index, offset in [(0x1F, 0x0), (0x2F, 0x0), (0x31, 0x0), (0x57, 0x0), (0x58, 0x0), (0x5A, 0x0), (0x5C, 0x0),
                           (0x5D, 0x0), (0x60, 0x0), (0x62, 0x0), (0x63, 0x0), (0x65, 0x0), (0x85, 0x0), (0x87, 0x0),
                           (0x8d, 0x0), (0x91, 0x0), (0x94, 0x0), (0x95, 0x0), (0xCD, 0x0), (0xCE, 0x0), (0xCF, 0x0),
                           (0xDA, 0x0), (0xE5, 0x0), (0xE7, 0x0), (0xE9, 0x0), (0xEA, 0x0), (0xEB, 0x0), (0xEC, 0x0),
                           (0xED, 0x0), (0xEE, 0x0), (0xEF, 0x0), (0xF5, 0x0)]:
-        BattleSANTAsub.set_location(get_long_battle_text_pointer(fout, index) + offset)
-        BattleSANTAsub.write(fout)
+        BattleSANTAsub.set_location(get_long_battle_text_pointer(outfile_rom_buffer, index) + offset)
+        BattleSANTAsub.write(outfile_rom_buffer)
 
 
 def manage_spookiness():
@@ -4619,13 +4617,13 @@ def manage_spookiness():
         locations.extend([0xA89BF, 0xB1963])
     for location in locations:
         n_o_e_s_c_a_p_e_sub.set_location(location)
-        n_o_e_s_c_a_p_e_sub.write(fout)
+        n_o_e_s_c_a_p_e_sub.write(outfile_rom_buffer)
 
     n_o_e_s_c_a_p_e_bottom_sub = Substitution()
     n_o_e_s_c_a_p_e_bottom_sub.bytestring = bytes([0x4B, 0xAE, 0xC2])
     for location in [0xA6325]:
         n_o_e_s_c_a_p_e_bottom_sub.set_location(location)
-        n_o_e_s_c_a_p_e_bottom_sub.write(fout)
+        n_o_e_s_c_a_p_e_bottom_sub.write(outfile_rom_buffer)
 
     nowhere_to_run_sub = Substitution()
     nowhere_to_run_sub.bytestring = bytes([0x4B, 0xB3, 0x42])
@@ -4634,7 +4632,7 @@ def manage_spookiness():
         locations.extend([0xB19B5, 0xB19F0])
     for location in locations:
         nowhere_to_run_sub.set_location(location)
-        nowhere_to_run_sub.write(fout)
+        nowhere_to_run_sub.write(outfile_rom_buffer)
 
     nowhere_to_run_bottom_sub = Substitution()
     nowhere_to_run_bottom_sub.bytestring = bytes([0x4B, 0xB3, 0xC2])
@@ -4643,18 +4641,17 @@ def manage_spookiness():
         locations.append(0xCA2F0)
     for location in locations:
         nowhere_to_run_bottom_sub.set_location(location)
-        nowhere_to_run_bottom_sub.write(fout)
+        nowhere_to_run_bottom_sub.write(outfile_rom_buffer)
 
 
 def manage_dances():
     if Options_.is_flag_active('madworld'):
-        spells = get_ranked_spells(sourcefile)
+        spells = get_ranked_spells(infile_rom_buffer)
         dances = random.sample(spells, 32)
         dances = [s.spellid for s in dances]
     else:
-        with open(sourcefile, 'rb') as f:
-            f.seek(0x0FFE80)
-            dances = bytes(f.read(32))
+        infile_rom_buffer.seek(0x0FFE80)
+        dances = bytes(infile_rom_buffer.read(32))
 
         # Shuffle the geos, plus Fire Dance, Pearl Wind, Lullaby, Acid Rain,
         # and Absolute 0 because why not
@@ -4667,7 +4664,7 @@ def manage_dances():
         random.shuffle(beasts)
 
         # Replace 2/16 moves that are duplicated from other dances
-        spells = get_ranked_spells(sourcefile)
+        spells = get_ranked_spells(infile_rom_buffer)
         spells = [s for s in spells
                   if s.valid and s.spellid >= 0x36 and s.spellid not in geo and s.spellid not in beasts]
         half = len(spells) // 2
@@ -4687,7 +4684,7 @@ def manage_dances():
     Dancesub = Substitution()
     Dancesub.bytestring = bytes(dances)
     Dancesub.set_location(0x0FFE80)
-    Dancesub.write(fout)
+    Dancesub.write(outfile_rom_buffer)
 
     # Randomize names
     bases = []
@@ -4721,8 +4718,8 @@ def manage_dances():
     dance_names = [" ".join(p) for p in zip(used_prefixes, used_bases)]
     for i, name in enumerate(dance_names):
         name = name_to_bytes(name, 12)
-        fout.seek(0x26FF9D + i * 12)
-        fout.write(name)
+        outfile_rom_buffer.seek(0x26FF9D + i * 12)
+        outfile_rom_buffer.write(name)
 
     for i, dance in enumerate(dance_names):
         from skillrandomizer import spellnames
@@ -4744,17 +4741,18 @@ def manage_dances():
                    [0x0D, 0x23],  # Water Rondo
                    [0x09, 0x0A, 0x0C, 0x11, 0x22, 0x26, 0x28, 0x2A],  # Dusk Requiem
                    [0x12]]  # Snowman Jazz
-    fout.seek(0x11F9AB)
+    outfile_rom_buffer.seek(0x11F9AB)
     for i, terrain in enumerate(backgrounds):
-        fout.write(bytes([random.choice(terrain)]))
+        outfile_rom_buffer.write(bytes([random.choice(terrain)]))
 
     # Change some semi-unused dance associations to make more sense
     # 1C (Colosseum) from Wind Song to Love Sonata
     # 1E (Thamasa) from Wind Song to Love Sonata
-    fout.seek(0x2D8E77)
-    fout.write(bytes([3]))
-    fout.seek(0x2D8E79)
-    fout.write(bytes([3]))
+    outfile_rom_buffer.seek(0x2D8E77)
+    outfile_rom_buffer.write(bytes([3]))
+    outfile_rom_buffer.seek(0x2D8E79)
+    outfile_rom_buffer.write(bytes([3]))
+
 
 def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationSet]):
     good_event_fsets = [256, 257, 258, 259, 260, 261, 263, 264, 268, 269, 270, 271, 272, 273, 275, 276, 277, 278, 279,
@@ -4783,29 +4781,30 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
 
     salt_formations = [id for id in salt_formations if id not in event_formations]
 
-    # print("EVENT FORMATIONS: " + str(event_formations))
-    # print("SALT FORMATIONS: " + str(salt_formations))
+    # print_to_connection("EVENT FORMATIONS: " + str(event_formations))
+    # print_to_connection("SALT FORMATIONS: " + str(salt_formations))
 
     for fset in fsets:
         if Options_.is_flag_active("cursedencounters"):  # code that applies FC flag to allow 16 encounters in all zones
             if fset.setid < 252 or fset.setid in good_event_fsets:  # only do regular enemies, don't do sets that can risk Zone Eater or get event encounters
-                if fset.setid != 58: #don't add Narshe Cave encounters to FC formation list, to keep Narshe Cave safe when using cursed encounters
+                if fset.setid != 58:  # don't add Narshe Cave encounters to FC formation list, to keep Narshe Cave safe when using cursed encounters
                     if not [value for value in fset.formids if
                             value in event_formations]:
                         fset.sixteen_pack = True
                     for i, v in enumerate(fset.formids):
                         if fset.formids[i] in salt_formations:
                             fset.formids[
-                               i] -= 3  # any encounter that could turn into an event encounter, reduce by 3 so it can't
+                                i] -= 3  # any encounter that could turn into an event encounter, reduce by 3 so it can't
                             fset.sixteen_pack = True
+
 
 def nerf_paladin_shield():
     paladin_shield = get_item(0x67)
     paladin_shield.mutate_learning()
-    paladin_shield.write_stats(fout)
+    paladin_shield.write_stats(outfile_rom_buffer)
 
 
-def fix_flash_and_bioblaster(fout):
+def fix_flash_and_bioblaster(outfile_rom_buffer: BytesIO):
     # Function to make Flash and Bio Blaster have correct names and animations when used outside of Tools
     # Because of FF6 jank, need to modify Schiller animation and share with Flash, and then modify Bomblet to share
     # with X-Kill. Not a perfect fix, but better than it was
@@ -4817,44 +4816,44 @@ def fix_flash_and_bioblaster(fout):
         [0x00, 0x20, 0xD1, 0x01, 0xC9, 0x00, 0x85, 0xB0, 0xFF, 0xBA, 0xC0, 0x89, 0x10, 0xBB, 0xC2, 0x00, 0x8A, 0x89,
          0x20,
          0xB5, 0xF1, 0xBB, 0xD2, 0x00, 0x8A, 0xD1, 0x00, 0x81, 0x00, 0x00, 0xFF])
-    fix_flash_sub.write(fout)
+    fix_flash_sub.write(outfile_rom_buffer)
 
     fix_flash_sub.set_location(0x108696)  # Make Flash have Schiller animation when used outside of Tools
     fix_flash_sub.bytestring = ([0x24, 0x81, 0xFF, 0xFF, 0xFF, 0xFF, 0x51, 0x00, 0x00, 0x9F, 0x10, 0x76, 0x81, 0x10])
-    fix_flash_sub.write(fout)
+    fix_flash_sub.write(outfile_rom_buffer)
 
     fix_flash_sub.set_location(0x1088D4)  # Change Schiller animation data to look better with one flash
     fix_flash_sub.bytestring = [0x24, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xE3, 0x00, 0x00, 0x6D, 0x10, 0x76, 0x81, 0x10]
-    fix_flash_sub.write(fout)
+    fix_flash_sub.write(outfile_rom_buffer)
 
     fix_flash_sub.set_location(0x023D45)  # Tell X-Kill to point to Bomblet for animation, instead of Flash
     fix_flash_sub.bytestring = ([0xD8])
-    fix_flash_sub.write(fout)
+    fix_flash_sub.write(outfile_rom_buffer)
 
     fix_flash_sub.set_location(0x108B82)  # Make Bomblet have X-Kill animation instead of nothing
     fix_flash_sub.bytestring = ([0xFF, 0xFF, 0x7F, 0x02, 0xFF, 0xFF, 0x35, 0x35, 0x00, 0xCC, 0x1B, 0xFF, 0xFF, 0x10])
-    fix_flash_sub.write(fout)
+    fix_flash_sub.write(outfile_rom_buffer)
 
     fix_bio_blaster_sub = Substitution()  # Make Bio Blaster have correct animation when used outside of Tools
     fix_bio_blaster_sub.set_location(0x108688)
     fix_bio_blaster_sub.bytestring = (
         [0x7E, 0x02, 0xFF, 0xFF, 0x4A, 0x00, 0x00, 0x00, 0xEE, 0x63, 0x03, 0xFF, 0xFF, 0x10])
-    fix_bio_blaster_sub.write(fout)
+    fix_bio_blaster_sub.write(outfile_rom_buffer)
 
     fix_bio_blaster_sub.set_location(
         0x02402D)  # Change Super Ball Item Animatino to point to 0xFFFF (No spell) animation
     fix_bio_blaster_sub.bytestring = ([0xFF])
-    fix_bio_blaster_sub.write(fout)
+    fix_bio_blaster_sub.write(outfile_rom_buffer)
 
     fix_bio_blaster_sub.set_location(0x108DA4)  # Tell 0xFFFF (No spell) to have Super Ball animation
     fix_bio_blaster_sub.bytestring = (
         [0x0E, 0x02, 0xFF, 0xFF, 0xFF, 0xFF, 0xD1, 0x00, 0x00, 0xCA, 0x10, 0x85, 0x02, 0x03])
-    fix_bio_blaster_sub.write(fout)
+    fix_bio_blaster_sub.write(outfile_rom_buffer)
 
     fix_bio_blaster_name_sub = Substitution()  # Change Spell Name to BioBlaster
     fix_bio_blaster_name_sub.set_location(0x26F971)
     fix_bio_blaster_name_sub.bytestring = ([0x81, 0xa2, 0xa8, 0x81, 0xa5, 0x9a, 0xac, 0xad, 0x9e, 0xab])
-    fix_bio_blaster_name_sub.write(fout)
+    fix_bio_blaster_name_sub.write(outfile_rom_buffer)
 
 
 def sprint_shoes_hint():
@@ -4869,7 +4868,7 @@ def sprint_shoes_hint():
     sprint_sub = Substitution()
     sprint_sub.set_location(0xA790E)
     sprint_sub.bytestring = b'\xFE'
-    sprint_sub.write(fout)
+    sprint_sub.write(outfile_rom_buffer)
 
 
 def sabin_hint(commands: Dict[str, CommandBlock]):
@@ -4894,13 +4893,13 @@ def house_hint():
 
 
 def start_with_random_espers():
-    fout.seek(0xC9ab6)
-    fout.write(bytes([0xB2, 0x00, 0x50, 0xF0 - 0xCA]))
+    outfile_rom_buffer.seek(0xC9ab6)
+    outfile_rom_buffer.write(bytes([0xB2, 0x00, 0x50, 0xF0 - 0xCA]))
 
-    espers = sorted(get_espers(sourcefile), key=lambda e: e.rank)
+    espers = sorted(get_espers(infile_rom_buffer), key=lambda e: e.rank)
 
     num_espers = 4 + random.randint(0, 2) + random.randint(0, 1)
-    fout.seek(0x305000)
+    outfile_rom_buffer.seek(0x305000)
     bytestring = bytes([0x78, 0x0e, 0x78, 0x0f])
     for _ in range(num_espers):
         rank = espers[0].rank
@@ -4915,38 +4914,38 @@ def start_with_random_espers():
         espers.remove(e)
         bytestring += bytes([0x86, 0x36 + e.id])
     bytestring += bytes([0xFE])
-    fout.write(bytestring)
+    outfile_rom_buffer.write(bytestring)
 
 
 def the_end_comes_beyond_katn():
-    fout.seek(0x25f821)
-    fout.write(bytes([0xEA] * 5))
+    outfile_rom_buffer.seek(0x25f821)
+    outfile_rom_buffer.write(bytes([0xEA] * 5))
 
-    fout.seek(0x25f852)
-    fout.write(bytes([0xEA] * 5))
+    outfile_rom_buffer.seek(0x25f852)
+    outfile_rom_buffer.write(bytes([0xEA] * 5))
 
-    fout.seek(0xcbfa3)
-    fout.write(bytes([0xf6, 0xf1, 0x00, 0x00, 0xbb, 0xfe]))
+    outfile_rom_buffer.seek(0xcbfa3)
+    outfile_rom_buffer.write(bytes([0xf6, 0xf1, 0x00, 0x00, 0xbb, 0xfe]))
 
 
 def the_end_comes_beyond_crusader():
-    fout.seek(0x25f821)
-    fout.write(bytes([0xEA] * 5))
+    outfile_rom_buffer.seek(0x25f821)
+    outfile_rom_buffer.write(bytes([0xEA] * 5))
 
-    fout.seek(0x25f852)
-    fout.write(bytes([0xEA] * 5))
+    outfile_rom_buffer.seek(0x25f852)
+    outfile_rom_buffer.write(bytes([0xEA] * 5))
 
-    fout.seek(0xc203f)
-    fout.write(bytes([0x97, 0xf6, 0xf1, 0x00, 0x00, 0x5c, 0xbb, 0xfe]))
+    outfile_rom_buffer.seek(0xc203f)
+    outfile_rom_buffer.write(bytes([0x97, 0xf6, 0xf1, 0x00, 0x00, 0x5c, 0xbb, 0xfe]))
 
 
 def expand_rom():
-    fout.seek(0, 2)
-    if fout.tell() < 0x400000:
+    outfile_rom_buffer.seek(0, 2)
+    if outfile_rom_buffer.tell() < 0x400000:
         expand_sub = Substitution()
-        expand_sub.set_location(fout.tell())
-        expand_sub.bytestring = bytes([0x00] * (0x400000 - fout.tell()))
-        expand_sub.write(fout)
+        expand_sub.set_location(outfile_rom_buffer.tell())
+        expand_sub.bytestring = bytes([0x00] * (0x400000 - outfile_rom_buffer.tell()))
+        expand_sub.write(outfile_rom_buffer)
 
 
 def validate_rom_expansion():
@@ -4955,23 +4954,23 @@ def validate_rom_expansion():
     # While the modules that may use this extra space already handle this,
     # BC may make further changes to bank 00 afterward, so we need to mirror
     # the final version.
-    fout.seek(0, 2)
-    romsize = fout.tell()
+    outfile_rom_buffer.seek(0, 2)
+    romsize = outfile_rom_buffer.tell()
     if romsize > 0x400000:
         # Standardize on 48mbit for ExHIROM, for now
         if romsize < 0x600000:
             expand_sub = Substitution()
             expand_sub.set_location(romsize)
             expand_sub.bytestring = bytes([0x00] * (0x600000 - romsize))
-            expand_sub.write(fout)
+            expand_sub.write(outfile_rom_buffer)
 
-        fout.seek(0)
-        bank = fout.read(0x10000)
-        fout.seek(0x400000)
-        fout.write(bank)
+        outfile_rom_buffer.seek(0)
+        bank = outfile_rom_buffer.read(0x10000)
+        outfile_rom_buffer.seek(0x400000)
+        outfile_rom_buffer.write(bank)
 
 
-def diverge(fout: BinaryIO):
+def diverge(outfile_rom_buffer: BytesIO):
     for line in open(DIVERGENT_TABLE):
         line = line.strip().split('#')[0]  # Ignore everything after '#'
         if not line:
@@ -4979,123 +4978,153 @@ def diverge(fout: BinaryIO):
         split_line = line.strip().split(' ')
         address = int(split_line[0], 16)
         data = bytes([int(b, 16) for b in split_line[1:]])
-        fout.seek(address)
-        fout.write(data)
+        outfile_rom_buffer.seek(address)
+        outfile_rom_buffer.write(data)
 
 
-# def randomize(args: List[str]) -> str:
-def randomize(**kwargs) -> str:
+def randomize(connection: Pipe = None, **kwargs) -> str:
     """
     The main function which takes in user arguments and creates a log
     and outfile. Returns a path (as str) to the output file.
     TODO: Document parameters, args, etc.
     """
-    global outfile, sourcefile, flags, seed, fout, ALWAYS_REPLACE, NEVER_REPLACE
+    global outfile_rom_path, infile_rom_path, \
+        flags, seed, \
+        infile_rom_buffer, outfile_rom_buffer, \
+        ALWAYS_REPLACE, NEVER_REPLACE, gui_connection
+
+    application = kwargs.get("application", None)
+
+    if not application or application == "console":
+        # The console should supply these kwargs
+        infile_rom_path = kwargs.get('infile_rom_path')
+        outfile_rom_path = kwargs.get('outfile_rom_path')
+        pass
+    if application == "gui":
+        # The gui (beyondchaos.py) should supply these kwargs
+        infile_rom_path = kwargs.get('infile_rom_path')
+        outfile_rom_path = kwargs.get('outfile_rom_path')
+        set_parent_pipe(connection)
+    if application == "web":
+        # The web interface should supply these kwargs
+        infile_rom_buffer = kwargs.get("infile_rom_buffer")
+        outfile_rom_buffer = kwargs.get("outfile_rom_buffer")
+        set_parent_pipe(connection)
+    fullseed = kwargs.get('seed')
 
     if TEST_ON:
-        kwargs['sourcefile'] = TEST_FILE
+        kwargs['infile_rom_path'] = TEST_FILE
         kwargs['seed'] = TEST_SEED
     sleep(0.5)
-    print('You are using Beyond Chaos CE Randomizer version "%s".' % VERSION)
+    pipe_print('You are using Beyond Chaos CE Randomizer version "%s".' % VERSION)
     if BETA:
-        print("WARNING: This version is a beta! Things may not work correctly.")
+        pipe_print("WARNING: This version is a beta! Things may not work correctly.")
 
-    previous_rom_path = ''
-    previous_output_directory = ''
+    config_infile_rom_path = ''
+    config_outfile_rom_path = ''
 
-    sourcefile = kwargs.get('sourcefile')
-    if not sourcefile:
-        previous_rom_path = get_input_path()
-        previous_output_directory = get_output_path()
-        previous_input = f" (blank for default: {previous_rom_path})" if previous_rom_path else ""
-        sourcefile = input(f"Please input the file name of your copy of "
-                           f"the FF3 US 1.0 rom{previous_input}:\n> ").strip()
-        print()
+    if not application or application == "console":
+        # If an input rom path is supplied, use that. Otherwise, check config.ini to see if a previously used
+        #    input path was used. If so, prompt the user if they would like to use the saved input path. Otherwise
+        #    prompt the user for the directory of their FF3 rom file.
+        # TODO: Refactor this part?
+        if not infile_rom_path:
+            config_infile_rom_path = get_input_path()
+            config_outfile_rom_path = get_output_path()
+            previous_input = f" (blank for default: {config_infile_rom_path})" if config_infile_rom_path else ""
+            infile_rom_path = input(f"Please input the file name of your copy of "
+                                    f"the FF3 US 1.0 rom{previous_input}:\n> ").strip()
+            pipe_print()
 
-    if previous_rom_path and not sourcefile:
-        sourcefile = previous_rom_path
+        # If there is a saved rom path and the user input was blank, use the saved rom path
+        if config_infile_rom_path and not infile_rom_path:
+            infile_rom_path = config_infile_rom_path
 
-    # Correct for Windows paths given with surrounding quotes
-    # (e.g. drag & drop onto console when path includes a space)
-    if sourcefile.startswith('"') and sourcefile.endswith('"'):
-        sourcefile = sourcefile.strip('"')
-    sourcefile = os.path.abspath(sourcefile)
+        # Correct for Windows paths given with surrounding quotes
+        # (e.g. drag & drop onto console when path includes a space)
+        if infile_rom_path.startswith('"') and infile_rom_path.endswith('"'):
+            infile_rom_path = infile_rom_path.strip('"')
+        infile_rom_path = os.path.abspath(infile_rom_path)
 
-    output_directory = kwargs.get('output_directory')
-    if not output_directory:
-        # If no previous directory or an invalid directory was obtained from bcce.cfg, default to the ROM's directory
-        if not previous_output_directory or not os.path.isdir(os.path.normpath(previous_output_directory)):
-            previous_output_directory = os.path.dirname(sourcefile)
+        outfile_rom_path = kwargs.get('outfile_rom_path')
+        if not outfile_rom_path:
+            # If no previous directory or an invalid directory was obtained from bcce.cfg, default to the ROM's directory
+            if not config_outfile_rom_path or not os.path.isdir(os.path.normpath(config_outfile_rom_path)):
+                config_outfile_rom_path = os.path.dirname(infile_rom_path)
 
-        while True:
-            # Input loop to make sure we get a valid directory
-            previous_output = f" (blank for default: {previous_output_directory})"
-            output_directory = input(
-                f"Please input the directory to place the randomized ROM file. {previous_output}:\n> ").strip()
-            print()
-
-            if previous_output_directory and not output_directory:
-                output_directory = previous_output_directory
-            if output_directory.startswith('"') and output_directory.endswith('"'):
-                output_directory = output_directory.strip('"')
-
-            if os.path.isdir(output_directory):
-                # Valid directory received. Break out of the loop.
-                break
-            else:
-                print("That output directory does not exist. Please try again.")
-
-    try:
-        with open(sourcefile, 'rb') as f:
-            data = f.read()
-
-    except IOError:
-        response = input("File not found. Would you like to search the current directory \n"
-                         "for a valid FF3 1.0 rom? (y/n) ")
-        if response and response[0].lower() == 'y':
-            for filename in sorted(os.listdir('.')):
-                stats = os.stat(filename)
-                size = stats.st_size
-                if size not in [3145728, 3145728 + 0x200]:
-                    continue
-
+            while True:
+                # Input loop to make sure we get a valid directory
+                previous_output = f" (blank for default: {config_outfile_rom_path})"
                 try:
-                    with open(filename, 'r+b') as f:
-                        data = f.read()
-                except IOError:
-                    continue
+                    outfile_rom_path = input(
+                        f"Please input the directory to place the randomized ROM file. {previous_output}:\n> ").strip()
+                    pipe_print()
+                except EOFError:
+                    raise RuntimeError("The GUI did not supply an output directory for the randomized ROM.")
 
-                if size == 3145728 + 0x200:
-                    data = data[0x200:]
-                h = md5(data).hexdigest()
-                if h in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2]:
-                    sourcefile = filename
+                if config_outfile_rom_path and not outfile_rom_path:
+                    outfile_rom_path = config_outfile_rom_path
+                if outfile_rom_path.startswith('"') and outfile_rom_path.endswith('"'):
+                    outfile_rom_path = outfile_rom_path.strip('"')
+
+                if os.path.isdir(outfile_rom_path):
+                    # Valid directory received. Break out of the loop.
                     break
+                else:
+                    pipe_print("That output directory does not exist. Please try again.")
+
+        try:
+            with open(infile_rom_path, 'rb') as f:
+                data = f.read()
+
+        except IOError:
+            response = input("File not found. Would you like to search the current directory \n"
+                             "for a valid FF3 1.0 rom? (y/n) ")
+            if response and response[0].lower() == 'y':
+                for filename in sorted(os.listdir('.')):
+                    stats = os.stat(filename)
+                    size = stats.st_size
+                    if size not in [3145728, 3145728 + 0x200]:
+                        continue
+
+                    try:
+                        with open(filename, 'r+b') as f:
+                            data = f.read()
+                    except IOError:
+                        continue
+
+                    if size == 3145728 + 0x200:
+                        data = data[0x200:]
+                    h = md5(data).hexdigest()
+                    if h in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2]:
+                        infile_rom_path = filename
+                        break
+                else:
+                    raise Exception("File not found.")
             else:
                 raise Exception("File not found.")
-        else:
-            raise Exception("File not found.")
-        print("Success! Using valid rom file: %s\n" % sourcefile)
-    del f
+            pipe_print("Success! Using valid rom file: %s\n" % infile_rom_path)
+        del f
 
-    flaghelptext = '''!   Recommended new player flags
--   Use all flags EXCEPT the ones listed'''
+        flaghelptext = '''!   Recommended new player flags
+    -   Use all flags EXCEPT the ones listed'''
 
-    fullseed = kwargs.get('seed')
     if fullseed:
         fullseed = str(fullseed).strip()
     else:
+        if not application or application != "console":
+            raise Exception("No seed was supplied.")
         fullseed = input("Please input a seed value (blank for a random "
                          "seed):\n> ").strip()
-        print()
+        pipe_print()
 
         if '.' not in fullseed:
             speeddials = get_items("Speeddial").items()
             mode_num = None
             while mode_num not in range(len(ALL_MODES)):
-                print("Available modes:\n")
-                for i, mode in enumerate(ALL_MODES):
-                    print("{}. {} - {}".format(i + 1, mode.name, mode.description))
+                pipe_print("Available modes:\n")
+                for i, application in enumerate(ALL_MODES):
+                    pipe_print("{}. {} - {}".format(i + 1, application.name, application.description))
                 mode_str = input("\nEnter desired mode number or name:\n").strip()
                 try:
                     mode_num = int(mode_str) - 1
@@ -5104,16 +5133,16 @@ def randomize(**kwargs) -> str:
                         if m.name == mode_str:
                             mode_num = i
                             break
-            mode = ALL_MODES[mode_num]
-            allowed_flags = [f for f in NORMAL_FLAGS if f.category == "flags" and f.name not in mode.prohibited_flags]
-            print()
+            application = ALL_MODES[mode_num]
+            allowed_flags = [f for f in NORMAL_FLAGS if f.category == "flags" and f.name not in application.prohibited_flags]
+            pipe_print()
             for flag in sorted(allowed_flags, key=lambda f: f.name):
-                print(flag.name, " - ", flag.long_description)
-            print(flaghelptext + "\n")
-            print("Save frequently used flag sets by adding 0: through 9: before the flags.")
+                pipe_print(flag.name + " - " + flag.long_description)
+            pipe_print(flaghelptext + "\n")
+            pipe_print("Save frequently used flag sets by adding 0: through 9: before the flags.")
             for speeddial_number, speeddial_flags in speeddials:
-                print("\t" + speeddial_number + ": " + speeddial_flags)
-            print()
+                pipe_print("\t" + speeddial_number + ": " + speeddial_flags)
+            pipe_print()
             flags = input("Please input your desired flags (blank for "
                           "all of them):\n> ").strip()
             if flags == "!":
@@ -5129,11 +5158,11 @@ def randomize(**kwargs) -> str:
             saving_speeddial = re.search("^[0-9]:", flags)
             if saving_speeddial:
                 set_value("Speeddial", flags[:1], flags[3:].strip())
-                print("Flags saved under speeddial number " + str(flags[:1]))
+                pipe_print("Flags saved under speeddial number " + str(flags[:1]))
                 flags = flags[3:]
 
             fullseed = "|%i|%s|%s" % (mode_num + 1, flags, fullseed)
-            print()
+            pipe_print()
 
     try:
         version, mode_str, flags, seed = tuple(fullseed.split('|'))
@@ -5161,56 +5190,68 @@ def randomize(**kwargs) -> str:
     seed = seed % (10 ** 10)
     reseed()
 
-    original_rom_location = sourcefile
+    if not application or application != "web":
+        if '.' in infile_rom_path:
+            tempname = os.path.basename(infile_rom_path).rsplit('.', 1)
+        else:
+            tempname = [os.path.basename(infile_rom_path), 'smc']
 
-    if '.' in sourcefile:
-        tempname = os.path.basename(sourcefile).rsplit('.', 1)
-    else:
-        tempname = [os.path.basename(sourcefile), 'smc']
+        outfile_rom_path = os.path.join(outfile_rom_path,
+                                        '.'.join([os.path.basename(tempname[0]),
+                                                  str(seed), tempname[1]]))
+        outlog = os.path.join(os.path.dirname(outfile_rom_path),
+                              '.'.join([os.path.basename(tempname[0]),
+                                        str(seed), 'txt']))
 
-    outfile = os.path.join(output_directory,
-                           '.'.join([os.path.basename(tempname[0]),
-                                     str(seed), tempname[1]]))
-    outlog = os.path.join(output_directory,
-                          '.'.join([os.path.basename(tempname[0]),
-                                    str(seed), 'txt']))
+        if infile_rom_path != config_infile_rom_path or outfile_rom_path != config_outfile_rom_path:
+            try:
+                save_input_path(infile_rom_path)
+                save_output_path(os.path.dirname(outfile_rom_path))
+            except:
+                pipe_print("Couldn't save flag string\n")
 
-    if sourcefile != previous_rom_path or output_directory != previous_output_directory:
-        try:
-            save_input_path(sourcefile)
-            save_output_path(output_directory)
-        except:
-            print("Couldn't save flag string\n")
+        infile_rom_buffer = BytesIO(open(infile_rom_path, "rb").read())
+        outfile_rom_buffer = BytesIO(open(infile_rom_path, "rb").read())
 
-    if len(data) % 0x400 == 0x200:
-        print("NOTICE: Headered ROM detected. Output file will have no header.")
-        data = data[0x200:]
-        sourcefile = '.'.join([tempname[0], "unheadered", tempname[1]])
-        with open(sourcefile, 'w+b') as f:
-            f.write(data)
+        if len(outfile_rom_buffer.read()) % 0x400 == 0x200:
+            pipe_print("NOTICE: Headered ROM detected. Output file will have no header.")
+            outfile_rom_buffer = outfile_rom_buffer[0x200:]
+            # infile_rom_path = '.'.join([tempname[0], "unheadered", tempname[1]])
+            # with open(infile_rom_path, 'w+b') as f:
+            #     f.write(data)
 
-    h = md5(data).hexdigest()
-    user_confirmed_proceed_from_gui = kwargs.get("from_gui", False)
-    if h not in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2] and not user_confirmed_proceed_from_gui:
-        print("WARNING! The md5 hash of this file does not match the known "
-              "hashes of the english FF6 1.0 rom!")
-        x = input("Continue? y/n ")
-        if not (x and x.lower()[0] == 'y'):
-            return
+        rom_hash = md5(outfile_rom_buffer.getbuffer()).hexdigest()
+        if rom_hash not in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2] and \
+                (not application or application == "console"):
+            pipe_print("WARNING! The md5 hash of this file does not match the known "
+                       "hashes of the english FF6 1.0 rom!")
+            x = input("Continue? y/n ")
+            if not (x and x.lower()[0] == 'y'):
+                return
 
-    copyfile(sourcefile, outfile)
+        # Before randomizing, test to make sure the supplied output directory is writable
+        if not os.access(os.path.dirname(outfile_rom_path), os.W_OK):
+            if gui_connection:
+                gui_connection.send(PermissionError("The randomizer does not have "
+                                                    "write permissions to the given ROM output directory."))
+                return
+            else:
+                raise PermissionError("The randomizer does not have write permissions "
+                                      "to the given ROM output directory.")
 
     flags = flags.lower()
     activation_string = Options_.activate_from_string(flags)
 
-    if version and version != VERSION:
-        print("WARNING! Version mismatch! "
-              "This seed will not produce the expected result!")
+    if not application or application != "web":
+        if version and version != VERSION:
+            pipe_print("WARNING! Version mismatch! "
+                       "This seed will not produce the expected result!")
     s = "Using seed: %s|%s|%s|%s" % (VERSION,
                                      Options_.mode.name,
-                                      " ".join([flag.name if isinstance(flag.value, bool) else flag.name + ":" + flag.value for flag in Options_.active_flags]),
+                                     " ".join([flag.name if isinstance(flag.value, bool) else
+                                               flag.name + ":" + flag.value for flag in Options_.active_flags]),
                                      seed)
-    print(s)
+    pipe_print(s)
     log(s, section=None)
     log("This is a game guide generated for the Beyond Chaos CE FF6 Randomizer.",
         section=None)
@@ -5220,70 +5261,72 @@ def randomize(**kwargs) -> str:
     commands = commands_from_table(COMMAND_TABLE)
     commands = {c.name: c for c in commands}
 
-    character.load_characters(original_rom_location, force_reload=True)
+    character.load_characters(infile_rom_buffer, force_reload=True)
     characters = get_characters()
 
     tm = gmtime(seed)
     if tm.tm_mon == 12 and (tm.tm_mday == 24 or tm.tm_mday == 25):
-        Options_.activate_flag('christmas')
+        Options_.activate_flag('christmas', True)
         activation_string += "CHRISTMAS MODE ACTIVATED\n"
     elif tm.tm_mon == 10 and tm.tm_mday == 31:
-        Options_.activate_flag('halloween')
+        Options_.activate_flag('halloween', True)
         activation_string += "ALL HALLOWS' EVE MODE ACTIVATED\n"
 
-    print(activation_string)
+    pipe_print(activation_string)
 
     if Options_.is_flag_active('randomboost'):
         random_boost_value = Options_.get_flag_value('randomboost')
         if type(random_boost_value) == bool:
-            while True:
-                random_boost_value = input("Please enter a randomness "
-                                           "multiplier value (blank or <=0 for tierless): ")
-                try:
-                    random_boost_value = int(random_boost_value)
-                    break
-                except ValueError:
-                    print("The supplied value for the randomness multiplier was not valid.")
-        if int(random_boost_value) <= 0:
+            if application and application != "console":
+                pipe_print("ERROR: No value was supplied for randomboost flag. Skipping flag.")
+            else:
+                while True:
+                    random_boost_value = input("Please enter a randomness "
+                                               "multiplier value (blank or <=0 for tierless): ")
+                    try:
+                        random_boost_value = int(random_boost_value)
+                        break
+                    except ValueError:
+                        pipe_print("The supplied value for the randomness multiplier was not valid.")
+        if not type(random_boost_value) == bool and int(random_boost_value) <= 0:
             set_randomness_multiplier(None)
         else:
             set_randomness_multiplier(int(random_boost_value))
     elif Options_.is_flag_active('madworld'):
         set_randomness_multiplier(None)
 
-    fout = open(outfile, "r+b")
     expand_rom()
 
-    print("\nNow beginning randomization.\n"
-          "The randomization is very thorough, so it may take some time.\n"
-          'Please be patient and wait for "randomization successful" to appear.')
+    pipe_print("\nNow beginning randomization.\n"
+                        "The randomization is very thorough, so it may take some time.\n"
+                        'Please be patient and wait for "randomization successful" to appear.')
 
     rng = Random(seed)
 
     if Options_.is_flag_active("thescenarionottaken"):
         if Options_.is_flag_active("strangejourney"):
-            print("thescenarionottaken flag is incompatible with strangejourney")
+            pipe_print("thescenarionottaken flag is incompatible with strangejourney")
         else:
-            diverge(fout)
+            diverge(outfile_rom_buffer)
 
-    read_dialogue(fout)
-    read_location_names(fout)
-    relocate_ending_cinematic_data(fout, 0xF08A70)
+    read_dialogue(outfile_rom_buffer)
+    read_location_names(outfile_rom_buffer)
+    relocate_ending_cinematic_data(outfile_rom_buffer, 0xF08A70)
 
     if Options_.is_flag_active("shuffle_commands") or \
             Options_.is_flag_active("replace_commands") or \
             Options_.is_flag_active("random_treasure"):
         auto_recruit_gau(stays_in_wor=not Options_.is_flag_active("shuffle_wor") and not
-                         Options_.is_flag_active('mimetime'))
+        Options_.is_flag_active('mimetime'))
         if Options_.is_flag_active("shuffle_commands") or Options_.is_flag_active("replace_commands"):
             auto_learn_rage()
 
     if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
         manage_commands(commands)
-        improve_gogo_status_menu(fout)
+        improve_gogo_status_menu(outfile_rom_buffer)
     reseed()
 
-    spells = get_ranked_spells(sourcefile)
+    spells = get_ranked_spells(infile_rom_buffer)
     if Options_.is_flag_active('madworld'):
         random.shuffle(spells)
         for i, s in enumerate(spells):
@@ -5295,7 +5338,7 @@ def randomize(**kwargs) -> str:
         if Options_.is_flag_active('sketch'):
             NEVER_REPLACE += ["sketch"]
         _, freespaces = manage_commands_new(commands)
-        improve_gogo_status_menu(fout)
+        improve_gogo_status_menu(outfile_rom_buffer)
     reseed()
 
     if Options_.is_flag_active("sprint"):
@@ -5310,13 +5353,13 @@ def randomize(**kwargs) -> str:
 
     preserve_graphics = (not Options_.is_flag_active("swap_sprites") and not Options_.is_flag_active('partyparty'))
 
-    monsters = get_monsters(sourcefile)
-    formations = get_formations(sourcefile)
-    fsets = get_fsets(sourcefile)
-    locations = get_locations(outfile)
-    items = get_ranked_items(sourcefile)
-    zones = get_zones(sourcefile)
-    get_metamorphs(sourcefile)
+    monsters = get_monsters(infile_rom_buffer)
+    formations = get_formations(infile_rom_buffer)
+    fsets = get_fsets(infile_rom_buffer)
+    locations = get_locations(infile_rom_buffer)
+    items = get_ranked_items(infile_rom_buffer)
+    zones = get_zones(infile_rom_buffer)
+    get_metamorphs(infile_rom_buffer)
 
     aispaces = [
         FreeBlock(0xFCF50, 0xFCF50 + 384),
@@ -5331,10 +5374,10 @@ def randomize(**kwargs) -> str:
                 and Options_.is_flag_active("random_character_stats"):
             dirk = get_item(0)
             if dirk is None:
-                items = get_ranked_items(sourcefile)
+                items = get_ranked_items(infile_rom_buffer)
                 dirk = get_item(0)
             s = dirk.become_another(halloween=Options_.is_flag_active('halloween'))
-            dirk.write_stats(fout)
+            dirk.write_stats(outfile_rom_buffer)
             dummy_item(dirk)
             assert not dummy_item(dirk)
             log(s, section="secret items")
@@ -5344,35 +5387,35 @@ def randomize(**kwargs) -> str:
         rename_card = get_item(231)
         if rename_card is not None:
             s = rename_card.become_another(tier="low")
-            rename_card.write_stats(fout)
+            rename_card.write_stats(outfile_rom_buffer)
 
             weapon_anim_fix = Substitution()
             weapon_anim_fix.set_location(0x19DB8)
             weapon_anim_fix.bytestring = bytes([0x22, 0x80, 0x30, 0xF0])
-            weapon_anim_fix.write(fout)
+            weapon_anim_fix.write(outfile_rom_buffer)
 
             weapon_anim_fix.set_location(0x303080)
             weapon_anim_fix.bytestring = bytes(
                 [0xE0, 0xE8, 0x02, 0xB0, 0x05, 0xBF, 0x00, 0xE4, 0xEC, 0x6B, 0xDA, 0xC2, 0x20, 0x8A, 0xE9, 0xF0, 0x02,
                  0xAA, 0x29, 0xFF, 0x00, 0xE2, 0x20, 0xBF, 0x00, 0x31, 0xF0, 0xFA, 0x6B])
-            weapon_anim_fix.write(fout)
+            weapon_anim_fix.write(outfile_rom_buffer)
             log(s, section="secret items")
     reseed()
 
     items = get_ranked_items()
     if Options_.is_flag_active("random_items"):
         manage_items(items, changed_commands=changed_commands)
-        buy_owned_breakable_tools(fout)
-        improve_item_display(fout)
-        improve_rage_menu(fout)
+        buy_owned_breakable_tools(outfile_rom_buffer)
+        improve_item_display(outfile_rom_buffer)
+        improve_rage_menu(outfile_rom_buffer)
     reseed()
 
-    manage_doom_gaze(fout)
+    manage_doom_gaze(outfile_rom_buffer)
 
     if Options_.is_flag_active("random_enemy_stats"):
         aispaces = manage_final_boss(aispaces)
         monsters = manage_monsters()
-        improve_rage_menu(fout)
+        improve_rage_menu(outfile_rom_buffer)
     reseed()
 
     if Options_.is_flag_active("random_enemy_stats") or \
@@ -5380,27 +5423,27 @@ def randomize(**kwargs) -> str:
             Options_.is_flag_active("replace_commands"):
         for m in monsters:
             m.screw_tutorial_bosses(old_vargas_fight=Options_.is_flag_active('rushforpower'))
-            m.write_stats(fout)
+            m.write_stats(outfile_rom_buffer)
 
     if Options_.is_flag_active("mementomori"):
         amount = Options_.get_flag_value('mementomori')
         if type(amount) == bool:
             while True:
-                amount = input("\nPlease enter a value for Memento Mori "
-                                      "(none, few, half, most, all):\n")
+                amount = input("\nHow many character should receive innate relics? "
+                                      "(0-14 or random):\n")
                 try:
-                    if amount.lower() in ["none", "few", "half", "most", "all"]:
+                    if amount.lower() == "random" or 0 < int(amount) < 15:
                         break
                     raise ValueError
                 except ValueError:
-                    print("The supplied value was not a valid option. Please try again.")
-        hidden_relic(fout, amount)
+                    pipe_print("The supplied value was not a valid option. Please try again.")
+        hidden_relic(outfile_rom_buffer, amount)
 
     # This needs to be before manage_monster_appearance or some of the monster
     # palettes will be messed up.
     esper_replacements = {}
     if Options_.is_flag_active("randomize_magicite"):
-        esper_replacements = randomize_magicite(fout, sourcefile)
+        esper_replacements = randomize_magicite(outfile_rom_buffer, infile_rom_buffer)
     reseed()
 
     if Options_.is_flag_active("random_palettes_and_names") and \
@@ -5414,9 +5457,15 @@ def randomize(**kwargs) -> str:
             Options_.is_any_flag_active(
                 ['partyparty', 'bravenudeworld', 'suplexwrecks',
                  'christmas', 'halloween', 'kupokupo', 'quikdraw', 'makeover']):
-        s = manage_character_appearance(fout, preserve_graphics=preserve_graphics)
+        s = manage_character_appearance(
+            outfile_rom_buffer,
+            preserve_graphics=preserve_graphics,
+            moogle_names=kwargs.get("moogle_names", None),
+            male_names=kwargs.get("male_names", None),
+            female_names=kwargs.get("female_names", None)
+        )
         log(s, "aesthetics")
-        show_original_names(fout)
+        show_original_names(outfile_rom_buffer)
     reseed()
 
     if Options_.is_flag_active("random_character_stats"):
@@ -5427,7 +5476,8 @@ def randomize(**kwargs) -> str:
     esperrage_spaces = [FreeBlock(0x26469, 0x26469 + 919)]
     if Options_.is_flag_active("random_espers"):
         if Options_.is_flag_active('dancingmaduin'):
-            allocate_espers(Options_.is_flag_active('ancientcave'), get_espers(sourcefile), get_characters(), fout,
+            allocate_espers(Options_.is_flag_active('ancientcave'), get_espers(infile_rom_buffer), get_characters(),
+                            outfile_rom_buffer,
                             esper_replacements)
             nerf_paladin_shield()
         manage_espers(esperrage_spaces, esper_replacements)
@@ -5438,7 +5488,7 @@ def randomize(**kwargs) -> str:
     titlesub = Substitution()
     titlesub.bytestring = [0xFD] * 4
     titlesub.set_location(0xA5E8E)
-    titlesub.write(fout)
+    titlesub.write(outfile_rom_buffer)
 
     manage_opening()
     manage_ending()
@@ -5447,12 +5497,12 @@ def randomize(**kwargs) -> str:
     savetutorial_sub = Substitution()
     savetutorial_sub.set_location(0xC9AF1)
     savetutorial_sub.bytestring = [0xD2, 0x33, 0xEA, 0xEA, 0xEA, 0xEA]
-    savetutorial_sub.write(fout)
+    savetutorial_sub.write(outfile_rom_buffer)
 
     savecheck_sub = Substitution()
     savecheck_sub.bytestring = [0xEA, 0xEA]
     savecheck_sub.set_location(0x319f2)
-    savecheck_sub.write(fout)
+    savecheck_sub.write(outfile_rom_buffer)
     reseed()
 
     if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
@@ -5462,7 +5512,7 @@ def randomize(**kwargs) -> str:
 
     if Options_.is_flag_active("random_zerker"):
         umaro_risk = manage_umaro(commands)
-        reset_rage_blizzard(items, umaro_risk, fout)
+        reset_rage_blizzard(items, umaro_risk, outfile_rom_buffer)
     reseed()
 
     if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
@@ -5475,7 +5525,7 @@ def randomize(**kwargs) -> str:
         # do this after swapping berserk
         from itemrandomizer import set_item_changed_commands
         set_item_changed_commands(changed_commands)
-        loglist = reset_special_relics(items, characters, fout)
+        loglist = reset_special_relics(items, characters, outfile_rom_buffer)
         log_string = "COMMAND CHANGERS\n---------------------------\n"
         loglist.sort(key=lambda i: i[0])
         for name, before, after in loglist:
@@ -5484,7 +5534,7 @@ def randomize(**kwargs) -> str:
             log_string += "{0:15}{1:7} -> {2:7}\n".format(name + ":", beforename.lower(), aftername.lower())
 
         log(log_string, section="item effects")
-        reset_cursed_shield(fout)
+        reset_cursed_shield(outfile_rom_buffer)
 
         if options.Use_new_randomizer:
             stat_randomizer = CharacterStats(rng, Options_, character.character_list)
@@ -5492,39 +5542,42 @@ def randomize(**kwargs) -> str:
             for mutated_character in character.character_list:
                 substitutions = mutated_character.get_bytes()
                 for substitution_address in substitutions:
-                    fout.seek(substitution_address)
-                    fout.write(substitutions[substitution_address])
+                    outfile_rom_buffer.seek(substitution_address)
+                    outfile_rom_buffer.write(substitutions[substitution_address])
         else:
             for c in characters:
-                c.mutate_stats(fout, start_in_wor)
+                c.mutate_stats(outfile_rom_buffer, start_in_wor)
     else:
         for c in characters:
-            c.mutate_stats(fout, start_in_wor, read_only=True)
+            c.mutate_stats(outfile_rom_buffer, start_in_wor, read_only=True)
     reseed()
 
     if Options_.is_flag_active('mpboost'):
         mp_boost_value = Options_.get_flag_value('mpboost')
         if type(mp_boost_value) == bool:
-            while True:
-                try:
-                    mp_boost_value = float(input("Please enter an MP multiplier value (0.0-50.0): "))
-                    if mp_boost_value < 0:
-                        raise ValueError
-                    break
-                except ValueError:
-                    print("The supplied value for the mp multiplier was not a positive number.")
+            if application and application != "console":
+                pipe_print("ERROR: No value was supplied for mpboost flag. Skipping flag.")
+            else:
+                while True:
+                    try:
+                        mp_boost_value = float(input("Please enter an MP multiplier value (0.0-50.0): "))
+                        if mp_boost_value < 0:
+                            raise ValueError
+                        break
+                    except ValueError:
+                        pipe_print("The supplied value for the mp multiplier was not a positive number.")
 
     if Options_.is_flag_active("random_formations"):
         formations = get_formations()
         fsets = get_fsets()
-        if Options_.is_flag_active('mpboost'):
+        if Options_.is_flag_active('mpboost') and type(mp_boost_value) == float:
             manage_formations(formations, fsets, mp_boost_value)
             manage_cursed_encounters(formations, fsets)
         else:
             manage_formations(formations, fsets)
             manage_cursed_encounters(formations, fsets)
         for fset in fsets:
-            fset.write_data(fout)
+            fset.write_data(outfile_rom_buffer)
 
     if Options_.is_flag_active("random_formations") or Options_.is_flag_active('ancientcave'):
         manage_dragons()
@@ -5539,7 +5592,7 @@ def randomize(**kwargs) -> str:
         remove_forest_event_sub = Substitution()
         remove_forest_event_sub.set_location(0xBA3D1)
         remove_forest_event_sub.bytestring = bytes([0xFE])
-        remove_forest_event_sub.write(fout)
+        remove_forest_event_sub.write(outfile_rom_buffer)
 
     reseed()
 
@@ -5559,11 +5612,11 @@ def randomize(**kwargs) -> str:
         manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music,
                                  no_special_events=no_special_events)
         for m in get_monsters():
-            m.write_stats(fout)
+            m.write_stats(outfile_rom_buffer)
     reseed()
 
     for f in get_formations():
-        f.write_data(fout)
+        f.write_data(outfile_rom_buffer)
 
     if Options_.is_flag_active("random_treasure"):
         wedge_money = 1000 + random.randint(0, 1500)
@@ -5572,20 +5625,20 @@ def randomize(**kwargs) -> str:
         starting_money_sub = Substitution()
         starting_money_sub.set_location(0xC9A93)
         starting_money_sub.bytestring = bytes([0x84, starting_money & 0xFF, (starting_money >> 8) & 0xFF])
-        starting_money_sub.write(fout)
+        starting_money_sub.write(outfile_rom_buffer)
 
         # do this after hidden formations
         katn = Options_.mode.name == 'katn'
         manage_treasure(monsters, shops=True, no_charm_drops=katn, katnFlag=katn)
         if not Options_.is_flag_active('ancientcave'):
             manage_chests()
-            mutate_event_items(fout, cutscene_skip=Options_.is_flag_active('notawaiter'),
+            mutate_event_items(outfile_rom_buffer, cutscene_skip=Options_.is_flag_active('notawaiter'),
                                crazy_prices=Options_.is_flag_active('madworld'),
                                no_monsters=Options_.is_flag_active('nomiabs'),
                                uncapped_monsters=Options_.is_flag_active('bsiab'))
             for fs in fsets:
                 # write new formation sets for MiaBs
-                fs.write_data(fout)
+                fs.write_data(outfile_rom_buffer)
     reseed()
 
     if Options_.is_flag_active("random_palettes_and_names"):
@@ -5594,7 +5647,8 @@ def randomize(**kwargs) -> str:
         manage_colorize_dungeons()
 
     if Options_.is_flag_active('ancientcave'):
-        manage_ancient(Options_, fout, sourcefile, form_music_overrides=form_music, randlog=randlog)
+        manage_ancient(Options_, outfile_rom_buffer, infile_rom_buffer, form_music_overrides=form_music,
+                       randlog=randlog)
     reseed()
 
     if Options_.is_flag_active("shuffle_commands") or \
@@ -5610,20 +5664,20 @@ def randomize(**kwargs) -> str:
 
     if Options_.is_flag_active('halloween'):
         demon_chocobo_sub = Substitution()
-        fout.seek(0x2d0000 + 896 * 7)
-        demon_chocobo_sub.bytestring = fout.read(896)
+        outfile_rom_buffer.seek(0x2d0000 + 896 * 7)
+        demon_chocobo_sub.bytestring = outfile_rom_buffer.read(896)
         for i in range(7):
             demon_chocobo_sub.set_location(0x2d0000 + 896 * i)
-            demon_chocobo_sub.write(fout)
+            demon_chocobo_sub.write(outfile_rom_buffer)
 
     if Options_.is_flag_active("random_window") or \
             Options_.is_flag_active('christmas') or \
             Options_.is_flag_active('halloween'):
         for i in range(8):
             w = WindowBlock(i)
-            w.read_data(sourcefile)
+            w.read_data(infile_rom_buffer)
             w.mutate()
-            w.write_data(fout)
+            w.write_data(outfile_rom_buffer)
     reseed()
 
     if Options_.is_flag_active('dearestmolulu') or (
@@ -5648,7 +5702,7 @@ def randomize(**kwargs) -> str:
     reseed()
 
     if Options_.is_flag_active('notawaiter') and not Options_.is_flag_active('ancientcave'):
-        print("Cutscenes are currently skipped up to Kefka @ Narshe")
+        pipe_print("Cutscenes are currently skipped up to Kefka @ Narshe")
         manage_skips()
     reseed()
 
@@ -5658,7 +5712,7 @@ def randomize(**kwargs) -> str:
         include_gau = Options_.is_flag_active("shuffle_commands") or \
                       Options_.is_flag_active("replace_commands") or \
                       Options_.is_flag_active("random_treasure")
-        wor_free_char = manage_wor_recruitment(fout,
+        wor_free_char = manage_wor_recruitment(outfile_rom_buffer,
                                                shuffle_wor=Options_.is_flag_active("shuffle_wor"),
                                                random_treasure=Options_.is_flag_active("random_treasure"),
                                                include_gau=include_gau,
@@ -5666,7 +5720,7 @@ def randomize(**kwargs) -> str:
     reseed()
 
     if Options_.is_flag_active('worringtriad') and not Options_.is_flag_active('ancientcave'):
-        manage_wor_skip(fout, wor_free_char, airship=Options_.is_flag_active('airship'),
+        manage_wor_skip(outfile_rom_buffer, wor_free_char, airship=Options_.is_flag_active('airship'),
                         dragon=Options_.mode.name == 'dragonhunt',
                         alternate_gogo=Options_.is_flag_active('mimetime'),
                         esper_replacements=esper_replacements)
@@ -5679,56 +5733,56 @@ def randomize(**kwargs) -> str:
     if Options_.is_flag_active("random_dances"):
         if 0x13 not in changed_commands:
             manage_dances()
-            improve_dance_menu(fout)
+            improve_dance_menu(outfile_rom_buffer)
     reseed()
 
     if Options_.is_flag_active('remonsterate'):
-        fout.close()
-        backup_path = outfile[:outfile.rindex('.')] + '.backup' + outfile[outfile.rindex('.'):]
-        copyfile(src=outfile, dst=backup_path)
+        outfile_backup = BytesIO(outfile_rom_buffer.getbuffer().tobytes())
+
         attempt_number = 0
         remonsterate_results = None
+        randomize_connection, remonsterate_connection = Pipe()
 
         while True:
             try:
-                if not using_console:
-                    remonsterate_kwargs = {
-                        "outfile": outfile,
-                        "seed": (seed + attempt_number),
-                        "rom_type": "1.0",
-                        "list_of_monsters": get_monsters(outfile)
-                    }
-                    pool = customthreadpool.NonDaemonPool(1)
-                    x = pool.apply_async(func=remonsterate, kwds=remonsterate_kwargs)
-                    remonsterate_results = x.get()
-                    pool.close()
-                    pool.join()
+                remonsterate_kwargs = {
+                    "outfile_rom_buffer": outfile_rom_buffer,
+                    "seed": (seed + attempt_number),
+                    "rom_type": "1.0",
+                    "list_of_monsters": get_monsters(outfile_rom_buffer)
+                }
+                remonsterate_process = Process(
+                    target=remonsterate,
+                    args=(remonsterate_connection,),
+                    kwargs=remonsterate_kwargs
+                )
+                remonsterate_process.start()
+                while True:
+                    try:
+                        response = randomize_connection.recv()
+                        if isinstance(response, str):
+                            pipe_print(response)
+                        elif isinstance(response, tuple):
+                            outfile_rom_buffer, remonsterate_results = response
+                            break
+                        elif isinstance(response, Exception):
+                            if not isinstance(response, OverflowError) and not \
+                                    isinstance(response, ReferenceError) and gui_connection:
+                                gui_connection.send(response)
+                            else:
+                                raise response
+                    except EOFError:
+                        break
 
-                elif using_console:
-                    remonsterate_kwargs = {
-                        "outfile": outfile,
-                        "seed": (seed + attempt_number),
-                        "rom_type": "1.0",
-                        "list_of_monsters": get_monsters(outfile)
-                    }
-                    thread = customthreadpool.ThreadWithReturnValue(target=remonsterate, kwargs=remonsterate_kwargs)
-                    thread.start()
-                    remonsterate_results = thread.join()
-                    if not remonsterate_results:
-                        # If there were no results, We can assume remonsterate generated an OverflowError.
-                        raise OverflowError
-
-            except OverflowError as e:
-                print("Remonsterate: An error occurred attempting to remonsterate. Trying again...")
+            except (OverflowError, ReferenceError) as e:
+                pipe_print("Remonsterate: An error occurred attempting to remonsterate. Trying again...")
                 # Replace backup file
-                copyfile(src=backup_path, dst=outfile)
+                outfile_rom_buffer = outfile_backup
                 attempt_number = attempt_number + 1
                 continue
             break
 
         # Remonsterate finished
-        fout = open(outfile, "r+b")
-        os.remove(backup_path)
         if remonsterate_results:
             for result in remonsterate_results:
                 log(str(result) + '\n', section='remonsterate')
@@ -5743,39 +5797,39 @@ def randomize(**kwargs) -> str:
                                            0x03, 0x00,
                                            0xB1, 0x76, 0x0A, 0xAA, 0xC2, 0x20, 0xBD, 0x01, 0x20, 0x90, 0x02,
                                            0x7B, 0x3A, 0xAA, 0x7B, 0xE2, 0x20, 0x22, 0xD1, 0x24, 0xC1, 0x80, 0xD7, ])
-        sketch_fix_sub.write(fout)
+        sketch_fix_sub.write(outfile_rom_buffer)
 
         sketch_fix_sub.set_location(0x12456)
         sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x18, 0xA0, 0x00, 0x00,
                                            0x86, 0x10, 0xA2, 0x3F, 0xAE, ])
-        sketch_fix_sub.write(fout)
+        sketch_fix_sub.write(outfile_rom_buffer)
 
         # Additional C1 sketch animation fix by Assassin, handles bad draw instruction
 
         sketch_fix_sub.set_location(0x12456)
         sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x18, 0xA0, 0x00, 0x00,
                                            0x86, 0x10, 0xA2, 0x3F, 0xAE, ])
-        sketch_fix_sub.write(fout)
+        sketch_fix_sub.write(outfile_rom_buffer)
 
         sketch_fix_sub.set_location(0x1246C)
         sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, ])
-        sketch_fix_sub.write(fout)
+        sketch_fix_sub.write(outfile_rom_buffer)
 
         sketch_fix_sub.set_location(0x12484)
         sketch_fix_sub.bytestring = bytes(
             [0x20, 0x8F, 0x24, 0xA2, 0x00, 0x14, 0xA0, 0x00, 0x24, 0x80, 0xD0, 0xDA, 0x86, 0x10,
              0x20, 0x20, 0x20, 0x20, 0xF5, 0x24, 0x20, 0xE5, 0x24, 0x20, 0xA5, 0x22, 0xFA, 0x60,
              0xEA, 0xEA, 0xEA, 0xEA, 0xEA, ])
-        sketch_fix_sub.write(fout)
+        sketch_fix_sub.write(outfile_rom_buffer)
 
         sketch_fix_sub.set_location(0x124A9)
         sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, ])
-        sketch_fix_sub.write(fout)
+        sketch_fix_sub.write(outfile_rom_buffer)
 
         sketch_fix_sub.set_location(0x124D1)
         sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xE0, 0xFF, 0xFF, 0xD0, 0x03,
                                            0x20, 0x20, 0x20, 0xA2, 0x00, 0x20, 0x20, 0x5C, 0x24, 0x6B, 0xEA, 0x6B, ])
-        sketch_fix_sub.write(fout)
+        sketch_fix_sub.write(outfile_rom_buffer)
 
         sketch_fix_sub.set_location(0x124F9)
         sketch_fix_sub.bytestring = bytes(
@@ -5783,21 +5837,21 @@ def randomize(**kwargs) -> str:
              0x0A, 0x0A, 0x0A, 0x0A, 0x8D, 0x69, 0x61, 0xBF, 0x00, 0x70, 0xD2, 0x29, 0xFF, 0x7F, 0x8D, 0xA8, 0x81,
              0x7B, 0xBF, 0x01, 0x70, 0xD2, 0xE2, 0x20, 0x0A, 0xEB, 0x6A, 0x8D, 0xAC, 0x81,
              0x0A, 0x0A, 0x0A, 0x7B, 0x2A, 0x8D, 0xAB, 0x81, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, ])
-        sketch_fix_sub.write(fout)
+        sketch_fix_sub.write(outfile_rom_buffer)
 
     has_music = Options_.is_any_flag_active(['johnnydmad', 'johnnyachaotic'])
     if has_music:
         music_init()
 
     if Options_.is_flag_active('alasdraco'):
-        opera = manage_opera(fout, has_music)
+        opera = manage_opera(outfile_rom_buffer, has_music)
         log(get_opera_log(), section="aesthetics")
     else:
         opera = None
     reseed()
 
     if has_music:
-        randomize_music(fout, Options_, opera=opera, form_music_overrides=form_music)
+        randomize_music(outfile_rom_buffer, Options_, opera=opera, form_music_overrides=form_music)
         log(get_music_spoiler(), section="music")
     reseed()
 
@@ -5812,7 +5866,7 @@ def randomize(**kwargs) -> str:
     reseed()
     reseed()
 
-    randomize_poem(fout)
+    randomize_poem(outfile_rom_buffer)
     randomize_passwords()
     reseed()
     namingway()
@@ -5821,11 +5875,11 @@ def randomize(**kwargs) -> str:
 
     # ----- NO MORE RANDOMNESS PAST THIS LINE -----
     if Options_.is_flag_active('thescenarionottaken'):
-        no_kutan_skip(fout)
+        no_kutan_skip(outfile_rom_buffer)
 
     write_all_locations_misc()
     for fs in fsets:
-        fs.write_data(fout)
+        fs.write_data(outfile_rom_buffer)
 
     # This needs to be after write_all_locations_misc()
     # so the changes to Daryl don't get stomped.
@@ -5839,38 +5893,45 @@ def randomize(**kwargs) -> str:
     if Options_.is_flag_active('easymodo') or Options_.is_flag_active('expboost'):
         exp_boost_value = Options_.get_flag_value('expboost')
         if Options_.is_flag_active('expboost') and type(exp_boost_value) == bool:
-            while True:
-                try:
-                    exp_boost_value = float(input("Please enter an EXP multiplier value (0.0-50.0): "))
-                    if exp_boost_value < 0:
-                        raise ValueError
-                    break
-                except ValueError:
-                    print("The supplied value for the EXP multiplier was not a positive number.")
+            if application and application != "console":
+                pipe_print("ERROR: No value was supplied for expboost flag. Skipping flag.")
+            else:
+                while True:
+                    try:
+                        exp_boost_value = float(input("Please enter an EXP multiplier value (0.0-50.0): "))
+                        if exp_boost_value < 0:
+                            raise ValueError
+                        break
+                    except ValueError:
+                        pipe_print("The supplied value for the EXP multiplier was not a positive number.")
         for m in monsters:
             if Options_.is_flag_active('easymodo'):
                 m.stats['hp'] = 1
-            if exp_boost_value:
+            if type(exp_boost_value) == float:
                 m.stats['xp'] = int(min(0xFFFF, float(exp_boost_value) * m.stats['xp']))
-            m.write_stats(fout)
+            m.write_stats(outfile_rom_buffer)
 
     if Options_.is_flag_active('gpboost'):
         gp_boost_value = Options_.get_flag_value('gpboost')
         if type(gp_boost_value) == bool:
-            while True:
-                try:
-                    gp_boost_value = float(input("Please enter a GP multiplier value (0.0-50.0): "))
-                    if gp_boost_value < 0:
-                        raise ValueError
-                    break
-                except ValueError:
-                    print("The supplied value for the gp multiplier was not a positive number.")
-        for m in monsters:
-            m.stats['gpboost'] = int(min(0xFFFF, float(gp_boost_value) * m.stats['gp']))
-            m.write_stats(fout)
+            if application and application != "console":
+                pipe_print().send("ERROR: No value was supplied for gpboost flag. Skipping flag.")
+            else:
+                while True:
+                    try:
+                        gp_boost_value = float(input("Please enter a GP multiplier value (0.0-50.0): "))
+                        if gp_boost_value < 0:
+                            raise ValueError
+                        break
+                    except ValueError:
+                        pipe_print("The supplied value for the gp multiplier was not a positive number.")
+        if not type(gp_boost_value) == bool:
+            for m in monsters:
+                m.stats['gpboost'] = int(min(0xFFFF, float(gp_boost_value) * m.stats['gp']))
+                m.write_stats(outfile_rom_buffer)
 
     if Options_.is_flag_active('naturalmagic') or Options_.is_flag_active('naturalstats'):
-        espers = get_espers(sourcefile)
+        espers = get_espers(infile_rom_buffer)
         if Options_.is_flag_active('naturalstats'):
             for e in espers:
                 e.bonus = 0xFF
@@ -5880,15 +5941,15 @@ def randomize(**kwargs) -> str:
             for i in items:
                 i.features['learnrate'] = 0
                 i.features['learnspell'] = 0
-                i.write_stats(fout)
+                i.write_stats(outfile_rom_buffer)
         for e in espers:
-            e.write_data(fout)
+            e.write_data(outfile_rom_buffer)
 
     if Options_.is_flag_active('canttouchthis'):
         for c in characters:
             if c.id >= 14:
                 continue
-            c.become_invincible(fout)
+            c.become_invincible(outfile_rom_buffer)
 
     if Options_.is_flag_active('equipanything'):
         manage_equip_anything()
@@ -5897,13 +5958,13 @@ def randomize(**kwargs) -> str:
         manage_full_umaro()
         for c in commands.values():
             if c.id not in [0x01, 0x08, 0x0E, 0x0F, 0x15, 0x19]:
-                c.allow_while_berserk(fout)
+                c.allow_while_berserk(outfile_rom_buffer)
         whelkhead = get_monster(0x134)
         whelkhead.stats['hp'] = 1
-        whelkhead.write_stats(fout)
+        whelkhead.write_stats(outfile_rom_buffer)
         whelkshell = get_monster(0x100)
         whelkshell.stats['hp'] = 1
-        whelkshell.write_stats(fout)
+        whelkshell.write_stats(outfile_rom_buffer)
 
     for item in get_ranked_items(allow_banned=True):
         if item.banned:
@@ -5915,49 +5976,53 @@ def randomize(**kwargs) -> str:
         manage_spookiness()
 
     if Options_.is_flag_active('dancelessons'):
-        no_dance_stumbles(fout)
+        no_dance_stumbles(outfile_rom_buffer)
 
-    banon_life3(fout)
-    allergic_dog(fout)
-    y_equip_relics(fout)
-    fix_gogo_portrait(fout)
-    cycle_statuses(fout)
-    name_swd_techs(fout)
-    fix_flash_and_bioblaster(fout)
-    title_gfx(fout)
-    improved_party_gear(fout)
-    manage_doom_gaze(fout)
+    banon_life3(outfile_rom_buffer)
+    allergic_dog(outfile_rom_buffer)
+    y_equip_relics(outfile_rom_buffer)
+    fix_gogo_portrait(outfile_rom_buffer)
+    cycle_statuses(outfile_rom_buffer)
+    name_swd_techs(outfile_rom_buffer)
+    fix_flash_and_bioblaster(outfile_rom_buffer)
+    title_gfx(outfile_rom_buffer)
+    improved_party_gear(outfile_rom_buffer)
+    manage_doom_gaze(outfile_rom_buffer)
 
     if Options_.is_flag_active("swdtechspeed"):
         swdtech_speed = Options_.get_flag_value('swdtechspeed')
         if type(swdtech_speed) == bool:
-            while True:
-                swdtech_speed = input("\nPlease enter a custom speed for Sword Tech "
-                                      "(random, vanilla, fast, faster, fastest):\n")
-                try:
-                    if swdtech_speed.lower() in ["random", "vanilla", "fast", "faster", "fastest"]:
-                        break
-                    raise ValueError
-                except ValueError:
-                    print("The supplied speed was not a valid option. Please try again.")
-        change_swdtech_speed(fout, random, swdtech_speed)
+            if application and application != "console":
+                pipe_print("ERROR: No value was supplied for swdtechspeed flag. Skipping flag.")
+            else:
+                while True:
+                    swdtech_speed = input("\nPlease enter a custom speed for Sword Tech "
+                                          "(random, vanilla, fast, faster, fastest):\n")
+                    try:
+                        if swdtech_speed.lower() in ["random", "vanilla", "fast", "faster", "fastest"]:
+                            break
+                        raise ValueError
+                    except ValueError:
+                        pipe_print("The supplied speed was not a valid option. Please try again.")
+        if not type(swdtech_speed) == bool:
+            change_swdtech_speed(outfile_rom_buffer, swdtech_speed)
     if Options_.is_flag_active("cursepower"):
-        change_cursed_shield_battles(fout, random, Options_.get_flag_value("cursepower"))
+        change_cursed_shield_battles(outfile_rom_buffer, Options_.get_flag_value("cursepower"))
 
-    s = manage_coral(fout)
+    s = manage_coral(outfile_rom_buffer)
     log(s, "aesthetics")
 
     # TODO Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
-    # add_esper_bonuses(fout)
+    # add_esper_bonuses(outfile_rom_buffer)
 
     if Options_.is_flag_active('removeflashing'):
-        fewer_flashes(fout)
+        fewer_flashes(outfile_rom_buffer)
 
     if Options_.is_flag_active('nicerpoison'):
-        nicer_poison(fout)
+        nicer_poison(outfile_rom_buffer)
 
     if not Options_.is_flag_active('fightclub'):
-        show_coliseum_rewards(fout)
+        show_coliseum_rewards(outfile_rom_buffer)
 
     if Options_.is_flag_active("replace_commands") or Options_.is_flag_active("shuffle_commands"):
         sabin_hint(commands)
@@ -5970,15 +6035,20 @@ def randomize(**kwargs) -> str:
     elif Options_.mode.name == "dragonhunt":
         the_end_comes_beyond_crusader()
 
-    manage_dialogue_patches(fout)
-    write_location_names(fout)
+    manage_dialogue_patches(outfile_rom_buffer)
+    write_location_names(outfile_rom_buffer)
 
     rewrite_title(text="FF6 BCCE %s" % seed)
     validate_rom_expansion()
-    fout.close()
     rewrite_checksum()
 
-    print("\nWriting log...")
+    if not application or application != "web":
+        with open(outfile_rom_path, 'wb+') as f:
+            f.write(outfile_rom_buffer.getvalue())
+        outfile_rom_buffer.close()
+
+    pipe_print("\nWriting log...")
+
     for c in sorted(characters, key=lambda c: c.id):
         c.associate_command_objects(list(commands.values()))
         if c.id > 13:
@@ -5999,13 +6069,12 @@ def randomize(**kwargs) -> str:
         log_chests()
     log_item_mutations()
 
-    with open(outlog, 'w+') as f:
-        f.write(get_logstring(
-            ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers",
-             "item magic", "item effects", "command-change relics", "colosseum", "monsters", "music",
-             "remonsterate", "shops", "treasure chests", "zozo clock", "secret items"]))
-
-    print("Randomization successful. Output filename: %s\n" % outfile)
+    if not application or application != "web":
+        with open(outlog, 'w+') as f:
+            f.write(get_logstring(
+                ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers",
+                 "item magic", "item effects", "command-change relics", "colosseum", "monsters", "music",
+                 "remonsterate", "shops", "treasure chests", "zozo clock", "secret items"]))
 
     if Options_.is_flag_active('bingoboingo'):
 
@@ -6018,25 +6087,25 @@ def randomize(**kwargs) -> str:
             numcards = kwargs.get('bingocards')
 
         else:
-            print("WELCOME TO BEYOND CHAOS BINGO MODE")
-            print("Include what type of squares? (blank for all)")
-            print("    a   Abilities\n"
-                  "    i   Items\n"
-                  "    m   Monsters\n"
-                  "    s   Spells")
+            pipe_print("WELCOME TO BEYOND CHAOS BINGO MODE")
+            pipe_print("Include what type of squares? (blank for all)")
+            pipe_print("    a   Abilities\n"
+                                "    i   Items\n"
+                                "    m   Monsters\n"
+                                "    s   Spells")
             bingoflags = input("> ").strip()
             if not bingoflags:
                 bingoflags = "aims"
             bingoflags = [c for c in "aims" if c in bingoflags]
 
-            print("What size grid? (default: 5)")
+            pipe_print("What size grid? (default: 5)")
             size = input("> ").strip()
             if not size:
                 size = 5
             else:
                 size = int(size)
 
-            print("What difficulty level? Easy, Normal, or Hard? (e/n/h)")
+            pipe_print("What difficulty level? Easy, Normal, or Hard? (e/n/h)")
             difficulty = input("> ").strip()
             if not difficulty:
                 difficulty = "n"
@@ -6045,43 +6114,59 @@ def randomize(**kwargs) -> str:
                 if difficulty not in "enh":
                     difficulty = "n"
 
-            print("Generate how many cards? (default: 1)")
+            pipe_print("Generate how many cards? (default: 1)")
             numcards = input("> ").strip()
             if not numcards:
                 numcards = 1
             else:
                 numcards = int(numcards)
 
-        print("Generating Bingo cards, please wait.")
+        pipe_print("Generating Bingo cards, please wait.")
         target_score = float(target_score) * (size ** 2)
 
         manage_bingo(bingoflags=bingoflags, size=size, difficulty=difficulty, numcards=numcards,
                      target_score=target_score)
-        print("Bingo cards generated.")
+        pipe_print("Bingo cards generated.")
 
-    return outfile
+    if application != "web":
+        pipe_print("Randomization successful. Output filename: %s\n" % outfile_rom_path)
+        if application == "gui":
+            pipe_print(True)
+    elif application == "web":
+        pipe_print("Randomization successful.")
+        pipe_print({
+            # ord = output rom data
+            # os = output seed
+            # osl = output spoiler log
+            "ord": outfile_rom_buffer,
+            "os": seed,
+            "osl": get_logstring(
+                ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances",
+                 "espers",
+                 "item magic", "item effects", "command-change relics", "colosseum", "monsters", "music",
+                 "remonsterate", "shops", "treasure chests", "zozo clock", "secret items"])
+        })
+    return outfile_rom_path
 
 
 if __name__ == "__main__":
-    using_console = True
     args = list(argv)
     # if len(argv) > 3 and argv[3].strip().lower() == "test" or TEST_ON:
     #    randomize(args=args)
     #    sys.exit()
     if len(args) > 1 and args[1] == '?':
-        print(
-            '\tBeyond Chaos Randomizer Community Edition, version ' + VERSION + '\n',
-            '\t\tOptional Keyword Arguments:\n',
-            '\t\tsource=<file path to your unrandomized Final Fantasy 3 v1.0 ROM file>\n',
-            '\t\tdestination=<directory path where you want the randomized ROM and spoiler log created>\n',
+        pipe_print(
+            '\tBeyond Chaos Randomizer Community Edition, version ' + VERSION + '\n'
+            '\t\tOptional Keyword Arguments:\n'
+            '\t\tsource=<file path to your unrandomized Final Fantasy 3 v1.0 ROM file>\n'
+            '\t\tdestination=<directory path where you want the randomized ROM and spoiler log created>\n'
             '\t\tseed=<flag and seed information in the format version.mode.flags.seed>\n'
-            '\t\tbingotype=<The desired bingo options, if you are using the bingoboingo flag>\n',
+            '\t\tbingotype=<The desired bingo options, if you are using the bingoboingo flag>\n'
             '\t\tbingosize=<The desired positive integer for the size of bingo card, '
-            'if you are using the bingoboingo flag>\n',
-            '\t\tbingodifficulty=<The desired bingo difficulty selection, if you are using the bingoboingo flag>\n',
+            'if you are using the bingoboingo flag>\n'
+            '\t\tbingodifficulty=<The desired bingo difficulty selection, if you are using the bingoboingo flag>\n'
             '\t\tbingocards=<The desired positive integer for number of bingo cards to generate, '
-            'if you are using the bingoboingo flag>\n',
-
+            'if you are using the bingoboingo flag>\n'
         )
         sys.exit()
     try:
@@ -6108,29 +6193,30 @@ if __name__ == "__main__":
             elif 'bingocards=' in argument:
                 bingocards = int(argument[argument.index('=') + 1:])
             else:
-                print('Keyword unrecognized or missing: ' + str(
+                pipe_print('Keyword unrecognized or missing: ' + str(
                     argument) + '.\nUse "python randomizer.py ?" to view a list of valid keyword arguments.')
 
         randomize(
-            sourcefile=source_arg,
+            infile_rom_path=source_arg,
             seed=seed_arg,
-            output_directory=destination_arg,
+            outfile_rom_path=destination_arg,
             bingotype=bingotype,
             bingosize=bingosize,
             bingodifficulty=bingodifficulty,
-            bingocards=bingocards
+            bingocards=bingocards,
+            application="console"
         )
         input('Press enter to close this program.')
     except Exception as e:
-        print('ERROR: %s' % e, '\nTo view valid keyword arguments, use "python randomizer.py ?"')
+        pipe_print('ERROR: %s' % e, '\nTo view valid keyword arguments, use "python randomizer.py ?"')
         import traceback
 
         traceback.print_exc()
-        if fout:
-            fout.close()
-        if outfile is not None:
-            print('Please try again with a different seed.')
-            input('Press enter to delete %s and quit. ' % outfile)
-            os.remove(outfile)
+        if outfile_rom_buffer:
+            outfile_rom_buffer.close()
+        if outfile_rom_path is not None:
+            pipe_print('Please try again with a different seed.')
+            input('Press enter to delete %s and quit. ' % outfile_rom_path)
+            os.remove(outfile_rom_path)
         else:
             input('Press enter to quit.')

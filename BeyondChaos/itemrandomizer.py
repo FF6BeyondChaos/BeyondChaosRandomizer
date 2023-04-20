@@ -1,5 +1,7 @@
 import traceback
 import options
+
+from io import BytesIO
 from utils import (hex2int, write_multi, read_multi, ITEM_TABLE,
                    CUSTOM_ITEMS_TABLE, mutate_index,
                    name_to_bytes, utilrandom as random,
@@ -171,21 +173,20 @@ class ItemBlock:
     def set_degree(self, value):
         self.degree = value
 
-    def read_stats(self, filename):
+    def read_stats(self, rom_file_buffer: BytesIO=False):
         global all_spells
 
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.itemtype = ord(f.read(1))
+        rom_file_buffer.seek(self.pointer)
+        self.itemtype = ord(rom_file_buffer.read(1))
 
         # throwable = self.itemtype & 0x10
         # usable_battle = self.itemtype & 0x20
         # usable_field = self.itemtype & 0x40
 
-        self.equippable = read_multi(f, length=2)
+        self.equippable = read_multi(rom_file_buffer, length=2)
         self.heavy = bool(self.equippable & 0x8000)
 
-        stats = list(f.read(len(ITEM_STATS)))
+        stats = list(rom_file_buffer.read(len(ITEM_STATS)))
         self.features = dict(list(zip(ITEM_STATS, stats)))
 
         # move flags for "randomly cast" and "destroy if used"
@@ -195,24 +196,22 @@ class ItemBlock:
             self.features["otherproperties"] |= break_flags >> 4
             self.features["breakeffect"] &= ~0xC0
 
-        self.price = read_multi(f, length=2)
+        self.price = read_multi(rom_file_buffer, length=2)
 
         if all_spells is None:
-            all_spells = get_ranked_spells(filename)
+            all_spells = get_ranked_spells(rom_file_buffer)
             all_spells = [s for s in all_spells if s.valid]
 
-        f.seek(0x2CE408 + (8 * self.itemid))
-        self.weapon_animation = list(f.read(8))
+        rom_file_buffer.seek(0x2CE408 + (8 * self.itemid))
+        self.weapon_animation = list(rom_file_buffer.read(8))
 
-        f.seek(0x12B300 + (13 * self.itemid))
-        self.dataname = list(f.read(13))
+        rom_file_buffer.seek(0x12B300 + (13 * self.itemid))
+        self.dataname = list(rom_file_buffer.read(13))
 
         # unhardcoded tintinabar patch moves the tintinabar flag
         if self.features["fieldeffect"] & 0x80:
             self.features["fieldeffect"] &= ~0x80
             self.features["special2"] |= 0x80
-
-        f.close()
 
     def ban(self):
         self.banned = True
@@ -1127,7 +1126,7 @@ def items_from_table(tablefile):
     return items
 
 
-def get_items(filename=None, allow_banned=False):
+def get_items(rom_file_buffer: BytesIO = None, allow_banned=False):
     global itemdict
     if itemdict:
         to_return = [i for i in list(itemdict.values()) if i]
@@ -1137,7 +1136,7 @@ def get_items(filename=None, allow_banned=False):
 
     items = items_from_table(ITEM_TABLE)
     for i in items:
-        i.read_stats(filename)
+        i.read_stats(rom_file_buffer)
         i.vanilla_data = deepcopy(i)
 
     for n, i in enumerate(items):
@@ -1176,8 +1175,8 @@ def get_secret_item():
     return item
 
 
-def get_ranked_items(filename=None, allow_banned=False):
-    items = get_items(filename, allow_banned)
+def get_ranked_items(rom_file_buffer: BytesIO = None, allow_banned=False):
+    items = get_items(rom_file_buffer, allow_banned)
     return sorted(items, key=lambda i: i.rank())
 
 

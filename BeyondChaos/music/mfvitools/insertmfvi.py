@@ -1126,14 +1126,14 @@ def insertmfvi(inrom, argparam=None, virt_sample_list=None, virt_seq_list=None, 
         print("brr dump test")
         brrdump_listfile = "[Samples]\n"
         for id, smp in sample_defs.items():
-            fn = outfile + f"_{id:02X}.brr"
+            fn = outfile_rom_path + f"_{id:02X}.brr"
             try:
                 with open(fn, "wb") as f:
                     f.write(smp.brr)
             except OSError:
                 print(f"I/O error: couldn't write to {fn}")
             brrdump_listfile += f"{id:02X}: {fn}, {smp.loop.hex().upper()}, {smp.tuning.hex().upper()}, {smp.adsr.hex().upper()}\n"
-        fn = outfile + f"_BRRdump.txt"
+        fn = outfile_rom_path + f"_BRRdump.txt"
         try:
             with open(fn, "w") as f:
                 f.write(brrdump_listfile)
@@ -1299,11 +1299,11 @@ if __name__ == "__main__":
         outfile_default = ".".join(outfile_default)
         print("Enter destination ROM filename.")
         print(f"Default: {outfile_default}")
-        outfile = input(" > ").strip()
-        if not outfile:
-            outfile = outfile_default
+        outfile_rom_path = input(" > ").strip()
+        if not outfile_rom_path:
+            outfile_rom_path = outfile_default
     else:
-        outfile = args.outfile
+        outfile_rom_path = args.outfile
     
     print()
     
@@ -1312,12 +1312,12 @@ if __name__ == "__main__":
     #snip
     
     try:
-        with open(outfile, "wb") as f:
+        with open(outfile_rom_path, "wb") as f:
             f.write(outrom)
     except OSError:
-        print(f"Couldn't write to output file {outfile}")
+        print(f"Couldn't write to output file {outfile_rom_path}")
         clean_end()
-    print(f"Wrote to {outfile} successfully.")
+    print(f"Wrote to {outfile_rom_path} successfully.")
     
     clean_end()
     

@@ -7,7 +7,7 @@ from collections import defaultdict
 
 from .tablereader import (
     determine_global_table, sort_good_order, set_table_specs,
-    set_global_output_filename, select_patches, write_patches, verify_patches,
+    set_global_output_file_buffer, select_patches, write_patches, verify_patches,
     get_random_degree, set_random_degree, get_difficulty, set_difficulty,
     set_seed, get_seed, close_file,
     reimport_psx_files)
@@ -16,8 +16,8 @@ from .utils import (
     md5hash)
 from .psx_file_extractor import DELTA_FILE
 
-sourcefile = None
-outfile = None
+infile_rom_path = None
+outfile_rom_path = None
 flags = None
 user_input_flags = None
 activated_codes = None
@@ -30,13 +30,13 @@ def get_all_objects():
 
 
 def get_sourcefile():
-    global sourcefile
-    return sourcefile
+    global infile_rom_path
+    return infile_rom_path
 
 
 def get_outfile():
-    global outfile
-    return outfile
+    global outfile_rom_path
+    return outfile_rom_path
 
 
 def get_flags():
@@ -60,7 +60,7 @@ def activate_code(code):
 
 
 def rewrite_snes_meta(title, version, lorom=False):
-    close_file(outfile)
+    close_file(outfile_rom_path)
 
     for o in get_all_objects():
         if o.random_degree != get_random_degree():
@@ -73,8 +73,8 @@ def rewrite_snes_meta(title, version, lorom=False):
         else:
             random_degree = "{0:0>2}".format(random_degree)
     rewrite_snes_title("%s %s %s" % (title, random_degree, get_seed()),
-                       outfile, version, lorom=lorom)
-    rewrite_snes_checksum(outfile, lorom=lorom)
+                       outfile_rom_path, version, lorom=lorom)
+    rewrite_snes_checksum(outfile_rom_path, lorom=lorom)
 
 
 def snescopy(sourcefile, outfile):
@@ -107,7 +107,7 @@ def write_cue_file():
 
 def run_interface(objects, custom_degree=False, custom_difficulty=False,
                   codes=None, snes=False):
-    global sourcefile, outfile, flags, user_input_flags
+    global infile_rom_path, outfile_rom_path, flags, user_input_flags
     global activated_codes, all_objects
 
     all_objects = objects
@@ -237,7 +237,7 @@ def run_interface(objects, custom_degree=False, custom_difficulty=False,
             e.strerror = ('%s; Did you include the filename extension? For '
                           'example, ".smc", ".sfc", or ".img". ' % e.strerror)
         raise e
-    set_global_output_filename(outfile)
+    set_global_output_file_buffer(outfile)
     determine_global_table(outfile)
     set_table_specs(objects)
 
@@ -397,17 +397,17 @@ def clean_and_write(objects):
 
     print("Saving game objects...")
     for o in objects:
-        o.write_all(outfile)
+        o.write_all(outfile_rom_path)
 
-    verify_patches(outfile)
+    verify_patches(outfile_rom_path)
     reimport_psx_files()
 
 
 def finish_interface():
     print()
     print("Randomization completed successfully.")
-    print("Output filename: %s" % outfile)
-    print("MD5 hash: %s" % md5hash(outfile))
+    print("Output filename: %s" % outfile_rom_path)
+    print("MD5 hash: %s" % md5hash(outfile_rom_path.getbuffer()))
     print()
     if len(argv) < 2:
         input("Press Enter to close this program. ")

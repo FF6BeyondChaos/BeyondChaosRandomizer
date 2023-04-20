@@ -1,5 +1,5 @@
 import math
-
+from io import BytesIO
 from dialoguemanager import set_dialogue
 from formationrandomizer import get_formations, get_fsets
 from itemrandomizer import get_ranked_items, get_item
@@ -281,16 +281,13 @@ class ChestBlock:
     def set_id(self, chestid):
         self.chestid = chestid
 
-    def read_data(self, filename):
+    def read_data(self, rom_file_buffer: BytesIO=False):
         global extra_miabs
-
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.position = read_multi(f, length=2)
-        self.memid = ord(f.read(1))
-        self.content_type = ord(f.read(1))
-        self.contents = ord(f.read(1))
-        f.close()
+        rom_file_buffer.seek(self.pointer)
+        self.position = read_multi(rom_file_buffer, length=2)
+        self.memid = ord(rom_file_buffer.read(1))
+        self.content_type = ord(rom_file_buffer.read(1))
+        self.contents = ord(rom_file_buffer.read(1))
         self.oldid = self.memid | ((self.content_type & 1) << 8)
 
         mark_taken_id(self.effective_id)

@@ -2,6 +2,7 @@ import itertools
 import os
 import string
 import options
+import pathlib
 
 from character import get_characters
 from utils import (CHARACTER_PALETTE_TABLE, EVENT_PALETTE_TABLE, FEMALE_NAMES_TABLE, MALE_NAMES_TABLE,
@@ -216,7 +217,7 @@ def manage_coral(fout):
     return sprite_log
 
 
-def manage_character_names(fout, change_to, male):
+def manage_character_names(fout, change_to, male, moogle_names=None, male_names=None, female_names=None):
     characters = get_characters()
     wild = options.Options_.is_flag_active('partyparty')
     sabin_mode = options.Options_.is_flag_active('suplexwrecks')
@@ -259,9 +260,12 @@ def manage_character_names(fout, change_to, male):
             elif chance != 1:
                 random_name_ids.append(moogle_id)
 
-        f = open_mei_fallback(MOOGLE_NAMES_TABLE)
-        mooglenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
-        f.close()
+        if not moogle_names:
+            f = open_mei_fallback(MOOGLE_NAMES_TABLE)
+            mooglenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
+            f.close()
+        else:
+            mooglenames = sorted(set(sanitize_names([name.strip() for name in moogle_names.split("\n")])))
 
         random_moogle_names = random.sample(mooglenames, len(random_name_ids))
         for index, moogle_id in enumerate(random_name_ids):
@@ -269,18 +273,27 @@ def manage_character_names(fout, change_to, male):
 
         # Human Mog gets a human name, maybe
         if random.choice([True, True, False]):
-            f = open_mei_fallback(MALE_NAMES_TABLE)
-            malenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
-            f.close()
+            if not male_names:
+                f = open_mei_fallback(MALE_NAMES_TABLE)
+                malenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
+                f.close()
+            else:
+                malenames = sorted(set(sanitize_names([name.strip() for name in male_names.split("\n")])))
 
             names[10] = random.choice(malenames)
     else:
-        f = open_mei_fallback(MALE_NAMES_TABLE)
-        malenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
-        f.close()
-        f = open_mei_fallback(FEMALE_NAMES_TABLE)
-        femalenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
-        f.close()
+        if not male_names:
+            f = open_mei_fallback(MALE_NAMES_TABLE)
+            malenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
+            f.close()
+        else:
+            malenames = sorted(set(sanitize_names([name.strip() for name in male_names.split("\n")])))
+        if not male_names:
+            f = open_mei_fallback(MALE_NAMES_TABLE)
+            femalenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
+            f.close()
+        else:
+            femalenames = sorted(set(sanitize_names([name.strip() for name in female_names.split("\n")])))
         for c in range(14):
             choose_male = False
             if wild or soldier_mode or ghost_mode:
@@ -431,7 +444,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
         known_replacements.extend(og_replacements)
 
     # weight selection based on no*/hate*/like*/only* codes
-    whitelist = [c.name for c in options.Options_.active_flags if options.Options_.get_flag_value(c) == "only"]
+    whitelist = [flag.name for flag in options.Options_.active_flags if flag.value == "only"]
     replace_candidates = []
     for r in known_replacements:
         whitelisted = False
@@ -492,7 +505,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps):
     return swap_to
 
 
-def manage_character_appearance(fout, preserve_graphics=False):
+def manage_character_appearance(fout, preserve_graphics=False, moogle_names=None, male_names=None, female_names=None):
     characters = get_characters()
     wild = options.Options_.is_flag_active('partyparty')
     sabin_mode = options.Options_.is_flag_active('suplexwrecks')
@@ -512,7 +525,10 @@ def manage_character_appearance(fout, preserve_graphics=False):
                     ("umaro", 0x162620, 0x16A0), ("dancer", 0x1731C0, 0x5C0),
                     ("lady", 0x1748C0, 0x5C0)]
         for rc in recolors:
-            filename = os.path.join("data", "sprites", "RC" + rc[0] + ".bin")
+            filename = os.path.join(pathlib.Path(__file__).parent.absolute(),
+                                    "data",
+                                    "sprites",
+                                    "RC" + rc[0] + ".bin")
             try:
                 with open_mei_fallback(filename, "rb") as f:
                     sprite = f.read()
@@ -574,7 +590,7 @@ def manage_character_appearance(fout, preserve_graphics=False):
             change_to = dict(list(zip(sorted(male), male)) +
                              list(zip(sorted(female), female)))
 
-    manage_character_names(fout, change_to, male)
+    manage_character_names(fout, change_to, male, moogle_names, male_names, female_names)
 
     swap_to = get_sprite_swaps(char_ids, male, female, change_to)
 
@@ -616,7 +632,10 @@ def manage_character_appearance(fout, preserve_graphics=False):
         for line in f.readlines():
             char_id, filename = line.strip().split(',', 1)
             try:
-                g = open_mei_fallback(os.path.join("custom", "sprites", filename), "rb")
+                g = open_mei_fallback(os.path.join(pathlib.Path(__file__).parent.absolute(),
+                                                   "custom",
+                                                   "sprites",
+                                                   filename), "rb")
             except IOError:
                 continue
 
@@ -683,8 +702,14 @@ def manage_character_appearance(fout, preserve_graphics=False):
                 use_fallback = False
 
                 try:
-                    g = open_mei_fallback(os.path.join("custom", "sprites", swap_to[c].portrait_filename), "rb")
-                    h = open_mei_fallback(os.path.join("custom", "sprites", swap_to[c].portrait_palette_filename), "rb")
+                    g = open_mei_fallback(os.path.join(pathlib.Path(__file__).parent.absolute(),
+                                                       "custom",
+                                                       "sprites",
+                                                       swap_to[c].portrait_filename), "rb")
+                    h = open_mei_fallback(os.path.join(pathlib.Path(__file__).parent.absolute(),
+                                                       "custom",
+                                                       "sprites",
+                                                       swap_to[c].portrait_palette_filename), "rb")
                 except IOError:
                     use_fallback = True
                     print("failed to load portrait %s for %s, using fallback" %(swap_to[c].portrait_filename, swap_to[c].name))
@@ -719,7 +744,9 @@ def manage_character_appearance(fout, preserve_graphics=False):
 
         if sprite_swap_mode and c in swap_to:
             try:
-                g = open_mei_fallback(os.path.join("custom", "sprites", swap_to[c].file), "rb")
+                g = open_mei_fallback(os.path.join(pathlib.Path(__file__).parent.absolute(),
+                                                   "custom",
+                                                   "sprites", swap_to[c].file), "rb")
             except IOError:
                 newsprite = sprites[change_to[c]]
                 for ch in characters:

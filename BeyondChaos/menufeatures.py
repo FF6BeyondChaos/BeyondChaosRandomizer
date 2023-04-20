@@ -1,8 +1,10 @@
+from io import BytesIO
 from utils import Substitution
 
 common_added = False
 
-def add_common_menu_stuff(fout):
+
+def add_common_menu_stuff(output_rom_buffer: BytesIO):
     global common_added
     if common_added:
         return
@@ -70,7 +72,7 @@ def add_common_menu_stuff(fout):
         0x89, 0x80, # BIT #$80
         0x6B, # RTL
     ])
-    common_sub.write(fout)
+    common_sub.write(output_rom_buffer)
 
     common_sub.set_location(0x301821)
     common_sub.bytestring = bytes([
@@ -230,7 +232,7 @@ def add_common_menu_stuff(fout):
         0x8F, 0x40, 0x21, 0x00, # STA $002140
         0x6B # RTL
     ])
-    common_sub.write(fout)
+    common_sub.write(output_rom_buffer)
 
     common_sub.set_location(0x301C00)
     common_sub.bytestring = bytes([
@@ -311,19 +313,20 @@ def add_common_menu_stuff(fout):
         0xE2, 0x20, # SEP #$20
         0x6B, # RTL
     ])
-    common_sub.write(fout)
+    common_sub.write(output_rom_buffer)
 
-def improve_item_display(fout):
-    add_common_menu_stuff(fout)
+
+def improve_item_display(output_rom_buffer: BytesIO):
+    add_common_menu_stuff(output_rom_buffer)
 
     display_sub = Substitution()
     display_sub.set_location(0x38706)
     display_sub.bytestring = bytes([0x22, 0x03, 0x00, 0xF0])
-    display_sub.write(fout)
+    display_sub.write(output_rom_buffer)
 
     display_sub.set_location(0x389E6)
     display_sub.bytestring = bytes([0x22, 0x2C, 0x00, 0xF0])
-    display_sub.write(fout)
+    display_sub.write(output_rom_buffer)
 
     display_sub.set_location(0x300080)
     display_sub.bytestring = bytes([
@@ -743,31 +746,32 @@ def improve_item_display(fout):
         # $F00725 table for hex digits
         0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB,
         0xBC, 0xBD, 0x9A, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F])
-    display_sub.write(fout)
+    display_sub.write(output_rom_buffer)
 
-def improve_gogo_status_menu(fout):
-    add_common_menu_stuff(fout)
+
+def improve_gogo_status_menu(output_rom_buffer: BytesIO):
+    add_common_menu_stuff(output_rom_buffer)
 
     status_sub = Substitution()
     status_sub.set_location(0x35EAD)
     status_sub.bytestring = bytes([0x22, 0x60, 0x0A, 0xF0]) # StatusMenu__FixOverflow
-    status_sub.write(fout)
+    status_sub.write(output_rom_buffer)
 
     status_sub.set_location(0x35E91)
     status_sub.bytestring = bytes([0x22, 0x6B, 0x0A, 0xF0]) # StatusMenu__FixWindowSize
-    status_sub.write(fout)
+    status_sub.write(output_rom_buffer)
 
     status_sub.set_location(0x363BA)
     status_sub.bytestring = bytes([0x22, 0x76, 0x0A, 0xF0]) # StatusMenu__FixSelection
-    status_sub.write(fout)
+    status_sub.write(output_rom_buffer)
 
     status_sub.set_location(0x322A3)
     status_sub.bytestring = bytes([0x22, 0x88, 0x0A, 0xF0]) # StatusMenu__FixScrollReset
-    status_sub.write(fout)
+    status_sub.write(output_rom_buffer)
 
     status_sub.set_location(0x3640C)
     status_sub.bytestring = bytes([0x22, 0x98, 0x0A, 0xF0, 0x60]) # StatusMenu__Main
-    status_sub.write(fout)
+    status_sub.write(output_rom_buffer)
 
     status_sub.set_location(0x300A60)
     status_sub.bytestring = bytes([
@@ -1046,19 +1050,20 @@ def improve_gogo_status_menu(fout):
         0x85, 0x4E, # sta $4e
         0x6B # RTL
     ])
-    status_sub.write(fout)
+    status_sub.write(output_rom_buffer)
 
-def improve_rage_menu(fout):
-    add_common_menu_stuff(fout)
+
+def improve_rage_menu(output_rom_buffer: BytesIO):
+    add_common_menu_stuff(output_rom_buffer)
 
     rage_sub = Substitution()
     rage_sub.set_location(0x321D9)
     rage_sub.bytestring = bytes([0x22, 0xD9, 0x0C, 0xF0])
-    rage_sub.write(fout)
+    rage_sub.write(output_rom_buffer)
 
     rage_sub.set_location(0x328BA)
     rage_sub.bytestring = bytes([0x22, 0x1D, 0x0D, 0xF0, 0xF0, 0x01, 0x60])
-    rage_sub.write(fout)
+    rage_sub.write(output_rom_buffer)
 
     rage_sub.set_location(0x300CD9)
     rage_sub.bytestring = bytes([
@@ -1508,7 +1513,7 @@ def improve_rage_menu(fout):
         0x28, # PLP
         0x6B # RTL
         ])
-    rage_sub.write(fout)
+    rage_sub.write(output_rom_buffer)
 
     rage_sub.set_location(0x301516)
     rage_sub.bytestring = bytes([
@@ -1597,13 +1602,14 @@ def improve_rage_menu(fout):
         0x24, 0x00, 0xD0, 0xFB, 0x78, 0xAD, 0x44, 0x00, 0x8D, 0x00, 0x21, 0xAD,
         0x43, 0x00, 0x8D, 0x0C, 0x42, 0xAD, 0xB5, 0x00, 0x8D, 0x06, 0x21, 0x9C,
         0xAE, 0x00, 0x6B])
-    rage_sub.write(fout)
+    rage_sub.write(output_rom_buffer)
 
-    _rage_dance_common(fout)
+    _rage_dance_common(output_rom_buffer)
+
 
 # rage and dance both require something in this block, but I haven't
 # narrowed down exactly what
-def _rage_dance_common(fout):
+def _rage_dance_common(output_rom_buffer: BytesIO):
     rage_dance_sub = Substitution()
     rage_dance_sub.set_location(0x301932)
     rage_dance_sub.bytestring = bytes([
@@ -1835,7 +1841,7 @@ def _rage_dance_common(fout):
         0xFA, # PLX
         0x6B # RTL
     ])
-    rage_dance_sub.write(fout)
+    rage_dance_sub.write(output_rom_buffer)
 
     rage_dance_sub.set_location(0x301B2B)
     rage_dance_sub.bytestring = bytes([
@@ -1928,35 +1934,36 @@ def _rage_dance_common(fout):
         0x8D, 0x00, 0x01,
         0x6B # RTL
     ])
-    rage_dance_sub.write(fout)
+    rage_dance_sub.write(output_rom_buffer)
 
     rage_dance_sub.set_location(0x10CF50)
     rage_dance_sub.bytestring = bytes([0xFF] * 4)
-    rage_dance_sub.write(fout)
+    rage_dance_sub.write(output_rom_buffer)
 
-def show_original_names(fout):
-    add_common_menu_stuff(fout)
+
+def show_original_names(output_rom_buffer: BytesIO):
+    add_common_menu_stuff(output_rom_buffer)
 
     names_sub = Substitution()
     names_sub.set_location(0x33311)
     names_sub.bytestring = bytes([0x22, 0x35, 0x07, 0xF0, 0xEA])
-    names_sub.write(fout)
+    names_sub.write(output_rom_buffer)
 
     names_sub.set_location(0x3335D)
     names_sub.bytestring = bytes([0x22, 0x43, 0x07, 0xF0, 0xEA])
-    names_sub.write(fout)
+    names_sub.write(output_rom_buffer)
 
     names_sub.set_location(0x333A9)
     names_sub.bytestring = bytes([0x22, 0x51, 0x07, 0xF0, 0xEA])
-    names_sub.write(fout)
+    names_sub.write(output_rom_buffer)
 
     names_sub.set_location(0x333F5)
     names_sub.bytestring = bytes([0x22, 0x5F, 0x07, 0xF0, 0xEA])
-    names_sub.write(fout)
+    names_sub.write(output_rom_buffer)
 
     names_sub.set_location(0x37973)
     names_sub.bytestring = bytes([0x22, 0x6D, 0x07, 0xF0])
-    names_sub.write(fout)
+    names_sub.write(output_rom_buffer)
 
     names_sub.set_location(0x300735)
     names_sub.bytestring = bytes([
@@ -1984,101 +1991,102 @@ def show_original_names(fout):
         0x86, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x86, 0x80, 0x94, 0xFF, 0xFF, 0xFF,
         0xFF, 0xFF, 0x86, 0x8E, 0x86, 0x8E, 0xFF, 0xFF, 0xFF, 0xFF, 0x94, 0x8C,
         0x80, 0x91, 0x8E, 0xFF, 0xFF, 0xFF])
-    names_sub.write(fout)
+    names_sub.write(output_rom_buffer)
 
-def improve_dance_menu(fout):
-    add_common_menu_stuff(fout)
+
+def improve_dance_menu(output_rom_buffer: BytesIO):
+    add_common_menu_stuff(output_rom_buffer)
 
     dance_menu_sub = Substitution()
     dance_menu_sub.set_location(0x321F0)
     dance_menu_sub.bytestring = bytes([0x5C, 0x5C, 0x19, 0xF0])
-    dance_menu_sub.write(fout)
+    dance_menu_sub.write(output_rom_buffer)
 
     dance_menu_sub.set_location(0x328B0)
     dance_menu_sub.bytestring = bytes([0x5C, 0x39, 0x19, 0xF0])
-    dance_menu_sub.write(fout)
+    dance_menu_sub.write(output_rom_buffer)
 
     dance_menu_sub.set_location(0x329AE)
     dance_menu_sub.bytestring = bytes([0x5C, 0x7F, 0x19, 0xF0])
-    dance_menu_sub.write(fout)
+    dance_menu_sub.write(output_rom_buffer)
 
-    _rage_dance_common(fout)
+    _rage_dance_common(output_rom_buffer)
 
 
-def y_equip_relics(fout):
+def y_equip_relics(output_rom_buffer: BytesIO):
     y_equip_relics_sub = Substitution()
     y_equip_relics_sub.set_location(0x30247)
     y_equip_relics_sub.bytestring = bytes([0x1e, 0x96])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x30287)
     y_equip_relics_sub.bytestring = bytes([0xcd, 0x98])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x31be9)
     y_equip_relics_sub.bytestring = bytes([0x5b, 0x96])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x31bf7)
     y_equip_relics_sub.bytestring = bytes([0x60, 0x96])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x3960d)
     y_equip_relics_sub.bytestring = bytes([0x65, 0x96])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x39615)
     y_equip_relics_sub.bytestring = bytes([0x0c, 0x96, 0xe6, 0x3a, 0xa9, 0x2c, 0x85, 0x29, 0x60, 0x20, 0x0c, 0x96, 0x20, 0x4e, 0x90, 0x20, 0x56, 0x8e, 0xa5, 0x08, 0x10, 0x0b, 0x20, 0xb2, 0x0e, 0x7b, 0xa5, 0x4b, 0x0a, 0xaa, 0x7c, 0x6c, 0x96, 0xa5, 0x09, 0x10, 0x0d, 0x20, 0xa9, 0x0e, 0x20, 0x10, 0x91, 0xa9, 0x04, 0x85, 0x27, 0x64, 0x26, 0x60, 0x0a, 0x10, 0x0a, 0x20, 0xb2, 0x0e, 0xa9, 0x58, 0x85, 0x26, 0xe6, 0x25, 0x60, 0xa9, 0x35, 0x85, 0xe0, 0x4c, 0x22, 0x20, 0xa0, 0x09, 0xa3, 0x80, 0x08, 0xa0, 0x11, 0xa3, 0x80, 0x03, 0xa0, 0xea, 0xa2, 0x4c, 0xf9, 0x02, 0x60])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x39672)
     y_equip_relics_sub.bytestring = bytes([0x9a])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
     y_equip_relics_sub.set_location(0x39678)
     y_equip_relics_sub.bytestring = bytes([0x5b])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
     y_equip_relics_sub.set_location(0x39692)
     y_equip_relics_sub.bytestring = bytes([0x60, 0x96, 0x20, 0x7a, 0x96, 0xe6, 0x26, 0x60, 0x20, 0xa8, 0x96, 0x80, 0xe9, 0xa9, 0x35, 0x85, 0x26, 0x64, 0x27, 0xc6, 0x25])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x3988c)
     y_equip_relics_sub.bytestring = bytes([0x10, 0x21, 0x20, 0xb2, 0x0e, 0xa5, 0x4e, 0x85, 0x5f, 0xa2, 0x57, 0x55, 0x86, 0x26, 0x20, 0x59, 0x9b, 0x20, 0x50, 0xa1, 0x20, 0xeb, 0x9a, 0x20, 0x33, 0x92, 0x20, 0x15, 0x6a, 0x20, 0x68, 0x13, 0x4c, 0xac, 0x9c, 0xa5, 0x09, 0x10, 0x0d, 0x20, 0xa9, 0x0e, 0xa9, 0x36, 0x85, 0x26, 0x20, 0x50, 0x8e, 0x4c, 0x59, 0x8e, 0x0a, 0x10, 0x03, 0x4C, 0x4A, 0x96, 0xA5, 0x26, 0x69, 0x29, 0x4C, 0x56, 0x96, 0x20, 0x72, 0x8E, 0xA5, 0x08, 0x10, 0xDB, 0x20, 0xB2, 0x0E, 0x20, 0xF2, 0x93, 0xC2, 0x21, 0x98, 0xE2, 0x20, 0x65, 0x4B, 0xA8, 0xB9, 0x1F, 0x00, 0x20, 0x5E, 0x9D, 0xA9, 0xFF, 0x99, 0x1F, 0x00, 0x20, 0x1B, 0x91, 0x80, 0xBD, 0xA5, 0x09, 0x0A, 0x10, 0x14, 0x20, 0xB2, 0x0E, 0x20, 0x5F, 0x1E, 0xB0, 0x0A, 0x20, 0xEB, 0x9E, 0xA5, 0x99, 0xD0, 0x03, 0x20, 0x9F, 0x96, 0x64, 0x08, 0x4C, 0xE6, 0x9E, 0xEA])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x39e81)
     y_equip_relics_sub.bytestring = bytes([0x5b])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x39e8f)
     y_equip_relics_sub.bytestring = bytes([0x60])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x39edd)
     y_equip_relics_sub.bytestring = bytes([0xf2, 0x98])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x39f1d)
     y_equip_relics_sub.bytestring = bytes([0x65])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x39fdf)
     y_equip_relics_sub.bytestring = bytes([0x5b])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x39ff0)
     y_equip_relics_sub.bytestring = bytes([0x60])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x3a048)
     y_equip_relics_sub.bytestring = bytes([0xf2, 0x98])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
     y_equip_relics_sub.set_location(0x3a147)
     y_equip_relics_sub.bytestring = bytes([0xf2, 0x98])
-    y_equip_relics_sub.write(fout)
+    y_equip_relics_sub.write(output_rom_buffer)
 
 
-def fix_gogo_portrait(fout):
+def fix_gogo_portrait(output_rom_buffer: BytesIO):
     """Hides the portion of Gogo's portrait that shows incorrectly on his status menu."""
-    fout.seek(0x35f51)
-    fout.write(bytes([0x0a, 0x62]))
+    output_rom_buffer.seek(0x35f51)
+    output_rom_buffer.write(bytes([0x0a, 0x62]))

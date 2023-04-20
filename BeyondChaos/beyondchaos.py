@@ -21,7 +21,7 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
 
 # Local application imports
 import utils
-import customthreadpool
+from multiprocessing import Process, Pipe
 from config import (read_flags, write_flags, validate_files, are_updates_hidden, updates_hidden,
                     get_input_path, get_output_path, save_version, check_player_sprites, check_remonsterate)
 from options import (NORMAL_FLAGS, MAKEOVER_MODIFIER_FLAGS, get_makeover_groups)
@@ -68,13 +68,13 @@ class GenConfirmation(QDialog):
         grid_layout.addWidget(header_text, 1, 0, 1, 9)
         grid_layout.addWidget(flag_list_scroll, 2, 0, 1, 9)
 
-        self.cancel_pushbutton = QPushButton("Cancel")
-        grid_layout.addWidget(self.cancel_pushbutton, 3, 1, 1, 3)
-        self.cancel_pushbutton.clicked.connect(self.button_pressed)
-
         self.confirm_pushbutton = QPushButton("Confirm")
-        grid_layout.addWidget(self.confirm_pushbutton, 3, 5, 1, 3)
+        grid_layout.addWidget(self.confirm_pushbutton, 3, 1, 1, 3)
         self.confirm_pushbutton.clicked.connect(self.button_pressed)
+
+        self.cancel_pushbutton = QPushButton("Cancel")
+        grid_layout.addWidget(self.cancel_pushbutton, 3, 5, 1, 3)
+        self.cancel_pushbutton.clicked.connect(self.button_pressed)
 
         self.setLayout(grid_layout)
 
@@ -234,7 +234,7 @@ class Window(QMainWindow):
         # values to be sent to Randomizer
         self.romText = ""
         self.romOutputDirectory = ""
-        self.version = "CE-4.2.0"
+        self.version = "CE-4.2.1"
         self.mode = "normal"
         self.seed = ""
         self.flags = []
@@ -565,6 +565,7 @@ class Window(QMainWindow):
                 if flag['object'].inputtype == 'boolean':
                     # cbox = FlagCheckBox("", flagname)
                     cbox = QPushButton("No")
+                    cbox.flag = flag['object']
                     if (flagname == "remonsterate" and not len(check_remonsterate()) == 0) or\
                        (flagname == "makeover" and not len(check_player_sprites()) == 0):
                         cbox.setEnabled(False)
@@ -586,6 +587,7 @@ class Window(QMainWindow):
                     flagcount += 1
                 elif flag['object'].inputtype == 'float2':
                     nbox = QDoubleSpinBox()
+                    nbox.flag = flag['object']
                     nbox.setMinimum(0)
                     nbox.setSingleStep(.1)
                     nbox.default = 1.00
@@ -605,6 +607,7 @@ class Window(QMainWindow):
                     flagcount += 1
                 elif flag['object'].inputtype == 'integer':
                     nbox = QSpinBox()
+                    nbox.flag = flag['object']
                     nbox.default = int(flag['object'].default_value)
                     nbox.setMinimum(int(flag['object'].minimum_value))
                     nbox.setFixedWidth(control_fixed_width)
@@ -628,17 +631,17 @@ class Window(QMainWindow):
                     flagcount += 1
                 elif flag['object'].inputtype == 'combobox':
                     cmbbox = QComboBox()
+                    cmbbox.flag = flag['object']
                     cmbbox.addItems(flag['object'].choices)
                     cmbbox.text = flagname
                     cmbbox.setFixedWidth(control_fixed_width)
                     cmbbox.setFixedHeight(control_fixed_height)
+                    cmbbox.setCurrentIndex(flag['object'].default_index)
                     if self.makeover_groups and flagname in self.makeover_groups:
-                        cmbbox.setCurrentIndex(cmbbox.findText("Normal"))
                         flaglbl = QLabel(f"{flagname} (" + str(self.makeover_groups[flagname]) +
                                          ")")
                         flagdesc = QLabel(f"{flag['object'].long_description}")
                     else:
-                        cmbbox.setCurrentIndex(cmbbox.findText("Vanilla"))
                         flaglbl = QLabel(f"{flagname}")
                         flagdesc = QLabel(f"{flag['object'].long_description}")
                     tablayout.addWidget(cmbbox, currentRow, 1)
@@ -652,6 +655,7 @@ class Window(QMainWindow):
             v_spacer.setFrameShape(QFrame.VLine)
             v_spacer.setFrameShadow(QFrame.Sunken)
             v_spacer.setFixedWidth(5)
+            v_spacer.setStyleSheet("margin: 5px 0 5px 0;")
             tablayout.addWidget(v_spacer, 0, 3, flagcount, 1)
 
             t.setLayout(tablayout)
@@ -918,10 +922,7 @@ class Window(QMainWindow):
                 elif type(child) == QSpinBox or type(child) == QDoubleSpinBox:
                     child.setValue(child.default)
                 elif type(child) == QComboBox:
-                    if self.makeover_groups and child.text in self.makeover_groups:
-                        child.setCurrentIndex(child.findText("Normal"))
-                    else:
-                        child.setCurrentIndex(child.findText("Vanilla"))
+                    child.setCurrentIndex(child.flag.default_index)
 
     # When flag UI button is checked, update corresponding
     # dictionary values
@@ -950,7 +951,7 @@ class Window(QMainWindow):
                             self.flags.append(c.text + ":" + str(round(c.value(), 2)))
                 children = t.findChildren(QComboBox)
                 for c in children:
-                    if c.currentText() not in ["Vanilla", "Normal"]:
+                    if c.currentIndex() != c.flag.default_index:
                         self.flags.append(c.text.lower() + ":" + c.currentText().lower())
 
             self.updateFlagString()
@@ -1200,21 +1201,40 @@ class Window(QMainWindow):
                     # TODO: put this in a new thread
                     try:
                         kwargs = {
-                            "sourcefile": self.romText,
+                            "infile_rom_path": self.romText,
+                            "outfile_rom_path": self.romOutputDirectory,
                             "seed": bundle,
-                            "output_directory": self.romOutputDirectory,
                             "bingotype": self.bingotype,
                             "bingosize": self.bingosize,
                             "bingodifficulty": self.bingodiff,
                             "bingocards": self.bingocards,
-                            "from_gui": True,
+                            "application": "gui"
                         }
-                        # pool = multiprocessing.Pool()
-                        pool = customthreadpool.NonDaemonPool(1)
-                        x = pool.apply_async(func=randomize, kwds=kwargs)
-                        x.get()
-                        pool.close()
-                        pool.join()
+                        parent_connection, child_connection = Pipe()
+                        randomize_process = Process(
+                            target=randomize,
+                            args=(child_connection,),
+                            kwargs=kwargs
+                        )
+                        randomize_process.start()
+                        while True:
+                            if not randomize_process.is_alive():
+                                raise RuntimeError("Unexpected error: The randomize child process died.")
+                            if parent_connection.poll(timeout=5):
+                                item = parent_connection.recv()
+                            else:
+                                item = None
+                            if item:
+                                try:
+                                    if isinstance(item, str):
+                                        print(item)
+                                    elif isinstance(item, Exception):
+                                        raise item
+                                    elif isinstance(item, bool):
+                                        break
+                                except EOFError:
+                                    break
+
                         # generate the output file name since we're using subprocess now instead of a direct call
                         if '.' in self.romText:
                             tempname = os.path.basename(self.romText).rsplit('.', 1)
@@ -1231,14 +1251,13 @@ class Window(QMainWindow):
                         randomize_error_message = QMessageBox()
                         randomize_error_message.setIcon(QMessageBox.Critical)
                         randomize_error_message.setWindowTitle("Exception: " + str(type(e).__name__))
-                        randomize_error_message.setText("A fatal " + str(type(e).__name__) + " exception occurred: " +
+                        randomize_error_message.setText("A " + str(type(e).__name__) + " exception occurred "
+                                                        "that prevented randomization: " +
+                                                        "<br>" +
                                                         str(e) +
                                                         "<br>" +
                                                         "<br>" +
-                                                        "<br>" +
-                                                        "<br>" +
                                                         "<b><u>Error Traceback for the Devs</u></b>:" +
-                                                        "<br>" +
                                                         "<br>" +
                                                         "<br>".join(traceback.format_exc().splitlines()))
                         randomize_error_message.setStandardButtons(QMessageBox.Close)

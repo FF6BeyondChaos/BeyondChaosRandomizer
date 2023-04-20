@@ -1,8 +1,9 @@
 from collections import defaultdict
 from os import path
 import random
-import re
 from typing import BinaryIO
+from io import BytesIO
+from multiprocessing import Pipe
 
 try:
     from sys import _MEIPASS
@@ -76,6 +77,21 @@ POEMS_TABLE = path.join(custom_path, "poems.txt")
 MODIFIERS_TABLE = path.join(custom_path, "moves.txt")
 MOVES_TABLE = path.join(custom_path, "moves.txt")
 CORAL_TABLE = path.join(custom_path, "coralnames.txt")
+
+parent_connection = None
+
+
+def pipe_print(output=""):
+    global parent_connection
+    if parent_connection:
+        parent_connection.send(output)
+    else:
+        print(str(output))
+
+
+def set_parent_pipe(connection: Pipe):
+    global parent_connection
+    parent_connection = connection
 
 
 def open_mei_fallback(filename, mode='r', encoding=None):
@@ -331,8 +347,8 @@ def int2bytes(value, length=2, reverse=True):
     return bytes(bs[:length])
 
 
-def read_multi(f, length=2, reverse=True):
-    vals = list(f.read(length))
+def read_multi(rom_file_buffer: BytesIO, length=2, reverse=True):
+    vals = list(rom_file_buffer.read(length))
     if reverse:
         vals = list(reversed(vals))
     value = 0
