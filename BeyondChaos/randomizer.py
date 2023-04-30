@@ -753,7 +753,7 @@ def manage_commands(commands: Dict[str, CommandBlock]):
      'magic': <skillrandomizer.CommandBlock object at 0x0000020D069188B0>,
      'morph': <skillrandomizer.CommandBlock object at 0x0000020D069188E0>,
      ...
-     'possess': <skillrandomizer.CommandBlock object at 0x0000020D06918D60>, 
+     'possess': <skillrandomizer.CommandBlock object at 0x0000020D06918D60>,
      'magitek': <skillrandomizer.CommandBlock object at 0x0000020D06918D90>}
     """
     characters = get_characters()
@@ -1002,7 +1002,7 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
      'magic': <skillrandomizer.CommandBlock object at 0x0000020D069188B0>,
      'morph': <skillrandomizer.CommandBlock object at 0x0000020D069188E0>,
      ...
-     'possess': <skillrandomizer.CommandBlock object at 0x0000020D06918D60>, 
+     'possess': <skillrandomizer.CommandBlock object at 0x0000020D06918D60>,
      'magitek': <skillrandomizer.CommandBlock object at 0x0000020D06918D90>}
     """
     # note: x-magic targets random party member
