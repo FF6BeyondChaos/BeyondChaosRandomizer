@@ -16,6 +16,7 @@ from monsterrandomizer import MonsterBlock
 from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
+from bcg_junction import JunctionManager
 from character import get_characters, get_character, equip_offsets
 from chestrandomizer import mutate_event_items, get_event_items
 from config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
@@ -4981,6 +4982,12 @@ def diverge(outfile_rom_buffer: BytesIO):
         outfile_rom_buffer.write(data)
 
 
+def junction_esper_procs(outfile_rom_buffer):
+    jm = JunctionManager(outfile_rom_buffer, 'bcg_junction_manifest.json')
+    jm.add_junction(None, 'junction_esper_magic', 'whitelist')
+    jm.execute()
+
+
 def randomize(connection: Pipe = None, **kwargs) -> str:
     """
     The main function which takes in user arguments and creates a log
@@ -6029,6 +6036,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
     if Options_.is_flag_active("sprint"):
         sprint_shoes_hint()
+
+    if Options_.is_flag_active('espercutegf'):
+        junction_esper_procs(outfile_rom_buffer)
 
     if Options_.mode.name == "katn":
         the_end_comes_beyond_katn()
