@@ -116,9 +116,9 @@ class Substitution:
     def set_location(self, location: int):
         self.location = location
 
-    def write(self, fout: BinaryIO):
-        fout.seek(self.location)
-        fout.write(bytes(self.bytestring))
+    def write(self, outfile_rom_buffer: BytesIO):
+        outfile_rom_buffer.seek(self.location)
+        outfile_rom_buffer.write(bytes(self.bytestring))
 
 
 class AutoLearnRageSub(Substitution):
@@ -134,23 +134,23 @@ class AutoLearnRageSub(Substitution):
         bs += [0x20, 0x07, 0x4A, 0xAD, 0x0A, 0x30, 0x60]
         return bytes(bs)
 
-    def write(self, fout):
+    def write(self, outfile_rom_buffer):
         learn_leap_sub = Substitution()
         learn_leap_sub.bytestring = bytes([0xEA] * 7)
         learn_leap_sub.set_location(0x2543E)
-        learn_leap_sub.write(fout)
+        learn_leap_sub.write(outfile_rom_buffer)
 
         gau_cant_appear_sub = Substitution()
         gau_cant_appear_sub.bytestring = bytes([0x80, 0x0C])
         gau_cant_appear_sub.set_location(0x22FB5)
-        gau_cant_appear_sub.write(fout)
+        gau_cant_appear_sub.write(outfile_rom_buffer)
 
         vict_sub = Substitution()
         vict_sub.bytestring = bytes([0x20]) + int2bytes(self.location, length=2)
         vict_sub.set_location(0x25EE5)
-        vict_sub.write(fout)
+        vict_sub.write(outfile_rom_buffer)
 
-        super(AutoLearnRageSub, self).write(fout)
+        super(AutoLearnRageSub, self).write(outfile_rom_buffer)
 
 
 texttable = {}
@@ -164,8 +164,6 @@ try:
     f.close()
 except FileNotFoundError:
     print("Error: " + TEXT_TABLE + " was not found in the tables folder.")
-
-
 
 
 def name_to_bytes(name, length):
@@ -210,45 +208,6 @@ def hex2int(hexstr):
     return int(hexstr, 16)
 
 
-# def shuffle_key_values(d):
-#     keys = list(d.keys())
-#     random.shuffle(keys)
-#     shuffled = dict(zip(keys, d.values()))
-#     d.update(shuffled)
-
-
-# def dialogue_to_bytes(text, null_terminate=True):
-#     bs = []
-#     i = 0
-#     while i < len(text):
-#         if text[i] == " ":
-#             spaces = re.match(" +", text[i:]).group(0)
-#             count = len(spaces)
-#             j = i + count
-#             hexstr = dialoguebytetable.get(text[i:j], "")
-#             if not hexstr:
-#                 hexstr = dialoguebytetable.get(text[i])
-#                 j = i + 1
-#             i = j
-#         elif text[i] == "<":
-#             j = text.find(">", i) + 1
-#             hexstr = dialoguetexttable.get(text[i:j], "")
-#             i = j
-#         elif i < len(text) - 1 and text[i:i + 2] in dialoguetexttable:
-#             hexstr = dialoguetexttable[text[i:i + 2]]
-#             i += 2
-#         else:
-#             hexstr = dialoguetexttable[text[i]]
-#             i += 1
-#
-#         if hexstr != "":
-#             bs.extend(bytes.fromhex(hexstr))
-#
-#     if null_terminate and bs[-1] != 0x0:
-#         bs.append(0x0)
-#     return bytes(bs)
-
-
 def bytes_to_dialogue(bs):
     text = []
     i = 0
@@ -270,52 +229,13 @@ def bytes_to_dialogue(bs):
     return "".join(text)
 
 
-def get_long_battle_text_pointer(f, index):
+def get_long_battle_text_pointer(infile_rom_buffer: BytesIO, index):
     base = 0x100000
     ptrs_start = 0x10D000
-    f.seek(ptrs_start + index * 2)
-    ptr = read_multi(f)
+    infile_rom_buffer.seek(ptrs_start + index * 2)
+    ptr = read_multi(infile_rom_buffer)
     ptr += base
     return ptr
-
-
-# def get_long_battle_text_index(f, address):
-#     base = 0x100000
-#     ptrs_start = 0x10D000
-#     ptrs_end = 0x10D200
-#     prev = 0
-#     for index, ptr_ptr in enumerate(range(ptrs_start, ptrs_end, 2)):
-#         f.seek(ptr_ptr)
-#         ptr = read_multi(f) + base
-#         if ptr > address:
-#             return index - 1
-#     return -1
-
-
-# def get_dialogue_pointer(f, index):
-#     f.seek(0xCE600)
-#     increment_index = read_multi(f)
-#     base = 0xD0000 if index <= increment_index else 0xE0000
-#     ptrs_start = 0xCE602
-#     f.seek(ptrs_start + index * 2)
-#     ptr = read_multi(f)
-#     ptr += base
-#     return ptr
-
-
-# def get_dialogue_index(f, address):
-#     f.seek(0xCE600)
-#     increment_index = read_multi(f)
-#     ptrs_start = 0xCE602
-#     ptrs_end = 0xD0000
-#     prev = 0
-#     for index, ptr_ptr in enumerate(range(ptrs_start, ptrs_end, 2)):
-#         base = 0xD0000 if index <= increment_index else 0xE0000
-#         f.seek(ptr_ptr)
-#         ptr = read_multi(f) + base
-#         if ptr > address:
-#             return index - 1
-#     return -1
 
 
 battlebg_palettes = {}
@@ -347,8 +267,8 @@ def int2bytes(value, length=2, reverse=True):
     return bytes(bs[:length])
 
 
-def read_multi(rom_file_buffer: BytesIO, length=2, reverse=True):
-    vals = list(rom_file_buffer.read(length))
+def read_multi(rom_buffer: BytesIO, length=2, reverse=True):
+    vals = list(rom_buffer.read(length))
     if reverse:
         vals = list(reversed(vals))
     value = 0
@@ -358,7 +278,7 @@ def read_multi(rom_file_buffer: BytesIO, length=2, reverse=True):
     return value
 
 
-def write_multi(f, value, length=2, reverse=True):
+def write_multi(outfile_rom_buffer, value, length=2, reverse=True):
     vals = []
     while value:
         value = int(value)
@@ -373,7 +293,7 @@ def write_multi(f, value, length=2, reverse=True):
     if not reverse:
         vals = reversed(vals)
 
-    f.write(bytes(vals))
+    outfile_rom_buffer.write(bytes(vals))
 
 
 utilrandom = random.Random()

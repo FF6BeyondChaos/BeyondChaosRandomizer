@@ -1112,8 +1112,8 @@ class TableObject(object):
     def write_all(cls, filename):
         if cls.specs.pointedpoint1 or not (
                 cls.specs.grouped or cls.specs.pointed or cls.specs.delimit):
-            for o in cls.every:
-                o.write_data()
+            for object in cls.every:
+                object.write_data()
         elif cls.specs.grouped:
             pointer = cls.specs.pointer
             f = get_open_file(filename)
@@ -1123,8 +1123,8 @@ class TableObject(object):
                 if cls.specs.groupednum is None:
                     f.write(chr(len(objs)))
                     pointer += 1
-                for o in objs:
-                    pointer = o.write_data(None, pointer)
+                for object in objs:
+                    pointer = object.write_data(None, pointer)
         elif cls.specs.pointed and cls.specs.delimit:
             pointer = cls.specs.pointedpointer
             f = get_open_file(filename)
@@ -1136,8 +1136,8 @@ class TableObject(object):
                 write_multi(f, pointer-cls.specs.pointedpointer,
                             length=cls.specs.pointedsize)
                 f.seek(pointer)
-                for o in objs:
-                    pointer = o.write_data(None, pointer)
+                for object in objs:
+                    pointer = object.write_data(None, pointer)
                 f.seek(pointer)
                 f.write(bytes([cls.specs.delimitval]))
                 pointer += 1
@@ -1167,8 +1167,8 @@ class TableObject(object):
                 objs = [o for o in cls.every if o.groupindex == i]
                 if hasattr(cls, "groupsort"):
                     objs = cls.groupsort(objs)
-                for o in objs:
-                    pointedpointer = o.write_data(None, pointedpointer)
+                for object in objs:
+                    pointedpointer = object.write_data(None, pointedpointer)
                 f.seek(pointer + (i*size))
                 write_multi(f, masked, length=size)
         elif cls.specs.delimit:
@@ -1178,8 +1178,8 @@ class TableObject(object):
                 objs = cls.getgroup(i)
                 if hasattr(cls, "groupsort"):
                     objs = cls.groupsort(objs)
-                for o in objs:
-                    pointer = o.write_data(None, pointer)
+                for object in objs:
+                    pointer = object.write_data(None, pointer)
                 f.seek(pointer)
                 f.write(chr(cls.specs.delimitval))
                 pointer += 1
