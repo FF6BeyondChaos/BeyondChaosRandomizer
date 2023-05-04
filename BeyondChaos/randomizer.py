@@ -6016,7 +6016,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     # add_esper_bonuses(outfile_rom_buffer)
 
     if Options_.is_flag_active('removeflashing'):
-        fewer_flashes(outfile_rom_buffer)
+        fewer_flashes(outfile_rom_buffer, Options_.get_flag_value('removeflashing'))
 
     if Options_.is_flag_active('nicerpoison'):
         nicer_poison(outfile_rom_buffer)

@@ -698,501 +698,722 @@ def nicer_poison(output_rom_buffer: BytesIO):
     nicer_poison_sub.write(output_rom_buffer)
 
 
-def fewer_flashes(output_rom_buffer: BytesIO):
+def fewer_flashes(output_rom_buffer: BytesIO, flag_value):
     anti_seizure_sub = Substitution()
 
-    # ------------- Attack Animations -------------
-    #
-    # Removing Final Kefka Death Flashing
-    #
-    anti_seizure_sub.set_location(0x10023B)  # D0023B
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x100241)  # D00241
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x100249)  # D00249
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10024F)  # D0024F
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Boss Death Flashing
-    #
-    anti_seizure_sub.set_location(0x100477)  # D00477
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10047D)  # D0047D
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x100485)  # D00485
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x100498)  # D00498
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Magicite Transformation Flash
-    #
-    anti_seizure_sub.set_location(0x100F31)  # D00F31
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x100F40)  # D00F40
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Ice 3 Flash
-    #
-    anti_seizure_sub.set_location(0x101979)  # D01979
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10197C)  # D0197C
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10197F)  # D0197F
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x101982)  # D01982
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x101985)  # D01985
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x101988)  # D01988
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10198B)  # D0198B
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10198E)  # D0198E
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x101991)  # D01991
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Fire 3 Flash
-    #
-    anti_seizure_sub.set_location(0x1019FB)  # D019FB
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x101A1D)  # D01A1D
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Phantasm Flash
-    #
-    anti_seizure_sub.set_location(0x101E08)  # D01E08
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x101E0E)  # D01E0E
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x101E20)  # D01E20
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x101E28)  # D01E28
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Tiger Break Flash
-    #
-    anti_seizure_sub.set_location(0x10240E)  # D0240E
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x102412)  # D02412
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x102416)  # D02416
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Diffuser Flash
-    #
-    anti_seizure_sub.set_location(0x103AEB)  # D03AEB
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x103AEE)  # D03AEE
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x103AF1)  # D03AF1
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x103AF4)  # D03AF4
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x103AF7)  # D03AF7
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x103AFA)  # D03AFA
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x103AFD)  # D03AFD
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x103B00)  # D03B00
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x103B03)  # D03B00
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Cat Rain Flash
-    #
-    anti_seizure_sub.set_location(0x102678)  # D02678
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10267C)  # D0267C
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Unknown Script 1's Flash
-    #
-    anti_seizure_sub.set_location(0x1026EF)  # D026EF
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1026FB)  # D026FB
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Mirager Flash
-    #
-    anti_seizure_sub.set_location(0x102792)  # D02792
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x102796)  # D02796
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Sabre Soul Flash
-    #
-    anti_seizure_sub.set_location(0x1027D4)  # D027D4
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1027DB)  # D027DB
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Back Blade Flash
-    #
-    anti_seizure_sub.set_location(0x1028D4)  # D028D4
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1028E0)  # D028E0
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Royal Shock Flash
-    #
-    anti_seizure_sub.set_location(0x102968)  # D02968
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10296C)  # D0296C
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x102974)  # D02974
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Unknown Script 2's Flash
-    #
-    anti_seizure_sub.set_location(0x102AAE)  # D02AAE
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x102AB2)  # D02AB2
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Absolute Zero Flash
-    #
-    anti_seizure_sub.set_location(0x102BFF)  # D02BFF
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x102C03)  # D02C03
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Unknown Script 3's Flash
-    #
-    anti_seizure_sub.set_location(0x1030CB)  # D030CB
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1030CF)  # D030CF
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Reverse Polarity Flash
-    #
-    anti_seizure_sub.set_location(0x10328C)  # D0328C
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x103293)  # D03293
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Rippler Flash
-    #
-    anti_seizure_sub.set_location(0x1033C7)  # D033C7
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1033CB)  # D033CB
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Step Mine Flash
-    #
-    anti_seizure_sub.set_location(0x1034DA)  # D034DA
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1034E1)  # D034E1
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Unknown Script 4's Flash
-    #
-    anti_seizure_sub.set_location(0x1035E7)  # D035E7
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1035F7)  # D035F7
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Schiller Flash
-    #
-    anti_seizure_sub.set_location(0x10380B)
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    # This commented out code is for vanilla Schiller, which BC is no longer using
-    # anti_seizure_sub.set_location(0x10381A)  # D0381A
-    # anti_seizure_sub.bytestring = bytes([0xE0])
-    # anti_seizure_sub.write(output_rom_buffer)
-
-    # anti_seizure_sub.set_location(0x10381E)  # D0381E
-    # anti_seizure_sub.bytestring = bytes([0xF0])
-    # anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Wall Change Flash
-    #
-    anti_seizure_sub.set_location(0x10399F)  # D0399F
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1039A4)  # D039A4
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1039AA)  # D039AA
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1039B0)  # D039B0
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1039B6)  # D039B6
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1039BC)  # D039BC
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1039C2)  # D039C2
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1039C8)  # D039C8
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1039CE)  # D039CE
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1039D5)  # D039D5
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Ultima Flash
-    #
-    anti_seizure_sub.set_location(0x1056EE)  # D056EE
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1056F6)  # D056F6
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Bolt 3/Giga Volt Flash
-    #
-    anti_seizure_sub.set_location(0x10588F)  # D0588F
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x105894)  # D05894
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x105897)  # D05897
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10589A)  # D0589A
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10589D)  # D0589D
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1058A2)  # D058A2
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1058A7)  # D058A7
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1058AC)  # D058AC
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1058B1)  # D058B1
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing X-Zone Flash
-    #
-    anti_seizure_sub.set_location(0x105A5E)  # D05A5E
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x105A6B)  # D05A6B
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x105A7A)  # D05A7A
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Dispel Flash
-    #
-    anti_seizure_sub.set_location(0x105DC3)  # D05DC3
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x105DCA)  # D05DCA
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x105DD3)  # D05DD3
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x105DDC)  # D05DDC
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x105DE5)  # D05DE5
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x105DEE)  # D05DEE
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Pep Up/Break Flash
-    #
-    anti_seizure_sub.set_location(0x1060EB)  # D060EB
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1060EF)  # D060EF
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Shock Flash
-    #
-    anti_seizure_sub.set_location(0x1068BF)  # D068BF
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1068D1)  # D068D1
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
+    if not flag_value.lower() == "bumrush":
+        # ------------- Attack Animations -------------
+        #
+        # Removing Final Kefka Death Flashing
+        #
+        anti_seizure_sub.set_location(0x10023B)  # D0023B
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x100241)  # D00241
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x100249)  # D00249
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10024F)  # D0024F
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Boss Death Flashing
+        #
+        anti_seizure_sub.set_location(0x100477)  # D00477
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10047D)  # D0047D
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x100485)  # D00485
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x100498)  # D00498
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Magicite Transformation Flash
+        #
+        anti_seizure_sub.set_location(0x100F31)  # D00F31
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x100F40)  # D00F40
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Ice 3 Flash
+        #
+        anti_seizure_sub.set_location(0x101979)  # D01979
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10197C)  # D0197C
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10197F)  # D0197F
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x101982)  # D01982
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x101985)  # D01985
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x101988)  # D01988
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10198B)  # D0198B
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10198E)  # D0198E
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x101991)  # D01991
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Fire 3 Flash
+        #
+        anti_seizure_sub.set_location(0x1019FB)  # D019FB
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x101A1D)  # D01A1D
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Phantasm Flash
+        #
+        anti_seizure_sub.set_location(0x101E08)  # D01E08
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x101E0E)  # D01E0E
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x101E20)  # D01E20
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x101E28)  # D01E28
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Tiger Break Flash
+        #
+        anti_seizure_sub.set_location(0x10240E)  # D0240E
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x102412)  # D02412
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x102416)  # D02416
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Diffuser Flash
+        #
+        anti_seizure_sub.set_location(0x103AEB)  # D03AEB
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x103AEE)  # D03AEE
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x103AF1)  # D03AF1
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x103AF4)  # D03AF4
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x103AF7)  # D03AF7
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x103AFA)  # D03AFA
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x103AFD)  # D03AFD
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x103B00)  # D03B00
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x103B03)  # D03B00
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Cat Rain Flash
+        #
+        anti_seizure_sub.set_location(0x102678)  # D02678
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10267C)  # D0267C
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Unknown Script 1's Flash
+        #
+        anti_seizure_sub.set_location(0x1026EF)  # D026EF
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1026FB)  # D026FB
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Mirager Flash
+        #
+        anti_seizure_sub.set_location(0x102792)  # D02792
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x102796)  # D02796
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Sabre Soul Flash
+        #
+        anti_seizure_sub.set_location(0x1027D4)  # D027D4
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1027DB)  # D027DB
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Back Blade Flash
+        #
+        anti_seizure_sub.set_location(0x1028D4)  # D028D4
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1028E0)  # D028E0
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Royal Shock Flash
+        #
+        anti_seizure_sub.set_location(0x102968)  # D02968
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10296C)  # D0296C
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x102974)  # D02974
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Unknown Script 2's Flash
+        #
+        anti_seizure_sub.set_location(0x102AAE)  # D02AAE
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x102AB2)  # D02AB2
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Absolute Zero Flash
+        #
+        anti_seizure_sub.set_location(0x102BFF)  # D02BFF
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x102C03)  # D02C03
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Unknown Script 3's Flash
+        #
+        anti_seizure_sub.set_location(0x1030CB)  # D030CB
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1030CF)  # D030CF
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Reverse Polarity Flash
+        #
+        anti_seizure_sub.set_location(0x10328C)  # D0328C
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x103293)  # D03293
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Rippler Flash
+        #
+        anti_seizure_sub.set_location(0x1033C7)  # D033C7
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1033CB)  # D033CB
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Step Mine Flash
+        #
+        anti_seizure_sub.set_location(0x1034DA)  # D034DA
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1034E1)  # D034E1
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Unknown Script 4's Flash
+        #
+        anti_seizure_sub.set_location(0x1035E7)  # D035E7
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1035F7)  # D035F7
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Schiller Flash
+        #
+        anti_seizure_sub.set_location(0x10380B)
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        # This commented out code is for vanilla Schiller, which BC is no longer using
+        # anti_seizure_sub.set_location(0x10381A)  # D0381A
+        # anti_seizure_sub.bytestring = bytes([0xE0])
+        # anti_seizure_sub.write(output_rom_buffer)
+
+        # anti_seizure_sub.set_location(0x10381E)  # D0381E
+        # anti_seizure_sub.bytestring = bytes([0xF0])
+        # anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Wall Change Flash
+        #
+        anti_seizure_sub.set_location(0x10399F)  # D0399F
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1039A4)  # D039A4
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1039AA)  # D039AA
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1039B0)  # D039B0
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1039B6)  # D039B6
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1039BC)  # D039BC
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1039C2)  # D039C2
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1039C8)  # D039C8
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1039CE)  # D039CE
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1039D5)  # D039D5
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Ultima Flash
+        #
+        anti_seizure_sub.set_location(0x1056EE)  # D056EE
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1056F6)  # D056F6
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Bolt 3/Giga Volt Flash
+        #
+        anti_seizure_sub.set_location(0x10588F)  # D0588F
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x105894)  # D05894
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x105897)  # D05897
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10589A)  # D0589A
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10589D)  # D0589D
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1058A2)  # D058A2
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1058A7)  # D058A7
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1058AC)  # D058AC
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1058B1)  # D058B1
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing X-Zone Flash
+        #
+        anti_seizure_sub.set_location(0x105A5E)  # D05A5E
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x105A6B)  # D05A6B
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x105A7A)  # D05A7A
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Dispel Flash
+        #
+        anti_seizure_sub.set_location(0x105DC3)  # D05DC3
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x105DCA)  # D05DCA
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x105DD3)  # D05DD3
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x105DDC)  # D05DDC
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x105DE5)  # D05DE5
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x105DEE)  # D05DEE
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Pep Up/Break Flash
+        #
+        anti_seizure_sub.set_location(0x1060EB)  # D060EB
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1060EF)  # D060EF
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Shock Flash
+        #
+        anti_seizure_sub.set_location(0x1068BF)  # D068BF
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1068D1)  # D068D1
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Quadra Slam/Slice Flash
+        #
+        # White Flash
+        anti_seizure_sub.set_location(0x1073DD)  # D073DD
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1073EF)  # D073EF
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1073F4)  # D073F4
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        # Green Flash
+        anti_seizure_sub.set_location(0x107403)  # D07403
+        anti_seizure_sub.bytestring = bytes([0x40])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x107425)  # D07425
+        anti_seizure_sub.bytestring = bytes([0x50])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10742A)  # D0742A
+        anti_seizure_sub.bytestring = bytes([0x50])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        # Blue Flash
+        anti_seizure_sub.set_location(0x107437)  # D07437
+        anti_seizure_sub.bytestring = bytes([0x20])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x107459)  # D07459
+        anti_seizure_sub.bytestring = bytes([0x30])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10745E)  # D0745E
+        anti_seizure_sub.bytestring = bytes([0x30])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        # Red Flash
+        anti_seizure_sub.set_location(0x107491)  # D07491
+        anti_seizure_sub.bytestring = bytes([0x80])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1074B3)  # D074B3
+        anti_seizure_sub.bytestring = bytes([0x90])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1074B8)  # D074B8
+        anti_seizure_sub.bytestring = bytes([0x90])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Slash Flash
+        #
+        anti_seizure_sub.set_location(0x1074F5)  # D074F5
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1074FE)  # D074FE
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x107508)  # D07508
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Flash Flash
+        #
+        anti_seizure_sub.set_location(0x107851)  # D07851
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10785D)  # D0785D
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Removing Goner Flash
+        #
+        anti_seizure_sub.set_location(0x1000D8)  # D000D8
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1000DA)  # D000DA
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1000DC)  # D000DC
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1000DE)  # D000DE
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1000E0)  # D000E0
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1000E6)  # D000E6
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1000E8)  # D000E8
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x100173)  # D00173
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x100176)  # D00176
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x100179)  # D00179
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        # BG3 horizontal lines fade to black
+        anti_seizure_sub.set_location(0x1001BD)  # D001BD
+        anti_seizure_sub.bytestring = bytes([0xCF])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x1001BF)  # D001BF
+        anti_seizure_sub.bytestring = bytes([0xB4])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        # ------------- Battle Event Scripts -------------
+        #
+        # Battle Event Script $15
+        #
+        anti_seizure_sub.set_location(0x10B887)  # D0B887
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10B88D)  # D0B88D
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10B894)  # D0B894
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10B89A)  # D0B89A
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10B8A1)  # D0B8A1
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10B8A7)  # D0B8A7
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10B8AE)  # D0B8AE
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10B8B4)  # D0B8B4
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10BCF5)  # D0BCF5
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10BCF9)  # D0BCF9
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Battle Event Script $19
+        #
+        anti_seizure_sub.set_location(0x10C7A4)  # D0C7A4
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10C7AA)  # D0C7AA
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10C7B1)  # D0C7B1
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10C7B7)  # D0C7B7
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10C7BE)  # D0C7BE
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10C7C4)  # D0C7C4
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10C7CB)  # D0C7CB
+        anti_seizure_sub.bytestring = bytes([0xE0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        anti_seizure_sub.set_location(0x10C7D1)  # D0C7D1
+        anti_seizure_sub.bytestring = bytes([0xF0])
+        anti_seizure_sub.write(output_rom_buffer)
+
+        #
+        # Thamasa Attack - Kefka Kills Espers
+        #
+
+        anti_seizure_sub.set_location(0xC03CA)
+        anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
+        anti_seizure_sub.write(output_rom_buffer)
 
     #
     # Removing Bum Rush Flashes
@@ -1230,226 +1451,6 @@ def fewer_flashes(output_rom_buffer: BytesIO):
 
     anti_seizure_sub.set_location(0x106C88)  # D06C87
     anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Quadra Slam/Slice Flash
-    #
-    # White Flash
-    anti_seizure_sub.set_location(0x1073DD)  # D073DD
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1073EF)  # D073EF
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1073F4)  # D073F4
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    # Green Flash
-    anti_seizure_sub.set_location(0x107403)  # D07403
-    anti_seizure_sub.bytestring = bytes([0x40])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x107425)  # D07425
-    anti_seizure_sub.bytestring = bytes([0x50])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10742A)  # D0742A
-    anti_seizure_sub.bytestring = bytes([0x50])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    # Blue Flash
-    anti_seizure_sub.set_location(0x107437)  # D07437
-    anti_seizure_sub.bytestring = bytes([0x20])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x107459)  # D07459
-    anti_seizure_sub.bytestring = bytes([0x30])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10745E)  # D0745E
-    anti_seizure_sub.bytestring = bytes([0x30])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    # Red Flash
-    anti_seizure_sub.set_location(0x107491)  # D07491
-    anti_seizure_sub.bytestring = bytes([0x80])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1074B3)  # D074B3
-    anti_seizure_sub.bytestring = bytes([0x90])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1074B8)  # D074B8
-    anti_seizure_sub.bytestring = bytes([0x90])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Slash Flash
-    #
-    anti_seizure_sub.set_location(0x1074F5)  # D074F5
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1074FE)  # D074FE
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x107508)  # D07508
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Flash Flash
-    #
-    anti_seizure_sub.set_location(0x107851)  # D07851
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10785D)  # D0785D
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Removing Goner Flash
-    #
-    anti_seizure_sub.set_location(0x1000D8)  # D000D8
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1000DA)  # D000DA
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1000DC)  # D000DC
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1000DE)  # D000DE
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1000E0)  # D000E0
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1000E6)  # D000E6
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1000E8)  # D000E8
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x100173)  # D00173
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x100176)  # D00176
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x100179)  # D00179
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    # BG3 horizontal lines fade to black
-    anti_seizure_sub.set_location(0x1001BD)  # D001BD
-    anti_seizure_sub.bytestring = bytes([0xCF])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x1001BF)  # D001BF
-    anti_seizure_sub.bytestring = bytes([0xB4])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    # ------------- Battle Event Scripts -------------
-    #
-    # Battle Event Script $15
-    #
-    anti_seizure_sub.set_location(0x10B887)  # D0B887
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10B88D)  # D0B88D
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10B894)  # D0B894
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10B89A)  # D0B89A
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10B8A1)  # D0B8A1
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10B8A7)  # D0B8A7
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10B8AE)  # D0B8AE
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10B8B4)  # D0B8B4
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10BCF5)  # D0BCF5
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10BCF9)  # D0BCF9
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Battle Event Script $19
-    #
-    anti_seizure_sub.set_location(0x10C7A4)  # D0C7A4
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10C7AA)  # D0C7AA
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10C7B1)  # D0C7B1
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10C7B7)  # D0C7B7
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10C7BE)  # D0C7BE
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10C7C4)  # D0C7C4
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10C7CB)  # D0C7CB
-    anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    anti_seizure_sub.set_location(0x10C7D1)  # D0C7D1
-    anti_seizure_sub.bytestring = bytes([0xF0])
-    anti_seizure_sub.write(output_rom_buffer)
-
-    #
-    # Thamasa Attack - Kefka Kills Espers
-    #
-
-    anti_seizure_sub.set_location(0xC03CA)
-    anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
     anti_seizure_sub.write(output_rom_buffer)
 
     #
