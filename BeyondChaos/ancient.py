@@ -1,3 +1,4 @@
+from io import BytesIO
 from character import get_characters, get_character
 from esperrandomizer import get_espers
 from formationrandomizer import (REPLACE_FORMATIONS, NOREPLACE_FORMATIONS, get_formations, get_fsets,
@@ -22,8 +23,8 @@ def get_npc_palettes():
     return palettes
 
 
-def manage_map_names(fout):
-    fout.seek(0xEF101)
+def manage_map_names(outfile_rom_buffer: BytesIO):
+    outfile_rom_buffer.seek(0xEF101)
     text = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             "abcdefghijklmnopqrstuvwxyz"
             "0123456789")
@@ -31,19 +32,20 @@ def manage_map_names(fout):
     text[" "] = 0x7F
     pointers = {}
     for i in range(1, 101):
-        pointers[i] = fout.tell()
+        pointers[i] = outfile_rom_buffer.tell()
         room_name = "Room %s" % i
         room_name = bytes([text[c] for c in room_name]) + b'\x00'
-        fout.write(room_name)
+        outfile_rom_buffer.write(room_name)
         #fout.write(chr(0))
 
     for i in range(1, 101):
-        fout.seek(0x268400 + (2*i))
+        outfile_rom_buffer.seek(0x268400 + (2 * i))
         pointer = pointers[i] - 0xEF100
-        write_multi(fout, pointer, length=2)
+        write_multi(outfile_rom_buffer, pointer, length=2)
 
 
-def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlog=None):
+def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: BytesIO,
+                   form_music_overrides=None, randlog=None):
     if not form_music_overrides:
         form_music_overrides = {}
 
@@ -51,17 +53,17 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
     if not Options_.is_flag_active("shuffle_commands"):
         alrs = AutoLearnRageSub(require_gau=True)
         alrs.set_location(0x23b73)
-        alrs.write(fout)
+        alrs.write(outfile_rom_buffer)
 
         enable_morph_sub = Substitution()
         enable_morph_sub.bytestring = bytes([0xEA] * 2)
         enable_morph_sub.set_location(0x25410)
-        enable_morph_sub.write(fout)
+        enable_morph_sub.write(outfile_rom_buffer)
 
         enable_mpoint_sub = Substitution()
         enable_mpoint_sub.bytestring = bytes([0xEA] * 2)
         enable_mpoint_sub.set_location(0x25E38)
-        enable_mpoint_sub.write(fout)
+        enable_mpoint_sub.write(outfile_rom_buffer)
 
         change_battle_commands += list(range(18, 28))
 
@@ -72,18 +74,18 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         commands = random.sample(moogle_commands, 2)
         c = get_character(i)
         c.battle_commands = [0x00, commands[0], commands[1], 0x01]
-        c.write_battle_commands(fout)
+        c.write_battle_commands(outfile_rom_buffer)
 
     for i in [32, 33]:
         c = get_character(i)
         c.battle_commands = [0x00, 0x1D, 0xFF, 0x01]
-        c.write_battle_commands(fout)
+        c.write_battle_commands(outfile_rom_buffer)
 
     characters = get_characters()
     gau = [c for c in characters if c.id == 11][0]
     if not Options_.is_flag_active("replace_commands") and gau.battle_commands[1] in [0x11, None]:
         gau.battle_commands[1] = 0xFF
-        gau.write_battle_commands(fout)
+        gau.write_battle_commands(outfile_rom_buffer)
 
     to_dummy = [get_item(0xF6), get_item(0xF7)]
     dummy_names = ["Pebble", "Tissue"]
@@ -92,21 +94,21 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         item.dataname = name
         item.price = 4
         item.itemtype = 6
-        item.write_stats(fout)
+        item.write_stats(outfile_rom_buffer)
     blank_sub = Substitution()
     blank_sub.set_location(0x2D76C1)
     blank_sub.bytestring = bytearray([0xFF] * (0x2D76F5 - blank_sub.location))
     blank_sub.bytestring[blank_sub.size//2] = 0
-    blank_sub.write(fout)
+    blank_sub.write(outfile_rom_buffer)
 
     goddess_save_sub = Substitution()
     goddess_save_sub.bytestring = bytes([0xFD, 0xFD])
     goddess_save_sub.set_location(0xC170A)
-    goddess_save_sub.write(fout)
+    goddess_save_sub.write(outfile_rom_buffer)
     goddess_save_sub.set_location(0xC1743)
-    goddess_save_sub.write(fout)
+    goddess_save_sub.write(outfile_rom_buffer)
     goddess_save_sub.set_location(0xC1866)
-    goddess_save_sub.write(fout)
+    goddess_save_sub.write(outfile_rom_buffer)
 
     # decrease exp needed for level up
     if Options_.is_flag_active('racecave'):
@@ -123,14 +125,14 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         ratio = (float(level) / maxlevel)**2
         ratio = min(ratio, 1.0)
         xptr = 0x2d8220 + (level*2)
-        fout.seek(xptr)
-        exp = read_multi(fout, length=2)
+        outfile_rom_buffer.seek(xptr)
+        exp = read_multi(outfile_rom_buffer, length=2)
         newexp = (exp / divisor)
         remaining = exp - newexp
         newexp = int(round(newexp + (ratio*remaining)))
         newexp = max(newexp, 1)
-        fout.seek(xptr)
-        write_multi(fout, newexp, length=2)
+        outfile_rom_buffer.seek(xptr)
+        write_multi(outfile_rom_buffer, newexp, length=2)
 
     startsub = Substitution()
     startsub.bytestring = bytearray([
@@ -156,16 +158,16 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
     for c in characters:
         i = c.id
         cptr = 0x2d7ca0 + 0x15 + (i*22)
-        fout.flush()
-        fout.seek(cptr)
-        level = ord(fout.read(1))
+        outfile_rom_buffer.flush()
+        outfile_rom_buffer.seek(cptr)
+        level = ord(outfile_rom_buffer.read(1))
         level &= 0xF3
         if i >= 14 or Options_.is_flag_active("speedcave") and i not in starting:
             level |= 0b1000
-        fout.seek(cptr)
-        fout.write(bytes([level]))
-    fout.seek(0xa5e74)
-    fout.write(b'\x00')  # remove Terra's magitek
+        outfile_rom_buffer.seek(cptr)
+        outfile_rom_buffer.write(bytes([level]))
+    outfile_rom_buffer.seek(0xa5e74)
+    outfile_rom_buffer.write(b'\x00')  # remove Terra's magitek
 
     tempcands = [14, 15, random.choice(list(range(18, 28))), random.choice([32, 33])]
     if Options_.is_flag_active('speedcave'):
@@ -178,17 +180,17 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         chargraphics[c] = c
     for c in range(18, 28):
         chargraphics[c] = 0xA
-    for n, i in enumerate(charcands):
+    for npc, i in enumerate(charcands):
         c = [x for x in characters if x.id == i][0]
         if i in chargraphics:
             g = chargraphics[i]
         else:
             g = i
-        startsub.bytestring.extend([0x7F, n, i,
-                                    0x37, n, g,
-                                    0x43, n, c.palette,
-                                    0x40, n, i])
-        c.slotid = n
+        startsub.bytestring.extend([0x7F, npc, i,
+                                    0x37, npc, g,
+                                    0x43, npc, c.palette,
+                                    0x40, npc, i])
+        c.slotid = npc
 
     runaway = random.choice([c for c in characters if hasattr(c, "slotid")
                              and c.id == c.slotid]).slotid
@@ -212,7 +214,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         shadow_leaving_sub.bytestring.append(0xEA)
     shadow_leaving_sub.bytestring += bytearray([0xA9, 0xFE,
                                                 0x20, 0x92, 0x07])
-    shadow_leaving_sub.write(fout)
+    shadow_leaving_sub.write(outfile_rom_buffer)
     shadow_leaving_sub.set_location(0x24861)
     shadow_leaving_sub.bytestring = bytearray([
         0xAE, runaway, 0x30,
@@ -233,7 +235,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         0xD0, 0x05,
         0x2C, 0xDE + (runaway//8), 0x1E,
         ])
-    shadow_leaving_sub.write(fout)
+    shadow_leaving_sub.write(outfile_rom_buffer)
     shadow_leaving_sub.set_location(0x10A851)
     shadow_leaving_sub.bytestring = bytearray([
         0x0E, 0x03, runaway, 0x6A, 0xA8, 0x0F,
@@ -244,12 +246,12 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         0x0E, 0x03, runaway, 0x92, 0xA8, 0x0F,
         0x10, 0xFF,
         ])
-    shadow_leaving_sub.write(fout)
+    shadow_leaving_sub.write(outfile_rom_buffer)
     shadow_leaving_sub.bytestring = bytearray([runaway])
     shadow_leaving_sub.set_location(0x10FC2F)
-    shadow_leaving_sub.write(fout)
+    shadow_leaving_sub.write(outfile_rom_buffer)
     shadow_leaving_sub.set_location(0x10FC5D)
-    shadow_leaving_sub.write(fout)
+    shadow_leaving_sub.write(outfile_rom_buffer)
 
     esperevents = [
         "Ramuh", "Ifrit", "Shiva", "Siren", "Terrato", "Shoat", "Maduin",
@@ -257,8 +259,8 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         "Alexandr", "Crusader", "Ragnarok", "Kirin", "ZoneSeek", "Carbunkl",
         "Phantom", "Sraphim", "Golem", "Unicorn", "Fenrir", "Starlet",
         "Phoenix"]
-    esperevents = dict([(n, i) for (i, n) in enumerate(esperevents)])
-    espers = list(get_espers(sourcefile))
+    esperevents = dict([(npc, i) for (i, npc) in enumerate(esperevents)])
+    espers = list(get_espers(infile_rom_buffer))
     num_espers = 3
     for i in range(num_espers):
         if Options_.is_flag_active("speedcave"):
@@ -286,25 +288,25 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                                      ])
     startsub.bytestring.append(0xFE)
     startsub.set_location(0xADD1E)
-    startsub.write(fout)
+    startsub.write(outfile_rom_buffer)
 
     startsub0 = Substitution()
     startsub0.bytestring = bytearray([0xB2, 0x1E, 0xDD, 0x00, 0xFE])
     startsub0.set_location(0xC9A4F)
-    startsub0.write(fout)
+    startsub0.write(outfile_rom_buffer)
 
     set_airship_sub = Substitution()
     set_airship_sub.bytestring = bytearray([0xB2, 0xD6, 0x02, 0x00,
                                             0xFE])
     set_airship_sub.set_location(0xAF53A)  # need first branch for button press
-    set_airship_sub.write(fout)
+    set_airship_sub.write(outfile_rom_buffer)
 
     tower_msg_sub = Substitution()
     tower_msg_sub.bytestring = bytearray([0xD6, 0xE6, 0xD6, 0xE7])  # reset temp chars
     while len(tower_msg_sub.bytestring) < 12:
         tower_msg_sub.bytestring.append(0xFD)
     tower_msg_sub.set_location(0xA03A7)
-    tower_msg_sub.write(fout)
+    tower_msg_sub.write(outfile_rom_buffer)
 
     from locationrandomizer import NPCBlock, EventBlock
     falcon = get_location(0xb)
@@ -349,7 +351,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             continue
         pilot_sub.bytestring += bytearray([0x3F, i, 0x00])
     pilot_sub.set_location(0xC2110)
-    pilot_sub.write(fout)
+    pilot_sub.write(outfile_rom_buffer)
 
     if Options_.is_flag_active("racecave"):
         randomize_tower(ancient=True, nummaps=50)
@@ -357,19 +359,19 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         randomize_tower(ancient=True, nummaps=85)
     else:
         randomize_tower(ancient=True, nummaps=300)
-    manage_map_names(fout)
+    manage_map_names(outfile_rom_buffer)
 
     # remove event pointers so Ancient Cave doesn't overwrite and create some softlock exits
 
     fix_cave_sub = Substitution()
     fix_cave_sub.set_location(0x11FC73)  # Owzer's Mansion change to no event
     fix_cave_sub.bytestring = bytes([0xB3, 0x5E, 0x00])
-    fix_cave_sub.write(fout)
+    fix_cave_sub.write(outfile_rom_buffer)
 
     fix_cave_sub = Substitution()
     fix_cave_sub.set_location(0x11FB89)  # Gau's Father change to no event
     fix_cave_sub.bytestring = bytes([0xB3, 0x5E, 0x00])
-    fix_cave_sub.write(fout)
+    fix_cave_sub.write(outfile_rom_buffer)
 
     unused_enemies = [u for u in get_monsters() if u.id in REPLACE_ENEMIES]
 
@@ -441,13 +443,13 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
     ch_bgs = random.sample(ch_bgs, 10) + [random.choice(waters), snows[0]]
     random.shuffle(ch_bgs)
 
-    for l in get_locations():
-        if not hasattr(l, "ancient_rank"):
-            l.entrance_set.entrances = []
-            l.entrance_set.longentrances = []
-            l.chests = []
-            l.attacks = 0
-            l.write_data(fout)
+    for location in get_locations():
+        if not hasattr(location, "ancient_rank"):
+            location.entrance_set.entrances = []
+            location.entrance_set.longentrances = []
+            location.chests = []
+            location.attacks = 0
+            location.write_data(outfile_rom_buffer)
 
     pointer = 0xB4E35
     if Options_.is_flag_active('racecave'):
@@ -460,15 +462,15 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         # could freeze the game d+pad and A on same frame tho
         leader_sub.set_location(0x324b7)
         leader_sub.bytestring = bytes([0xEA, 0xEA, 0xEA])
-        leader_sub.write(fout)
+        leader_sub.write(outfile_rom_buffer)
         leader_sub.set_location(0x32473)
         leader_sub.bytestring = bytes([0xEA, 0xEA])
-        leader_sub.write(fout)
+        leader_sub.write(outfile_rom_buffer)
 
         leader_sub.set_location(0xa02da)
         leader_sub.bytestring = bytes([
             0xB2, subptr & 0xFF, (subptr >> 8) & 0xFF, subptr >> 16])
-        leader_sub.write(fout)
+        leader_sub.write(outfile_rom_buffer)
         leader_sub.set_location(pointer)
         leader_sub.bytestring = bytearray([])
         locked = 0
@@ -493,7 +495,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             mem_addr = ((0x1b+byte) << 3) | bit
             leader_sub.bytestring += bytearray([0xD6, mem_addr])
         leader_sub.bytestring += bytearray([0x96, 0xFE])
-        leader_sub.write(fout)
+        leader_sub.write(outfile_rom_buffer)
         pswitch_ptr = pointer - 0xa0000
         pointer += len(leader_sub.bytestring)
 
@@ -574,7 +576,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         setcands = [f for f in get_fsets() if f.setid >= 0x100 and f.unused]
         fset = setcands.pop()
         fset.formids = formids
-        fset.write_data(fout)
+        fset.write_data(outfile_rom_buffer)
         timer = max([e.stats['hp'] for f in formations
                      for e in f.present_enemies])
         reverse = False
@@ -606,10 +608,10 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         sub = Substitution()
         sub.set_location(ptr)
         sub.bytestring = bytes(bytestring)
-        sub.write(fout)
+        sub.write(outfile_rom_buffer)
         return ptr + len(enemy_template)
 
-    shops = get_shops(sourcefile)
+    shops = get_shops(infile_rom_buffer)
     shopranks = {}
     itemshops = [s for s in shops
                  if s.shoptype_pretty in ["items", "misc"]]
@@ -667,7 +669,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
     num_in_party_sub = Substitution()
     num_in_party_sub.set_location(0xAC654)
     num_in_party_sub.bytestring = [0xB2, c0, b0, a0]
-    num_in_party_sub.write(fout)
+    num_in_party_sub.write(outfile_rom_buffer)
     num_in_party_sub.set_location(pointer)
     num_in_party_sub.bytestring = bytes([
         0xC0, 0xAE, 0x01, c1, b1, a1,
@@ -678,7 +680,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         0xD3, 0xA2,
         0xFE
     ])
-    num_in_party_sub.write(fout)
+    num_in_party_sub.write(outfile_rom_buffer)
     pointer += len(num_in_party_sub.bytestring)
     ally_addrs = {}
     for chosen in set(optional_chars):
@@ -709,7 +711,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                 uptr = (pointer - 1) - 0xa0000
                 a, b, c = (uptr >> 16, (uptr >> 8) & 0xFF, uptr & 0xFF)
                 allysub.bytestring[7:10] = [c, b, a]
-                allysub.write(fout)
+                allysub.write(outfile_rom_buffer)
                 event_addr = (allysub.location - 0xa0000) & 0x3FFFF
                 ally_addrs[chosen.id, party_id, npc_id] = event_addr
 
@@ -745,27 +747,27 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         sub.bytestring[15:17] = price
         assert None not in sub.bytestring
         sub.bytestring = bytes(sub.bytestring)
-        sub.write(fout)
+        sub.write(outfile_rom_buffer)
         return sub
 
     rest_shops = []
     random.shuffle(restlocs)
-    for l in restlocs:
-        assert l.ancient_rank == 0
-        l.music = restmusics.pop()
-        l.make_warpable()
+    for location in restlocs:
+        assert location.ancient_rank == 0
+        location.music = restmusics.pop()
+        location.make_warpable()
 
-        innsub = make_paysub(inn_template, inn_template2, l, pointer)
+        innsub = make_paysub(inn_template, inn_template2, location, pointer)
         pointer += innsub.size
-        savesub = make_paysub(save_template, save_template2, l, pointer)
+        savesub = make_paysub(save_template, save_template2, location, pointer)
         pointer += savesub.size
         if Options_.is_flag_active('racecave'):
             pswitch_sub = make_paysub(partyswitch_template,
-                                      partyswitch_template2, l, pointer)
+                                      partyswitch_template2, location, pointer)
             pointer += pswitch_sub.size
 
         event_addr = (innsub.location - 0xa0000) & 0x3FFFF
-        innkeeper = NPCBlock(pointer=None, locid=l.locid)
+        innkeeper = NPCBlock(pointer=None, locid=location.locid)
         graphics = random.randint(14, 62)
         palette = random.choice(npc_palettes[graphics])
         attributes = {
@@ -778,9 +780,9 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             "move_type": 0, "sprite_priority": 0, "vehicle": 0}
         for key, value in attributes.items():
             setattr(innkeeper, key, value)
-        l.npcs.append(innkeeper)
+        location.npcs.append(innkeeper)
 
-        unequipper = NPCBlock(pointer=None, locid=l.locid)
+        unequipper = NPCBlock(pointer=None, locid=location.locid)
         attributes = {
             "graphics": 0x1e, "palette": 3, "x": 49, "y": 16,
             "show_on_vehicle": False, "speed":  0,
@@ -791,10 +793,10 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             "move_type": 0, "sprite_priority": 0, "vehicle": 0}
         for key, value in attributes.items():
             setattr(unequipper, key, value)
-        l.npcs.append(unequipper)
+        location.npcs.append(unequipper)
 
         event_addr = (savesub.location - 0xa0000) & 0x3FFFF
-        pay_to_save = NPCBlock(pointer=None, locid=l.locid)
+        pay_to_save = NPCBlock(pointer=None, locid=location.locid)
         attributes = {
             "graphics": 0x6f, "palette": 6, "x": 47, "y": 4,
             "show_on_vehicle": False, "speed":  0,
@@ -805,12 +807,12 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             "move_type": 0, "sprite_priority": 0, "vehicle": 0}
         for key, value in attributes.items():
             setattr(pay_to_save, key, value)
-        l.npcs.append(pay_to_save)
+        location.npcs.append(pay_to_save)
 
-        if l.restrank == 4:
+        if location.restrank == 4:
             final_loc = get_location(412)
             if len(final_loc.npcs) < 2:
-                final_save = NPCBlock(pointer=None, locid=l.locid)
+                final_save = NPCBlock(pointer=None, locid=location.locid)
                 attributes = {
                     "graphics": 0x6f, "palette": 6, "x": 82, "y": 43,
                     "show_on_vehicle": False, "speed":  0,
@@ -823,14 +825,14 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                     setattr(final_save, key, value)
                 final_loc.npcs.append(final_save)
 
-        shop = shopranks[l.restrank].pop()
+        shop = shopranks[location.restrank].pop()
         if shop is not None:
-            shop.name = "Rest stop " + str(l.restrank)
+            shop.name = "Rest stop " + str(location.restrank)
             rest_shops.append(shop)
             shopsub = Substitution()
             shopsub.set_location(pointer)
             shopsub.bytestring = bytes([0x9B, shop.shopid, 0xFE])
-            shopsub.write(fout)
+            shopsub.write(outfile_rom_buffer)
             pointer += len(shopsub.bytestring)
             event_addr = (shopsub.location - 0xa0000) & 0x3FFFF
         else:
@@ -838,8 +840,8 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             colsub = Substitution()
             colsub.set_location(0xb78ea)
             colsub.bytestring = bytes([0x59, 0x04, 0x5C, 0xFE])
-            colsub.write(fout)
-        shopkeeper = NPCBlock(pointer=None, locid=l.locid)
+            colsub.write(outfile_rom_buffer)
+        shopkeeper = NPCBlock(pointer=None, locid=location.locid)
         graphics = random.randint(14, 62)
         palette = random.choice(npc_palettes[graphics])
         attributes = {
@@ -852,7 +854,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             "move_type": 0, "sprite_priority": 0, "vehicle": 0}
         for key, value in attributes.items():
             setattr(shopkeeper, key, value)
-        l.npcs.append(shopkeeper)
+        location.npcs.append(shopkeeper)
 
         if optional_chars:
             chosen = optional_chars.pop()
@@ -861,8 +863,8 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                 byte, bit = 0, 0
             else:
                 byte, bit = (chosen.slotid // 8) + 0x1b, chosen.slotid % 8
-            event_addr = ally_addrs[chosen.id, l.party_id, len(l.npcs)]
-            ally = NPCBlock(pointer=None, locid=l.locid)
+            event_addr = ally_addrs[chosen.id, location.party_id, len(location.npcs)]
+            ally = NPCBlock(pointer=None, locid=location.locid)
             attributes = {
                 "graphics": chargraphics[chosen.id],
                 "palette": chosen.palette,
@@ -873,7 +875,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                 "bg2_scroll": 0, "move_type": 0, "sprite_priority": 0, "vehicle": 0}
             for key, value in attributes.items():
                 setattr(ally, key, value)
-            l.npcs.append(ally)
+            location.npcs.append(ally)
             if (len(optional_chars) == 12 or (optional_chars and
                                               Options_.is_flag_active('speedcave'))):
                 temp = optional_chars.pop()
@@ -883,7 +885,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                         byte, bit = 0, 0
                     else:
                         byte, bit = (chosen.slotid // 8) + 0x1b, chosen.slotid % 8
-                    event_addr = ally_addrs[chosen.id, l.party_id, len(l.npcs)]
+                    event_addr = ally_addrs[chosen.id, location.party_id, len(location.npcs)]
                     attributes = {
                         "graphics": chargraphics[chosen.id],
                         "palette": chosen.palette,
@@ -892,16 +894,16 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                         "facing": 2, "no_turn_when_speaking": False, "layer_priority": 0,
                         "special_anim": 0, "memaddr": byte, "membit": bit,
                         "bg2_scroll": 0, "move_type": 0, "sprite_priority": 0, "vehicle": 0}
-                    ally = NPCBlock(pointer=None, locid=l.locid)
+                    ally = NPCBlock(pointer=None, locid=location.locid)
                     for key, value in attributes.items():
                         setattr(ally, key, value)
-                    l.npcs.append(ally)
+                    location.npcs.append(ally)
 
-        if l.restrank == 1:
+        if location.restrank == 1:
             num_espers = 3
-        elif l.restrank in [2, 3]:
+        elif location.restrank in [2, 3]:
             num_espers = 2
-        elif l.restrank == 4:
+        elif location.restrank == 4:
             num_espers = 1
         for i in range(num_espers):
             if not espers:
@@ -909,7 +911,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             if Options_.is_flag_active('speedcave'):
                 candidates = espers
             else:
-                esperrank = l.restrank
+                esperrank = location.restrank
                 if random.randint(1, 7) == 7:
                     esperrank += 1
                 candidates = []
@@ -923,12 +925,12 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             espers.remove(esper)
             espersub = espersubs[esper.name]
             index = espersub.bytestring.index(None)
-            espersub.bytestring[index] = 0x10 | len(l.npcs)
-            espersub.write(fout)
+            espersub.bytestring[index] = 0x10 | len(location.npcs)
+            espersub.write(outfile_rom_buffer)
             event_addr = (espersub.location - 0xa0000) & 0x3FFFF
             event_value = esperevents[esper.name]
             byte, bit = event_value // 8, event_value % 8
-            magicite = NPCBlock(pointer=None, locid=l.locid)
+            magicite = NPCBlock(pointer=None, locid=location.locid)
             attributes = {
                 "graphics": 0x5B, "palette": 2, "x": 44+i, "y": 16,
                 "show_on_vehicle": False, "speed":  0,
@@ -939,11 +941,11 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                 "move_type": 0, "sprite_priority": 0, "vehicle": 0}
             for key, value in attributes.items():
                 setattr(magicite, key, value)
-            l.npcs.append(magicite)
+            location.npcs.append(magicite)
 
         event_addr = pointer - 0xa0000
-        pointer = make_challenge_event(l, pointer)
-        enemy = NPCBlock(pointer=None, locid=l.locid)
+        pointer = make_challenge_event(location, pointer)
+        enemy = NPCBlock(pointer=None, locid=location.locid)
         attributes = {
             "graphics": 0x3e, "palette": 2, "x": 42, "y": 6,
             "show_on_vehicle": False, "speed":  0,
@@ -954,11 +956,11 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             "move_type": 0, "sprite_priority": 0, "vehicle": 0}
         for key, value in attributes.items():
             setattr(enemy, key, value)
-        l.npcs.append(enemy)
+        location.npcs.append(enemy)
 
         if Options_.is_flag_active('racecave'):
             event_addr = (pswitch_sub.location - 0xa0000) & 0x3FFFF
-            partyswitch = NPCBlock(pointer=None, locid=l.locid)
+            partyswitch = NPCBlock(pointer=None, locid=location.locid)
             attributes = {
                 "graphics": 0x17, "palette": 0, "x": 55, "y": 16,
                 "show_on_vehicle": False, "speed":  0,
@@ -969,9 +971,9 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                 "move_type": 0, "sprite_priority": 0, "vehicle": 0}
             for key, value in attributes.items():
                 setattr(partyswitch, key, value)
-            l.npcs.append(partyswitch)
+            location.npcs.append(partyswitch)
 
-        renamer = NPCBlock(pointer=None, locid=l.locid)
+        renamer = NPCBlock(pointer=None, locid=location.locid)
         attributes = {
             "graphics": 0x24, "palette": 0, "x": 47, "y": 16,
             "show_on_vehicle": False, "speed": 0,
@@ -982,7 +984,7 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             "move_type": 0, "sprite_priority": 0, "vehicle": 0}
         for key, value in attributes.items():
             setattr(renamer, key, value)
-        l.npcs.append(renamer)
+        location.npcs.append(renamer)
 
     for s in sorted(rest_shops, key=lambda s: s.name):
         if "shops"not in randlog:
@@ -1001,45 +1003,45 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
     encrate_sub = Substitution()
     encrate_sub.set_location(0xC2BF)
     encrate_sub.bytestring = bytes(dungeon_rates)
-    encrate_sub.write(fout)
+    encrate_sub.write(outfile_rom_buffer)
 
     maxrank = max(locations, key=lambda l: l.ancient_rank).ancient_rank
-    for l in locations:
-        if l not in restlocs and (l.npcs or l.events):
-            for n in l.npcs:
-                if n == final_save:
+    for location in locations:
+        if location not in restlocs and (location.npcs or location.events):
+            for npc in location.npcs:
+                if npc == final_save:
                     continue
-                if n.graphics == 0x6F:
-                    n.memaddr, n.membit, n.event_addr = 0x73, 1, 0x5EB3
+                if npc.graphics == 0x6F:
+                    npc.memaddr, npc.membit, npc.event_addr = 0x73, 1, 0x5EB3
                     success = False
-                    for e in l.events:
-                        if e.x % 128 == n.x % 128 and e.y % 128 == n.y % 128:
+                    for event in location.events:
+                        if event.x % 128 == npc.x % 128 and event.y % 128 == npc.y % 128:
                             if success:
                                 raise Exception("Duplicate events found.")
-                            e.event_addr = 0x5EB3
+                            event.event_addr = 0x5EB3
                             success = True
                     if not success:
                         raise Exception("No corresponding event found.")
-        for e in l.entrances:
-            e.dest |= 0x800
-        rank = l.ancient_rank
-        l.name_id = min(rank, 0xFF)
+        for entrance in location.entrances:
+            entrance.dest |= 0x800
+        rank = location.ancient_rank
+        location.name_id = min(rank, 0xFF)
 
-        if not hasattr(l, "restrank"):
-            if hasattr(l, "secret_treasure") and l.secret_treasure:
+        if not hasattr(location, "restrank"):
+            if hasattr(location, "secret_treasure") and location.secret_treasure:
                 pass
-            elif l.locid == 334 or not hasattr(l, "routerank"):
-                l.music = 58
-            elif l.routerank in levelmusic:
-                l.music = levelmusic[l.routerank]
+            elif location.locid == 334 or not hasattr(location, "routerank"):
+                location.music = 58
+            elif location.routerank in levelmusic:
+                location.music = levelmusic[location.routerank]
             else:
                 raise Exception
 
-        l.setid = rank
+        location.setid = rank
         if rank == 0:
-            l.attacks = 0
+            location.attacks = 0
         elif rank > 0xFF:
-            l.setid = random.randint(0xF0, 0xFF)
+            location.setid = random.randint(0xF0, 0xFF)
         else:
             def enrank(r):
                 mr = min(maxrank, 0xFF)
@@ -1109,10 +1111,10 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                 if formation.get_music() == 0:
                     formation.set_music(6)
                     formation.set_continuous_music()
-                    formation.write_data(fout)
-            fset.write_data(fout)
+                    formation.write_data(outfile_rom_buffer)
+            fset.write_data(outfile_rom_buffer)
 
-        if not (hasattr(l, "secret_treasure") and l.secret_treasure):
+        if not (hasattr(location, "secret_treasure") and location.secret_treasure):
             if Options_.is_flag_active('speedcave') or rank == 0:
                 low = random.randint(0, 400)
                 high = random.randint(low, low*5)
@@ -1131,11 +1133,11 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                 enemy_limit *= 1.5
             else:
                 enemy_limit = None
-            l.unlock_chests(int(low), int(high), monster=monster,
+            location.unlock_chests(int(low), int(high), monster=monster,
                             guarantee_miab_treasure=True,
                             enemy_limit=enemy_limit, uncapped_monsters=Options_.is_flag_active('bsiab'))
 
-        l.write_data(fout)
+        location.write_data(outfile_rom_buffer)
 
     final_cut = Substitution()
     final_cut.set_location(0xA057D)
@@ -1182,8 +1184,8 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
             1: [0xC18A4, 0xC184B],
             2: [0xC16DD, 0xC171D, 0xC1756],
             3: [None, None, None]}
-        fout.seek(0xA0F6F)
-        fout.write(bytes([0x36]))
+        outfile_rom_buffer.seek(0xA0F6F)
+        outfile_rom_buffer.write(bytes([0x36]))
         candidates = sorted(boss_formations, key=lambda b: b.rank())
         candidates = [c for c in candidates if c.inescapable]
         candidates = candidates[random.randint(0, len(candidates)-16):]
@@ -1211,8 +1213,8 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
                                       7, 8, 9, 10, 11, 13])
                 fset = get_2pack(chosen)
                 if address is not None:
-                    fout.seek(address)
-                    fout.write(bytes([fset.setid & 0xFF]))
+                    outfile_rom_buffer.seek(address)
+                    outfile_rom_buffer.write(bytes([fset.setid & 0xFF]))
                 else:
                     bg = bgs.pop()
                     final_cut.bytestring += bytearray([
@@ -1223,4 +1225,4 @@ def manage_ancient(Options_, fout, sourcefile, form_music_overrides=None, randlo
         assert not chosens
 
     final_cut.bytestring += bytearray([0xB2, 0x64, 0x13, 0x00])
-    final_cut.write(fout)
+    final_cut.write(outfile_rom_buffer)

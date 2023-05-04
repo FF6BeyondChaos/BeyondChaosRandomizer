@@ -304,18 +304,18 @@ def select_magicite(candidates, esper_ids_to_replace):
     return results
 
 
-def randomize_magicite(fout, sourcefile):
+def randomize_magicite(outfile_rom_buffer, infile_rom_buffer):
     magicite = []
 
     # Some espers use 128x128 graphics, and those look like crap in the Ifrit/Shiva fight
     # So make sure Ifrit and Shiva have espers with small graphics. Tritoch also has
     # Issues with large sprites in the cutscene with the MagiTek armor
-    espers = get_espers(sourcefile)
+    espers = get_espers(infile_rom_buffer)
     shuffled_espers = {}
     espers_by_name = {e.name: e for e in espers}
     esper_graphics = [MonsterGraphicBlock(pointer=0x127780 + (5 * i), name="") for i in range(len(espers))]
     for eg in esper_graphics:
-        eg.read_data(sourcefile)
+        eg.read_data(infile_rom_buffer)
 
     # Ifrit's esper graphics are large. But he has separate enemy graphics that are fine.
     ifrit_graphics = copy.copy(get_monster(0x109).graphics)
@@ -382,7 +382,7 @@ def randomize_magicite(fout, sourcefile):
     for i, e in shuffled_espers.items():
         e.location = locations[i]
 
-    s = sourcefile
+    s = infile_rom_buffer
     # with open(sourcefile, 'br') as s:
     for line in open(MAGICITE_TABLE, 'r'):
         line = line.split('#')[0].strip()
@@ -412,8 +412,8 @@ def randomize_magicite(fout, sourcefile):
         set_dialogue_var(original_name + "Possessive", new_name + "'s")
         dotted_new_name = "".join(chain(*zip(new_name, repeat('.'))))[:-1]
         set_dialogue_var(original_name + "Dotted", dotted_new_name)
-        fout.seek(m.address + 1)
-        fout.write(bytes([m.esper_index + 0x36]))
+        outfile_rom_buffer.seek(m.address + 1)
+        outfile_rom_buffer.write(bytes([m.esper_index + 0x36]))
 
     phoenix_replacement = shuffled_espers[espers_by_name["Phoenix"].id]
     set_location_name(71, f"{phoenix_replacement.name.upper()} CAVE")
@@ -424,14 +424,14 @@ def randomize_magicite(fout, sourcefile):
         monster = get_monster(monster_id)
         esper_id = [e.id for e in espers if e.name == name][0]
         replacement = shuffled_espers[esper_id]
-        change_enemy_name(fout, monster_id, replacement.name)
+        change_enemy_name(outfile_rom_buffer, monster_id, replacement.name)
         mg = esper_graphics[replacement.id]
         monster.graphics.copy_data(mg)
-        monster.graphics.write_data(fout)
+        monster.graphics.write_data(outfile_rom_buffer)
 
     ragnarok = get_item(27)
     ragnarok.dataname = bytes([0xd9]) + name_to_bytes(shuffled_espers[espers_by_name["Ragnarok"].id].name, 12)
-    ragnarok.write_stats(fout)
+    ragnarok.write_stats(outfile_rom_buffer)
 
     return shuffled_espers
 

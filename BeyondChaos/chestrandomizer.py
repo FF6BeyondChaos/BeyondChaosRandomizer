@@ -281,13 +281,13 @@ class ChestBlock:
     def set_id(self, chestid):
         self.chestid = chestid
 
-    def read_data(self, rom_file_buffer: BytesIO=False):
+    def read_data(self, infile_rom_buffer: BytesIO=False):
         global extra_miabs
-        rom_file_buffer.seek(self.pointer)
-        self.position = read_multi(rom_file_buffer, length=2)
-        self.memid = ord(rom_file_buffer.read(1))
-        self.content_type = ord(rom_file_buffer.read(1))
-        self.contents = ord(rom_file_buffer.read(1))
+        infile_rom_buffer.seek(self.pointer)
+        self.position = read_multi(infile_rom_buffer, length=2)
+        self.memid = ord(infile_rom_buffer.read(1))
+        self.content_type = ord(infile_rom_buffer.read(1))
+        self.contents = ord(infile_rom_buffer.read(1))
         self.oldid = self.memid | ((self.content_type & 1) << 8)
 
         mark_taken_id(self.effective_id)
@@ -362,17 +362,17 @@ class ChestBlock:
             self.content_type &= 0xFE
         self.memid = nextid & 0xFF
 
-    def write_data(self, fout, nextpointer):
-        fout.seek(nextpointer)
-        write_multi(fout, self.position, length=2)
+    def write_data(self, outfile_rom_buffer: BytesIO, nextpointer):
+        outfile_rom_buffer.seek(nextpointer)
+        write_multi(outfile_rom_buffer, self.position, length=2)
 
         if self.memid is None:
             self.set_new_id()
 
         # TODO: Preserve same IDs on chests like in Figaro Cave
-        fout.write(bytes([self.memid]))
-        fout.write(bytes([self.content_type]))
-        fout.write(bytes([self.contents]))
+        outfile_rom_buffer.write(bytes([self.memid]))
+        outfile_rom_buffer.write(bytes([self.content_type]))
+        outfile_rom_buffer.write(bytes([self.contents]))
 
     def get_current_value(self, guideline=None):
         if self.treasure:
@@ -576,7 +576,7 @@ class EventItem:
         self.content_type = c.content_type
         self.contents = c.contents
 
-    def write_data(self, fout, cutscene_skip=False):
+    def write_data(self, output_rom_buffer: BytesIO, cutscene_skip=False):
         content_command_dict = {0x80: 0x6E, 0x40: 0x6D, 0x20: 0x6F}
 
         event_item_sub = Substitution()
@@ -594,13 +594,13 @@ class EventItem:
             event_item_sub.bytestring.extend([0xFD, 0xFD])  # Do nothing
         if not cutscene_skip or not self.cutscene_skip_pointer:
             event_item_sub.bytestring.extend(self.postfix_bytes)
-        event_item_sub.write(fout)
+        event_item_sub.write(output_rom_buffer)
 
         duplicate_dict = duplicate_event_item_skip_dict if cutscene_skip else duplicate_event_item_dict
         if self.pointer in duplicate_dict:
             prev_pointer = self.pointer
             self.pointer = duplicate_dict[self.pointer]
-            self.write_data(fout)
+            self.write_data(output_rom_buffer)
             self.pointer = prev_pointer
         elif self.pointer == 0xCD59E:
             event_item_sub.bytestring = bytes([
@@ -609,7 +609,7 @@ class EventItem:
                 # Show text 0x06E5 at bottom, no text box, with item self.contents
                 0xFE])  # return
             event_item_sub.set_location(0x10CF4A)
-            event_item_sub.write(fout)
+            event_item_sub.write(output_rom_buffer)
 
             # Change Lone Wolf text to say item placeholder instead of gold hairpin
             text = ("<line>Grrrr…<line>"
@@ -621,7 +621,7 @@ class EventItem:
             # move Lone Wolf talking into a subroutine
             event_item_sub.bytestring = bytes([0xB2, 0x4A, 0xCF, 0x06])
             event_item_sub.set_location(0xCD581)
-            event_item_sub.write(fout)
+            event_item_sub.write(output_rom_buffer)
 
 
 # TODO: Maybe this should be in a text file
@@ -711,15 +711,16 @@ def get_event_items():
     return event_items_dict
 
 
-def mutate_event_items(fout, cutscene_skip=False, crazy_prices=False, no_monsters=False, uncapped_monsters=False):
+def mutate_event_items(outfile_rom_buffer: BytesIO, cutscene_skip=False, crazy_prices=False,
+                       no_monsters=False, uncapped_monsters=False):
     event_item_sub = Substitution()
     event_item_sub.set_location(0x9926)
     event_item_sub.bytestring = bytes([0x8A, 0xD6, 0x99, 0xd6])  # pointer to new event commands 66 and 67
-    event_item_sub.write(fout)
+    event_item_sub.write(outfile_rom_buffer)
     event_item_sub.set_location(0x9934)
     event_item_sub.bytestring = bytes(
         [0x13, 0xD6, 0x26, 0xD6, 0x71, 0xD6])  # pointers to new event commands 6D, 6E, and 6F
-    event_item_sub.write(fout)
+    event_item_sub.write(outfile_rom_buffer)
 
     event_item_sub.set_location(0xD613)
     event_item_sub.bytestring = bytes([
@@ -747,12 +748,12 @@ def mutate_event_items(fout, cutscene_skip=False, crazy_prices=False, no_monster
         0xA5, 0xED, 0x85, 0x1A, 0x85, 0x22, 0x64, 0x24, 0x20, 0xE5, 0x02, 0xA9, 0x01, 0x20, 0x70, 0x9B, 0x4C, 0xBC,
         0xA4,
     ])
-    event_item_sub.write(fout)
+    event_item_sub.write(outfile_rom_buffer)
 
-    fout.seek(0xC3243)
-    phoenix_events = fout.read(0x3F)
-    fout.seek(0xC324F)
-    fout.write(phoenix_events)
+    outfile_rom_buffer.seek(0xC3243)
+    phoenix_events = outfile_rom_buffer.read(0x3F)
+    outfile_rom_buffer.seek(0xC324F)
+    outfile_rom_buffer.write(phoenix_events)
 
     # End some text boxes early so they don't show the item.
     early_end_texts = [
@@ -776,4 +777,4 @@ def mutate_event_items(fout, cutscene_skip=False, crazy_prices=False, no_monster
         for e in event_items_dict[location]:
             e.mutate_contents(cutscene_skip=cutscene_skip, no_monsters=no_monsters, uncapped_monsters=uncapped_monsters,
                               crazy_prices=crazy_prices)
-            e.write_data(fout, cutscene_skip=cutscene_skip)
+            e.write_data(outfile_rom_buffer, cutscene_skip=cutscene_skip)
