@@ -79,7 +79,7 @@ TEST_ON = True
 #TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin easymodo dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dearestmolulu questionablecontent thescenarionottaken|1603333081"
 # FLARE GLITCH TEST_SEED = "CE-4.2.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z notawaiter dearestmolulu easymodo|1682567897"
+TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z johnnydmad|1682567897"
 #TEST_SEED = "CE-4.2.1|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
 TEST_FILE = "D:\Beyond Chaos\FF3DS.smc"
 seed, flags = None, None
@@ -5851,7 +5851,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     reseed()
 
     if has_music:
-        randomize_music(outfile_rom_buffer, Options_, opera=opera, form_music_overrides=form_music)
+        from utils import custom_path
+        randomize_music(outfile_rom_buffer, Options_, playlist_path=custom_path , playlist_filename="songs.txt",
+            opera=opera, form_music_overrides=form_music)
         log(get_music_spoiler(), section="music")
     reseed()
 
