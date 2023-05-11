@@ -198,14 +198,14 @@ class FileManager(object):
         return s.strip()
 
     def write_all(self):
-        for f in self.flat_files:
-            f.write_data()
+        for flat_file in self.flat_files:
+            flat_file.write_data()
 
     def get_file(self, name):
         filepath = path.join(self.dirname, name)
-        for f in self.flat_files:
-            if f.__repr__() == filepath:
-                return f
+        for flat_file in self.flat_files:
+            if flat_file.__repr__() == filepath:
+                return flat_file
 
     def export_file(self, name, filepath=None):
         if not name.endswith(';1'):
@@ -215,10 +215,10 @@ class FileManager(object):
         dirname = path.split(filepath)[0]
         if dirname and not path.exists(dirname):
             makedirs(dirname)
-        f = self.get_file(name)
-        if f is None:
+        file = self.get_file(name)
+        if file is None:
             return None
-        f.write_data(filepath)
+        file.write_data(filepath)
         return filepath
 
     def import_file(self, name, filepath=None, new_target_sector=None,

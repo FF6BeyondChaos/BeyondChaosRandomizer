@@ -400,14 +400,14 @@ class FormationSet():
         else:
             self.sixteen_pack = False
 
-    def write_data(self, fout):
-        fout.seek(self.pointer)
+    def write_data(self, outfile_rom_buffer: BytesIO):
+        outfile_rom_buffer.seek(self.pointer)
         for value in self.formids:
             if self.sixteen_pack:
                 value |= 0x8000
             else:
                 value &= 0x7FFF
-            write_multi(fout, value, length=2)
+            write_multi(outfile_rom_buffer, value, length=2)
 
     def remove_redundant_formation(self, fsets, replacement=None,
                                    check_only=False):

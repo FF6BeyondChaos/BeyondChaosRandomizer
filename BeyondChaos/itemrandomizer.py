@@ -266,27 +266,27 @@ class ItemBlock:
 
         return s
 
-    def write_stats(self, fout):
-        fout.seek(self.pointer)
-        fout.write(bytes([self.itemtype]))
+    def write_stats(self, outfile_rom_buffer: BytesIO):
+        outfile_rom_buffer.seek(self.pointer)
+        outfile_rom_buffer.write(bytes([self.itemtype]))
 
         self.confirm_heavy()
-        write_multi(fout, self.equippable, length=2)
+        write_multi(outfile_rom_buffer, self.equippable, length=2)
 
         s = bytes([self.features[key] for key in ITEM_STATS])
-        fout.write(s)
+        outfile_rom_buffer.write(s)
 
-        write_multi(fout, self.price, length=2)
+        write_multi(outfile_rom_buffer, self.price, length=2)
 
         if self.is_weapon or (self.itemtype & 0x0f) == 0x01:
             if self.itemid < 93:
-                fout.seek(0x2CE408 + (8 * self.itemid))
+                outfile_rom_buffer.seek(0x2CE408 + (8 * self.itemid))
             else:
-                fout.seek(0x303100 + (8 * (self.itemid - 93)))
-            fout.write(bytes(self.weapon_animation))
+                outfile_rom_buffer.seek(0x303100 + (8 * (self.itemid - 93)))
+            outfile_rom_buffer.write(bytes(self.weapon_animation))
 
-        fout.seek(0x12B300 + (13 * self.itemid))
-        fout.write(bytes(self.dataname))
+        outfile_rom_buffer.seek(0x12B300 + (13 * self.itemid))
+        outfile_rom_buffer.write(bytes(self.dataname))
 
     def confirm_heavy(self):
         if self.heavy and self.equippable:
@@ -993,13 +993,13 @@ sperelic2 = {0x04: (0x3619C, 0x361A1),
 invalid_commands = [0x00, 0x04, 0x14, 0x15, 0x19, 0xFF]
 
 
-def reset_cursed_shield(fout):
+def reset_cursed_shield(output_rom_buffer: BytesIO):
     cursed = get_item(0x66)
     cursed.equippable = cursed.equippable & 0x0FFF
-    cursed.write_stats(fout)
+    cursed.write_stats(output_rom_buffer)
 
 
-def reset_special_relics(items, characters, fout):
+def reset_special_relics(items, characters, output_rom_buffer: BytesIO):
     global changed_commands
     characters = [c for c in characters if c.id < 14]
     changedict = {}
@@ -1072,10 +1072,10 @@ def reset_special_relics(items, characters, fout):
 
             for ptrdict in [sperelic, sperelic2]:
                 beforeptr, afterptr = ptrdict[flag]
-                fout.seek(beforeptr)
-                fout.write(bytes([before]))
-                fout.seek(afterptr)
-                fout.write(bytes([after]))
+                output_rom_buffer.seek(beforeptr)
+                output_rom_buffer.write(bytes([before]))
+                output_rom_buffer.seek(afterptr)
+                output_rom_buffer.write(bytes([after]))
             break
         changedict[flag] = (before, after)
 
@@ -1097,19 +1097,19 @@ def reset_special_relics(items, characters, fout):
                 for t in tempchars:
                     item.equippable |= (1 << t.id)
 
-                item.write_stats(fout)
+                item.write_stats(output_rom_buffer)
                 loglist.append((item.name, before, after))
 
     return loglist
 
 
-def reset_rage_blizzard(items, umaro_risk, fout):
+def reset_rage_blizzard(items, umaro_risk, output_rom_buffer: BytesIO):
     for item in items:
         if item.itemid not in [0xC5, 0xC6]:
             continue
 
         item.equippable = 1 << (umaro_risk.id)
-        item.write_stats(fout)
+        item.write_stats(output_rom_buffer)
 
 
 def items_from_table(tablefile):

@@ -395,9 +395,13 @@ NORMAL_FLAGS = [
          inputtype="boolean"),
     Flag(name='removeflashing',
          description="NOT SO FLASHY MODE",
-         long_description="Removes most white flashing effects from the game, such as Bum Rush.",
+         long_description='"All" removes most white flashing effects from the game. '
+                          '"BumRush" just removes the Bum Rush flashing.',
          category="aesthetic",
-         inputtype="boolean"),
+         inputtype="combobox",
+         choices=("Vanilla", "All", "BumRush"),
+         default_value="Vanilla",
+         default_index=0),
 
     # battle codes
     Flag(name='collateraldamage',

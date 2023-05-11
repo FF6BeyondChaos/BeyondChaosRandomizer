@@ -509,8 +509,8 @@ class RandomSpellSub(Substitution):
         self.bytestring[7:10] = bytearray([c, b, a])
         self.bytestring += bytearray(sorted([s.spellid for s in self.spells]))
 
-    def write(self, fout):
-        super(RandomSpellSub, self).write(fout)
+    def write(self, outfile_rom_buffer):
+        super(RandomSpellSub, self).write(outfile_rom_buffer)
 
     def set_spells(self, valid_spells, spellclass=None, spellsets=None):
         spellsets = spellsets or get_spellsets(spells=valid_spells)
@@ -618,10 +618,10 @@ class ComboSpellSub(Substitution):
         self.bytestring.append(0x60)
         assert len(self.bytestring) == self.get_overhead()
 
-    def write(self, fout):
-        super(ComboSpellSub, self).write(fout)
+    def write(self, outfile_rom_buffer):
+        super(ComboSpellSub, self).write(outfile_rom_buffer)
         for s in self.spellsubs:
-            s.write(fout)
+            s.write(outfile_rom_buffer)
 
     def __repr__(self):
         return "Use the combo {0}.".format(
@@ -647,9 +647,9 @@ class MultiSpellSubMixin(Substitution):
             self.name = self.spellsub.name
             self.spells = self.spellsub.spells
 
-    def write(self, fout):
-        self.spellsub.write(fout)
-        super(MultiSpellSubMixin, self).write(fout)
+    def write(self, outfile_rom_buffer):
+        self.spellsub.write(outfile_rom_buffer)
+        super(MultiSpellSubMixin, self).write(outfile_rom_buffer)
 
 
 class ChainSpellSub(MultiSpellSubMixin):

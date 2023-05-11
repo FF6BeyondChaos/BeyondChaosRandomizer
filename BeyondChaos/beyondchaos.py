@@ -548,7 +548,7 @@ class Window(QMainWindow):
         middleRightGroupBox = QGroupBox("Flag Selection")
         tabVBoxLayout = QVBoxLayout()
         tabs = QTabWidget()
-        control_fixed_width = 65
+        control_fixed_width = 70
         control_fixed_height = 20
 
         # loop to add tab objects to 'tabs' TabWidget
