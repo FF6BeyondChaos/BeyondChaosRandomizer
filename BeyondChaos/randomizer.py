@@ -16,8 +16,8 @@ from monsterrandomizer import MonsterBlock
 from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
-from bcg_junction import JunctionManager
 from character import get_characters, get_character, equip_offsets, character_list, load_characters
+from bcg_junction import JunctionManager
 from chestrandomizer import mutate_event_items, get_event_items
 from config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
                     set_value)
@@ -77,11 +77,11 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-#TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin easymodo dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dearestmolulu questionablecontent thescenarionottaken|1603333081"
+TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin easymodo dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dearestmolulu questionablecontent espercutegf|1603333081"
 # FLARE GLITCH TEST_SEED = "CE-4.2.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #TEST_SEED = "CE-4.2.1|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
-TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty frenchvanilla object:like boys:like generic:like electricboogaloo randombosses dancingmaduin dancelessons cursepower:random swdtechspeed:fast alasdraco capslockoff johnnydmad notawaiter nicerpoison bsiab mimetime questionablecontent \ morefanatical supernatural|1681868973"
+#TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty frenchvanilla object:like boys:like generic:like electricboogaloo randombosses dancingmaduin dancelessons cursepower:random swdtechspeed:fast alasdraco capslockoff johnnydmad notawaiter nicerpoison bsiab mimetime questionablecontent \ morefanatical supernatural|1681868973"
 
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
@@ -4982,7 +4982,6 @@ def diverge():
         data = bytes([int(b, 16) for b in split_line[1:]])
         outfile_rom_buffer.seek(address)
         outfile_rom_buffer.write(data)
-
 
 def junction_esper_procs(outfile_rom_buffer):
     jm = JunctionManager(outfile_rom_buffer, 'bcg_junction_manifest.json')
