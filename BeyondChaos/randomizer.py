@@ -16,6 +16,7 @@ from monsterrandomizer import MonsterBlock
 from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
+from bcg_junction import JunctionManager
 from character import get_characters, get_character, equip_offsets, character_list, load_characters
 from chestrandomizer import mutate_event_items, get_event_items
 from config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
@@ -80,7 +81,7 @@ TEST_ON = False
 # FLARE GLITCH TEST_SEED = "CE-4.2.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #TEST_SEED = "CE-4.2.1|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
-TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty frenchvanilla object:like boys:like generic:like electricboogaloo randombosses dancingmaduin dancelessons cursepower:random swdtechspeed:fast alasdraco capslockoff johnnydmad notawaiter nicerpoison bsiab mimetime questionablecontent cursedencounters morefanatical supernatural|1681868973"
+TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty frenchvanilla object:like boys:like generic:like electricboogaloo randombosses dancingmaduin dancelessons cursepower:random swdtechspeed:fast alasdraco capslockoff johnnydmad notawaiter nicerpoison bsiab mimetime questionablecontent \ morefanatical supernatural|1681868973"
 
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
@@ -754,7 +755,7 @@ def manage_commands(commands: Dict[str, CommandBlock]):
      'magic': <skillrandomizer.CommandBlock object at 0x0000020D069188B0>,
      'morph': <skillrandomizer.CommandBlock object at 0x0000020D069188E0>,
      ...
-     'possess': <skillrandomizer.CommandBlock object at 0x0000020D06918D60>, 
+     'possess': <skillrandomizer.CommandBlock object at 0x0000020D06918D60>,
      'magitek': <skillrandomizer.CommandBlock object at 0x0000020D06918D90>}
     """
     characters = get_characters()
@@ -1003,7 +1004,7 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
      'magic': <skillrandomizer.CommandBlock object at 0x0000020D069188B0>,
      'morph': <skillrandomizer.CommandBlock object at 0x0000020D069188E0>,
      ...
-     'possess': <skillrandomizer.CommandBlock object at 0x0000020D06918D60>, 
+     'possess': <skillrandomizer.CommandBlock object at 0x0000020D06918D60>,
      'magitek': <skillrandomizer.CommandBlock object at 0x0000020D06918D90>}
     """
     # note: x-magic targets random party member
@@ -4983,6 +4984,12 @@ def diverge():
         outfile_rom_buffer.write(data)
 
 
+def junction_esper_procs(outfile_rom_buffer):
+    jm = JunctionManager(outfile_rom_buffer, 'bcg_junction_manifest.json')
+    jm.add_junction(None, 'junction_esper_magic', 'whitelist')
+    jm.execute()
+
+
 def randomize(connection: Pipe = None, **kwargs) -> str:
     """
     The main function which takes in user arguments and creates a log
@@ -6031,6 +6038,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
     if Options_.is_flag_active("sprint"):
         sprint_shoes_hint()
+
+    if Options_.is_flag_active('espercutegf'):
+        junction_esper_procs(outfile_rom_buffer)
 
     if Options_.mode.name == "katn":
         the_end_comes_beyond_katn()

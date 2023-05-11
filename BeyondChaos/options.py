@@ -57,7 +57,7 @@ class Flag:
                                           '',
                                           flag_string,
                                           re.IGNORECASE)
-                                          
+
         # The flag was not found. Is it a simple flag and needs to be turned on?
         # We need to account for the possibility of spaces or no spaces
         # spaces = '- p i e' - caught by re.search
@@ -684,6 +684,11 @@ NORMAL_FLAGS = [
                           "'Divergent Paths' mod.",
          category="experimental",
          inputtype="boolean"),
+    Flag(name='espercutegf',
+         description='JUNCTION MODE',
+         long_description='Actions randomly proc spells of equipped esper.',
+         category='experimental',
+         inputtype='boolean'),
 
     # beta codes
 
