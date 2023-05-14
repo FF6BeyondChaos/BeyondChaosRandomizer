@@ -314,7 +314,6 @@ def init_playlist(path=PLAYLIST_PATH, fn=DEFAULT_PLAYLIST_FILE):
                 playlist_map[k] += f", {v}"
             else:
                 playlist_map[k] = v
-    print(str(playlist_map))
     return playlist_map, tierboss_pool
 
 
