@@ -17,7 +17,6 @@ from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
 from character import get_characters, get_character, equip_offsets, character_list, load_characters
-from bcg_junction import JunctionManager
 from chestrandomizer import mutate_event_items, get_event_items
 from config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
                     set_value)
@@ -81,9 +80,7 @@ TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z makeo
 # FLARE GLITCH TEST_SEED = "CE-4.2.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #TEST_SEED = "CE-4.2.1|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
-#TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k m n o p q r s t u w y z makeover partyparty frenchvanilla object:like boys:like generic:like electricboogaloo randombosses dancingmaduin dancelessons cursepower:random swdtechspeed:fast alasdraco capslockoff johnnydmad notawaiter nicerpoison bsiab mimetime questionablecontent \ morefanatical supernatural|1681868973"
-
-TEST_FILE = "FF3.smc"
+TEST_FILE = "D:\Beyond Chaos\FF3DS.smc"
 seed, flags = None, None
 seedcounter = 1
 infile_rom_path = None
@@ -2848,13 +2845,14 @@ def manage_espers(freespaces: List[FreeBlock], replacements: dict = None) -> Lis
     return freespaces
 
 
-def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=False, katnFlag=False):
+def manage_treasure(monsters: List[MonsterBlock], shops=True, no_charm_drops=False, katnFlag=False,
+        guarantee_hidon_drop=False):
     for treasure_metamorph in get_metamorphs():
         treasure_metamorph.mutate_items()
         treasure_metamorph.write_data(outfile_rom_buffer)
 
     for m in monsters:
-        m.mutate_items(katnFlag)
+        m.mutate_items(katnFlag, guarantee_hidon_drop)
         if no_charm_drops:
             charms = [222, 223]
             while any(x in m.items for x in charms):
@@ -5637,7 +5635,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
         # do this after hidden formations
         katn = Options_.mode.name == 'katn'
-        manage_treasure(monsters, shops=True, no_charm_drops=katn, katnFlag=katn)
+        guarantee_hidon_drop = Options_.is_flag_active("random_enemy_stats")
+        manage_treasure(monsters, shops=True, no_charm_drops=katn, katnFlag=katn,
+            guarantee_hidon_drop=guarantee_hidon_drop)
         if not Options_.is_flag_active('ancientcave'):
             manage_chests()
             mutate_event_items(outfile_rom_buffer, cutscene_skip=Options_.is_flag_active('notawaiter'),
@@ -5859,7 +5859,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     reseed()
 
     if has_music:
-        randomize_music(outfile_rom_buffer, Options_, opera=opera, form_music_overrides=form_music)
+        from utils import custom_path
+        randomize_music(outfile_rom_buffer, Options_, playlist_path=custom_path , playlist_filename="songs.txt",
+            opera=opera, form_music_overrides=form_music)
         log(get_music_spoiler(), section="music")
     reseed()
 
