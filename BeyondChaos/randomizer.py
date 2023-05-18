@@ -75,11 +75,10 @@ BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = True
-#TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin easymodo dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dearestmolulu questionablecontent thescenarionottaken|1603333081"
+TEST_ON = False
+TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin easymodo dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dearestmolulu questionablecontent espercutegf|1603333081"
 # FLARE GLITCH TEST_SEED = "CE-4.2.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z johnnydmad|1682567897"
 #TEST_SEED = "CE-4.2.1|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
 TEST_FILE = "D:\Beyond Chaos\FF3DS.smc"
 seed, flags = None, None
@@ -753,7 +752,7 @@ def manage_commands(commands: Dict[str, CommandBlock]):
      'magic': <skillrandomizer.CommandBlock object at 0x0000020D069188B0>,
      'morph': <skillrandomizer.CommandBlock object at 0x0000020D069188E0>,
      ...
-     'possess': <skillrandomizer.CommandBlock object at 0x0000020D06918D60>, 
+     'possess': <skillrandomizer.CommandBlock object at 0x0000020D06918D60>,
      'magitek': <skillrandomizer.CommandBlock object at 0x0000020D06918D90>}
     """
     characters = get_characters()
@@ -1002,7 +1001,7 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
      'magic': <skillrandomizer.CommandBlock object at 0x0000020D069188B0>,
      'morph': <skillrandomizer.CommandBlock object at 0x0000020D069188E0>,
      ...
-     'possess': <skillrandomizer.CommandBlock object at 0x0000020D06918D60>, 
+     'possess': <skillrandomizer.CommandBlock object at 0x0000020D06918D60>,
      'magitek': <skillrandomizer.CommandBlock object at 0x0000020D06918D90>}
     """
     # note: x-magic targets random party member
@@ -4758,6 +4757,7 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
                         281, 282, 283, 285, 286, 287,
                         297, 303, 400, 382, 402, 403,
                         404]  # event formation sets that can be shuffled with cursedencounters
+    bad_event_fsets = [58, 108, 128] #Narshe Cave, Magitek Factory Escape, Collapsing House
     event_formations = set()
     salt_formations = set()
 
@@ -4769,9 +4769,9 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
             salt_formations.add((formation.formid - 3))
             salt_formations.add((formation.formid - 4))
         for i, v in enumerate(formation.big_enemy_ids):
-            if formation.big_enemy_ids[i] in [273, 293, 299, 304, 306, 307, 313, 314, 315, 323, 355, 356, 357, 358, 362,
-                                              363, 364, 365, 369,
-                                              373]:  # don't do Zone Eater, Naughty, L.X Magic, Phunbaba, Guardian, Merchant, Officer
+            if formation.big_enemy_ids[i] in [273, 293, 295, 296, 297, 299, 304, 306, 307, 313, 314, 315, 323, 355, 356, 357, 358, 362,
+                                              363, 364, 365, 369, 373, 381, 408, 418, 471, 512, 513, 514, 515]:  # don't do Zone Eater, Naughty, L.X Magic,
+                # Phunbaba, Guardian, Merchant, Officer, Banquet encounters, Warring Triad, Atma, Tier 1, 2, 3, Final Kefka
                 event_formations.add(formation.formid)
                 salt_formations.add((formation.formid - 1))
                 salt_formations.add((formation.formid - 2))
@@ -4786,7 +4786,7 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
     for fset in fsets:
         if Options_.is_flag_active("cursedencounters"):  # code that applies FC flag to allow 16 encounters in all zones
             if fset.setid < 252 or fset.setid in good_event_fsets:  # only do regular enemies, don't do sets that can risk Zone Eater or get event encounters
-                if fset.setid != 58:  # don't add Narshe Cave encounters to FC formation list, to keep Narshe Cave safe when using cursed encounters
+                if fset.setid not in bad_event_fsets:
                     if not [value for value in fset.formids if
                             value in event_formations]:
                         fset.sixteen_pack = True
@@ -4979,6 +4979,11 @@ def diverge():
         data = bytes([int(b, 16) for b in split_line[1:]])
         outfile_rom_buffer.seek(address)
         outfile_rom_buffer.write(data)
+
+def junction_esper_procs(outfile_rom_buffer):
+    jm = JunctionManager(outfile_rom_buffer, 'bcg_junction_manifest.json')
+    jm.add_junction(None, 'junction_esper_magic', 'whitelist')
+    jm.execute()
 
 
 def randomize(connection: Pipe = None, **kwargs) -> str:
@@ -6031,6 +6036,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
     if Options_.is_flag_active("sprint"):
         sprint_shoes_hint()
+
+    if Options_.is_flag_active('espercutegf'):
+        junction_esper_procs(outfile_rom_buffer)
 
     if Options_.mode.name == "katn":
         the_end_comes_beyond_katn()

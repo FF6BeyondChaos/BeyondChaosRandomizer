@@ -1,0 +1,208 @@
+{
+    "always_whitelist_address":     "611000",
+    "character_whitelist_address":  "612000",
+    "character_blacklist_address":  "612800",
+    "esper_whitelist_address":      "613000",
+    "esper_blacklist_address":      "613800",
+    "equip_whitelist_address":      "614000",
+    "equip_blacklist_address":      "615000",
+
+    "junction_indexes": {
+        "junction_esper_magic":     "01",
+        "junction_taunt":           "02",
+        "junction_half_taunt":      "03",
+        "junction_boost_fire":      "10",
+        "junction_boost_ice":       "11",
+        "junction_boost_bolt":      "12",
+        "junction_boost_poison":    "13",
+        "junction_boost_wind":      "14",
+        "junction_boost_pearl":     "15",
+        "junction_boost_earth":     "16",
+        "junction_boost_water":     "17",
+        "junction_pierce_fire":     "18",
+        "junction_pierce_ice":      "19",
+        "junction_pierce_bolt":     "1a",
+        "junction_pierce_poison":   "1b",
+        "junction_pierce_wind":     "1c",
+        "junction_pierce_pearl":    "1d",
+        "junction_pierce_earth":    "1e",
+        "junction_pierce_water":    "1f"
+    },
+
+    "junction_short_names": {
+        "junction_esper_magic":     "EspMag-J",
+        "junction_taunt":           "Taunt",
+        "junction_half_taunt":      "Half-Taunt",
+        "junction_boost_fire":      "Fire Up",
+        "junction_boost_ice":       "Ice Up",
+        "junction_boost_bolt":      "Bolt Up",
+        "junction_boost_poison":    "Psn. Up",
+        "junction_boost_wind":      "Wind Up",
+        "junction_boost_pearl":     "Pearl Up",
+        "junction_boost_earth":     "Earth Up",
+        "junction_boost_water":     "Water Up",
+        "junction_pierce_fire":     "Fire Pierce",
+        "junction_pierce_ice":      "Ice Pierce",
+        "junction_pierce_bolt":     "Bolt Pierce",
+        "junction_pierce_poison":   "Psn. Pierce",
+        "junction_pierce_wind":     "Wind Pierce",
+        "junction_pierce_pearl":    "Pearl Pierce",
+        "junction_pierce_earth":    "Earth Pierce",
+        "junction_pierce_water":    "Water Pierce"
+    },
+
+    "character_names": [
+        "Terra", "Locke", "Cyan", "Shadow", "Edgar", "Sabin", "Celes",
+        "Strago", "Relm", "Setzer", "Mog", "Gau", "Gogo", "Umaro",
+        "Banon", "Leo"
+    ],
+
+    "esper_names": [
+        "Ramuh", "Ifrit", "Shiva", "Siren", "Terrato", "Shoat", "Maduin",
+        "Bismark", "Stray", "Palidor", "Tritoch", "Odin", "Raiden", "Bahamut",
+        "Alexandr", "Crusader", "Ragnarok", "Kirin", "ZoneSeek", "Carbunkl",
+        "Phantom", "Sraphim", "Golem", "Unicorn", "Fenrir", "Starlet",
+        "Phoenix"
+    ],
+
+    "equip_names": [
+        "Dirk", "MithrilKnife", "Guardian", "Air Lancet",
+        "ThiefKnife", "Assassin", "Man Eater", "SwordBreaker",
+        "Graedus", "ValiantKnife", "MithrilBlade", "RegalCutlass",
+        "Rune Edge", "Flame Sabre", "Blizzard", "ThunderBlade",
+        "Epee", "Break Blade", "Drainer", "Enhancer",
+        "Crystal", "Falchion", "Soul Sabre", "Ogre Nix",
+        "Excalibur", "Scimitar", "Illumina", "Ragnarok",
+        "Atma Weapon", "Mithril Pike", "Trident", "Stout Spear",
+        "Partisan", "Pearl Lance", "Gold Lance", "Aura Lance",
+        "Imp Halberd", "Imperial", "Kodachi", "Blossom",
+        "Hardened", "Striker", "Stunner", "Ashura",
+        "Kotetsu", "Forged", "Tempest", "Murasame",
+        "Aura", "Strato", "Sky Render", "Heal Rod",
+        "Mithril Rod", "Fire Rod", "Ice Rod", "Thunder Rod",
+        "Poison Rod", "Pearl Rod", "Gravity Rod", "Punisher",
+        "Magus Rod", "Chocobo Brsh", "DaVinci Brsh", "Magical Brsh",
+        "Rainbow Brsh", "Shuriken", "Ninja Star", "Tack Star",
+        "Flail", "Full Moon", "Morning Star", "Boomerang",
+        "Rising Sun", "Hawk Eye", "Bone Club", "Sniper",
+        "Wing Edge", "Cards", "Darts", "Doom Darts",
+        "Trump", "Dice", "Fixed Dice", "MetalKnuckle",
+        "Mithril Claw", "Kaiser", "Poison Claw", "Fire Knuckle",
+        "Dragon Claw", "Tiger Fangs", "Buckler", "Heavy Shld",
+        "Mithril Shld", "Gold Shld", "Aegis Shld", "Diamond Shld",
+        "Flame Shld", "Ice Shld", "Thunder Shld", "Crystal Shld",
+        "Genji Shld", "TortoiseShld", "Cursed Shld", "Paladin Shld",
+        "Force Shld", "Leather Hat", "Hair Band", "Plumed Hat",
+        "Beret", "Magus Hat", "Bandana", "Iron Helmet",
+        "Coronet", "Bard's Hat", "Green Beret", "Head Band",
+        "Mithril Helm", "Tiara", "Gold Helmet", "Tiger Mask",
+        "Red Cap", "Mystery Veil", "Circlet", "Regal Crown",
+        "Diamond Helm", "Dark Hood", "Crystal Helm", "Oath Veil",
+        "Cat Hood", "Genji Helmet", "Thornlet", "Titanium",
+        "LeatherArmor", "Cotton Robe", "Kung Fu Suit", "Iron Armor",
+        "Silk Robe", "Mithril Vest", "Ninja Gear", "White Dress",
+        "Mithril Mail", "Gaia Gear", "Mirage Vest", "Gold Armor",
+        "Power Sash", "Light Robe", "Diamond Vest", "Red Jacket",
+        "Force Armor", "DiamondArmor", "Dark Gear", "Tao Robe",
+        "Crystal Mail", "Czarina Gown", "Genji Armor", "Imp's Armor",
+        "Minerva", "Tabby Suit", "Chocobo Suit", "Moogle Suit",
+        "Nutkin Suit", "BehemothSuit", "Snow Muffler", "NoiseBlaster",
+        "Bio Blaster", "Flash", "Chain Saw", "Debilitator",
+        "Drill", "Air Anchor", "AutoCrossbow", "Fire Skean",
+        "Water Edge", "Bolt Edge", "Inviz Edge", "Shadow Edge",
+        "Goggles", "Star Pendant", "Peace Ring", "Amulet",
+        "White Cape", "Jewel Ring", "Fairy Ring", "Barrier Ring",
+        "MithrilGlove", "Guard Ring", "RunningShoes", "Wall Ring",
+        "Cherub Down", "Cure Ring", "True Knight", "DragoonBoots",
+        "Zephyr Cape", "Czarina Ring", "Cursed Ring", "Earrings",
+        "Atlas Armlet", "Blizzard Orb", "Rage Ring", "Sneak Ring",
+        "Pod Bracelet", "Hero Ring", "Ribbon", "Muscle Belt",
+        "Crystal Orb", "Gold Hairpin", "Economizer", "Thief Glove",
+        "Gauntlet", "Genji Glove", "Hyper Wrist", "Offering",
+        "Beads", "Black Belt", "Coin Toss", "FakeMustache",
+        "Gem Box", "Dragon Horn", "Merit Award", "Memento Ring",
+        "Safety Bit", "Relic Ring", "Moogle Charm", "Charm Bangle",
+        "Marvel Shoes", "Back Guard", "Gale Hairpin", "Sniper Sight",
+        "Exp. Egg", "Tintinabar", "Sprint Shoes", "Rename Card",
+        "Tonic", "Potion", "X-Potion", "Tincture",
+        "Ether", "X-Ether", "Elixir", "Megalixir",
+        "Fenix Down", "Revivify", "Antidote", "Eyedrop",
+        "Soft", "Remedy", "Sleeping Bag", "Tent",
+        "Green Cherry", "Magicite", "Super Ball", "Echo Screen",
+        "Smoke Bomb", "Warp Stone", "Dried Meat", "(Empty)"
+    ],
+
+    "always_whitelist": [],
+
+    "character_whitelist": {},
+    "character_blacklist": {},
+    "esper_whitelist":     {},
+    "esper_blacklist":     {},
+    "equip_whitelist":     {},
+    "equip_blacklist":     {},
+
+    "core_patch_list": [
+        "patch_rom_expansion.txt",
+        "patch_junction_core.txt"
+    ],
+
+    "patch_list": {
+        "junction_esper_magic": [
+            "patch_junction_esper_magic_proc.txt"
+        ],
+        "junction_taunt": [
+            "patch_junction_taunt.txt"
+        ],
+        "junction_half_taunt": [
+            "patch_junction_taunt.txt"
+        ],
+        "junction_boost_fire": [
+            "patch_junction_elemental_boost.txt"
+        ],
+        "junction_boost_ice": [
+            "patch_junction_elemental_boost.txt"
+        ],
+        "junction_boost_bolt": [
+            "patch_junction_elemental_boost.txt"
+        ],
+        "junction_boost_poison": [
+            "patch_junction_elemental_boost.txt"
+        ],
+        "junction_boost_wind": [
+            "patch_junction_elemental_boost.txt"
+        ],
+        "junction_boost_pearl": [
+            "patch_junction_elemental_boost.txt"
+        ],
+        "junction_boost_earth": [
+            "patch_junction_elemental_boost.txt"
+        ],
+        "junction_boost_water": [
+            "patch_junction_elemental_boost.txt"
+        ],
+        "junction_pierce_fire": [
+            "patch_junction_elemental_pierce.txt"
+        ],
+        "junction_pierce_ice": [
+            "patch_junction_elemental_pierce.txt"
+        ],
+        "junction_pierce_bolt": [
+            "patch_junction_elemental_pierce.txt"
+        ],
+        "junction_pierce_poison": [
+            "patch_junction_elemental_pierce.txt"
+        ],
+        "junction_pierce_wind": [
+            "patch_junction_elemental_pierce.txt"
+        ],
+        "junction_pierce_pearl": [
+            "patch_junction_elemental_pierce.txt"
+        ],
+        "junction_pierce_earth": [
+            "patch_junction_elemental_pierce.txt"
+        ],
+        "junction_pierce_water": [
+            "patch_junction_elemental_pierce.txt"
+        ]
+    }
+}
