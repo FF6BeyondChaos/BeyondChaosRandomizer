@@ -17,6 +17,7 @@ from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
 from character import get_characters, get_character, equip_offsets, character_list, load_characters
+from bcg_junction import JunctionManager
 from chestrandomizer import mutate_event_items, get_event_items
 from config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
                     set_value)
@@ -35,9 +36,7 @@ from itemrandomizer import (reset_equippable, get_ranked_items, get_item,
                             ItemBlock)
 from locationrandomizer import (get_locations, get_location, get_zones,
                                 get_npcs, randomize_forest, NPCBlock)
-from menufeatures import (improve_item_display, improve_gogo_status_menu,
-                          improve_rage_menu, show_original_names,
-                          improve_dance_menu, y_equip_relics, fix_gogo_portrait)
+from menufeatures import (improve_dance_menu, y_equip_relics, fix_gogo_portrait)
 from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monsters,
                                get_metamorphs, get_ranked_monsters,
                                shuffle_monsters, get_monster, read_ai_table,
@@ -49,7 +48,8 @@ from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
                      change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx, apply_namingway,
-                     improved_party_gear, patch_doom_gaze, nicer_poison, fix_xzone, imp_skimp, hidden_relic)
+                     improved_party_gear, patch_doom_gaze, nicer_poison, fix_xzone, imp_skimp, hidden_relic,
+                     myself_patches, cure_item_ocd)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -1558,13 +1558,13 @@ def manage_natural_magic():
         return
 
     natmag_learn_sub = Substitution()
-    natmag_learn_sub.set_location(0xa182)
-    natmag_learn_sub.bytestring = bytes([0x22, 0x73, 0x08, 0xF0] + [0xEA] * 4)
-    natmag_learn_sub.write(outfile_rom_buffer)
-
-    natmag_learn_sub.set_location(0x261b6)
-    natmag_learn_sub.bytestring = bytes([0x22, 0x4B, 0x08, 0xF0] + [0xEA] * 10)
-    natmag_learn_sub.write(outfile_rom_buffer)
+    # natmag_learn_sub.set_location(0xa182)
+    # natmag_learn_sub.bytestring = bytes([0x22, 0x73, 0x08, 0xF0] + [0xEA] * 4)
+    # natmag_learn_sub.write(outfile_rom_buffer)
+    #
+    # natmag_learn_sub.set_location(0x261b6)
+    # natmag_learn_sub.bytestring = bytes([0x22, 0x4B, 0x08, 0xF0] + [0xEA] * 10)
+    # natmag_learn_sub.write(outfile_rom_buffer)
 
     natmag_learn_sub.set_location(0x30084B)
     natmag_learn_sub.bytestring = bytes(
@@ -5340,7 +5340,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
     if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
         manage_commands(commands)
-        improve_gogo_status_menu(outfile_rom_buffer)
+        # improve_gogo_status_menu(outfile_rom_buffer)
     reseed()
 
     spells = get_ranked_spells(infile_rom_buffer)
@@ -5355,7 +5355,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         if Options_.is_flag_active('sketch'):
             NEVER_REPLACE += ["sketch"]
         _, freespaces = manage_commands_new(commands)
-        improve_gogo_status_menu(outfile_rom_buffer)
+        # improve_gogo_status_menu(outfile_rom_buffer)
     reseed()
 
     if Options_.is_flag_active("sprint"):
@@ -5423,8 +5423,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     if Options_.is_flag_active("random_items"):
         manage_items(items, changed_commands=changed_commands)
         buy_owned_breakable_tools(outfile_rom_buffer)
-        improve_item_display(outfile_rom_buffer)
-        improve_rage_menu(outfile_rom_buffer)
+        # improve_item_display(outfile_rom_buffer)
+        # improve_rage_menu(outfile_rom_buffer)
     reseed()
 
     manage_doom_gaze(outfile_rom_buffer)
@@ -5432,7 +5432,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     if Options_.is_flag_active("random_enemy_stats"):
         aispaces = manage_final_boss(aispaces)
         monsters = manage_monsters()
-        improve_rage_menu(outfile_rom_buffer)
+        # improve_rage_menu(outfile_rom_buffer)
     reseed()
 
     if Options_.is_flag_active("random_enemy_stats") or \
@@ -5482,7 +5482,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             female_names=kwargs.get("female_names", None)
         )
         log(s, "aesthetics")
-        show_original_names(outfile_rom_buffer)
+        # show_original_names(outfile_rom_buffer)
     reseed()
 
     if Options_.is_flag_active("random_character_stats"):
@@ -6009,6 +6009,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     title_gfx(outfile_rom_buffer)
     improved_party_gear(outfile_rom_buffer)
     manage_doom_gaze(outfile_rom_buffer)
+    myself_patches(outfile_rom_buffer)
+    cure_item_ocd(outfile_rom_buffer)
 
     if Options_.is_flag_active("swdtechspeed"):
         swdtech_speed = Options_.get_flag_value('swdtechspeed')
