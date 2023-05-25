@@ -764,9 +764,13 @@ class ItemBlock:
         if extra_effects:
             if random.randint(1, 3) == 3:
                 self.mutate_special_action()
-            if not learned and random.randint(1, 4):
+
+            if not learned and random.randint(1, 4) == 4:
                 self.mutate_learning(allow_ultima)
                 learned = True
+            if not broken and random.randint(1, 4) == 4:
+                self.mutate_break_effect(wild_breaks=wild_breaks)
+                broken = True
 
             if random.randint(1, 2) == 2:
                 self.mutate_feature()
