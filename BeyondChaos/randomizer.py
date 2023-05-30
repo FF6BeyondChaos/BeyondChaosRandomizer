@@ -5479,7 +5479,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             preserve_graphics=preserve_graphics,
             moogle_names=kwargs.get("moogle_names", None),
             male_names=kwargs.get("male_names", None),
-            female_names=kwargs.get("female_names", None)
+            female_names=kwargs.get("female_names", None),
+            sprite_replacements=kwargs.get("sprite_replacements", None)
         )
         log(s, "aesthetics")
         # show_original_names(outfile_rom_buffer)
