@@ -49,7 +49,7 @@ from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
                      change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx, apply_namingway,
                      improved_party_gear, patch_doom_gaze, nicer_poison, fix_xzone, imp_skimp, hidden_relic,
-                     myself_patches, cure_item_ocd)
+                     myself_patches)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -6011,7 +6011,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     improved_party_gear(outfile_rom_buffer)
     manage_doom_gaze(outfile_rom_buffer)
     myself_patches(outfile_rom_buffer)
-    cure_item_ocd(outfile_rom_buffer)
 
     if Options_.is_flag_active("swdtechspeed"):
         swdtech_speed = Options_.get_flag_value('swdtechspeed')
