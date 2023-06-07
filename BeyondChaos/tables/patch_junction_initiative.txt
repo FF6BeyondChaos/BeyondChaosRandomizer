@@ -1,0 +1,81 @@
+.addr   jun-checker                     610000
+.addr   jun-check-entity-living         610600
+.addr   main                            621600
+.addr   check-esper-defense             6200c0
+.addr   return-loop                     022594
+.addr   return-terminate                022600
+
+.def    jun-index-initiative    04
+.def    jun-index-regenerator   51
+.def    jun-index-auto-reraise  75
+.def    jun-index-final-fenix   98
+
+0225fa: 5c $main
+:       ea ea
+
+$main
+:       bb
+
+:       a9 jun-index-regenerator
+:       22 $jun-checker
+:       f0 no-regenerator
+:       bd e8 3d
+:       09 02
+:       9d e8 3d
+
+.label no-regenerator
+:       22 $jun-check-entity-living
+:       f0 no-auto-reraise
+:       a9 jun-index-final-fenix
+:       22 $jun-checker
+:       d0 yes-auto-reraise
+:       a9 jun-index-auto-reraise
+:       22 $jun-checker
+:       f0 no-auto-reraise
+.label yes-auto-reraise
+:       bd f9 3e
+:       09 04
+:       9d f9 3e
+
+.label no-auto-reraise
+:       da
+:       20 $check-esper-defense,2
+:       f0 no-esper-defense
+:       aa
+:       bf 00 00 c4
+:       89 40 00
+:       d0 no-esper-defense
+# check whether the esper restores instead of inflicts status
+:       bf 04 00 c4
+:       89 04 00
+:       d0 no-esper-defense
+:       bf 0a 00 c4
+:       19 e4 3e
+:       99 e4 3e
+:       bf 0c 00 c4
+:       19 f8 3e
+:       29 ff df
+:       99 f8 3e
+
+.label no-esper-defense
+:       e2 30
+:       fa
+:       a9 jun-index-initiative
+:       22 $jun-checker
+:       f0 main-exit
+:       a9 ff
+:       99 19 32
+.label main-exit
+:       c2 20
+:       88 88
+:       10 continue-loop
+:       5c $return-terminate
+.label continue-loop
+:       5c $return-loop
+
+VALIDATION
+
+0225f7: 99 19 32
+:       c2 20
+:       88 88
+:       10 94

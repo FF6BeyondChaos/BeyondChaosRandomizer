@@ -781,14 +781,16 @@ class ItemBlock:
         if unbreakable:
             self.mutate_break_effect(unbreakable=unbreakable)
 
-    def mutate_name(self, vanilla=False):
+    def mutate_name(self, vanilla=False, character='?'):
         if vanilla:
             self.name = self.vanilla_data.name
             self.dataname[1:] = name_to_bytes(self.name, len(self.name))
-        elif options.Options_.is_flag_active("questionablecontent") and not self.is_consumable and '?' not in self.name:
-            self.name = self.name[:11] + '?'
+        elif options.Options_.is_flag_active("questionablecontent") and not self.is_consumable and character not in self.name:
+            self.name = self.name[:11] + character
             # Index on self.dataname is [1:] because the first character determines the
             #   equipment symbol (helmet/shield/etc).
+            if isinstance(self.dataname, bytes):
+                self.dataname = list(self.dataname)
             self.dataname[1:] = name_to_bytes(self.name, len(self.name))
 
     def rank(self):

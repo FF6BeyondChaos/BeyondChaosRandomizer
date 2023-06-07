@@ -1,0 +1,32 @@
+.addr   main                    57f000
+.addr   return-miss             0222b5
+.addr   return-hit              0222e8
+
+022226: 5c $main
+
+$main
+:       ad a2 11
+:       4a
+:       b0 exit-miss-physical
+:       ad a2 11
+:       89 02
+:       f0 exit-hit
+:       b9 a1 3a
+:       89 04
+:       d0 exit-miss-instant-death
+.label exit-hit
+:       5c $return-hit
+.label exit-miss-instant-death
+:       b9 fc 3d
+:       09 10
+:       99 fc 3d
+.label exit-miss-physical
+:       5c $return-miss
+
+VALIDATION
+
+022226: ad a2 11
+:       4a
+
+$main
+:       00 00 00 00

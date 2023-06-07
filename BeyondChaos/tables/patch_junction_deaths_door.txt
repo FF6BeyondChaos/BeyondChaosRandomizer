@@ -1,0 +1,63 @@
+.addr   jun-checker                     610000
+.addr   jun-check-count-all-living      610680
+.addr   main                            620c80
+
+.def    jun-index-deaths-door           55
+
+0233bd: 22 $main
+
+$main
+:       08
+:       90 exit-hit
+
+:       e2 20
+:       ad a2 11
+:       89 02
+:       f0 exit-miss
+
+:       bd 05 3b
+:       c9 01
+:       f0 condemned-case
+
+:       a9 jun-index-deaths-door
+:       22 $jun-checker
+:       f0 exit-miss
+
+# duplicated Revenge code
+:       9c 14 34
+:       c2 20
+:       48
+:       38
+:       bd 1c 3c
+:       fd f4 3b
+.label damage-and-miss
+:       99 d0 33
+:       68
+:       e2 20
+
+.label exit-miss
+:       28
+:       b9 18 30
+:       14 a4
+:       6b
+.label exit-hit
+:       28
+:       6b
+
+.label condemned-case
+:       a9 jun-index-deaths-door
+:       22 $jun-check-count-all-living
+:       c9 00
+:       f0 exit-miss
+:       9c 14 34
+:       c2 20
+:       48
+:       a9 0f 27
+:       80 damage-and-miss
+
+VALIDATION
+0233bd: 90 02
+:       14 a4
+
+025bc7: a9 0d
+:       85 b8

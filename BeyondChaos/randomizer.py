@@ -12,12 +12,15 @@ from multiprocessing import Pipe, Process
 import character
 import locationrandomizer
 import options
-from monsterrandomizer import MonsterBlock
+from monsterrandomizer import MonsterBlock, solo_bosses
 from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
 from character import get_characters, get_character, equip_offsets, character_list, load_characters
-from bcg_junction import JunctionManager
+from bcg_junction import (JunctionManager,
+                          write_patch as jm_write_patch,
+                          tblpath as jm_tblpath,
+                          set_addressing_mode as jm_set_addressing_mode)
 from chestrandomizer import mutate_event_items, get_event_items
 from config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
                     set_value)
@@ -44,7 +47,7 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
                                get_collapsing_house_help_skill)
 from musicinterface import randomize_music, manage_opera, get_music_spoiler, music_init, get_opera_log
 from options import ALL_MODES, NORMAL_FLAGS, Options_
-from patches import (allergic_dog, banon_life3, vanish_doom, evade_mblock,
+from patches import (allergic_dog, banon_life3, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
                      change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx, apply_namingway,
@@ -108,6 +111,13 @@ namelocdict = {}
 changed_commands = set([])
 
 randlog = {}
+
+JUNCTION_MANAGER_PARAMETERS = {
+    'morpher-index': 0x0,
+    'berserker-index': 0xd,
+    'monster-equip-steal-enabled': 0,
+    'monster-equip-drop-enabled': 0,
+    }
 
 
 def log(text: str, section: str):
@@ -934,6 +944,7 @@ def manage_commands(commands: Dict[str, CommandBlock]):
                         morph_char_sub.bytestring = bytes([0xC9, c.id])
                         morph_char_sub.set_location(0x25E32)
                         morph_char_sub.write(outfile_rom_buffer)
+                        JUNCTION_MANAGER_PARAMETERS['morpher-index'] = c.id
             for i, command in enumerate(reversed(using)):
                 c.set_battle_command(i + 1, command=command)
         else:
@@ -1766,6 +1777,7 @@ def manage_umaro(commands: Dict[str, CommandBlock]):
     umaro_exchange_sub.write(outfile_rom_buffer)
     umaro_exchange_sub.set_location(0x20926)
     umaro_exchange_sub.write(outfile_rom_buffer)
+    JUNCTION_MANAGER_PARAMETERS['berserker-index'] = umaro_risk.id
 
     spells = get_ranked_spells(infile_rom_buffer)
     spells = [x for x in spells if x.target_enemy_default]
@@ -2195,7 +2207,9 @@ def manage_rng():
 
 
 def manage_balance(newslots: bool = True):
-    vanish_doom(outfile_rom_buffer)
+    vanish_doom_patch = os.path.join(jm_tblpath, 'patch_vanish_doom.txt')
+    jm_set_addressing_mode('hirom')
+    jm_write_patch(outfile_rom_buffer, vanish_doom_patch)
     evade_mblock(outfile_rom_buffer)
     fix_xzone(outfile_rom_buffer)
     imp_skimp(outfile_rom_buffer)
@@ -4992,10 +5006,93 @@ def diverge():
         outfile_rom_buffer.seek(address)
         outfile_rom_buffer.write(data)
 
-def junction_esper_procs(outfile_rom_buffer):
-    jm = JunctionManager(outfile_rom_buffer, 'bcg_junction_manifest.json')
-    jm.add_junction(None, 'junction_esper_magic', 'whitelist')
-    jm.execute()
+
+def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
+    jm.set_seed(seed)
+
+    monsters = get_monsters()
+    for m in monsters:
+        if hasattr(m, 'changed_name'):
+            monster_index = m.id
+            old_length = len(m.name.rstrip('_'))
+            old_suffix = jm.monster_names[m.id][old_length:]
+            jm.monster_names[m.id] = m.changed_name + old_suffix
+
+    if Options_.is_flag_active('espercutegf'):
+        jm.add_junction(None, 'esper_magic', 'whitelist')
+        jm.add_junction(None, 'esper_counter', 'whitelist')
+        jm.add_junction(None, 'esper_attack', 'whitelist')
+        jm.add_junction(None, 'esper_defense', 'whitelist')
+        jm.add_junction(None, 'caller', 'whitelist')
+        jm.activated = True
+
+    if Options_.is_flag_active('espffect'):
+        espers = sorted(jm.esper_tags.keys())
+        jm.randomize_generous(espers, 'esper', True)
+        jm.activated = True
+
+    if (Options_.is_flag_active('effectmas')
+            or Options_.is_flag_active('effectory')):
+        banned_equips = set()
+        characters = get_characters()
+        for c in characters:
+            if c.id >= 16:
+                continue
+            for equiptype in ['weapon', 'shield', 'helm', 'armor',
+                              'relic1', 'relic2']:
+                outfile_rom_buffer.seek(c.address + equip_offsets[equiptype])
+                equipid = ord(outfile_rom_buffer.read(1))
+                banned_equips.add(equipid)
+
+        items = get_ranked_items()
+        valid_equips = [i for i in items if i.equippable & 0x3fff
+                        and 1 <= i.itemtype & 0xf <= 5
+                        and i.itemid in jm.equip_tags
+                        and i.itemid not in banned_equips]
+
+        equips = []
+        if Options_.is_flag_active('effectmas'):
+            equips += [i.itemid for i in valid_equips
+                       if 1 <= i.itemtype & 0xf <= 4]
+
+        if Options_.is_flag_active('effectory'):
+            equips += [i.itemid for i in valid_equips
+                       if i.itemtype & 0xf == 5]
+
+        jm.randomize_sparing(equips, 'equip', True)
+        if options.Options_.is_flag_active('questionablecontent'):
+            chosen_items = [i for i in items if i.itemid in jm.equip_whitelist]
+            for item in chosen_items:
+                item.mutate_name(character='!')
+                item.write_stats(outfile_rom_buffer)
+        jm.activated = True
+
+    if Options_.is_flag_active('effectster'):
+        monsters = get_monsters()
+        jm.reseed('premonster')
+        valid_monsters = []
+        for m in monsters:
+            if m.id in solo_bosses:
+                continue
+            if m.id not in jm.monster_tags:
+                continue
+            if (m.oldlevel / 99) > (jm.random.random() ** 3):
+                valid_monsters.append(m.id)
+
+        jm.randomize_sparing(valid_monsters, 'monster', True)
+        statuses = {'morph', 'imp', 'zombie', 'dance'}
+        statuses = {jm.get_category_index('status', name) for name in statuses}
+        jm.randomize_generous(statuses, 'status', True)
+        jm.activated = True
+
+    if Options_.is_flag_active('treaffect'):
+        JUNCTION_MANAGER_PARAMETERS['monster-equip-steal-enabled'] = 1
+        JUNCTION_MANAGER_PARAMETERS['monster-equip-drop-enabled'] = 1
+
+    if jm.activated:
+        jm.match_esper_monster_junctions()
+
+    jm.set_parameters(JUNCTION_MANAGER_PARAMETERS)
 
 
 def randomize(connection: Pipe = None, **kwargs) -> str:
@@ -5461,6 +5558,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     esper_replacements = {}
     if Options_.is_flag_active("randomize_magicite"):
         esper_replacements = randomize_magicite(outfile_rom_buffer, infile_rom_buffer)
+        JUNCTION_MANAGER_PARAMETERS['esper_replacements'] = esper_replacements
     reseed()
 
     if Options_.is_flag_active("random_palettes_and_names") and \
@@ -5895,6 +5993,10 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     if Options_.is_flag_active('thescenarionottaken'):
         chocobo_merchant()
 
+    jm = JunctionManager(outfile_rom_buffer, 'bcg_junction_manifest.json')
+    jm.activated = False
+    junction_everything(jm, outfile_rom_buffer)
+
     # ----- NO MORE RANDOMNESS PAST THIS LINE -----
     if Options_.is_flag_active('thescenarionottaken'):
         no_kutan_skip(outfile_rom_buffer)
@@ -6053,9 +6155,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     if Options_.is_flag_active("sprint"):
         sprint_shoes_hint()
 
-    if Options_.is_flag_active('espercutegf'):
-        junction_esper_procs(outfile_rom_buffer)
-
     if Options_.mode.name == "katn":
         the_end_comes_beyond_katn()
     elif Options_.mode.name == "dragonhunt":
@@ -6063,6 +6162,19 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
     manage_dialogue_patches(outfile_rom_buffer)
     write_location_names(outfile_rom_buffer)
+
+    if jm.activated:
+        outfile_rom_buffer.seek(0, 2)
+        romsize = outfile_rom_buffer.tell()
+        if romsize < 0x700000:
+            expand_sub = Substitution()
+            expand_sub.set_location(romsize)
+            expand_sub.bytestring = bytes([0x00] * (0x700000 - romsize))
+            expand_sub.write(outfile_rom_buffer)
+
+        jm.execute()
+        jm.verify()
+        log(jm.report, section='junctions')
 
     rewrite_title(text="FF6 BCCE %s" % seed)
     validate_rom_expansion()
@@ -6100,7 +6212,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             f.write(get_logstring(
                 ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers",
                  "item magic", "item effects", "command-change relics", "colosseum", "monsters", "music",
-                 "remonsterate", "shops", "treasure chests", "zozo clock", "secret items"]))
+                 "remonsterate", "shops", "treasure chests", "junctions", "zozo clock", "secret items"]))
 
     if Options_.is_flag_active('bingoboingo'):
 
@@ -6170,7 +6282,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                 ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances",
                  "espers",
                  "item magic", "item effects", "command-change relics", "colosseum", "monsters", "music",
-                 "remonsterate", "shops", "treasure chests", "zozo clock", "secret items"])
+                 "remonsterate", "shops", "treasure chests", "junctions", "zozo clock", "secret items"])
         })
     return outfile_rom_path
 

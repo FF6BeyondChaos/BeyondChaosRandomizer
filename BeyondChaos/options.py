@@ -690,10 +690,44 @@ NORMAL_FLAGS = [
          category="experimental",
          inputtype="boolean"),
     Flag(name='espercutegf',
-         description='JUNCTION MODE',
-         long_description='Actions randomly proc spells of equipped esper.',
+         description='SUMMONER MODE',
+         long_description='Characters gain the traits of equipped espers. '
+                          'Casters can change equipped esper mid-battle.',
          category='experimental',
          inputtype='boolean'),
+    Flag(name='espffect',
+         description='ESPER JUNCTION EFFECTS MODE',
+         long_description='Attach random effects from the "Junction" patch '
+                          'set to espers. Low potential for softlocks.',
+         category='experimental',
+         inputtype='boolean'),
+    Flag(name='effectmas',
+         description='EQUIPMENT JUNCTION EFFECTS MODE',
+         long_description='Attach random effects from the "Junction" patch '
+                          'set to equipment (excluding relics). Medium '
+                          'potential for softlocks.',
+         category='experimental',
+         inputtype='boolean'),
+    Flag(name='effectory',
+         description='RELIC JUNCTION EFFECTS MODE',
+         long_description='Attach random effects from the "Junction" patch '
+                          'set to relics. Medium potential for softlocks.',
+         category='experimental',
+         inputtype='boolean'),
+    Flag(name='effectster',
+         description='MONSTER JUNCTION EFFECTS MODE',
+         long_description='Attach random effects from the "Junction" patch '
+                          'set to monsters, rages, and some statuses. High '
+                          'potential for softlocks.',
+         category='experimental',
+         inputtype='boolean'),
+    Flag(name='treaffect',
+         description='MONSTER EQUIPMENT JUNCTION EFFECTS MODE',
+         long_description='Monsters inherit the "Junction" effects of held '
+                          'items. High potential for softlocks.',
+         category='experimental',
+         inputtype='boolean'),
+
 
     # beta codes
 
