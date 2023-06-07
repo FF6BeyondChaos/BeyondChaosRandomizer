@@ -1733,17 +1733,14 @@ def manage_umaro(commands: Dict[str, CommandBlock]):
 
     umaro = [c for c in characters if c.id == 13][0]
     umaro.battle_commands = list(umaro_risk.battle_commands)
-    if random.choice([True, False, False]):
-        umaro_risk.battle_commands = [0x00, 0xFF, 0xFF, 0xFF]
-    else:
-        cands = [0x00, 0x05, 0x06, 0x07, 0x09, 0x0A, 0x0B, 0x10,
-                 0x12, 0x13, 0x16, 0x18]
-        cands = [i for i in cands if i not in changed_commands]
-        base_command = random.choice(cands)
-        commands = list(commands.values())
-        base_command = [c for c in commands if c.id == base_command][0]
-        base_command.allow_while_berserk(outfile_rom_buffer)
-        umaro_risk.battle_commands = [base_command.id, 0xFF, 0xFF, 0xFF]
+    cands = [0x00, 0x05, 0x06, 0x07, 0x09, 0x0A, 0x0B, 0x10,
+             0x12, 0x13, 0x16, 0x18]
+    cands = [i for i in cands if i not in changed_commands]
+    base_command = random.choice(cands)
+    commands = list(commands.values())
+    base_command = [c for c in commands if c.id == base_command][0]
+    base_command.allow_while_berserk(outfile_rom_buffer)
+    umaro_risk.battle_commands = [base_command.id, 0xFF, 0xFF, 0xFF]
 
     umaro.beserk = False
     umaro_risk.beserk = True
