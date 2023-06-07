@@ -118,6 +118,7 @@ JUNCTION_MANAGER_PARAMETERS = {
     'monster-equip-steal-enabled': 0,
     'monster-equip-drop-enabled': 0,
     }
+jm_set_addressing_mode('hirom')
 
 
 def log(text: str, section: str):
@@ -410,24 +411,6 @@ class AutoRecruitGauSub(Substitution):
         if Options_.is_flag_active("shuffle_commands") or Options_.is_flag_active("replace_commands"):
             REPLACE_ENEMIES.append(0x172)
         super(AutoRecruitGauSub, self).write(outfile_rom_buffer)
-
-
-class EnableEsperMagicSub(Substitution):
-    @property
-    def bytestring(self) -> bytes:
-        return bytes([0x20, 0xDD, 0x4E,
-                      0xA6, 0x00, 0xB9, 0x00, 0x00, 0xC9, 0x0E, 0xB0, 0x04,
-                      0xA9, 0x20, 0x80, 0x02, 0xA9, 0x24,
-                      0x95, 0x79,
-                      0xE8,
-                      0xA9, 0x24, 0x60])
-
-    def write(self, output_rom_buffer: BytesIO):
-        jsr_sub = Substitution()
-        jsr_sub.bytestring = bytes([0x20]) + int2bytes(self.location, length=2) + bytes([0xEA])
-        jsr_sub.set_location(0x34D3D)
-        jsr_sub.write(output_rom_buffer)
-        super(EnableEsperMagicSub, self).write(output_rom_buffer)
 
 
 class FreeBlock:
@@ -827,9 +810,9 @@ def manage_commands(commands: Dict[str, CommandBlock]):
     rage_blank_sub.set_location(0x47AA0)
     rage_blank_sub.write(outfile_rom_buffer)
 
-    eems = EnableEsperMagicSub()
-    eems.set_location(0x3F09F)
-    eems.write(outfile_rom_buffer)
+    enable_esper_menu_patch = os.path.join(
+        jm_tblpath, 'patch_can_always_access_esper_menu.txt')
+    jm_write_patch(outfile_rom_buffer, enable_esper_menu_patch)
 
     # Let x-magic user use magic menu.
     enable_xmagic_menu_sub = Substitution()
@@ -2208,7 +2191,6 @@ def manage_rng():
 
 def manage_balance(newslots: bool = True):
     vanish_doom_patch = os.path.join(jm_tblpath, 'patch_vanish_doom.txt')
-    jm_set_addressing_mode('hirom')
     jm_write_patch(outfile_rom_buffer, vanish_doom_patch)
     evade_mblock(outfile_rom_buffer)
     fix_xzone(outfile_rom_buffer)
