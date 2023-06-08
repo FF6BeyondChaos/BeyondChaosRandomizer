@@ -5042,8 +5042,9 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
         if options.Options_.is_flag_active('questionablecontent'):
             chosen_items = [i for i in items if i.itemid in jm.equip_whitelist]
             for item in chosen_items:
-                item.mutate_name(character='!')
-                item.write_stats(outfile_rom_buffer)
+                if jm.equip_whitelist[item.itemid]:
+                    item.mutate_name(character='!')
+                    item.write_stats(outfile_rom_buffer)
         jm.activated = True
 
     if Options_.is_flag_active('effectster'):
