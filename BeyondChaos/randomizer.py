@@ -78,7 +78,7 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime suplexwrecks questionablecontent|1603333081"
+TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime suplexwrecks questionablecontent expboost:10.0|1603333081"
 # FLARE GLITCH TEST_SEED = "CE-4.2.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #TEST_SEED = "CE-4.2.1|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
@@ -5216,8 +5216,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             mode_num = None
             while mode_num not in range(len(ALL_MODES)):
                 pipe_print("Available modes:\n")
-                for i, application in enumerate(ALL_MODES):
-                    pipe_print("{}. {} - {}".format(i + 1, application.name, application.description))
+                for i, mode in enumerate(ALL_MODES):
+                    pipe_print("{}. {} - {}".format(i + 1, mode.name, mode.description))
                 mode_str = input("\nEnter desired mode number or name:\n").strip()
                 try:
                     mode_num = int(mode_str) - 1
@@ -5226,8 +5226,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                         if m.name == mode_str:
                             mode_num = i
                             break
-            application = ALL_MODES[mode_num]
-            allowed_flags = [f for f in NORMAL_FLAGS if f.category == "flags" and f.name not in application.prohibited_flags]
+            mode = ALL_MODES[mode_num]
+            allowed_flags = [f for f in NORMAL_FLAGS if f.category == "flags" and f.name not in mode.prohibited_flags]
             pipe_print()
             for flag in sorted(allowed_flags, key=lambda f: f.name):
                 pipe_print(flag.name + " - " + flag.long_description)
@@ -6010,7 +6010,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         for monster in monsters:
             if Options_.is_flag_active('easymodo'):
                 monster.stats['hp'] = 1
-            if type(exp_boost_value) == float:
+            if not type(exp_boost_value) == bool:
                 monster.stats['xp'] = int(min(0xFFFF, float(exp_boost_value) * monster.stats['xp']))
             monster.write_stats(outfile_rom_buffer)
 
@@ -6018,7 +6018,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         gp_boost_value = Options_.get_flag_value('gpboost')
         if type(gp_boost_value) == bool:
             if application and application != "console":
-                pipe_print().send("ERROR: No value was supplied for gpboost flag. Skipping flag.")
+                pipe_print("ERROR: No value was supplied for gpboost flag. Skipping flag.")
             else:
                 while True:
                     try:
