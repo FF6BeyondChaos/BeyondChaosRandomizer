@@ -1,0 +1,124 @@
+.addr   jun-checker                     610000
+.addr   jun-queue-command               610ff0
+.addr   jun-queue-self-spell            610fc0
+.addr   jun-set-target-counter          6107c0
+.addr   main                            620480
+
+.addr   spell-indexes-address           620580
+.def    spell-indexes           1f 21 22 26 2a 2b 2f 33 34 35 4c 4e fe cf
+.addr   command-indexes-address         620590
+.def    command-indexes         0b 18 40 41 15
+
+.def    first-spell-index           20
+.def    overflow-spell-index        2e
+.def    first-command-index         30
+.def    overflow-command-index      35
+
+.addr   do-self-spell                   625000
+.addr   do-command                      626000
+
+.def    jun-index-morph             38
+.def    jun-index-revenge           39
+.def    jun-index-escape            3a
+
+.def    escape-spell-index          c2
+.def    revenge-spell-index         92
+
+020a5d: 22 $main
+:       ea ea
+
+$spell-indexes-address
+:       spell-indexes
+
+$command-indexes-address
+:       command-indexes
+
+$main
+:       5d 05 32
+:       9d 05 32
+
+:       a9 first-spell-index
+.label spell-loop
+:       22 $jun-checker
+:       f0 skip-spell
+:       20 $do-self-spell,2
+.label skip-spell
+:       1a
+:       c9 overflow-spell-index
+:       90 spell-loop
+
+:       a9 first-command-index
+.label command-loop
+:       22 $jun-checker
+:       f0 skip-command
+:       20 $do-command,2
+.label skip-command
+:       1a
+:       c9 overflow-command-index
+:       90 command-loop
+
+:       ad f6 1c
+:       c9 10
+:       90 no-morph
+:       a9 jun-index-morph
+:       22 $jun-checker
+:       f0 no-morph
+:       a9 03
+:       8d 7a 3a
+:       22 $jun-queue-command
+
+.label no-morph
+:       a9 jun-index-revenge
+:       22 $jun-checker
+:       f0 no-revenge
+:       22 $jun-set-target-counter
+:       a9 44
+:       8d 7a 3a
+:       a9 revenge-spell-index
+:       8d 7b 3a
+:       22 $jun-queue-command
+
+.label no-revenge
+:       a9 06
+:       24 b1
+:       d0 cant-escape
+:       a9 jun-index-escape
+:       22 $jun-checker
+:       f0 cant-escape
+:       a9 escape-spell-index
+:       22 $jun-queue-self-spell
+.label cant-escape
+
+:       6b
+
+$do-self-spell
+:       48 da
+:       38
+:       e9 first-spell-index
+:       aa
+:       bf $spell-indexes-address
+:       fa
+# using command 26 allows us to proc multiple spells without ex. undoing vanish
+:       22 $jun-queue-self-spell
+:       68
+:       60
+
+$do-command
+:       48 da
+:       38
+:       e9 first-command-index
+:       aa
+:       bf $command-indexes-address
+:       fa
+:       8d 7a 3a
+:       9c 7b 3a
+:       64 b8
+:       64 b9
+:       22 $jun-queue-command
+:       68
+:       60
+
+VALIDATION
+
+020a5d: 5d 05 32
+:       9d 05 32

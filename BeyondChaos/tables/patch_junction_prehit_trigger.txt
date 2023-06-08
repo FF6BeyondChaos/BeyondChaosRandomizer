@@ -1,0 +1,316 @@
+.addr   jun-checker                     610000
+.addr   jun-checker-y                   6100a0
+.addr   jun-check-are-same-team         6105e0
+.addr   jun-check-entity-living         610600
+.addr   jun-check-entity-can-act        6106c0
+.addr   jun-set-target-allies           610780
+.addr   jun-rng1                        610820
+.addr   jun-rng2                        610830
+.addr   jun-generic-dispatch            610f00
+.addr   jun-queue-self-spell            610fc0
+.addr   jun-queue-command               610ff0
+
+.addr   get-esper-spell                 620100
+
+.addr   main                            621000
+.addr   main-firestarter                621200
+.addr   main-resonate                   622100
+.addr   main-counter                    622320
+.addr   queue-counter                   622300
+.addr   return-normal                   022215
+.addr   return-miss                     0222d1
+
+.def    jun-index-null-freeze       5a
+.def    jun-index-firestarter       74
+
+.def    jun-index-counter-all       84
+.def    jun-index-hamedo            85
+.def    jun-index-return-magic      86
+.def    jun-index-esper-counter     87
+.def    jun-index-resonate          8d
+.def    jun-index-sunken-state      8e
+.def    jun-index-decisive          9c
+
+.def    vanish-spell-index          26
+.def    final-attack-command-index  44
+
+.def    rippler-allowed-statuses1   37 fd
+.def    rippler-allowed-statuses2   fe 84
+
+022211: 5c $main
+
+024692: 22 $main-firestarter
+:       ea ea ea
+
+$main
+:       e2 20
+:       64 fe
+:       da
+
+:       b9 0d 3f
+:       f0 no-freeze
+:       b9 f9 3e
+:       29 02
+:       f0 no-freeze
+:       bb
+:       a9 jun-index-null-freeze
+:       22 $jun-checker
+:       d0 freeze-exit-miss
+
+.label no-freeze
+:       fa
+
+:       a9 jun-index-resonate
+:       22 $jun-checker
+:       d0 resonate
+:       22 $jun-checker-y
+:       d0 resonate
+:       80 no-resonate
+.label resonate
+:       20 $main-resonate,2
+:       e2 20
+
+.label no-resonate
+:       a9 jun-index-decisive
+:       22 $jun-checker
+:       f0 no-decisive
+:       9c 1a 34
+
+.label no-decisive
+:       ad 1a 34
+:       f0 no-counter
+:       4c $main-counter
+
+.label no-counter
+:       5c $return-normal
+.label freeze-exit-miss
+:       fa
+:       5c $return-miss
+
+$main-firestarter
+:       da 5a
+
+:       e2 20
+:       a2 12
+.label firestarter-loop
+:       8a
+:       c3 01
+:       f0 firestarter-skip
+:       22 $jun-check-entity-can-act
+:       f0 firestarter-skip
+:       c2 20
+:       bd 18 30
+:       85 b8
+:       22 $jun-set-target-allies
+:       b9 18 30
+:       25 b8
+:       e2 20
+:       f0 firestarter-skip
+:       a9 jun-index-firestarter
+:       22 $jun-checker
+:       f0 firestarter-skip
+:       a9 02
+:       8d 7a 3a
+:       a9 00
+:       8d 7b 3a
+# set mp cost to zero, because it will be wrong if the spell isn't learned
+:       a9 40
+:       04 b1
+:       22 $jun-queue-command
+.label firestarter-skip
+:       ca ca
+:       10 firestarter-loop
+
+.label exit-normal
+:       e2 20
+:       64 b8
+:       64 b9
+:       7a fa
+:       a9 22
+:       99 0d 3f
+:       6b
+
+$main-counter
+:       b9 18 30
+:       3c 18 30
+:       f0 not-targeting-self
+:       82 counter-exit-just-exit,2
+.label not-targeting-self
+
+:       c2 20
+:       a5 b8
+:       48
+:       e2 20
+
+:       22 $jun-check-are-same-team
+:       d0 no-counter-all
+:       22 $jun-rng2
+:       29 03
+:       d0 no-counter-all
+:       a9 jun-index-counter-all
+:       22 $jun-checker-y
+:       f0 no-counter-all
+:       20 $queue-counter,2
+
+.label no-counter-all
+:       ad a5 11
+:       f0 no-return-magic
+:       c0 08
+:       b0 monsters-ignore-mp
+:       3a
+:       d9 08 3c
+:       b0 no-return-magic
+.label monsters-ignore-mp
+:       a9 jun-index-return-magic
+:       22 $jun-checker-y
+:       f0 no-return-magic
+:       c2 20
+:       bd 18 30
+:       85 b8
+:       a5 b5
+:       8d 7a 3a
+:       e2 20
+:       a9 02
+:       8d 7a 3a
+:       da
+:       bb
+:       22 $jun-queue-command
+:       fa
+
+.label no-return-magic
+:       a9 jun-index-esper-counter
+:       22 $jun-checker-y
+:       f0 no-esper-counter
+:       c2 20
+:       a5 b8
+:       48
+:       bd 18 30
+:       85 b8
+:       e2 20
+:       da 5a
+:       8a
+:       bb
+:       a8
+:       20 $get-esper-spell,2
+:       c9 ff
+:       f0 skip-esper-counter
+:       eb
+:       a9 40
+:       04 b1
+:       a9 final-attack-command-index
+:       c2 20
+:       8d 7a 3a
+:       22 $jun-queue-command
+.label skip-esper-counter
+:       7a fa
+:       c2 20
+:       68
+:       85 b8
+:       e2 20
+
+.label no-esper-counter
+# check for physical
+:       ad a2 11
+:       4a
+:       90 counter-exit-normal
+
+:       b9 e4 3e
+:       89 10
+:       d0 no-sunken-state
+
+:       a9 jun-index-sunken-state
+:       22 $jun-checker-y
+:       f0 no-sunken-state
+:       da
+:       bb
+:       a9 vanish-spell-index
+:       22 $jun-queue-self-spell
+:       fa
+
+.label no-sunken-state
+:       a5 b5
+:       d0 no-hamedo
+:       22 $jun-rng1
+:       90 no-hamedo
+:       a9 jun-index-hamedo
+:       22 $jun-checker-y
+:       f0 no-hamedo
+:       20 $queue-counter,2
+
+.label counter-exit-miss
+:       c2 20
+:       68
+:       85 b8
+:       e2 20
+:       5c $return-miss
+
+.label no-hamedo
+.label counter-exit-normal
+:       c2 20
+:       68
+:       85 b8
+:       e2 20
+.label counter-exit-just-exit
+:       5c $return-normal
+
+$queue-counter
+:       da
+:       c2 20
+:       bd 18 30
+:       85 b8
+:       9c 7a 3a
+:       e2 20
+:       bb
+:       22 $jun-check-entity-can-act
+:       f0 exit-queue-counter
+:       22 $jun-queue-command
+.label exit-queue-counter
+:       fa
+:       60
+
+$main-resonate
+# this is largely duplicated rippler code,
+# except with the originally intended "banned status" bitmasks
+:       08
+:       c2 20
+
+:       bd e4 3e
+:       39 e4 3e
+:       49 ff ff
+:       29 rippler-allowed-statuses1
+:       85 ee
+:       bd e4 3e
+:       25 ee
+:       99 d4 3d
+
+:       9d fc 3d
+:       b9 e4 3e
+:       25 ee
+:       9d d4 3d
+:       99 fc 3d
+
+:       bd f8 3e
+:       39 f8 3e
+:       49 ff ff
+:       29 rippler-allowed-statuses2
+:       85 ee
+:       bd f8 3e
+:       25 ee
+:       99 e8 3d
+
+:       9d 10 3e
+:       b9 f8 3e
+:       25 ee
+:       9d e8 3d
+:       99 10 3e
+
+:       28
+:       60
+
+VALIDATION
+
+022211: e2 20
+:       64 fe
+
+024692: e2 20
+:       a9 22

@@ -522,6 +522,8 @@ def map_to_snes(address, lorom=False):
         return address | 0xC00000
     elif address < 0x7E0000:
         return address
+    elif 0x7E0000 <= address <= 0x7FFFFF and not address & 0x8000:
+        return address
     else:
         # NOTE: Normally 7E and 7F can be accessed with banks 3E and 3F
         # But we cannot use 3E:0000-3E:7FFF or 3F:0000-3F:7FFF

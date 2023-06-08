@@ -1,0 +1,134 @@
+.addr   jun-checker                     610000
+.addr   jun-check-is-damage-over-time   610920
+.addr   main                            620700
+.addr   check-element                   6207a0
+.addr   check-prism                     6213c0
+.addr   bits                            00bafc
+
+# 022241 -> 02224f
+.addr   return-reflect                  022241
+
+# 02224b -> 022215 (order of operations changed for vanish doom)
+# This skips forward to 022259, the end of the vanish doom patch
+.addr   return-no-reflect               02224b
+
+.def    jun-index-null-reflect  0d
+.def    jun-index-fire          40
+.def    jun-index-ice           41
+.def    jun-index-bolt          42
+.def    jun-index-poison        43
+.def    jun-index-wind          44
+.def    jun-index-pearl         45
+.def    jun-index-earth         46
+.def    jun-index-water         47
+.def    jun-index-nuke          48
+
+022235: 5c $main
+:       ea
+
+$main
+:       da
+
+:       a9 jun-index-null-reflect
+:       22 $jun-checker
+:       d0 no-reflect
+
+# check for physical
+:       a9 01
+:       2c a2 11
+:       d0 no-reflect
+
+:       22 $jun-check-is-damage-over-time
+:       d0 no-reflect
+.label not-targeting-self
+
+:       20 $check-prism,2
+:       f0 non-elemental
+
+:       bb
+:       85 10
+:       a9 jun-index-fire
+:       20 $check-element,2
+:       d0 yes-reflect
+:       a9 jun-index-ice
+:       20 $check-element,2
+:       d0 yes-reflect
+:       a9 jun-index-bolt
+:       20 $check-element,2
+:       d0 yes-reflect
+:       a9 jun-index-poison
+:       20 $check-element,2
+:       d0 yes-reflect
+:       a9 jun-index-wind
+:       20 $check-element,2
+:       d0 yes-reflect
+:       a9 jun-index-pearl
+:       20 $check-element,2
+:       d0 yes-reflect
+:       a9 jun-index-earth
+:       20 $check-element,2
+:       d0 yes-reflect
+:       a9 jun-index-water
+:       20 $check-element,2
+:       d0 yes-reflect
+
+.label normal-reflect-check
+:       ad a3 11
+:       89 02
+:       d0 no-reflect
+:       b9 f8 3e
+:       10 no-reflect
+
+.label yes-reflect
+:       a9 80
+:       14 ba
+:       fa
+:       5c $return-reflect
+
+.label no-reflect
+:       fa
+:       5c $return-no-reflect
+
+.label non-elemental
+:       ad a2 11
+:       89 01
+:       d0 normal-reflect-check
+:       ad a4 11
+:       89 81
+:       d0 normal-reflect-check
+:       ad a6 11
+:       f0 normal-reflect-check
+:       a9 jun-index-nuke
+:       22 $jun-checker
+:       f0 normal-reflect-check
+:       80 yes-reflect
+
+$check-element
+:       48 da
+:       29 07
+:       aa
+:       bf $bits
+:       85 11
+:       fa
+:       24 10
+:       f0 check-element-pull-exit
+:       68
+:       22 $jun-checker
+:       60
+.label check-element-pull-exit
+:       68
+:       e2 02
+:       60
+
+VALIDATION
+
+# in unmodified roms this code is at c2/2235
+# the vanish doom patch moves it to c2/2243
+022235: ad a3 11
+:       89 02
+
+022241: c2 20
+:       b9 18 30
+
+02224b: ad a2 11
+:       89 02
