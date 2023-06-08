@@ -1550,7 +1550,7 @@ def manage_natural_magic(NATURAL_MAGIC_TABLE):
     except ValueError:
         return
 
-    natmag_learn_sub = Substitution()
+    #natmag_learn_sub = Substitution()
     # natmag_learn_sub.set_location(0xa182)
     # natmag_learn_sub.bytestring = bytes([0x22, 0x73, 0x08, 0xF0] + [0xEA] * 4)
     # natmag_learn_sub.write(outfile_rom_buffer)
@@ -1559,18 +1559,18 @@ def manage_natural_magic(NATURAL_MAGIC_TABLE):
     # natmag_learn_sub.bytestring = bytes([0x22, 0x4B, 0x08, 0xF0] + [0xEA] * 10)
     # natmag_learn_sub.write(outfile_rom_buffer)
 
-    natmag_learn_sub.set_location(NATURAL_MAGIC_TABLE)
-    natmag_learn_sub.bytestring = bytes(
-        [0xC9, 0x0C, 0xB0, 0x23, 0x48, 0xDA, 0x5A, 0x0B, 0xF4, 0x00, 0x15, 0x2B, 0x85, 0x08, 0xEB, 0x48, 0x85, 0x0B,
-         0xAE, 0xF4, 0x00, 0x86, 0x09, 0x7B, 0xEB, 0xA9, 0x80, 0x85, 0x0C, 0x22, 0xAB, 0x08, 0xF0, 0x68, 0xEB, 0x2B,
-         0x7A, 0xFA, 0x68, 0x6B, 0xC9, 0x0C, 0xB0, 0xFB, 0x48, 0xDA, 0x5A, 0x0B, 0xF4, 0x00, 0x15, 0x2B, 0x85, 0x08,
-         0x8D, 0x02, 0x42, 0xA9, 0x36, 0x8D, 0x03, 0x42, 0xB9, 0x08, 0x16, 0x85, 0x0B, 0xC2, 0x20, 0xAD, 0x16, 0x42,
-         0x18, 0x69, 0x6E, 0x1A, 0x85, 0x09, 0xA9, 0x00, 0x00, 0xE2, 0x20, 0xA9, 0xFF, 0x85, 0x0C, 0x22, 0xAB, 0x08,
-         0xF0, 0x2B, 0x7A, 0xFA, 0x68, 0x6B, 0xA0, 0x10, 0x00, 0xA5, 0x08, 0xC2, 0x20, 0x29, 0xFF, 0x00, 0xEB, 0x4A,
-         0x4A, 0x4A, 0xAA, 0xA9, 0x00, 0x00, 0xE2, 0x20, 0xBF, 0xE1, 0x08, 0xF0, 0xC5, 0x0B, 0xF0, 0x02, 0xB0, 0x11,
-         0x5A, 0xBF, 0xE0, 0x08, 0xF0, 0xA8, 0xB1, 0x09, 0xC9, 0xFF, 0xF0, 0x04, 0xA5, 0x0C, 0x91, 0x09, 0x7A, 0xE8,
-         0xE8, 0x88, 0xD0, 0xE0, 0x6B] + [0xFF] * 2 * 16 * 12)
-    natmag_learn_sub.write(outfile_rom_buffer)
+    #natmag_learn_sub.set_location(NATURAL_MAGIC_TABLE)
+    #natmag_learn_sub.bytestring = bytes(
+    #    [0xC9, 0x0C, 0xB0, 0x23, 0x48, 0xDA, 0x5A, 0x0B, 0xF4, 0x00, 0x15, 0x2B, 0x85, 0x08, 0xEB, 0x48, 0x85, 0x0B,
+    #     0xAE, 0xF4, 0x00, 0x86, 0x09, 0x7B, 0xEB, 0xA9, 0x80, 0x85, 0x0C, 0x22, 0xAB, 0x08, 0xF0, 0x68, 0xEB, 0x2B,
+    #     0x7A, 0xFA, 0x68, 0x6B, 0xC9, 0x0C, 0xB0, 0xFB, 0x48, 0xDA, 0x5A, 0x0B, 0xF4, 0x00, 0x15, 0x2B, 0x85, 0x08,
+    #     0x8D, 0x02, 0x42, 0xA9, 0x36, 0x8D, 0x03, 0x42, 0xB9, 0x08, 0x16, 0x85, 0x0B, 0xC2, 0x20, 0xAD, 0x16, 0x42,
+    #     0x18, 0x69, 0x6E, 0x1A, 0x85, 0x09, 0xA9, 0x00, 0x00, 0xE2, 0x20, 0xA9, 0xFF, 0x85, 0x0C, 0x22, 0xAB, 0x08,
+    #     0xF0, 0x2B, 0x7A, 0xFA, 0x68, 0x6B, 0xA0, 0x10, 0x00, 0xA5, 0x08, 0xC2, 0x20, 0x29, 0xFF, 0x00, 0xEB, 0x4A,
+    #     0x4A, 0x4A, 0xAA, 0xA9, 0x00, 0x00, 0xE2, 0x20, 0xBF, 0xE1, 0x08, 0xF0, 0xC5, 0x0B, 0xF0, 0x02, 0xB0, 0x11,
+    #     0x5A, 0xBF, 0xE0, 0x08, 0xF0, 0xA8, 0xB1, 0x09, 0xC9, 0xFF, 0xF0, 0x04, 0xA5, 0x0C, 0x91, 0x09, 0x7A, 0xE8,
+    #     0xE8, 0x88, 0xD0, 0xE0, 0x6B] + [0xFF] * 2 * 16 * 12)
+    #natmag_learn_sub.write(outfile_rom_buffer)
 
     spells = get_ranked_spells(infile_rom_buffer, magic_only=True)
     spellids = [s.spellid for s in spells]
@@ -1611,7 +1611,7 @@ def manage_natural_magic(NATURAL_MAGIC_TABLE):
             candidate.natural_magic.append((level, newspell))
         candidate.natural_magic = sorted(candidate.natural_magic, key=lambda s: (s[0], s[1].spellid))
         for i, (level, newspell) in enumerate(candidate.natural_magic):
-            pointer = 0x3008e0 + candidate.id * 32 + (2 * i)
+            pointer = NATURAL_MAGIC_TABLE + candidate.id * 32 + (2 * i)
             outfile_rom_buffer.seek(pointer)
             outfile_rom_buffer.write(bytes([newspell.spellid]))
             outfile_rom_buffer.write(bytes([level]))
@@ -2590,7 +2590,7 @@ def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
     return items
 
 
-def manage_reorder_rages(freespaces: List[FreeBlock], RAGE_ORDER_TABLE) -> List[FreeBlock]:
+def manage_reorder_rages(RAGE_ORDER_TABLE):
     pointer = RAGE_ORDER_TABLE
 
     monsters = get_monsters()
@@ -2604,57 +2604,7 @@ def manage_reorder_rages(freespaces: List[FreeBlock], RAGE_ORDER_TABLE) -> List[
     reordered_rages_sub.set_location(pointer)
     reordered_rages_sub.write(outfile_rom_buffer)
     hirage, midrage, lorage = ((pointer >> 16) & 0x3F) + 0xC0, (pointer >> 8) & 0xFF, pointer & 0xFF
-
-    rage_reorder_sub = Substitution()
-    rage_reorder_sub.bytestring = [0xA9, 0x00,  # LDA #$00
-                                   0xA8,  # TAY
-                                   # main loop
-                                   # get learned rages byte, store in EE
-                                   0xBB, 0xBF, lorage, midrage, hirage,
-                                   0x4A, 0x4A, 0x4A,  # LSR x3
-                                   0xAA,  # TAX
-                                   0xBD, 0x2C, 0x1D,  # LDA $1D2C,X (get rage byte)
-                                   0x85, 0xEE,  # STA $EE
-                                   # get bitmask for learned rage
-                                   0xBB, 0xBF, lorage, midrage, hirage,
-                                   0x29, 0x07,  # AND #$07 get bottom three bits
-                                   0xC9, 0x00,  # CMP #$00
-                                   0xF0, 0x05,  # BEQ 5 bytes forward
-                                   0x46, 0xEE,  # LSR $EE
-                                   0x3A,  # DEC
-                                   0x80, 0xF7,  # BRA 7 bytes back
-                                   # check that rage is learned
-                                   0xA9, 0x01,  # LDA #$01
-                                   0x25, 0xEE,  # AND $EE
-                                   0xEA,  # nothing
-                                   0xC9, 0x01,  # CMP #$01
-                                   0xD0, 0x0C,  # BNE 12 bytes forward (skip if not known)
-                                   # 0xEA, 0xEA,
-                                   # add rage to battle menu
-                                   0xEE, 0x9A, 0x3A,  # INC $3A9A (number of rages known)
-                                   0xBB, 0xBF, lorage, midrage, hirage,  # get rage
-                                   0x8F, 0x80, 0x21, 0x00,  # STA $002180 (store rage in menu)
-                                   # check to terminate loop
-                                   0xC8,  # INY (advance to next enemy)
-                                   0xC0, 0xFF,  # CPY #$FF
-                                   0xD0, 0xC8,  # BNE (loop for all enemies 0 to 254)
-                                   # return from subroutine
-                                   0x60,  # RTS
-                                   ]
-    myfs = get_appropriate_freespace(freespaces, rage_reorder_sub.size)
-    pointer = myfs.start
-    freespaces = determine_new_freespaces(freespaces, myfs, rage_reorder_sub.size)
-    rage_reorder_sub.set_location(pointer)
-    rage_reorder_sub.write(outfile_rom_buffer)
-
-    rage_reorder_sub = Substitution()
-    rage_reorder_sub.bytestring = [0x20, pointer & 0xFF, (pointer >> 8) & 0xFF,  # JSR
-                                   0x60,  # RTS
-                                   ]
-    rage_reorder_sub.set_location(0x25847)
-    rage_reorder_sub.write(outfile_rom_buffer)
-
-    return freespaces
+    return
 
 
 def manage_esper_boosts(freespaces: List[FreeBlock]) -> List[FreeBlock]:
@@ -4227,7 +4177,7 @@ def manage_auction_house():
         auction_sub.bytestring = bytes([0x6d, item.itemid, 0x45, 0x45, 0x45])
         auction_sub.write(outfile_rom_buffer)
 
-        addr = 0x302000 + i * 6
+        addr = 0x304000 + i * 6
         auction_sub.set_location(addr)
         auction_sub.bytestring = bytes([0x66, auction_item[3] & 0xff, (auction_item[3] & 0xff00) >> 8, item.itemid,
                                         # Show text auction_item[3] with item item.itemid
@@ -5578,7 +5528,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         manage_espers(esperrage_spaces, esper_replacements)
     reseed()
     myself_locations = myself_patches(outfile_rom_buffer)
-    esperrage_spaces = manage_reorder_rages(esperrage_spaces, myself_locations["RAGE_ORDER_TABLE"])
+    manage_reorder_rages(myself_locations["RAGE_ORDER_TABLE"])
 
     titlesub = Substitution()
     titlesub.bytestring = [0xFD] * 4
