@@ -39,20 +39,19 @@ from itemrandomizer import (reset_equippable, get_ranked_items, get_item,
                             ItemBlock)
 from locationrandomizer import (get_locations, get_location, get_zones,
                                 get_npcs, randomize_forest, NPCBlock)
-from menufeatures import (improve_dance_menu, y_equip_relics, fix_gogo_portrait)
 from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monsters,
                                get_metamorphs, get_ranked_monsters,
                                shuffle_monsters, get_monster, read_ai_table,
                                change_enemy_name, randomize_enemy_name,
                                get_collapsing_house_help_skill)
+from myselfpatches import myself_patches
 from musicinterface import randomize_music, manage_opera, get_music_spoiler, music_init, get_opera_log
 from options import ALL_MODES, NORMAL_FLAGS, Options_
 from patches import (allergic_dog, banon_life3, evade_mblock,
                      death_abuse, no_kutan_skip, show_coliseum_rewards,
                      cycle_statuses, no_dance_stumbles, fewer_flashes,
                      change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx, apply_namingway,
-                     improved_party_gear, patch_doom_gaze, nicer_poison, fix_xzone, imp_skimp, hidden_relic,
-                     myself_patches)
+                     improved_party_gear, patch_doom_gaze, nicer_poison, fix_xzone, imp_skimp, hidden_relic, y_equip_relics, fix_gogo_portrait)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -79,7 +78,7 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime dearestmolulu questionablecontent espercutegf penultima|1603333081"
+TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime suplexwrecks questionablecontent|1603333081"
 # FLARE GLITCH TEST_SEED = "CE-4.2.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #TEST_SEED = "CE-4.2.1|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
@@ -1504,7 +1503,7 @@ def manage_suplex(commands: Dict[str, CommandBlock], monsters: List[MonsterBlock
     for c in characters:
         c.set_battle_command(0, command_id=0)
         c.set_battle_command(1, command_id=5)
-        c.set_battle_command(2, command_id=0xA)
+        c.set_battle_command(2, command_id=0x10)
         c.set_battle_command(3, command_id=1)
         c.write_battle_commands(outfile_rom_buffer)
 
@@ -1533,7 +1532,7 @@ def beta_manageDesperation():
         traceback.print_exc()
 
 
-def manage_natural_magic():
+def manage_natural_magic(NATURAL_MAGIC_TABLE):
     characters = get_characters()
     candidates = [c for c in characters if c.id < 12 and (0x02 in c.battle_commands or 0x17 in c.battle_commands)]
 
@@ -1560,7 +1559,7 @@ def manage_natural_magic():
     # natmag_learn_sub.bytestring = bytes([0x22, 0x4B, 0x08, 0xF0] + [0xEA] * 10)
     # natmag_learn_sub.write(outfile_rom_buffer)
 
-    natmag_learn_sub.set_location(0x30084B)
+    natmag_learn_sub.set_location(NATURAL_MAGIC_TABLE)
     natmag_learn_sub.bytestring = bytes(
         [0xC9, 0x0C, 0xB0, 0x23, 0x48, 0xDA, 0x5A, 0x0B, 0xF4, 0x00, 0x15, 0x2B, 0x85, 0x08, 0xEB, 0x48, 0x85, 0x0B,
          0xAE, 0xF4, 0x00, 0x86, 0x09, 0x7B, 0xEB, 0xA9, 0x80, 0x85, 0x0C, 0x22, 0xAB, 0x08, 0xF0, 0x68, 0xEB, 0x2B,
@@ -2591,8 +2590,8 @@ def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
     return items
 
 
-def manage_reorder_rages(freespaces: List[FreeBlock]) -> List[FreeBlock]:
-    pointer = 0x301416
+def manage_reorder_rages(freespaces: List[FreeBlock], RAGE_ORDER_TABLE) -> List[FreeBlock]:
+    pointer = RAGE_ORDER_TABLE
 
     monsters = get_monsters()
     monsters = [m for m in monsters if m.id <= 0xFE]
@@ -5578,8 +5577,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             nerf_paladin_shield()
         manage_espers(esperrage_spaces, esper_replacements)
     reseed()
-
-    esperrage_spaces = manage_reorder_rages(esperrage_spaces)
+    myself_locations = myself_patches(outfile_rom_buffer)
+    esperrage_spaces = manage_reorder_rages(esperrage_spaces, myself_locations["RAGE_ORDER_TABLE"])
 
     titlesub = Substitution()
     titlesub.bytestring = [0xFD] * 4
@@ -5603,7 +5602,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
     if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
         # do this after swapping beserk
-        manage_natural_magic()
+        manage_natural_magic(myself_locations["NATURAL_MAGIC_TABLE"])
     reseed()
 
     if Options_.is_flag_active("random_zerker"):
@@ -5831,7 +5830,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     if Options_.is_flag_active("random_dances"):
         if 0x13 not in changed_commands:
             manage_dances()
-            improve_dance_menu(outfile_rom_buffer)
+            #improve_dance_menu(outfile_rom_buffer)
     reseed()
 
     if Options_.is_flag_active('remonsterate'):
@@ -6092,7 +6091,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     title_gfx(outfile_rom_buffer)
     improved_party_gear(outfile_rom_buffer)
     manage_doom_gaze(outfile_rom_buffer)
-    myself_patches(outfile_rom_buffer)
 
     if Options_.is_flag_active("swdtechspeed"):
         swdtech_speed = Options_.get_flag_value('swdtechspeed')

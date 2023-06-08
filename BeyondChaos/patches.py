@@ -643,6 +643,84 @@ def improved_party_gear(output_rom_buffer: BytesIO):
         0xA9, 0xBF, 0x03, 0x8F, 0xEF, 0x30, 0x7E, 0xE2, 0x20, 0x6B])
     ipg_sub.write(output_rom_buffer)
 
+def y_equip_relics(output_rom_buffer: BytesIO):
+    y_equip_relics_sub = Substitution()
+    y_equip_relics_sub.set_location(0x30247)
+    y_equip_relics_sub.bytestring = bytes([0x1e, 0x96])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x30287)
+    y_equip_relics_sub.bytestring = bytes([0xcd, 0x98])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x31be9)
+    y_equip_relics_sub.bytestring = bytes([0x5b, 0x96])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x31bf7)
+    y_equip_relics_sub.bytestring = bytes([0x60, 0x96])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x3960d)
+    y_equip_relics_sub.bytestring = bytes([0x65, 0x96])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x39615)
+    y_equip_relics_sub.bytestring = bytes([0x0c, 0x96, 0xe6, 0x3a, 0xa9, 0x2c, 0x85, 0x29, 0x60, 0x20, 0x0c, 0x96, 0x20, 0x4e, 0x90, 0x20, 0x56, 0x8e, 0xa5, 0x08, 0x10, 0x0b, 0x20, 0xb2, 0x0e, 0x7b, 0xa5, 0x4b, 0x0a, 0xaa, 0x7c, 0x6c, 0x96, 0xa5, 0x09, 0x10, 0x0d, 0x20, 0xa9, 0x0e, 0x20, 0x10, 0x91, 0xa9, 0x04, 0x85, 0x27, 0x64, 0x26, 0x60, 0x0a, 0x10, 0x0a, 0x20, 0xb2, 0x0e, 0xa9, 0x58, 0x85, 0x26, 0xe6, 0x25, 0x60, 0xa9, 0x35, 0x85, 0xe0, 0x4c, 0x22, 0x20, 0xa0, 0x09, 0xa3, 0x80, 0x08, 0xa0, 0x11, 0xa3, 0x80, 0x03, 0xa0, 0xea, 0xa2, 0x4c, 0xf9, 0x02, 0x60])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x39672)
+    y_equip_relics_sub.bytestring = bytes([0x9a])
+    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.set_location(0x39678)
+    y_equip_relics_sub.bytestring = bytes([0x5b])
+    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.set_location(0x39692)
+    y_equip_relics_sub.bytestring = bytes([0x60, 0x96, 0x20, 0x7a, 0x96, 0xe6, 0x26, 0x60, 0x20, 0xa8, 0x96, 0x80, 0xe9, 0xa9, 0x35, 0x85, 0x26, 0x64, 0x27, 0xc6, 0x25])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x3988c)
+    y_equip_relics_sub.bytestring = bytes([0x10, 0x21, 0x20, 0xb2, 0x0e, 0xa5, 0x4e, 0x85, 0x5f, 0xa2, 0x57, 0x55, 0x86, 0x26, 0x20, 0x59, 0x9b, 0x20, 0x50, 0xa1, 0x20, 0xeb, 0x9a, 0x20, 0x33, 0x92, 0x20, 0x15, 0x6a, 0x20, 0x68, 0x13, 0x4c, 0xac, 0x9c, 0xa5, 0x09, 0x10, 0x0d, 0x20, 0xa9, 0x0e, 0xa9, 0x36, 0x85, 0x26, 0x20, 0x50, 0x8e, 0x4c, 0x59, 0x8e, 0x0a, 0x10, 0x03, 0x4C, 0x4A, 0x96, 0xA5, 0x26, 0x69, 0x29, 0x4C, 0x56, 0x96, 0x20, 0x72, 0x8E, 0xA5, 0x08, 0x10, 0xDB, 0x20, 0xB2, 0x0E, 0x20, 0xF2, 0x93, 0xC2, 0x21, 0x98, 0xE2, 0x20, 0x65, 0x4B, 0xA8, 0xB9, 0x1F, 0x00, 0x20, 0x5E, 0x9D, 0xA9, 0xFF, 0x99, 0x1F, 0x00, 0x20, 0x1B, 0x91, 0x80, 0xBD, 0xA5, 0x09, 0x0A, 0x10, 0x14, 0x20, 0xB2, 0x0E, 0x20, 0x5F, 0x1E, 0xB0, 0x0A, 0x20, 0xEB, 0x9E, 0xA5, 0x99, 0xD0, 0x03, 0x20, 0x9F, 0x96, 0x64, 0x08, 0x4C, 0xE6, 0x9E, 0xEA])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x39e81)
+    y_equip_relics_sub.bytestring = bytes([0x5b])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x39e8f)
+    y_equip_relics_sub.bytestring = bytes([0x60])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x39edd)
+    y_equip_relics_sub.bytestring = bytes([0xf2, 0x98])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x39f1d)
+    y_equip_relics_sub.bytestring = bytes([0x65])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x39fdf)
+    y_equip_relics_sub.bytestring = bytes([0x5b])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x39ff0)
+    y_equip_relics_sub.bytestring = bytes([0x60])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x3a048)
+    y_equip_relics_sub.bytestring = bytes([0xf2, 0x98])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+    y_equip_relics_sub.set_location(0x3a147)
+    y_equip_relics_sub.bytestring = bytes([0xf2, 0x98])
+    y_equip_relics_sub.write(output_rom_buffer)
+
+
+def fix_gogo_portrait(output_rom_buffer: BytesIO):
+    """Hides the portion of Gogo's portrait that shows incorrectly on his status menu."""
+    output_rom_buffer.seek(0x35f51)
+    output_rom_buffer.write(bytes([0x0a, 0x62]))
+
 
 def patch_doom_gaze(output_rom_buffer: BytesIO):
     # Add an option to the Falcon's wheel to search out Doom Gaze
@@ -1696,195 +1774,3 @@ def fewer_flashes(output_rom_buffer: BytesIO, flag_value):
     # CC/D6FB - Blue Flash
     # CC/D713 - Blue Flash
     # CC/D720 - Blue Flash
-
-
-def myself_patches(output_rom_buffer : BytesIO):
-    _sub = Substitution()
-    # PATCH_ITEM_DESC, 0xc38706, 4, [ byte data; ]
-    _sub.set_location(0x38706)
-    _sub.bytestring = bytes([0x22, 0x03, 0x00, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_ITEM_DESC, 0xc389e6, 4, [ byte data; ]
-    _sub.set_location(0x389e6)
-    _sub.bytestring = bytes([0x22, 0x2B, 0x00, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_ORIGINAL_NAME, 0xc33311, 5, [ byte data; ]
-    _sub.set_location(0x33311)
-    _sub.bytestring = bytes([0x22, 0x26, 0x07, 0xF0, 0xEA])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_ORIGINAL_NAME, 0xc3335d, 5, [ byte data; ]
-    _sub.set_location(0x3335d)
-    _sub.bytestring = bytes([0x22, 0x34, 0x07, 0xF0, 0xEA])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_ORIGINAL_NAME, 0xc333a9, 5, [ byte data; ]
-    _sub.set_location(0x333a9)
-    _sub.bytestring = bytes([0x22, 0x42, 0x07, 0xF0, 0xEA])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_ORIGINAL_NAME, 0xc333f5, 5, [ byte data; ]
-    _sub.set_location(0x333f5)
-    _sub.bytestring = bytes([0x22, 0x50, 0x07, 0xF0, 0xEA])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_ORIGINAL_NAME, 0xc37973, 4, [ byte data; ]
-    _sub.set_location(0x37973)
-    _sub.bytestring = bytes([0x22, 0x5E, 0x07, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_NATURAL_MAGIC, 0xc261b6, 14, [ byte data; ]
-    _sub.set_location(0x261b6)
-    _sub.bytestring = bytes([0x22, 0x3A, 0x08, 0xF0, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_NATURAL_MAGIC, 0xc0a182, 4, [ byte data; ]
-    _sub.set_location(0xa182)
-    _sub.bytestring = bytes([0x22, 0x61, 0x08, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_STATUS_MENU, 0xc35ead, 4, [ byte data; ]
-    _sub.set_location(0x35ead)
-    _sub.bytestring = bytes([0x22, 0x4D, 0x0A, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_STATUS_MENU, 0xc35e91, 4, [ byte data; ]
-    _sub.set_location(0x35e91)
-    _sub.bytestring = bytes([0x22, 0x58, 0x0A, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_STATUS_MENU, 0xc363ba, 4, [ byte data; ]
-    _sub.set_location(0x363ba)
-    _sub.bytestring = bytes([0x22, 0x63, 0x0A, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_STATUS_MENU, 0xc35e69, 4, [ byte data; ]
-    _sub.set_location(0x35e69)
-    _sub.bytestring = bytes([0x22, 0x75, 0x0A, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_STATUS_MENU, 0xc3640c, 5, [ byte data; ]
-    _sub.set_location(0x3640c)
-    _sub.bytestring = bytes([0x22, 0x83, 0x0A, 0xF0, 0x60])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_RAGE_DESC, 0xc321d9, 4, [ byte data; ]
-    _sub.set_location(0x321d9)
-    _sub.bytestring = bytes([0x22, 0xC2, 0x0C, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_RAGE_DESC, 0xc328ba, 7, [ byte data; ]
-    _sub.set_location(0x328ba)
-    _sub.bytestring = bytes([0x22, 0x06, 0x0D, 0xF0, 0xF0, 0x01, 0x60])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_RAGE_DESC, 0xc31fe6, 1, [ byte data; ]
-    _sub.set_location(0x31fe6)
-    _sub.bytestring = bytes([0xAA])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_RAGE_DESC, 0xc353c1, 5, [ byte data; ]
-    _sub.set_location(0x353c1)
-    _sub.bytestring = bytes([0x22, 0x0A, 0x14, 0xF0, 0x60])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_RAGE_DESC, 0xc35433, 5, [ byte data; ]
-    _sub.set_location(0x35433)
-    _sub.bytestring = bytes([0x22, 0xCB, 0x14, 0xF0, 0xEA])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_RAGE_DESC, 0xc25847, 5, [ byte data; ]
-    _sub.set_location(0x25847)
-    _sub.bytestring = bytes([0x22, 0x59, 0x14, 0xF0, 0x60])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_DANCE_DESC, 0xc328b0, 4, [ byte data; ]
-    _sub.set_location(0x328b0)
-    _sub.bytestring = bytes([0x5C, 0x97, 0x1A, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_DANCE_DESC, 0xc321f0, 4, [ byte data; ]
-    _sub.set_location(0x321f0)
-    _sub.bytestring = bytes([0x5C, 0xB9, 0x1A, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_DANCE_DESC, 0xc329ae, 4, [ byte data; ]
-    _sub.set_location(0x329ae)
-    _sub.bytestring = bytes([0x5C, 0xDB, 0x1A, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_NPC_RNG, 0xc00636, 4, [ byte data; ]
-    _sub.set_location(0x636)
-    _sub.bytestring = bytes([0xBF, 0x01, 0x1E, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_BLACKBELT, 0xc24d03, 5, [ byte data; ]
-    _sub.set_location(0x24d03)
-    _sub.bytestring = bytes([0x22, 0x01, 0x1F, 0xF0, 0xEA])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_SRAM_EXPANSION, 0xc0bd8f, 9, [ byte data; ]
-    _sub.set_location(0xbd8f)
-    _sub.bytestring = bytes([0x22, 0x55, 0x1F, 0xF0, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_SRAM_EXPANSION, 0xc31566, 4, [ byte data; ]
-    _sub.set_location(0x31566)
-    _sub.bytestring = bytes([0x22, 0x6B, 0x1F, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_SRAM_EXPANSION, 0xc3151f, 4, [ byte data; ]
-    _sub.set_location(0x3151f)
-    _sub.bytestring = bytes([0x22, 0xAA, 0x1F, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_ITEM_LOCK, 0xc37fbc, 4, [ byte data; ]
-    _sub.set_location(0x37fbc)
-    _sub.bytestring = bytes([0x22, 0xCA, 0x1F, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_ITEM_LOCK, 0xc326ba, 5, [ byte data; ]
-    _sub.set_location(0x326ba)
-    _sub.bytestring = bytes([0x22, 0x4A, 0x20, 0xF0, 0x60])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_ITEM_LOCK, 0xc32728, 4, [ byte data; ]
-    _sub.set_location(0x32728)
-    _sub.bytestring = bytes([0x22, 0x7A, 0x20, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_ITEM_LOCK, 0xc31f3b, 4, [ byte data; ]
-    _sub.set_location(0x31f3b)
-    _sub.bytestring = bytes([0x22, 0x8A, 0x20, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_ITEM_LOCK, 0xc327aa, 4, [ byte data; ]
-    _sub.set_location(0x327aa)
-    _sub.bytestring = bytes([0x22, 0xE1, 0x1F, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_ITEM_LOCK, 0xc18ae1, 4, [ byte data; ]
-    _sub.set_location(0x18ae1)
-    _sub.bytestring = bytes([0x22, 0xFC, 0x1F, 0xF0])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_SRAM_SIZE, 0xffd8, 1, [ byte data; ]
-    _sub.set_location(0xffd8)
-    _sub.bytestring = bytes([0x04])
-    _sub.write(output_rom_buffer)
-
-    # PATCH_NEWCODE, 0xf00000, 8465, [ byte data; ]
-    _sub.set_location(0x300000)
-    with open(MYSELF_BLOB, 'r+b') as f:
-        _sub.bytestring = f.read()
-    _sub.write(output_rom_buffer)
-
-    return {
-        "NATURAL_MAGIC_TABLE" : 0x3008cd,
-        "RAGE_ORDER_TABLE" : 0x301579,
-        "BLACKBELT_STAT" : 0x301f52,
-        "BLACKBELT_MULTIPLIER" : 0x301f53,
-        "BLACKBELT_ADDER" : 0x301f54,
-    }
