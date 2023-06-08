@@ -178,7 +178,7 @@ def name_to_bytes(name, length):
 
 shorttexttable = {}
 try:
-    f = open(SHORT_TEXT_TABLE)
+    f = open(SHORT_TEXT_TABLE, encoding="utf-8")
     for line in f:
         line = line.strip()
         char, value = tuple(line.split())
