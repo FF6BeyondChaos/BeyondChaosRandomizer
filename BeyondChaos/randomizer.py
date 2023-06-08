@@ -5650,7 +5650,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     # Check expboost, gpboost, and mpboost values
     for flag_name in ["expboost", "gpboost", "mpboost"]:
         if flag := Options_.is_flag_active(flag_name):
-            skip_errors = not application or application != "console"
             while True:
                 try:
                     if flag.maximum_value < float(flag.value):
@@ -5667,14 +5666,12 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                 except ValueError:
                     error_message = "The supplied value for " + flag_name + " was not a number."
 
-                if error_message:
-                    if skip_errors:
-                        error_message += " Deactivating flag."
-                        pipe_print(error_message)
-                        Options_.deactivate_flag(flag_name)
-                        break
-                    pipe_print(error_message)
-                flag.value = float(input("Please enter a multiplier between " + str(flag.minimum_value) +
+                if not application or application != "console":
+                    # Users in the GUI or web cannot fix the flags after generation begins, so deactivate the flag.
+                    pipe_print(error_message + " Deactivating flag.")
+                    Options_.deactivate_flag(flag_name)
+                    break
+                flag.value = float(input(error_message + " Please enter a multiplier between " + str(flag.minimum_value) +
                     " and " + str(flag.maximum_value) + " for " + flag_name + ".\n>"))
 
     if Options_.is_flag_active("random_formations"):
