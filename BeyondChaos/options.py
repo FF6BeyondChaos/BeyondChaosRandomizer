@@ -84,7 +84,7 @@ class Options:
     def is_flag_active(self, flag_attribute: str):
         for flag in self.active_flags:
             if flag.name.lower() == flag_attribute.lower() or flag.description.lower() == flag_attribute.lower():
-                return True
+                return flag
 
     def is_any_flag_active(self, flag_names: List[str]):
         for flag in self.active_flags:
@@ -111,6 +111,12 @@ class Options:
                 if flag in RESTRICTED_VANILLA_SPRITE_FLAGS:
                     self.activate_flag("frenchvanilla", True)
                 return
+
+    def deactivate_flag(self, flag_name: str):
+        for index, flag in enumerate(self.active_flags):
+            if flag.name == flag_name:
+                del self.active_flags[index]
+
 
     def activate_from_string(self, flag_string):
         s = ""
@@ -450,13 +456,17 @@ NORMAL_FLAGS = [
          long_description="All battles will award multiplied exp.",
          category="battle",
          inputtype="float2",
-         default_value="1.00"),
+         default_value="1.00",
+         minimum_value=0,
+         maximum_value=50),
     Flag(name='gpboost',
          description="MULTIPLIED GP MODE",
          long_description="All battles will award multiplied gp.",
          category="battle",
          inputtype="float2",
-         default_value="1.00"),
+         default_value="1.00",
+         minimum_value=0,
+         maximum_value=50),
     Flag(name='lessfanatical',
          description="EASY FANATICS TOWER MODE",
          long_description="Disables forced magic command in Fanatic's Tower.",
@@ -478,7 +488,9 @@ NORMAL_FLAGS = [
          long_description="All battles will award multiplied magic points.",
          category="battle",
          inputtype="float2",
-         default_value="1.00"),
+         default_value="1.00",
+         minimum_value=0,
+         maximum_value=50),
     Flag(name='nobreaks',
          description="NO ITEM BREAKS MODE",
          long_description="Causes no items to break for spell effects.",
