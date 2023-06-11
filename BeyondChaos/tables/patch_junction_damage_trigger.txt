@@ -83,7 +83,7 @@ $main
 :       20 $boost-damage-double,2
 
 .label no-chemist
-:       ad 7a 3a
+:       ad 7c 3a
 :       29 ff 00
 :       c9 22 00
 :       f0 no-reverse
@@ -546,6 +546,11 @@ $retarget-salve
 
 $do-auto-potion
 :       da
+
+# check for decisive blow
+:       ad 1a 34
+:       29 ff 00
+:       f0 auto-potion-exit
 
 # check for mp damage
 :       a9 80 00
