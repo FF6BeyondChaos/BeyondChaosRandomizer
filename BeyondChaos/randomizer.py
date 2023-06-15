@@ -3140,7 +3140,7 @@ def manage_dragons():
         outfile_rom_buffer.write(bytes([dragon]))
 
 
-def manage_formations(formations: List[Formation], fsets: List[FormationSet], mpMultiplier: float = 1) -> List[
+def manage_formations(formations: List[Formation], fsets: List[FormationSet]) -> List[
     Formation]:
     for fset in fsets:
         if len(fset.formations) == 4:
@@ -5647,30 +5647,38 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             character.mutate_stats(outfile_rom_buffer, start_in_wor, read_only=True)
     reseed()
 
-    if Options_.is_flag_active('mpboost'):
-        mp_boost_value = Options_.get_flag_value('mpboost')
-        if type(mp_boost_value) == bool:
-            if application and application != "console":
-                pipe_print("ERROR: No value was supplied for mpboost flag. Skipping flag.")
-            else:
-                while True:
-                    try:
-                        mp_boost_value = float(input("Please enter an MP multiplier value (0.0-50.0): "))
-                        if mp_boost_value < 0:
-                            raise ValueError
+    # Check expboost, gpboost, and mpboost values
+    for flag_name in ["expboost", "gpboost", "mpboost"]:
+        if flag := Options_.is_flag_active(flag_name):
+            while True:
+                try:
+                    if flag.maximum_value < float(flag.value):
+                        error_message = "The supplied value for " + flag_name + " was greater than the maximum " \
+                            "allowed value of " + str(flag.maximum_value) + "."
+                    elif float(flag.value) < flag.minimum_value:
+                        error_message = "The supplied value for " + flag_name + " was less than the minimum " \
+                            "allowed value of " + str(flag.minimum_value) + "."
+                    elif not flag.value or type(flag.value) == bool or str(flag.value).lower() == "nan":
+                        error_message = "No value was supplied for " + flag_name + "."
+                    else:
+                        flag.value = float(flag.value)
                         break
-                    except ValueError:
-                        pipe_print("The supplied value for the mp multiplier was not a positive number.")
+                except ValueError:
+                    error_message = "The supplied value for " + flag_name + " was not a number."
+
+                if not application or application != "console":
+                    # Users in the GUI or web cannot fix the flags after generation begins, so deactivate the flag.
+                    pipe_print(error_message + " Deactivating flag.")
+                    Options_.deactivate_flag(flag_name)
+                    break
+                flag.value = float(input(error_message + " Please enter a multiplier between " + str(flag.minimum_value) +
+                    " and " + str(flag.maximum_value) + " for " + flag_name + ".\n>"))
 
     if Options_.is_flag_active("random_formations"):
         formations = get_formations()
         fsets = get_fsets()
-        if Options_.is_flag_active('mpboost') and type(mp_boost_value) == float:
-            manage_formations(formations, fsets, mp_boost_value)
-            manage_cursed_encounters(formations, fsets)
-        else:
-            manage_formations(formations, fsets)
-            manage_cursed_encounters(formations, fsets)
+        manage_formations(formations, fsets)
+        manage_cursed_encounters(formations, fsets)
         for fset in fsets:
             fset.write_data(outfile_rom_buffer)
 
@@ -5993,45 +6001,17 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     if Options_.is_flag_active("random_zerker") or Options_.is_flag_active("random_character_stats"):
         manage_equip_umaro(event_freespaces)
 
-    if Options_.is_flag_active('easymodo') or Options_.is_flag_active('expboost'):
-        exp_boost_value = Options_.get_flag_value('expboost')
-        if Options_.is_flag_active('expboost') and type(exp_boost_value) == bool:
-            if application and application != "console":
-                pipe_print("ERROR: No value was supplied for expboost flag. Skipping flag.")
-            else:
-                while True:
-                    try:
-                        exp_boost_value = float(input("Please enter an EXP multiplier value (0.0-50.0): "))
-                        if exp_boost_value < 0:
-                            raise ValueError
-                        break
-                    except ValueError:
-                        pipe_print("The supplied value for the EXP multiplier was not a positive number.")
+    # Write easymodo, expboost, and gpboost stat changes to each monster
+    if Options_.is_flag_active('easymodo') or Options_.is_flag_active('expboost') or \
+            Options_.is_flag_active('gpboost'):
         for monster in monsters:
             if Options_.is_flag_active('easymodo'):
                 monster.stats['hp'] = 1
-            if not type(exp_boost_value) == bool:
-                monster.stats['xp'] = int(min(0xFFFF, float(exp_boost_value) * monster.stats['xp']))
+            if Options_.is_flag_active('expboost'):
+                monster.stats['xp'] = int(min(0xFFFF, float(Options_.get_flag_value("expboost")) * monster.stats['xp']))
+            if Options_.is_flag_active('gpboost'):
+                monster.stats['gp'] = int(min(0xFFFF, float(Options_.get_flag_value("gpboost")) * monster.stats['gp']))
             monster.write_stats(outfile_rom_buffer)
-
-    if Options_.is_flag_active('gpboost'):
-        gp_boost_value = Options_.get_flag_value('gpboost')
-        if type(gp_boost_value) == bool:
-            if application and application != "console":
-                pipe_print("ERROR: No value was supplied for gpboost flag. Skipping flag.")
-            else:
-                while True:
-                    try:
-                        gp_boost_value = float(input("Please enter a GP multiplier value (0.0-50.0): "))
-                        if gp_boost_value < 0:
-                            raise ValueError
-                        break
-                    except ValueError:
-                        pipe_print("The supplied value for the gp multiplier was not a positive number.")
-        if not type(gp_boost_value) == bool:
-            for monster in monsters:
-                monster.stats['gp'] = int(min(0xFFFF, float(gp_boost_value) * monster.stats['gp']))
-                monster.write_stats(outfile_rom_buffer)
 
     if Options_.is_flag_active('naturalmagic') or Options_.is_flag_active('naturalstats'):
         espers = get_espers(infile_rom_buffer)

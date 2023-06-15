@@ -324,7 +324,7 @@ class Formation():
     def exp(self):
         return sum(e.stats['xp'] for e in self.present_enemies)
 
-    def mutate(self, mp=False, mp_boost_value=None):
+    def mutate(self, mp=False, mp_boost_value=False):
         if mp and self.mp is not None and 0 < self.mp < 100:
             factor = self.levelrank() / 100
             self.mp += int(round(self.mp * factor))
