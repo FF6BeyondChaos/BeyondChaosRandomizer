@@ -72,16 +72,16 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-4.2.1"
+VERSION = "CE-5.0.0"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime suplexwrecks questionablecontent|1603333081"
-# FLARE GLITCH TEST_SEED = "CE-4.2.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
-# REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-#TEST_SEED = "CE-4.2.1|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
+TEST_SEED = "CE-5.0.0|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime suplexwrecks questionablecontent|1603333081"
+# FLARE GLITCH TEST_SEED = "CE-5.0.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
+# REMONSTERATE ASSERTION TEST_SEED = "CE-5.0.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
+#TEST_SEED = "CE-5.0.0|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
 TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
