@@ -1,10 +1,12 @@
 import traceback
 import options
+
+from io import BytesIO
 from utils import (hex2int, write_multi, read_multi, ITEM_TABLE,
                    CUSTOM_ITEMS_TABLE, mutate_index,
                    name_to_bytes, utilrandom as random,
                    Substitution)
-from skillrandomizer import get_ranked_spells
+from skillrandomizer import get_ranked_spells, get_spell
 from copy import deepcopy
 
 # future blocks: chests, morphs, shops
@@ -171,21 +173,20 @@ class ItemBlock:
     def set_degree(self, value):
         self.degree = value
 
-    def read_stats(self, filename):
+    def read_stats(self, rom_file_buffer: BytesIO=False):
         global all_spells
 
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.itemtype = ord(f.read(1))
+        rom_file_buffer.seek(self.pointer)
+        self.itemtype = ord(rom_file_buffer.read(1))
 
         # throwable = self.itemtype & 0x10
         # usable_battle = self.itemtype & 0x20
         # usable_field = self.itemtype & 0x40
 
-        self.equippable = read_multi(f, length=2)
+        self.equippable = read_multi(rom_file_buffer, length=2)
         self.heavy = bool(self.equippable & 0x8000)
 
-        stats = list(f.read(len(ITEM_STATS)))
+        stats = list(rom_file_buffer.read(len(ITEM_STATS)))
         self.features = dict(list(zip(ITEM_STATS, stats)))
 
         # move flags for "randomly cast" and "destroy if used"
@@ -195,24 +196,22 @@ class ItemBlock:
             self.features["otherproperties"] |= break_flags >> 4
             self.features["breakeffect"] &= ~0xC0
 
-        self.price = read_multi(f, length=2)
+        self.price = read_multi(rom_file_buffer, length=2)
 
         if all_spells is None:
-            all_spells = get_ranked_spells(filename)
+            all_spells = get_ranked_spells(rom_file_buffer)
             all_spells = [s for s in all_spells if s.valid]
 
-        f.seek(0x2CE408 + (8 * self.itemid))
-        self.weapon_animation = list(f.read(8))
+        rom_file_buffer.seek(0x2CE408 + (8 * self.itemid))
+        self.weapon_animation = list(rom_file_buffer.read(8))
 
-        f.seek(0x12B300 + (13 * self.itemid))
-        self.dataname = list(f.read(13))
+        rom_file_buffer.seek(0x12B300 + (13 * self.itemid))
+        self.dataname = list(rom_file_buffer.read(13))
 
         # unhardcoded tintinabar patch moves the tintinabar flag
         if self.features["fieldeffect"] & 0x80:
             self.features["fieldeffect"] &= ~0x80
             self.features["special2"] |= 0x80
-
-        f.close()
 
     def ban(self):
         self.banned = True
@@ -267,27 +266,27 @@ class ItemBlock:
 
         return s
 
-    def write_stats(self, fout):
-        fout.seek(self.pointer)
-        fout.write(bytes([self.itemtype]))
+    def write_stats(self, outfile_rom_buffer: BytesIO):
+        outfile_rom_buffer.seek(self.pointer)
+        outfile_rom_buffer.write(bytes([self.itemtype]))
 
         self.confirm_heavy()
-        write_multi(fout, self.equippable, length=2)
+        write_multi(outfile_rom_buffer, self.equippable, length=2)
 
         s = bytes([self.features[key] for key in ITEM_STATS])
-        fout.write(s)
+        outfile_rom_buffer.write(s)
 
-        write_multi(fout, self.price, length=2)
+        write_multi(outfile_rom_buffer, self.price, length=2)
 
         if self.is_weapon or (self.itemtype & 0x0f) == 0x01:
             if self.itemid < 93:
-                fout.seek(0x2CE408 + (8 * self.itemid))
+                outfile_rom_buffer.seek(0x2CE408 + (8 * self.itemid))
             else:
-                fout.seek(0x303100 + (8 * (self.itemid - 93)))
-            fout.write(bytes(self.weapon_animation))
+                outfile_rom_buffer.seek(0x303100 + (8 * (self.itemid - 93)))
+            outfile_rom_buffer.write(bytes(self.weapon_animation))
 
-        fout.seek(0x12B300 + (13 * self.itemid))
-        fout.write(bytes(self.dataname))
+        outfile_rom_buffer.seek(0x12B300 + (13 * self.itemid))
+        outfile_rom_buffer.write(bytes(self.dataname))
 
     def confirm_heavy(self):
         if self.heavy and self.equippable:
@@ -579,11 +578,15 @@ class ItemBlock:
            not self.features['elemweaks'] == self.vanilla_data.features['elemweaks']:
             self.mutate_name()
 
-    def mutate_learning(self):
+    def mutate_learning(self, allow_ultima):
         if not self.is_armor and not self.is_relic:
             return
 
-        spell, rank = self.pick_a_spell(magic_only=True)
+        if allow_ultima:
+            filter_func = lambda s: s.name != 'Ultima'
+        else:
+            filter_func = lambda s: True
+        spell, rank = self.pick_a_spell(magic_only=True, custom=filter_func)
         if self.degree:
             learnrate = self.degree
         else:
@@ -724,7 +727,7 @@ class ItemBlock:
 
         self.price = min(self.price, 65000)
 
-    def mutate(self, always_break=False, crazy_prices=False, extra_effects=False, wild_breaks=False, no_breaks=False, unbreakable=False):
+    def mutate(self, always_break=False, crazy_prices=False, extra_effects=False, wild_breaks=False, no_breaks=False, unbreakable=False, allow_ultima=True):
         global changed_commands
         self.mutate_stats()
         self.mutate_price(crazy_prices=crazy_prices)
@@ -737,14 +740,17 @@ class ItemBlock:
                 self.mutate_break_effect(wild_breaks=wild_breaks)
                 broken = True
         if self.itemid == 0xE6:
-            self.mutate_learning()
+            self.mutate_learning(allow_ultima)
+            learned = True
+        if not allow_ultima and get_spell(self.features['learnspell']).name == 'Ultima':
+            self.mutate_learning(False)
             learned = True
         while random.randint(1, 5) == 5:
             x = random.randint(0, 99)
             if x < 10:
                 self.mutate_special_action()
             if 10 <= x < 20 and not learned:
-                self.mutate_learning()
+                self.mutate_learning(allow_ultima)
             if 20 <= x < 50 and not broken:
                 self.mutate_break_effect(wild_breaks=wild_breaks)
                 broken = True
@@ -759,6 +765,13 @@ class ItemBlock:
             if random.randint(1, 3) == 3:
                 self.mutate_special_action()
 
+            if not learned and random.randint(1, 4) == 4:
+                self.mutate_learning(allow_ultima)
+                learned = True
+            if not broken and random.randint(1, 4) == 4:
+                self.mutate_break_effect(wild_breaks=wild_breaks)
+                broken = True
+
             if random.randint(1, 2) == 2:
                 self.mutate_feature()
             while random.randint(1, 3) == 3:
@@ -768,14 +781,16 @@ class ItemBlock:
         if unbreakable:
             self.mutate_break_effect(unbreakable=unbreakable)
 
-    def mutate_name(self, vanilla=False):
+    def mutate_name(self, vanilla=False, character='?'):
         if vanilla:
             self.name = self.vanilla_data.name
             self.dataname[1:] = name_to_bytes(self.name, len(self.name))
-        elif options.Options_.is_code_active("questionablecontent") and not self.is_consumable and '?' not in self.name:
-            self.name = self.name[:11] + '?'
+        elif options.Options_.is_flag_active("questionablecontent") and not self.is_consumable and character not in self.name:
+            self.name = self.name[:11] + character
             # Index on self.dataname is [1:] because the first character determines the
             #   equipment symbol (helmet/shield/etc).
+            if isinstance(self.dataname, bytes):
+                self.dataname = list(self.dataname)
             self.dataname[1:] = name_to_bytes(self.name, len(self.name))
 
     def rank(self):
@@ -994,13 +1009,13 @@ sperelic2 = {0x04: (0x3619C, 0x361A1),
 invalid_commands = [0x00, 0x04, 0x14, 0x15, 0x19, 0xFF]
 
 
-def reset_cursed_shield(fout):
+def reset_cursed_shield(output_rom_buffer: BytesIO):
     cursed = get_item(0x66)
     cursed.equippable = cursed.equippable & 0x0FFF
-    cursed.write_stats(fout)
+    cursed.write_stats(output_rom_buffer)
 
 
-def reset_special_relics(items, characters, fout):
+def reset_special_relics(items, characters, output_rom_buffer: BytesIO):
     global changed_commands
     characters = [c for c in characters if c.id < 14]
     changedict = {}
@@ -1073,10 +1088,10 @@ def reset_special_relics(items, characters, fout):
 
             for ptrdict in [sperelic, sperelic2]:
                 beforeptr, afterptr = ptrdict[flag]
-                fout.seek(beforeptr)
-                fout.write(bytes([before]))
-                fout.seek(afterptr)
-                fout.write(bytes([after]))
+                output_rom_buffer.seek(beforeptr)
+                output_rom_buffer.write(bytes([before]))
+                output_rom_buffer.seek(afterptr)
+                output_rom_buffer.write(bytes([after]))
             break
         changedict[flag] = (before, after)
 
@@ -1098,19 +1113,19 @@ def reset_special_relics(items, characters, fout):
                 for t in tempchars:
                     item.equippable |= (1 << t.id)
 
-                item.write_stats(fout)
+                item.write_stats(output_rom_buffer)
                 loglist.append((item.name, before, after))
 
     return loglist
 
 
-def reset_rage_blizzard(items, umaro_risk, fout):
+def reset_rage_blizzard(items, umaro_risk, output_rom_buffer: BytesIO):
     for item in items:
         if item.itemid not in [0xC5, 0xC6]:
             continue
 
         item.equippable = 1 << (umaro_risk.id)
-        item.write_stats(fout)
+        item.write_stats(output_rom_buffer)
 
 
 def items_from_table(tablefile):
@@ -1127,7 +1142,7 @@ def items_from_table(tablefile):
     return items
 
 
-def get_items(filename=None, allow_banned=False):
+def get_items(rom_file_buffer: BytesIO = None, allow_banned=False):
     global itemdict
     if itemdict:
         to_return = [i for i in list(itemdict.values()) if i]
@@ -1137,7 +1152,7 @@ def get_items(filename=None, allow_banned=False):
 
     items = items_from_table(ITEM_TABLE)
     for i in items:
-        i.read_stats(filename)
+        i.read_stats(rom_file_buffer)
         i.vanilla_data = deepcopy(i)
 
     for n, i in enumerate(items):
@@ -1176,8 +1191,8 @@ def get_secret_item():
     return item
 
 
-def get_ranked_items(filename=None, allow_banned=False):
-    items = get_items(filename, allow_banned)
+def get_ranked_items(rom_file_buffer: BytesIO = None, allow_banned=False):
+    items = get_items(rom_file_buffer, allow_banned)
     return sorted(items, key=lambda i: i.rank())
 
 

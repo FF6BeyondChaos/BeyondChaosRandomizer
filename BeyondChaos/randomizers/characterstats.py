@@ -10,7 +10,7 @@ class CharacterStats(Randomizer):
 
     def __init__(self, rng: random.Random, options: Options, characters: List[Character]):
         super().__init__(options)
-        self._randomize_level = not self._Options.is_code_active('worringtriad')
+        self._randomize_level = not self._Options.is_flag_active('worringtriad')
         self._characters = characters
         self._rng = rng
 
@@ -20,7 +20,7 @@ class CharacterStats(Randomizer):
 
     @property
     def is_active(self):
-        return self._Options.random_character_stats
+        return self._Options.is_flag_active("random_character_stats")
 
     def randomize(self):
         if not self.is_active:

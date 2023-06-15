@@ -1,4 +1,5 @@
 import random
+from io import BytesIO
 from collections import defaultdict
 from hashlib import md5
 from collections import Counter
@@ -437,8 +438,8 @@ def get_transparency(image: Image):
     transparency = Counter(border).most_common(1)[0][0]
     return transparency
 
-def rewrite_snes_title(text, filename, version, lorom=False):
-    f = open(filename, 'r+b')
+
+def rewrite_snes_title(text, rom_file_buffer: BytesIO, version, lorom=False):
     while len(text) < 20:
         text += ' '
     if len(text) > 20:
@@ -447,13 +448,12 @@ def rewrite_snes_title(text, filename, version, lorom=False):
         mask = 0x7FFF
     else:
         mask = 0xFFFF
-    f.seek(0xFFC0 & mask)
-    f.write(bytes(text.encode('ascii')))
-    f.seek(0xFFDB & mask)
+    rom_file_buffer.seek(0xFFC0 & mask)
+    rom_file_buffer.write(bytes(text.encode('ascii')))
+    rom_file_buffer.seek(0xFFDB & mask)
     if isinstance(version, str) and '.' in version:
         version = version.split('.')[0]
-    f.write(bytes([int(version)]))
-    f.close()
+    rom_file_buffer.write(bytes([int(version)]))
 
 
 def checksum_calc_sum(data, length):
@@ -475,10 +475,9 @@ def checksum_mirror_sum(data, length, actual_size, mask=0x80000000):
     return part1 + part2
 
 
-def rewrite_snes_checksum(filename, lorom=False):
-    f = open(filename, 'r+b')
-    f.seek(0, 2)
-    actual_size = f.tell()
+def rewrite_snes_checksum(outfile_rom_buffer: BytesIO, lorom=False):
+    outfile_rom_buffer.seek(0, 2)
+    actual_size = outfile_rom_buffer.tell()
     if actual_size & (0x1FFFF):
         print("WARNING: The rom is a strange size.")
 
@@ -489,20 +488,19 @@ def rewrite_snes_checksum(filename, lorom=False):
     expected_header_size = 0x9
     while actual_size > (1024 << expected_header_size):
         expected_header_size += 1
-    f.seek(0xFFD7 & rommask)
-    previous_header_size = ord(f.read(1))
+    outfile_rom_buffer.seek(0xFFD7 & rommask)
+    previous_header_size = ord(outfile_rom_buffer.read(1))
     if previous_header_size != expected_header_size:
         print("WARNING: Game rom reports incorrect size. Fixing.")
-        f.seek(0xFFD7 & rommask)
-        f.write(expected_header_size.to_bytes(1, byteorder='little'))
+        outfile_rom_buffer.seek(0xFFD7 & rommask)
+        outfile_rom_buffer.write(expected_header_size.to_bytes(1, byteorder='little'))
 
-    f.seek(0, 0)
-    data = f.read()
+    outfile_rom_buffer.seek(0, 0)
+    data = outfile_rom_buffer.read()
     checksum = checksum_mirror_sum(data, actual_size, actual_size)
 
     checksum &= 0xFFFF
-    f.seek(0xFFDE & rommask)
-    write_multi(f, checksum, length=2)
-    f.seek(0xFFDC & rommask)
-    write_multi(f, checksum ^ 0xFFFF, length=2)
-    f.close()
+    outfile_rom_buffer.seek(0xFFDE & rommask)
+    write_multi(outfile_rom_buffer, checksum, length=2)
+    outfile_rom_buffer.seek(0xFFDC & rommask)
+    write_multi(outfile_rom_buffer, checksum ^ 0xFFFF, length=2)

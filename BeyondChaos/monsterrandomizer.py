@@ -1,5 +1,6 @@
 import copy
 import traceback
+from io import BytesIO
 from utils import (write_multi, read_multi, ENEMY_TABLE,
                    name_to_bytes, get_palette_transformer, mutate_index,
                    make_table, utilrandom as random)
@@ -115,18 +116,18 @@ def updatePos(monsterId, x, y):
     monsterdict[monsterId].update_pos(x, y)
 
 
-def change_enemy_name(fout, enemy_id, name):
+def change_enemy_name(outfile_rom_buffer: BytesIO, enemy_id, name):
     pointer = 0xFC050 + (enemy_id * 10)
-    fout.seek(pointer)
+    outfile_rom_buffer.seek(pointer)
     monster = get_monster(enemy_id)
     monster.changed_name = name
     name = name_to_bytes(name, 10)
-    fout.write(name)
+    outfile_rom_buffer.write(name)
 
 
-def randomize_enemy_name(fout, enemy_id):
+def randomize_enemy_name(outfile_rom_buffer: BytesIO, enemy_id):
     name = generate_name()
-    change_enemy_name(fout, enemy_id, name)
+    change_enemy_name(outfile_rom_buffer, enemy_id, name)
     return name
 
 
@@ -621,16 +622,16 @@ class MonsterBlock:
         if hp_add[1] > 0 and hp_add[1] > hp_add[0]:
             self.stats['hp'] += random.randint(*hp_add) + random.randint(*hp_add)
 
-    def randomize_special_effect(self, fout, halloween=False):
+    def randomize_special_effect(self, outfile_rom_buffer: BytesIO, halloween=False):
         attackpointer = 0xFD0D0 + (self.id * 10)
-        fout.seek(attackpointer)
+        outfile_rom_buffer.seek(attackpointer)
         attack = generate_attack()
         self.attackname = attack
         attack = name_to_bytes(attack, 10)
-        fout.write(attack)
+        outfile_rom_buffer.write(attack)
 
-        fout.seek(self.specialeffectpointer)
-        fout.write(bytes(random.randint(0, 0x21)))
+        outfile_rom_buffer.seek(self.specialeffectpointer)
+        outfile_rom_buffer.write(bytes(random.randint(0, 0x21)))
 
         candidates = list(range(0, 33)) #randomize special animations
         self.attackanimation = random.choice(candidates)
@@ -658,71 +659,68 @@ class MonsterBlock:
         self.graphics.copy_data(chosen.graphics)
         self.copy_visible(chosen)
 
-    def read_stats(self, filename):
+    def read_stats(self, infile_rom_buffer: BytesIO=False):
         global all_spells
         global HIGHEST_LEVEL
 
         try:
-            f = open(filename, 'r+b')
-            f.seek(self.pointer)
+            infile_rom_buffer.seek(self.pointer)
             for key in stat_order:
-                self.stats[key] = ord(f.read(1))
-            self.stats['hp'] = read_multi(f, length=2)
-            self.stats['mp'] = read_multi(f, length=2)
-            self.stats['xp'] = read_multi(f, length=2)
-            self.stats['gp'] = read_multi(f, length=2)
-            self.stats['level'] = ord(f.read(1))
+                self.stats[key] = ord(infile_rom_buffer.read(1))
+            self.stats['hp'] = read_multi(infile_rom_buffer, length=2)
+            self.stats['mp'] = read_multi(infile_rom_buffer, length=2)
+            self.stats['xp'] = read_multi(infile_rom_buffer, length=2)
+            self.stats['gp'] = read_multi(infile_rom_buffer, length=2)
+            self.stats['level'] = ord(infile_rom_buffer.read(1))
             self.oldlevel = self.stats['level']
             if self.stats['xp'] > 0:
                 xps.append((self.oldlevel, self.stats['xp']))
             if self.stats['gp'] > 0:
                 gps.append((self.oldlevel, self.stats['gp']))
 
-            self.morph = ord(f.read(1))
-            self.misc1 = ord(f.read(1))
-            self.misc2 = ord(f.read(1))
+            self.morph = ord(infile_rom_buffer.read(1))
+            self.misc1 = ord(infile_rom_buffer.read(1))
+            self.misc2 = ord(infile_rom_buffer.read(1))
 
-            f.seek(self.pointer + 20)
-            self.immunities = list(f.read(3))
-            self.absorb = ord(f.read(1))
-            self.null = ord(f.read(1))
-            self.weakness = ord(f.read(1))
+            infile_rom_buffer.seek(self.pointer + 20)
+            self.immunities = list(infile_rom_buffer.read(3))
+            self.absorb = ord(infile_rom_buffer.read(1))
+            self.null = ord(infile_rom_buffer.read(1))
+            self.weakness = ord(infile_rom_buffer.read(1))
 
-            f.seek(self.attackanimationptr)
-            self.attackanimation = ord(f.read(1))
+            infile_rom_buffer.seek(self.attackanimationptr)
+            self.attackanimation = ord(infile_rom_buffer.read(1))
 
-            f.seek(self.battleanimationptr)
-            self.battleanimation = ord(f.read(1))
+            infile_rom_buffer.seek(self.battleanimationptr)
+            self.battleanimation = ord(infile_rom_buffer.read(1))
 
-            f.seek(self.pointer + 27)
-            self.statuses = list(f.read(4))
-            self.special = ord(f.read(1))
+            infile_rom_buffer.seek(self.pointer + 27)
+            self.statuses = list(infile_rom_buffer.read(4))
+            self.special = ord(infile_rom_buffer.read(1))
 
-            f.seek(self.itemptr)
-            self.items = list(f.read(4))
+            infile_rom_buffer.seek(self.itemptr)
+            self.items = list(infile_rom_buffer.read(4))
             self.original_drops = self.drops
 
-            f.seek(self.controlptr)
-            self.controls = list(f.read(4))
+            infile_rom_buffer.seek(self.controlptr)
+            self.controls = list(infile_rom_buffer.read(4))
 
-            f.seek(self.sketchptr)
-            self.sketches = list(f.read(2))
+            infile_rom_buffer.seek(self.sketchptr)
+            self.sketches = list(infile_rom_buffer.read(2))
 
             if not self.is_boss:
-                f.seek(self.rageptr)
-                self.rages = list(f.read(2))
+                infile_rom_buffer.seek(self.rageptr)
+                self.rages = list(infile_rom_buffer.read(2))
             else:
                 self.rages = None
 
-            f.seek(self.aiptr)
-            self.ai = read_multi(f, length=2)
+            infile_rom_buffer.seek(self.aiptr)
+            self.ai = read_multi(infile_rom_buffer, length=2)
 
             if all_spells is None:
-                all_spells = get_ranked_spells(filename)
+                all_spells = get_ranked_spells(infile_rom_buffer)
 
-            f.close()
-
-            self.read_ai(filename)
+            self.read_ai(infile_rom_buffer)
         except Exception as e:
             traceback.print_exc()
 
@@ -754,8 +752,8 @@ class MonsterBlock:
         self.stats['mp'] = int(round(max(self.stats['mp'], factor * max(s.mp for s in skillset))))
 
     def mutate_ai(self, Options_, change_skillset=True, safe_solo_terra=True):
-        itembreaker = Options_.is_code_active("collateraldamage")
-        if self.name[:2] == "L." and not Options_.is_code_active("randombosses"):
+        itembreaker = Options_.is_flag_active("collateraldamage")
+        if self.name[:2] == "L." and not Options_.is_flag_active("randombosses"):
             change_skillset = False
         elif "guardian" in self.name.lower():
             return
@@ -771,11 +769,11 @@ class MonsterBlock:
             f = s1.abort_on_allies == s2.abort_on_allies
             return a and b and c and d and e and f
 
-        if Options_.mode.name == "katn" or Options_.is_code_active("madworld"):
+        if Options_.mode.name == "katn" or Options_.is_flag_active("madworld"):
             restricted = [0xEA, 0xC8] #restrict Baba Breath and Seize
         else:
             restricted = [0x13, 0x14] #restrict Meteor and Ultima for normal playthroughs
-        if Options_.is_code_active("darkworld"):
+        if Options_.is_flag_active("darkworld"):
             restricted = []  # All skills are fair game sucka
 
         banned = restricted
@@ -958,18 +956,17 @@ class MonsterBlock:
         assert len(b"".join(newscript)) == len(b"".join(self.aiscript))
         self.aiscript = newscript
 
-    def read_ai(self, filename):
+    def read_ai(self, rom_file_buffer: BytesIO):
         try:
-            f = open(filename, 'r+b')
             pointer = self.ai + 0xF8700
-            f.seek(pointer)
+            rom_file_buffer.seek(pointer)
             seen = False
             script = []
             while True:
-                value = f.read(1)
+                value = rom_file_buffer.read(1)
                 try:
                     numargs = AICODES[ord(value)]
-                    args = f.read(numargs)
+                    args = rom_file_buffer.read(numargs)
                 except KeyError:
                     args = b""
                 script.append(bytearray(value + args))
@@ -996,17 +993,17 @@ class MonsterBlock:
     def aiscriptsize(self):
         return len(b"".join(self.aiscript))
 
-    def write_ai(self, fout):
+    def write_ai(self, outfile_rom_buffer: BytesIO):
         for (i, action) in enumerate(self.aiscript):
             if (len(action) == 4 and action[0] == 0xf0 and action[1] == 0x55):
                 # fix Cyan's AI at imperial camp
                 action = bytearray([0xF0, 0xEE, 0xEE, 0xEE])
                 self.aiscript[i] = action
-        fout.seek(self.aiptr)
-        write_multi(fout, self.ai, length=2)
+        outfile_rom_buffer.seek(self.aiptr)
+        write_multi(outfile_rom_buffer, self.ai, length=2)
         pointer = self.ai + 0xF8700
-        fout.seek(pointer)
-        fout.write(b"".join(self.aiscript))
+        outfile_rom_buffer.seek(pointer)
+        outfile_rom_buffer.write(b"".join(self.aiscript))
 
     @property
     def humanoid(self):
@@ -1075,54 +1072,54 @@ class MonsterBlock:
         if self.floating != other.floating:
             self.statuses[2] ^= 0x1
 
-    def write_stats(self, fout):
+    def write_stats(self, output_rom_buffer: BytesIO):
         self.set_minimum_mp()
 
-        fout.seek(self.pointer)
+        output_rom_buffer.seek(self.pointer)
         for key in stat_order:
-            fout.write(bytes([self.stats[key]]))
-        write_multi(fout, self.stats['hp'], length=2)
-        write_multi(fout, self.stats['mp'], length=2)
-        write_multi(fout, self.stats['xp'], length=2)
-        write_multi(fout, self.stats['gp'], length=2)
-        fout.write(bytes([self.stats['level']]))
+            output_rom_buffer.write(bytes([self.stats[key]]))
+        write_multi(output_rom_buffer, self.stats['hp'], length=2)
+        write_multi(output_rom_buffer, self.stats['mp'], length=2)
+        write_multi(output_rom_buffer, self.stats['xp'], length=2)
+        write_multi(output_rom_buffer, self.stats['gp'], length=2)
+        output_rom_buffer.write(bytes([self.stats['level']]))
 
-        fout.write(bytes([self.morph]))
-        fout.write(bytes([self.misc1]))
-        fout.write(bytes([self.misc2]))
+        output_rom_buffer.write(bytes([self.morph]))
+        output_rom_buffer.write(bytes([self.misc1]))
+        output_rom_buffer.write(bytes([self.misc2]))
 
-        fout.seek(self.pointer + 20)
+        output_rom_buffer.seek(self.pointer + 20)
         for i in self.immunities:
-            fout.write(bytes([i]))
-        fout.write(bytes([self.absorb]))
-        fout.write(bytes([self.null]))
-        fout.write(bytes([self.weakness]))
+            output_rom_buffer.write(bytes([i]))
+        output_rom_buffer.write(bytes([self.absorb]))
+        output_rom_buffer.write(bytes([self.null]))
+        output_rom_buffer.write(bytes([self.weakness]))
 
-        fout.seek(self.attackanimationptr)
-        fout.write(bytes([self.attackanimation]))
+        output_rom_buffer.seek(self.attackanimationptr)
+        output_rom_buffer.write(bytes([self.attackanimation]))
 
-        fout.seek(self.battleanimationptr)
-        fout.write(bytes([self.battleanimation]))
+        output_rom_buffer.seek(self.battleanimationptr)
+        output_rom_buffer.write(bytes([self.battleanimation]))
 
-        fout.seek(self.pointer + 27)
+        output_rom_buffer.seek(self.pointer + 27)
         for s in self.statuses:
-            fout.write(bytes([s]))
-        fout.write(bytes([self.special]))
+            output_rom_buffer.write(bytes([s]))
+        output_rom_buffer.write(bytes([self.special]))
 
-        fout.seek(self.itemptr)
-        fout.write(bytes(self.items))
+        output_rom_buffer.seek(self.itemptr)
+        output_rom_buffer.write(bytes(self.items))
 
-        fout.seek(self.controlptr)
-        fout.write(bytes(self.controls))
+        output_rom_buffer.seek(self.controlptr)
+        output_rom_buffer.write(bytes(self.controls))
 
-        fout.seek(self.sketchptr)
-        fout.write(bytes(self.sketches))
+        output_rom_buffer.seek(self.sketchptr)
+        output_rom_buffer.write(bytes(self.sketches))
 
         if not self.is_boss:
-            fout.seek(self.rageptr)
-            fout.write(bytes(self.rages))
+            output_rom_buffer.seek(self.rageptr)
+            output_rom_buffer.write(bytes(self.rages))
 
-        self.write_ai(fout)
+        self.write_ai(output_rom_buffer)
 
     def screw_tutorial_bosses(self, old_vargas_fight=False):
         name = self.name.lower().strip('_')
@@ -1378,10 +1375,12 @@ class MonsterBlock:
             self.null &= denullify
             self.absorb &= denullify
 
-    def mutate_items(self, katnFlag=False):
+    def mutate_items(self, katnFlag=False, guarantee_hidon_drop=False):
         if random.choice([True, False]):
             random.shuffle(self.items)
 
+        if self.display_name == 'Hidon' and guarantee_hidon_drop:
+            self.items = self.steals + [0x3C, 0x3C]  # guarantee drop Magus Rod
         items = get_ranked_items()
         itemids = [i.itemid for i in items]
         new_items = []
@@ -1684,9 +1683,9 @@ class MonsterBlock:
         self.special = special
 
     def mutate(self, Options_, change_skillset=None, safe_solo_terra=True, katn=False):
-        randombosses = Options_.is_code_active("randombosses")
-        darkworld = Options_.is_code_active("darkworld")
-        madworld = Options_.is_code_active("madworld")
+        randombosses = Options_.is_flag_active("randombosses")
+        darkworld = Options_.is_flag_active("darkworld")
+        madworld = Options_.is_flag_active("madworld")
 
         if change_skillset is None:
             change_skillset = randombosses or not (self.is_boss or self.boss_death)
@@ -1831,21 +1830,21 @@ def monsters_from_table(tablefile):
     return monsters
 
 
-def get_monsters(filename=None):
+def get_monsters(rom_buffer: BytesIO = None):
     try:
         if monsterdict:
             return sorted(list(monsterdict.values()), key=lambda m: m.id)
 
-        get_ranked_items(filename)
+        get_ranked_items(rom_buffer)
         monsters = monsters_from_table(ENEMY_TABLE)
-        for m in monsters:
-            m.read_stats(filename)
+        for monster in monsters:
+            monster.read_stats(rom_buffer)
 
         mgs = []
-        for j, m in enumerate(monsters):
-            mg = MonsterGraphicBlock(pointer=0x127000 + (5 * j), name=m.name)
-            mg.read_data(filename)
-            m.set_graphics(graphics=mg)
+        for id, monster in enumerate(monsters):
+            mg = MonsterGraphicBlock(pointer=0x127000 + (5 * id), name=monster.name)
+            mg.read_data(rom_buffer)
+            monster.set_graphics(graphics=mg)
             mgs.append(mg)
 
         return monsters
@@ -1857,8 +1856,8 @@ def get_monster(monster_id):
     return monsterdict[monster_id]
 
 
-def get_ranked_monsters(filename=None, bosses=True):
-    monsters = get_monsters(filename=filename)
+def get_ranked_monsters(infile_rom_buffer: BytesIO = None, bosses=True):
+    monsters = get_monsters(infile_rom_buffer)
     if not bosses:
         monsters = [m for m in monsters if m.id <= 0xFF]
     monsters = sorted(monsters, key=lambda m: m.rank())
@@ -1943,31 +1942,29 @@ class MonsterGraphicBlock:
         self.palette_data = []
         self.palette_values = []
 
-    def read_data(self, filename):
+    def read_data(self, infile_rom_buffer: BytesIO):
         global palette_pools
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.graphics = read_multi(f, length=2)
-        f.seek(self.pointer + 2)
-        self.palette = read_multi(f, length=2, reverse=False)
+        infile_rom_buffer.seek(self.pointer)
+        self.graphics = read_multi(infile_rom_buffer, length=2)
+        infile_rom_buffer.seek(self.pointer + 2)
+        self.palette = read_multi(infile_rom_buffer, length=2, reverse=False)
         self.large = bool(self.palette & 0x8000)
         self.palette_index = self.palette & 0x3FF
         self.palette_pointer = 0x127820 + (self.palette_index * 16)
-        f.seek(self.pointer + 4)
-        self.size_template = ord(f.read(1))
+        infile_rom_buffer.seek(self.pointer + 4)
+        self.size_template = ord(infile_rom_buffer.read(1))
 
-        f.seek(self.palette_pointer)
+        infile_rom_buffer.seek(self.palette_pointer)
         numcolors = 0x20
 
         for i in range(numcolors):
-            color = read_multi(f, length=2)
+            color = read_multi(infile_rom_buffer, length=2)
             blue = (color & 0x7c00) >> 10
             green = (color & 0x03e0) >> 5
             red = color & 0x001f
             self.palette_data.append(color)
             self.palette_values.append(int(round(sum([red, green, blue]) / 3.0)))
         self.palette_data = tuple(self.palette_data)
-        f.close()
 
         if self.graphics not in palette_pools:
             palette_pools[self.graphics] = set([])
@@ -1997,7 +1994,7 @@ class MonsterGraphicBlock:
         palette = (palette_pointer - 0x127820) // 0x10
         self.palette = palette
 
-    def write_data(self, fout, palette_pointer=None, no_palette=False):
+    def write_data(self, outfile_rom_buffer: BytesIO, palette_pointer=None, no_palette=False):
         if palette_pointer is None:
             palette_pointer = self.palette_pointer
             palette = self.palette
@@ -2013,18 +2010,18 @@ class MonsterGraphicBlock:
         if palette_pointer > 0x12a800:
             raise Exception("Palette pointer out of bounds.")
 
-        fout.seek(self.pointer)
-        write_multi(fout, self.graphics, length=2)
-        fout.seek(self.pointer + 2)
-        write_multi(fout, palette, length=2, reverse=False)
-        fout.seek(self.pointer + 4)
-        fout.write(bytes([self.size_template]))
+        outfile_rom_buffer.seek(self.pointer)
+        write_multi(outfile_rom_buffer, self.graphics, length=2)
+        outfile_rom_buffer.seek(self.pointer + 2)
+        write_multi(outfile_rom_buffer, palette, length=2, reverse=False)
+        outfile_rom_buffer.seek(self.pointer + 4)
+        outfile_rom_buffer.write(bytes([self.size_template]))
         if no_palette:
             return
 
-        fout.seek(palette_pointer)
+        outfile_rom_buffer.seek(palette_pointer)
         for color in self.palette_data:
-            write_multi(fout, color, length=2)
+            write_multi(outfile_rom_buffer, color, length=2)
 
     def mutate_palette(self, alternatives=None):
         transformer = get_palette_transformer(basepalette=self.palette_data)
@@ -2036,15 +2033,13 @@ class MetamorphBlock:
         self.pointer = pointer
         self.items = []
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.items = list(f.read(4))
-        f.close()
+    def read_data(self, infile_rom_buffer: BytesIO):
+        infile_rom_buffer.seek(self.pointer)
+        self.items = list(infile_rom_buffer.read(4))
 
-    def write_data(self, fout):
-        fout.seek(self.pointer)
-        fout.write(bytes(self.items))
+    def write_data(self, outfile_rom_buffer: BytesIO):
+        outfile_rom_buffer.seek(self.pointer)
+        outfile_rom_buffer.write(bytes(self.items))
 
     def mutate_items(self):
         for i in range(4):
@@ -2064,7 +2059,7 @@ class MetamorphBlock:
         return False
 
 
-def get_metamorphs(filename=None):
+def get_metamorphs(infile_rom_buffer: BytesIO = None):
     global metamorphs
     if metamorphs is not None:
         return metamorphs
@@ -2072,10 +2067,10 @@ def get_metamorphs(filename=None):
     metamorphs = []
     for i in range(32):
         address = 0x47f40 + (i * 4)
-        mm = MetamorphBlock(pointer=address)
-        mm.read_data(filename)
-        mm.id = i
-        metamorphs.append(mm)
+        metamorph = MetamorphBlock(pointer=address)
+        metamorph.read_data(infile_rom_buffer)
+        metamorph.id = i
+        metamorphs.append(metamorph)
     return get_metamorphs()
 
 

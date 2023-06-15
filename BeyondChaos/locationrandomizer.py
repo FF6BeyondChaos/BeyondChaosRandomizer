@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from io import BytesIO
 from copy import copy
 from formationrandomizer import get_fset
 from utils import (read_multi, write_multi, battlebg_palettes, MAP_NAMES_TABLE,
@@ -72,11 +72,11 @@ def get_chest_id_counts():
     if chest_id_counts is not None:
         return chest_id_counts
     chest_id_counts = {}
-    for l in get_locations():
-        for c in l.chests:
-            if c.effective_id not in chest_id_counts:
-                chest_id_counts[c.effective_id] = 0
-            chest_id_counts[c.effective_id] += 1
+    for location in get_locations():
+        for chest in location.chests:
+            if chest.effective_id not in chest_id_counts:
+                chest_id_counts[chest.effective_id] = 0
+            chest_id_counts[chest.effective_id] += 1
     return get_chest_id_counts()
 
 
@@ -106,43 +106,41 @@ class NPCBlock():
     def set_id(self, npcid):
         self.npcid = npcid
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        value = read_multi(f, length=4)
+    def read_data(self, infile_rom_buffer: BytesIO=False):
+        infile_rom_buffer.seek(self.pointer)
+        value = read_multi(infile_rom_buffer, length=4)
         self.palette = (value & 0x1C0000) >> 18
         self.bg2_scroll = (value & 0x200000) >> 21
         self.membit = (value & 0x1C00000) >> 22
         self.memaddr = (value & 0xFE000000) >> 25
         self.event_addr = value & 0x3FFFF
 
-        byte4 = ord(f.read(1))
+        byte4 = ord(infile_rom_buffer.read(1))
         self.x = byte4 & 0x7f
         self.show_on_vehicle = (byte4 & 0x80) >> 7
 
-        byte5 = ord(f.read(1))
+        byte5 = ord(infile_rom_buffer.read(1))
         self.y = byte5 & 0x3F
         self.speed = (byte5 & 0xC0) >> 6
 
-        self.graphics = ord(f.read(1))
+        self.graphics = ord(infile_rom_buffer.read(1))
 
-        byte7 = ord(f.read(1))
+        byte7 = ord(infile_rom_buffer.read(1))
         self.move_type = byte7 & 0xF
         self.sprite_priority = (byte7 & 0x30) >> 4
         self.vehicle = (byte7 & 0xC0) >> 6
 
-        byte8 = ord(f.read(1))
+        byte8 = ord(infile_rom_buffer.read(1))
         self.facing = byte8 & 0x03
         self.no_turn_when_speaking = (byte8 & 0x4) >> 2
         self.layer_priority = (byte8 & 0x18) >> 3
         self.special_anim = (byte8 & 0xe0) >> 5
-        f.close()
 
-    def write_data(self, fout, nextpointer):
-        fout.seek(nextpointer)
+    def write_data(self, outfile_rom_buffer, nextpointer):
+        outfile_rom_buffer.seek(nextpointer)
         value = (self.event_addr | (self.palette << 18) | (self.bg2_scroll << 21)
                  | (self.membit << 22) | (self.memaddr << 25))
-        write_multi(fout, value, length=4)
+        write_multi(outfile_rom_buffer, value, length=4)
 
         byte4 = (self.x & 0x7f) | ((self.show_on_vehicle & 0x1) << 7)
         byte5 = (self.y & 0x3F) | ((self.speed & 0x3) << 6)
@@ -151,7 +149,7 @@ class NPCBlock():
         byte8 = (self.facing & 0x03) | ((self.no_turn_when_speaking & 0x1) << 2) | (
                     (self.layer_priority & 0x3) << 3) | ((self.special_anim & 0x7) << 5)
 
-        fout.write(bytes([byte4, byte5, byte6, byte7, byte8]))
+        outfile_rom_buffer.write(bytes([byte4, byte5, byte6, byte7, byte8]))
 
 
 class EventBlock():
@@ -166,19 +164,17 @@ class EventBlock():
     def set_id(self, eventid):
         self.eventid = eventid
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.x = ord(f.read(1))
-        self.y = ord(f.read(1))
-        self.event_addr = read_multi(f, length=3)
-        f.close()
+    def read_data(self, infile_rom_buffer: BytesIO = None):
+        infile_rom_buffer.seek(self.pointer)
+        self.x = ord(infile_rom_buffer.read(1))
+        self.y = ord(infile_rom_buffer.read(1))
+        self.event_addr = read_multi(infile_rom_buffer, length=3)
 
-    def write_data(self, fout, nextpointer):
-        fout.seek(nextpointer)
-        fout.write(bytes([self.x]))
-        fout.write(bytes([self.y]))
-        write_multi(fout, self.event_addr, length=3)
+    def write_data(self, output_rom_buffer, nextpointer):
+        output_rom_buffer.seek(nextpointer)
+        output_rom_buffer.write(bytes([self.x]))
+        output_rom_buffer.write(bytes([self.y]))
+        write_multi(output_rom_buffer, self.event_addr, length=3)
 
 
 # 256 zones
@@ -191,13 +187,11 @@ class Zone():
         self.setids = []
         self.rates = 0
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.setids = list(f.read(4))
-        f.seek(self.ratepointer)
-        self.rates = ord(f.read(1))
-        f.close()
+    def read_data(self, infile_rom_buffer: BytesIO = None):
+        infile_rom_buffer.seek(self.pointer)
+        self.setids = list(infile_rom_buffer.read(4))
+        infile_rom_buffer.seek(self.ratepointer)
+        self.rates = ord(infile_rom_buffer.read(1))
 
     @property
     def pretty_rates(self):
@@ -250,12 +244,12 @@ class Zone():
                 self.rates &= (0xFF ^ (0x3 << shift))
                 self.rates |= (rate << shift)
 
-    def write_data(self, fout):
+    def write_data(self, outfile_rom_buffer):
         # Do not write new set ids... let the locations do that.
         # fout.seek(self.pointer)
         # fout.write("".join(map(chr, self.setids)))
-        fout.seek(self.ratepointer)
-        fout.write(bytes([self.rates]))
+        outfile_rom_buffer.seek(self.ratepointer)
+        outfile_rom_buffer.write(bytes([self.rates]))
 
 
 # 415 locations
@@ -502,42 +496,40 @@ class Location():
     def layer3ptr(self):
         return (self.mapdata >> 20) & 0x3FF
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
+    def read_data(self, infile_rom_buffer: BytesIO):
+        infile_rom_buffer.seek(self.pointer)
 
-        self.name_id = ord(f.read(1))
-        self.layers_to_animate = ord(f.read(1))
-        self._battlebg = ord(f.read(1))
-        self.unknown0 = ord(f.read(1))
-        self.tileproperties = ord(f.read(1))  # mult by 2
-        self.attacks = ord(f.read(1))
-        self.unknown1 = ord(f.read(1))
-        self.graphic_sets = list(f.read(4))
-        self.tileformations = read_multi(f, length=2, reverse=True)
-        self.mapdata = read_multi(f, length=4)
-        self.unknown2 = ord(f.read(1))
-        self.bgshift = list(f.read(4))
-        self.unknown3 = ord(f.read(1))
-        self.layer12dimensions = ord(f.read(1))
-        self.unknown4 = ord(f.read(1))
-        self.palette_index = read_multi(f, length=3)
-        self.music = ord(f.read(1))
-        self.unknown5 = ord(f.read(1))
-        self.width = ord(f.read(1))
-        self.height = ord(f.read(1))
-        self.layerpriorities = ord(f.read(1))
-        assert f.tell() == self.pointer + 0x21
+        self.name_id = ord(infile_rom_buffer.read(1))
+        self.layers_to_animate = ord(infile_rom_buffer.read(1))
+        self._battlebg = ord(infile_rom_buffer.read(1))
+        self.unknown0 = ord(infile_rom_buffer.read(1))
+        self.tileproperties = ord(infile_rom_buffer.read(1))  # mult by 2
+        self.attacks = ord(infile_rom_buffer.read(1))
+        self.unknown1 = ord(infile_rom_buffer.read(1))
+        self.graphic_sets = list(infile_rom_buffer.read(4))
+        self.tileformations = read_multi(infile_rom_buffer, length=2, reverse=True)
+        self.mapdata = read_multi(infile_rom_buffer, length=4)
+        self.unknown2 = ord(infile_rom_buffer.read(1))
+        self.bgshift = list(infile_rom_buffer.read(4))
+        self.unknown3 = ord(infile_rom_buffer.read(1))
+        self.layer12dimensions = ord(infile_rom_buffer.read(1))
+        self.unknown4 = ord(infile_rom_buffer.read(1))
+        self.palette_index = read_multi(infile_rom_buffer, length=3)
+        self.music = ord(infile_rom_buffer.read(1))
+        self.unknown5 = ord(infile_rom_buffer.read(1))
+        self.width = ord(infile_rom_buffer.read(1))
+        self.height = ord(infile_rom_buffer.read(1))
+        self.layerpriorities = ord(infile_rom_buffer.read(1))
+        assert infile_rom_buffer.tell() == self.pointer + 0x21
 
-        f.seek(0xf5600 + self.locid)
-        self.setid = ord(f.read(1))
+        infile_rom_buffer.seek(0xf5600 + self.locid)
+        self.setid = ord(infile_rom_buffer.read(1))
 
-        f.close()
-        self.entrance_set.read_data(filename)
+        self.entrance_set.read_data(infile_rom_buffer)
         self.backup_entrances()
-        self.read_chests(filename)
-        self.read_npcs(filename)
-        self.read_events(filename)
+        self.read_chests(infile_rom_buffer)
+        self.read_npcs(infile_rom_buffer)
+        self.read_events(infile_rom_buffer)
 
     def make_tower_flair(self):
         towerloc = get_location(334)
@@ -580,10 +572,10 @@ class Location():
             battlebg = mapbattlebgs[locid]
             self._battlebg = (self._battlebg & 0xC0) | battlebg
 
-    def write_data(self, fout):
+    def write_data(self, outfile_rom_buffer):
         if self.pointer is None:
             self.pointer = 0x2D8F00 + (33 * self.locid)
-        fout.seek(self.pointer)
+        outfile_rom_buffer.seek(self.pointer)
 
         def write_attributes(*args):
             for attribute in args:
@@ -592,30 +584,30 @@ class Location():
                     attribute = bytes([attribute])
                 except TypeError:
                     attribute = bytes(attribute)
-                fout.write(attribute)
+                outfile_rom_buffer.write(attribute)
 
         write_attributes("name_id", "layers_to_animate", "_battlebg",
                          "unknown0", "tileproperties", "attacks",
                          "unknown1", "graphic_sets")
 
-        write_multi(fout, self.tileformations, length=2, reverse=True)
-        write_multi(fout, self.mapdata, length=4, reverse=True)
+        write_multi(outfile_rom_buffer, self.tileformations, length=2, reverse=True)
+        write_multi(outfile_rom_buffer, self.mapdata, length=4, reverse=True)
 
         write_attributes(
             "unknown2", "bgshift", "unknown3", "layer12dimensions",
             "unknown4")
 
-        write_multi(fout, self.palette_index, length=3)
+        write_multi(outfile_rom_buffer, self.palette_index, length=3)
 
         write_attributes("music", "unknown5", "width", "height",
                          "layerpriorities")
         try:
-            assert fout.tell() == self.pointer + 0x21
+            assert outfile_rom_buffer.tell() == self.pointer + 0x21
         except:
-            print(fout.tell() - (self.pointer + 0x21))
+            print(outfile_rom_buffer.tell() - (self.pointer + 0x21))
 
-        fout.seek(0xf5600 + self.locid)
-        fout.write(bytes([self.setid]))
+        outfile_rom_buffer.seek(0xf5600 + self.locid)
+        outfile_rom_buffer.write(bytes([self.setid]))
 
     def copy(self, location):
         attributes = [
@@ -639,52 +631,49 @@ class Location():
         eset.copy(location.entrance_set)
         self.copy_chests(location)
 
-    def read_chests(self, filename):
+    def read_chests(self, infile_rom_buffer: BytesIO):
         from chestrandomizer import ChestBlock
-        f = open(filename, 'r+b')
-        f.seek(self.chestpointer)
-        begin = read_multi(f, length=2)
-        end = read_multi(f, length=2)
+        infile_rom_buffer.seek(self.chestpointer)
+        begin = read_multi(infile_rom_buffer, length=2)
+        end = read_multi(infile_rom_buffer, length=2)
         numchests = (end - begin) // 5
         self.chests = []
         for i in range(numchests):
             pointer = begin + (i * 5) + 0x2d8634
-            c = ChestBlock(pointer, self.locid)
-            c.read_data(filename)
-            c.set_id(i)
-            self.chests.append(c)
+            chest = ChestBlock(pointer, self.locid)
+            chest.read_data(infile_rom_buffer)
+            chest.set_id(i)
+            self.chests.append(chest)
 
-    def read_npcs(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.npcpointer)
-        begin = read_multi(f, length=2)
-        end = read_multi(f, length=2)
+    def read_npcs(self, infile_rom_buffer: BytesIO):
+        infile_rom_buffer.seek(self.npcpointer)
+        begin = read_multi(infile_rom_buffer, length=2)
+        end = read_multi(infile_rom_buffer, length=2)
         numnpcs = (end - begin) / 9.0
         assert numnpcs == round(numnpcs)
         numnpcs = int(numnpcs)
         self.npcs = []
         for i in range(numnpcs):
             pointer = begin + (i * 9) + 0x41a10
-            e = NPCBlock(pointer, self.locid)
-            e.read_data(filename)
-            e.set_id(i)
-            self.npcs.append(e)
+            npc = NPCBlock(pointer, self.locid)
+            npc.read_data(infile_rom_buffer)
+            npc.set_id(i)
+            self.npcs.append(npc)
 
-    def read_events(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.eventpointer)
-        begin = read_multi(f, length=2)
-        end = read_multi(f, length=2)
+    def read_events(self, infile_rom_buffer: BytesIO):
+        infile_rom_buffer.seek(self.eventpointer)
+        begin = read_multi(infile_rom_buffer, length=2)
+        end = read_multi(infile_rom_buffer, length=2)
         numevents = (end - begin) / 5.0
         assert numevents == round(numevents)
         numevents = int(numevents)
         self.events = []
         for i in range(numevents):
             pointer = begin + (i * 5) + 0x40000
-            e = EventBlock(pointer, self.locid)
-            e.read_data(filename)
-            e.set_id(i)
-            self.events.append(e)
+            event = EventBlock(pointer, self.locid)
+            event.read_data(infile_rom_buffer)
+            event.set_id(i)
+            self.events.append(event)
 
     def copy_chests(self, location):
         from chestrandomizer import ChestBlock
@@ -768,52 +757,52 @@ class Location():
             if random.randint(1, 5) >= 4:
                 c.set_new_id()
 
-    def write_chests(self, fout, nextpointer):
-        fout.seek(self.chestpointer)
-        write_multi(fout, (nextpointer - 0x2d8634), length=2)
-        for c in self.chests:
+    def write_chests(self, outfile_rom_buffer, nextpointer):
+        outfile_rom_buffer.seek(self.chestpointer)
+        write_multi(outfile_rom_buffer, (nextpointer - 0x2d8634), length=2)
+        for chest in self.chests:
             if nextpointer + 5 > 0x2d8e5a:
                 raise Exception("Not enough space for treasure chests.")
-            c.write_data(fout, nextpointer)
+            chest.write_data(outfile_rom_buffer, nextpointer)
             nextpointer += 5
-        fout.seek(self.chestpointer + 2)
-        write_multi(fout, (nextpointer - 0x2d8634), length=2)
+        outfile_rom_buffer.seek(self.chestpointer + 2)
+        write_multi(outfile_rom_buffer, (nextpointer - 0x2d8634), length=2)
 
         return nextpointer
 
-    def write_npcs(self, fout, nextpointer, ignore_order=False):
-        fout.seek(self.npcpointer)
-        write_multi(fout, (nextpointer - 0x41a10), length=2)
-        for i in range(len(self.npcs)):
+    def write_npcs(self, outfile_rom_buffer, nextpointer, ignore_order=False):
+        outfile_rom_buffer.seek(self.npcpointer)
+        write_multi(outfile_rom_buffer, (nextpointer - 0x41a10), length=2)
+        for npc_index in range(len(self.npcs)):
             if ignore_order:
-                e = self.npcs[i]
+                npc = self.npcs[npc_index]
             else:
                 try:
-                    e = [v for v in self.npcs if v.npcid == i][0]
+                    npc = [v for v in self.npcs if v.npcid == npc_index][0]
                 except IndexError:
                     raise Exception("NPCs out of order.")
             if nextpointer + 9 >= 0x46AC0:
                 import pdb
                 pdb.set_trace()
                 raise Exception("Not enough space for npcs.")
-            e.write_data(fout, nextpointer)
+            npc.write_data(outfile_rom_buffer, nextpointer)
             nextpointer += 9
-        fout.seek(self.npcpointer + 2)
-        write_multi(fout, (nextpointer - 0x41a10), length=2)
+        outfile_rom_buffer.seek(self.npcpointer + 2)
+        write_multi(outfile_rom_buffer, (nextpointer - 0x41a10), length=2)
         return nextpointer
 
-    def write_events(self, fout, nextpointer):
-        fout.seek(self.eventpointer)
-        write_multi(fout, (nextpointer - 0x40000), length=2)
-        for e in self.events:
+    def write_events(self, outfile_rom_buffer, nextpointer):
+        outfile_rom_buffer.seek(self.eventpointer)
+        write_multi(outfile_rom_buffer, (nextpointer - 0x40000), length=2)
+        for event in self.events:
             if nextpointer + 5 >= 0x41a10:
                 import pdb
                 pdb.set_trace()
                 raise Exception("Not enough space for events.")
-            e.write_data(fout, nextpointer)
+            event.write_data(outfile_rom_buffer, nextpointer)
             nextpointer += 5
-        fout.seek(self.eventpointer + 2)
-        write_multi(fout, (nextpointer - 0x40000), length=2)
+        outfile_rom_buffer.seek(self.eventpointer + 2)
+        write_multi(outfile_rom_buffer, (nextpointer - 0x40000), length=2)
         return nextpointer
 
 
@@ -829,15 +818,13 @@ class Entrance():
         self._entrances = []
         self.location = None
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.x = ord(f.read(1))
-        self.y = ord(f.read(1))
-        self.dest = read_multi(f, length=2)
-        self.destx = ord(f.read(1))
-        self.desty = ord(f.read(1))
-        f.close()
+    def read_data(self, rom_file_buffer: BytesIO):
+        rom_file_buffer.seek(self.pointer)
+        self.x = ord(rom_file_buffer.read(1))
+        self.y = ord(rom_file_buffer.read(1))
+        self.dest = read_multi(rom_file_buffer, length=2)
+        self.destx = ord(rom_file_buffer.read(1))
+        self.desty = ord(rom_file_buffer.read(1))
 
     def set_id(self, entid):
         self.entid = entid
@@ -900,15 +887,15 @@ class Entrance():
     def reset_reachable_entrances(self):
         self._entrances = None
 
-    def write_data(self, fout, nextpointer):
+    def write_data(self, outfile_rom_buffer: BytesIO, nextpointer):
         if nextpointer >= 0x1FDA00:
             raise Exception("Not enough room for entrances.")
-        fout.seek(nextpointer)
-        fout.write(bytes([self.x]))
-        fout.write(bytes([self.y]))
-        write_multi(fout, self.dest, length=2)
-        fout.write(bytes([self.destx]))
-        fout.write(bytes([self.desty]))
+        outfile_rom_buffer.seek(nextpointer)
+        outfile_rom_buffer.write(bytes([self.x]))
+        outfile_rom_buffer.write(bytes([self.y]))
+        write_multi(outfile_rom_buffer, self.dest, length=2)
+        outfile_rom_buffer.write(bytes([self.destx]))
+        outfile_rom_buffer.write(bytes([self.desty]))
 
     def __repr__(self):
         if hasattr(self, "entid") and self.entid is not None:
@@ -924,34 +911,32 @@ class Entrance():
 
 
 class LongEntrance(Entrance):
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.x = ord(f.read(1))
-        self.y = ord(f.read(1))
-        self.width = ord(f.read(1))
-        self.dest = read_multi(f, length=2)
-        self.destx = ord(f.read(1))
-        self.desty = ord(f.read(1))
-        f.close()
+    def read_data(self, rom_file_buffer: BytesIO):
+        rom_file_buffer.seek(self.pointer)
+        self.x = ord(rom_file_buffer.read(1))
+        self.y = ord(rom_file_buffer.read(1))
+        self.width = ord(rom_file_buffer.read(1))
+        self.dest = read_multi(rom_file_buffer, length=2)
+        self.destx = ord(rom_file_buffer.read(1))
+        self.desty = ord(rom_file_buffer.read(1))
 
-    def write_data(self, fout, nextpointer):
+    def write_data(self, outfile_rom_buffer, nextpointer):
         if nextpointer >= 0x2DFE00:
             raise Exception("Not enough room for long entrances.")
-        fout.seek(nextpointer)
-        fout.write(bytes([self.x]))
-        fout.write(bytes([self.y]))
-        fout.write(bytes([self.width]))
-        write_multi(fout, self.dest, length=2)
-        fout.write(bytes([self.destx]))
-        fout.write(bytes([self.desty]))
+        outfile_rom_buffer.seek(nextpointer)
+        outfile_rom_buffer.write(bytes([self.x]))
+        outfile_rom_buffer.write(bytes([self.y]))
+        outfile_rom_buffer.write(bytes([self.width]))
+        write_multi(outfile_rom_buffer, self.dest, length=2)
+        outfile_rom_buffer.write(bytes([self.destx]))
+        outfile_rom_buffer.write(bytes([self.desty]))
 
     def copy(self, entrance):
         for attribute in ["x", "y", "dest", "destx", "desty", "width"]:
             setattr(self, attribute, getattr(entrance, attribute))
 
 
-class EntranceSet():
+class EntranceSet:
     def __init__(self, entid):
         self.entid = entid
         self.pointer = 0x1fbb00 + (2 * entid)
@@ -963,12 +948,11 @@ class EntranceSet():
     def destinations(self):
         return {e.destination for e in self.entrances}
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        start = read_multi(f, length=2)
-        end = read_multi(f, length=2)
-        f.close()
+    def read_data(self, rom_file_buffer: BytesIO):
+        rom_file_buffer.seek(self.pointer)
+        start = read_multi(rom_file_buffer, length=2)
+        end = read_multi(rom_file_buffer, length=2)
+
         n = (end - start) // 6
         assert end == start + (6 * n)
         self.entrances = []
@@ -977,14 +961,13 @@ class EntranceSet():
             e.set_id(i)
             self.entrances.append(e)
         for e in self.entrances:
-            e.read_data(filename)
+            e.read_data(rom_file_buffer)
             e.set_location(self.location)
 
-        f = open(filename, 'r+b')
-        f.seek(self.longpointer)
-        start = read_multi(f, length=2)
-        end = read_multi(f, length=2)
-        f.close()
+        rom_file_buffer.seek(self.longpointer)
+        start = read_multi(rom_file_buffer, length=2)
+        end = read_multi(rom_file_buffer, length=2)
+
         n = (end - start) // 7
         assert end == start + (7 * n)
         self.longentrances = []
@@ -993,26 +976,26 @@ class EntranceSet():
             e.set_id(i)
             self.longentrances.append(e)
         for e in self.longentrances:
-            e.read_data(filename)
+            e.read_data(rom_file_buffer)
             e.set_location(self.location)
 
         self.location.uniqify_entrances()
 
-    def write_data(self, fout, nextpointer, longnextpointer):
-        fout.seek(self.pointer)
-        write_multi(fout, (nextpointer - 0x1fbb00), length=2)
-        fout.seek(self.longpointer)
-        write_multi(fout, (longnextpointer - 0x2df480), length=2)
+    def write_data(self, outfile_rom_buffer, nextpointer, longnextpointer):
+        outfile_rom_buffer.seek(self.pointer)
+        write_multi(outfile_rom_buffer, (nextpointer - 0x1fbb00), length=2)
+        outfile_rom_buffer.seek(self.longpointer)
+        write_multi(outfile_rom_buffer, (longnextpointer - 0x2df480), length=2)
         self.location.uniqify_entrances()
-        for e in self.entrances:
+        for entrance in self.entrances:
             if nextpointer + 6 > 0x1fda00:
                 raise Exception("Too many entrance triggers.")
-            e.write_data(fout, nextpointer)
+            entrance.write_data(outfile_rom_buffer, nextpointer)
             nextpointer += 6
-        for e in self.longentrances:
+        for longentrance in self.longentrances:
             if longnextpointer + 7 >= 0x2dfe00:
                 raise Exception("Too many long entrance triggers.")
-            e.write_data(fout, longnextpointer)
+            longentrance.write_data(outfile_rom_buffer, longnextpointer)
             longnextpointer += 7
         return nextpointer, longnextpointer
 
@@ -1041,16 +1024,16 @@ class EntranceSet():
             longentrance.desty = e.y
 
 
-def get_locations(filename=None):
+def get_locations(infile_rom_buffer: BytesIO = None):
     global locations
     if locations is None:
         locations = [Location(i) for i in range(415)]
-        if filename is None:
+        if infile_rom_buffer is None:
             raise ValueError("Please supply a filename for new locations.")
-        for l in locations:
-            l.read_data(filename)
-            l.fill_battle_bg()
-            locdict[l.locid] = l
+        for location in locations:
+            location.read_data(infile_rom_buffer)
+            location.fill_battle_bg()
+            locdict[location.locid] = location
     return locations
 
 
@@ -1066,14 +1049,14 @@ def update_locations(newlocs):
         l.new = True
 
 
-def get_zones(filename=None):
+def get_zones(rom_file_buffer: BytesIO = None):
     global zones
     if zones is None:
         zones = [Zone(i) for i in range(0x100)]
-        if filename is None:
+        if rom_file_buffer is None:
             raise Exception("Please supply a filename for new zones.")
         for z in zones:
-            z.read_data(filename)
+            z.read_data(rom_file_buffer)
         return get_zones()
     assert len(zones) == 0x100
     return zones
@@ -1086,7 +1069,7 @@ def get_location(locid):
     return locdict[locid]
 
 
-def get_unused_locations(filename=None):
+def get_unused_locations():
     global unused_locs
     if unused_locs:
         return unused_locs
@@ -1188,11 +1171,14 @@ if __name__ == "__main__":
     from formationrandomizer import get_formations, get_fsets
     from monsterrandomizer import get_monsters
 
-    get_monsters(filename)
-    get_formations(filename)
-    get_fsets(filename)
-    locations = get_locations(filename)
-    zones = get_zones(filename)
+    with open(filename, "rb") as infile:
+        input_file_buffer = infile.read()
+    get_monsters(input_file_buffer)
+    get_formations(input_file_buffer)
+    get_fsets(input_file_buffer)
+    locations = get_locations(input_file_buffer)
+    zones = get_zones(input_file_buffer)
+
     for l in locations:
         print("%x" % (l.layers_to_animate & 2), l, end=' ')
         print()

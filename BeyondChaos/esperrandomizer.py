@@ -1,4 +1,5 @@
 import copy
+from io import BytesIO
 from dataclasses import dataclass, field
 from functools import reduce
 from itertools import chain, repeat
@@ -180,21 +181,19 @@ class EsperBlock:
         s += "\nLOCATION: " + self.location
         return s
 
-    def read_data(self, filename):
+    def read_data(self, rom_file_buffer: BytesIO=False):
         global spells
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
+        rom_file_buffer.seek(self.pointer)
         if spells is None:
-            spells = get_ranked_spells(filename, magic_only=True)
+            spells = get_ranked_spells(rom_file_buffer, magic_only=True)
         self.spells, self.learnrates = [], []
         for _ in range(5):
-            learnrate = ord(f.read(1))
-            spell = ord(f.read(1))
+            learnrate = ord(rom_file_buffer.read(1))
+            spell = ord(rom_file_buffer.read(1))
             if spell != 0xFF and learnrate != 0:
                 self.spells.append(get_spell(spell))
                 self.learnrates.append(learnrate)
-        self.bonus = ord(f.read(1))
-        f.close()
+        self.bonus = ord(rom_file_buffer.read(1))
 
     def write_data(self, fout):
         fout.seek(self.pointer)
@@ -206,16 +205,21 @@ class EsperBlock:
             fout.write(b'\xFF')
         fout.write(bytes([self.bonus]))
 
-    def get_candidates(self, rank, set_lower=True, allow_quick=False):
+    def get_candidates(self, rank, set_lower=True, allow_quick=False, allow_ultima=True):
         candidates = get_candidates(rank, set_lower=set_lower)
         if not allow_quick:
             quick = [s for s in candidates if s.name == "Quick"]
             if quick:
                 quick = quick[0]
                 candidates.remove(quick)
+        if not allow_ultima:
+            ultima = [s for s in candidates if s.name == 'Ultima']
+            if ultima:
+                ultima = ultima[0]
+                candidates.remove(ultima)
         return candidates
 
-    def generate_spells(self, tierless=False):
+    def generate_spells(self, tierless=False, allow_ultima=True):
         global used
 
         self.spells, self.learnrates = [], []
@@ -225,7 +229,7 @@ class EsperBlock:
         rank = min(rank, max(rankbounds.keys()))
 
         if random.randint(1, 10) != 10:
-            candidates = self.get_candidates(rank, set_lower=not tierless, allow_quick=tierless)
+            candidates = self.get_candidates(rank, set_lower=not tierless, allow_quick=tierless, allow_ultima=allow_ultima)
             if candidates:
                 s = random.choice(candidates)
                 self.spells.append(s)
@@ -233,7 +237,7 @@ class EsperBlock:
 
         rank = self.rank
         for _ in range(random.randint(0, 2) + random.randint(0, 2)):
-            candidates = self.get_candidates(rank, set_lower=False, allow_quick=tierless)
+            candidates = self.get_candidates(rank, set_lower=False, allow_quick=tierless, allow_ultima=allow_ultima)
             if candidates:
                 s = random.choice(candidates)
                 if s in self.spells:
@@ -305,18 +309,18 @@ def select_magicite(candidates, esper_ids_to_replace):
     return results
 
 
-def randomize_magicite(fout, sourcefile):
+def randomize_magicite(outfile_rom_buffer, infile_rom_buffer):
     magicite = []
 
     # Some espers use 128x128 graphics, and those look like crap in the Ifrit/Shiva fight
     # So make sure Ifrit and Shiva have espers with small graphics. Tritoch also has
     # Issues with large sprites in the cutscene with the MagiTek armor
-    espers = get_espers(sourcefile)
+    espers = get_espers(infile_rom_buffer)
     shuffled_espers = {}
     espers_by_name = {e.name: e for e in espers}
     esper_graphics = [MonsterGraphicBlock(pointer=0x127780 + (5 * i), name="") for i in range(len(espers))]
     for eg in esper_graphics:
-        eg.read_data(sourcefile)
+        eg.read_data(infile_rom_buffer)
 
     # Ifrit's esper graphics are large. But he has separate enemy graphics that are fine.
     ifrit_graphics = copy.copy(get_monster(0x109).graphics)
@@ -383,20 +387,21 @@ def randomize_magicite(fout, sourcefile):
     for i, e in shuffled_espers.items():
         e.location = locations[i]
 
-    with open(sourcefile, 'br') as s:
-        for line in open(MAGICITE_TABLE, 'r'):
-            line = line.split('#')[0].strip()
-            l = line.split(',')
-            address = int(l[0], 16)
-            dialogue = [int(d, 16) for d in l[1:]]
+    s = infile_rom_buffer
+    # with open(sourcefile, 'br') as s:
+    for line in open(MAGICITE_TABLE, 'r'):
+        line = line.split('#')[0].strip()
+        l = line.split(',')
+        address = int(l[0], 16)
+        dialogue = [int(d, 16) for d in l[1:]]
 
-            s.seek(address)
-            instruction = ord(s.read(1))
-            esper_index = ord(s.read(1))
-            if instruction not in [0x86, 0x87] or esper_index < 0x36 or esper_index > 0x50:
-                print("Error in magicite table")
-                return
-            magicite.append(Magicite(address, esper_index - 0x36, dialogue))
+        s.seek(address)
+        instruction = ord(s.read(1))
+        esper_index = ord(s.read(1))
+        if instruction not in [0x86, 0x87] or esper_index < 0x36 or esper_index > 0x50:
+            print("Error in magicite table")
+            return
+        magicite.append(Magicite(address, esper_index - 0x36, dialogue))
 
     for m in magicite:
         original_name = espers[m.original_esper_index].name
@@ -412,8 +417,8 @@ def randomize_magicite(fout, sourcefile):
         set_dialogue_var(original_name + "Possessive", new_name + "'s")
         dotted_new_name = "".join(chain(*zip(new_name, repeat('.'))))[:-1]
         set_dialogue_var(original_name + "Dotted", dotted_new_name)
-        fout.seek(m.address + 1)
-        fout.write(bytes([m.esper_index + 0x36]))
+        outfile_rom_buffer.seek(m.address + 1)
+        outfile_rom_buffer.write(bytes([m.esper_index + 0x36]))
 
     phoenix_replacement = shuffled_espers[espers_by_name["Phoenix"].id]
     set_location_name(71, f"{phoenix_replacement.name.upper()} CAVE")
@@ -424,14 +429,14 @@ def randomize_magicite(fout, sourcefile):
         monster = get_monster(monster_id)
         esper_id = [e.id for e in espers if e.name == name][0]
         replacement = shuffled_espers[esper_id]
-        change_enemy_name(fout, monster_id, replacement.name)
+        change_enemy_name(outfile_rom_buffer, monster_id, replacement.name)
         mg = esper_graphics[replacement.id]
         monster.graphics.copy_data(mg)
-        monster.graphics.write_data(fout)
+        monster.graphics.write_data(outfile_rom_buffer)
 
     ragnarok = get_item(27)
     ragnarok.dataname = bytes([0xd9]) + name_to_bytes(shuffled_espers[espers_by_name["Ragnarok"].id].name, 12)
-    ragnarok.write_stats(fout)
+    ragnarok.write_stats(outfile_rom_buffer)
 
     return shuffled_espers
 

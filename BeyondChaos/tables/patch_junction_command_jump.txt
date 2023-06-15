@@ -1,0 +1,24 @@
+.addr   jun-set-target-counter          6107c0
+.addr   main                            628040
+.addr   reentry-address                 024ecb
+
+.addr   pointer-address                 61f182
+.def    command-index       41
+
+$main
+:       bb
+:       a9 16
+:       8d 7a 3a
+
+# duplicated action queue code
+:       8a da
+:       ae 67 3a
+:       9d 20 38
+:       fa
+:       ee 67 3a
+
+:       22 $jun-set-target-counter
+:       5c $reentry-address
+
+$pointer-address
+:       $main,2

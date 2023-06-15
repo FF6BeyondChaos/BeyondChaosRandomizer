@@ -1,3 +1,4 @@
+from io import BytesIO
 from utils import CHAR_TABLE, hex2int, utilrandom as random
 
 equip_offsets = {"weapon": 15,
@@ -13,12 +14,12 @@ CHARSTATNAMES = ["hp", "mp", "vigor", "speed", "stamina", "m.power",
 character_list_deprecated = []
 character_list = []
 
-def load_characters(rom_file_name, force_reload=False):
+
+def load_characters(infile_rom_buffer: BytesIO=False, force_reload=False):
     from gameobjects.character import Character
     if character_list and not force_reload:
         return
 
-    rom = open(rom_file_name, "rb")
     character_byte_block_length = 22
     character_id = 1
     for line in open(CHAR_TABLE):
@@ -29,8 +30,8 @@ def load_characters(rom_file_name, force_reload=False):
             line = line.replace('  ', ' ')
         character_address_and_name = line.split(",")
         character_address = int(character_address_and_name[0], 16)
-        rom.seek(character_address)
-        character_data = rom.read(character_byte_block_length)
+        infile_rom_buffer.seek(character_address)
+        character_data = infile_rom_buffer.read(character_byte_block_length)
         character = Character(character_id, character_address, character_address_and_name[1], character_data)
         character_id += 1
         character_list.append(character)
@@ -149,21 +150,21 @@ class CharacterBlock:
         if self.id == 12:
             self.battle_commands[0] = 0x12
 
-    def write_battle_commands(self, fout):
+    def write_battle_commands(self, outfile_rom_buffer: BytesIO):
         for i, command in enumerate(self.battle_commands):
             if command is None:
                 if i == 0:
                     command = 0
                 else:
                     continue
-            fout.seek(self.address + 2 + i)
-            fout.write(bytes([command]))
+            outfile_rom_buffer.seek(self.address + 2 + i)
+            outfile_rom_buffer.write(bytes([command]))
 
     def write_default_equipment(self, fout, equipid, equiptype):
         fout.seek(self.address + equip_offsets[equiptype])
         fout.write(bytes([equipid]))
 
-    def mutate_stats(self, fout, start_in_wor, read_only=False):
+    def mutate_stats(self, outfile_rom_buffer: BytesIO, start_in_wor, read_only=False):
 
         def mutation(base):
             while True:
@@ -185,25 +186,25 @@ class CharacterBlock:
             return value
 
         self.stats = {}
-        fout.seek(self.address)
-        hpmp = bytes(fout.read(2))
+        outfile_rom_buffer.seek(self.address)
+        hpmp = bytes(outfile_rom_buffer.read(2))
         if not read_only:
             hpmp = bytes([mutation(v) for v in hpmp])
-            fout.seek(self.address)
-            fout.write(hpmp)
+            outfile_rom_buffer.seek(self.address)
+            outfile_rom_buffer.write(hpmp)
         self.stats['hp'], self.stats['mp'] = tuple(hpmp)
 
-        fout.seek(self.address + 6)
-        stats = fout.read(9)
+        outfile_rom_buffer.seek(self.address + 6)
+        stats = outfile_rom_buffer.read(9)
         if not read_only:
             stats = bytes([mutation(v) for v in stats])
-            fout.seek(self.address + 6)
-            fout.write(stats)
+            outfile_rom_buffer.seek(self.address + 6)
+            outfile_rom_buffer.write(stats)
         for name, value in zip(CHARSTATNAMES[2:], stats):
             self.stats[name] = value
 
-        fout.seek(self.address + 21)
-        level_run = fout.read(1)[0]
+        outfile_rom_buffer.seek(self.address + 21)
+        level_run = outfile_rom_buffer.read(1)[0]
         run = level_run & 0x03
         level = (level_run & 0x0C) >> 2
         run_map = {
@@ -238,14 +239,14 @@ class CharacterBlock:
                     if level_chance < 0:
                         level = i
                         break
-            fout.seek(self.address + 21)
+            outfile_rom_buffer.seek(self.address + 21)
             level_run = (level_run & 0xF0) | level << 2 | run
-            fout.write(bytes([level_run]))
+            outfile_rom_buffer.write(bytes([level_run]))
 
-    def become_invincible(self, fout):
-        fout.seek(self.address + 11)
+    def become_invincible(self, outfile_rom_buffer: BytesIO):
+        outfile_rom_buffer.seek(self.address + 11)
         stats = bytes([0xFF, 0xFF, 0x80, 0x80])
-        fout.write(stats)
+        outfile_rom_buffer.write(stats)
 
     def set_id(self, i):
         self.id = i

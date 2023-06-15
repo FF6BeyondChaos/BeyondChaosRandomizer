@@ -308,7 +308,7 @@ def remap_maps(routes):
             if loc.locid not in towerlocids:
                 loc.make_tower_flair()
                 from options import Options_
-                loc.unlock_chests(200, 1000, uncapped_monsters=Options_.is_code_active('bsiab'))
+                loc.unlock_chests(200, 1000, uncapped_monsters=Options_.is_flag_active('bsiab'))
                 fsets = get_new_fsets("kefka's tower", 20)
                 fset = random.choice(fsets)
                 for formation in fset.formations:
@@ -1301,7 +1301,7 @@ def randomize_fanatics(unused_locids, morefanatical=False):
         entrance.dest = (entrance.dest & 0xFE00) | (stair.locid & 0x1FF)
 
 
-def randomize_tower(filename, ancient=False, nummaps=None, morefanatical = False):
+def randomize_tower(ancient=False, nummaps=None, morefanatical=False):
     global ANCIENT
     ANCIENT = ancient
     if nummaps is None:

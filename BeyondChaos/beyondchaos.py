@@ -17,14 +17,14 @@ from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
                              QLabel, QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QFileDialog,
                              QApplication, QTabWidget, QInputDialog, QScrollArea, QMessageBox,
                              QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox, QDialog,
-                             QDialogButtonBox, QMenu, QMainWindow)
+                             QDialogButtonBox, QMenu, QMainWindow, QDesktopWidget, QLayout, QFrame)
 
 # Local application imports
 import utils
-import customthreadpool
+from multiprocessing import Process, Pipe
 from config import (read_flags, write_flags, validate_files, are_updates_hidden, updates_hidden,
                     get_input_path, get_output_path, save_version, check_player_sprites, check_remonsterate)
-from options import (ALL_FLAGS, NORMAL_CODES, MAKEOVER_MODIFIER_CODES, makeover_groups)
+from options import (NORMAL_FLAGS, MAKEOVER_MODIFIER_FLAGS, get_makeover_groups)
 from update import (get_updater)
 from randomizer import randomize, VERSION, BETA, MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2
 
@@ -41,12 +41,48 @@ class FlagButton(QPushButton):
         self.value = value
 
 
-# Extended QCheckBox widget to hold flag value - CURRENTLY USED
-class FlagCheckBox(QCheckBox):
-    def __init__(self, text, value):
-        super(FlagCheckBox, self).__init__()
-        self.setText(text)
-        self.value = value
+class GenConfirmation(QDialog):
+    def __init__(self, header, flag_list):
+        super().__init__()
+        self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowContextHelpButtonHint)
+        screen_size = QDesktopWidget().screenGeometry(-1)
+        self.setMinimumSize(
+            int(min(screen_size.width() / 2, 300)),
+            int(screen_size.height() * .5)
+        )
+        self.left = int(screen_size.width() / 2 - self.width() / 2)
+        self.top = int(screen_size.height() / 2 - self.height() / 2)
+        self.setWindowTitle("Confirm Seed Generation?")
+
+        grid_layout = QGridLayout()
+        grid_layout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
+
+        header_text = QLabel(header)
+
+        flag_list_label = QLabel(flag_list)
+        flag_list_scroll = QScrollArea(self)
+        flag_list_scroll.setWidgetResizable(True)
+        flag_list_scroll.setWidget(flag_list_label)
+        flag_list_scroll.setStyleSheet("margin-bottom: 10px;")
+
+        grid_layout.addWidget(header_text, 1, 0, 1, 9)
+        grid_layout.addWidget(flag_list_scroll, 2, 0, 1, 9)
+
+        self.confirm_pushbutton = QPushButton("Confirm")
+        grid_layout.addWidget(self.confirm_pushbutton, 3, 1, 1, 3)
+        self.confirm_pushbutton.clicked.connect(self.button_pressed)
+
+        self.cancel_pushbutton = QPushButton("Cancel")
+        grid_layout.addWidget(self.cancel_pushbutton, 3, 5, 1, 3)
+        self.cancel_pushbutton.clicked.connect(self.button_pressed)
+
+        self.setLayout(grid_layout)
+
+    def button_pressed(self):
+        if self.sender() == self.cancel_pushbutton:
+            self.reject()
+        elif self.sender() == self.confirm_pushbutton:
+            self.accept()
 
 
 class BingoPrompts(QDialog):
@@ -189,15 +225,16 @@ class Window(QMainWindow):
 
         # window geometry data
         self.title = "Beyond Chaos Randomizer " + VERSION
-        self.left = 200
-        self.top = 200
-        self.width = 1000
-        self.height = 700
+        screen_size = QDesktopWidget().screenGeometry(-1)
+        self.width = int(min(screen_size.width() / 2, 1000))
+        self.height = int(screen_size.height() * .8)
+        self.left = int(screen_size.width() / 2 - self.width / 2)
+        self.top = int(screen_size.height() / 2 - self.height / 2)
 
         # values to be sent to Randomizer
         self.romText = ""
         self.romOutputDirectory = ""
-        self.version = "CE-4.2.1"
+        self.version = "CE-5.0.0"
         self.mode = "normal"
         self.seed = ""
         self.flags = []
@@ -222,6 +259,7 @@ class Window(QMainWindow):
             self.aesthetic, self.field, self.characters, self.experimental, self.gamebreaking,
             self.beta
         ]
+        self.makeover_groups = get_makeover_groups()
         # keep a list of all checkboxes
         self.checkBoxes = []
 
@@ -276,7 +314,7 @@ class Window(QMainWindow):
 
         # Begin buiding program/window
         # pull data from files
-        self.initCodes()
+        self.initFlags()
 
         # create window using geometry data
         self.initWindow()
@@ -284,7 +322,7 @@ class Window(QMainWindow):
         self.romInput.setText(self.romText)
         self.romOutput.setText(self.romOutputDirectory)
         self.updateFlagString()
-        self.updateFlagCheckboxes()
+        # self.updateFlagCheckboxes()
         self.flagButtonClicked()
         self.updatePresetDropdown()
         self.clearUI()
@@ -298,15 +336,6 @@ class Window(QMainWindow):
 
         previousRomPath = get_input_path()
         previousOutputDirectory = get_output_path()
-
-        # try:
-        #     config = configparser.ConfigParser()
-        #     config.read('bcce.cfg')
-        #     if 'ROM' in config:
-        #         previousRomPath = config['ROM']['Path']
-        #         previousOutputDirectory = config['ROM']['Output']
-        # except (IOError, KeyError):
-        #     pass
 
         self.romText = previousRomPath
         self.romOutputDirectory = previousOutputDirectory
@@ -462,33 +491,26 @@ class Window(QMainWindow):
         return groupLayout
 
     def GroupBoxTwoLayout(self):
-
         self.compileModes()
         self.compileSupportedPresets()
-        vhbox = QVBoxLayout()
-        groupBoxTwo = QGroupBox()
-        topGroupBox = QGroupBox()
-        bottomGroupBox = QGroupBox()
-        topHBox = QHBoxLayout()
-        bottomHBox = QHBoxLayout()
-        topHBox.addStretch(0)
-        bottomHBox.addStretch(0)
+        mode_and_preset_group = QGroupBox()
+        mode_and_preset_layout = QGridLayout()
 
         # ---- Game Mode Drop Down ---- #
-        gameModeLabel = QLabel("Game Mode")
-        gameModeLabel.setMaximumWidth(60)
-        topHBox.addWidget(gameModeLabel, alignment=QtCore.Qt.AlignLeft)
+        gameModeLabel = QLabel("Game Mode:")
+        gameModeLabel.setStyleSheet("padding-left: 22px;")
+        mode_and_preset_layout.addWidget(gameModeLabel, 1, 1)
         for item in self.GameModes.items():
             self.modeBox.addItem(item[0])
         self.modeBox.currentTextChanged.connect(
             lambda: self.updateGameDescription()
         )
-        topHBox.addWidget(self.modeBox, alignment=QtCore.Qt.AlignLeft)
+        mode_and_preset_layout.addWidget(self.modeBox, 1, 2)
 
         # ---- Preset Flags Drop Down ---- #
-        presetModeLabel = QLabel("Preset Flags")
-        presetModeLabel.setMaximumWidth(60)
-        topHBox.addWidget(presetModeLabel, alignment=QtCore.Qt.AlignRight)
+        presetModeLabel = QLabel("Preset Flags:")
+        presetModeLabel.setStyleSheet("padding-left: 22px;")
+        mode_and_preset_layout.addWidget(presetModeLabel, 1, 3)
         self.presetBox.addItem("Select a flagset")
         self.loadSavedFlags()
         for item in self.GamePresets.items():
@@ -497,90 +519,28 @@ class Window(QMainWindow):
         self.presetBox.currentTextChanged.connect(
             lambda: self.updatePresetDropdown()
         )
-        topHBox.addWidget(self.presetBox, alignment=QtCore.Qt.AlignLeft)
+        mode_and_preset_layout.addWidget(self.presetBox, 1, 4)
 
-        # ---- Update Button ---- #
-        # updateButton = QPushButton("Check for Updates")
-        # updateButton.setStyleSheet(
-        #    "font:bold;"
-        #    "font-size:18px;"
-        #    "height:24px;"
-        #    "background-color:#5A8DBE;"
-        #    "color:#E4E4E4;")
-        # width = 250
-        # height = 60
-        # updateButton.setMaximumWidth(width)
-        # updateButton.setMaximumHeight(height)
-        # updateButton.clicked.connect(lambda: self.update_bc())
-        # updateButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-        # effect = QGraphicsDropShadowEffect()
-        # effect.setBlurRadius(3)
-        # updateButton.setGraphicsEffect(effect)
-        # topHBox.addWidget(
-        #    updateButton,
-        #    alignment = QtCore.Qt.AlignLeft
-        # )
-
-        # ---- Mode Description ---- #
-        gameModeDescriptionLabel = QLabel("Game Mode Description:")
-        gameModeDescriptionLabel.setStyleSheet(
-            "font-size:14px; "
-            "height:24px;"
-            "color:#253340;"
-        )
-        bottomHBox.addWidget(
-            gameModeDescriptionLabel,
-            alignment=QtCore.Qt.AlignLeft
-        )
-        self.modeDescription.setStyleSheet(
-            "font-size:14px;"
-            "height:24px;"
-            "color:#253340;"
-        )
-        bottomHBox.addWidget(
-            self.modeDescription,
-            alignment=QtCore.Qt.AlignLeft
-        )
-
-        # ---- Spacer ---- #
-        spacerDescriptionLabel = QLabel("          ")
-        spacerDescriptionLabel.setStyleSheet(
-            "font-size:14px;"
-            "height:24px;"
-            "color:#253340;"
-        )
-        bottomHBox.addWidget(
-            spacerDescriptionLabel,
-            alignment=QtCore.Qt.AlignLeft
-        )
-
-        # ---- Preset Description ---- #
-        flagDescriptionLabel = QLabel("Flag Description:")
+        flagDescriptionLabel = QLabel("Preset Description:")
         flagDescriptionLabel.setStyleSheet(
             "font-size:14px;"
             "height:24px;"
             "color:#253340;"
+            "padding-left: 22px;"
         )
-        bottomHBox.addWidget(
-            flagDescriptionLabel,
-            alignment=QtCore.Qt.AlignLeft
-        )
+        mode_and_preset_layout.addWidget(flagDescriptionLabel,1, 5)
+
         self.flagDescription.setStyleSheet(
             "font-size:14px;"
             "height:24px;"
             "color:#253340;"
         )
-        bottomHBox.addWidget(
-            self.flagDescription,
-            alignment=QtCore.Qt.AlignLeft
-        )
+        mode_and_preset_layout.addWidget(self.flagDescription, 1, 6)
 
-        topGroupBox.setLayout(topHBox)
-        bottomGroupBox.setLayout(bottomHBox)
-        vhbox.addWidget(topGroupBox)
-        vhbox.addWidget(bottomGroupBox)
-        groupBoxTwo.setLayout(vhbox)
-        return groupBoxTwo
+        mode_and_preset_layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
+        mode_and_preset_group.setLayout(mode_and_preset_layout)
+        mode_and_preset_group.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
+        return mode_and_preset_group
 
     def flagBoxLayout(self):
         groupBoxTwo = QGroupBox()
@@ -588,6 +548,8 @@ class Window(QMainWindow):
         middleRightGroupBox = QGroupBox("Flag Selection")
         tabVBoxLayout = QVBoxLayout()
         tabs = QTabWidget()
+        control_fixed_width = 70
+        control_fixed_height = 20
 
         # loop to add tab objects to 'tabs' TabWidget
         for t, d, names in zip(self.tablist,
@@ -596,68 +558,105 @@ class Window(QMainWindow):
             tabObj = QScrollArea()
             tabs.addTab(tabObj, names)
             tablayout = QGridLayout()
+            tablayout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
+            flagcount = 0
             currentRow = 0
-            for flagname, flagdesc in d.items():
-                if flagdesc['inputtype'] == 'checkbox':
-                    cbox = FlagCheckBox(
-                        f"{flagname}  -  {flagdesc['explanation']}",
-                        flagname
-                    )
+            for flagname, flag in d.items():
+                if flag['object'].inputtype == 'boolean':
+                    # cbox = FlagCheckBox("", flagname)
+                    cbox = QPushButton("No")
+                    cbox.flag = flag['object']
                     if (flagname == "remonsterate" and not len(check_remonsterate()) == 0) or\
                        (flagname == "makeover" and not len(check_player_sprites()) == 0):
                         cbox.setEnabled(False)
-
                     self.checkBoxes.append(cbox)
-                    tablayout.addWidget(cbox, currentRow, 1, 1, 2)
-                    cbox.clicked.connect(lambda checked: self.flagButtonClicked())
-                elif flagdesc['inputtype'] == 'numberbox':
-                    if flagname in ['expboost', 'gpboost', 'mpboost']:
-                        nbox = QDoubleSpinBox()
-                    else:
-                        nbox = QSpinBox()
+                    cbox.setFixedWidth(control_fixed_width)
+                    cbox.setFixedHeight(control_fixed_height)
+                    cbox.setCheckable(True)
+                    cbox.value = flagname
 
-                    if flagname == "cursepower":
-                        nbox.setMinimum(0)
-                        nbox.setSpecialValueText("Random")
-                        nbox.setMaximum(255)
-                        nbox.default = 255
-                    elif flagname in ['expboost', 'gpboost', 'mpboost']:
-                        nbox.setMinimum(-0.1)
-                        nbox.setSingleStep(.1)
-                        nbox.setSpecialValueText('Off')
-                        nbox.setSuffix("x")
-                        nbox.default = nbox.minimum()
-                    else:
-                        nbox.setMinimum(-1)
-                        nbox.setSpecialValueText('Off')
-                        nbox.default = nbox.minimum()
+                    flaglbl = QLabel(f"{flagname}")
+                    flagdesc = QLabel(f"{flag['object'].long_description}")
 
-                    nbox.setFixedWidth(70)
+                    tablayout.addWidget(cbox, currentRow, 1)
+                    tablayout.addWidget(flaglbl, currentRow, 2)
+                    tablayout.addWidget(flagdesc, currentRow, 4)
+                    cbox.clicked.connect(lambda checked:
+                                         self.flagButtonClicked()
+                                         )
+                    flagcount += 1
+                elif flag['object'].inputtype == 'float2':
+                    nbox = QDoubleSpinBox()
+                    nbox.flag = flag['object']
+                    nbox.setMinimum(0)
+                    nbox.setSingleStep(.1)
+                    nbox.default = 1.00
+                    nbox.setSuffix("x")
                     nbox.setValue(nbox.default)
                     nbox.text = flagname
-                    flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
+                    nbox.setFixedWidth(control_fixed_width)
+                    nbox.setFixedHeight(control_fixed_height)
+
+                    flaglbl = QLabel(f"{flagname}")
+                    flagdesc = QLabel(f"{flag['object'].long_description}")
+
                     tablayout.addWidget(nbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
+                    tablayout.addWidget(flagdesc, currentRow, 4)
                     nbox.valueChanged.connect(lambda: self.flagButtonClicked())
-                elif flagdesc['inputtype'] == 'combobox':
+                    flagcount += 1
+                elif flag['object'].inputtype == 'integer':
+                    nbox = QSpinBox()
+                    nbox.flag = flag['object']
+                    nbox.default = int(flag['object'].default_value)
+                    nbox.setMinimum(int(flag['object'].minimum_value))
+                    nbox.setFixedWidth(control_fixed_width)
+                    nbox.setFixedHeight(control_fixed_height)
+                    if flagname == "cursepower":
+                        nbox.setMaximum(255)
+                        nbox.default = 255
+                    if flagname == "randomboost":
+                        nbox.setMaximum(255)
+                        nbox.default = 0
+                    nbox.setValue(nbox.default)
+                    nbox.text = flagname
+
+                    flaglbl = QLabel(f"{flagname}")
+                    flagdesc = QLabel(f"{flag['object'].long_description}")
+
+                    tablayout.addWidget(nbox, currentRow, 1)
+                    tablayout.addWidget(flaglbl, currentRow, 2)
+                    tablayout.addWidget(flagdesc, currentRow, 4)
+                    nbox.valueChanged.connect(lambda: self.flagButtonClicked())
+                    flagcount += 1
+                elif flag['object'].inputtype == 'combobox':
                     cmbbox = QComboBox()
-                    cmbbox.addItems(flagdesc['choices'])
-                    width = 50
-                    for choice in flagdesc['choices']:
-                        width = max(width, len(choice) * 10)
-                    cmbbox.setFixedWidth(width)
+                    cmbbox.flag = flag['object']
+                    cmbbox.addItems(flag['object'].choices)
                     cmbbox.text = flagname
-                    if makeover_groups and flagname in makeover_groups:
-                        cmbbox.setCurrentIndex(cmbbox.findText("Normal"))
-                        flaglbl = QLabel(f"{flagname} (" + str(makeover_groups[flagname]) +
-                                         ")   -  " + f"{flagdesc['explanation']}")
+                    cmbbox.setFixedWidth(control_fixed_width)
+                    cmbbox.setFixedHeight(control_fixed_height)
+                    cmbbox.setCurrentIndex(flag['object'].default_index)
+                    if self.makeover_groups and flagname in self.makeover_groups:
+                        flaglbl = QLabel(f"{flagname} (" + str(self.makeover_groups[flagname]) +
+                                         ")")
+                        flagdesc = QLabel(f"{flag['object'].long_description}")
                     else:
-                        cmbbox.setCurrentIndex(cmbbox.findText("Vanilla"))
-                        flaglbl = QLabel(f"{flagname}  -  {flagdesc['explanation']}")
+                        flaglbl = QLabel(f"{flagname}")
+                        flagdesc = QLabel(f"{flag['object'].long_description}")
                     tablayout.addWidget(cmbbox, currentRow, 1)
                     tablayout.addWidget(flaglbl, currentRow, 2)
+                    tablayout.addWidget(flagdesc, currentRow, 4)
                     cmbbox.activated[str].connect(lambda: self.flagButtonClicked())
+                    flagcount += 1
                 currentRow += 1
+
+            v_spacer = QFrame()
+            v_spacer.setFrameShape(QFrame.VLine)
+            v_spacer.setFrameShadow(QFrame.Sunken)
+            v_spacer.setFixedWidth(5)
+            v_spacer.setStyleSheet("margin: 5px 0 5px 0;")
+            tablayout.addWidget(v_spacer, 0, 3, flagcount, 1)
 
             t.setLayout(tablayout)
             tabObj.setWidgetResizable(True)
@@ -701,130 +700,6 @@ class Window(QMainWindow):
 
         return groupBoxTwo
 
-    # Middle groupbox of sub-groupboxes.  Consists of left section
-    # (game mode # selection) and right section
-    # (flag selection -> tab-sorted)
-    def GroupBoxThreeLayout(self):
-        groupBoxTwo = QGroupBox()
-        middleHBox = QHBoxLayout()
-
-        middleRightGroupBox = QGroupBox("Flag Selection")
-        tabVBoxLayout = QVBoxLayout()
-        tabs = QTabWidget()
-        tabNames = [
-            "Flags", "Sprites", "SpriteCategories", "Battle", "Aesthetic",
-            "Field", "Characters", "Experimental", "Gamebreaking", "Beta"
-        ]
-
-        ########## Checkboxes and inline descriptions ###########
-
-        # loop to add tab objects to 'tabs' TabWidget
-        for t, d, names in zip(self.tablist, self.dictionaries, tabNames):
-            tabObj = QScrollArea()
-            tabs.addTab(tabObj, names)
-            # We have a horizontal box that can go item1,
-            # item 2 in left-right fashion
-            itemLayout = QHBoxLayout()
-            # We then have two vertical boxes, one for normal flags,
-            # one for flags that have sliders or entry boxes.
-            boxOneLayout = QVBoxLayout()
-            boxTwoVertLayout = QVBoxLayout()
-            boxTwoHorzLayout = QVBoxLayout()
-            # We then have the group boxes the vertical tayouts get
-            # set into
-            groupOneBox = QGroupBox()
-            groupTwoVertBox = QGroupBox()
-            groupTwoHorzBox = QGroupBox()
-            flagGroup = QGroupBox()
-            for flagname, flagdesc in d.items():
-                if flagname == "exp":
-                    cbox = FlagCheckBox(
-                        f"{flagname}  -  {flagdesc['explanation']}",
-                        flagname
-                    )
-                else:
-                    cbox = FlagCheckBox(
-                        f"{flagname}  -  {flagdesc['explanation']}",
-                        flagname
-                    )
-                    self.checkBoxes.append(cbox)
-                    cbox.clicked.connect(
-                        lambda checked: self.flagButtonClicked()
-                    )
-                    # Context - adding a second pane to certain tabs
-                    # for now for sliders.
-                    boxOneLayout.addWidget(cbox)
-                    groupOneBox.setLayout(boxOneLayout)
-                itemLayout.addWidget(groupOneBox)
-            t.setLayout(itemLayout)
-            tabObj.setWidgetResizable(True)
-            tabObj.setWidget(t)
-
-        tabVBoxLayout.addWidget(tabs)
-        # ----------- tabs done --------------
-
-        # This is the line in the layout that displays the string
-        # of selected flags and the button to save those flags
-        widgetV = QWidget()
-        widgetVBoxLayout = QVBoxLayout()
-        widgetV.setLayout(widgetVBoxLayout)
-
-        widgetVBoxLayout.addWidget(QLabel("Text-string of selected flags:"))
-        self.flagString.textChanged.connect(self.textchanged)
-        widgetVBoxLayout.addWidget(self.flagString)
-
-        saveButton = QPushButton("Save flags selection")
-        saveButton.clicked.connect(lambda: self.saveFlags())
-        widgetVBoxLayout.addWidget(saveButton)
-
-        # This part makes a group box and adds the selected-flags
-        # display and a button to clear the UI
-        flagTextWidget = QGroupBox()
-        flagTextHBox = QHBoxLayout()
-        flagTextHBox.addWidget(widgetV)
-        clearUiButton = QPushButton("Reset")
-        clearUiButton.setStyleSheet(
-            "font:bold;"
-            "font-size:16px;"
-            "height:60px;"
-            "background-color:#5A8DBE;"
-            "color:#E4E4E4;"
-        )
-        clearUiButton.clicked.connect(lambda: self.clearUI())
-        clearUiButton.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
-        effect = QGraphicsDropShadowEffect()
-        effect.setBlurRadius(3)
-        effect.setOffset(3, 3)
-        clearUiButton.setGraphicsEffect(effect)
-        flagTextHBox.addWidget(clearUiButton)
-        flagTextWidget.setLayout(flagTextHBox)
-
-        tabVBoxLayout.addWidget(flagTextWidget)
-        middleRightGroupBox.setLayout(tabVBoxLayout)
-        # ------------- Part two (right) end-------------------------
-
-        # Add widgets to HBoxLayout and assign to middle groupbox
-        # layout
-        middleHBox.addWidget(middleRightGroupBox)
-        groupBoxTwo.setLayout(middleHBox)
-
-        return groupBoxTwo
-
-    # Bottom groupbox consisting of saved seeds selection box, and
-    # button to generate seed
-    def GroupBoxFourLayout(self):
-        bottomGroupBox = QGroupBox()
-        bottomHBox = QHBoxLayout()
-
-        bottomHBox.addWidget(QLabel("Saved flag selection: "))
-
-        # todo: Add amount of seeds to generate here.
-        # todo: Add retry on failure checkbox
-        bottomHBox.addStretch(1)
-
-        bottomGroupBox.setLayout(bottomHBox)
-        return bottomGroupBox
-
     # ---------------------------------------------------------------
     # ------------ NO MORE LAYOUT DESIGN PAST THIS POINT-------------
     # ---------------------------------------------------------------
@@ -844,8 +719,9 @@ class Window(QMainWindow):
             if child.isEnabled():
                 for v in values:
                     v = str(v).lower()
-                    if type(child) == FlagCheckBox and v == child.value:
+                    if type(child) == QPushButton and v == child.value:
                         child.setChecked(True)
+                        child.setText("Yes")
                         self.flags.append(v)
                     elif type(child) in [QSpinBox] and str(v).startswith(child.text.lower()):
                         if ":" in v:
@@ -873,42 +749,35 @@ class Window(QMainWindow):
 
     # (At startup) Opens reads code flags/descriptions and
     #   puts data into separate dictionaries
-    def initCodes(self):
-        for code in NORMAL_CODES + MAKEOVER_MODIFIER_CODES:
-            if code.category == "aesthetic":
+    def initFlags(self):
+        for flag in sorted(NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS, key=lambda x: x.name):
+            if flag.category == "flags":
+                d = self.flag
+            elif flag.category == "aesthetic":
                 d = self.aesthetic
-            elif code.category == "sprite":
+            elif flag.category == "sprite":
                 d = self.sprite
-            elif code.category == "spriteCategories":
+            elif flag.category == "spriteCategories":
                 d = self.spriteCategories
-            elif code.category == "experimental":
+            elif flag.category == "experimental":
                 d = self.experimental
-            elif code.category == "gamebreaking":
+            elif flag.category == "gamebreaking":
                 d = self.gamebreaking
-            elif code.category == "field":
+            elif flag.category == "field":
                 d = self.field
-            elif code.category == "characters":
+            elif flag.category == "characters":
                 d = self.characters
-            elif code.category == "beta":
+            elif flag.category == "beta":
                 d = self.beta
-            elif code.category == "battle":
+            elif flag.category == "battle":
                 d = self.battle
             else:
-                print(f"Code {code.name} does not have a valid category.")
+                print(f"Flag {flag.name} does not have a valid category.")
                 continue
 
-            d[code.name] = {
-                'explanation': code.long_description,
-                'inputtype': code.inputtype,
+            d[flag.name] = {
                 'checked': False,
-                'choices': code.choices
-            }
-
-        for flag in sorted(ALL_FLAGS):
-            self.flag[flag.name] = {
-                'explanation': flag.description,
-                'inputtype': flag.inputtype,
-                'checked': True
+                'object': flag
             }
 
     # opens input dialog to get a name to assign a desired seed flagset, then
@@ -1038,9 +907,8 @@ class Window(QMainWindow):
 
         self.modeBox.setCurrentIndex(0)
         self.presetBox.setCurrentIndex(0)
-        self.initCodes()
-        self.updateFlagCheckboxes()
-        self.flagButtonClicked()
+        self.initFlags()
+        self.clear_controls()
         self.flagString.clear()
         self.flags.clear()
         self.updateGameDescription()
@@ -1048,15 +916,13 @@ class Window(QMainWindow):
     def clear_controls(self):
         for tab in self.tablist:
             for child in tab.children():
-                if type(child) == FlagCheckBox:
+                if type(child) == QPushButton:
                     child.setChecked(False)
+                    child.setText("No")
                 elif type(child) == QSpinBox or type(child) == QDoubleSpinBox:
                     child.setValue(child.default)
                 elif type(child) == QComboBox:
-                    if makeover_groups and child.text in makeover_groups:
-                        child.setCurrentIndex(child.findText("Normal"))
-                    else:
-                        child.setCurrentIndex(child.findText("Vanilla"))
+                    child.setCurrentIndex(child.flag.default_index)
 
     # When flag UI button is checked, update corresponding
     # dictionary values
@@ -1067,12 +933,14 @@ class Window(QMainWindow):
         if not self.flagsChanging:
             self.flags.clear()
             for t, d in zip(self.tablist, self.dictionaries):
-                children = t.findChildren(FlagCheckBox)
+                children = t.findChildren(QPushButton)
                 for c in children:
                     if c.isChecked():
+                        c.setText("Yes")
                         d[c.value]['checked'] = True
                         self.flags.append(c.value)
                     else:
+                        c.setText("No")
                         d[c.value]['checked'] = False
                 children = t.findChildren(QSpinBox) + t.findChildren(QDoubleSpinBox)
                 for c in children:
@@ -1083,7 +951,7 @@ class Window(QMainWindow):
                             self.flags.append(c.text + ":" + str(round(c.value(), 2)))
                 children = t.findChildren(QComboBox)
                 for c in children:
-                    if c.currentText() not in ["Vanilla", "Normal"]:
+                    if c.currentIndex() != c.flag.default_index:
                         self.flags.append(c.text.lower() + ":" + c.currentText().lower())
 
             self.updateFlagString()
@@ -1254,14 +1122,17 @@ class Window(QMainWindow):
                 flagMsg = ""
             flagMode = flagMode.strip()
             for flag in self.flags:
-                if flagMsg != "":
-                    flagMsg += "\n-"
+                if flagMsg:
+                    if len(flag) == 1:
+                        flagMsg += " "
+                    else:
+                        flagMsg += "\n"
                 flagMsg += flag
             if flagMsg == "":
                 QMessageBox.about(
                     self,
                     "Error",
-                    "You need to select a flag and/or code!"
+                    "You need to select a flag!"
                 )
                 return
 
@@ -1290,20 +1161,24 @@ class Window(QMainWindow):
 
             # This makes the flag string more readable in
             # the confirm dialog
-            message = (f"Rom: {self.romText}\n"
-                       f"Output: {self.romOutputDirectory}\n"
-                       f"Seed: {displaySeed}\n"
-                       f"Number of seeds: {self.seedCount.text()}\n"
-                       f"Mode: {self.mode}\n"
-                       f"Flags: \n-{flagMsg}\n"
-                       f"(Hyphens are not actually used in seed generation)"
-                       )
-            continue_confirmed = QMessageBox.question(
-                self,
-                "Confirm Seed Generation?",
+            message = (
+                "{0: <10} {1}\n"
+                "{2: <9} {3}\n"
+                "{4: <10} {5}\n"
+                "{6: <10} {7}\n"
+                "{8: <10} {9}\n"
+                "{10: <10}".format(
+                    "Rom:", self.romText,
+                    "Output:", self.romOutputDirectory,
+                    "Seed:", displaySeed,
+                    "Batch:", self.seedCount.text(),
+                    "Mode:", self.mode,
+                    "Flags:")
+            )
+            continue_confirmed = GenConfirmation(
                 message,
-                QMessageBox.Yes | QMessageBox.Cancel
-            ) == QMessageBox.Yes
+                f"{flagMsg}"
+            ).exec()
             if continue_confirmed:
                 self.clearConsole()
                 self.seed = self.seed or int(time.time())
@@ -1326,21 +1201,40 @@ class Window(QMainWindow):
                     # TODO: put this in a new thread
                     try:
                         kwargs = {
-                            "sourcefile": self.romText,
+                            "infile_rom_path": self.romText,
+                            "outfile_rom_path": self.romOutputDirectory,
                             "seed": bundle,
-                            "output_directory": self.romOutputDirectory,
                             "bingotype": self.bingotype,
                             "bingosize": self.bingosize,
                             "bingodifficulty": self.bingodiff,
                             "bingocards": self.bingocards,
-                            "from_gui": True,
+                            "application": "gui"
                         }
-                        # pool = multiprocessing.Pool()
-                        pool = customthreadpool.NonDaemonPool(1)
-                        x = pool.apply_async(func=randomize, kwds=kwargs)
-                        x.get()
-                        pool.close()
-                        pool.join()
+                        parent_connection, child_connection = Pipe()
+                        randomize_process = Process(
+                            target=randomize,
+                            args=(child_connection,),
+                            kwargs=kwargs
+                        )
+                        randomize_process.start()
+                        while True:
+                            if not randomize_process.is_alive():
+                                raise RuntimeError("Unexpected error: The randomize child process died.")
+                            if parent_connection.poll(timeout=5):
+                                item = parent_connection.recv()
+                            else:
+                                item = None
+                            if item:
+                                try:
+                                    if isinstance(item, str):
+                                        print(item)
+                                    elif isinstance(item, Exception):
+                                        raise item
+                                    elif isinstance(item, bool):
+                                        break
+                                except EOFError:
+                                    break
+
                         # generate the output file name since we're using subprocess now instead of a direct call
                         if '.' in self.romText:
                             tempname = os.path.basename(self.romText).rsplit('.', 1)
@@ -1357,14 +1251,13 @@ class Window(QMainWindow):
                         randomize_error_message = QMessageBox()
                         randomize_error_message.setIcon(QMessageBox.Critical)
                         randomize_error_message.setWindowTitle("Exception: " + str(type(e).__name__))
-                        randomize_error_message.setText("A fatal " + str(type(e).__name__) + " exception occurred: " +
+                        randomize_error_message.setText("A " + str(type(e).__name__) + " exception occurred "
+                                                        "that prevented randomization: " +
+                                                        "<br>" +
                                                         str(e) +
                                                         "<br>" +
                                                         "<br>" +
-                                                        "<br>" +
-                                                        "<br>" +
                                                         "<b><u>Error Traceback for the Devs</u></b>:" +
-                                                        "<br>" +
                                                         "<br>" +
                                                         "<br>".join(traceback.format_exc().splitlines()))
                         randomize_error_message.setStandardButtons(QMessageBox.Close)
@@ -1416,22 +1309,24 @@ class Window(QMainWindow):
         self.flagString.setText(temp)
         self.flagsChanging = False
 
-    # read through dictionaries and set flag checkboxes as 'checked'
-    def updateFlagCheckboxes(self):
-        for t, d in zip(self.tablist, self.dictionaries):
-            # create a list of all checkbox objects from the
-            # current QTabWidget
-            children = t.findChildren(FlagCheckBox)
 
-            # enumerate checkbox objects and set them to 'checked' if
-            # corresponding
-            #   flag value is true
-            for c in children:
-                value = c.value
-                if d[value]['checked']:
-                    c.setProperty('checked', True)
-                else:
-                    c.setProperty('checked', False)
+    # read through dictionaries and set flag checkboxes as 'checked'
+    # def updateFlagCheckboxes(self):
+    #     for t, d in zip(self.tablist, self.dictionaries):
+    #         # create a list of all checkbox objects from the
+    #         # current QTabWidget
+    #         children = t.findChildren(FlagCheckBox)
+    #
+    #         # enumerate checkbox objects and set them to 'checked' if
+    #         # corresponding
+    #         #   flag value is true
+    #         for c in children:
+    #             value = c.value
+    #             if d[value]['checked']:
+    #                 c.setProperty('checked', True)
+    #             else:
+    #                 c.setProperty('checked', False)
+
 
     def validateInputRom(self, value):
         try:

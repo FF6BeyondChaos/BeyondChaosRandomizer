@@ -1,0 +1,101 @@
+.addr   get-command-subroutine          61f000
+.addr   get-command-jump                61f020
+
+# should reserve 0x200 bytes for the table, up to 61f300
+.addr   jun-command-table-address       61f100
+# c21401 minus one
+.addr   return-addr                     021400
+
+.addr   cmd-00  0215c8
+.addr   cmd-01  021897
+.addr   cmd-02  021741
+.addr   cmd-03  021936
+.addr   cmd-04  021927
+.addr   cmd-05  021591
+.addr   cmd-06  021610
+.addr   cmd-07  021847
+.addr   cmd-08  02188d
+.addr   cmd-09  021885
+.addr   cmd-0a  02159d
+.addr   cmd-0b  02195b
+.addr   cmd-0c  02175f
+.addr   cmd-0d  02151f
+.addr   cmd-0e  021976
+.addr   cmd-0f  021726
+.addr   cmd-10  021560
+.addr   cmd-11  02199d
+.addr   cmd-12  02151e
+.addr   cmd-13  02177d
+.addr   cmd-14  02194c
+.addr   cmd-15  02196a
+.addr   cmd-16  0217f6
+.addr   cmd-17  021741
+.addr   cmd-18  021907
+.addr   cmd-19  021763
+.addr   cmd-1a  02171e
+.addr   cmd-1b  02171a
+.addr   cmd-1c  0217e5
+.addr   cmd-1d  02175f
+.addr   cmd-1e  0219b2
+.addr   cmd-1f  02151e
+.addr   cmd-20  025072
+.addr   cmd-21  0250d1
+.addr   cmd-22  02500b
+.addr   cmd-23  024f57
+.addr   cmd-24  024f97
+.addr   cmd-25  0250cd
+.addr   cmd-26  024f5f
+.addr   cmd-27  0250dd
+.addr   cmd-28  02151e
+.addr   cmd-29  025161
+.addr   cmd-2a  0220de
+.addr   cmd-2b  02642d
+.addr   cmd-2c  0251a8
+.addr   cmd-2d  0251b2
+.addr   cmd-2e  021dfa
+.addr   cmd-2f  021e1a
+.addr   cmd-30  021e5e
+.addr   cmd-31  02151e
+.addr   cmd-32  02151e
+.addr   cmd-33  02151e
+
+0213fc: 5c $get-command-subroutine
+02155b: 5c $get-command-jump
+
+$get-command-subroutine
+:       aa
+:       f4 $return-addr,2
+:       8a
+:       4c $get-command-jump,2
+
+$get-command-jump
+:       aa
+:       c9 34
+:       b0 new-command
+:       a9 c2
+:       80 main-body
+.label new-command
+:       a9 62
+.label main-body
+:       85 12
+:       8a
+:       0a aa
+:       c2 20
+:       bf $jun-command-table-address
+:       85 10
+:       e2 20
+:       dc 10 00
+
+VALIDATION
+
+.addr   command-pointers        0219c7
+
+0213fc: 0a aa
+:       fc $command-pointers,2
+
+02155b: 0a aa
+:       7c $command-pointers,2
+
+0219c7: $cmd-00,2
+:       $cmd-01,2
+:       $cmd-02,2

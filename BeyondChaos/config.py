@@ -45,7 +45,7 @@ def write_flags(name, flags):
     try:
         config.add_section('Flags')    
     except Exception:
-        print("Config Section Flags already exists, skipping writing new section.")
+        pass
     
     config.set('Flags', name, flags)
     with open('config.ini', 'w') as f:

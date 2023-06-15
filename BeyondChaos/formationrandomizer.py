@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 import monsterrandomizer
+from io import BytesIO
 from math import log, floor
 
 from monsterrandomizer import monsterdict, get_monsters
@@ -112,29 +113,26 @@ class Formation():
     def battle_event(self):
         return any([m.battle_event for m in self.present_enemies])
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.mouldbyte = ord(f.read(1))
-        self.enemies_present = ord(f.read(1))
-        self.enemy_ids = list(f.read(6))
-        self.enemy_pos = list(f.read(6))
-        self.bosses = ord(f.read(1))
+    def read_data(self, rom_file_buffer: BytesIO=False):
+        rom_file_buffer.seek(self.pointer)
+        self.mouldbyte = ord(rom_file_buffer.read(1))
+        self.enemies_present = ord(rom_file_buffer.read(1))
+        self.enemy_ids = list(rom_file_buffer.read(6))
+        self.enemy_pos = list(rom_file_buffer.read(6))
+        self.bosses = ord(rom_file_buffer.read(1))
 
-        f.seek(self.auxpointer)
-        self.misc1 = ord(f.read(1))
-        self.misc2 = ord(f.read(1))
-        self.eventscript = ord(f.read(1))
-        self.misc3 = ord(f.read(1))
+        rom_file_buffer.seek(self.auxpointer)
+        self.misc1 = ord(rom_file_buffer.read(1))
+        self.misc2 = ord(rom_file_buffer.read(1))
+        self.eventscript = ord(rom_file_buffer.read(1))
+        self.misc3 = ord(rom_file_buffer.read(1))
 
         appointer = 0x1fb400 + self.formid
         if appointer < 0x1fb600:
-            f.seek(0x1fb400 + self.formid)
-            self.mp = ord(f.read(1))
+            rom_file_buffer.seek(0x1fb400 + self.formid)
+            self.mp = ord(rom_file_buffer.read(1))
         else:
             self.mp = None
-
-        f.close()
 
     @property
     def mould(self):
@@ -280,7 +278,8 @@ class Formation():
 
     def read_mould(self, filename):
         mouldspecsptrs = 0x2D01A
-        f = open(filename, 'r+b')
+        # f = open(filename, 'r+b')
+        f = filename
         pointer = mouldspecsptrs + (2 * self.mould)
         f.seek(pointer)
         pointer = read_multi(f, length=2) | 0x20000
@@ -325,7 +324,7 @@ class Formation():
     def exp(self):
         return sum(e.stats['xp'] for e in self.present_enemies)
 
-    def mutate(self, mp=False, mp_boost_value=None):
+    def mutate(self, mp=False, mp_boost_value=False):
         if mp and self.mp is not None and 0 < self.mp < 100:
             factor = self.levelrank() / 100
             self.mp += int(round(self.mp * factor))
@@ -386,31 +385,29 @@ class FormationSet():
     def veldty(self):
         return all([f.veldty for f in self.formations])
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
+    def read_data(self, rom_file_buffer: BytesIO=False):
+        rom_file_buffer.seek(self.pointer)
         self.formids = []
         if self.setid <= 0xFF:
             num_encounters = 4
         else:
             num_encounters = 2
         for _ in range(num_encounters):
-            self.formids.append(read_multi(f, length=2))
-        if any([f & 0x8000 for f in self.formids]):
-            assert all([f & 0x8000 for f in self.formids])
+            self.formids.append(read_multi(rom_file_buffer, length=2))
+        if any([formation_id & 0x8000 for formation_id in self.formids]):
+            assert all([formation_id & 0x8000 for formation_id in self.formids])
             self.sixteen_pack = True
         else:
             self.sixteen_pack = False
-        f.close()
 
-    def write_data(self, fout):
-        fout.seek(self.pointer)
+    def write_data(self, outfile_rom_buffer: BytesIO):
+        outfile_rom_buffer.seek(self.pointer)
         for value in self.formids:
             if self.sixteen_pack:
                 value |= 0x8000
             else:
                 value &= 0x7FFF
-            write_multi(fout, value, length=2)
+            write_multi(outfile_rom_buffer, value, length=2)
 
     def remove_redundant_formation(self, fsets, replacement=None,
                                    check_only=False):

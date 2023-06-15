@@ -7,9 +7,9 @@ a fork of SubtractionSoup's FF6 Beyond Chaos EX Randomizer
 a fork of Abyssonym's FF6 Beyond Chaos Randomizer
 <p>
 
-__Version__: 4.2.1
+__Version__: 5.0.0
 <br />
-__Date__: 2023-02-27
+__Date__: 2023-06-14
 <br />
 __URL__: https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest
 <br />
@@ -271,7 +271,7 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
 	Synchysi - esper restriction
 	Lenophis - unhardcoded tintinabar
     Novalia Spirit - "Allergic Dog" bug fix, Selective Reequip
-    Leet Sketcher - Y Equip Relics, rotating statuses patch
+    Leet Sketcher - Y Equip Relics, rotating statuses patch, Imp Skimp
     Assassin - That Damn Yellow Streak fix, sketch fix
 	Power Panda - Divergent Paths: The 3 Scenarios
 	HatZen08 - Coliseum Rewards Display

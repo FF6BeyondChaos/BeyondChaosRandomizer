@@ -702,3 +702,24 @@ statusacquire3      09
 name_icon           e2
 name_text           Absamantium
 tier                high
+
+! Albatross
+price               1
+itemtype            11
+equippable          3fff
+power               d8
+hitmdef             ff
+magstam             bb
+speedvigor          bb
+mblockevade         88
+otherproperties     20
+specialaction       a0
+statusacquire2      10
+statusacquire3      08
+statboost1          08
+special2            43
+weapon_animation    0f 0f 18 35 18 82 56 0
+name_icon           df
+name_text           Albatross
+description         Secret Item
+tier                high

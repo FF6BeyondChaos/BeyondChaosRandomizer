@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from io import BytesIO
 from sys import argv
 from shutil import copyfile
 
@@ -158,12 +158,11 @@ def recompress(bytestring):
     return result
 
 
-def decompress_at_location(filename, address):
-    f = open(filename, 'r+b')
-    f.seek(address)
-    size = read_multi(f, length=2)
-    #print "Size is %s" % size
-    bytestring = f.read(size)
+def decompress_at_location(infile_rom_buffer: BytesIO, address):
+    infile_rom_buffer.seek(address)
+    size = read_multi(infile_rom_buffer, length=2)
+    # print "Size is %s" % size
+    bytestring = infile_rom_buffer.read(size)
     decompressed = decompress(bytestring, complicated=True)
     return decompressed
 
@@ -175,8 +174,8 @@ class Decompressor():
         self.maxaddress = maxaddress
         self.data = None
 
-    def read_data(self, filename):
-        self.data = decompress_at_location(filename, self.address)
+    def read_data(self, infile_rom_buffer: BytesIO):
+        self.data = decompress_at_location(infile_rom_buffer, self.address)
         self.backup = str(self.data)
         #assert decompress(recompress(self.backup)) == self.backup
 
@@ -192,27 +191,28 @@ class Decompressor():
             address = address - self.fakeaddress
         return self.data[address:address+length]
 
-    def compress_and_write(self, fout):
+    def compress_and_write(self, outfile_rom_buffer: BytesIO):
         compressed = recompress(self.data)
         size = len(compressed)
-        #print "Recompressed is %s" % size
+        # print "Recompressed is %s" % size
         if self.maxaddress:
             length = self.maxaddress - self.address
-            fout.seek(self.address)
-            fout.write(bytes([0xFF]*length))
-        fout.seek(self.address)
-        write_multi(fout, size, length=2)
-        fout.write(bytes(compressed))
-        if self.maxaddress and fout.tell() >= self.maxaddress:
+            outfile_rom_buffer.seek(self.address)
+            outfile_rom_buffer.write(bytes([0xFF] * length))
+        outfile_rom_buffer.seek(self.address)
+        write_multi(outfile_rom_buffer, size, length=2)
+        outfile_rom_buffer.write(bytes(compressed))
+        if self.maxaddress and outfile_rom_buffer.tell() >= self.maxaddress:
             raise Exception("Recompressed data out of bounds.")
 
+
 if __name__ == "__main__":
-    sourcefile = argv[1]
-    outfile = argv[2]
-    copyfile(sourcefile, outfile)
+    infile_rom_path = argv[1]
+    outfile_rom_path = argv[2]
+    copyfile(infile_rom_path, outfile_rom_path)
     d = Decompressor(0x2686C, fakeaddress=0x7E5000, maxaddress=0x28A70)
-    d.read_data(sourcefile)
+    d.read_data(infile_rom_path)
     print(["%x" % i for i in d.get_bytestring(0x7E7C43, 0x20)])
     d.writeover(0x7E50F7, [0x0] * 57)
     d.writeover(0x7E501A, [0xEA] * 3)
-    d.compress_and_write(outfile)
+    d.compress_and_write(outfile_rom_path)

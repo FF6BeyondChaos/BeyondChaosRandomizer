@@ -1,0 +1,19 @@
+.addr   main                            628100
+.addr   reentry-address                 02175f
+
+.addr   pointer-address                 61f188
+.def    command-index               44
+
+$main
+:       a9 02
+:       85 b5
+# stops character from standing up
+:       a9 10
+:       14 b0
+# prevents attack name from being displayed
+:       a9 01
+:       14 b2
+:       5c $reentry-address
+
+$pointer-address
+:       $main,2

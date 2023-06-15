@@ -1,0 +1,393 @@
+.addr   jun-checker                     610000
+.addr   jun-check-entity-living         610600
+.addr   jun-check-count-all-living      610680
+.addr   jun-divide                      610860
+.addr   main                            620300
+.addr   main-misc                       620600
+.addr   multiply-damage                 6205e0
+.addr   check-element                   6212e0
+.addr   check-esper                     620e20
+.addr   check-nuke                      620e40
+.addr   check-phys                      621540
+.addr   boost-damage-half               620e00
+.addr   boost-damage-quarter            621440
+.addr   reduce-damage-quarter           621460
+.addr   return                          023373
+.addr   bits                            00bafc
+
+.addr   check-has-esper                 621aa0
+.addr   get-esper-data-offset           621ad0
+
+.addr   background-dances-address       2d8e5b
+
+.def    jun-index-fire          10
+.def    jun-index-ice           11
+.def    jun-index-bolt          12
+.def    jun-index-poison        13
+.def    jun-index-wind          14
+.def    jun-index-pearl         15
+.def    jun-index-earth         16
+.def    jun-index-water         17
+.def    jun-index-fire-font     60
+.def    jun-index-ice-font      61
+.def    jun-index-bolt-font     62
+.def    jun-index-poison-font   63
+.def    jun-index-wind-font     64
+.def    jun-index-pearl-font    65
+.def    jun-index-earth-font    66
+.def    jun-index-water-font    67
+.def    jun-index-fire-sink     68
+.def    jun-index-ice-sink      69
+.def    jun-index-bolt-sink     6a
+.def    jun-index-poison-sink   6b
+.def    jun-index-wind-sink     6c
+.def    jun-index-pearl-sink    6d
+.def    jun-index-earth-sink    6e
+.def    jun-index-water-sink    6f
+
+.def    jun-index-esper         49
+.def    jun-index-nuke          4a
+.def    jun-index-nuke-font     4b
+.def    jun-index-nuke-sink     4c
+.def    jun-index-phys          4d
+.def    jun-index-phys-font     4e
+.def    jun-index-phys-sink     4f
+
+.def    jun-index-esper-attack  9a
+
+.def    jun-index-loner         3c
+.def    jun-index-crisis-arm    3d
+.def    jun-index-gaia-boost    a0
+
+.def    ramuh-index             36
+.def    phoenix-index-plus-one  51
+.def    gaia-elements-bits      10 20 01 04 40 80 08 02
+
+02336f: 5c $main
+
+$main
+:       48 da 5a
+
+:       20 $check-has-esper,2
+:       f0 no-esper-main
+:       a9 jun-index-esper-attack
+:       22 $jun-checker
+:       f0 no-esper-main
+:       da
+:       20 $get-esper-data-offset,2
+:       bf 01 00 c4
+:       0c a1 11
+:       e2 10
+:       fa
+
+.label no-esper-main
+:       a9 jun-index-fire
+:       20 $check-element,2
+:       a9 jun-index-ice
+:       20 $check-element,2
+:       a9 jun-index-bolt
+:       20 $check-element,2
+:       a9 jun-index-poison
+:       20 $check-element,2
+:       a9 jun-index-wind
+:       20 $check-element,2
+:       a9 jun-index-pearl
+:       20 $check-element,2
+:       a9 jun-index-earth
+:       20 $check-element,2
+:       a9 jun-index-water
+:       20 $check-element,2
+
+:       20 $check-esper,2
+:       20 $check-nuke,2
+:       20 $check-phys,2
+
+:       20 $main-misc,2
+
+:       da
+:       ae e2 11
+:       bf $background-dances-address
+:       aa
+:       bf @gaia-elements-address,3
+:       fa
+:       2c a1 11
+:       f0 no-gaia-boost
+:       a9 jun-index-gaia-boost
+:       22 $jun-checker
+:       f0 no-gaia-boost
+:       20 $boost-damage-half,2
+
+.label no-gaia-boost
+:       7a fa 68
+:       ad a2 11
+:       4a
+:       5c $return
+
+.label gaia-elements-address
+:       gaia-elements-bits
+
+$main-misc
+:       da 08
+:       c2 20
+
+:       a9 jun-index-loner 00
+:       22 $jun-checker
+:       f0 no-loner
+
+:       a9 00 00
+:       48
+:       bd 18 30
+:       89 0f 00
+:       f0 no-characters
+:       09 0f 00
+.label no-characters
+:       89 00 3f
+:       f0 no-monsters
+:       09 00 3f
+.label no-monsters
+:       48
+
+:       a2 12
+.label loner-loop
+:       bd 18 30
+:       23 01
+:       f0 loner-skip
+:       22 $jun-check-entity-living
+:       f0 loner-skip
+:       a3 03
+:       1a
+:       83 03
+.label loner-skip
+:       ca ca
+:       10 loner-loop
+
+:       68
+:       a9 05 00
+:       38
+:       e3 01
+:       10 no-underflow
+:       a9 00 00
+.label no-underflow
+:       83 01
+:       68
+:       aa
+:       4e b0 11
+:       20 $multiply-damage,2
+:       fa da
+
+.label no-loner
+:       a9 jun-index-crisis-arm 00
+:       22 $jun-checker
+:       f0 no-junction
+
+:       4e b0 11
+:       4e b0 11
+:       bd f4 3b
+:       a2 0a
+:       22 $jun-divide
+:       20 $multiply-damage,2
+
+.label no-junction
+:       28 fa
+:       60
+
+$multiply-damage
+:       a9 00 00
+.label multiply-loop
+:       e0 00
+:       f0 end-multiply-loop
+:       18
+:       6d b0 11
+:       90 no-overflow
+:       7b
+:       3a
+:       80 end-multiply-loop
+.label no-overflow
+:       ca
+:       80 multiply-loop
+.label end-multiply-loop
+:       8d b0 11
+:       60
+
+$check-element
+:       48 da
+:       86 10
+:       29 07
+:       aa
+:       bf $bits
+:       fa
+:       2c a1 11
+:       f0 check-element-pull-exit
+:       68
+:       22 $jun-checker
+:       f0 no-boost
+:       20 $boost-damage-half,2
+.label  no-boost
+
+:       29 07
+:       aa
+:       18
+:       69 jun-index-fire-font
+:       22 $jun-check-count-all-living
+.label font-loop
+:       3a
+:       30 end-font-loop
+:       20 $boost-damage-quarter,2
+:       80 font-loop
+.label end-font-loop
+
+:       8a
+:       18
+:       69 jun-index-fire-sink
+:       22 $jun-check-count-all-living
+.label sink-loop
+:       3a
+:       30 end-sink-loop
+:       20 $reduce-damage-quarter,2
+:       80 sink-loop
+.label end-sink-loop
+
+.label check-element-exit
+:       a6 10
+:       60
+.label check-element-pull-exit
+:       a6 10
+:       68
+:       60
+
+$check-esper
+:       a5 b5
+:       c9 19
+:       f0 is-esper
+:       c9 02
+:       d0 not-esper
+:       a5 b6
+:       c9 ramuh-index
+:       90 not-esper
+:       c9 phoenix-index-plus-one
+:       b0 not-esper
+.label is-esper
+:       a9 jun-index-esper
+:       22 $jun-checker
+:       f0 not-esper
+:       20 $boost-damage-half,2
+.label not-esper
+:       60
+
+$check-nuke
+:       ad a1 11
+:       d0 not-nuke
+:       ad a2 11
+:       89 01
+:       d0 not-nuke
+:       ad a4 11
+:       89 81
+:       d0 not-nuke
+
+:       a9 jun-index-nuke
+:       22 $jun-checker
+:       f0 no-nuke-boost
+:       20 $boost-damage-half,2
+.label no-nuke-boost
+
+:       a9 jun-index-nuke-font
+:       22 $jun-check-count-all-living
+.label nuke-font-loop
+:       3a
+:       30 end-nuke-font-loop
+:       20 $boost-damage-quarter,2
+:       80 nuke-font-loop
+.label end-nuke-font-loop
+
+:       a9 jun-index-nuke-sink
+:       22 $jun-check-count-all-living
+.label nuke-sink-loop
+:       3a
+:       30 end-nuke-sink-loop
+:       20 $reduce-damage-quarter,2
+:       80 nuke-sink-loop
+.label end-nuke-sink-loop
+
+.label not-nuke
+:       60
+
+$check-phys
+:       ad a2 11
+:       89 01
+:       f0 not-phys
+
+:       a9 jun-index-phys
+:       22 $jun-checker
+:       f0 no-phys-boost
+:       20 $boost-damage-half,2
+.label no-phys-boost
+
+:       a9 jun-index-phys-font
+:       22 $jun-check-count-all-living
+.label phys-font-loop
+:       3a
+:       30 end-phys-font-loop
+:       20 $boost-damage-quarter,2
+:       80 phys-font-loop
+.label end-phys-font-loop
+
+:       a9 jun-index-phys-sink
+:       22 $jun-check-count-all-living
+.label phys-sink-loop
+:       3a
+:       30 end-phys-sink-loop
+:       20 $reduce-damage-quarter,2
+:       80 phys-sink-loop
+.label end-phys-sink-loop
+
+.label not-phys
+:       60
+
+$boost-damage-half
+:       48
+:       c2 20
+:       ad b0 11
+:       4a
+:       18
+:       6d b0 11
+:       90 no-overflow-half
+:       a9 ff ff
+.label no-overflow-half
+:       8d b0 11
+:       e2 20
+:       68
+:       60
+
+$boost-damage-quarter
+:       48
+:       c2 20
+:       ad b0 11
+:       4a 4a
+:       18
+:       6d b0 11
+:       90 no-overflow-quarter
+:       a9 ff ff
+.label no-overflow-quarter
+:       8d b0 11
+:       e2 20
+:       68
+:       60
+
+$reduce-damage-quarter
+:       48
+:       c2 20
+:       ad b0 11
+:       4a
+:       8d b0 11
+:       4a
+:       18
+:       6d b0 11
+:       8d b0 11
+:       e2 20
+:       68
+:       60
+
+VALIDATION
+
+02336f: ad a2 11
+:       4a

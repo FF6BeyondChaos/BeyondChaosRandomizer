@@ -1,5 +1,6 @@
 import dataclasses
 
+from io import BytesIO
 from chestrandomizer import get_event_items
 from character import get_character, get_characters
 from dialoguemanager import get_dialogue, set_dialogue
@@ -69,7 +70,7 @@ def _dir_to_camera_moves(dir):
     return out
 
 
-def recruit_mog_insert(fout, recruit_info):
+def recruit_mog_insert(outfile_rom_buffer: BytesIO, recruit_info):
     maybe_name_location = 0x304000
     maybe_name_low = maybe_name_location & 0xFF
     maybe_name_mid = (maybe_name_location >> 8) & 0xFF
@@ -80,20 +81,20 @@ def recruit_mog_insert(fout, recruit_info):
     name_mid = (name_location >> 8) & 0xFF
     name_high = name_location >> 16
 
-    fout.seek(recruit_info.name_pointer)
-    extra_bytes = fout.read(recruit_info.num_name_bytes)
+    outfile_rom_buffer.seek(recruit_info.name_pointer)
+    extra_bytes = outfile_rom_buffer.read(recruit_info.num_name_bytes)
     level_average_bytes = bytes([0x77, 0x0A]) if recruit_info.special == zone_eater_recruit else bytes([])
     maybe_name_sub = Substitution()
     maybe_name_sub.set_location(maybe_name_location)
     maybe_name_sub.bytestring = bytes([
         0xC0, 0x9F, 0x02, name_low, name_mid, name_high - 0x0A,
     ]) + extra_bytes + level_average_bytes + bytes([0xFE])
-    maybe_name_sub.write(fout)
+    maybe_name_sub.write(outfile_rom_buffer)
 
     name_jump = Substitution()
     name_jump.set_location(recruit_info.name_pointer)
     name_jump.bytestring = bytes([0xB2, maybe_name_low, maybe_name_mid, maybe_name_high - 0x0A] + [0xFD] * (recruit_info.num_name_bytes-4))
-    name_jump.write(fout)
+    name_jump.write(outfile_rom_buffer)
 
     palette = get_character(0xA).palette
     name_sub = Substitution()
@@ -165,22 +166,22 @@ def recruit_mog_insert(fout, recruit_info):
         0x3E, 0x0A, # Delete object 0A
         0x45, # refresh objects
     ]) + extra_bytes + bytes([0xFE])
-    name_sub.write(fout)
+    name_sub.write(outfile_rom_buffer)
 
 
-def recruit_umaro_insert(fout, recruit_info):
+def recruit_umaro_insert(outfile_rom_buffer: BytesIO, recruit_info):
     name_location = 0x304400
     name_low = name_location & 0xFF
     name_mid = (name_location >> 8) & 0xFF
     name_high = name_location >> 16
 
-    fout.seek(recruit_info.name_pointer)
-    extra_bytes = fout.read(recruit_info.num_name_bytes)
+    outfile_rom_buffer.seek(recruit_info.name_pointer)
+    extra_bytes = outfile_rom_buffer.read(recruit_info.num_name_bytes)
 
     name_jump = Substitution()
     name_jump.set_location(recruit_info.name_pointer)
     name_jump.bytestring = bytes([0xB2, name_low, name_mid, name_high - 0x0A] + [0xFD] * (recruit_info.num_name_bytes-4))
-    name_jump.write(fout)
+    name_jump.write(outfile_rom_buffer)
 
     palette = get_character(0xD).palette
     name_sub = Substitution()
@@ -240,22 +241,22 @@ def recruit_umaro_insert(fout, recruit_info):
         0x3E, 0x0D, # Delete object 0D
         0x45, # refresh objects
     ]) + extra_bytes + bytes([0xFE])
-    name_sub.write(fout)
+    name_sub.write(outfile_rom_buffer)
 
 
-def recruit_gogo_insert(fout, recruit_info):
+def recruit_gogo_insert(outfile_rom_buffer: BytesIO, recruit_info):
     name_location = 0x304800
     name_low = name_location & 0xFF
     name_mid = (name_location >> 8) & 0xFF
     name_high = name_location >> 16
 
-    fout.seek(recruit_info.name_pointer)
-    extra_bytes = fout.read(recruit_info.num_name_bytes)
+    outfile_rom_buffer.seek(recruit_info.name_pointer)
+    extra_bytes = outfile_rom_buffer.read(recruit_info.num_name_bytes)
 
     name_jump = Substitution()
     name_jump.set_location(recruit_info.name_pointer)
     name_jump.bytestring = bytes([0xB2, name_low, name_mid, name_high - 0x0A] + [0xFD] * (recruit_info.num_name_bytes-4))
-    name_jump.write(fout)
+    name_jump.write(outfile_rom_buffer)
 
     palette = get_character(0xD).palette
     name_sub = Substitution()
@@ -309,7 +310,7 @@ def recruit_gogo_insert(fout, recruit_info):
         0x3E, 0x0C, # Delete object 0C
         0x45, # refresh objects
     ]) + extra_bytes + bytes([0xFE])
-    name_sub.write(fout)
+    name_sub.write(outfile_rom_buffer)
 
 
 class WoRRecruitInfo:
@@ -338,21 +339,21 @@ class WoRRecruitInfo:
         self.name_camera = name_camera
         self.name_show_full_party = name_show_full_party
 
-    def write_data(self, fout):
+    def write_data(self, outfile_rom_buffer: BytesIO):
         assert self.char_id is not None
         for event_pointer in self.event_pointers:
-            fout.seek(event_pointer)
-            fout.write(bytes([self.char_id]))
+            outfile_rom_buffer.seek(event_pointer)
+            outfile_rom_buffer.write(bytes([self.char_id]))
         for recruited_bit_pointer in self.recruited_bit_pointers:
-            fout.seek(recruited_bit_pointer)
-            fout.write(bytes([0xf0 + self.char_id]))
+            outfile_rom_buffer.seek(recruited_bit_pointer)
+            outfile_rom_buffer.write(bytes([0xf0 + self.char_id]))
         for shop_menu_bit_pointer in self.shop_menu_bit_pointers:
-            fout.seek(shop_menu_bit_pointer)
-            fout.write(bytes([0xe0 + self.char_id]))
+            outfile_rom_buffer.seek(shop_menu_bit_pointer)
+            outfile_rom_buffer.write(bytes([0xe0 + self.char_id]))
         palette = get_character(self.char_id).palette
         for palette_pointer in self.palette_pointers:
-            fout.seek(palette_pointer)
-            fout.write(bytes([palette]))
+            outfile_rom_buffer.seek(palette_pointer)
+            outfile_rom_buffer.write(bytes([palette]))
         for location_id, npc_id in self.location_npcs:
             location = get_location(location_id)
             npc = location.npcs[npc_id]
@@ -366,42 +367,42 @@ class WoRRecruitInfo:
             set_dialogue(index, text)
         if self.caseword_pointers:
             for location in self.caseword_pointers:
-                fout.seek(location)
-                byte = ord(fout.read(1))
-                fout.seek(location)
-                fout.write(bytes([byte & 0x0F | (self.char_id << 4)]))
+                outfile_rom_buffer.seek(location)
+                byte = ord(outfile_rom_buffer.read(1))
+                outfile_rom_buffer.seek(location)
+                outfile_rom_buffer.write(bytes([byte & 0x0F | (self.char_id << 4)]))
 
         if self.special:
-            self.special(fout, self.char_id)
+            self.special(outfile_rom_buffer, self.char_id)
 
         if self.char_id == 0xA and self.special != moogle_cave_recruit:
-            recruit_mog_insert(fout, self)
+            recruit_mog_insert(outfile_rom_buffer, self)
         if self.char_id == 0xC and self.special not in [sasquatch_cave_recruit, moogle_cave_recruit, zone_eater_recruit]:
-            recruit_gogo_insert(fout, self)
+            recruit_gogo_insert(outfile_rom_buffer, self)
         if self.char_id == 0xD and self.special not in [sasquatch_cave_recruit, moogle_cave_recruit, zone_eater_recruit]:
-            recruit_umaro_insert(fout, self)
+            recruit_umaro_insert(outfile_rom_buffer, self)
 
 
-def falcon_recruit(fout, char_id):
+def falcon_recruit(outfile_rom_buffer: BytesIO, char_id):
     falcon_recruit_sub = Substitution()
     falcon_recruit_sub.set_location(0xA4871)
     falcon_recruit_sub.bytestring = bytes([0xD4, 0xF0 + char_id])
-    falcon_recruit_sub.write(fout)
+    falcon_recruit_sub.write(outfile_rom_buffer)
 
     falcon_recruit_sub.set_location(0xA483F)
     falcon_recruit_sub.bytestring = bytes([0x97, 0x5C, 0x77, 0x00 + char_id])
-    falcon_recruit_sub.write(fout)
+    falcon_recruit_sub.write(outfile_rom_buffer)
 
     #falcon_recruit_sub.set_location(0xA5324)
     #falcon_recruit_sub.bytestring = bytes([0xD5, 0xFB])
-    #falcon_recruit_sub.write(fout)
+    #falcon_recruit_sub.write(outfile_rom_buffer)
 
     #falcon_recruit_sub.set_location(0xA5310 + 2 * char_id - (2 if char_id > 6 else 0))
     #falcon_recruit_sub.bytestring = bytes([0xD4, 0xF0 + char_id])
-    #falcon_recruit_sub.write(fout)
+    #falcon_recruit_sub.write(outfile_rom_buffer)
 
 
-def moogle_cave_recruit(fout, char_id):
+def moogle_cave_recruit(outfile_rom_buffer: BytesIO, char_id):
     if char_id == 0x0A:
         return
 
@@ -411,39 +412,39 @@ def moogle_cave_recruit(fout, char_id):
         moogle_cave_recruit_sub = Substitution()
         moogle_cave_recruit_sub.set_location(0xC3975)
         moogle_cave_recruit_sub.bytestring = bytes([0x2F, 0x02])
-        moogle_cave_recruit_sub.write(fout)
+        moogle_cave_recruit_sub.write(outfile_rom_buffer)
 
         moogle_cave_recruit_sub.set_location(0xC3AA0)
         if char_id == 0x0C:
             moogle_cave_recruit_sub.bytestring = bytes([0x4B, 0x0D, 0xCA]) # shrouded in odd clothing
         else:
             moogle_cave_recruit_sub.bytestring = bytes([0x4B, 0xF9, 0xC5]) # Admirer of bone-carvings text
-        moogle_cave_recruit_sub.write(fout)
+        moogle_cave_recruit_sub.write(outfile_rom_buffer)
         return
 
     # Don't rename, stay in got-Mog-in-WoB part
     moogle_cave_recruit_sub = Substitution()
     moogle_cave_recruit_sub.set_location(0xC3974)
     moogle_cave_recruit_sub.bytestring = bytes([0xFD] * 7)
-    moogle_cave_recruit_sub.write(fout)
+    moogle_cave_recruit_sub.write(outfile_rom_buffer)
 
 
-def sasquatch_cave_recruit(fout, char_id):
+def sasquatch_cave_recruit(outfile_rom_buffer: BytesIO, char_id):
     assert char_id != 0x0A
 
     umaro_name = get_character(char_id).newname
     for umaro_id in [0x10f, 0x110]:
-        change_enemy_name(fout, umaro_id, umaro_name)
+        change_enemy_name(outfile_rom_buffer, umaro_id, umaro_name)
 
     if char_id == 0x0C:
         gogo_sub = Substitution()
         gogo_sub.set_location(0xCD811)
         gogo_sub.bytestring = bytes([0x4B, 0x0D, 0xCA]) # shrouded in odd clothing
-        gogo_sub.write(fout)
+        gogo_sub.write(outfile_rom_buffer)
 
         gogo_sub.set_location(0xCD79A)
         gogo_sub.bytestring = bytes([0x40, 0x0C, 0x0C]) # assign Gogo properties to Gogo
-        gogo_sub.write(fout)
+        gogo_sub.write(outfile_rom_buffer)
         return
 
     if char_id == 0x0D:
@@ -453,7 +454,7 @@ def sasquatch_cave_recruit(fout, char_id):
     # Level average character instead of setting Umaro's properties
     sasquatch_cave_recruit_sub.set_location(0xCD79A)
     sasquatch_cave_recruit_sub.bytestring = bytes([0x77, char_id, 0xFD])
-    sasquatch_cave_recruit_sub.write(fout)
+    sasquatch_cave_recruit_sub.write(outfile_rom_buffer)
 
     # Skip over rename
     sasquatch_cave_recruit_sub.set_location(0xCD7F5)
@@ -461,10 +462,10 @@ def sasquatch_cave_recruit(fout, char_id):
 
         0xC0, 0x27, 0x01, 0x40, 0xD8, 0x02 # jump
     ])
-    sasquatch_cave_recruit_sub.write(fout)
+    sasquatch_cave_recruit_sub.write(outfile_rom_buffer)
 
 
-def zone_eater_recruit(fout, char_id):
+def zone_eater_recruit(outfile_rom_buffer: BytesIO, char_id):
     if char_id == 0x0C:
         return
 
@@ -480,36 +481,39 @@ def zone_eater_recruit(fout, char_id):
     zone_eater_recruit_sub = Substitution()
     zone_eater_recruit_sub.set_location(0xB81CF)
     zone_eater_recruit_sub.bytestring = bytes(prefix + [0x3D, char_id, 0xC0, 0x27, 0x01, 0x00, 0x82, 0x01])
-    zone_eater_recruit_sub.write(fout)
+    zone_eater_recruit_sub.write(outfile_rom_buffer)
+
 
 def collapsing_house_recruit(unused_fout, unused_char_id):
     pass
 
-def manage_wor_recruitment(fout, shuffle_wor, random_treasure, include_gau, alternate_gogo):
+
+def manage_wor_recruitment(outfile_rom_buffer: BytesIO, shuffle_wor, random_treasure, include_gau, alternate_gogo):
     if alternate_gogo:
-        _setup_alternate_zone_eater(fout, include_gau)
+        _setup_alternate_zone_eater(outfile_rom_buffer, include_gau)
 
         # Change Gogo's textbox if you don't have the right character
         gogo_text_sub = Substitution()
         gogo_text_sub.bytestring = bytes([0x4B, 0xE5, 0x00])
         gogo_text_sub.set_location(0xC33A6)
-        gogo_text_sub.write(fout)
+        gogo_text_sub.write(outfile_rom_buffer)
 
     if shuffle_wor:
-        wor_free_char, collapsing_house_char = _shuffle_recruit_locations(fout, random_treasure, include_gau, alternate_gogo)
+        wor_free_char, collapsing_house_char = _shuffle_recruit_locations(outfile_rom_buffer, random_treasure,
+                                                                          include_gau, alternate_gogo)
     else:
         wor_free_char = 0x0B
         collapsing_house_char = 0x05
 
     if alternate_gogo:
-        _manage_gogo_recruitment(fout, collapsing_house_char)
+        _manage_gogo_recruitment(outfile_rom_buffer, collapsing_house_char)
 
-    _start_of_wor_event(fout, alternate_gogo)
+    _start_of_wor_event(outfile_rom_buffer, alternate_gogo)
 
     return wor_free_char
 
 
-def _start_of_wor_event(fout, alternate_gogo):
+def _start_of_wor_event(outfile_rom_buffer: BytesIO, alternate_gogo):
     new_events = [
         # Set names for Mog, Gogo, Umaro in case they appear in text
         0x7F, 0x0C, 0x0C, # Set name for GOGO
@@ -532,7 +536,7 @@ def _start_of_wor_event(fout, alternate_gogo):
     ] + new_events + [
         0xFE, # Return
     ]
-    wor_bits_sub.write(fout)
+    wor_bits_sub.write(outfile_rom_buffer)
     next_event = wor_bits_sub.location + len(wor_bits_sub.bytestring)
 
     # call the new subroutine above in place of CB4B4B
@@ -542,11 +546,10 @@ def _start_of_wor_event(fout, alternate_gogo):
     wor_bits_sub2 = Substitution()
     wor_bits_sub2.set_location(0xA5334)
     wor_bits_sub2.bytestring = [0xB2, ptr_low, ptr_mid, ptr_high]
-    wor_bits_sub2.write(fout)
+    wor_bits_sub2.write(outfile_rom_buffer)
 
 
-
-def _shuffle_recruit_locations(fout, random_treasure, include_gau, alternate_gogo):
+def _shuffle_recruit_locations(outfile_rom_buffer: BytesIO, random_treasure, include_gau, alternate_gogo):
     candidates = [0x00, 0x01, 0x02, 0x05, 0x07, 0x08, 0x0A, 0x0D]
     locke_event_pointers = [0xc2c48, 0xc2c51, 0xc2c91, 0xc2c9d, 0xc2c9e, 0xc2caf, 0xc2cb8, 0xc2cc5, 0xc2cca, 0xc2cd8, 0xc2ce3, 0xc2ce9, 0xc2cee, 0xc2cf4, 0xc2cfa, 0xc2d0b, 0xc2d33, 0xc2e32, 0xc2e4a, 0xc2e80, 0xc2e86, 0xc2e8b, 0xc2e91, 0xc2ea5, 0xc2eb1, 0xc2ec4, 0xc2f0b, 0xc2fe1, 0xc3102, 0xc3106, 0xc3117, 0xc311d, 0xc3124, 0xc3134, 0xc313d, 0xc3163, 0xc3183, 0xc3185, 0xc3189, 0xc318b, 0xc318e, 0xc3191, 0xc3197, 0xc31c7, 0xc31cb, 0xc31e2, 0xc31e8, 0xc31ed, 0xc31f2, 0xc31f8, 0xc3210, 0xc3215, 0xc321d, 0xc3229, 0xc322f, 0xc3235, 0xc323b]
     locke_event_pointers_2 = [0xc3244, 0xc324a, 0xc324f, 0xc3258, 0xc326a]
@@ -697,13 +700,13 @@ def _shuffle_recruit_locations(fout, random_treasure, include_gau, alternate_gog
         elif info.special == collapsing_house_recruit:
             collapsing_house_char = candidate
 
-        info.write_data(fout)
+        info.write_data(outfile_rom_buffer)
         get_character(candidate).wor_location = info.label
 
     return wor_free_char, collapsing_house_char
 
 
-def _manage_gogo_recruitment(fout, collapsing_house_char):
+def _manage_gogo_recruitment(outfile_rom_buffer: BytesIO, collapsing_house_char):
     character_specific_locations = {
         0: {'map': 0xE2, 'x': 84, 'y': 17, 'facing': 0, 'move': True}, # Zozo tower top *Terra only*,
         #1: *Locke only*
@@ -849,7 +852,7 @@ def _manage_gogo_recruitment(fout, collapsing_house_char):
     recruit_event = Substitution()
     recruit_event.set_location(0xCE5EF)
     recruit_event.bytestring = [0xB2, 0x00, 0x50, 0x26, 0xFE] # Call subroutine, return
-    recruit_event.write(fout)
+    recruit_event.write(outfile_rom_buffer)
 
     recruit_event = Substitution()
     recruit_event.set_location(0x305000)
@@ -1077,14 +1080,14 @@ def _manage_gogo_recruitment(fout, collapsing_house_char):
         0xB2, 0x34, 0x2E, 0x01, # enable collision
         0xFE, # Return
     ]
-    recruit_event.write(fout)
+    recruit_event.write(outfile_rom_buffer)
     next_event = recruit_event.location + len(recruit_event.bytestring)
 
     recruit_event = Substitution()
     recruit_event.bytestring = [0x10 + gogo_npc.npcid]
     for location in [0xB81CA, 0xB8204, 0xB820E, 0xB821C, 0xB8221, 0xB822D, 0xB822F, 0xB8236]:
         recruit_event.set_location(location)
-        recruit_event.write(fout)
+        recruit_event.write(outfile_rom_buffer)
 
     # Called after naming Gogo
     ptr_low = next_event & 0xFF
@@ -1097,7 +1100,7 @@ def _manage_gogo_recruitment(fout, collapsing_house_char):
         0xB2, ptr_low, ptr_mid, ptr_high, # Call subroutine below
         0xFD, 0xFD, # NOP
     ]
-    recruit_event.write(fout)
+    recruit_event.write(outfile_rom_buffer)
 
     recruit_event = Substitution()
     recruit_event.set_location(next_event)
@@ -1110,18 +1113,18 @@ def _manage_gogo_recruitment(fout, collapsing_house_char):
     ] + show_npcs + [
         0xFE #return
     ]
-    recruit_event.write(fout)
+    recruit_event.write(outfile_rom_buffer)
     next_event = recruit_event.location + len(recruit_event.bytestring)
 
     # Turn off Gogo bit at beginning of game
-    fout.seek(0xE0A0 + gogo_npc.memaddr)
-    value = ord(fout.read(1))
+    outfile_rom_buffer.seek(0xE0A0 + gogo_npc.memaddr)
+    value = ord(outfile_rom_buffer.read(1))
     value &= ~(1 << gogo_npc.membit)
-    fout.seek(0xE0A0 + gogo_npc.memaddr)
-    fout.write(bytes([value]))
+    outfile_rom_buffer.seek(0xE0A0 + gogo_npc.memaddr)
+    outfile_rom_buffer.write(bytes([value]))
 
 
-def _setup_alternate_zone_eater(fout, include_gau):
+def _setup_alternate_zone_eater(outfile_rom_buffer: BytesIO, include_gau):
      # replace zone eater gogo with gau, instead of giving him for free on the airship
     zone_eater_loc = get_location(0x116)
     gau_npc = zone_eater_loc.npcs[0]
@@ -1136,11 +1139,11 @@ def _setup_alternate_zone_eater(fout, include_gau):
         return
 
     # Turn on Gau bit at beginning of game
-    fout.seek(0xE0A0 + gau_npc.memaddr)
-    value = ord(fout.read(1))
+    outfile_rom_buffer.seek(0xE0A0 + gau_npc.memaddr)
+    value = ord(outfile_rom_buffer.read(1))
     value |= (1 << gau_npc.membit)
-    fout.seek(0xE0A0 + gau_npc.memaddr)
-    fout.write(bytes([value]))
+    outfile_rom_buffer.seek(0xE0A0 + gau_npc.memaddr)
+    outfile_rom_buffer.write(bytes([value]))
 
     text = '<GAU>: Uwao, aooh!<wait 60 frames> I’m <GAU>!<wait 60 frames><line>I’m your friend!<wait 60 frames><line>Let’s travel together!'
     set_dialogue(0x286, text)
@@ -1182,7 +1185,7 @@ def _setup_alternate_zone_eater(fout, include_gau):
     ptr_mid = (jump_location & 0xFF00) >> 8
     ptr_high = ((jump_location - 0xA0000) & 0xFF0000) >> 16
     gau_event.bytestring = bytes_1[:-3] + [ptr_low, ptr_mid, ptr_high] + bytes_2 + bytes_3
-    gau_event.write(fout)
+    gau_event.write(outfile_rom_buffer)
 
     global alt_zone_eater_recruit
     alt_zone_eater_recruit = WoRRecruitInfo(
@@ -1211,10 +1214,11 @@ def _setup_alternate_zone_eater(fout, include_gau):
     gau_event_shim.bytestring = [
         0xB2, ptr_low, ptr_mid, ptr_high, 0xFE
     ]
-    gau_event_shim.write(fout)
+    gau_event_shim.write(outfile_rom_buffer)
 
 
-def manage_wor_skip(fout, wor_free_char=0xB, airship=False, dragon=False, alternate_gogo=False, esper_replacements=None):
+def manage_wor_skip(outfile_rom_buffer: BytesIO, wor_free_char=0xB, airship=False,
+                    dragon=False, alternate_gogo=False, esper_replacements=None):
     characters = get_characters()
 
     espers = [0x0, 0x1, 0x2, 0x3, 0x5, 0x6, 0x7, 0x8, 0x11, 0x13, 0x14, 0x17]
@@ -1226,7 +1230,7 @@ def manage_wor_skip(fout, wor_free_char=0xB, airship=False, dragon=False, altern
     startsub0 = Substitution()
     startsub0.bytestring = bytes([0xB2, 0x1E, 0xDD, 0x00, 0xFE])
     startsub0.set_location(0xC9A4F)
-    startsub0.write(fout)
+    startsub0.write(outfile_rom_buffer)
 
     # change code at start of game to warp to wor
     wor_sub = Substitution()
@@ -1376,7 +1380,7 @@ def manage_wor_skip(fout, wor_free_char=0xB, airship=False, dragon=False, altern
         0xFE
     ])
     wor_sub.set_location(0xADD1E)
-    wor_sub.write(fout)
+    wor_sub.write(outfile_rom_buffer)
     wor_sub2 = Substitution()
     wor_sub2.bytestring = bytearray([])
 
@@ -1480,26 +1484,26 @@ def manage_wor_skip(fout, wor_free_char=0xB, airship=False, dragon=False, altern
             ])
 
     wor_sub2.set_location(0xA9749)
-    wor_sub2.write(fout)
+    wor_sub2.write(outfile_rom_buffer)
 
     # set more Lores as starting Lores
     odds = [True, True, False]
     address = 0x26F564
-    fout.seek(address)
-    extra_known_lores = read_multi(fout, length=3)
+    outfile_rom_buffer.seek(address)
+    extra_known_lores = read_multi(outfile_rom_buffer, length=3)
     for i in range(24):
         if random.choice(odds):
             extra_known_lores |= (1 << i)
         if random.choice([True, False, False]):
             odds.append(False)
-    fout.seek(address)
-    write_multi(fout, extra_known_lores, length=3)
+    outfile_rom_buffer.seek(address)
+    write_multi(outfile_rom_buffer, extra_known_lores, length=3)
 
     if dragon:
-        set_alternate_dragon_locations(fout)
+        set_alternate_dragon_locations(outfile_rom_buffer)
 
 
-def set_alternate_dragon_locations(fout):
+def set_alternate_dragon_locations(outfile_rom_buffer: BytesIO):
     # TODO: Add more locations and randomly pick two?
     # These NPCs happen to match the NPC numbers of the dragons
     # in Kefka's tower so we can jump into the same event.
@@ -1538,4 +1542,4 @@ def set_alternate_dragon_locations(fout):
         0xC0, 0xB4, 0x86, 0x20, 0x19, 0x02,  # If haven't beat this dragon, branch to $CC1920
         0xFE # return
     ])
-    skull_dragon_event.write(fout)
+    skull_dragon_event.write(outfile_rom_buffer)

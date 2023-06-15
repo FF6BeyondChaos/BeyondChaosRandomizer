@@ -1,0 +1,609 @@
+.addr   jun-checker                     610000
+.addr   jun-divide                      610860
+.addr   jun-rng1                        610820
+.addr   jun-queue-command               610ff0
+.addr   jun-check-entity-living         610600
+.addr   jun-check-count-all-living      610680
+.addr   jun-deduct-item-if-possible     610740
+.addr   jun-set-target-allies           610780
+.addr   jun-count-bits                  6108c0
+.addr   main                            620c00
+.addr   main-nihopalaoa                 620c60
+.addr   main-calc                       621dc0
+.addr   check-calc                      621c80
+.addr   do-distribute-characters        621d00
+.addr   do-distribute-monsters          621d60
+.addr   check-nihopalaoa                620e80
+.addr   check-heal                      620f20
+.addr   check-brace                     621280
+.addr   check-catch                     6212a0
+.addr   boost-healing-half              620ea0
+.addr   boost-healing-double            620ec0
+.addr   boost-damage-double             620ee0
+.addr   boost-healing-quarter           620f60
+.addr   reduce-healing-quarter          620f80
+.addr   reduce-damage-half              620ce0
+.addr   reverse-damage                  620fa0
+.addr   check-precision                 620fc0
+.addr   do-auto-potion                  621100
+.addr   check-nonzero-nonlethal-damage  621160
+.addr   retarget-salve                  621180
+.addr   do-blood-restriction            6207c0
+
+.def    jun-index-blood             0a
+.def    jun-index-heal-boost        53
+.def    jun-index-heal-font         70
+.def    jun-index-heal-sink         71
+.def    jun-index-reverse           52
+.def    jun-index-chemist           5e
+.def    jun-index-nihopalaoa        5f
+.def    jun-index-precision         5b
+.def    jun-index-catch             77
+.def        throw-index                 08
+.def    jun-index-brace             7f
+.def    jun-index-damage-split      88
+.def    jun-index-distribute        89
+.def    jun-index-auto-potion       80
+.def        jun-index-salve             07
+.def        potion-index                e9
+
+
+022af2: 22 $main-nihopalaoa
+
+0262f1: 22 $main-calc
+
+0262f7: 22 $main
+:       ea ea
+
+$main
+:       b9 e4 33
+:       c9 ff ff
+:       f0 no-check-heal
+:       20 $check-heal,2
+:       20 $do-blood-restriction,2
+:       80 heal-or-damage
+
+.label no-check-heal
+:       b9 d0 33
+:       c9 ff ff
+:       f0 no-junction
+
+.label heal-or-damage
+:       20 $check-brace,2
+:       20 $check-catch,2
+
+:       a5 b5
+:       29 ff 00
+:       c9 01 00
+:       d0 no-chemist
+:       a9 jun-index-chemist 00
+:       22 $jun-checker
+:       f0 no-chemist
+:       20 $boost-healing-double,2
+:       20 $boost-damage-double,2
+
+.label no-chemist
+:       ad 7c 3a
+:       29 ff 00
+:       c9 22 00
+:       f0 no-reverse
+:       a9 jun-index-reverse 00
+:       22 $jun-checker
+:       f0 no-reverse
+:       20 $reverse-damage,2
+
+.label no-reverse
+:       20 $check-precision,2
+:       20 $do-auto-potion,2
+
+.label no-junction
+:       b9 d0 33
+:       d9 e4 33
+:       6b
+
+$main-nihopalaoa
+:       da
+:       bb
+:       20 $check-nihopalaoa,2
+:       f0 exit-no-nihopalaoa
+:       a9 05
+:       1c a4 11
+:       a9 04
+:       1c a2 11
+.label exit-no-nihopalaoa
+:       fa
+:       bf 00 50 d8
+:       6b
+
+$check-heal
+:       a9 jun-index-heal-boost 00
+:       22 $jun-checker
+:       f0 no-heal-boost
+:       20 $boost-healing-half,2
+.label no-heal-boost
+
+:       a9 jun-index-heal-font 00
+:       22 $jun-check-count-all-living
+.label heal-font-loop
+:       3a
+:       30 end-heal-font-loop
+:       20 $boost-healing-quarter,2
+:       80 heal-font-loop
+.label end-heal-font-loop
+
+:       a9 jun-index-heal-sink 00
+:       22 $jun-check-count-all-living
+.label heal-sink-loop
+:       3a
+:       30 end-heal-sink-loop
+:       20 $reduce-healing-quarter,2
+:       80 heal-sink-loop
+.label end-heal-sink-loop
+
+.label not-heal
+:       60
+
+$do-blood-restriction
+:       b9 18 30
+:       3c 18 30
+:       f0 no-blood
+:       e2 20
+:       ad a5 11
+:       f0 no-blood
+:       a9 01
+:       2c a4 11
+:       f0 no-blood
+:       a9 jun-index-blood
+:       22 $jun-checker
+:       f0 no-blood
+:       c2 20
+:       9e e4 33
+.label no-blood
+:       c2 20
+:       60
+
+$main-calc
+:       64 f0
+:       64 f2
+:       a0 12
+.label main-calc-loop
+:       20 $check-calc,2
+:       88 88
+:       10 main-calc-loop
+:       6b
+
+$check-brace
+:       da
+:       bb
+:       b9 a1 3a
+:       89 02 00
+:       f0 no-brace
+:       a9 jun-index-brace 00
+:       22 $jun-checker
+:       f0 no-brace
+:       20 $reduce-damage-half,2
+.label no-brace
+:       fa
+:       60
+
+$check-nihopalaoa
+:       48 08
+:       e2 20
+:       a5 b5
+:       c9 01
+:       d0 not-nihopalaoa
+:       a9 jun-index-nihopalaoa
+:       22 $jun-checker
+:       f0 not-nihopalaoa
+:       28 68
+:       c2 02
+:       60
+.label not-nihopalaoa
+:       28 68
+:       e2 02
+:       60
+
+$reverse-damage
+:       b9 d0 33
+:       48
+:       b9 e4 33
+:       99 d0 33
+:       68
+:       99 e4 33
+:       60
+
+$check-precision
+:       a5 b8
+:       da
+:       22 $jun-count-bits
+:       e0 02
+:       90 no-precision-pull
+:       fa
+
+:       e2 20
+:       a9 jun-index-precision
+:       22 $jun-checker
+:       f0 no-precision
+
+:       e0 08
+:       b0 enemy-precision
+:       c0 08
+:       b0 no-precision
+:       80 yes-precision
+
+.label enemy-precision
+:       c0 08
+:       90 no-precision
+
+.label yes-precision
+:       c2 20
+:       a9 ff ff
+:       99 d0 33
+:       60
+.label no-precision-pull
+:       fa
+.label no-precision
+:       c2 20
+:       60
+
+$check-calc
+:       da
+:       20 $check-nonzero-nonlethal-damage,2
+:       f0 no-damage-split
+:       bb
+:       a9 jun-index-damage-split 00
+:       22 $jun-checker
+:       f0 no-damage-split
+:       fa da
+:       fe d0 33
+:       f0 calc-attacker-damage-not-null
+:       de d0 33
+.label  calc-attacker-damage-not-null
+:       b9 d0 33
+:       4a 4a
+:       18
+:       7d d0 33
+:       9d d0 33
+:       b9 d0 33
+:       48
+:       4a 4a
+:       99 d0 33
+:       68
+:       38
+:       f9 d0 33
+:       99 d0 33
+
+.label no-damage-split
+:       b9 e4 33
+:       1a
+:       f0 no-distribute
+:       bb
+:       a9 jun-index-distribute 00
+:       22 $jun-checker
+:       f0 no-distribute
+:       b9 e4 33
+:       18
+:       79 f4 3b
+:       d9 1c 3c
+:       90 no-distribute
+:       38
+:       f9 1c 3c
+:       48
+:       b9 1c 3c
+:       38
+:       f9 f4 3b
+:       99 e4 33
+:       68
+:       c0 08
+:       b0 distribute-is-monster
+:       20 $do-distribute-characters,2
+:       80 no-distribute
+.label distribute-is-monster
+:       20 $do-distribute-monsters,2
+
+.label no-distribute
+:       fa
+:       60
+
+$do-distribute-characters
+:       da 5a 48
+:       a0 00
+:       a2 06
+
+:       e2 20
+.label dist-char-count-loop
+:       8a
+:       c3 03
+:       f0 dist-char-count-skip
+:       22 $jun-check-entity-living
+:       f0 dist-char-count-skip
+:       c8
+.label dist-char-count-skip
+:       ca ca
+:       10 dist-char-count-loop
+:       c2 20
+
+:       c0 00
+:       f0 dist-char-exit
+:       bb
+:       68
+:       22 $jun-divide
+:       48
+
+:       a2 06
+.label dist-char-heal-loop
+:       e2 20
+:       8a
+:       c3 03
+:       f0 dist-char-heal-skip
+:       22 $jun-check-entity-living
+:       f0 dist-char-heal-skip
+:       c2 20
+:       bd e4 33
+:       1a
+:       f0 dist-char-heal-not-null
+:       3a
+.label dist-char-heal-not-null
+:       18
+:       63 01
+:       9d e4 33
+.label dist-char-heal-skip
+:       ca ca
+:       10 dist-char-heal-loop
+
+.label dist-char-exit
+:       c2 20
+:       68 7a fa
+:       60
+
+$do-distribute-monsters
+:       da 5a 48
+:       a0 00
+:       a2 12
+
+:       e2 20
+.label dist-mon-count-loop
+:       8a
+:       c3 03
+:       f0 dist-mon-count-skip
+:       22 $jun-check-entity-living
+:       f0 dist-mon-count-skip
+:       c8
+.label dist-mon-count-skip
+:       ca ca
+:       e0 07
+:       b0 dist-mon-count-loop
+:       c2 20
+
+:       c0 00
+:       f0 dist-mon-exit
+:       bb
+:       68
+:       22 $jun-divide
+:       48
+
+:       a2 12
+.label dist-mon-heal-loop
+:       e2 20
+:       8a
+:       c3 03
+:       f0 dist-mon-heal-skip
+:       22 $jun-check-entity-living
+:       f0 dist-mon-heal-skip
+:       c2 20
+:       bd e4 33
+:       1a
+:       f0 dist-mon-heal-not-null
+:       3a
+.label dist-mon-heal-not-null
+:       18
+:       63 01
+:       9d e4 33
+.label dist-mon-heal-skip
+:       ca ca
+:       e0 07
+:       b0 dist-mon-heal-loop
+
+.label dist-mon-exit
+:       c2 20
+:       68 7a fa
+:       60
+
+$check-catch
+:       da
+:       a5 b5
+:       29 ff 00
+:       c9 throw-index 00
+:       d0 catch-exit
+:       bb
+:       a9 jun-index-catch 00
+:       22 $jun-checker
+:       f0 catch-exit
+:       9e d0 33
+:       e0 08
+:       b0 catch-exit
+
+:       22 $jun-rng1
+:       b0 catch-exit
+
+:       e2 20
+:       a9 b0
+:       8d 01 34
+:       a5 b6
+:       8d 35 2f
+:       9d f4 32
+:       bd 18 30
+:       0c 8c 3a
+:       c2 20
+
+.label catch-exit
+:       fa
+:       60
+
+$boost-healing-half
+:       b9 e4 33
+:       c9 ff ff
+:       f0 exit-healing-half
+:       4a
+:       18
+:       79 e4 33
+:       90 healing-half-no-overflow
+:       a9 fe ff
+.label healing-half-no-overflow
+:       99 e4 33
+.label exit-healing-half
+:       60
+
+$boost-healing-quarter
+:       48
+:       b9 e4 33
+:       c9 ff ff
+:       f0 exit-healing-quarter
+:       4a 4a
+:       18
+:       79 e4 33
+:       90 healing-quarter-no-overflow
+:       a9 fe ff
+.label healing-quarter-no-overflow
+:       99 e4 33
+.label exit-healing-quarter
+:       68
+:       60
+
+$reduce-healing-quarter
+:       48
+:       b9 e4 33
+:       c9 ff ff
+:       f0 exit-healing-reduce
+:       4a
+:       99 e4 33
+:       4a
+:       18
+:       79 e4 33
+:       99 e4 33
+.label exit-healing-reduce
+:       68
+:       60
+
+$boost-healing-double
+:       b9 e4 33
+:       c9 ff ff
+:       f0 exit-healing-double
+:       0a
+:       90 healing-double-no-overflow
+:       a9 fe ff
+.label healing-double-no-overflow
+:       99 e4 33
+.label exit-healing-double
+:       60
+
+$boost-damage-double
+:       b9 d0 33
+:       c9 ff ff
+:       f0 exit-damage-double
+:       0a
+:       90 damage-double-no-overflow
+:       a9 fe ff
+.label damage-double-no-overflow
+:       99 d0 33
+.label exit-damage-double
+:       60
+
+$reduce-damage-half
+:       b9 d0 33
+:       c9 ff ff
+:       f0 exit-damage-half
+:       4a
+:       99 d0 33
+.label exit-damage-half
+:       60
+
+$check-nonzero-nonlethal-damage
+:       48
+:       b9 d0 33
+:       f0 non-non-is-zero
+:       1a
+:       f0 non-non-is-zero
+:       3a
+:       d9 f4 3b
+:       b0 non-non-is-lethal
+:       68
+:       c2 02
+:       60
+.label non-non-is-zero
+.label non-non-is-lethal
+:       68
+:       e2 02
+:       60
+
+$retarget-salve
+:       a9 jun-index-salve
+:       22 $jun-checker
+:       f0 no-salve
+:       22 $jun-set-target-allies
+.label no-salve
+:       60
+
+$do-auto-potion
+:       da
+
+# check for decisive blow
+:       ad 1a 34
+:       29 ff 00
+:       f0 auto-potion-exit
+
+# check for mp damage
+:       a9 80 00
+:       2c a3 11
+:       d0 auto-potion-exit
+
+:       20 $check-nonzero-nonlethal-damage,2
+:       f0 auto-potion-exit
+
+:       bb
+:       a9 jun-index-auto-potion 00
+:       22 $jun-checker
+:       f0 auto-potion-exit
+
+:       a9 00 00
+:       e0 08
+:       90 skip-monster-rng-check
+:       22 $jun-rng1
+:       90 do-not-deduct-item
+:       80 auto-potion-fail
+.label skip-monster-rng-check
+:       a9 potion-index 00
+:       22 $jun-deduct-item-if-possible
+:       f0 auto-potion-fail
+:       e2 20
+:       a9 potion-index
+:       9d f4 32
+:       c2 20
+.label do-not-deduct-item
+
+:       bd 18 30
+:       85 b8
+:       e2 20
+:       20 $retarget-salve,2
+
+:       a9 01
+:       8d 7a 3a
+:       a9 potion-index
+:       8d 7b 3a
+:       22 $jun-queue-command
+:       80 auto-potion-exit
+.label auto-potion-fail
+.label auto-potion-exit
+:       c2 20
+:       fa
+:       60
+
+VALIDATION
+
+0262f1: 64 f0
+:       64 f2
+
+022af2: bf 00 50 d8
+
+0262f7: b9 d0 33
+:       d9 e4 33

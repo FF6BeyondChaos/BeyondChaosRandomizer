@@ -1,3 +1,4 @@
+from io import BytesIO
 from utils import SHOP_TABLE, utilrandom as random
 from itemrandomizer import get_ranked_items, get_item
 
@@ -24,12 +25,10 @@ class ShopBlock:
     def set_id(self, shopid):
         self.shopid = shopid
 
-    def read_data(self, filename):
-        f = open(filename, 'r+b')
-        f.seek(self.pointer)
-        self.misc = ord(f.read(1))
-        self.items = bytes(f.read(8))
-        f.close()
+    def read_data(self, rom_file_buffer: BytesIO=False):
+        rom_file_buffer.seek(self.pointer)
+        self.misc = ord(rom_file_buffer.read(1))
+        self.items = bytes(rom_file_buffer.read(8))
 
     def write_data(self, fout):
         fout.seek(self.pointer)
@@ -79,7 +78,7 @@ class ShopBlock:
                 self.misc &= 0x0F
                 break
 
-    def mutate_items(self, fout, crazy_shops=False):
+    def mutate_items(self, outfile_rom_buffer: BytesIO, crazy_shops=False):
         items = get_ranked_items()
         if crazy_shops:
             weapons_tools = [i for i in items if i.is_weapon or i.is_tool]
@@ -142,26 +141,26 @@ class ShopBlock:
         if not new_items:
             return
 
-        for i in new_items:
-            if i.price < 3:
-                price = i.rank()
+        for item in new_items:
+            if item.price < 3:
+                price = item.rank()
                 modifier = price // 2
                 price += random.randint(0, modifier)
                 while random.randint(1, 4) < 4:
                     price += random.randint(0, modifier)
                 price = min(price, 0xFEFE)
-                i.price = price
+                item.price = price
 
                 zerocount = 0
-                while i.price > 100:
-                    i.price = i.price // 10
+                while item.price > 100:
+                    item.price = item.price // 10
                     zerocount += 1
 
                 while zerocount > 0:
-                    i.price = i.price * 10
+                    item.price = item.price * 10
                     zerocount += -1
 
-                i.write_stats(fout)
+                item.write_stats(outfile_rom_buffer)
 
         self.items = [i.itemid for i in new_items]
         self.items = sorted(set(self.items))
@@ -177,9 +176,9 @@ class ShopBlock:
         return priciest.price
 
 
-def buy_owned_breakable_tools(fout):
-    fout.seek(0x3b7f4)
-    fout.write(b'\x27')
+def buy_owned_breakable_tools(outfile_rom_buffer: BytesIO):
+    outfile_rom_buffer.seek(0x3b7f4)
+    outfile_rom_buffer.write(b'\x27')
 
 
 all_shops = None
