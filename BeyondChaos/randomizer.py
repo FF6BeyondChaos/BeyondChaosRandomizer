@@ -78,7 +78,7 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime suplexwrecks questionablecontent expboost:10.0|1603333081"
+TEST_SEED = "CE-4.2.1|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime suplexwrecks questionablecontent|1603333081"
 # FLARE GLITCH TEST_SEED = "CE-4.2.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-4.2.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #TEST_SEED = "CE-4.2.1|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
@@ -5366,7 +5366,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
     if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
         manage_commands(commands)
-        # improve_gogo_status_menu(outfile_rom_buffer)
+
     reseed()
 
     spells = get_ranked_spells(infile_rom_buffer)
@@ -5381,7 +5381,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         if Options_.is_flag_active('sketch'):
             NEVER_REPLACE += ["sketch"]
         _, freespaces = manage_commands_new(commands)
-        # improve_gogo_status_menu(outfile_rom_buffer)
+
     reseed()
 
     if Options_.is_flag_active("sprint"):
@@ -5449,8 +5449,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     if Options_.is_flag_active("random_items"):
         manage_items(items, changed_commands=changed_commands)
         buy_owned_breakable_tools(outfile_rom_buffer)
-        # improve_item_display(outfile_rom_buffer)
-        # improve_rage_menu(outfile_rom_buffer)
+
     reseed()
 
     manage_doom_gaze(outfile_rom_buffer)
@@ -5458,7 +5457,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     if Options_.is_flag_active("random_enemy_stats"):
         aispaces = manage_final_boss(aispaces)
         monsters = manage_monsters()
-        # improve_rage_menu(outfile_rom_buffer)
+
     reseed()
 
     if Options_.is_flag_active("random_enemy_stats") or \
@@ -5561,7 +5560,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     reseed()
 
     if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
-        # do this after swapping beserk
+        # do this after swapping berserk
         manage_tempchar_commands()
     reseed()
 
@@ -5788,7 +5787,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     if Options_.is_flag_active("random_dances"):
         if 0x13 not in changed_commands:
             manage_dances()
-            #improve_dance_menu(outfile_rom_buffer)
+
     reseed()
 
     if Options_.is_flag_active('remonsterate'):
