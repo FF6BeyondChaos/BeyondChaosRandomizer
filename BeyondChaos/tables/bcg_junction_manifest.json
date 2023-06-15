@@ -180,7 +180,9 @@
         "decisive":             "9c",
         "maintenance":          "9d",
         "true_paladin":         "9e",
-        "popular":              "9f"
+        "popular":              "9f",
+        "gaia_boost":           "a0",
+        "gaia_assist":          "a1"
     },
 
     "junction_short_names": {
@@ -340,7 +342,9 @@
         "decisive":             "Decisive",
         "maintenance":          "Maintenance",
         "true_paladin":         "True Paladin",
-        "popular":              "Popularity"
+        "popular":              "Popularity",
+        "gaia_boost":           "Gaia Boost",
+        "gaia_assist":          "Gaia Assist"
     },
 
     "junction_tags": {
@@ -500,7 +504,9 @@
         "decisive":             ["death"],
         "maintenance":          ["item"],
         "true_paladin":         ["defend"],
-        "popular":              ["defend"]
+        "popular":              ["defend"],
+        "gaia_boost":           ["dance", "fire", "ice", "bolt", "poison", "wind", "pearl", "earth", "water"],
+        "gaia_assist":          ["dance", "defend", "magic"]
     },
 
     "esper_tags":       "tags_esper.json",
@@ -1230,6 +1236,13 @@
         ],
         "popular": [
             "patch_junction_cover.txt"
+        ],
+        "gaia_boost": [
+            "patch_junction_damage_modification.txt"
+        ],
+        "gaia_assist": [
+            "patch_junction_prehit_trigger.txt",
+            "patch_junction_command_spell_proc.txt"
         ]
     }
 }
