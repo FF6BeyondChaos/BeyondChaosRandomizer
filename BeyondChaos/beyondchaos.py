@@ -610,14 +610,11 @@ class Window(QMainWindow):
                     nbox.flag = flag['object']
                     nbox.default = int(flag['object'].default_value)
                     nbox.setMinimum(int(flag['object'].minimum_value))
+                    nbox.setMaximum(int(flag['object'].maximum_value))
                     nbox.setFixedWidth(control_fixed_width)
                     nbox.setFixedHeight(control_fixed_height)
                     if flagname == "cursepower":
-                        nbox.setMaximum(255)
-                        nbox.default = 255
-                    if flagname == "randomboost":
-                        nbox.setMaximum(255)
-                        nbox.default = 0
+                        nbox.setSpecialValueText("Random")
                     nbox.setValue(nbox.default)
                     nbox.text = flagname
 
