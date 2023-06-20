@@ -615,6 +615,8 @@ class Window(QMainWindow):
                     nbox.setFixedHeight(control_fixed_height)
                     if flagname == "cursepower":
                         nbox.setSpecialValueText("Random")
+                    else:
+                        nbox.setSpecialValueText("Off")
                     nbox.setValue(nbox.default)
                     nbox.text = flagname
 
@@ -1014,7 +1016,7 @@ class Window(QMainWindow):
             elif mode == "advancedplayer":
                 self.GamePresets['Advanced Player'] = (
                     "b c d e f g h i j k m n o p q r s t u w y z alasdraco capslockoff partyparty makeover "
-                    "johnnydmad notawaiter dancingmaduin bsiab mimetime randombosses electricboogaloo dancelessons "
+                    "johnnydmad notawaiter dancingmaduin:1 bsiab mimetime randombosses electricboogaloo dancelessons "
                     "questionablecontent remonsterate swdtechspeed:random "
                 )
             elif mode == "chaoticplayer":

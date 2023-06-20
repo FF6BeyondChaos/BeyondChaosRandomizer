@@ -412,8 +412,8 @@ NORMAL_FLAGS = [
     # battle codes
     Flag(name='collateraldamage',
          description="ITEM BREAK MODE",
-         long_description="All pieces of equipment break for spells. Characters only have the Fight and "
-                          "Item commands, and enemies will use items drastically more often than usual.",
+         long_description="All equipment break for spells. Characters only have Fight and "
+                          "Item commands. Enemies will use items drastically more often than usual.",
          category="battle",
          inputtype="boolean"),
     Flag(name='cursepower',
@@ -431,10 +431,13 @@ NORMAL_FLAGS = [
          inputtype="boolean"),
     Flag(name='dancingmaduin',
          description="RESTRICTED ESPERS MODE",
-         long_description="Restricts Esper usage such that most Espers can only be equipped by one character. "
-                          "Also usually changes what spell the Paladin Shld teaches.",
+         long_description="Espers can only be equipped by specific characters. Higher value = higher chance of "
+                          "more characters. Usually changes Paladin Shld spell.",
          category="battle",
-         inputtype="boolean"),
+         inputtype="integer",
+         default_value="0",
+         minimum_value=0,
+         maximum_value=25),
     Flag(name='darkworld',
          description="SLASHER'S DELIGHT MODE",
          long_description="Drastically increases the difficulty of the seed, akin to a hard mode. "
