@@ -86,7 +86,7 @@ def allocate_espers(ancient_cave, espers, characters, multiplier,
         num_users = 1
         if e.id not in [crusader_id, ragnarok_id] and (20 - (4 * e.rank)) * multiplier >= random.random() * 100:
             num_users += 1
-            while num_users < 15 and random.choice([True] + [False] * (e.rank + 2)):
+            while num_users < len(char_ids) and random.choice([True] + [False] * (e.rank + 2)):
                 num_users += 1
         users = random.sample(characters, num_users)
         chars_for_esper.append([c.id for c in users])
