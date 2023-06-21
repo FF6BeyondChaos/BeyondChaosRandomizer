@@ -409,6 +409,16 @@ def patch_filename_to_bytecode(patchfilename, mapping=None, parameters=None):
             else:
                 next_address += 1
 
+    for defname in sorted(definitions):
+        for aname in sorted(code_addresses):
+            if defname in aname.lower():
+                raise Exception('Address "%s" cannot contain '
+                                'definition "%s".' % (aname, defname))
+        for lname in sorted(labels):
+            if defname in lname.lower():
+                raise Exception('Label "%s" cannot contain '
+                                'definition "%s".' % (lname, defname))
+
     for read_into in (patch, validation):
         for (address, filename) in sorted(read_into):
             code = read_into[address, filename]
