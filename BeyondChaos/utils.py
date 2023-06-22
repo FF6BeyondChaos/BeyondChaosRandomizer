@@ -77,6 +77,7 @@ POEMS_TABLE = path.join(custom_path, "poems.txt")
 MODIFIERS_TABLE = path.join(custom_path, "moves.txt")
 MOVES_TABLE = path.join(custom_path, "moves.txt")
 CORAL_TABLE = path.join(custom_path, "coralnames.txt")
+SONGS_TABLE = path.join(custom_path, "songs.txt")
 
 parent_connection = None
 
