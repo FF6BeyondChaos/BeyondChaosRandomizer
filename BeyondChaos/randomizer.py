@@ -811,8 +811,6 @@ def manage_commands(commands: Dict[str, CommandBlock]):
     rage_blank_sub.set_location(0x47AA0)
     rage_blank_sub.write(outfile_rom_buffer)
 
-    can_always_access_esper_menu(outfile_rom_buffer)
-
     # Let x-magic user use magic menu.
     enable_xmagic_menu_sub = Substitution()
     enable_xmagic_menu_sub.bytestring = bytes([0xDF, 0x78, 0x4D, 0xC3,  # CMP $C34D78,X
@@ -5387,6 +5385,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         if Options_.is_flag_active("shuffle_commands") or Options_.is_flag_active("replace_commands"):
             auto_learn_rage()
 
+    can_always_access_esper_menu(outfile_rom_buffer)
     if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
         manage_commands(commands)
 
