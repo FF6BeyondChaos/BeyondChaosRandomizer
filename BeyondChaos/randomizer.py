@@ -61,7 +61,7 @@ from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
 from towerrandomizer import randomize_tower
 from utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    FINAL_BOSS_AI_TABLE, SKIP_EVENTS_TABLE, DANCE_NAMES_TABLE,
-                   DIVERGENT_TABLE,
+                   DIVERGENT_TABLE, SONGS_TABLE,
                    get_long_battle_text_pointer,
                    Substitution, shorttexttable, name_to_bytes,
                    hex2int, int2bytes, read_multi, write_multi,
@@ -79,7 +79,7 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "CE-5.0.0|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime suplexwrecks questionablecontent|1603333081"
+TEST_SEED = "CE-5.0.0|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime suplexwrecks questionablecontent|1603333081"
 # FLARE GLITCH TEST_SEED = "CE-5.0.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-5.0.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #TEST_SEED = "CE-5.0.0|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
@@ -5516,7 +5516,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     reseed()
 
     # Check expboost, gpboost, and mpboost values
-    for flag_name in ["expboost", "gpboost", "mpboost", "dancingmaduin"]:
+    for flag_name in ["expboost", "gpboost", "mpboost"]:
         if flag := Options_.is_flag_active(flag_name):
             while True:
                 try:
@@ -5541,9 +5541,11 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                     pipe_print(error_message + " Deactivating flag.")
                     Options_.deactivate_flag(flag_name)
                     break
-                flag.value = float(
-                    input(error_message + " Please enter a multiplier between " + str(flag.minimum_value) +
-                          " and " + str(flag.maximum_value) + " for " + flag_name + ".\n>"))
+                flag.value = input(error_message + " Please enter a multiplier between " + str(flag.minimum_value) +
+                    " and " + str(flag.maximum_value) + " for " + flag_name + ".\n>")
+
+
+
 
     esperrage_spaces = [FreeBlock(0x26469, 0x26469 + 919)]
     if Options_.is_flag_active("random_espers"):
@@ -5913,7 +5915,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
     if has_music:
         from utils import custom_path
-        randomize_music(outfile_rom_buffer, Options_, playlist_path=custom_path , playlist_filename="songs.txt",
+        randomize_music(outfile_rom_buffer, Options_, playlist_path=custom_path, playlist_filename=SONGS_TABLE,
             opera=opera, form_music_overrides=form_music)
         log(get_music_spoiler(), section="music")
     reseed()

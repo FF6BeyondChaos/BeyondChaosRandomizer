@@ -431,13 +431,14 @@ NORMAL_FLAGS = [
          inputtype="boolean"),
     Flag(name='dancingmaduin',
          description="RESTRICTED ESPERS MODE",
-         long_description="Espers can only be equipped by specific characters. Higher value = higher chance of "
-                          "more characters. Usually changes Paladin Shld spell.",
+         long_description="Espers can only be equipped by specific characters. Choose the minimum amount "
+                          "of characters per Esper. Usually changes Paladin Shld spell. "
+                          "\nRandom chooses the same random minimum for all Espers; Chaos chooses them separately.",
          category="battle",
-         inputtype="integer",
-         default_value="0",
-         minimum_value=0,
-         maximum_value=25),
+         inputtype="combobox",
+         choices=("Off", "Chaos","Random", "1", "2", "3", "4", "5", "6", "7", "8", "10", "11", "12", "13"),
+         default_value="Vanilla",
+         default_index=0),
     Flag(name='darkworld',
          description="SLASHER'S DELIGHT MODE",
          long_description="Drastically increases the difficulty of the seed, akin to a hard mode. "
