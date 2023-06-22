@@ -248,34 +248,35 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
 ## CONTRIBUTORS
 
     Abyssonym - original Beyond Chaos creator
-    subtractionsoup - former maintainer of Beyond Chaos EX 
+    subtractionsoup - former maintainer of Beyond Chaos EX
     CtrlxZ - created or modified a bunch of sprites for the randomizer
-	HoxNorf - ported over sprites and music for the randomizer
+    HoxNorf - ported over sprites and music for the randomizer
     DarkSlash - madworld, darkworld, randombosses codes and some other things for KatN mode; current maintainer of Beyond Chaos CE (send help)
     emberling - speeddial, randomized music, alasdraco, dialoguemanager, converted a ton of music, and reworked palettes and sprite replacement, FF6 music player patch
-	Rushlight - made music arrangements for the randomizer
+    Rushlight - made music arrangements for the randomizer
     Lockirby2 - The worringtriad and notawaiter codes
     myself086 - new menu features and natural magic expansion
     Dracovious - Created new GUI and R-Limit, and some other codes
-	GreenKnight5 - First GUI, Cecilbot
-	DrInsanoPHD - Refactoring code, character stats randomizer, bug fixes, lots of help with CE releases
-	Crimdahl - Rotating status patch, dancelessons code, removeflashing code, lots of help with CE releases, 
-	fusoyeahhh - lots of help with CE releases
-	RazzleStorm - refactoring some code, adding type hints, lots of help with CE releases
-	CDude - lots of help with event codes for CE versions, fixing Bio Blast and Flash/Schiller animations
-	Cecil188 - ported over music, owner of the Discord, and overall helper with everything
-	
+    GreenKnight5 - First GUI, Cecilbot
+    DrInsanoPHD - Refactoring code, character stats randomizer, bug fixes, lots of help with CE releases
+    Crimdahl - Rotating status patch, dancelessons code, removeflashing code, lots of help with CE releases,
+    fusoyeahhh - lots of help with CE releases
+    RazzleStorm - refactoring some code, adding type hints, lots of help with CE releases
+    CDude - lots of help with event codes for CE versions, fixing Bio Blast and Flash/Schiller animations
+    Cecil188 - ported over music, owner of the Discord, and overall helper with everything
+
 
 ## EXTERNAL PATCHES USED
 
-	Synchysi - esper restriction
-	Lenophis - unhardcoded tintinabar
+    Synchysi - esper restriction
+    Lenophis - unhardcoded tintinabar
     Novalia Spirit - "Allergic Dog" bug fix, Selective Reequip
     Leet Sketcher - Y Equip Relics, rotating statuses patch, Imp Skimp
     Assassin - That Damn Yellow Streak fix, sketch fix
-	Power Panda - Divergent Paths: The 3 Scenarios
-	HatZen08 - Coliseum Rewards Display
-	madsiur, tsushiy, Lenophis - FF6 Music Player
+    Power Panda - Divergent Paths: The 3 Scenarios
+    HatZen08 - Coliseum Rewards Display
+    madsiur, tsushiy, Lenophis - FF6 Music Player
+    SilentEnigma, Imzogelmo - MP damage color digits
 
 ## SPECIAL THANKS
 

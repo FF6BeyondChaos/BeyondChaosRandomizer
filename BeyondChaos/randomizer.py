@@ -18,8 +18,6 @@ from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
 from character import get_characters, get_character, equip_offsets, character_list, load_characters
 from bcg_junction import (JunctionManager,
-                          write_patch as jm_write_patch,
-                          tblpath as jm_tblpath,
                           set_addressing_mode as jm_set_addressing_mode)
 from chestrandomizer import mutate_event_items, get_event_items
 from config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
@@ -47,11 +45,14 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
 from myselfpatches import myself_patches
 from musicinterface import randomize_music, manage_opera, get_music_spoiler, music_init, get_opera_log
 from options import ALL_MODES, NORMAL_FLAGS, Options_
-from patches import (allergic_dog, banon_life3, evade_mblock,
-                     death_abuse, no_kutan_skip, show_coliseum_rewards,
-                     cycle_statuses, no_dance_stumbles, fewer_flashes,
-                     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx, apply_namingway,
-                     improved_party_gear, patch_doom_gaze, nicer_poison, fix_xzone, imp_skimp, hidden_relic, y_equip_relics, fix_gogo_portrait)
+from patches import (
+    allergic_dog, banon_life3, evade_mblock, death_abuse, no_kutan_skip,
+    show_coliseum_rewards, cycle_statuses, no_dance_stumbles, fewer_flashes,
+    change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break,
+    title_gfx, apply_namingway, improved_party_gear, patch_doom_gaze,
+    nicer_poison, fix_xzone, imp_skimp, hidden_relic, y_equip_relics,
+    fix_gogo_portrait, vanish_doom, mp_color_digits,
+    can_always_access_esper_menu, verify_patchlist)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -809,9 +810,7 @@ def manage_commands(commands: Dict[str, CommandBlock]):
     rage_blank_sub.set_location(0x47AA0)
     rage_blank_sub.write(outfile_rom_buffer)
 
-    enable_esper_menu_patch = os.path.join(
-        jm_tblpath, 'patch_can_always_access_esper_menu.txt')
-    jm_write_patch(outfile_rom_buffer, enable_esper_menu_patch)
+    can_always_access_esper_menu(outfile_rom_buffer)
 
     # Let x-magic user use magic menu.
     enable_xmagic_menu_sub = Substitution()
@@ -2186,8 +2185,7 @@ def manage_rng():
 
 
 def manage_balance(newslots: bool = True):
-    vanish_doom_patch = os.path.join(jm_tblpath, 'patch_vanish_doom.txt')
-    jm_write_patch(outfile_rom_buffer, vanish_doom_patch)
+    vanish_doom(outfile_rom_buffer)
     evade_mblock(outfile_rom_buffer)
     fix_xzone(outfile_rom_buffer)
     imp_skimp(outfile_rom_buffer)
@@ -6019,6 +6017,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     fix_flash_and_bioblaster(outfile_rom_buffer)
     title_gfx(outfile_rom_buffer)
     improved_party_gear(outfile_rom_buffer)
+    mp_color_digits(outfile_rom_buffer)
     manage_doom_gaze(outfile_rom_buffer)
 
     if Options_.is_flag_active("swdtechspeed"):
@@ -6086,6 +6085,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     rewrite_title(text="FF6 BCCE %s" % seed)
     validate_rom_expansion()
     rewrite_checksum()
+    verify_patchlist(outfile_rom_buffer)
 
     if not application or application != "web":
         with open(outfile_rom_path, 'wb+') as f:

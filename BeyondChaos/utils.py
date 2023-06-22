@@ -78,8 +78,6 @@ MODIFIERS_TABLE = path.join(custom_path, "moves.txt")
 MOVES_TABLE = path.join(custom_path, "moves.txt")
 CORAL_TABLE = path.join(custom_path, "coralnames.txt")
 
-MYSELF_BLOB = path.join(tblpath, 'myself_blob.bin')
-
 parent_connection = None
 
 
