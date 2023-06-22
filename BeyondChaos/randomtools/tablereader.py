@@ -233,15 +233,16 @@ def patch_filename_to_bytecode(patchfilename, mapping=None, parameters=None):
                 value = int(value, 0x10)
             except ValueError:
                 pass
-        if isinstance(value, int):
-            s = ''
-            while True:
-                s = ' '.join([s, '{0:0>2x}'.format(value & 0xff)]).strip()
-                value >>= 8
-                if not value:
-                    break
-            value = s
         return value
+
+    def hexify(value):
+        s = ''
+        while True:
+            s = ' '.join([s, '{0:0>2x}'.format(value & 0xff)]).strip()
+            value >>= 8
+            if not value:
+                break
+        return s.strip()
 
     if parameters is not None:
         for parameter_name, value in parameters.items():
@@ -299,6 +300,13 @@ def patch_filename_to_bytecode(patchfilename, mapping=None, parameters=None):
         for match in defparmatches:
             to_replace, name, value = match
             value = clean_parameter(value)
+            if isinstance(value, int):
+                if (':' in line and
+                        line.index(':') < line.index(to_replace)):
+                    value = hexify(value)
+                else:
+                    value = '%x' % value
+
             if name not in PATCH_PARAMETERS:
                 line = line.replace(to_replace, value)
             else:
@@ -310,7 +318,14 @@ def patch_filename_to_bytecode(patchfilename, mapping=None, parameters=None):
                     continue
                 to_replace = '{{%s}}' % name
                 if to_replace in line:
-                    line = line.replace(to_replace, PATCH_PARAMETERS[name])
+                    value = PATCH_PARAMETERS[name]
+                    if isinstance(value, int):
+                        if (':' in line and
+                                line.index(':') < line.index(to_replace)):
+                            value = hexify(value)
+                        else:
+                            value = '%x' % value
+                    line = line.replace(to_replace, value)
 
         if line.startswith(".def"):
             _, name, value = line.split(' ', 2)

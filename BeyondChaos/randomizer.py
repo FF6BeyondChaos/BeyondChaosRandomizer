@@ -117,6 +117,7 @@ JUNCTION_MANAGER_PARAMETERS = {
     'berserker-index': 0xd,
     'monster-equip-steal-enabled': 0,
     'monster-equip-drop-enabled': 0,
+    'esper-allocations-address': 0x3f858,
     }
 jm_set_addressing_mode('hirom')
 
@@ -4933,6 +4934,14 @@ def diverge():
         outfile_rom_buffer.write(data)
 
 
+def initialize_esper_allocation_table(outfile_rom_buffer: BytesIO):
+    NUM_ESPERS = 27
+    data = b'\xff' * (NUM_ESPERS) * 2
+    outfile_rom_buffer.seek(
+        JUNCTION_MANAGER_PARAMETERS['esper-allocations-address'])
+    outfile_rom_buffer.write(data)
+
+
 def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
     jm.set_seed(seed)
 
@@ -5532,10 +5541,15 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     reseed()
 
     esperrage_spaces = [FreeBlock(0x26469, 0x26469 + 919)]
+
+    # Even if we don't enable dancingmaduin, we must construct an
+    # esper allocation table for other modules that rely on it
+    # (i.e. junction effects)
+    initialize_esper_allocation_table(outfile_rom_buffer)
     if Options_.is_flag_active("random_espers"):
         dancingmaduin = Options_.is_flag_active('dancingmaduin')
         if dancingmaduin:
-            allocate_espers(
+            esper_allocations_address = allocate_espers(
                 Options_.is_flag_active('ancientcave'),
                 get_espers(infile_rom_buffer),
                 get_characters(),
@@ -5544,6 +5558,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                 esper_replacements
             )
             nerf_paladin_shield()
+            verify = JUNCTION_MANAGER_PARAMETERS['esper-allocations-address']
+            assert esper_allocations_address == verify
         manage_espers(esperrage_spaces, esper_replacements)
     reseed()
     myself_locations = myself_patches(outfile_rom_buffer)

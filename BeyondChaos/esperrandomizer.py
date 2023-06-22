@@ -69,7 +69,7 @@ def get_candidates(myrank, set_lower=True):
 
 def allocate_espers(ancient_cave, espers, characters, user_choice,
         outfile_rom_buffer: BytesIO,
-        replacements=None):
+        replacements=None) -> int:
     char_ids = list(range(14)) # everyone including Gogo
 
     characters = [c for c in characters if c.id in char_ids]
@@ -162,6 +162,16 @@ def allocate_espers(ancient_cave, espers, characters, user_choice,
                                          0xAD, 0xFF, 0x9E, 0xAA, 0xAE, 0xA2, 0xA9, 0xBE, 0x00] + [
                                          i for sublist in map(int2bytes, char_mask_for_esper) for i in sublist]
     esper_allocator_sub.write(outfile_rom_buffer)
+
+    table_address = esper_allocator_sub.bytestring[29:29+3]
+    table_address = ((table_address[2] << 16) |
+                     (table_address[1] << 8) |
+                     table_address[0])
+    expected_address = (
+        esper_allocator_sub.location + len(esper_allocator_sub.bytestring)
+        - (len(char_mask_for_esper)*2))
+    assert expected_address == table_address & 0x3FFFFF
+    return expected_address
 
 
 class EsperBlock:
