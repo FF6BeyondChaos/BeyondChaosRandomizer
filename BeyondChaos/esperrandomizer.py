@@ -73,6 +73,8 @@ def allocate_espers(ancient_cave, espers, characters, user_choice,
     char_ids = list(range(14)) # everyone including Gogo
 
     characters = [c for c in characters if c.id in char_ids]
+    preassigned_espers = random.sample(espers, len(characters))
+    preassignments = {e: c for (e, c) in zip(preassigned_espers, characters)}
 
     chars_for_esper = []
     max_rank = max(espers, key=lambda e: e.rank).rank
@@ -100,6 +102,11 @@ def allocate_espers(ancient_cave, espers, characters, user_choice,
             while num_users < 15 and random.choice([True] + [False] * (e.rank + 2)):
                 num_users += 1
         users = random.sample(characters, num_users)
+        if e in preassignments:
+            c = preassignments[e]
+            if c not in users:
+                users[0] = c
+            assert c in users
         chars_for_esper.append([c.id for c in users])
 
     if not ancient_cave:
