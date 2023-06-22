@@ -67,10 +67,10 @@ def get_candidates(myrank, set_lower=True):
     return fresh
 
 
-def allocate_espers(ancient_cave, espers, characters, multiplier,
+def allocate_espers(ancient_cave, espers, characters, user_choice,
         outfile_rom_buffer: BytesIO,
         replacements=None):
-    char_ids = list(range(12)) + [13]  # everyone but Gogo
+    char_ids = list(range(14)) # everyone but Gogo
 
     characters = [c for c in characters if c.id in char_ids]
 
@@ -82,11 +82,17 @@ def allocate_espers(ancient_cave, espers, characters, multiplier,
         crusader_id = replacements[crusader_id].id
         ragnarok_id = replacements[ragnarok_id].id
 
+    if str(user_choice).lower() == "random":
+        user_choice = random.randint(1,13)
+
     for e in espers:
-        num_users = 1
-        if e.id not in [crusader_id, ragnarok_id] and (20 - (4 * e.rank)) * multiplier >= random.random() * 100:
+        if str(user_choice).lower() == "chaos":
+            num_users = random.randint(1, 13)
+        else:
+            num_users = int(user_choice)
+        if e.id not in [crusader_id, ragnarok_id] and random.randint(1, 25) >= 25 - max_rank + e.rank:
             num_users += 1
-            while num_users < len(char_ids) and random.choice([True] + [False] * (e.rank + 2)):
+            while num_users < 15 and random.choice([True] + [False] * (e.rank + 2)):
                 num_users += 1
         users = random.sample(characters, num_users)
         chars_for_esper.append([c.id for c in users])

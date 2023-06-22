@@ -79,7 +79,7 @@ VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "CE-5.0.0|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime suplexwrecks questionablecontent|1603333081"
+TEST_SEED = "CE-5.0.0|normal|b c d e f g h i j k l m n o p q r s t u w y z johnnydmad makeover partyparty electricboogaloo randombosses dancelessons swdtechspeed:random alasdraco capslockoff dancingmaduin:chaos notawaiter bsiab questionablecontent|1603333081"
 # FLARE GLITCH TEST_SEED = "CE-5.0.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-5.0.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #TEST_SEED = "CE-5.0.0|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
@@ -5283,6 +5283,38 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     flags = flags.lower()
     activation_string = Options_.activate_from_string(flags)
 
+    # Check expboost, gpboost, and mpboost values
+    for flag_name in ["expboost", "gpboost", "mpboost", "randomboost"]:
+        if flag := Options_.is_flag_active(flag_name):
+            while True:
+                try:
+                    if flag.maximum_value < float(flag.value):
+                        error_message = "The supplied value for " + flag_name + " was greater than the maximum " \
+                                                                                "allowed value of " + str(
+                            flag.maximum_value) + "."
+                    elif float(flag.value) < flag.minimum_value:
+                        error_message = "The supplied value for " + flag_name + " was less than the minimum " \
+                                                                                "allowed value of " + str(
+                            flag.minimum_value) + "."
+                    elif not flag.value or type(flag.value) == bool or str(flag.value).lower() == "nan":
+                        error_message = "No value was supplied for " + flag_name + "."
+                    else:
+                        flag.value = float(flag.value)
+                        if flag.inputtype == "integer":
+                            flag.value = int(flag.value)
+                        break
+                except ValueError:
+                    error_message = "The supplied value for " + flag_name + " was not a number."
+
+                if not application or application != "console":
+                    # Users in the GUI or web cannot fix the flags after generation begins, so deactivate the flag.
+                    pipe_print(error_message + " Deactivating flag.")
+                    Options_.deactivate_flag(flag_name)
+                    break
+                flag.value = input(error_message + " Please enter a multiplier between " + str(flag.minimum_value) +
+                                   " and " + str(flag.maximum_value) + " for " + flag_name + ".\n>")
+
+
     if not application or application != "web":
         if version and version != VERSION:
             pipe_print("WARNING! Version mismatch! "
@@ -5290,7 +5322,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     s = "Using seed: %s|%s|%s|%s" % (VERSION,
                                      Options_.mode.name,
                                      " ".join([flag.name if isinstance(flag.value, bool) else
-                                               flag.name + ":" + flag.value for flag in Options_.active_flags]),
+                                               flag.name + ":" + str(flag.value) for flag in Options_.active_flags]),
                                      seed)
     pipe_print(s)
     log(s, section=None)
@@ -5316,23 +5348,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     pipe_print(activation_string)
 
     if Options_.is_flag_active('randomboost'):
-        random_boost_value = Options_.get_flag_value('randomboost')
-        if type(random_boost_value) == bool:
-            if application and application != "console":
-                pipe_print("ERROR: No value was supplied for randomboost flag. Skipping flag.")
-            else:
-                while True:
-                    random_boost_value = input("Please enter a randomness "
-                                               "multiplier value (blank or <=0 for tierless): ")
-                    try:
-                        random_boost_value = int(random_boost_value)
-                        break
-                    except ValueError:
-                        pipe_print("The supplied value for the randomness multiplier was not valid.")
-        if not type(random_boost_value) == bool and int(random_boost_value) <= 0:
-            set_randomness_multiplier(None)
-        else:
-            set_randomness_multiplier(int(random_boost_value))
+        set_randomness_multiplier(int(Options_.get_flag_value('randomboost')))
     elif Options_.is_flag_active('madworld'):
         set_randomness_multiplier(None)
 
@@ -5514,38 +5530,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         # do this after items
         manage_equipment(items)
     reseed()
-
-    # Check expboost, gpboost, and mpboost values
-    for flag_name in ["expboost", "gpboost", "mpboost"]:
-        if flag := Options_.is_flag_active(flag_name):
-            while True:
-                try:
-                    if flag.maximum_value < float(flag.value):
-                        error_message = "The supplied value for " + flag_name + " was greater than the maximum " \
-                                                                                "allowed value of " + str(
-                            flag.maximum_value) + "."
-                    elif float(flag.value) < flag.minimum_value:
-                        error_message = "The supplied value for " + flag_name + " was less than the minimum " \
-                                                                                "allowed value of " + str(
-                            flag.minimum_value) + "."
-                    elif not flag.value or type(flag.value) == bool or str(flag.value).lower() == "nan":
-                        error_message = "No value was supplied for " + flag_name + "."
-                    else:
-                        flag.value = float(flag.value)
-                        break
-                except ValueError:
-                    error_message = "The supplied value for " + flag_name + " was not a number."
-
-                if not application or application != "console":
-                    # Users in the GUI or web cannot fix the flags after generation begins, so deactivate the flag.
-                    pipe_print(error_message + " Deactivating flag.")
-                    Options_.deactivate_flag(flag_name)
-                    break
-                flag.value = input(error_message + " Please enter a multiplier between " + str(flag.minimum_value) +
-                    " and " + str(flag.maximum_value) + " for " + flag_name + ".\n>")
-
-
-
 
     esperrage_spaces = [FreeBlock(0x26469, 0x26469 + 919)]
     if Options_.is_flag_active("random_espers"):
