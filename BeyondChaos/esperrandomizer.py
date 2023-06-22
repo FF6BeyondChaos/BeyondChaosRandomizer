@@ -67,7 +67,9 @@ def get_candidates(myrank, set_lower=True):
     return fresh
 
 
-def allocate_espers(ancient_cave, espers, characters, fout, replacements=None):
+def allocate_espers(ancient_cave, espers, characters, multiplier,
+        outfile_rom_buffer: BytesIO,
+        replacements=None):
     char_ids = list(range(12)) + [13]  # everyone but Gogo
 
     characters = [c for c in characters if c.id in char_ids]
@@ -82,9 +84,9 @@ def allocate_espers(ancient_cave, espers, characters, fout, replacements=None):
 
     for e in espers:
         num_users = 1
-        if e.id not in [crusader_id, ragnarok_id] and random.randint(1, 25) >= 25 - max_rank + e.rank:
+        if e.id not in [crusader_id, ragnarok_id] and (20 - (4 * e.rank)) * multiplier >= random.random() * 100:
             num_users += 1
-            while num_users < 15 and random.choice([True] + [False] * (e.rank + 2)):
+            while num_users < len(char_ids) and random.choice([True] + [False] * (e.rank + 2)):
                 num_users += 1
         users = random.sample(characters, num_users)
         chars_for_esper.append([c.id for c in users])
@@ -112,29 +114,29 @@ def allocate_espers(ancient_cave, espers, characters, fout, replacements=None):
     esper_allocator_sub = Substitution()
     esper_allocator_sub.set_location(0x31B61)
     esper_allocator_sub.bytestring = [0x20, 0x00, 0xF8]
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
     esper_allocator_sub.set_location(0x35524)
     esper_allocator_sub.bytestring = [0x20, 0x07, 0xF8]
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
     esper_allocator_sub.set_location(0x358E1)
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
     esper_allocator_sub.set_location(0x359B1)
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
     esper_allocator_sub.set_location(0x35593)
     esper_allocator_sub.bytestring = [0xA9, 0x2C]
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
     esper_allocator_sub.set_location(0x355B2)
     esper_allocator_sub.bytestring = [0x20, 0x2E, 0xF8]
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
     esper_allocator_sub.set_location(0x358E8)
     esper_allocator_sub.bytestring = [0xC9, 0x20, 0xF0, 0x16]
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
     esper_allocator_sub.set_location(0x3F800)
 
@@ -148,7 +150,7 @@ def allocate_espers(ancient_cave, espers, characters, fout, replacements=None):
                                          0x80, 0xF4, 0x60, 0x9C, 0x80, 0x21, 0x4C, 0xD9, 0x7F, 0x82, 0x9A, 0xA7, 0xC3,
                                          0xAD, 0xFF, 0x9E, 0xAA, 0xAE, 0xA2, 0xA9, 0xBE, 0x00] + [
                                          i for sublist in map(int2bytes, char_mask_for_esper) for i in sublist]
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
 
 class EsperBlock:

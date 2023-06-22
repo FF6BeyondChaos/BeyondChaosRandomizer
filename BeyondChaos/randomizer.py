@@ -5515,12 +5515,48 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         manage_equipment(items)
     reseed()
 
+    # Check expboost, gpboost, and mpboost values
+    for flag_name in ["expboost", "gpboost", "mpboost", "dancingmaduin"]:
+        if flag := Options_.is_flag_active(flag_name):
+            while True:
+                try:
+                    if flag.maximum_value < float(flag.value):
+                        error_message = "The supplied value for " + flag_name + " was greater than the maximum " \
+                                                                                "allowed value of " + str(
+                            flag.maximum_value) + "."
+                    elif float(flag.value) < flag.minimum_value:
+                        error_message = "The supplied value for " + flag_name + " was less than the minimum " \
+                                                                                "allowed value of " + str(
+                            flag.minimum_value) + "."
+                    elif not flag.value or type(flag.value) == bool or str(flag.value).lower() == "nan":
+                        error_message = "No value was supplied for " + flag_name + "."
+                    else:
+                        flag.value = float(flag.value)
+                        break
+                except ValueError:
+                    error_message = "The supplied value for " + flag_name + " was not a number."
+
+                if not application or application != "console":
+                    # Users in the GUI or web cannot fix the flags after generation begins, so deactivate the flag.
+                    pipe_print(error_message + " Deactivating flag.")
+                    Options_.deactivate_flag(flag_name)
+                    break
+                flag.value = float(
+                    input(error_message + " Please enter a multiplier between " + str(flag.minimum_value) +
+                          " and " + str(flag.maximum_value) + " for " + flag_name + ".\n>"))
+
     esperrage_spaces = [FreeBlock(0x26469, 0x26469 + 919)]
     if Options_.is_flag_active("random_espers"):
-        if Options_.is_flag_active('dancingmaduin'):
-            allocate_espers(Options_.is_flag_active('ancientcave'), get_espers(infile_rom_buffer), get_characters(),
-                            outfile_rom_buffer,
-                            esper_replacements)
+        dancingmaduin = Options_.is_flag_active('dancingmaduin')
+        if dancingmaduin:
+            allocate_espers(
+                Options_.is_flag_active('ancientcave'),
+                get_espers(infile_rom_buffer),
+                get_characters(),
+                dancingmaduin.value,
+                outfile_rom_buffer,
+                esper_replacements
+            )
             nerf_paladin_shield()
         manage_espers(esperrage_spaces, esper_replacements)
     reseed()
@@ -5593,33 +5629,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         for character in characters:
             character.mutate_stats(outfile_rom_buffer, start_in_wor, read_only=True)
     reseed()
-
-    # Check expboost, gpboost, and mpboost values
-    for flag_name in ["expboost", "gpboost", "mpboost"]:
-        if flag := Options_.is_flag_active(flag_name):
-            while True:
-                try:
-                    if flag.maximum_value < float(flag.value):
-                        error_message = "The supplied value for " + flag_name + " was greater than the maximum " \
-                            "allowed value of " + str(flag.maximum_value) + "."
-                    elif float(flag.value) < flag.minimum_value:
-                        error_message = "The supplied value for " + flag_name + " was less than the minimum " \
-                            "allowed value of " + str(flag.minimum_value) + "."
-                    elif not flag.value or type(flag.value) == bool or str(flag.value).lower() == "nan":
-                        error_message = "No value was supplied for " + flag_name + "."
-                    else:
-                        flag.value = float(flag.value)
-                        break
-                except ValueError:
-                    error_message = "The supplied value for " + flag_name + " was not a number."
-
-                if not application or application != "console":
-                    # Users in the GUI or web cannot fix the flags after generation begins, so deactivate the flag.
-                    pipe_print(error_message + " Deactivating flag.")
-                    Options_.deactivate_flag(flag_name)
-                    break
-                flag.value = float(input(error_message + " Please enter a multiplier between " + str(flag.minimum_value) +
-                    " and " + str(flag.maximum_value) + " for " + flag_name + ".\n>"))
 
     if Options_.is_flag_active("random_formations"):
         formations = get_formations()
