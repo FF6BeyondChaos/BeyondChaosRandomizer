@@ -399,45 +399,45 @@ class ItemBlock:
     def get_new_feature(self, feature, feature_byte, nochange):
         features = {
             "statboost1": {e: 1 << i for i, e in
-                      enumerate(["Bat. Pwr +1/4", "Mag. Pwr +1/4", "+1/4 HP",
-                      "+1/2 HP", "+1/8 HP", "+1/4 MP", "+1/2 MP", "+1/8 MP"])},
+                           enumerate(["Bat. Pwr +1/4", "Mag. Pwr +1/4", "+1/4 HP",
+                                      "+1/2 HP", "+1/8 HP", "+1/4 MP", "+1/2 MP", "+1/8 MP"])},
             "statboost2": {e: 1 << i for i, e in
-                      enumerate(["Better Steal", "",
-                      "Better Sketch","Better Control", "100% Hit Rate",
-                      "1/2 MP Cost", "MP cost = 1", "Vigor +50%"])},
+                           enumerate(["Better Steal", "",
+                                      "Better Sketch", "Better Control", "100% Hit Rate",
+                                      "1/2 MP Cost", "MP cost = 1", "Vigor +50%"])},
             "special1": {e: 1 << i for i, e in
-                      enumerate(["Initiative", "Vigilance", "Command Changer",
-                      "Command Changer", "Command Changer", "Command Changer",
-                      "Command Changer", "Super Jump"])},
+                         enumerate(["Initiative", "Vigilance", "Command Changer",
+                                    "Command Changer", "Command Changer", "Command Changer",
+                                    "Command Changer", "Super Jump"])},
             "special2": {e: 1 << i for i, e in
-                      enumerate(["Fight -> X-Fight", "Can counter",
-                      "Random Evade", "Use weapon 2-handed",
-                      "Can equip 2 weapons", "Can equip anything",
-                      "Cover", "Step regen"])},
+                         enumerate(["Fight -> X-Fight", "Can counter",
+                                    "Random Evade", "Use weapon 2-handed",
+                                    "Can equip 2 weapons", "Can equip anything",
+                                    "Cover", "Step regen"])},
             "special3": {e: 1 << i for i, e in
-                      enumerate(["Low HP Shell", "Low HP Safe", "Low HP Reflect",
-                      "Double EXP", "Double GP",
-                      "", "", "Reverses Cures"])},
+                         enumerate(["Low HP Shell", "Low HP Safe", "Low HP Reflect",
+                                    "Double EXP", "Double GP",
+                                    "", "", "Reverses Cures"])},
             "statusprotect1": {e: 1 << i for i, e in
-                      enumerate(["No dark", "No zombie", "No poison",
-                      "No magitek", "No clear", "No imp",
-                      "No petrify", "Death protection"])},
+                               enumerate(["No dark", "No zombie", "No poison",
+                                          "No magitek", "No clear", "No imp",
+                                          "No petrify", "Death protection"])},
             "statusprotect2": {e: 1 << i for i, e in
-                      enumerate(["No condemned", "Near fatal always",
-                      "No image", "No mute", "No berserk", "No muddle",
-                      "No seizure", "No sleep"])},
+                               enumerate(["No condemned", "Near fatal always",
+                                          "No image", "No mute", "No berserk", "No muddle",
+                                          "No seizure", "No sleep"])},
             "statusacquire2": {e: 1 << i for i, e in
-                      enumerate(["Condemned", "Near fatal", "Image", "Mute",
-                      "Berserk", "Muddle", "Seizure", "Sleep"])},
+                               enumerate(["Condemned", "Near fatal", "Image", "Mute",
+                                          "Berserk", "Muddle", "Seizure", "Sleep"])},
             "statusacquire3": {e: 1 << i for i, e in
-                      enumerate(["Auto float", "Auto regen", "Auto slow",
-                      "Auto haste", "Auto stop", "Auto shell",
-                      "Auto safe", "Auto reflect"])},
+                               enumerate(["Auto float", "Auto regen", "Auto slow",
+                                          "Auto haste", "Auto stop", "Auto shell",
+                                          "Auto safe", "Auto reflect"])},
             "fieldeffect": {e: 1 << i for i, e in
-                      enumerate(["1/2 enc.", "No enc.", "", "", "",
-                      "Sprint", "", ""])},
+                            enumerate(["1/2 enc.", "No enc.", "", "", "",
+                                       "Sprint", "", ""])},
             "otherproperties": {e: 1 << i for i, e in
-                      enumerate(["", "", "Procs", "Breaks", "", "", "", ""])}
+                                enumerate(["", "", "Procs", "Breaks", "", "", "", ""])}
         }
 
         try:
@@ -573,9 +573,9 @@ class ItemBlock:
 
         # If any changes occurred, mutate the item's name
         if not self.features['elements'] == self.vanilla_data.features['elements'] or \
-           not self.features['elemabsorbs'] == self.vanilla_data.features['elemabsorbs'] or \
-           not self.features['elemnulls'] == self.vanilla_data.features['elemnulls'] or \
-           not self.features['elemweaks'] == self.vanilla_data.features['elemweaks']:
+               not self.features['elemabsorbs'] == self.vanilla_data.features['elemabsorbs'] or \
+               not self.features['elemnulls'] == self.vanilla_data.features['elemnulls'] or \
+               not self.features['elemweaks'] == self.vanilla_data.features['elemweaks']:
             self.mutate_name()
 
     def mutate_learning(self, allow_ultima):
@@ -601,14 +601,16 @@ class ItemBlock:
         self.features['learnrate'] = learnrate
         self.features['learnspell'] = spell.spellid
         if not self.vanilla_data.features['learnrate'] == self.features['learnrate'] or \
-           not self.vanilla_data.features['learnspell'] == self.features['learnspell']:
+                not self.vanilla_data.features['learnspell'] == self.features['learnspell']:
             self.mutate_name()
 
     def get_specialaction(self, new_action):
 
-        special_descriptions = ["Can steal", "Atma", "X-kill", "Man eater", "Drain HP", "Drain MP", "Uses some MP", "Random throw",
-                                "Dice", "Valiant", "Wind Attack", "Heals Target", "Slice Kill", "Fragile wpn", "Uses more MP", ]
-        s = special_descriptions[new_action-1]
+        special_descriptions = ["Can steal", "Atma", "X-kill", "Man eater", "Drain HP", "Drain MP", "Uses some MP",
+                                "Random throw",
+                                "Dice", "Valiant", "Wind Attack", "Heals Target", "Slice Kill", "Fragile wpn",
+                                "Uses more MP", ]
+        s = special_descriptions[new_action - 1]
 
         return s
 
@@ -727,7 +729,8 @@ class ItemBlock:
 
         self.price = min(self.price, 65000)
 
-    def mutate(self, always_break=False, crazy_prices=False, extra_effects=False, wild_breaks=False, no_breaks=False, unbreakable=False, allow_ultima=True):
+    def mutate(self, always_break=False, crazy_prices=False, extra_effects=False, wild_breaks=False, no_breaks=False,
+               unbreakable=False, allow_ultima=True):
         global changed_commands
         self.mutate_stats()
         self.mutate_price(crazy_prices=crazy_prices)

@@ -56,10 +56,10 @@ class SpriteReplacement:
         return False
 
 
-def get_sprite_replacements(sprite_replacements=None):
-    if sprite_replacements:
+def get_sprite_replacements(web_custom_sprite_replacements=None):
+    if web_custom_sprite_replacements:
         return [SpriteReplacement(*line.strip().split(',')) for
-                                   line in sprite_replacements.split("\n")]
+                                   line in web_custom_sprite_replacements.split("\n")]
 
     global sprite_replacement_list
     if sprite_replacement_list:
@@ -189,11 +189,14 @@ def sanitize_coral(names):
     return [name[:12] for name in names if name != ""]
 
 
-def manage_coral(outfile_rom_buffer: BytesIO):
+def manage_coral(outfile_rom_buffer: BytesIO, web_custom_coral_names=None):
     from dialoguemanager import set_dialogue_var, load_patch_file
-    coral_file = open_mei_fallback(CORAL_TABLE)
-    coralnames = sorted(set(sanitize_coral([line.strip() for line in coral_file.readlines()])))
-    coral_file.close()
+    if not web_custom_coral_names:
+        coral_file = open_mei_fallback(CORAL_TABLE)
+        coralnames = sorted(set(sanitize_coral([line.strip() for line in coral_file.readlines()])))
+        coral_file.close()
+    else:
+        coralnames = sorted(set(sanitize_coral([line.strip() for line in web_custom_coral_names.split("\n")])))
 
     sprite_log = ""
 
@@ -309,9 +312,15 @@ def manage_character_names(outfile_rom_buffer: BytesIO, change_to, male,
                 choose_male = True
 
             if choose_male:
-                name = random.choice(malenames)
+                try:
+                    name = random.choice(malenames)
+                except IndexError:
+                    raise IndexError("There were not enough male names supplied. The game requires up to 14 names.")
             else:
-                name = random.choice(femalenames)
+                try:
+                    name = random.choice(femalenames)
+                except IndexError:
+                    raise IndexError("There were not enough female names supplied. The game requires up to 14 names.")
 
             if name in malenames:
                 malenames.remove(name)
@@ -389,19 +398,22 @@ def get_free_portrait_ids(swap_to, change_to, char_ids, char_portraits):
     return free_portrait_ids, merchant
 
 
-def get_sprite_swaps(char_ids, male, female, vswaps, sprite_replacements=None):
+def get_sprite_swaps(char_ids, male, female, vswaps, web_custom_sprite_replacements=None):
     sprite_swap_mode = options.Options_.is_flag_active('makeover')
     wild = options.Options_.is_flag_active('partyparty')
     clone_mode = options.Options_.is_flag_active('cloneparty')
     replace_all = options.Options_.is_flag_active('novanilla') or options.Options_.is_flag_active('frenchvanilla')
-    external_vanillas = False if options.Options_.is_flag_active('novanilla') else (options.Options_.is_flag_active('frenchvanilla') or clone_mode)
+    external_vanillas = False if options.Options_.is_flag_active('novanilla') else (
+                options.Options_.is_flag_active('frenchvanilla') or clone_mode)
     if not sprite_swap_mode:
         return []
 
-    known_replacements = get_sprite_replacements(sprite_replacements)
+    known_replacements = get_sprite_replacements(web_custom_sprite_replacements)
 
     # uniqueids for sprites pulled from rom
-    vuids = {0: "terra", 1: "locke", 2: "cyan", 3: "shadow", 4: "edgar", 5: "sabin", 6: "celes", 7: "strago", 8: "relm", 9: "setzer", 10: "moogle", 11: "gau", 12: "gogo6", 13: "umaro", 16: "leo", 17: "banon", 18: "terra", 21: "kefka"}
+    vuids = {0: "terra", 1: "locke", 2: "cyan", 3: "shadow", 4: "edgar", 5: "sabin", 6: "celes", 7: "strago", 8: "relm",
+             9: "setzer", 10: "moogle", 11: "gau", 12: "gogo6", 13: "umaro", 16: "leo", 17: "banon", 18: "terra",
+             21: "kefka"}
 
     # determine which character ids are makeover'd
     blacklist = set()
@@ -412,7 +424,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps, sprite_replacements=None):
         replace_min = 8 if not wild else 16
         replace_max = 12 if not wild else 20
         num_to_replace = min(len(known_replacements), random.randint(replace_min, replace_max))
-        is_replaced = [True] * num_to_replace + [False]*(len(char_ids)-num_to_replace)
+        is_replaced = [True] * num_to_replace + [False] * (len(char_ids) - num_to_replace)
         random.shuffle(is_replaced)
         for i, t in enumerate(is_replaced):
             if i in vuids and not t:
@@ -490,7 +502,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps, sprite_replacements=None):
                 candidates = male_candidates
             else:
                 candidates = neutral_candidates
-            if random.randint(0, len(neutral_candidates)+2*len(candidates)) <= len(neutral_candidates):
+            if random.randint(0, len(neutral_candidates) + 2 * len(candidates)) <= len(neutral_candidates):
                 candidates = neutral_candidates
         if clone_mode:
             reverse_blacklist = [c for c in candidates if c.is_on(blacklist)]
@@ -513,8 +525,8 @@ def get_sprite_swaps(char_ids, male, female, vswaps, sprite_replacements=None):
 
 
 def manage_character_appearance(outfile_rom_buffer: BytesIO, preserve_graphics=False,
-                                moogle_names=None, male_names=None, female_names=None,
-                                sprite_replacements=None):
+                                web_custom_moogle_names=None, web_custom_male_names=None,
+                                web_custom_female_names=None, web_custom_sprite_replacements=None):
     characters = get_characters()
     wild = options.Options_.is_flag_active('partyparty')
     sabin_mode = options.Options_.is_flag_active('suplexwrecks')
@@ -571,7 +583,7 @@ def manage_character_appearance(outfile_rom_buffer: BytesIO, preserve_graphics=F
         # all characters are moogles except Mog, Imp, and Esper Terra
         if wild:
             # make mog human
-            mog = random.choice(list(range(0, 0x0A)) + list(range(0x0B, 0x0F)) +[0x10, 0x11, 0x13, 0x15])
+            mog = random.choice(list(range(0, 0x0A)) + list(range(0x0B, 0x0F)) + [0x10, 0x11, 0x13, 0x15])
             # esper terra and imp neither human nor moogle
             esper_terra, imp = random.sample([0x0F, 0x12, 0x14], 2)
         else:
@@ -600,9 +612,10 @@ def manage_character_appearance(outfile_rom_buffer: BytesIO, preserve_graphics=F
             change_to = dict(list(zip(sorted(male), male)) +
                              list(zip(sorted(female), female)))
 
-    manage_character_names(outfile_rom_buffer, change_to, male, moogle_names, male_names, female_names)
+    manage_character_names(outfile_rom_buffer, change_to, male, web_custom_moogle_names,
+                           web_custom_male_names, web_custom_female_names)
 
-    swap_to = get_sprite_swaps(char_ids, male, female, change_to, sprite_replacements)
+    swap_to = get_sprite_swaps(char_ids, male, female, change_to, web_custom_sprite_replacements)
 
     for c in characters:
         if c.id < 14:
@@ -722,7 +735,8 @@ def manage_character_appearance(outfile_rom_buffer: BytesIO, preserve_graphics=F
                                                        swap_to[c].portrait_palette_filename), "rb")
                 except IOError:
                     use_fallback = True
-                    print("failed to load portrait %s for %s, using fallback" %(swap_to[c].portrait_filename, swap_to[c].name))
+                    print("failed to load portrait %s for %s, using fallback" % (
+                          swap_to[c].portrait_filename, swap_to[c].name))
                 else:
                     new_portrait_data = g.read(0x320)
                     new_portrait_palette_data = h.read(0x20)
@@ -806,7 +820,7 @@ def manage_palettes(outfile_rom_buffer: BytesIO, change_to, char_ids):
         twinpal = random.randint(0, 5)
         char_palette_pool = list(range(0, 6)) + list(range(0, 6))
         char_palette_pool.remove(twinpal)
-        char_palette_pool.append(random.choice(list(range(0, twinpal))+list(range(twinpal, 6))))
+        char_palette_pool.append(random.choice(list(range(0, twinpal)) + list(range(twinpal, 6))))
         while True:
             random.shuffle(char_palette_pool)
             # make sure terra, locke, and edgar are all different
@@ -865,13 +879,13 @@ def manage_palettes(outfile_rom_buffer: BytesIO, change_to, char_ids):
         outfile_rom_buffer.seek(0x2CE2B + c)
         outfile_rom_buffer.write(bytes([new_palette]))
         pointers = [0, 4, 9, 13]
-        pointers = [ptr + 0x18EA60 + (18*c) for ptr in pointers]
+        pointers = [ptr + 0x18EA60 + (18 * c) for ptr in pointers]
         if c < 14:
             for ptr in pointers:
                 outfile_rom_buffer.seek(ptr)
                 byte = ord(outfile_rom_buffer.read(1))
                 byte = byte & 0xF1
-                byte |= ((new_palette+2) << 1)
+                byte |= ((new_palette + 2) << 1)
                 outfile_rom_buffer.seek(ptr)
                 outfile_rom_buffer.write(bytes([byte]))
         character.palette = new_palette
@@ -904,7 +918,7 @@ def manage_palettes(outfile_rom_buffer: BytesIO, change_to, char_ids):
             skintones = skintones[:5] + [snowmanvampire]
 
     for i in range(6):
-        pointer = 0x268000 + (i*0x20)
+        pointer = 0x268000 + (i * 0x20)
         if new_palette_mode:
             palette = recolor_character_palette(outfile_rom_buffer, pointer, palette=None,
                                                 flesh=(i == 5), santa=(christmas_mode and i == 3),
@@ -912,17 +926,17 @@ def manage_palettes(outfile_rom_buffer: BytesIO, change_to, char_ids):
         else:
             palette = recolor_character_palette(outfile_rom_buffer, pointer, palette=None,
                                                 flesh=(i == 5), santa=(christmas_mode and i == 3))
-        pointer = 0x2D6300 + (i*0x20)
+        pointer = 0x2D6300 + (i * 0x20)
         recolor_character_palette(outfile_rom_buffer, pointer, palette=palette)
 
     # esper terra
-    pointer = 0x268000 + (8*0x20)
+    pointer = 0x268000 + (8 * 0x20)
     if new_palette_mode:
         palette = recolor_character_palette(outfile_rom_buffer, pointer, palette=None, trance=True)
     else:
         palette = recolor_character_palette(outfile_rom_buffer, pointer, palette=None, flesh=True,
                                             middle=False)
-    pointer = 0x2D6300 + (6*0x20)
+    pointer = 0x2D6300 + (6 * 0x20)
     palette = recolor_character_palette(outfile_rom_buffer, pointer, palette=palette)
 
     # recolor magitek and chocobos
@@ -937,7 +951,7 @@ def manage_palettes(outfile_rom_buffer: BytesIO, change_to, char_ids):
             write_multi(outfile_rom_buffer, color, length=2)
 
     recolor_palette(0x2cfd4, 23)
-    recolor_palette(0x268000+(7*0x20), 16)
+    recolor_palette(0x268000 + (7 * 0x20), 16)
     recolor_palette(0x12ee20, 16)
     recolor_palette(0x12ef20, 16)
 

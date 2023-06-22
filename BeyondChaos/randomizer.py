@@ -4031,7 +4031,6 @@ def manage_opening():
     def replace_credits_text(address: int, text: str, split=False):
         original = d.get_bytestring(address, 0x40)
         length = original.index(0)
-        # print_to_connection("Length of line: " + str(length) + ". Length of credit:  " + str(len(text)) + ".")
         original = original[:length]
         if 0xFE in original and not split:
             linebreak = original.index(0xFE)
@@ -4709,7 +4708,7 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
                         281, 282, 283, 285, 286, 287,
                         297, 303, 400, 382, 402, 403,
                         404]  # event formation sets that can be shuffled with cursedencounters
-    bad_event_fsets = [58, 108, 128] #Narshe Cave, Magitek Factory Escape, Collapsing House
+    bad_event_fsets = [58, 108, 128] # Narshe Cave, Magitek Factory Escape, Collapsing House
     event_formations = set()
     salt_formations = set()
 
@@ -4732,8 +4731,6 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
 
     salt_formations = [id for id in salt_formations if id not in event_formations]
 
-    # print_to_connection("EVENT FORMATIONS: " + str(event_formations))
-    # print_to_connection("SALT FORMATIONS: " + str(salt_formations))
 
     for fset in fsets:
         if Options_.is_flag_active("cursedencounters"):  # code that applies FC flag to allow 16 encounters in all zones
@@ -5028,1165 +5025,1169 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     and outfile. Returns a path (as str) to the output file.
     TODO: Document parameters, args, etc.
     """
-    global outfile_rom_path, infile_rom_path, \
-        flags, seed, \
-        infile_rom_buffer, outfile_rom_buffer, \
-        ALWAYS_REPLACE, NEVER_REPLACE, gui_connection
+    try:
+        global outfile_rom_path, infile_rom_path, \
+            flags, seed, \
+            infile_rom_buffer, outfile_rom_buffer, \
+            ALWAYS_REPLACE, NEVER_REPLACE, gui_connection
 
-    application = kwargs.get("application", None)
+        application = kwargs.get("application", None)
 
-    if TEST_ON:
-        kwargs['infile_rom_path'] = TEST_FILE
-        kwargs['seed'] = TEST_SEED
+        if TEST_ON:
+            kwargs['infile_rom_path'] = TEST_FILE
+            kwargs['seed'] = TEST_SEED
 
-    if not application or application == "console":
-        # The console should supply these kwargs
-        infile_rom_path = kwargs.get('infile_rom_path')
-        outfile_rom_path = kwargs.get('outfile_rom_path')
-        pass
-    if application == "gui":
-        # The gui (beyondchaos.py) should supply these kwargs
-        infile_rom_path = kwargs.get('infile_rom_path')
-        outfile_rom_path = kwargs.get('outfile_rom_path')
-        set_parent_pipe(connection)
-    if application == "web":
-        # The web interface should supply these kwargs
-        infile_rom_buffer = kwargs.get("infile_rom_buffer")
-        outfile_rom_buffer = kwargs.get("outfile_rom_buffer")
-        set_parent_pipe(connection)
-    fullseed = kwargs.get('seed')
+        if not application or application == "console":
+            # The console should supply these kwargs
+            infile_rom_path = kwargs.get('infile_rom_path')
+            outfile_rom_path = kwargs.get('outfile_rom_path')
+            pass
+        if application == "gui":
+            # The gui (beyondchaos.py) should supply these kwargs
+            infile_rom_path = kwargs.get('infile_rom_path')
+            outfile_rom_path = kwargs.get('outfile_rom_path')
+            set_parent_pipe(connection)
+        if application == "web":
+            # The web interface should supply these kwargs
+            infile_rom_buffer = kwargs.get("infile_rom_buffer")
+            outfile_rom_buffer = kwargs.get("outfile_rom_buffer")
+            set_parent_pipe(connection)
+        fullseed = kwargs.get('seed')
 
-    sleep(0.5)
-    pipe_print('You are using Beyond Chaos CE Randomizer version "%s".' % VERSION)
-    if BETA:
-        pipe_print("WARNING: This version is a beta! Things may not work correctly.")
+        sleep(0.5)
+        pipe_print('You are using Beyond Chaos CE Randomizer version "%s".' % VERSION)
+        if BETA:
+            pipe_print("WARNING: This version is a beta! Things may not work correctly.")
 
-    config_infile_rom_path = ''
-    config_outfile_rom_path = ''
+        config_infile_rom_path = ''
+        config_outfile_rom_path = ''
 
-    if not application or application == "console":
-        # If an input rom path is supplied, use that. Otherwise, check config.ini to see if a previously used
-        #    input path was used. If so, prompt the user if they would like to use the saved input path. Otherwise
-        #    prompt the user for the directory of their FF3 rom file.
-        # TODO: Refactor this part?
-        if not infile_rom_path:
-            config_infile_rom_path = get_input_path()
-            config_outfile_rom_path = get_output_path()
-            previous_input = f" (blank for default: {config_infile_rom_path})" if config_infile_rom_path else ""
-            infile_rom_path = input(f"Please input the file name of your copy of "
-                                    f"the FF3 US 1.0 rom{previous_input}:\n> ").strip()
-            pipe_print()
+        if not application or application == "console":
+            # If an input rom path is supplied, use that. Otherwise, check config.ini to see if a previously used
+            #    input path was used. If so, prompt the user if they would like to use the saved input path. Otherwise
+            #    prompt the user for the directory of their FF3 rom file.
+            # TODO: Refactor this part?
+            if not infile_rom_path:
+                config_infile_rom_path = get_input_path()
+                config_outfile_rom_path = get_output_path()
+                previous_input = f" (blank for default: {config_infile_rom_path})" if config_infile_rom_path else ""
+                infile_rom_path = input(f"Please input the file name of your copy of "
+                                        f"the FF3 US 1.0 rom{previous_input}:\n> ").strip()
+                pipe_print()
 
-        # If there is a saved rom path and the user input was blank, use the saved rom path
-        if config_infile_rom_path and not infile_rom_path:
-            infile_rom_path = config_infile_rom_path
+            # If there is a saved rom path and the user input was blank, use the saved rom path
+            if config_infile_rom_path and not infile_rom_path:
+                infile_rom_path = config_infile_rom_path
 
-        # Correct for Windows paths given with surrounding quotes
-        # (e.g. drag & drop onto console when path includes a space)
-        if infile_rom_path.startswith('"') and infile_rom_path.endswith('"'):
-            infile_rom_path = infile_rom_path.strip('"')
-        infile_rom_path = os.path.abspath(infile_rom_path)
+            # Correct for Windows paths given with surrounding quotes
+            # (e.g. drag & drop onto console when path includes a space)
+            if infile_rom_path.startswith('"') and infile_rom_path.endswith('"'):
+                infile_rom_path = infile_rom_path.strip('"')
+            infile_rom_path = os.path.abspath(infile_rom_path)
 
-        outfile_rom_path = kwargs.get('outfile_rom_path')
-        if not outfile_rom_path:
-            # If no previous directory or an invalid directory was obtained from bcce.cfg, default to the ROM's directory
-            if not config_outfile_rom_path or not os.path.isdir(os.path.normpath(config_outfile_rom_path)):
-                config_outfile_rom_path = os.path.dirname(infile_rom_path)
+            outfile_rom_path = kwargs.get('outfile_rom_path')
+            if not outfile_rom_path:
+                # If no previous directory or an invalid directory was obtained from bcce.cfg, default to the ROM's directory
+                if not config_outfile_rom_path or not os.path.isdir(os.path.normpath(config_outfile_rom_path)):
+                    config_outfile_rom_path = os.path.dirname(infile_rom_path)
 
-            while True:
-                # Input loop to make sure we get a valid directory
-                previous_output = f" (blank for default: {config_outfile_rom_path})"
-                try:
-                    outfile_rom_path = input(
-                        f"Please input the directory to place the randomized ROM file. {previous_output}:\n> ").strip()
-                    pipe_print()
-                except EOFError:
-                    raise RuntimeError("The GUI did not supply an output directory for the randomized ROM.")
-
-                if config_outfile_rom_path and not outfile_rom_path:
-                    outfile_rom_path = config_outfile_rom_path
-                if outfile_rom_path.startswith('"') and outfile_rom_path.endswith('"'):
-                    outfile_rom_path = outfile_rom_path.strip('"')
-
-                if os.path.isdir(outfile_rom_path):
-                    # Valid directory received. Break out of the loop.
-                    break
-                else:
-                    pipe_print("That output directory does not exist. Please try again.")
-
-        try:
-            with open(infile_rom_path, 'rb') as f:
-                data = f.read()
-
-        except IOError:
-            response = input("File not found. Would you like to search the current directory \n"
-                             "for a valid FF3 1.0 rom? (y/n) ")
-            if response and response[0].lower() == 'y':
-                for filename in sorted(os.listdir('.')):
-                    stats = os.stat(filename)
-                    size = stats.st_size
-                    if size not in [3145728, 3145728 + 0x200]:
-                        continue
-
+                while True:
+                    # Input loop to make sure we get a valid directory
+                    previous_output = f" (blank for default: {config_outfile_rom_path})"
                     try:
-                        with open(filename, 'r+b') as f:
-                            data = f.read()
-                    except IOError:
-                        continue
+                        outfile_rom_path = input(
+                            f"Please input the directory to place the randomized ROM file. {previous_output}:\n> ").strip()
+                        pipe_print()
+                    except EOFError:
+                        raise RuntimeError("The GUI did not supply an output directory for the randomized ROM.")
 
-                    if size == 3145728 + 0x200:
-                        data = data[0x200:]
-                    h = md5(data).hexdigest()
-                    if h in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2]:
-                        infile_rom_path = filename
+                    if config_outfile_rom_path and not outfile_rom_path:
+                        outfile_rom_path = config_outfile_rom_path
+                    if outfile_rom_path.startswith('"') and outfile_rom_path.endswith('"'):
+                        outfile_rom_path = outfile_rom_path.strip('"')
+
+                    if os.path.isdir(outfile_rom_path):
+                        # Valid directory received. Break out of the loop.
                         break
+                    else:
+                        pipe_print("That output directory does not exist. Please try again.")
+
+            try:
+                with open(infile_rom_path, 'rb') as f:
+                    data = f.read()
+
+            except IOError:
+                response = input("File not found. Would you like to search the current directory \n"
+                                 "for a valid FF3 1.0 rom? (y/n) ")
+                if response and response[0].lower() == 'y':
+                    for filename in sorted(os.listdir('.')):
+                        stats = os.stat(filename)
+                        size = stats.st_size
+                        if size not in [3145728, 3145728 + 0x200]:
+                            continue
+
+                        try:
+                            with open(filename, 'r+b') as f:
+                                data = f.read()
+                        except IOError:
+                            continue
+
+                        if size == 3145728 + 0x200:
+                            data = data[0x200:]
+                        h = md5(data).hexdigest()
+                        if h in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2]:
+                            infile_rom_path = filename
+                            break
+                    else:
+                        raise Exception("File not found.")
                 else:
                     raise Exception("File not found.")
-            else:
-                raise Exception("File not found.")
-            pipe_print("Success! Using valid rom file: %s\n" % infile_rom_path)
-        del f
+                pipe_print("Success! Using valid rom file: %s\n" % infile_rom_path)
+            del f
 
-        flaghelptext = '''!   Recommended new player flags
-    -   Use all flags EXCEPT the ones listed'''
+            flaghelptext = '''!   Recommended new player flags
+        -   Use all flags EXCEPT the ones listed'''
 
-    if fullseed:
-        fullseed = str(fullseed).strip()
-    else:
-        if not application or application != "console":
-            raise Exception("No seed was supplied.")
-        fullseed = input("Please input a seed value (blank for a random "
-                         "seed):\n> ").strip()
-        pipe_print()
-
-        if '.' not in fullseed:
-            speeddials = get_items("Speeddial").items()
-            mode_num = None
-            while mode_num not in range(len(ALL_MODES)):
-                pipe_print("Available modes:\n")
-                for i, mode in enumerate(ALL_MODES):
-                    pipe_print("{}. {} - {}".format(i + 1, mode.name, mode.description))
-                mode_str = input("\nEnter desired mode number or name:\n").strip()
-                try:
-                    mode_num = int(mode_str) - 1
-                except ValueError:
-                    for i, m in enumerate(ALL_MODES):
-                        if m.name == mode_str:
-                            mode_num = i
-                            break
-            mode = ALL_MODES[mode_num]
-            allowed_flags = [f for f in NORMAL_FLAGS if f.category == "flags" and f.name not in mode.prohibited_flags]
+        if fullseed:
+            fullseed = str(fullseed).strip()
+        else:
+            if not application or application != "console":
+                raise Exception("No seed was supplied.")
+            fullseed = input("Please input a seed value (blank for a random "
+                             "seed):\n> ").strip()
             pipe_print()
-            for flag in sorted(allowed_flags, key=lambda f: f.name):
-                pipe_print(flag.name + " - " + flag.long_description)
-            pipe_print(flaghelptext + "\n")
-            pipe_print("Save frequently used flag sets by adding 0: through 9: before the flags.")
-            for speeddial_number, speeddial_flags in speeddials:
-                pipe_print("\t" + speeddial_number + ": " + speeddial_flags)
-            pipe_print()
-            flags = input("Please input your desired flags (blank for "
-                          "all of them):\n> ").strip()
-            if flags == "!":
-                flags = '-dfklu partyparty makeover johnnydmad'
 
-            is_speeddialing = re.search("^[0-9]$", flags)
-            if is_speeddialing:
+            if '.' not in fullseed:
+                speeddials = get_items("Speeddial").items()
+                mode_num = None
+                while mode_num not in range(len(ALL_MODES)):
+                    pipe_print("Available modes:\n")
+                    for i, mode in enumerate(ALL_MODES):
+                        pipe_print("{}. {} - {}".format(i + 1, mode.name, mode.description))
+                    mode_str = input("\nEnter desired mode number or name:\n").strip()
+                    try:
+                        mode_num = int(mode_str) - 1
+                    except ValueError:
+                        for i, m in enumerate(ALL_MODES):
+                            if m.name == mode_str:
+                                mode_num = i
+                                break
+                mode = ALL_MODES[mode_num]
+                allowed_flags = [f for f in NORMAL_FLAGS if f.category == "flags" and f.name not in mode.prohibited_flags]
+                pipe_print()
+                for flag in sorted(allowed_flags, key=lambda f: f.name):
+                    pipe_print(flag.name + " - " + flag.long_description)
+                pipe_print(flaghelptext + "\n")
+                pipe_print("Save frequently used flag sets by adding 0: through 9: before the flags.")
                 for speeddial_number, speeddial_flags in speeddials:
-                    if speeddial_number == flags[:1]:
-                        flags = speeddial_flags.strip()
-                        break
-
-            saving_speeddial = re.search("^[0-9]:", flags)
-            if saving_speeddial:
-                set_value("Speeddial", flags[:1], flags[3:].strip())
-                pipe_print("Flags saved under speeddial number " + str(flags[:1]))
-                flags = flags[3:]
-
-            fullseed = "|%i|%s|%s" % (mode_num + 1, flags, fullseed)
-            pipe_print()
-
-    try:
-        version, mode_str, flags, seed = tuple(fullseed.split('|'))
-    except ValueError:
-        raise ValueError('Seed should be in the format <version>|<mode>|<flags>|<seed>')
-    mode_str = mode_str.strip()
-    mode_num = None
-    try:
-        mode_num = int(mode_str) - 1
-    except ValueError:
-        for i, m in enumerate(ALL_MODES):
-            if m.name == mode_str:
-                mode_num = i
-                break
-
-    if mode_num not in range(len(ALL_MODES)):
-        raise Exception("Invalid mode specified")
-    Options_.mode = ALL_MODES[mode_num]
-
-    seed = seed.strip()
-    if not seed:
-        seed = int(time())
-    else:
-        seed = int(seed)
-    seed = seed % (10 ** 10)
-    reseed()
-
-    if not application or application != "web":
-        if '.' in infile_rom_path:
-            tempname = os.path.basename(infile_rom_path).rsplit('.', 1)
-        else:
-            tempname = [os.path.basename(infile_rom_path), 'smc']
-
-        outfile_rom_path = os.path.join(outfile_rom_path,
-                                        '.'.join([os.path.basename(tempname[0]),
-                                                  str(seed), tempname[1]]))
-        outlog = os.path.join(os.path.dirname(outfile_rom_path),
-                              '.'.join([os.path.basename(tempname[0]),
-                                        str(seed), 'txt']))
-
-        if infile_rom_path != config_infile_rom_path or outfile_rom_path != config_outfile_rom_path:
-            try:
-                save_input_path(infile_rom_path)
-                save_output_path(os.path.dirname(outfile_rom_path))
-            except:
-                pipe_print("Couldn't save flag string\n")
-
-        infile_rom_buffer = BytesIO(open(infile_rom_path, "rb").read())
-        outfile_rom_buffer = BytesIO(open(infile_rom_path, "rb").read())
-
-        if len(outfile_rom_buffer.read()) % 0x400 == 0x200:
-            pipe_print("NOTICE: Headered ROM detected. Output file will have no header.")
-            outfile_rom_buffer = outfile_rom_buffer[0x200:]
-            # infile_rom_path = '.'.join([tempname[0], "unheadered", tempname[1]])
-            # with open(infile_rom_path, 'w+b') as f:
-            #     f.write(data)
-
-        rom_hash = md5(outfile_rom_buffer.getbuffer()).hexdigest()
-        if rom_hash not in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2] and \
-                (not application or application == "console"):
-            pipe_print("WARNING! The md5 hash of this file does not match the known "
-                       "hashes of the english FF6 1.0 rom!")
-            x = input("Continue? y/n ")
-            if not (x and x.lower()[0] == 'y'):
-                return
-
-        # Before randomizing, test to make sure the supplied output directory is writable
-        if not os.access(os.path.dirname(outfile_rom_path), os.W_OK):
-            if gui_connection:
-                gui_connection.send(PermissionError("The randomizer does not have "
-                                                    "write permissions to the given ROM output directory."))
-                return
-            else:
-                raise PermissionError("The randomizer does not have write permissions "
-                                      "to the given ROM output directory.")
-
-    flags = flags.lower()
-    activation_string = Options_.activate_from_string(flags)
-
-    # Check expboost, gpboost, and mpboost values
-    for flag_name in ["expboost", "gpboost", "mpboost", "randomboost"]:
-        if flag := Options_.is_flag_active(flag_name):
-            while True:
-                try:
-                    if flag.maximum_value < float(flag.value):
-                        error_message = "The supplied value for " + flag_name + " was greater than the maximum " \
-                                                                                "allowed value of " + str(
-                            flag.maximum_value) + "."
-                    elif float(flag.value) < flag.minimum_value:
-                        error_message = "The supplied value for " + flag_name + " was less than the minimum " \
-                                                                                "allowed value of " + str(
-                            flag.minimum_value) + "."
-                    elif not flag.value or type(flag.value) == bool or str(flag.value).lower() == "nan":
-                        error_message = "No value was supplied for " + flag_name + "."
-                    else:
-                        flag.value = float(flag.value)
-                        if flag.inputtype == "integer":
-                            flag.value = int(flag.value)
-                        break
-                except ValueError:
-                    error_message = "The supplied value for " + flag_name + " was not a number."
-
-                if not application or application != "console":
-                    # Users in the GUI or web cannot fix the flags after generation begins, so deactivate the flag.
-                    pipe_print(error_message + " Deactivating flag.")
-                    Options_.deactivate_flag(flag_name)
-                    break
-                flag.value = input(error_message + " Please enter a multiplier between " + str(flag.minimum_value) +
-                                   " and " + str(flag.maximum_value) + " for " + flag_name + ".\n>")
-
-
-    if not application or application != "web":
-        if version and version != VERSION:
-            pipe_print("WARNING! Version mismatch! "
-                       "This seed will not produce the expected result!")
-    s = "Using seed: %s|%s|%s|%s" % (VERSION,
-                                     Options_.mode.name,
-                                     " ".join([flag.name if isinstance(flag.value, bool) else
-                                               flag.name + ":" + str(flag.value) for flag in Options_.active_flags]),
-                                     seed)
-    pipe_print(s)
-    log(s, section=None)
-    log("This is a game guide generated for the Beyond Chaos CE FF6 Randomizer.",
-        section=None)
-    log("For more information, visit https://github.com/FF6BeyondChaos/BeyondChaosRandomizer",
-        section=None)
-
-    commands = commands_from_table(COMMAND_TABLE)
-    commands = {c.name: c for c in commands}
-
-    load_characters(infile_rom_buffer, force_reload=True)
-    characters = get_characters()
-
-    tm = gmtime(seed)
-    if tm.tm_mon == 12 and (tm.tm_mday == 24 or tm.tm_mday == 25):
-        Options_.activate_flag('christmas', True)
-        activation_string += "CHRISTMAS MODE ACTIVATED\n"
-    elif tm.tm_mon == 10 and tm.tm_mday == 31:
-        Options_.activate_flag('halloween', True)
-        activation_string += "ALL HALLOWS' EVE MODE ACTIVATED\n"
-
-    pipe_print(activation_string)
-
-    if Options_.is_flag_active('randomboost'):
-        set_randomness_multiplier(int(Options_.get_flag_value('randomboost')))
-    elif Options_.is_flag_active('madworld'):
-        set_randomness_multiplier(None)
-
-    expand_rom()
-
-    pipe_print("\nNow beginning randomization.\n"
-                        "The randomization is very thorough, so it may take some time.\n"
-                        'Please be patient and wait for "randomization successful" to appear.')
-
-    rng = Random(seed)
-
-    if Options_.is_flag_active("thescenarionottaken"):
-        if Options_.is_flag_active("strangejourney"):
-            pipe_print("thescenarionottaken flag is incompatible with strangejourney")
-        else:
-            diverge()
-
-    read_dialogue(infile_rom_buffer)
-    read_location_names(infile_rom_buffer)
-    relocate_ending_cinematic_data(0xF08A70)
-
-    if Options_.is_flag_active("shuffle_commands") or \
-            Options_.is_flag_active("replace_commands") or \
-            Options_.is_flag_active("random_treasure"):
-        auto_recruit_gau(stays_in_wor=not Options_.is_flag_active("shuffle_wor") and not
-        Options_.is_flag_active('mimetime'))
-        if Options_.is_flag_active("shuffle_commands") or Options_.is_flag_active("replace_commands"):
-            auto_learn_rage()
-
-    if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
-        manage_commands(commands)
-
-    reseed()
-
-    spells = get_ranked_spells(infile_rom_buffer)
-    if Options_.is_flag_active('madworld'):
-        random.shuffle(spells)
-        for i, s in enumerate(spells):
-            s._rank = i + 1
-            s.valid = True
-    if Options_.is_flag_active("replace_commands") and not Options_.is_flag_active('suplexwrecks'):
-        if Options_.is_flag_active('quikdraw'):
-            ALWAYS_REPLACE += ["rage"]
-        if Options_.is_flag_active('sketch'):
-            NEVER_REPLACE += ["sketch"]
-        _, freespaces = manage_commands_new(commands)
-
-    reseed()
-
-    if Options_.is_flag_active("sprint"):
-        manage_sprint()
-
-    if Options_.is_flag_active("fix_exploits"):
-        manage_balance(newslots=Options_.is_flag_active("replace_commands"))
-
-    if Options_.is_flag_active("random_final_party"):
-        randomize_final_party_order()
-    reseed()
-
-    preserve_graphics = (not Options_.is_flag_active("swap_sprites") and not Options_.is_flag_active('partyparty'))
-
-    monsters = get_monsters(infile_rom_buffer)
-    formations = get_formations(infile_rom_buffer)
-    fsets = get_fsets(infile_rom_buffer)
-    locations = get_locations(outfile_rom_buffer)  # Must read from outfile for thescenarionottaken to function
-    items = get_ranked_items(infile_rom_buffer)
-    zones = get_zones(infile_rom_buffer)
-    get_metamorphs(infile_rom_buffer)
-
-    aispaces = [
-        FreeBlock(0xFCF50, 0xFCF50 + 384),
-        FreeBlock(0xFFF47, 0xFFF47 + 87),
-        FreeBlock(0xFFFBE, 0xFFFBE + 66)
-    ]
-
-    if Options_.is_flag_active("random_final_dungeon") or Options_.is_flag_active('ancientcave'):
-        # do this before treasure
-        if Options_.is_flag_active("random_enemy_stats") \
-                and Options_.is_flag_active("random_treasure") \
-                and Options_.is_flag_active("random_character_stats"):
-            dirk = get_item(0)
-            if dirk is None:
-                items = get_ranked_items(infile_rom_buffer)
-                dirk = get_item(0)
-            s = dirk.become_another(halloween=Options_.is_flag_active('halloween'))
-            dirk.write_stats(outfile_rom_buffer)
-            dummy_item(dirk)
-            assert not dummy_item(dirk)
-            log(s, section="secret items")
-    if Options_.is_flag_active("random_enemy_stats") and \
-            Options_.is_flag_active("random_treasure") and \
-            Options_.is_flag_active("random_character_stats"):
-        rename_card = get_item(231)
-        if rename_card is not None:
-            s = rename_card.become_another(tier="low")
-            rename_card.write_stats(outfile_rom_buffer)
-
-            weapon_anim_fix = Substitution()
-            weapon_anim_fix.set_location(0x19DB8)
-            weapon_anim_fix.bytestring = bytes([0x22, 0x80, 0x30, 0xF0])
-            weapon_anim_fix.write(outfile_rom_buffer)
-
-            weapon_anim_fix.set_location(0x303080)
-            weapon_anim_fix.bytestring = bytes(
-                [0xE0, 0xE8, 0x02, 0xB0, 0x05, 0xBF, 0x00, 0xE4, 0xEC, 0x6B, 0xDA, 0xC2, 0x20, 0x8A, 0xE9, 0xF0, 0x02,
-                 0xAA, 0x29, 0xFF, 0x00, 0xE2, 0x20, 0xBF, 0x00, 0x31, 0xF0, 0xFA, 0x6B])
-            weapon_anim_fix.write(outfile_rom_buffer)
-            log(s, section="secret items")
-    reseed()
-
-    items = get_ranked_items()
-    if Options_.is_flag_active("random_items"):
-        manage_items(items, changed_commands=changed_commands)
-        buy_owned_breakable_tools(outfile_rom_buffer)
-
-    reseed()
-
-    manage_doom_gaze(outfile_rom_buffer)
-
-    if Options_.is_flag_active("random_enemy_stats"):
-        aispaces = manage_final_boss(aispaces)
-        monsters = manage_monsters()
-
-    reseed()
-
-    if Options_.is_flag_active("random_enemy_stats") or \
-            Options_.is_flag_active("shuffle_commands") or \
-            Options_.is_flag_active("replace_commands"):
-        for m in monsters:
-            m.screw_tutorial_bosses(old_vargas_fight=Options_.is_flag_active('rushforpower'))
-            m.write_stats(outfile_rom_buffer)
-
-    if Options_.is_flag_active("mementomori"):
-        amount = Options_.get_flag_value('mementomori')
-        if type(amount) == bool:
-            while True:
-                amount = input("\nHow many character should receive innate relics? "
-                                      "(0-14 or random):\n")
-                try:
-                    if amount.lower() == "random" or 0 < int(amount) < 15:
-                        break
-                    raise ValueError
-                except ValueError:
-                    pipe_print("The supplied value was not a valid option. Please try again.")
-        hidden_relic(outfile_rom_buffer, amount)
-
-    # This needs to be before manage_monster_appearance or some of the monster
-    # palettes will be messed up.
-    esper_replacements = {}
-    if Options_.is_flag_active("randomize_magicite"):
-        esper_replacements = randomize_magicite(outfile_rom_buffer, infile_rom_buffer)
-        JUNCTION_MANAGER_PARAMETERS['esper_replacements'] = esper_replacements
-    reseed()
-
-    if Options_.is_flag_active("random_palettes_and_names") and \
-            Options_.is_flag_active("random_enemy_stats"):
-        mgs = manage_monster_appearance(monsters,
-                                        preserve_graphics=preserve_graphics)
-    reseed()
-
-    if Options_.is_flag_active("random_palettes_and_names") or \
-            Options_.is_flag_active("swap_sprites") or \
-            Options_.is_any_flag_active(
-                ['partyparty', 'bravenudeworld', 'suplexwrecks',
-                 'christmas', 'halloween', 'kupokupo', 'quikdraw', 'makeover']):
-        s = manage_character_appearance(
-            outfile_rom_buffer,
-            preserve_graphics=preserve_graphics,
-            moogle_names=kwargs.get("moogle_names", None),
-            male_names=kwargs.get("male_names", None),
-            female_names=kwargs.get("female_names", None),
-            sprite_replacements=kwargs.get("sprite_replacements", None)
-        )
-        log(s, "aesthetics")
-        # show_original_names(outfile_rom_buffer)
-    reseed()
-
-    if Options_.is_flag_active("random_character_stats"):
-        # do this after items
-        manage_equipment(items)
-    reseed()
-
-    esperrage_spaces = [FreeBlock(0x26469, 0x26469 + 919)]
-    if Options_.is_flag_active("random_espers"):
-        dancingmaduin = Options_.is_flag_active('dancingmaduin')
-        if dancingmaduin:
-            allocate_espers(
-                Options_.is_flag_active('ancientcave'),
-                get_espers(infile_rom_buffer),
-                get_characters(),
-                dancingmaduin.value,
-                outfile_rom_buffer,
-                esper_replacements
-            )
-            nerf_paladin_shield()
-        manage_espers(esperrage_spaces, esper_replacements)
-    reseed()
-    myself_locations = myself_patches(outfile_rom_buffer)
-    manage_reorder_rages(myself_locations["RAGE_ORDER_TABLE"])
-
-    titlesub = Substitution()
-    titlesub.bytestring = [0xFD] * 4
-    titlesub.set_location(0xA5E8E)
-    titlesub.write(outfile_rom_buffer)
-
-    manage_opening()
-    manage_ending()
-    manage_auction_house()
-
-    savetutorial_sub = Substitution()
-    savetutorial_sub.set_location(0xC9AF1)
-    savetutorial_sub.bytestring = [0xD2, 0x33, 0xEA, 0xEA, 0xEA, 0xEA]
-    savetutorial_sub.write(outfile_rom_buffer)
-
-    savecheck_sub = Substitution()
-    savecheck_sub.bytestring = [0xEA, 0xEA]
-    savecheck_sub.set_location(0x319f2)
-    savecheck_sub.write(outfile_rom_buffer)
-    reseed()
-
-    if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
-        # do this after swapping beserk
-        manage_natural_magic(myself_locations["NATURAL_MAGIC_TABLE"])
-    reseed()
-
-    if Options_.is_flag_active("random_zerker"):
-        umaro_risk = manage_umaro(commands)
-        reset_rage_blizzard(items, umaro_risk, outfile_rom_buffer)
-    reseed()
-
-    if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
-        # do this after swapping berserk
-        manage_tempchar_commands()
-    reseed()
-
-    start_in_wor = Options_.is_flag_active('worringtriad')
-    if Options_.is_flag_active("random_character_stats"):
-        # do this after swapping berserk
-        from itemrandomizer import set_item_changed_commands
-        set_item_changed_commands(changed_commands)
-        loglist = reset_special_relics(items, characters, outfile_rom_buffer)
-        log_string = "COMMAND CHANGERS\n---------------------------\n"
-        loglist.sort(key=lambda i: i[0])
-        for name, before, after in loglist:
-            beforename = [c for c in commands.values() if c.id == before][0].name
-            aftername = [c for c in commands.values() if c.id == after][0].name
-            log_string += "{0:15}{1:7} -> {2:7}\n".format(name + ":", beforename.lower(), aftername.lower())
-
-        log(log_string, section="item effects")
-        reset_cursed_shield(outfile_rom_buffer)
-
-        if options.Use_new_randomizer:
-            stat_randomizer = CharacterStats(rng, Options_, character_list)
-            stat_randomizer.randomize()
-            for mutated_character in character_list:
-                substitutions = mutated_character.get_bytes()
-                for substitution_address in substitutions:
-                    outfile_rom_buffer.seek(substitution_address)
-                    outfile_rom_buffer.write(substitutions[substitution_address])
-        else:
-            for character in characters:
-                character.mutate_stats(outfile_rom_buffer, start_in_wor)
-    else:
-        for character in characters:
-            character.mutate_stats(outfile_rom_buffer, start_in_wor, read_only=True)
-    reseed()
-
-    if Options_.is_flag_active("random_formations"):
-        formations = get_formations()
-        fsets = get_fsets()
-        manage_formations(formations, fsets)
-        manage_cursed_encounters(formations, fsets)
-        for fset in fsets:
-            fset.write_data(outfile_rom_buffer)
-
-    if Options_.is_flag_active("random_formations") or Options_.is_flag_active('ancientcave'):
-        manage_dragons()
-    reseed()
-
-    if Options_.is_flag_active("randomize_forest") and not \
-            Options_.is_flag_active('ancientcave') and not \
-            Options_.is_flag_active('strangejourney'):
-        randomize_forest()
-
-        # remove forced healing event tile with randomized forest
-        remove_forest_event_sub = Substitution()
-        remove_forest_event_sub.set_location(0xBA3D1)
-        remove_forest_event_sub.bytestring = bytes([0xFE])
-        remove_forest_event_sub.write(outfile_rom_buffer)
-
-    reseed()
-
-    if Options_.is_flag_active("random_final_dungeon") and not Options_.is_flag_active('ancientcave'):
-        # do this before treasure
-        manage_tower()
-    reseed()
-    if Options_.is_flag_active("norng"):
-        fix_norng_npcs()
-
-    if Options_.is_flag_active("random_formations") or Options_.is_flag_active("random_treasure"):
-        assign_unused_enemy_formations()
-
-    form_music = {}
-    if Options_.is_flag_active("random_formations"):
-        no_special_events = not Options_.is_flag_active('bsiab')
-        manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music,
-                                 no_special_events=no_special_events)
-        for monster in get_monsters():
-            monster.write_stats(outfile_rom_buffer)
-    reseed()
-
-    for formation in get_formations():
-        formation.write_data(outfile_rom_buffer)
-
-    if Options_.is_flag_active("random_treasure"):
-        wedge_money = 1000 + random.randint(0, 1500)
-        vicks_money = 500 + random.randint(0, 750)
-        starting_money = wedge_money + vicks_money
-        starting_money_sub = Substitution()
-        starting_money_sub.set_location(0xC9A93)
-        starting_money_sub.bytestring = bytes([0x84, starting_money & 0xFF, (starting_money >> 8) & 0xFF])
-        starting_money_sub.write(outfile_rom_buffer)
-
-        # do this after hidden formations
-        katn = Options_.mode.name == 'katn'
-        guarantee_hidon_drop = Options_.is_flag_active("random_enemy_stats")
-        manage_treasure(monsters, shops=True, no_charm_drops=katn, katnFlag=katn,
-            guarantee_hidon_drop=guarantee_hidon_drop)
-        if not Options_.is_flag_active('ancientcave'):
-            manage_chests()
-            mutate_event_items(outfile_rom_buffer, cutscene_skip=Options_.is_flag_active('notawaiter'),
-                               crazy_prices=Options_.is_flag_active('madworld'),
-                               no_monsters=Options_.is_flag_active('nomiabs'),
-                               uncapped_monsters=Options_.is_flag_active('bsiab'))
-            for fset in fsets:
-                # write new formation sets for MiaBs
-                fset.write_data(outfile_rom_buffer)
-    reseed()
-
-    if Options_.is_flag_active("random_palettes_and_names"):
-        # do this before ancient cave
-        # could probably do it after if I wasn't lazy
-        manage_colorize_dungeons()
-
-    if Options_.is_flag_active('ancientcave'):
-        manage_ancient(Options_, outfile_rom_buffer, infile_rom_buffer, form_music_overrides=form_music,
-                       randlog=randlog)
-    reseed()
-
-    if Options_.is_flag_active("shuffle_commands") or \
-            Options_.is_flag_active("replace_commands") or \
-            Options_.is_flag_active("random_enemy_stats"):
-        manage_magitek()
-    reseed()
-
-    if Options_.is_flag_active("random_blitz"):
-        if 0x0A not in changed_commands:
-            manage_blitz()
-    reseed()
-
-    if Options_.is_flag_active('halloween'):
-        demon_chocobo_sub = Substitution()
-        outfile_rom_buffer.seek(0x2d0000 + 896 * 7)
-        demon_chocobo_sub.bytestring = outfile_rom_buffer.read(896)
-        for i in range(7):
-            demon_chocobo_sub.set_location(0x2d0000 + 896 * i)
-            demon_chocobo_sub.write(outfile_rom_buffer)
-
-    if Options_.is_flag_active("random_window") or \
-            Options_.is_flag_active('christmas') or \
-            Options_.is_flag_active('halloween'):
-        for i in range(8):
-            window = WindowBlock(i)
-            window.read_data()
-            window.mutate()
-            window.write_data()
-    reseed()
-
-    if Options_.is_flag_active('dearestmolulu') or (
-            Options_.is_flag_active("random_formations") and
-            Options_.is_flag_active("fix_exploits") and not
-            Options_.is_flag_active('ancientcave')):
-        manage_encounter_rate()
-    reseed()
-    reseed()
-
-    if Options_.is_flag_active("random_animation_palettes"):
-        manage_colorize_animations()
-    reseed()
-
-    if Options_.is_flag_active('suplexwrecks'):
-        manage_suplex(commands, monsters)
-    reseed()
-
-    if Options_.is_flag_active('strangejourney') and not Options_.is_flag_active('ancientcave'):
-        create_dimensional_vortex()
-        # manage_strange_events()
-    reseed()
-
-    if Options_.is_flag_active('notawaiter') and not Options_.is_flag_active('ancientcave'):
-        pipe_print("Cutscenes are currently skipped up to Kefka @ Narshe")
-        manage_skips()
-    reseed()
-
-    wor_free_char = 0xB  # gau
-    alternate_gogo = Options_.is_flag_active('mimetime')
-    if (Options_.is_flag_active("shuffle_wor") or alternate_gogo) and not Options_.is_flag_active('ancientcave'):
-        include_gau = Options_.is_flag_active("shuffle_commands") or \
-                      Options_.is_flag_active("replace_commands") or \
-                      Options_.is_flag_active("random_treasure")
-        wor_free_char = manage_wor_recruitment(outfile_rom_buffer,
-                                               shuffle_wor=Options_.is_flag_active("shuffle_wor"),
-                                               random_treasure=Options_.is_flag_active("random_treasure"),
-                                               include_gau=include_gau,
-                                               alternate_gogo=alternate_gogo)
-    reseed()
-
-    if Options_.is_flag_active('worringtriad') and not Options_.is_flag_active('ancientcave'):
-        manage_wor_skip(outfile_rom_buffer, wor_free_char, airship=Options_.is_flag_active('airship'),
-                        dragon=Options_.mode.name == 'dragonhunt',
-                        alternate_gogo=Options_.is_flag_active('mimetime'),
-                        esper_replacements=esper_replacements)
-    reseed()
-
-    if Options_.is_flag_active("random_clock") and not Options_.is_flag_active('ancientcave'):
-        manage_clock()
-    reseed()
-
-    if Options_.is_flag_active("random_dances"):
-        if 0x13 not in changed_commands:
-            manage_dances()
-
-    reseed()
-
-    if Options_.is_flag_active('remonsterate'):
-        outfile_backup = BytesIO(outfile_rom_buffer.getbuffer().tobytes())
-
-        attempt_number = 0
-        remonsterate_results = None
-        randomize_connection, remonsterate_connection = Pipe()
-
-        while True:
-            try:
-                remonsterate_kwargs = {
-                    "outfile_rom_buffer": outfile_rom_buffer,
-                    "seed": (seed + attempt_number),
-                    "rom_type": "1.0",
-                    "list_of_monsters": get_monsters(outfile_rom_buffer)
-                }
-                remonsterate_process = Process(
-                    target=remonsterate,
-                    args=(remonsterate_connection,),
-                    kwargs=remonsterate_kwargs
-                )
-                remonsterate_process.start()
-                while True:
-                    try:
-                        response = randomize_connection.recv()
-                        if isinstance(response, str):
-                            pipe_print(response)
-                        elif isinstance(response, tuple):
-                            outfile_rom_buffer, remonsterate_results = response
+                    pipe_print("\t" + speeddial_number + ": " + speeddial_flags)
+                pipe_print()
+                flags = input("Please input your desired flags (blank for "
+                              "all of them):\n> ").strip()
+                if flags == "!":
+                    flags = '-dfklu partyparty makeover johnnydmad'
+
+                is_speeddialing = re.search("^[0-9]$", flags)
+                if is_speeddialing:
+                    for speeddial_number, speeddial_flags in speeddials:
+                        if speeddial_number == flags[:1]:
+                            flags = speeddial_flags.strip()
                             break
-                        elif isinstance(response, Exception):
-                            if not isinstance(response, OverflowError) and not \
-                                    isinstance(response, ReferenceError) and gui_connection:
-                                gui_connection.send(response)
-                            else:
-                                raise response
-                    except EOFError:
-                        break
 
-            except (OverflowError, ReferenceError) as e:
-                pipe_print("Remonsterate: An error occurred attempting to remonsterate. Trying again...")
-                # Replace backup file
-                outfile_rom_buffer = outfile_backup
-                attempt_number = attempt_number + 1
-                continue
-            break
+                saving_speeddial = re.search("^[0-9]:", flags)
+                if saving_speeddial:
+                    set_value("Speeddial", flags[:1], flags[3:].strip())
+                    pipe_print("Flags saved under speeddial number " + str(flags[:1]))
+                    flags = flags[3:]
 
-        # Remonsterate finished
-        if remonsterate_results:
-            for result in remonsterate_results:
-                log(str(result) + '\n', section='remonsterate')
+                fullseed = "|%i|%s|%s" % (mode_num + 1, flags, fullseed)
+                pipe_print()
 
-    if not Options_.is_flag_active('sketch') or Options_.is_flag_active('remonsterate'):
-        # Original C2 sketch fix by Assassin, prevents bad pointers
+        try:
+            version, mode_str, flags, seed = tuple(fullseed.split('|'))
+        except ValueError:
+            raise ValueError('Seed should be in the format <version>|<mode>|<flags>|<seed>')
+        mode_str = mode_str.strip()
+        mode_num = None
+        try:
+            mode_num = int(mode_str) - 1
+        except ValueError:
+            for i, m in enumerate(ALL_MODES):
+                if m.name == mode_str:
+                    mode_num = i
+                    break
 
-        sketch_fix_sub = Substitution()
-        sketch_fix_sub.set_location(0x2F5C6)
-        sketch_fix_sub.bytestring = bytes([0x80, 0xCA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0x4C, 0x09, 0xF8,
-                                           0xA0, 0x00, 0x28, 0x22, 0x09, 0xB1, 0xC1, 0xA9, 0x01, 0x1C, 0x8D, 0x89, 0xA0,
-                                           0x03, 0x00,
-                                           0xB1, 0x76, 0x0A, 0xAA, 0xC2, 0x20, 0xBD, 0x01, 0x20, 0x90, 0x02,
-                                           0x7B, 0x3A, 0xAA, 0x7B, 0xE2, 0x20, 0x22, 0xD1, 0x24, 0xC1, 0x80, 0xD7, ])
-        sketch_fix_sub.write(outfile_rom_buffer)
+        if mode_num not in range(len(ALL_MODES)):
+            raise Exception("Invalid mode specified")
+        Options_.mode = ALL_MODES[mode_num]
 
-        sketch_fix_sub.set_location(0x12456)
-        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x18, 0xA0, 0x00, 0x00,
-                                           0x86, 0x10, 0xA2, 0x3F, 0xAE, ])
-        sketch_fix_sub.write(outfile_rom_buffer)
+        seed = seed.strip()
+        if not seed:
+            seed = int(time())
+        else:
+            seed = int(seed)
+        seed = seed % (10 ** 10)
+        reseed()
 
-        # Additional C1 sketch animation fix by Assassin, handles bad draw instruction
-
-        sketch_fix_sub.set_location(0x12456)
-        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x18, 0xA0, 0x00, 0x00,
-                                           0x86, 0x10, 0xA2, 0x3F, 0xAE, ])
-        sketch_fix_sub.write(outfile_rom_buffer)
-
-        sketch_fix_sub.set_location(0x1246C)
-        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, ])
-        sketch_fix_sub.write(outfile_rom_buffer)
-
-        sketch_fix_sub.set_location(0x12484)
-        sketch_fix_sub.bytestring = bytes(
-            [0x20, 0x8F, 0x24, 0xA2, 0x00, 0x14, 0xA0, 0x00, 0x24, 0x80, 0xD0, 0xDA, 0x86, 0x10,
-             0x20, 0x20, 0x20, 0x20, 0xF5, 0x24, 0x20, 0xE5, 0x24, 0x20, 0xA5, 0x22, 0xFA, 0x60,
-             0xEA, 0xEA, 0xEA, 0xEA, 0xEA, ])
-        sketch_fix_sub.write(outfile_rom_buffer)
-
-        sketch_fix_sub.set_location(0x124A9)
-        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, ])
-        sketch_fix_sub.write(outfile_rom_buffer)
-
-        sketch_fix_sub.set_location(0x124D1)
-        sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xE0, 0xFF, 0xFF, 0xD0, 0x03,
-                                           0x20, 0x20, 0x20, 0xA2, 0x00, 0x20, 0x20, 0x5C, 0x24, 0x6B, 0xEA, 0x6B, ])
-        sketch_fix_sub.write(outfile_rom_buffer)
-
-        sketch_fix_sub.set_location(0x124F9)
-        sketch_fix_sub.bytestring = bytes(
-            [0x1A, 0xF0, 0x01, 0x3A, 0x0A, 0x0A, 0x18, 0x65, 0x10, 0xAA, 0xBF, 0x02, 0x70, 0xD2, 0xEB, 0x29, 0xFF, 0x03,
-             0x0A, 0x0A, 0x0A, 0x0A, 0x8D, 0x69, 0x61, 0xBF, 0x00, 0x70, 0xD2, 0x29, 0xFF, 0x7F, 0x8D, 0xA8, 0x81,
-             0x7B, 0xBF, 0x01, 0x70, 0xD2, 0xE2, 0x20, 0x0A, 0xEB, 0x6A, 0x8D, 0xAC, 0x81,
-             0x0A, 0x0A, 0x0A, 0x7B, 0x2A, 0x8D, 0xAB, 0x81, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, ])
-        sketch_fix_sub.write(outfile_rom_buffer)
-
-    has_music = Options_.is_any_flag_active(['johnnydmad', 'johnnyachaotic'])
-    if has_music:
-        music_init()
-
-    if Options_.is_flag_active('alasdraco'):
-        opera = manage_opera(outfile_rom_buffer, has_music)
-        log(get_opera_log(), section="aesthetics")
-    else:
-        opera = None
-    reseed()
-
-    if has_music:
-        from utils import custom_path
-        randomize_music(outfile_rom_buffer, Options_, playlist_path=custom_path, playlist_filename=SONGS_TABLE,
-            opera=opera, form_music_overrides=form_music)
-        log(get_music_spoiler(), section="music")
-    reseed()
-
-    if Options_.mode.name == "katn":
-        start_with_random_espers()
-        set_lete_river_encounters()
-    reseed()
-
-    if Options_.is_flag_active("random_enemy_stats") or Options_.is_flag_active("random_formations"):
-        if not Options_.is_flag_active('ancientcave') or Options_.mode.name == "katn":
-            house_hint()
-    reseed()
-    reseed()
-
-    randomize_poem(outfile_rom_buffer)
-    randomize_passwords()
-    reseed()
-    namingway()
-    if Options_.is_flag_active('thescenarionottaken'):
-        chocobo_merchant()
-
-    jm = JunctionManager(outfile_rom_buffer, 'bcg_junction_manifest.json')
-    jm.activated = False
-    junction_everything(jm, outfile_rom_buffer)
-
-    # ----- NO MORE RANDOMNESS PAST THIS LINE -----
-    if Options_.is_flag_active('thescenarionottaken'):
-        no_kutan_skip(outfile_rom_buffer)
-
-    write_all_locations_misc()
-    for fset in fsets:
-        fset.write_data(outfile_rom_buffer)
-
-    # This needs to be after write_all_locations_misc()
-    # so the changes to Daryl don't get stomped.
-    event_freespaces = [FreeBlock(0xCFE2A, 0xCFE2a + 470)]
-    if Options_.is_flag_active('airship'):
-        event_freespaces = activate_airship_mode(event_freespaces)
-
-    if Options_.is_flag_active("random_zerker") or Options_.is_flag_active("random_character_stats"):
-        manage_equip_umaro(event_freespaces)
-
-    # Write easymodo, expboost, and gpboost stat changes to each monster
-    if Options_.is_flag_active('easymodo') or Options_.is_flag_active('expboost') or \
-            Options_.is_flag_active('gpboost'):
-        for monster in monsters:
-            if Options_.is_flag_active('easymodo'):
-                monster.stats['hp'] = 1
-            if Options_.is_flag_active('expboost'):
-                monster.stats['xp'] = int(min(0xFFFF, float(Options_.get_flag_value("expboost")) * monster.stats['xp']))
-            if Options_.is_flag_active('gpboost'):
-                monster.stats['gp'] = int(min(0xFFFF, float(Options_.get_flag_value("gpboost")) * monster.stats['gp']))
-            monster.write_stats(outfile_rom_buffer)
-
-    if Options_.is_flag_active('naturalmagic') or Options_.is_flag_active('naturalstats'):
-        espers = get_espers(infile_rom_buffer)
-        if Options_.is_flag_active('naturalstats'):
-            for esper in espers:
-                esper.bonus = 0xFF
-        if Options_.is_flag_active('naturalmagic'):
-            for esper in espers:
-                esper.spells, esper.learnrates = [], []
-            for item in items:
-                item.features['learnrate'] = 0
-                item.features['learnspell'] = 0
-                item.write_stats(outfile_rom_buffer)
-        for esper in espers:
-            esper.write_data(outfile_rom_buffer)
-
-    if Options_.is_flag_active('canttouchthis'):
-        for character in characters:
-            if character.id >= 14:
-                continue
-            character.become_invincible(outfile_rom_buffer)
-
-    if Options_.is_flag_active('equipanything'):
-        manage_equip_anything()
-
-    if Options_.is_flag_active('playsitself'):
-        manage_full_umaro()
-        for command in commands.values():
-            if command.id not in [0x01, 0x08, 0x0E, 0x0F, 0x15, 0x19]:
-                command.allow_while_berserk(outfile_rom_buffer)
-        whelkhead = get_monster(0x134)
-        whelkhead.stats['hp'] = 1
-        whelkhead.write_stats(outfile_rom_buffer)
-        whelkshell = get_monster(0x100)
-        whelkshell.stats['hp'] = 1
-        whelkshell.write_stats(outfile_rom_buffer)
-
-    for item in get_ranked_items(allow_banned=True):
-        if item.banned:
-            assert not dummy_item(item)
-
-    if Options_.is_flag_active('christmas') and not Options_.is_flag_active('ancientcave'):
-        manage_santa()
-    elif Options_.is_flag_active('halloween') and not Options_.is_flag_active('ancientcave'):
-        manage_spookiness()
-
-    if Options_.is_flag_active('dancelessons'):
-        no_dance_stumbles(outfile_rom_buffer)
-
-    banon_life3(outfile_rom_buffer)
-    allergic_dog(outfile_rom_buffer)
-    y_equip_relics(outfile_rom_buffer)
-    fix_gogo_portrait(outfile_rom_buffer)
-    cycle_statuses(outfile_rom_buffer)
-    name_swd_techs(outfile_rom_buffer)
-    fix_flash_and_bioblaster(outfile_rom_buffer)
-    title_gfx(outfile_rom_buffer)
-    improved_party_gear(outfile_rom_buffer)
-    mp_color_digits(outfile_rom_buffer)
-    manage_doom_gaze(outfile_rom_buffer)
-
-    if Options_.is_flag_active("swdtechspeed"):
-        swdtech_speed = Options_.get_flag_value('swdtechspeed')
-        if type(swdtech_speed) == bool:
-            if application and application != "console":
-                pipe_print("ERROR: No value was supplied for swdtechspeed flag. Skipping flag.")
+        if not application or application != "web":
+            if '.' in infile_rom_path:
+                tempname = os.path.basename(infile_rom_path).rsplit('.', 1)
             else:
+                tempname = [os.path.basename(infile_rom_path), 'smc']
+
+            outfile_rom_path = os.path.join(outfile_rom_path,
+                                            '.'.join([os.path.basename(tempname[0]),
+                                                      str(seed), tempname[1]]))
+            outlog = os.path.join(os.path.dirname(outfile_rom_path),
+                                  '.'.join([os.path.basename(tempname[0]),
+                                            str(seed), 'txt']))
+
+            if infile_rom_path != config_infile_rom_path or outfile_rom_path != config_outfile_rom_path:
+                try:
+                    save_input_path(infile_rom_path)
+                    save_output_path(os.path.dirname(outfile_rom_path))
+                except:
+                    pipe_print("Couldn't save flag string\n")
+
+            infile_rom_buffer = BytesIO(open(infile_rom_path, "rb").read())
+            outfile_rom_buffer = BytesIO(open(infile_rom_path, "rb").read())
+
+            if len(outfile_rom_buffer.read()) % 0x400 == 0x200:
+                pipe_print("NOTICE: Headered ROM detected. Output file will have no header.")
+                outfile_rom_buffer = outfile_rom_buffer[0x200:]
+                # infile_rom_path = '.'.join([tempname[0], "unheadered", tempname[1]])
+                # with open(infile_rom_path, 'w+b') as f:
+                #     f.write(data)
+
+            rom_hash = md5(outfile_rom_buffer.getbuffer()).hexdigest()
+            if rom_hash not in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2] and \
+                    (not application or application == "console"):
+                pipe_print("WARNING! The md5 hash of this file does not match the known "
+                           "hashes of the english FF6 1.0 rom!")
+                x = input("Continue? y/n ")
+                if not (x and x.lower()[0] == 'y'):
+                    return
+
+            # Before randomizing, test to make sure the supplied output directory is writable
+            if not os.access(os.path.dirname(outfile_rom_path), os.W_OK):
+                if gui_connection:
+                    gui_connection.send(PermissionError("The randomizer does not have "
+                                                        "write permissions to the given ROM output directory."))
+                    return
+                else:
+                    raise PermissionError("The randomizer does not have write permissions "
+                                          "to the given ROM output directory.")
+
+        flags = flags.lower()
+        activation_string = Options_.activate_from_string(flags)
+
+        # Check expboost, gpboost, and mpboost values
+        for flag_name in ["expboost", "gpboost", "mpboost", "randomboost"]:
+            if flag := Options_.is_flag_active(flag_name):
                 while True:
-                    swdtech_speed = input("\nPlease enter a custom speed for Sword Tech "
-                                          "(random, vanilla, fast, faster, fastest):\n")
                     try:
-                        if swdtech_speed.lower() in ["random", "vanilla", "fast", "faster", "fastest"]:
+                        if flag.maximum_value < float(flag.value):
+                            error_message = "The supplied value for " + flag_name + " was greater than the maximum " \
+                                                                                    "allowed value of " + str(
+                                flag.maximum_value) + "."
+                        elif float(flag.value) < flag.minimum_value:
+                            error_message = "The supplied value for " + flag_name + " was less than the minimum " \
+                                                                                    "allowed value of " + str(
+                                flag.minimum_value) + "."
+                        elif not flag.value or type(flag.value) == bool or str(flag.value).lower() == "nan":
+                            error_message = "No value was supplied for " + flag_name + "."
+                        else:
+                            flag.value = float(flag.value)
+                            if flag.inputtype == "integer":
+                                flag.value = int(flag.value)
+                            break
+                    except ValueError:
+                        error_message = "The supplied value for " + flag_name + " was not a number."
+
+                    if not application or application != "console":
+                        # Users in the GUI or web cannot fix the flags after generation begins, so deactivate the flag.
+                        pipe_print(error_message + " Deactivating flag.")
+                        Options_.deactivate_flag(flag_name)
+                        break
+                    flag.value = input(error_message + " Please enter a multiplier between " + str(flag.minimum_value) +
+                                       " and " + str(flag.maximum_value) + " for " + flag_name + ".\n>")
+
+
+        if not application or application != "web":
+            if version and version != VERSION:
+                pipe_print("WARNING! Version mismatch! "
+                           "This seed will not produce the expected result!")
+        s = "Using seed: %s|%s|%s|%s" % (VERSION,
+                                         Options_.mode.name,
+                                         " ".join([flag.name if isinstance(flag.value, bool) else
+                                                   flag.name + ":" + str(flag.value) for flag in Options_.active_flags]),
+                                         seed)
+        pipe_print(s)
+        log(s, section=None)
+        log("This is a game guide generated for the Beyond Chaos CE FF6 Randomizer.",
+            section=None)
+        log("For more information, visit https://github.com/FF6BeyondChaos/BeyondChaosRandomizer",
+            section=None)
+
+        commands = commands_from_table(COMMAND_TABLE)
+        commands = {c.name: c for c in commands}
+
+        load_characters(infile_rom_buffer, force_reload=True)
+        characters = get_characters()
+
+        tm = gmtime(seed)
+        if tm.tm_mon == 12 and (tm.tm_mday == 24 or tm.tm_mday == 25):
+            Options_.activate_flag('christmas', True)
+            activation_string += "CHRISTMAS MODE ACTIVATED\n"
+        elif tm.tm_mon == 10 and tm.tm_mday == 31:
+            Options_.activate_flag('halloween', True)
+            activation_string += "ALL HALLOWS' EVE MODE ACTIVATED\n"
+
+        pipe_print(activation_string)
+
+        if Options_.is_flag_active('randomboost'):
+            set_randomness_multiplier(int(Options_.get_flag_value('randomboost')))
+        elif Options_.is_flag_active('madworld'):
+            set_randomness_multiplier(None)
+
+        expand_rom()
+
+        pipe_print("\nNow beginning randomization.\n"
+                   "The randomization is very thorough, so it may take some time.\n"
+                   'Please be patient and wait for "randomization successful" to appear.')
+
+        rng = Random(seed)
+
+        if Options_.is_flag_active("thescenarionottaken"):
+            if Options_.is_flag_active("strangejourney"):
+                pipe_print("thescenarionottaken flag is incompatible with strangejourney")
+            else:
+                diverge()
+
+        read_dialogue(infile_rom_buffer)
+        read_location_names(infile_rom_buffer)
+        relocate_ending_cinematic_data(0xF08A70)
+
+        if Options_.is_flag_active("shuffle_commands") or \
+                Options_.is_flag_active("replace_commands") or \
+                Options_.is_flag_active("random_treasure"):
+            auto_recruit_gau(stays_in_wor=not Options_.is_flag_active("shuffle_wor") and not
+            Options_.is_flag_active('mimetime'))
+            if Options_.is_flag_active("shuffle_commands") or Options_.is_flag_active("replace_commands"):
+                auto_learn_rage()
+
+        if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
+            manage_commands(commands)
+
+        reseed()
+
+        spells = get_ranked_spells(infile_rom_buffer)
+        if Options_.is_flag_active('madworld'):
+            random.shuffle(spells)
+            for i, s in enumerate(spells):
+                s._rank = i + 1
+                s.valid = True
+        if Options_.is_flag_active("replace_commands") and not Options_.is_flag_active('suplexwrecks'):
+            if Options_.is_flag_active('quikdraw'):
+                ALWAYS_REPLACE += ["rage"]
+            if Options_.is_flag_active('sketch'):
+                NEVER_REPLACE += ["sketch"]
+            _, freespaces = manage_commands_new(commands)
+
+        reseed()
+
+        if Options_.is_flag_active("sprint"):
+            manage_sprint()
+
+        if Options_.is_flag_active("fix_exploits"):
+            manage_balance(newslots=Options_.is_flag_active("replace_commands"))
+
+        if Options_.is_flag_active("random_final_party"):
+            randomize_final_party_order()
+        reseed()
+
+        preserve_graphics = (not Options_.is_flag_active("swap_sprites") and not Options_.is_flag_active('partyparty'))
+
+        monsters = get_monsters(infile_rom_buffer)
+        formations = get_formations(infile_rom_buffer)
+        fsets = get_fsets(infile_rom_buffer)
+        locations = get_locations(outfile_rom_buffer)  # Must read from outfile for thescenarionottaken to function
+        items = get_ranked_items(infile_rom_buffer)
+        zones = get_zones(infile_rom_buffer)
+        get_metamorphs(infile_rom_buffer)
+
+        aispaces = [
+            FreeBlock(0xFCF50, 0xFCF50 + 384),
+            FreeBlock(0xFFF47, 0xFFF47 + 87),
+            FreeBlock(0xFFFBE, 0xFFFBE + 66)
+        ]
+
+        if Options_.is_flag_active("random_final_dungeon") or Options_.is_flag_active('ancientcave'):
+            # do this before treasure
+            if Options_.is_flag_active("random_enemy_stats") \
+                    and Options_.is_flag_active("random_treasure") \
+                    and Options_.is_flag_active("random_character_stats"):
+                dirk = get_item(0)
+                if dirk is None:
+                    items = get_ranked_items(infile_rom_buffer)
+                    dirk = get_item(0)
+                s = dirk.become_another(halloween=Options_.is_flag_active('halloween'))
+                dirk.write_stats(outfile_rom_buffer)
+                dummy_item(dirk)
+                assert not dummy_item(dirk)
+                log(s, section="secret items")
+        if Options_.is_flag_active("random_enemy_stats") and \
+                Options_.is_flag_active("random_treasure") and \
+                Options_.is_flag_active("random_character_stats"):
+            rename_card = get_item(231)
+            if rename_card is not None:
+                s = rename_card.become_another(tier="low")
+                rename_card.write_stats(outfile_rom_buffer)
+
+                weapon_anim_fix = Substitution()
+                weapon_anim_fix.set_location(0x19DB8)
+                weapon_anim_fix.bytestring = bytes([0x22, 0x80, 0x30, 0xF0])
+                weapon_anim_fix.write(outfile_rom_buffer)
+
+                weapon_anim_fix.set_location(0x303080)
+                weapon_anim_fix.bytestring = bytes(
+                    [0xE0, 0xE8, 0x02, 0xB0, 0x05, 0xBF, 0x00, 0xE4, 0xEC, 0x6B, 0xDA, 0xC2, 0x20, 0x8A, 0xE9, 0xF0, 0x02,
+                     0xAA, 0x29, 0xFF, 0x00, 0xE2, 0x20, 0xBF, 0x00, 0x31, 0xF0, 0xFA, 0x6B])
+                weapon_anim_fix.write(outfile_rom_buffer)
+                log(s, section="secret items")
+        reseed()
+
+        items = get_ranked_items()
+        if Options_.is_flag_active("random_items"):
+            manage_items(items, changed_commands=changed_commands)
+            buy_owned_breakable_tools(outfile_rom_buffer)
+
+        reseed()
+
+        manage_doom_gaze(outfile_rom_buffer)
+
+        if Options_.is_flag_active("random_enemy_stats"):
+            aispaces = manage_final_boss(aispaces)
+            monsters = manage_monsters()
+
+        reseed()
+
+        if Options_.is_flag_active("random_enemy_stats") or \
+                Options_.is_flag_active("shuffle_commands") or \
+                Options_.is_flag_active("replace_commands"):
+            for m in monsters:
+                m.screw_tutorial_bosses(old_vargas_fight=Options_.is_flag_active('rushforpower'))
+                m.write_stats(outfile_rom_buffer)
+
+        if Options_.is_flag_active("mementomori"):
+            amount = Options_.get_flag_value('mementomori')
+            if type(amount) == bool:
+                while True:
+                    amount = input("\nHow many character should receive innate relics? "
+                                   "(0-14 or random):\n")
+                    try:
+                        if amount.lower() == "random" or 0 < int(amount) < 15:
                             break
                         raise ValueError
                     except ValueError:
-                        pipe_print("The supplied speed was not a valid option. Please try again.")
-        if not type(swdtech_speed) == bool:
-            change_swdtech_speed(outfile_rom_buffer, swdtech_speed)
-    if Options_.is_flag_active("cursepower"):
-        change_cursed_shield_battles(outfile_rom_buffer, Options_.get_flag_value("cursepower"))
+                        pipe_print("The supplied value was not a valid option. Please try again.")
+            hidden_relic(outfile_rom_buffer, amount)
 
-    s = manage_coral(outfile_rom_buffer)
-    log(s, "aesthetics")
+        # This needs to be before manage_monster_appearance or some of the monster
+        # palettes will be messed up.
+        esper_replacements = {}
+        if Options_.is_flag_active("randomize_magicite"):
+            esper_replacements = randomize_magicite(outfile_rom_buffer, infile_rom_buffer)
+            JUNCTION_MANAGER_PARAMETERS['esper_replacements'] = esper_replacements
+        reseed()
 
-    # TODO Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
-    # add_esper_bonuses(outfile_rom_buffer)
+        if Options_.is_flag_active("random_palettes_and_names") and \
+                Options_.is_flag_active("random_enemy_stats"):
+            mgs = manage_monster_appearance(monsters,
+                                            preserve_graphics=preserve_graphics)
+        reseed()
 
-    if Options_.is_flag_active('removeflashing'):
-        fewer_flashes(outfile_rom_buffer, Options_.get_flag_value('removeflashing'))
+        if Options_.is_flag_active("random_palettes_and_names") or \
+                Options_.is_flag_active("swap_sprites") or \
+                Options_.is_any_flag_active(
+                    ['partyparty', 'bravenudeworld', 'suplexwrecks',
+                     'christmas', 'halloween', 'kupokupo', 'quikdraw', 'makeover']):
+            s = manage_character_appearance(
+                outfile_rom_buffer,
+                preserve_graphics=preserve_graphics,
+                web_custom_moogle_names=kwargs.get("web_custom_moogle_names", None),
+                web_custom_male_names=kwargs.get("web_custom_male_names", None),
+                web_custom_female_names=kwargs.get("web_custom_female_names", None),
+                web_custom_sprite_replacements=kwargs.get("web_custom_sprite_replacements", None)
+            )
+            log(s, "aesthetics")
+            # show_original_names(outfile_rom_buffer)
+        reseed()
 
-    if Options_.is_flag_active('nicerpoison'):
-        nicer_poison(outfile_rom_buffer)
+        if Options_.is_flag_active("random_character_stats"):
+            # do this after items
+            manage_equipment(items)
+        reseed()
 
-    if not Options_.is_flag_active('fightclub'):
-        show_coliseum_rewards(outfile_rom_buffer)
+        esperrage_spaces = [FreeBlock(0x26469, 0x26469 + 919)]
+        if Options_.is_flag_active("random_espers"):
+            dancingmaduin = Options_.is_flag_active('dancingmaduin')
+            if dancingmaduin:
+                allocate_espers(
+                    Options_.is_flag_active('ancientcave'),
+                    get_espers(infile_rom_buffer),
+                    get_characters(),
+                    dancingmaduin.value,
+                    outfile_rom_buffer,
+                    esper_replacements
+                )
+                nerf_paladin_shield()
+            manage_espers(esperrage_spaces, esper_replacements)
+        reseed()
+        myself_locations = myself_patches(outfile_rom_buffer)
+        manage_reorder_rages(myself_locations["RAGE_ORDER_TABLE"])
 
-    if Options_.is_flag_active("replace_commands") or Options_.is_flag_active("shuffle_commands"):
-        sabin_hint(commands)
+        titlesub = Substitution()
+        titlesub.bytestring = [0xFD] * 4
+        titlesub.set_location(0xA5E8E)
+        titlesub.write(outfile_rom_buffer)
 
-    if Options_.is_flag_active("sprint"):
-        sprint_shoes_hint()
+        manage_opening()
+        manage_ending()
+        manage_auction_house()
 
-    if Options_.mode.name == "katn":
-        the_end_comes_beyond_katn()
-    elif Options_.mode.name == "dragonhunt":
-        the_end_comes_beyond_crusader()
+        savetutorial_sub = Substitution()
+        savetutorial_sub.set_location(0xC9AF1)
+        savetutorial_sub.bytestring = [0xD2, 0x33, 0xEA, 0xEA, 0xEA, 0xEA]
+        savetutorial_sub.write(outfile_rom_buffer)
 
-    manage_dialogue_patches(outfile_rom_buffer)
-    write_location_names(outfile_rom_buffer)
+        savecheck_sub = Substitution()
+        savecheck_sub.bytestring = [0xEA, 0xEA]
+        savecheck_sub.set_location(0x319f2)
+        savecheck_sub.write(outfile_rom_buffer)
+        reseed()
 
-    if jm.activated:
-        outfile_rom_buffer.seek(0, 2)
-        romsize = outfile_rom_buffer.tell()
-        if romsize < 0x700000:
-            expand_sub = Substitution()
-            expand_sub.set_location(romsize)
-            expand_sub.bytestring = bytes([0x00] * (0x700000 - romsize))
-            expand_sub.write(outfile_rom_buffer)
+        if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
+            # do this after swapping beserk
+            manage_natural_magic(myself_locations["NATURAL_MAGIC_TABLE"])
+        reseed()
 
-        jm.execute()
-        jm.verify()
-        log(jm.report, section='junctions')
+        if Options_.is_flag_active("random_zerker"):
+            umaro_risk = manage_umaro(commands)
+            reset_rage_blizzard(items, umaro_risk, outfile_rom_buffer)
+        reseed()
 
-    rewrite_title(text="FF6 BCCE %s" % seed)
-    validate_rom_expansion()
-    rewrite_checksum()
-    verify_patchlist(outfile_rom_buffer)
+        if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
+            # do this after swapping berserk
+            manage_tempchar_commands()
+        reseed()
 
-    if not application or application != "web":
-        with open(outfile_rom_path, 'wb+') as f:
-            f.write(outfile_rom_buffer.getvalue())
-        outfile_rom_buffer.close()
+        start_in_wor = Options_.is_flag_active('worringtriad')
+        if Options_.is_flag_active("random_character_stats"):
+            # do this after swapping berserk
+            from itemrandomizer import set_item_changed_commands
+            set_item_changed_commands(changed_commands)
+            loglist = reset_special_relics(items, characters, outfile_rom_buffer)
+            log_string = "COMMAND CHANGERS\n---------------------------\n"
+            loglist.sort(key=lambda i: i[0])
+            for name, before, after in loglist:
+                beforename = [c for c in commands.values() if c.id == before][0].name
+                aftername = [c for c in commands.values() if c.id == after][0].name
+                log_string += "{0:15}{1:7} -> {2:7}\n".format(name + ":", beforename.lower(), aftername.lower())
 
-    pipe_print("\nWriting log...")
+            log(log_string, section="item effects")
+            reset_cursed_shield(outfile_rom_buffer)
 
-    for character in sorted(characters, key=lambda c: c.id):
-        character.associate_command_objects(list(commands.values()))
-        if character.id > 13:
-            continue
-        log(str(character), section="characters")
-
-    if options.Use_new_randomizer:
-        for character in sorted(character_list, key=lambda c: c.id):
-            if character.id <= 14:
-                log(str(character), section="stats")
-
-    for monster in sorted(get_monsters(), key=lambda m: m.display_name):
-        if monster.display_name:
-            log(monster.get_description(changed_commands=changed_commands),
-                section="monsters")
-
-    if not Options_.is_flag_active("ancientcave"):
-        log_chests()
-    log_item_mutations()
-
-    if not application or application != "web":
-        with open(outlog, 'w+') as f:
-            f.write(get_logstring(
-                ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers",
-                 "item magic", "item effects", "command-change relics", "colosseum", "monsters", "music",
-                 "remonsterate", "shops", "treasure chests", "junctions", "zozo clock", "secret items"]))
-
-    if Options_.is_flag_active('bingoboingo'):
-
-        target_score = 200.0
-
-        if kwargs.get("from_gui", False):
-            bingoflags = kwargs.get('bingotype')
-            size = kwargs.get('bingosize')
-            difficulty = kwargs.get('bingodifficulty')
-            numcards = kwargs.get('bingocards')
-
+            if options.Use_new_randomizer:
+                stat_randomizer = CharacterStats(rng, Options_, character_list)
+                stat_randomizer.randomize()
+                for mutated_character in character_list:
+                    substitutions = mutated_character.get_bytes()
+                    for substitution_address in substitutions:
+                        outfile_rom_buffer.seek(substitution_address)
+                        outfile_rom_buffer.write(substitutions[substitution_address])
+            else:
+                for character in characters:
+                    character.mutate_stats(outfile_rom_buffer, start_in_wor)
         else:
-            pipe_print("WELCOME TO BEYOND CHAOS BINGO MODE")
-            pipe_print("Include what type of squares? (blank for all)")
-            pipe_print("    a   Abilities\n"
-                                "    i   Items\n"
-                                "    m   Monsters\n"
-                                "    s   Spells")
-            bingoflags = input("> ").strip()
-            if not bingoflags:
-                bingoflags = "aims"
-            bingoflags = [c for c in "aims" if c in bingoflags]
+            for character in characters:
+                character.mutate_stats(outfile_rom_buffer, start_in_wor, read_only=True)
+        reseed()
 
-            pipe_print("What size grid? (default: 5)")
-            size = input("> ").strip()
-            if not size:
-                size = 5
-            else:
-                size = int(size)
+        if Options_.is_flag_active("random_formations"):
+            formations = get_formations()
+            fsets = get_fsets()
+            manage_formations(formations, fsets)
+            manage_cursed_encounters(formations, fsets)
+            for fset in fsets:
+                fset.write_data(outfile_rom_buffer)
 
-            pipe_print("What difficulty level? Easy, Normal, or Hard? (e/n/h)")
-            difficulty = input("> ").strip()
-            if not difficulty:
-                difficulty = "n"
+        if Options_.is_flag_active("random_formations") or Options_.is_flag_active('ancientcave'):
+            manage_dragons()
+        reseed()
+
+        if Options_.is_flag_active("randomize_forest") and not \
+                Options_.is_flag_active('ancientcave') and not \
+                Options_.is_flag_active('strangejourney'):
+            randomize_forest()
+
+            # remove forced healing event tile with randomized forest
+            remove_forest_event_sub = Substitution()
+            remove_forest_event_sub.set_location(0xBA3D1)
+            remove_forest_event_sub.bytestring = bytes([0xFE])
+            remove_forest_event_sub.write(outfile_rom_buffer)
+
+        reseed()
+
+        if Options_.is_flag_active("random_final_dungeon") and not Options_.is_flag_active('ancientcave'):
+            # do this before treasure
+            manage_tower()
+        reseed()
+        if Options_.is_flag_active("norng"):
+            fix_norng_npcs()
+
+        if Options_.is_flag_active("random_formations") or Options_.is_flag_active("random_treasure"):
+            assign_unused_enemy_formations()
+
+        form_music = {}
+        if Options_.is_flag_active("random_formations"):
+            no_special_events = not Options_.is_flag_active('bsiab')
+            manage_formations_hidden(formations, freespaces=aispaces, form_music_overrides=form_music,
+                                     no_special_events=no_special_events)
+            for monster in get_monsters():
+                monster.write_stats(outfile_rom_buffer)
+        reseed()
+
+        for formation in get_formations():
+            formation.write_data(outfile_rom_buffer)
+
+        if Options_.is_flag_active("random_treasure"):
+            wedge_money = 1000 + random.randint(0, 1500)
+            vicks_money = 500 + random.randint(0, 750)
+            starting_money = wedge_money + vicks_money
+            starting_money_sub = Substitution()
+            starting_money_sub.set_location(0xC9A93)
+            starting_money_sub.bytestring = bytes([0x84, starting_money & 0xFF, (starting_money >> 8) & 0xFF])
+            starting_money_sub.write(outfile_rom_buffer)
+
+            # do this after hidden formations
+            katn = Options_.mode.name == 'katn'
+            guarantee_hidon_drop = Options_.is_flag_active("random_enemy_stats")
+            manage_treasure(monsters, shops=True, no_charm_drops=katn, katnFlag=katn,
+                            guarantee_hidon_drop=guarantee_hidon_drop)
+            if not Options_.is_flag_active('ancientcave'):
+                manage_chests()
+                mutate_event_items(outfile_rom_buffer, cutscene_skip=Options_.is_flag_active('notawaiter'),
+                                   crazy_prices=Options_.is_flag_active('madworld'),
+                                   no_monsters=Options_.is_flag_active('nomiabs'),
+                                   uncapped_monsters=Options_.is_flag_active('bsiab'))
+                for fset in fsets:
+                    # write new formation sets for MiaBs
+                    fset.write_data(outfile_rom_buffer)
+        reseed()
+
+        if Options_.is_flag_active("random_palettes_and_names"):
+            # do this before ancient cave
+            # could probably do it after if I wasn't lazy
+            manage_colorize_dungeons()
+
+        if Options_.is_flag_active('ancientcave'):
+            manage_ancient(Options_, outfile_rom_buffer, infile_rom_buffer, form_music_overrides=form_music,
+                           randlog=randlog)
+        reseed()
+
+        if Options_.is_flag_active("shuffle_commands") or \
+                Options_.is_flag_active("replace_commands") or \
+                Options_.is_flag_active("random_enemy_stats"):
+            manage_magitek()
+        reseed()
+
+        if Options_.is_flag_active("random_blitz"):
+            if 0x0A not in changed_commands:
+                manage_blitz()
+        reseed()
+
+        if Options_.is_flag_active('halloween'):
+            demon_chocobo_sub = Substitution()
+            outfile_rom_buffer.seek(0x2d0000 + 896 * 7)
+            demon_chocobo_sub.bytestring = outfile_rom_buffer.read(896)
+            for i in range(7):
+                demon_chocobo_sub.set_location(0x2d0000 + 896 * i)
+                demon_chocobo_sub.write(outfile_rom_buffer)
+
+        if Options_.is_flag_active("random_window") or \
+                Options_.is_flag_active('christmas') or \
+                Options_.is_flag_active('halloween'):
+            for i in range(8):
+                window = WindowBlock(i)
+                window.read_data()
+                window.mutate()
+                window.write_data()
+        reseed()
+
+        if Options_.is_flag_active('dearestmolulu') or (
+                Options_.is_flag_active("random_formations") and
+                Options_.is_flag_active("fix_exploits") and not
+                Options_.is_flag_active('ancientcave')):
+            manage_encounter_rate()
+        reseed()
+        reseed()
+
+        if Options_.is_flag_active("random_animation_palettes"):
+            manage_colorize_animations()
+        reseed()
+
+        if Options_.is_flag_active('suplexwrecks'):
+            manage_suplex(commands, monsters)
+        reseed()
+
+        if Options_.is_flag_active('strangejourney') and not Options_.is_flag_active('ancientcave'):
+            create_dimensional_vortex()
+            # manage_strange_events()
+        reseed()
+
+        if Options_.is_flag_active('notawaiter') and not Options_.is_flag_active('ancientcave'):
+            pipe_print("Cutscenes are currently skipped up to Kefka @ Narshe")
+            manage_skips()
+        reseed()
+
+        wor_free_char = 0xB  # gau
+        alternate_gogo = Options_.is_flag_active('mimetime')
+        if (Options_.is_flag_active("shuffle_wor") or alternate_gogo) and not Options_.is_flag_active('ancientcave'):
+            include_gau = Options_.is_flag_active("shuffle_commands") or \
+                          Options_.is_flag_active("replace_commands") or \
+                          Options_.is_flag_active("random_treasure")
+            wor_free_char = manage_wor_recruitment(outfile_rom_buffer,
+                                                   shuffle_wor=Options_.is_flag_active("shuffle_wor"),
+                                                   random_treasure=Options_.is_flag_active("random_treasure"),
+                                                   include_gau=include_gau,
+                                                   alternate_gogo=alternate_gogo)
+        reseed()
+
+        if Options_.is_flag_active('worringtriad') and not Options_.is_flag_active('ancientcave'):
+            manage_wor_skip(outfile_rom_buffer, wor_free_char, airship=Options_.is_flag_active('airship'),
+                            dragon=Options_.mode.name == 'dragonhunt',
+                            alternate_gogo=Options_.is_flag_active('mimetime'),
+                            esper_replacements=esper_replacements)
+        reseed()
+
+        if Options_.is_flag_active("random_clock") and not Options_.is_flag_active('ancientcave'):
+            manage_clock()
+        reseed()
+
+        if Options_.is_flag_active("random_dances"):
+            if 0x13 not in changed_commands:
+                manage_dances()
+
+        reseed()
+
+        if Options_.is_flag_active('remonsterate'):
+            outfile_backup = BytesIO(outfile_rom_buffer.getbuffer().tobytes())
+
+            attempt_number = 0
+            remonsterate_results = None
+            randomize_connection, remonsterate_connection = Pipe()
+
+            while True:
+                try:
+                    remonsterate_kwargs = {
+                        "outfile_rom_buffer": outfile_rom_buffer,
+                        "seed": (seed + attempt_number),
+                        "rom_type": "1.0",
+                        "list_of_monsters": get_monsters(outfile_rom_buffer)
+                    }
+                    remonsterate_process = Process(
+                        target=remonsterate,
+                        args=(remonsterate_connection,),
+                        kwargs=remonsterate_kwargs
+                    )
+                    remonsterate_process.start()
+                    while True:
+                        try:
+                            response = randomize_connection.recv()
+                            if isinstance(response, str):
+                                pipe_print(response)
+                            elif isinstance(response, tuple):
+                                outfile_rom_buffer, remonsterate_results = response
+                                break
+                            elif isinstance(response, Exception):
+                                if not isinstance(response, OverflowError) and not \
+                                        isinstance(response, ReferenceError) and gui_connection:
+                                    gui_connection.send(response)
+                                else:
+                                    raise response
+                        except EOFError:
+                            break
+
+                except (OverflowError, ReferenceError) as e:
+                    pipe_print("Remonsterate: An error occurred attempting to remonsterate. Trying again...")
+                    # Replace backup file
+                    outfile_rom_buffer = outfile_backup
+                    attempt_number = attempt_number + 1
+                    continue
+                break
+
+            # Remonsterate finished
+            if remonsterate_results:
+                for result in remonsterate_results:
+                    log(str(result) + '\n', section='remonsterate')
+
+        if not Options_.is_flag_active('sketch') or Options_.is_flag_active('remonsterate'):
+            # Original C2 sketch fix by Assassin, prevents bad pointers
+
+            sketch_fix_sub = Substitution()
+            sketch_fix_sub.set_location(0x2F5C6)
+            sketch_fix_sub.bytestring = bytes([0x80, 0xCA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0x4C, 0x09, 0xF8,
+                                               0xA0, 0x00, 0x28, 0x22, 0x09, 0xB1, 0xC1, 0xA9, 0x01, 0x1C, 0x8D, 0x89, 0xA0,
+                                               0x03, 0x00,
+                                               0xB1, 0x76, 0x0A, 0xAA, 0xC2, 0x20, 0xBD, 0x01, 0x20, 0x90, 0x02,
+                                               0x7B, 0x3A, 0xAA, 0x7B, 0xE2, 0x20, 0x22, 0xD1, 0x24, 0xC1, 0x80, 0xD7, ])
+            sketch_fix_sub.write(outfile_rom_buffer)
+
+            sketch_fix_sub.set_location(0x12456)
+            sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x18, 0xA0, 0x00, 0x00,
+                                               0x86, 0x10, 0xA2, 0x3F, 0xAE, ])
+            sketch_fix_sub.write(outfile_rom_buffer)
+
+            # Additional C1 sketch animation fix by Assassin, handles bad draw instruction
+
+            sketch_fix_sub.set_location(0x12456)
+            sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x18, 0xA0, 0x00, 0x00,
+                                               0x86, 0x10, 0xA2, 0x3F, 0xAE, ])
+            sketch_fix_sub.write(outfile_rom_buffer)
+
+            sketch_fix_sub.set_location(0x1246C)
+            sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, ])
+            sketch_fix_sub.write(outfile_rom_buffer)
+
+            sketch_fix_sub.set_location(0x12484)
+            sketch_fix_sub.bytestring = bytes(
+                [0x20, 0x8F, 0x24, 0xA2, 0x00, 0x14, 0xA0, 0x00, 0x24, 0x80, 0xD0, 0xDA, 0x86, 0x10,
+                 0x20, 0x20, 0x20, 0x20, 0xF5, 0x24, 0x20, 0xE5, 0x24, 0x20, 0xA5, 0x22, 0xFA, 0x60,
+                 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, ])
+            sketch_fix_sub.write(outfile_rom_buffer)
+
+            sketch_fix_sub.set_location(0x124A9)
+            sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, ])
+            sketch_fix_sub.write(outfile_rom_buffer)
+
+            sketch_fix_sub.set_location(0x124D1)
+            sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xE0, 0xFF, 0xFF, 0xD0, 0x03,
+                                               0x20, 0x20, 0x20, 0xA2, 0x00, 0x20, 0x20, 0x5C, 0x24, 0x6B, 0xEA, 0x6B, ])
+            sketch_fix_sub.write(outfile_rom_buffer)
+
+            sketch_fix_sub.set_location(0x124F9)
+            sketch_fix_sub.bytestring = bytes(
+                [0x1A, 0xF0, 0x01, 0x3A, 0x0A, 0x0A, 0x18, 0x65, 0x10, 0xAA, 0xBF, 0x02, 0x70, 0xD2, 0xEB, 0x29, 0xFF, 0x03,
+                 0x0A, 0x0A, 0x0A, 0x0A, 0x8D, 0x69, 0x61, 0xBF, 0x00, 0x70, 0xD2, 0x29, 0xFF, 0x7F, 0x8D, 0xA8, 0x81,
+                 0x7B, 0xBF, 0x01, 0x70, 0xD2, 0xE2, 0x20, 0x0A, 0xEB, 0x6A, 0x8D, 0xAC, 0x81,
+                 0x0A, 0x0A, 0x0A, 0x7B, 0x2A, 0x8D, 0xAB, 0x81, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, ])
+            sketch_fix_sub.write(outfile_rom_buffer)
+
+        has_music = Options_.is_any_flag_active(['johnnydmad', 'johnnyachaotic'])
+        if has_music:
+            music_init(web_custom_playlist=kwargs.get("web_custom_playlist", None))
+
+        if Options_.is_flag_active('alasdraco'):
+            opera = manage_opera(outfile_rom_buffer, has_music)
+            log(get_opera_log(), section="aesthetics")
+        else:
+            opera = None
+        reseed()
+
+        if has_music:
+            from utils import custom_path
+            randomize_music(outfile_rom_buffer, Options_, playlist_path=custom_path, playlist_filename="songs.txt",
+                            opera=opera, form_music_overrides=form_music)
+            log(get_music_spoiler(), section="music")
+        reseed()
+
+        if Options_.mode.name == "katn":
+            start_with_random_espers()
+            set_lete_river_encounters()
+        reseed()
+
+        if Options_.is_flag_active("random_enemy_stats") or Options_.is_flag_active("random_formations"):
+            if not Options_.is_flag_active('ancientcave') or Options_.mode.name == "katn":
+                house_hint()
+        reseed()
+        reseed()
+
+        randomize_poem(outfile_rom_buffer)
+        randomize_passwords(custom_web_passwords=kwargs.get("web_custom_passwords", None))
+        reseed()
+        namingway()
+        if Options_.is_flag_active('thescenarionottaken'):
+            chocobo_merchant()
+
+        jm = JunctionManager(outfile_rom_buffer, 'bcg_junction_manifest.json')
+        jm.activated = False
+        junction_everything(jm, outfile_rom_buffer)
+
+        # ----- NO MORE RANDOMNESS PAST THIS LINE -----
+        if Options_.is_flag_active('thescenarionottaken'):
+            no_kutan_skip(outfile_rom_buffer)
+
+        write_all_locations_misc()
+        for fset in fsets:
+            fset.write_data(outfile_rom_buffer)
+
+        # This needs to be after write_all_locations_misc()
+        # so the changes to Daryl don't get stomped.
+        event_freespaces = [FreeBlock(0xCFE2A, 0xCFE2a + 470)]
+        if Options_.is_flag_active('airship'):
+            event_freespaces = activate_airship_mode(event_freespaces)
+
+        if Options_.is_flag_active("random_zerker") or Options_.is_flag_active("random_character_stats"):
+            manage_equip_umaro(event_freespaces)
+
+        # Write easymodo, expboost, and gpboost stat changes to each monster
+        if Options_.is_flag_active('easymodo') or Options_.is_flag_active('expboost') or \
+                Options_.is_flag_active('gpboost'):
+            for monster in monsters:
+                if Options_.is_flag_active('easymodo'):
+                    monster.stats['hp'] = 1
+                if Options_.is_flag_active('expboost'):
+                    monster.stats['xp'] = int(min(0xFFFF, float(Options_.get_flag_value("expboost")) * monster.stats['xp']))
+                if Options_.is_flag_active('gpboost'):
+                    monster.stats['gp'] = int(min(0xFFFF, float(Options_.get_flag_value("gpboost")) * monster.stats['gp']))
+                monster.write_stats(outfile_rom_buffer)
+
+        if Options_.is_flag_active('naturalmagic') or Options_.is_flag_active('naturalstats'):
+            espers = get_espers(infile_rom_buffer)
+            if Options_.is_flag_active('naturalstats'):
+                for esper in espers:
+                    esper.bonus = 0xFF
+            if Options_.is_flag_active('naturalmagic'):
+                for esper in espers:
+                    esper.spells, esper.learnrates = [], []
+                for item in items:
+                    item.features['learnrate'] = 0
+                    item.features['learnspell'] = 0
+                    item.write_stats(outfile_rom_buffer)
+            for esper in espers:
+                esper.write_data(outfile_rom_buffer)
+
+        if Options_.is_flag_active('canttouchthis'):
+            for character in characters:
+                if character.id >= 14:
+                    continue
+                character.become_invincible(outfile_rom_buffer)
+
+        if Options_.is_flag_active('equipanything'):
+            manage_equip_anything()
+
+        if Options_.is_flag_active('playsitself'):
+            manage_full_umaro()
+            for command in commands.values():
+                if command.id not in [0x01, 0x08, 0x0E, 0x0F, 0x15, 0x19]:
+                    command.allow_while_berserk(outfile_rom_buffer)
+            whelkhead = get_monster(0x134)
+            whelkhead.stats['hp'] = 1
+            whelkhead.write_stats(outfile_rom_buffer)
+            whelkshell = get_monster(0x100)
+            whelkshell.stats['hp'] = 1
+            whelkshell.write_stats(outfile_rom_buffer)
+
+        for item in get_ranked_items(allow_banned=True):
+            if item.banned:
+                assert not dummy_item(item)
+
+        if Options_.is_flag_active('christmas') and not Options_.is_flag_active('ancientcave'):
+            manage_santa()
+        elif Options_.is_flag_active('halloween') and not Options_.is_flag_active('ancientcave'):
+            manage_spookiness()
+
+        if Options_.is_flag_active('dancelessons'):
+            no_dance_stumbles(outfile_rom_buffer)
+
+        banon_life3(outfile_rom_buffer)
+        allergic_dog(outfile_rom_buffer)
+        y_equip_relics(outfile_rom_buffer)
+        fix_gogo_portrait(outfile_rom_buffer)
+        cycle_statuses(outfile_rom_buffer)
+        name_swd_techs(outfile_rom_buffer)
+        fix_flash_and_bioblaster(outfile_rom_buffer)
+        title_gfx(outfile_rom_buffer)
+        improved_party_gear(outfile_rom_buffer)
+        mp_color_digits(outfile_rom_buffer)
+        manage_doom_gaze(outfile_rom_buffer)
+
+        if Options_.is_flag_active("swdtechspeed"):
+            swdtech_speed = Options_.get_flag_value('swdtechspeed')
+            if type(swdtech_speed) == bool:
+                if application and application != "console":
+                    pipe_print("ERROR: No value was supplied for swdtechspeed flag. Skipping flag.")
+                else:
+                    while True:
+                        swdtech_speed = input("\nPlease enter a custom speed for Sword Tech "
+                                              "(random, vanilla, fast, faster, fastest):\n")
+                        try:
+                            if swdtech_speed.lower() in ["random", "vanilla", "fast", "faster", "fastest"]:
+                                break
+                            raise ValueError
+                        except ValueError:
+                            pipe_print("The supplied speed was not a valid option. Please try again.")
+            if not type(swdtech_speed) == bool:
+                change_swdtech_speed(outfile_rom_buffer, swdtech_speed)
+        if Options_.is_flag_active("cursepower"):
+            change_cursed_shield_battles(outfile_rom_buffer, Options_.get_flag_value("cursepower"))
+
+        s = manage_coral(outfile_rom_buffer, kwargs.get("web_custom_coral_names", None))
+        log(s, "aesthetics")
+
+        # TODO Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
+        # add_esper_bonuses(outfile_rom_buffer)
+
+        if Options_.is_flag_active('removeflashing'):
+            fewer_flashes(outfile_rom_buffer, Options_.get_flag_value('removeflashing'))
+
+        if Options_.is_flag_active('nicerpoison'):
+            nicer_poison(outfile_rom_buffer)
+
+        if not Options_.is_flag_active('fightclub'):
+            show_coliseum_rewards(outfile_rom_buffer)
+
+        if Options_.is_flag_active("replace_commands") or Options_.is_flag_active("shuffle_commands"):
+            sabin_hint(commands)
+
+        if Options_.is_flag_active("sprint"):
+            sprint_shoes_hint()
+
+        if Options_.mode.name == "katn":
+            the_end_comes_beyond_katn()
+        elif Options_.mode.name == "dragonhunt":
+            the_end_comes_beyond_crusader()
+
+        manage_dialogue_patches(outfile_rom_buffer)
+        write_location_names(outfile_rom_buffer)
+
+        if jm.activated:
+            outfile_rom_buffer.seek(0, 2)
+            romsize = outfile_rom_buffer.tell()
+            if romsize < 0x700000:
+                expand_sub = Substitution()
+                expand_sub.set_location(romsize)
+                expand_sub.bytestring = bytes([0x00] * (0x700000 - romsize))
+                expand_sub.write(outfile_rom_buffer)
+
+            jm.execute()
+            jm.verify()
+            log(jm.report, section='junctions')
+
+        rewrite_title(text="FF6 BCCE %s" % seed)
+        validate_rom_expansion()
+        rewrite_checksum()
+        verify_patchlist(outfile_rom_buffer)
+
+        if not application or application != "web":
+            with open(outfile_rom_path, 'wb+') as f:
+                f.write(outfile_rom_buffer.getvalue())
+            outfile_rom_buffer.close()
+
+        pipe_print("\nWriting log...")
+
+        for character in sorted(characters, key=lambda c: c.id):
+            character.associate_command_objects(list(commands.values()))
+            if character.id > 13:
+                continue
+            log(str(character), section="characters")
+
+        if options.Use_new_randomizer:
+            for character in sorted(character_list, key=lambda c: c.id):
+                if character.id <= 14:
+                    log(str(character), section="stats")
+
+        for monster in sorted(get_monsters(), key=lambda m: m.display_name):
+            if monster.display_name:
+                log(monster.get_description(changed_commands=changed_commands),
+                    section="monsters")
+
+        if not Options_.is_flag_active("ancientcave"):
+            log_chests()
+        log_item_mutations()
+
+        if not application or application != "web":
+            with open(outlog, 'w+') as f:
+                f.write(get_logstring(
+                    ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers",
+                     "item magic", "item effects", "command-change relics", "colosseum", "monsters", "music",
+                     "remonsterate", "shops", "treasure chests", "junctions", "zozo clock", "secret items"]))
+
+        if Options_.is_flag_active('bingoboingo'):
+
+            target_score = 200.0
+
+            if kwargs.get("from_gui", False):
+                bingoflags = kwargs.get('bingotype')
+                size = kwargs.get('bingosize')
+                difficulty = kwargs.get('bingodifficulty')
+                numcards = kwargs.get('bingocards')
+
             else:
-                difficulty = difficulty[0].lower()
-                if difficulty not in "enh":
+                pipe_print("WELCOME TO BEYOND CHAOS BINGO MODE")
+                pipe_print("Include what type of squares? (blank for all)")
+                pipe_print("    a   Abilities\n"
+                           "    i   Items\n"
+                           "    m   Monsters\n"
+                           "    s   Spells")
+                bingoflags = input("> ").strip()
+                if not bingoflags:
+                    bingoflags = "aims"
+                bingoflags = [c for c in "aims" if c in bingoflags]
+
+                pipe_print("What size grid? (default: 5)")
+                size = input("> ").strip()
+                if not size:
+                    size = 5
+                else:
+                    size = int(size)
+
+                pipe_print("What difficulty level? Easy, Normal, or Hard? (e/n/h)")
+                difficulty = input("> ").strip()
+                if not difficulty:
                     difficulty = "n"
+                else:
+                    difficulty = difficulty[0].lower()
+                    if difficulty not in "enh":
+                        difficulty = "n"
 
-            pipe_print("Generate how many cards? (default: 1)")
-            numcards = input("> ").strip()
-            if not numcards:
-                numcards = 1
-            else:
-                numcards = int(numcards)
+                pipe_print("Generate how many cards? (default: 1)")
+                numcards = input("> ").strip()
+                if not numcards:
+                    numcards = 1
+                else:
+                    numcards = int(numcards)
 
-        pipe_print("Generating Bingo cards, please wait.")
-        target_score = float(target_score) * (size ** 2)
+            pipe_print("Generating Bingo cards, please wait.")
+            target_score = float(target_score) * (size ** 2)
 
-        manage_bingo(bingoflags=bingoflags, size=size, difficulty=difficulty, numcards=numcards,
-                     target_score=target_score)
-        pipe_print("Bingo cards generated.")
+            manage_bingo(bingoflags=bingoflags, size=size, difficulty=difficulty, numcards=numcards,
+                         target_score=target_score)
+            pipe_print("Bingo cards generated.")
 
-    if application != "web":
-        pipe_print("Randomization successful. Output filename: %s\n" % outfile_rom_path)
-        if application == "gui":
-            pipe_print(True)
-    elif application == "web":
-        pipe_print("Randomization successful.")
-        pipe_print({
-            # ord = output rom data
-            # os = output seed
-            # osl = output spoiler log
-            "ord": outfile_rom_buffer,
-            "os": seed,
-            "osl": get_logstring(
-                ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances",
-                 "espers",
-                 "item magic", "item effects", "command-change relics", "colosseum", "monsters", "music",
-                 "remonsterate", "shops", "treasure chests", "junctions", "zozo clock", "secret items"])
-        })
-    return outfile_rom_path
+        if application != "web":
+            pipe_print("Randomization successful. Output filename: %s\n" % outfile_rom_path)
+            if application == "gui":
+                pipe_print(True)
+        elif application == "web":
+            pipe_print("Randomization successful.")
+            pipe_print({
+                # ord = output rom data
+                # os = output seed
+                # osl = output spoiler log
+                "ord": outfile_rom_buffer,
+                "os": seed,
+                "osl": get_logstring(
+                    ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances",
+                     "espers",
+                     "item magic", "item effects", "command-change relics", "colosseum", "monsters", "music",
+                     "remonsterate", "shops", "treasure chests", "junctions", "zozo clock", "secret items"])
+            })
+        return outfile_rom_path
+    except Exception as e:
+        import sys, traceback
+        pipe_print(traceback.format_exc())
 
 
 if __name__ == "__main__":

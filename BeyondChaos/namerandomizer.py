@@ -69,10 +69,9 @@ def generate_name(size=None, maxsize=10):
 
         if name:
             for ename in enemynames:
-                if len(name) > (lookback+1):
+                if len(name) > (lookback + 1):
                     length = min(len(name), len(ename))
                     if name[:length] == ename[:length]:
-
                         name = ""
                         break
 
@@ -100,6 +99,7 @@ def generate_attack():
     if len(modifier) + len(move) < 10:
         return ("%s %s" % (modifier, move)).strip()
     return modifier + move
+
 
 if __name__ == "__main__":
     for i in range(0x100):

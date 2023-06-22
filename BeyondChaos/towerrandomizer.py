@@ -1247,7 +1247,7 @@ def randomize_fanatics(unused_locids, morefanatical=False):
     stairs = [get_location(i) for i in [363, 359, 360, 361]]
     pitstops = [get_location(i) for i in [365, 367, 368, 369]]
     if morefanatical:
-        num_new_levels = 3 #force the tallest tower with morefanatical
+        num_new_levels = 3 # force the tallest tower with morefanatical
     else:
         num_new_levels = random.randint(0, 1) + random.randint(1, 2)
     unused_locations = [get_location(l) for l in unused_locids]
@@ -1283,19 +1283,21 @@ def randomize_fanatics(unused_locids, morefanatical=False):
 
     for stop in pitstops:
 
-        if not morefanatical and random.choice([True, False]): #if morefanatical, change every door, otherwise doa 50/50 check
+        if not morefanatical and random.choice(
+                [True, False]):  # if morefanatical, change every door, otherwise doa 50/50 check
             continue
         index = pitstops.index(stop)
         if index == 0:
             continue
         if morefanatical:
-            index2 = index + random.choice([-2, -1, 0, 1, 2]) #allow FT pitstops to warp up and down with morefanatical
+            index2 = index + random.choice(
+                [-2, -1, 0, 1, 2])  # allow FT pitstops to warp up and down with morefanatical
         else:
             index2 = index + random.choice([-1, -1, -2])
         if index2 < 0:
             index2 = 0
-        if index2 > len(stairs)-1:
-            index2 = len(stairs)-1
+        if index2 > len(stairs) - 1:
+            index2 = len(stairs) - 1
         stair = stairs[index2]
         entrance = stop.entrances[0]
         entrance.dest = (entrance.dest & 0xFE00) | (stair.locid & 0x1FF)

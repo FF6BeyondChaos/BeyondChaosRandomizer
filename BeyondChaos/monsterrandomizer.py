@@ -633,13 +633,13 @@ class MonsterBlock:
         outfile_rom_buffer.seek(self.specialeffectpointer)
         outfile_rom_buffer.write(bytes(random.randint(0, 0x21)))
 
-        candidates = list(range(0, 33)) #randomize special animations
+        candidates = list(range(0, 33)) # randomize special animations
         self.attackanimation = random.choice(candidates)
 
         if halloween:
-            self.battleanimation = 0x00 #Make enemies scream for Halloween
+            self.battleanimation = 0x00 # Make enemies scream for Halloween
         else:
-            candidates = sorted(set(range(0, 0x5A)) - set([0, 0x1C])) #randomize battle animations
+            candidates = sorted(set(range(0, 0x5A)) - set([0, 0x1C])) # randomize battle animations
             self.battleanimation = random.choice(candidates)
 
     def mutate_graphics_swap(self, candidates):
@@ -770,9 +770,9 @@ class MonsterBlock:
             return a and b and c and d and e and f
 
         if Options_.mode.name == "katn" or Options_.is_flag_active("madworld"):
-            restricted = [0xEA, 0xC8] #restrict Baba Breath and Seize
+            restricted = [0xEA, 0xC8] # restrict Baba Breath and Seize
         else:
-            restricted = [0x13, 0x14] #restrict Meteor and Ultima for normal playthroughs
+            restricted = [0x13, 0x14] # restrict Meteor and Ultima for normal playthroughs
         if Options_.is_flag_active("darkworld"):
             restricted = []  # All skills are fair game sucka
 
@@ -1830,20 +1830,20 @@ def monsters_from_table(tablefile):
     return monsters
 
 
-def get_monsters(rom_buffer: BytesIO = None):
+def get_monsters(infile_rom_buffer: BytesIO=None):
     try:
         if monsterdict:
             return sorted(list(monsterdict.values()), key=lambda m: m.id)
 
-        get_ranked_items(rom_buffer)
+        get_ranked_items(infile_rom_buffer)
         monsters = monsters_from_table(ENEMY_TABLE)
         for monster in monsters:
-            monster.read_stats(rom_buffer)
+            monster.read_stats(infile_rom_buffer)
 
         mgs = []
         for id, monster in enumerate(monsters):
             mg = MonsterGraphicBlock(pointer=0x127000 + (5 * id), name=monster.name)
-            mg.read_data(rom_buffer)
+            mg.read_data(infile_rom_buffer)
             monster.set_graphics(graphics=mg)
             mgs.append(mg)
 
