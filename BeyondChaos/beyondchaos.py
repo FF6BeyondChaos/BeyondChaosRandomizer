@@ -728,7 +728,9 @@ class Window(QMainWindow):
                                 child.setValue(int(str(v).split(":")[1]))
                                 self.flags.append(v)
                             except ValueError:
-                                pass
+                                if str(v).split(":")[1] == child.specialValueText().lower():
+                                    child.setValue(child.minimum())
+                                    self.flags.append(v)
                     elif type(child) in [QDoubleSpinBox] and str(v).startswith(child.text.lower()):
                         if ":" in v:
                             try:
