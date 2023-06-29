@@ -1007,25 +1007,27 @@ class Window(QMainWindow):
         for mode in self.supportedPresets:
             if mode == "newplayer":
                 self.GamePresets['New Player'] = (
-                    "b c e f g i n o p q r s t w y z alasdraco capslockoff partyparty makeover "
-                    "johnnydmad questionablecontent dancelessons swdtechspeed:faster "
+                    "b c e f g i n o p q r s t w y z makeover partyparty dancelessons lessfanatical "
+                    "expboost:2.0 gpboost:2.0 mpboost:2.0 swdtechspeed:faster alasdraco capslockoff "
+                    "johnnydmad questionablecontent "
                 )
             elif mode == "intermediateplayer":
                 self.GamePresets['Intermediate Player'] = (
-                    "b c d e f g i j k m n o p q r s t u w y z alasdraco capslockoff partyparty makeover "
-                    "johnnydmad notawaiter mimetime electricboogaloo dancelessons remonsterate swdtechspeed:random "
+                    "b c d e f g i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo "
+                    "swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter remonsterate "
                 )
             elif mode == "advancedplayer":
                 self.GamePresets['Advanced Player'] = (
-                    "b c d e f g h i j k m n o p q r s t u w y z alasdraco capslockoff partyparty makeover "
-                    "johnnydmad notawaiter dancingmaduin:1 bsiab mimetime randombosses electricboogaloo dancelessons "
-                    "questionablecontent remonsterate swdtechspeed:random "
+                    "b c d e f g h i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo "
+                    "randombosses dancingmaduin:1 swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter "
+                    "remonsterate bsiab mimetime morefanatical questionablecontent "
                 )
             elif mode == "chaoticplayer":
                 self.GamePresets['Chaotic Player'] = (
-                    "b c d e f g h i j k m n o p q r s t u w y z alasdraco capslockoff partyparty makeover "
-                    "johnnyachaotic notawaiter electricboogaloo masseffect allcombos supernatural randomboost:2 "
-                    "bsiab mimetime thescenarionottaken questionablecontent dancelessons remonsterate swdtechspeed:random"
+                    "b c d e f g h i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo "
+                    "masseffect randombosses dancingmaduin:chaos swdtechspeed:random alasdraco capslockoff "
+                    "johnnyachaotic notawaiter remonsterate bsiab mimetime questionablecontent randomboost:2 "
+                    "allcombos supernatural mementomori:random thescenarionottaken "
                 )
             elif mode == "raceeasy":
                 self.GamePresets['KaN Race - Easy'] = (
