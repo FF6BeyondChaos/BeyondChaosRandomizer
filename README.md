@@ -9,7 +9,7 @@ a fork of Abyssonym's FF6 Beyond Chaos Randomizer
 
 __Version__: 5.0.0
 <br />
-__Date__: 2023-06-14
+__Date__: 2023-06-28
 <br />
 __URL__: https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest
 <br />
@@ -172,6 +172,10 @@ Decode them if you're having trouble.
  * Hint #1:  Vg'f zber qvssvphyg tbvat hc guna pbzvat qbja.
  * Hint #2:  Qba'g trg qvfgenpgrq. Fgnl sbphfrq ba lbhe tbny, naq riraghnyyl lbh jvyy ernpu vg.
  * Solution: Fbzr gernfher ebbzf ner gencf gung qebc lbh gb n ybjre yriry bs gur gbjre. Nibvq gur gernfher ebbzf naq lbh jba'g trg fghpx.
+
+Q: I can't find the Striker! How do I get Shadow from the Colosseum in the World of Ruin?
+<br />
+A: Lbh pna trg gur Fgevxre ol orggvat vgrzf va gur Pbybffrhz.
 
 Q: The old man in Narshe won't give me the Ragnarok esper. Is this a bug?
 <br />

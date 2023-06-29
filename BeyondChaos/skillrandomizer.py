@@ -444,7 +444,7 @@ def get_spellsets(spells=None):
     spellsets['Limit'] = ('Limit breaker', [l for l in limitSpellids])
 
     spellsets['Level'] = ('level-based skill',
-                          [s for s in spells if s.level_spell])
+                          [s for s in spells if s.level_spell or s.name in ["Flare Star", "Dischord", "Stone"]])
     spellsets['Miss'] = ('skill with low accuracy',
                          [s for s in spells if not s.unblockable and not s.level_spell and 0 < s.accuracy < 90])
 

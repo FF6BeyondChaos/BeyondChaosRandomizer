@@ -117,6 +117,7 @@ JUNCTION_MANAGER_PARAMETERS = {
     'berserker-index': 0xd,
     'monster-equip-steal-enabled': 0,
     'monster-equip-drop-enabled': 0,
+    'esper-allocations-address': 0x3f858,
     }
 jm_set_addressing_mode('hirom')
 
@@ -809,8 +810,6 @@ def manage_commands(commands: Dict[str, CommandBlock]):
     rage_blank_sub.bytestring = bytes([0x01] + ([0x00] * 31))
     rage_blank_sub.set_location(0x47AA0)
     rage_blank_sub.write(outfile_rom_buffer)
-
-    can_always_access_esper_menu(outfile_rom_buffer)
 
     # Let x-magic user use magic menu.
     enable_xmagic_menu_sub = Substitution()
@@ -4930,6 +4929,14 @@ def diverge():
         outfile_rom_buffer.write(data)
 
 
+def initialize_esper_allocation_table(outfile_rom_buffer: BytesIO):
+    NUM_ESPERS = 27
+    data = b'\xff' * (NUM_ESPERS) * 2
+    outfile_rom_buffer.seek(
+        JUNCTION_MANAGER_PARAMETERS['esper-allocations-address'])
+    outfile_rom_buffer.write(data)
+
+
 def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
     jm.set_seed(seed)
 
@@ -5376,8 +5383,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             if Options_.is_flag_active("shuffle_commands") or Options_.is_flag_active("replace_commands"):
                 auto_learn_rage()
 
-        if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
-            manage_commands(commands)
+    can_always_access_esper_menu(outfile_rom_buffer)
+    if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
+        manage_commands(commands)
 
         reseed()
 
@@ -5529,23 +5537,30 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             manage_equipment(items)
         reseed()
 
-        esperrage_spaces = [FreeBlock(0x26469, 0x26469 + 919)]
-        if Options_.is_flag_active("random_espers"):
-            dancingmaduin = Options_.is_flag_active('dancingmaduin')
-            if dancingmaduin:
-                allocate_espers(
-                    Options_.is_flag_active('ancientcave'),
-                    get_espers(infile_rom_buffer),
-                    get_characters(),
-                    dancingmaduin.value,
-                    outfile_rom_buffer,
-                    esper_replacements
-                )
-                nerf_paladin_shield()
-            manage_espers(esperrage_spaces, esper_replacements)
-        reseed()
-        myself_locations = myself_patches(outfile_rom_buffer)
-        manage_reorder_rages(myself_locations["RAGE_ORDER_TABLE"])
+    esperrage_spaces = [FreeBlock(0x26469, 0x26469 + 919)]
+
+    # Even if we don't enable dancingmaduin, we must construct an
+    # esper allocation table for other modules that rely on it
+    # (i.e. junction effects)
+    initialize_esper_allocation_table(outfile_rom_buffer)
+    if Options_.is_flag_active("random_espers"):
+        dancingmaduin = Options_.is_flag_active('dancingmaduin')
+        if dancingmaduin:
+            esper_allocations_address = allocate_espers(
+                Options_.is_flag_active('ancientcave'),
+                get_espers(infile_rom_buffer),
+                get_characters(),
+                dancingmaduin.value,
+                outfile_rom_buffer,
+                esper_replacements
+            )
+            nerf_paladin_shield()
+            verify = JUNCTION_MANAGER_PARAMETERS['esper-allocations-address']
+            assert esper_allocations_address == verify
+        manage_espers(esperrage_spaces, esper_replacements)
+    reseed()
+    myself_locations = myself_patches(outfile_rom_buffer)
+    manage_reorder_rages(myself_locations["RAGE_ORDER_TABLE"])
 
         titlesub = Substitution()
         titlesub.bytestring = [0xFD] * 4
