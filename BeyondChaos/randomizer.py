@@ -17,8 +17,7 @@ from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
 from character import get_characters, get_character, equip_offsets, character_list, load_characters
-from bcg_junction import (JunctionManager,
-                          set_addressing_mode as jm_set_addressing_mode)
+from bcg_junction import JunctionManager
 from chestrandomizer import mutate_event_items, get_event_items
 from config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
                     set_value)
@@ -119,7 +118,6 @@ JUNCTION_MANAGER_PARAMETERS = {
     'monster-equip-drop-enabled': 0,
     'esper-allocations-address': 0x3f858,
     }
-jm_set_addressing_mode('hirom')
 
 
 def log(text: str, section: str):
@@ -6088,6 +6086,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             expand_sub.bytestring = bytes([0x00] * (0x700000 - romsize))
             expand_sub.write(outfile_rom_buffer)
 
+        if Options_.is_flag_active('playsitself'):
+            jm.patch_blacklist.add('patch_junction_focus_umaro.txt')
         jm.execute()
         jm.verify()
         log(jm.report, section='junctions')
