@@ -4967,7 +4967,7 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
         banned_equips = set()
         characters = get_characters()
         for c in characters:
-            if c.id >= 16:
+            if c.id >= 14:
                 continue
             for equiptype in ['weapon', 'shield', 'helm', 'armor',
                               'relic1', 'relic2']:
@@ -4998,6 +4998,31 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
                     item.mutate_name(character='!')
                     item.write_stats(outfile_rom_buffer)
         jm.activated = True
+
+        for equiptype in ['weapon', 'shield', 'helm', 'armor',
+                          'relic1', 'relic2']:
+            pool = [i.itemid for i in items if i.equippable
+                    and equiptype.startswith(i.equiptype)]
+            if equiptype == 'shield':
+                pool += [i.itemid for i in items if i.equippable
+                         and i.equiptype == 'weapon']
+            pool.append(0xff)
+            fallback = [i for i in pool if not jm.equip_whitelist[i]]
+            for c in characters:
+                if c.id != 15 and c.id < 29:
+                    continue
+                equip_address = c.address + equip_offsets[equiptype]
+                outfile_rom_buffer.seek(equip_address)
+                equipid = ord(outfile_rom_buffer.read(1))
+                junctions = jm.equip_whitelist[equipid]
+                if junctions:
+                    old_rank = pool.index(equipid) / (len(pool)-1)
+                    index = int(round(old_rank * (len(fallback)-1)))
+                    new_equip = fallback[index]
+                    old_item = [i for i in items if i.itemid == equipid][0]
+                    new_item = [i for i in items if i.itemid == new_equip][0]
+                    outfile_rom_buffer.seek(equip_address)
+                    outfile_rom_buffer.write(bytes([new_equip]))
 
     if Options_.is_flag_active('effectster'):
         monsters = get_monsters()
