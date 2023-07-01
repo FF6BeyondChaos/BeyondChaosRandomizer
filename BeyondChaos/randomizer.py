@@ -5001,13 +5001,18 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
 
         for equiptype in ['weapon', 'shield', 'helm', 'armor',
                           'relic1', 'relic2']:
-            pool = [i.itemid for i in items if i.equippable
+            pool = [i for i in items if i.equippable
                     and equiptype.startswith(i.equiptype)]
             if equiptype == 'shield':
-                pool += [i.itemid for i in items if i.equippable
+                pool += [i for i in items if i.equippable
                          and i.equiptype == 'weapon']
-            pool.append(0xff)
-            fallback = [i for i in pool if not jm.equip_whitelist[i]]
+            fallback = [
+                i for i in pool if not (i.has_disabling_status or
+                                        jm.equip_whitelist[i.itemid])]
+            pool = [i.itemid for i in pool]
+            fallback = [i.itemid for i in fallback]
+            pool.insert(0, 0xff)
+            fallback.insert(0, 0xff)
             for c in characters:
                 if c.id != 15 and c.id < 29:
                     continue
