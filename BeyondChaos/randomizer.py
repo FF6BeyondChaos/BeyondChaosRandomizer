@@ -17,8 +17,7 @@ from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
 from character import get_characters, get_character, equip_offsets, character_list, load_characters
-from bcg_junction import (JunctionManager,
-                          set_addressing_mode as jm_set_addressing_mode)
+from bcg_junction import JunctionManager
 from chestrandomizer import mutate_event_items, get_event_items
 from config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
                     set_value)
@@ -119,7 +118,6 @@ JUNCTION_MANAGER_PARAMETERS = {
     'monster-equip-drop-enabled': 0,
     'esper-allocations-address': 0x3f858,
     }
-jm_set_addressing_mode('hirom')
 
 
 def log(text: str, section: str):
@@ -4969,7 +4967,7 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
         banned_equips = set()
         characters = get_characters()
         for c in characters:
-            if c.id >= 16:
+            if c.id >= 14:
                 continue
             for equiptype in ['weapon', 'shield', 'helm', 'armor',
                               'relic1', 'relic2']:
@@ -5000,6 +4998,36 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
                     item.mutate_name(character='!')
                     item.write_stats(outfile_rom_buffer)
         jm.activated = True
+
+        for equiptype in ['weapon', 'shield', 'helm', 'armor',
+                          'relic1', 'relic2']:
+            pool = [i for i in items if i.equippable
+                    and equiptype.startswith(i.equiptype)]
+            if equiptype == 'shield':
+                pool += [i for i in items if i.equippable
+                         and i.equiptype == 'weapon']
+            fallback = [
+                i for i in pool if not (i.has_disabling_status or
+                                        jm.equip_whitelist[i.itemid])]
+            pool = [i.itemid for i in pool]
+            fallback = [i.itemid for i in fallback]
+            pool.insert(0, 0xff)
+            fallback.insert(0, 0xff)
+            for c in characters:
+                if c.id != 15 and c.id < 29:
+                    continue
+                equip_address = c.address + equip_offsets[equiptype]
+                outfile_rom_buffer.seek(equip_address)
+                equipid = ord(outfile_rom_buffer.read(1))
+                junctions = jm.equip_whitelist[equipid]
+                if junctions:
+                    old_rank = pool.index(equipid) / (len(pool)-1)
+                    index = int(round(old_rank * (len(fallback)-1)))
+                    new_equip = fallback[index]
+                    old_item = [i for i in items if i.itemid == equipid][0]
+                    new_item = [i for i in items if i.itemid == new_equip][0]
+                    outfile_rom_buffer.seek(equip_address)
+                    outfile_rom_buffer.write(bytes([new_equip]))
 
     if Options_.is_flag_active('effectster'):
         monsters = get_monsters()
@@ -6088,6 +6116,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             expand_sub.bytestring = bytes([0x00] * (0x700000 - romsize))
             expand_sub.write(outfile_rom_buffer)
 
+        if Options_.is_flag_active('playsitself'):
+            jm.patch_blacklist.add('patch_junction_focus_umaro.txt')
         jm.execute()
         jm.verify()
         log(jm.report, section='junctions')

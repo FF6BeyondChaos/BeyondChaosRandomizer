@@ -10,14 +10,25 @@ import traceback
 from hashlib import md5
 
 # Related third-party imports
-import requests.exceptions
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtGui import QCursor
-from PyQt5.QtWidgets import (QPushButton, QCheckBox, QWidget, QVBoxLayout,
-                             QLabel, QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QFileDialog,
-                             QApplication, QTabWidget, QInputDialog, QScrollArea, QMessageBox,
-                             QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox, QDialog,
-                             QDialogButtonBox, QMenu, QMainWindow, QDesktopWidget, QLayout, QFrame)
+try:
+    import requests.exceptions
+    from PyQt5 import QtGui, QtCore
+    from PyQt5.QtGui import QCursor
+    from PyQt5.QtWidgets import (
+            QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel, QGroupBox,
+            QHBoxLayout, QLineEdit, QComboBox, QFileDialog, QApplication,
+            QTabWidget, QInputDialog, QScrollArea, QMessageBox,
+            QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox,
+            QDialog, QDialogButtonBox, QMenu, QMainWindow, QDesktopWidget,
+            QLayout, QFrame)
+    from PIL import Image, ImageOps
+except ImportError as e:
+    print('ERROR: ' + str(e))
+    import traceback
+
+    traceback.print_exc()
+    input('Press enter to quit.')
+    exit(0)
 
 # Local application imports
 import utils
