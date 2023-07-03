@@ -67,10 +67,14 @@ def get_candidates(myrank, set_lower=True):
     return fresh
 
 
-def allocate_espers(ancient_cave, espers, characters, fout, replacements=None):
-    char_ids = list(range(12)) + [13]  # everyone but Gogo
+def allocate_espers(ancient_cave, espers, characters, user_choice,
+        outfile_rom_buffer: BytesIO,
+        replacements=None) -> int:
+    char_ids = list(range(14)) # everyone including Gogo
 
     characters = [c for c in characters if c.id in char_ids]
+    preassigned_espers = random.sample(espers, len(characters))
+    preassignments = {e: c for (e, c) in zip(preassigned_espers, characters)}
 
     chars_for_esper = []
     max_rank = max(espers, key=lambda e: e.rank).rank
@@ -80,13 +84,29 @@ def allocate_espers(ancient_cave, espers, characters, fout, replacements=None):
         crusader_id = replacements[crusader_id].id
         ragnarok_id = replacements[ragnarok_id].id
 
+    if user_choice is True:
+        user_choice = "chaos"
+    ALLOCATION_RATE = 0.15
+    if str(user_choice).lower() == "random":
+        user_choice = random.randint(1, random.randint(1, 13))
+
     for e in espers:
-        num_users = 1
+        num_users = None
+        if str(user_choice).lower() == "chaos":
+            num_users = max(1, sum([1 for _ in range(13)
+                                    if random.random() < ALLOCATION_RATE]))
+        else:
+            num_users = int(user_choice)
         if e.id not in [crusader_id, ragnarok_id] and random.randint(1, 25) >= 25 - max_rank + e.rank:
             num_users += 1
             while num_users < 15 and random.choice([True] + [False] * (e.rank + 2)):
                 num_users += 1
         users = random.sample(characters, num_users)
+        if e in preassignments:
+            c = preassignments[e]
+            if c not in users:
+                users[0] = c
+            assert c in users
         chars_for_esper.append([c.id for c in users])
 
     if not ancient_cave:
@@ -112,29 +132,29 @@ def allocate_espers(ancient_cave, espers, characters, fout, replacements=None):
     esper_allocator_sub = Substitution()
     esper_allocator_sub.set_location(0x31B61)
     esper_allocator_sub.bytestring = [0x20, 0x00, 0xF8]
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
     esper_allocator_sub.set_location(0x35524)
     esper_allocator_sub.bytestring = [0x20, 0x07, 0xF8]
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
     esper_allocator_sub.set_location(0x358E1)
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
     esper_allocator_sub.set_location(0x359B1)
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
     esper_allocator_sub.set_location(0x35593)
     esper_allocator_sub.bytestring = [0xA9, 0x2C]
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
     esper_allocator_sub.set_location(0x355B2)
     esper_allocator_sub.bytestring = [0x20, 0x2E, 0xF8]
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
     esper_allocator_sub.set_location(0x358E8)
     esper_allocator_sub.bytestring = [0xC9, 0x20, 0xF0, 0x16]
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
 
     esper_allocator_sub.set_location(0x3F800)
 
@@ -148,7 +168,17 @@ def allocate_espers(ancient_cave, espers, characters, fout, replacements=None):
                                          0x80, 0xF4, 0x60, 0x9C, 0x80, 0x21, 0x4C, 0xD9, 0x7F, 0x82, 0x9A, 0xA7, 0xC3,
                                          0xAD, 0xFF, 0x9E, 0xAA, 0xAE, 0xA2, 0xA9, 0xBE, 0x00] + [
                                          i for sublist in map(int2bytes, char_mask_for_esper) for i in sublist]
-    esper_allocator_sub.write(fout)
+    esper_allocator_sub.write(outfile_rom_buffer)
+
+    table_address = esper_allocator_sub.bytestring[29:29+3]
+    table_address = ((table_address[2] << 16) |
+                     (table_address[1] << 8) |
+                     table_address[0])
+    expected_address = (
+        esper_allocator_sub.location + len(esper_allocator_sub.bytestring)
+        - (len(char_mask_for_esper)*2))
+    assert expected_address == table_address & 0x3FFFFF
+    return expected_address
 
 
 class EsperBlock:

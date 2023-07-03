@@ -906,8 +906,21 @@ def process_music(inrom, meta={}, f_chaos=False, f_battle=True, opera=None, even
 
         if attempts >= 1000:
             print(
-                "Music randomization failed after 1000 attempts. Your custom music configuration files and/or filters may be too restrictive.")
-            return inrom
+                f"Music randomization failed after 1000 attempts. Your custom music configuration files and/or filters may be too restrictive. falling back to {DEFAULT_PLAYLIST_FILE}")
+            return process_music(
+                inrom=inrom,
+                meta=meta,
+                f_chaos=f_chaos,
+                f_battle=f_battle,
+                opera=opera,
+                eventmodes=eventmodes,
+                playlist_path=PLAYLIST_PATH,
+                playlist_filename=DEFAULT_PLAYLIST_FILE,
+                subpath=subpath,
+                freespace=freespace,
+                pool_test=pool_test,
+                ext_rng=ext_rng
+          )
         attempts += 1
 
         # -- process special cases (battle, opera, tierboss) wrt. choosing tracks

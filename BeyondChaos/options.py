@@ -412,8 +412,8 @@ NORMAL_FLAGS = [
     # battle codes
     Flag(name='collateraldamage',
          description="ITEM BREAK MODE",
-         long_description="All pieces of equipment break for spells. Characters only have the Fight and "
-                          "Item commands, and enemies will use items drastically more often than usual.",
+         long_description="All equipment break for spells. Characters only have Fight and "
+                          "Item commands. Enemies will use items drastically more often than usual.",
          category="battle",
          inputtype="boolean"),
     Flag(name='cursepower',
@@ -422,6 +422,7 @@ NORMAL_FLAGS = [
          category="battle",
          inputtype="integer",
          default_value="255",
+         minimum_value=0,
          maximum_value=255),
     Flag(name='dancelessons',
          description="NO DANCE FAILURES",
@@ -430,10 +431,14 @@ NORMAL_FLAGS = [
          inputtype="boolean"),
     Flag(name='dancingmaduin',
          description="RESTRICTED ESPERS MODE",
-         long_description="Restricts Esper usage such that most Espers can only be equipped by one character. "
-                          "Also usually changes what spell the Paladin Shld teaches.",
+         long_description="Espers can only be equipped by specific characters. Choose the minimum amount "
+                          "of characters per Esper. Usually changes Paladin Shld spell. "
+                          "\nRandom chooses the same random minimum for all Espers; Chaos chooses them separately.",
          category="battle",
-         inputtype="boolean"),
+         inputtype="combobox",
+         choices=("Off", "Chaos","Random", "1", "2", "3", "4", "5", "6", "7", "8", "10", "11", "12", "13"),
+         default_value="Off",
+         default_index=0),
     Flag(name='darkworld',
          description="SLASHER'S DELIGHT MODE",
          long_description="Drastically increases the difficulty of the seed, akin to a hard mode. "
@@ -584,7 +589,9 @@ NORMAL_FLAGS = [
          long_description="Prompts for a multiplier, increasing the range of randomization. (0=uniform randomness)",
          category="field",
          inputtype="integer",
-         default_value="0"),
+         default_value="0",
+         minimum_value=0,
+         maximum_value=255),
     Flag(name='worringtriad',
          description="START IN WOR",
          long_description="The player will start in the World of Ruin, with all of the World of Balance "

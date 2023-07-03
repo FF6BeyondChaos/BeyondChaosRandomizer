@@ -7,9 +7,9 @@ a fork of SubtractionSoup's FF6 Beyond Chaos EX Randomizer
 a fork of Abyssonym's FF6 Beyond Chaos Randomizer
 <p>
 
-__Version__: 5.0.0
+__Version__: 5.0.1
 <br />
-__Date__: 2023-06-14
+__Date__: 2023-07-02
 <br />
 __URL__: https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest
 <br />
@@ -173,6 +173,10 @@ Decode them if you're having trouble.
  * Hint #2:  Qba'g trg qvfgenpgrq. Fgnl sbphfrq ba lbhe tbny, naq riraghnyyl lbh jvyy ernpu vg.
  * Solution: Fbzr gernfher ebbzf ner gencf gung qebc lbh gb n ybjre yriry bs gur gbjre. Nibvq gur gernfher ebbzf naq lbh jba'g trg fghpx.
 
+Q: I can't find the Striker! How do I get Shadow from the Colosseum in the World of Ruin?
+<br />
+A: Lbh pna trg gur Fgevxre ol orggvat vgrzf va gur Pbybffrhz.
+
 Q: The old man in Narshe won't give me the Ragnarok esper. Is this a bug?
 <br />
 A: It's not a bug. Ragnarok (esper) is at a different location. Location: Gur obff ng gur gbc bs Snangvpf Gbjre unf vg.
@@ -248,34 +252,35 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
 ## CONTRIBUTORS
 
     Abyssonym - original Beyond Chaos creator
-    subtractionsoup - former maintainer of Beyond Chaos EX 
+    subtractionsoup - former maintainer of Beyond Chaos EX
     CtrlxZ - created or modified a bunch of sprites for the randomizer
-	HoxNorf - ported over sprites and music for the randomizer
+    HoxNorf - ported over sprites and music for the randomizer
     DarkSlash - madworld, darkworld, randombosses codes and some other things for KatN mode; current maintainer of Beyond Chaos CE (send help)
     emberling - speeddial, randomized music, alasdraco, dialoguemanager, converted a ton of music, and reworked palettes and sprite replacement, FF6 music player patch
-	Rushlight - made music arrangements for the randomizer
+    Rushlight - made music arrangements for the randomizer
     Lockirby2 - The worringtriad and notawaiter codes
     myself086 - new menu features and natural magic expansion
     Dracovious - Created new GUI and R-Limit, and some other codes
-	GreenKnight5 - First GUI, Cecilbot
-	DrInsanoPHD - Refactoring code, character stats randomizer, bug fixes, lots of help with CE releases
-	Crimdahl - Rotating status patch, dancelessons code, removeflashing code, lots of help with CE releases, 
-	fusoyeahhh - lots of help with CE releases
-	RazzleStorm - refactoring some code, adding type hints, lots of help with CE releases
-	CDude - lots of help with event codes for CE versions, fixing Bio Blast and Flash/Schiller animations
-	Cecil188 - ported over music, owner of the Discord, and overall helper with everything
-	
+    GreenKnight5 - First GUI, Cecilbot
+    DrInsanoPHD - Refactoring code, character stats randomizer, bug fixes, lots of help with CE releases
+    Crimdahl - Rotating status patch, dancelessons code, removeflashing code, lots of help with CE releases,
+    fusoyeahhh - lots of help with CE releases
+    RazzleStorm - refactoring some code, adding type hints, lots of help with CE releases
+    CDude - lots of help with event codes for CE versions, fixing Bio Blast and Flash/Schiller animations
+    Cecil188 - ported over music, owner of the Discord, and overall helper with everything
+
 
 ## EXTERNAL PATCHES USED
 
-	Synchysi - esper restriction
-	Lenophis - unhardcoded tintinabar
+    Synchysi - esper restriction
+    Lenophis - unhardcoded tintinabar
     Novalia Spirit - "Allergic Dog" bug fix, Selective Reequip
     Leet Sketcher - Y Equip Relics, rotating statuses patch, Imp Skimp
     Assassin - That Damn Yellow Streak fix, sketch fix
-	Power Panda - Divergent Paths: The 3 Scenarios
-	HatZen08 - Coliseum Rewards Display
-	madsiur, tsushiy, Lenophis - FF6 Music Player
+    Power Panda - Divergent Paths: The 3 Scenarios
+    HatZen08 - Coliseum Rewards Display
+    madsiur, tsushiy, Lenophis - FF6 Music Player
+    SilentEnigma, Imzogelmo - MP damage color digits
 
 ## SPECIAL THANKS
 

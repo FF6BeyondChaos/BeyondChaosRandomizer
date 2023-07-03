@@ -1,6 +1,5 @@
 {
     "Dirk": [
-        "physical"
     ],
     "MithrilKnife": [
         "physical"
@@ -732,5 +731,7 @@
     ],
     "Sprint Shoes": [
         "haste"
+    ],
+    "Rename Card": [
     ]
 }

@@ -427,10 +427,10 @@ def get_snes_palette_transformer(use_luma=False, always=None, middle=True,
 
 def rewrite_snes_title(text, filename, version, lorom=False):
     f = open(filename, 'r+b')
-    while len(text) < 20:
+    while len(text) < 21:
         text += ' '
-    if len(text) > 20:
-        text = text[:19] + "?"
+    if len(text) > 21:
+        text = text[:20] + "?"
     if lorom:
         mask = 0x7FFF
     else:

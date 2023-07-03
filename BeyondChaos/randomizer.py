@@ -17,10 +17,7 @@ from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
 from character import get_characters, get_character, equip_offsets, character_list, load_characters
-from bcg_junction import (JunctionManager,
-                          write_patch as jm_write_patch,
-                          tblpath as jm_tblpath,
-                          set_addressing_mode as jm_set_addressing_mode)
+from bcg_junction import JunctionManager
 from chestrandomizer import mutate_event_items, get_event_items
 from config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
                     set_value)
@@ -47,11 +44,14 @@ from monsterrandomizer import (REPLACE_ENEMIES, MonsterGraphicBlock, get_monster
 from myselfpatches import myself_patches
 from musicinterface import randomize_music, manage_opera, get_music_spoiler, music_init, get_opera_log
 from options import ALL_MODES, NORMAL_FLAGS, Options_
-from patches import (allergic_dog, banon_life3, evade_mblock,
-                     death_abuse, no_kutan_skip, show_coliseum_rewards,
-                     cycle_statuses, no_dance_stumbles, fewer_flashes,
-                     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break, title_gfx, apply_namingway,
-                     improved_party_gear, patch_doom_gaze, nicer_poison, fix_xzone, imp_skimp, hidden_relic, y_equip_relics, fix_gogo_portrait)
+from patches import (
+    allergic_dog, banon_life3, evade_mblock, death_abuse, no_kutan_skip,
+    show_coliseum_rewards, cycle_statuses, no_dance_stumbles, fewer_flashes,
+    change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break,
+    title_gfx, apply_namingway, improved_party_gear, patch_doom_gaze,
+    nicer_poison, fix_xzone, imp_skimp, hidden_relic, y_equip_relics,
+    fix_gogo_portrait, vanish_doom, mp_color_digits,
+    can_always_access_esper_menu, verify_patchlist)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -60,7 +60,7 @@ from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
 from towerrandomizer import randomize_tower
 from utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    FINAL_BOSS_AI_TABLE, SKIP_EVENTS_TABLE, DANCE_NAMES_TABLE,
-                   DIVERGENT_TABLE,
+                   DIVERGENT_TABLE, SONGS_TABLE,
                    get_long_battle_text_pointer,
                    Substitution, shorttexttable, name_to_bytes,
                    hex2int, int2bytes, read_multi, write_multi,
@@ -72,13 +72,13 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-5.0.0"
+VERSION = "CE-5.0.1"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
 TEST_ON = False
-TEST_SEED = "CE-5.0.0|normal|b c d e f g h i j k l m n o p q r s t u w y z makeover partyparty electricboogaloo randombosses dancingmaduin dancelessons swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter bsiab mimetime suplexwrecks questionablecontent|1603333081"
+TEST_SEED = "CE-5.0.0|normal|b c d e f g h i j k l m n o p q r s t u w y z johnnydmad makeover partyparty electricboogaloo randombosses dancelessons swdtechspeed:random alasdraco capslockoff notawaiter bsiab questionablecontent|1603333081"
 # FLARE GLITCH TEST_SEED = "CE-5.0.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-5.0.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #TEST_SEED = "CE-5.0.0|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
@@ -116,8 +116,8 @@ JUNCTION_MANAGER_PARAMETERS = {
     'berserker-index': 0xd,
     'monster-equip-steal-enabled': 0,
     'monster-equip-drop-enabled': 0,
+    'esper-allocations-address': 0x3f858,
     }
-jm_set_addressing_mode('hirom')
 
 
 def log(text: str, section: str):
@@ -808,10 +808,6 @@ def manage_commands(commands: Dict[str, CommandBlock]):
     rage_blank_sub.bytestring = bytes([0x01] + ([0x00] * 31))
     rage_blank_sub.set_location(0x47AA0)
     rage_blank_sub.write(outfile_rom_buffer)
-
-    enable_esper_menu_patch = os.path.join(
-        jm_tblpath, 'patch_can_always_access_esper_menu.txt')
-    jm_write_patch(outfile_rom_buffer, enable_esper_menu_patch)
 
     # Let x-magic user use magic menu.
     enable_xmagic_menu_sub = Substitution()
@@ -2186,8 +2182,7 @@ def manage_rng():
 
 
 def manage_balance(newslots: bool = True):
-    vanish_doom_patch = os.path.join(jm_tblpath, 'patch_vanish_doom.txt')
-    jm_write_patch(outfile_rom_buffer, vanish_doom_patch)
+    vanish_doom(outfile_rom_buffer)
     evade_mblock(outfile_rom_buffer)
     fix_xzone(outfile_rom_buffer)
     imp_skimp(outfile_rom_buffer)
@@ -4935,6 +4930,14 @@ def diverge():
         outfile_rom_buffer.write(data)
 
 
+def initialize_esper_allocation_table(outfile_rom_buffer: BytesIO):
+    NUM_ESPERS = 27
+    data = b'\xff' * (NUM_ESPERS) * 2
+    outfile_rom_buffer.seek(
+        JUNCTION_MANAGER_PARAMETERS['esper-allocations-address'])
+    outfile_rom_buffer.write(data)
+
+
 def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
     jm.set_seed(seed)
 
@@ -4964,7 +4967,7 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
         banned_equips = set()
         characters = get_characters()
         for c in characters:
-            if c.id >= 16:
+            if c.id >= 14:
                 continue
             for equiptype in ['weapon', 'shield', 'helm', 'armor',
                               'relic1', 'relic2']:
@@ -4995,6 +4998,36 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
                     item.mutate_name(character='!')
                     item.write_stats(outfile_rom_buffer)
         jm.activated = True
+
+        for equiptype in ['weapon', 'shield', 'helm', 'armor',
+                          'relic1', 'relic2']:
+            pool = [i for i in items if i.equippable
+                    and equiptype.startswith(i.equiptype)]
+            if equiptype == 'shield':
+                pool += [i for i in items if i.equippable
+                         and i.equiptype == 'weapon']
+            fallback = [
+                i for i in pool if not (i.has_disabling_status or
+                                        jm.equip_whitelist[i.itemid])]
+            pool = [i.itemid for i in pool]
+            fallback = [i.itemid for i in fallback]
+            pool.insert(0, 0xff)
+            fallback.insert(0, 0xff)
+            for c in characters:
+                if c.id != 15 and c.id < 29:
+                    continue
+                equip_address = c.address + equip_offsets[equiptype]
+                outfile_rom_buffer.seek(equip_address)
+                equipid = ord(outfile_rom_buffer.read(1))
+                junctions = jm.equip_whitelist[equipid]
+                if junctions:
+                    old_rank = pool.index(equipid) / (len(pool)-1)
+                    index = int(round(old_rank * (len(fallback)-1)))
+                    new_equip = fallback[index]
+                    old_item = [i for i in items if i.itemid == equipid][0]
+                    new_item = [i for i in items if i.itemid == new_equip][0]
+                    outfile_rom_buffer.seek(equip_address)
+                    outfile_rom_buffer.write(bytes([new_equip]))
 
     if Options_.is_flag_active('effectster'):
         monsters = get_monsters()
@@ -5285,6 +5318,38 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     flags = flags.lower()
     activation_string = Options_.activate_from_string(flags)
 
+    # Check expboost, gpboost, and mpboost values
+    for flag_name in ["expboost", "gpboost", "mpboost", "randomboost"]:
+        if flag := Options_.is_flag_active(flag_name):
+            while True:
+                try:
+                    if flag.maximum_value < float(flag.value):
+                        error_message = "The supplied value for " + flag_name + " was greater than the maximum " \
+                                                                                "allowed value of " + str(
+                            flag.maximum_value) + "."
+                    elif float(flag.value) < flag.minimum_value:
+                        error_message = "The supplied value for " + flag_name + " was less than the minimum " \
+                                                                                "allowed value of " + str(
+                            flag.minimum_value) + "."
+                    elif not flag.value or type(flag.value) == bool or str(flag.value).lower() == "nan":
+                        error_message = "No value was supplied for " + flag_name + "."
+                    else:
+                        flag.value = float(flag.value)
+                        if flag.inputtype == "integer":
+                            flag.value = int(flag.value)
+                        break
+                except ValueError:
+                    error_message = "The supplied value for " + flag_name + " was not a number."
+
+                if not application or application != "console":
+                    # Users in the GUI or web cannot fix the flags after generation begins, so deactivate the flag.
+                    pipe_print(error_message + " Deactivating flag.")
+                    Options_.deactivate_flag(flag_name)
+                    break
+                flag.value = input(error_message + " Please enter a multiplier between " + str(flag.minimum_value) +
+                                   " and " + str(flag.maximum_value) + " for " + flag_name + ".\n>")
+
+
     if not application or application != "web":
         if version and version != VERSION:
             pipe_print("WARNING! Version mismatch! "
@@ -5292,7 +5357,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     s = "Using seed: %s|%s|%s|%s" % (VERSION,
                                      Options_.mode.name,
                                      " ".join([flag.name if isinstance(flag.value, bool) else
-                                               flag.name + ":" + flag.value for flag in Options_.active_flags]),
+                                               flag.name + ":" + str(flag.value) for flag in Options_.active_flags]),
                                      seed)
     pipe_print(s)
     log(s, section=None)
@@ -5318,23 +5383,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     pipe_print(activation_string)
 
     if Options_.is_flag_active('randomboost'):
-        random_boost_value = Options_.get_flag_value('randomboost')
-        if type(random_boost_value) == bool:
-            if application and application != "console":
-                pipe_print("ERROR: No value was supplied for randomboost flag. Skipping flag.")
-            else:
-                while True:
-                    random_boost_value = input("Please enter a randomness "
-                                               "multiplier value (blank or <=0 for tierless): ")
-                    try:
-                        random_boost_value = int(random_boost_value)
-                        break
-                    except ValueError:
-                        pipe_print("The supplied value for the randomness multiplier was not valid.")
-        if not type(random_boost_value) == bool and int(random_boost_value) <= 0:
-            set_randomness_multiplier(None)
-        else:
-            set_randomness_multiplier(int(random_boost_value))
+        set_randomness_multiplier(int(Options_.get_flag_value('randomboost')))
     elif Options_.is_flag_active('madworld'):
         set_randomness_multiplier(None)
 
@@ -5364,6 +5413,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         if Options_.is_flag_active("shuffle_commands") or Options_.is_flag_active("replace_commands"):
             auto_learn_rage()
 
+    can_always_access_esper_menu(outfile_rom_buffer)
     if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
         manage_commands(commands)
 
@@ -5518,12 +5568,25 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     reseed()
 
     esperrage_spaces = [FreeBlock(0x26469, 0x26469 + 919)]
+
+    # Even if we don't enable dancingmaduin, we must construct an
+    # esper allocation table for other modules that rely on it
+    # (i.e. junction effects)
+    initialize_esper_allocation_table(outfile_rom_buffer)
     if Options_.is_flag_active("random_espers"):
-        if Options_.is_flag_active('dancingmaduin'):
-            allocate_espers(Options_.is_flag_active('ancientcave'), get_espers(infile_rom_buffer), get_characters(),
-                            outfile_rom_buffer,
-                            esper_replacements)
+        dancingmaduin = Options_.is_flag_active('dancingmaduin')
+        if dancingmaduin:
+            esper_allocations_address = allocate_espers(
+                Options_.is_flag_active('ancientcave'),
+                get_espers(infile_rom_buffer),
+                get_characters(),
+                dancingmaduin.value,
+                outfile_rom_buffer,
+                esper_replacements
+            )
             nerf_paladin_shield()
+            verify = JUNCTION_MANAGER_PARAMETERS['esper-allocations-address']
+            assert esper_allocations_address == verify
         manage_espers(esperrage_spaces, esper_replacements)
     reseed()
     myself_locations = myself_patches(outfile_rom_buffer)
@@ -5595,33 +5658,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         for character in characters:
             character.mutate_stats(outfile_rom_buffer, start_in_wor, read_only=True)
     reseed()
-
-    # Check expboost, gpboost, and mpboost values
-    for flag_name in ["expboost", "gpboost", "mpboost"]:
-        if flag := Options_.is_flag_active(flag_name):
-            while True:
-                try:
-                    if flag.maximum_value < float(flag.value):
-                        error_message = "The supplied value for " + flag_name + " was greater than the maximum " \
-                            "allowed value of " + str(flag.maximum_value) + "."
-                    elif float(flag.value) < flag.minimum_value:
-                        error_message = "The supplied value for " + flag_name + " was less than the minimum " \
-                            "allowed value of " + str(flag.minimum_value) + "."
-                    elif not flag.value or type(flag.value) == bool or str(flag.value).lower() == "nan":
-                        error_message = "No value was supplied for " + flag_name + "."
-                    else:
-                        flag.value = float(flag.value)
-                        break
-                except ValueError:
-                    error_message = "The supplied value for " + flag_name + " was not a number."
-
-                if not application or application != "console":
-                    # Users in the GUI or web cannot fix the flags after generation begins, so deactivate the flag.
-                    pipe_print(error_message + " Deactivating flag.")
-                    Options_.deactivate_flag(flag_name)
-                    break
-                flag.value = float(input(error_message + " Please enter a multiplier between " + str(flag.minimum_value) +
-                    " and " + str(flag.maximum_value) + " for " + flag_name + ".\n>"))
 
     if Options_.is_flag_active("random_formations"):
         formations = get_formations()
@@ -5906,7 +5942,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
     if has_music:
         from utils import custom_path
-        randomize_music(outfile_rom_buffer, Options_, playlist_path=custom_path , playlist_filename="songs.txt",
+        randomize_music(outfile_rom_buffer, Options_, playlist_path=custom_path, playlist_filename=SONGS_TABLE,
             opera=opera, form_music_overrides=form_music)
         log(get_music_spoiler(), section="music")
     reseed()
@@ -6019,6 +6055,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     fix_flash_and_bioblaster(outfile_rom_buffer)
     title_gfx(outfile_rom_buffer)
     improved_party_gear(outfile_rom_buffer)
+    mp_color_digits(outfile_rom_buffer)
     manage_doom_gaze(outfile_rom_buffer)
 
     if Options_.is_flag_active("swdtechspeed"):
@@ -6079,6 +6116,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             expand_sub.bytestring = bytes([0x00] * (0x700000 - romsize))
             expand_sub.write(outfile_rom_buffer)
 
+        if Options_.is_flag_active('playsitself'):
+            jm.patch_blacklist.add('patch_junction_focus_umaro.txt')
         jm.execute()
         jm.verify()
         log(jm.report, section='junctions')
@@ -6086,6 +6125,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
     rewrite_title(text="FF6 BCCE %s" % seed)
     validate_rom_expansion()
     rewrite_checksum()
+    verify_patchlist(outfile_rom_buffer)
 
     if not application or application != "web":
         with open(outfile_rom_path, 'wb+') as f:
