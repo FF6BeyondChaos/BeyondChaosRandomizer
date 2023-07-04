@@ -170,6 +170,11 @@ class ItemBlock:
     def is_consumable(self):
         return self.itemtype & 0x0f == 0x06
 
+    @property
+    def equiptype(self):
+        return ['tool', 'weapon', 'armor', 'shield',
+                'helm', 'relic', 'consumable'][self.itemtype & 0x0f]
+
     def set_degree(self, value):
         self.degree = value
 
