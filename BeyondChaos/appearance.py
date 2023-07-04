@@ -496,9 +496,9 @@ def get_sprite_swaps(char_ids, male, female, vswaps, web_custom_sprite_replaceme
         if wild:
             candidates = replace_candidates
         else:
-            if char_id in female:
+            if female and char_id in female:
                 candidates = female_candidates
-            elif char_id in male:
+            elif male and char_id in male:
                 candidates = male_candidates
             else:
                 candidates = neutral_candidates

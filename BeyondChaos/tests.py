@@ -1,3 +1,103 @@
+VERSION = "CE-5.0.0"
+SOURCE_FILE = "D:\\Emulation\\SNES\\Beyond Chaos\\FF3.smc"
+OUTPUT_PATH = "D:\\Emulation\\SNES\\Beyond Chaos\\"
+TEST_SEED = "CE-5.0.0|normal|e dancingmaduin:off electricboogaloo mpboost:16.44 playsitself bsiab equipanything espffect cloneparty makeover|1688017607"
+#"CE-5.0.0|normal|cloneparty makeover speedcave ancientcave gpboost:32.52 strangejourney notawaiter|1688014811"
+
+"CE-5.0.0|speedcave|c g i lessfanatical playsitself allcombos equipanything espercutegf novanilla makeover speedcave ancientcave|1688014999"
+# "patch_junction_focus_umaro.txt-20928 did not pass validation"
+
+
+def test_generation():
+    from randomizer import randomize
+    try:
+        randomize(
+            application="tester",
+            infile_rom_path=SOURCE_FILE,
+            outfile_rom_path=OUTPUT_PATH,
+            seed=TEST_SEED
+        )
+    except Exception as e:
+        print(e)
+
+
+def test_random_generation(iterations: int, num_flags: int):
+    from options import ALL_FLAGS
+    from options import ALL_MODES
+    from randomizer import randomize
+    from random import Random
+    from time import time
+    from multiprocessing import Pipe, Process
+
+    random = Random()
+    for index in range(iterations):
+        try:
+            ALL_TESTING_FLAGS = [flag for flag in ALL_FLAGS if flag.name not in ["remonsterate", "bingoboingo"]]
+            current_flagstring = ""
+            new_flags = random.sample(ALL_TESTING_FLAGS, num_flags)
+            for flag in new_flags:
+                try:
+                    if flag.inputtype == "integer":
+                        # Choose a random value from within the allowed values
+                        flag.value = random.randint(flag.minimum_value, flag.maximum_value)
+                        current_flagstring += str(flag.name) + ":" + str(flag.value)
+                    elif flag.inputtype == "float2":
+                        # Choose a random value from within the allowed values
+                        flag.value = round(random.uniform(flag.minimum_value, flag.maximum_value), 2)
+                        current_flagstring += str(flag.name) + ":" + str(flag.value)
+                    elif flag.inputtype == "combobox":
+                        # Choose a random value from within the allowed values
+                        flag.value = random.choice(flag.choices)
+                        while flag.value == flag.default_value:
+                            # Except do not allow the default_value, because that represents the flag being off
+                            flag.value = random.choice(flag.choices)
+                        current_flagstring += str(flag.name) + ":" + str(flag.value)
+                    else:
+                        current_flagstring += str(flag.name)
+                    current_flagstring += " "
+                except Exception:
+                    print("Error setting and applying flag value for flag " + str(flag.name) + " on iteration " +
+                          str(index) + ".")
+            current_seed = str(VERSION) + "|" + \
+                           str(random.choice(ALL_MODES).name) + "|" + \
+                           str(current_flagstring) + "|" + \
+                           str(int(time()))
+            print("Running generation with seed " + str(current_seed))
+            kwargs = {
+                "infile_rom_path": SOURCE_FILE,
+                "outfile_rom_path": OUTPUT_PATH,
+                "seed": current_seed,
+                "application": "tester"
+            }
+            parent_connection, child_connection = Pipe()
+            randomize_process = Process(
+                target=randomize,
+                args=(child_connection,),
+                kwargs=kwargs
+            )
+            randomize_process.start()
+            while True:
+                if not randomize_process.is_alive():
+                    raise RuntimeError("Unexpected error: The randomize child process died.")
+                if parent_connection.poll(timeout=5):
+                    item = parent_connection.recv()
+                else:
+                    item = None
+                if item:
+                    try:
+                        if isinstance(item, str):
+                            print(item)
+                        elif isinstance(item, Exception):
+                            raise item
+                        elif isinstance(item, bool):
+                            break
+                    except EOFError:
+                        break
+            print("\n")
+        except Exception as e:
+            print(e)
+
+
 def test_esper_allocation():
     from esperrandomizer import get_espers
     from character import get_characters
@@ -6,8 +106,7 @@ def test_esper_allocation():
 
     random = Random()
     char_ids = list(range(12)) + [13]
-    source_file = "D:\\Beyond Chaos\\ff3.smc"
-    espers = get_espers(BytesIO(open(source_file, "rb").read()))
+    espers = get_espers(BytesIO(open(SOURCE_FILE, "rb").read()))
     characters = [c for c in get_characters() if c.id in char_ids]
     preassigned_espers = random.sample(espers, len(characters))
     preassignments = {e: c for (e, c) in zip(preassigned_espers, characters)}
@@ -98,4 +197,5 @@ def test_esper_allocation():
 
 
 if __name__ == "__main__":
-    test_esper_allocation()
+    # test_generation()
+    test_random_generation(50, 10)

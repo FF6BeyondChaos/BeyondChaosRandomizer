@@ -5077,15 +5077,10 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             infile_rom_path = kwargs.get('infile_rom_path')
             outfile_rom_path = kwargs.get('outfile_rom_path')
             pass
-        if application == "gui":
+        if application in ["gui", "web", "tester"]:
             # The gui (beyondchaos.py) should supply these kwargs
             infile_rom_path = kwargs.get('infile_rom_path')
             outfile_rom_path = kwargs.get('outfile_rom_path')
-            set_parent_pipe(connection)
-        if application == "web":
-            # The web interface should supply these kwargs
-            infile_rom_buffer = kwargs.get("infile_rom_buffer")
-            outfile_rom_buffer = kwargs.get("outfile_rom_buffer")
             set_parent_pipe(connection)
         fullseed = kwargs.get('seed')
 
@@ -6125,39 +6120,40 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         rewrite_checksum()
         verify_patchlist(outfile_rom_buffer)
 
-        if not application or application != "web":
+        if not application or application in ["console", "gui"]:
             with open(outfile_rom_path, 'wb+') as f:
                 f.write(outfile_rom_buffer.getvalue())
             outfile_rom_buffer.close()
 
-        pipe_print("\nWriting log...")
+        if not application == "tester":
+            pipe_print("\nWriting log...")
 
-        for character in sorted(characters, key=lambda c: c.id):
-            character.associate_command_objects(list(commands.values()))
-            if character.id > 13:
-                continue
-            log(str(character), section="characters")
+            for character in sorted(characters, key=lambda c: c.id):
+                character.associate_command_objects(list(commands.values()))
+                if character.id > 13:
+                    continue
+                log(str(character), section="characters")
 
-        if options.Use_new_randomizer:
-            for character in sorted(character_list, key=lambda c: c.id):
-                if character.id <= 14:
-                    log(str(character), section="stats")
+            if options.Use_new_randomizer:
+                for character in sorted(character_list, key=lambda c: c.id):
+                    if character.id <= 14:
+                        log(str(character), section="stats")
 
-        for monster in sorted(get_monsters(), key=lambda m: m.display_name):
-            if monster.display_name:
-                log(monster.get_description(changed_commands=changed_commands),
-                    section="monsters")
+            for monster in sorted(get_monsters(), key=lambda m: m.display_name):
+                if monster.display_name:
+                    log(monster.get_description(changed_commands=changed_commands),
+                        section="monsters")
 
-        if not Options_.is_flag_active("ancientcave"):
-            log_chests()
-        log_item_mutations()
+            if not Options_.is_flag_active("ancientcave"):
+                log_chests()
+            log_item_mutations()
 
-        if not application or application != "web":
-            with open(outlog, 'w+') as f:
-                f.write(get_logstring(
-                    ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers",
-                     "item magic", "item effects", "command-change relics", "colosseum", "monsters", "music",
-                     "remonsterate", "shops", "treasure chests", "junctions", "zozo clock", "secret items"]))
+            if not application or application in ["console", "gui"]:
+                with open(outlog, 'w+') as f:
+                    f.write(get_logstring(
+                        ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers",
+                         "item magic", "item effects", "command-change relics", "colosseum", "monsters", "music",
+                         "remonsterate", "shops", "treasure chests", "junctions", "zozo clock", "secret items"]))
 
         if Options_.is_flag_active('bingoboingo'):
 
@@ -6211,7 +6207,10 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                          target_score=target_score)
             pipe_print("Bingo cards generated.")
 
-        if application != "web":
+        if application == "tester":
+            pipe_print("Randomization successful.")
+            pipe_print(True)
+        elif application in ["console", "gui"]:
             pipe_print("Randomization successful. Output filename: %s\n" % outfile_rom_path)
             if application == "gui":
                 pipe_print(True)
