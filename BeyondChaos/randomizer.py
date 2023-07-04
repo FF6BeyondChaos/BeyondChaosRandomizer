@@ -6109,11 +6109,11 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                 expand_sub.bytestring = bytes([0x00] * (0x700000 - romsize))
                 expand_sub.write(outfile_rom_buffer)
 
-        if Options_.is_flag_active('playsitself'):
-            jm.patch_blacklist.add('patch_junction_focus_umaro.txt')
-        jm.execute()
-        jm.verify()
-        log(jm.report, section='junctions')
+            if Options_.is_flag_active('playsitself'):
+                jm.patch_blacklist.add('patch_junction_focus_umaro.txt')
+            jm.execute()
+            jm.verify()
+            log(jm.report, section='junctions')
 
         rewrite_title(text="FF6 BCCE %s" % seed)
         validate_rom_expansion()
