@@ -77,12 +77,6 @@ BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
     VERSION_ROMAN += " BETA"
-TEST_ON = False
-TEST_SEED = "CE-5.0.0|normal|b c d e f g h i j k l m n o p q r s t u w y z johnnydmad makeover partyparty electricboogaloo randombosses dancelessons swdtechspeed:random alasdraco capslockoff notawaiter bsiab questionablecontent|1603333081"
-# FLARE GLITCH TEST_SEED = "CE-5.0.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
-# REMONSTERATE ASSERTION TEST_SEED = "CE-5.0.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-#TEST_SEED = "CE-5.0.0|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
-TEST_FILE = "FF3.smc"
 seed, flags = None, None
 seedcounter = 1
 infile_rom_path = None
@@ -5073,10 +5067,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             ALWAYS_REPLACE, NEVER_REPLACE, gui_connection
 
         application = kwargs.get("application", None)
-
-        if TEST_ON:
-            kwargs['infile_rom_path'] = TEST_FILE
-            kwargs['seed'] = TEST_SEED
 
         if not application or application == "console":
             # The console should supply these kwargs

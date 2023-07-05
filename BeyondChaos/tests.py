@@ -2,7 +2,10 @@ VERSION = "CE-5.0.0"
 SOURCE_FILE = "D:\\Emulation\\SNES\\Beyond Chaos\\FF3.smc"
 OUTPUT_PATH = "D:\\Emulation\\SNES\\Beyond Chaos\\"
 TEST_SEED = "CE-5.0.0|normal|e dancingmaduin:off electricboogaloo mpboost:16.44 playsitself bsiab equipanything espffect cloneparty makeover|1688017607"
-#"CE-5.0.0|normal|cloneparty makeover speedcave ancientcave gpboost:32.52 strangejourney notawaiter|1688014811"
+# FLARE GLITCH TEST_SEED = "CE-5.0.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
+# REMONSTERATE ASSERTION TEST_SEED = "CE-5.0.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
+#TEST_SEED = "CE-5.0.0|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
+
 
 "CE-5.0.0|speedcave|c g i lessfanatical playsitself allcombos equipanything espercutegf novanilla makeover speedcave ancientcave|1688014999"
 # "patch_junction_focus_umaro.txt-20928 did not pass validation"
