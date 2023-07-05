@@ -4590,7 +4590,7 @@ def manage_spookiness():
         nowhere_to_run_bottom_sub.write(outfile_rom_buffer)
 
 
-def manage_dances():
+def manage_dances(dance_names=None):
     if Options_.is_flag_active('madworld'):
         spells = get_ranked_spells(infile_rom_buffer)
         dances = random.sample(spells, 32)
@@ -4636,7 +4636,13 @@ def manage_dances():
     bases = []
     prefixes = [[] for i in range(0, 8)]
     i = -1
-    for line in open_mei_fallback(DANCE_NAMES_TABLE):
+
+    if not dance_names:
+        with open_mei_fallback(DANCE_NAMES_TABLE) as dance_file:
+            dance_names = dance_file.read()
+    dance_names = dance_names.split("\n")
+
+    for line in dance_names:
         line = line.strip()
         if line[0] == '*':
             i += 1
@@ -5077,10 +5083,14 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             infile_rom_path = kwargs.get('infile_rom_path')
             outfile_rom_path = kwargs.get('outfile_rom_path')
             pass
-        if application in ["gui", "web", "tester"]:
+        if application in ["gui", "tester"]:
             # The gui (beyondchaos.py) should supply these kwargs
             infile_rom_path = kwargs.get('infile_rom_path')
             outfile_rom_path = kwargs.get('outfile_rom_path')
+            set_parent_pipe(connection)
+        if application == "web":
+            infile_rom_buffer = kwargs.get('infile_rom_buffer')
+            outfile_rom_buffer = kwargs.get('outfile_rom_buffer')
             set_parent_pipe(connection)
         fullseed = kwargs.get('seed')
 
@@ -5815,7 +5825,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
         if Options_.is_flag_active("random_dances"):
             if 0x13 not in changed_commands:
-                manage_dances()
+                manage_dances(kwargs.get("web_custom_dance_names", None))
 
         reseed()
 
