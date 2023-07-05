@@ -14,15 +14,39 @@ TEST_SEED = "CE-5.0.0|normal|e dancingmaduin:off electricboogaloo mpboost:16.44 
 # Test a single generation, just like using TEST = True previously in randomizer.py
 def test_generation():
     from randomizer import randomize
-    try:
-        randomize(
-            application="tester",
-            infile_rom_path=SOURCE_FILE,
-            outfile_rom_path=OUTPUT_PATH,
-            seed=TEST_SEED
-        )
-    except Exception as e:
-        print(e)
+    from multiprocessing import Pipe, Process
+
+    print("Running generation with seed " + str(TEST_SEED))
+    kwargs = {
+        "infile_rom_path": SOURCE_FILE,
+        "outfile_rom_path": OUTPUT_PATH,
+        "seed": TEST_SEED,
+        "application": "tester"
+    }
+    parent_connection, child_connection = Pipe()
+    randomize_process = Process(
+        target=randomize,
+        args=(child_connection,),
+        kwargs=kwargs
+    )
+    randomize_process.start()
+    while True:
+        if not randomize_process.is_alive():
+            raise RuntimeError("Unexpected error: The randomize child process died.")
+        if parent_connection.poll(timeout=5):
+            item = parent_connection.recv()
+        else:
+            item = None
+        if item:
+            try:
+                if isinstance(item, str):
+                    print(item)
+                elif isinstance(item, Exception):
+                    raise item
+                elif isinstance(item, bool):
+                    break
+            except EOFError:
+                break
 
 
 # Test multiple generations. Choose a number of seeds to generate and a number of random flags those seeds should have.
