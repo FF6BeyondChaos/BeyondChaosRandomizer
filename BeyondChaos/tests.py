@@ -11,6 +11,7 @@ TEST_SEED = "CE-5.0.0|normal|e dancingmaduin:off electricboogaloo mpboost:16.44 
 # "patch_junction_focus_umaro.txt-20928 did not pass validation"
 
 
+# Test a single generation, just like using TEST = True previously in randomizer.py
 def test_generation():
     from randomizer import randomize
     try:
@@ -24,6 +25,9 @@ def test_generation():
         print(e)
 
 
+# Test multiple generations. Choose a number of seeds to generate and a number of random flags those seeds should have.
+# The selected mode is random too.
+# Note that this method does not write any of the generated roms to disk.
 def test_random_generation(iterations: int, num_flags: int):
     from options import ALL_FLAGS
     from options import ALL_MODES
