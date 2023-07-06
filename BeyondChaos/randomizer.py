@@ -12,7 +12,7 @@ from multiprocessing import Pipe, Process
 import character
 import locationrandomizer
 import options
-from monsterrandomizer import MonsterBlock, solo_bosses
+from monsterrandomizer import MonsterBlock, early_bosses
 from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
@@ -5045,7 +5045,7 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
         jm.reseed('premonster')
         valid_monsters = []
         for m in monsters:
-            if m.id in solo_bosses:
+            if m.id in early_bosses:
                 continue
             if m.id not in jm.monster_tags:
                 continue
@@ -5059,6 +5059,17 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
         jm.activated = True
 
     if Options_.is_flag_active('treaffect'):
+        monsters = get_monsters()
+        for m in monsters:
+            if m.id not in early_bosses:
+                continue
+            for item in m.steals + m.drops:
+                if item is None:
+                    continue
+                index = item.itemid
+                for effect_index in jm.equip_whitelist[index]:
+                    jm.add_junction(m.id, effect_index, 'blacklist',
+                                    force_category='monster')
         JUNCTION_MANAGER_PARAMETERS['monster-equip-steal-enabled'] = 1
         JUNCTION_MANAGER_PARAMETERS['monster-equip-drop-enabled'] = 1
 
