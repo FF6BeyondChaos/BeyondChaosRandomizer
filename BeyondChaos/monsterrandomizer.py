@@ -622,10 +622,13 @@ class MonsterBlock:
         if hp_add[1] > 0 and hp_add[1] > hp_add[0]:
             self.stats['hp'] += random.randint(*hp_add) + random.randint(*hp_add)
 
-    def randomize_special_effect(self, outfile_rom_buffer: BytesIO, halloween=False):
+    def randomize_special_effect(self,
+                                 outfile_rom_buffer: BytesIO,
+                                 halloween=False,
+                                 web_custom_moves=None):
         attackpointer = 0xFD0D0 + (self.id * 10)
         outfile_rom_buffer.seek(attackpointer)
-        attack = generate_attack()
+        attack = generate_attack(web_custom_moves=web_custom_moves)
         self.attackname = attack
         attack = name_to_bytes(attack, 10)
         outfile_rom_buffer.write(attack)

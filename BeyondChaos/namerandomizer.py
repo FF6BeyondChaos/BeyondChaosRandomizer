@@ -80,15 +80,33 @@ def generate_name(size=None, maxsize=10):
             return name
 
 
-def generate_attack():
+def generate_attack(web_custom_moves=None):
+    global moves, modifiers
+    if web_custom_moves:
+        moves = web_custom_moves
+        modifiers = web_custom_moves
+
+    # One in seven times, make a move with both a prefix and suffix
     if random.randint(1, 7) != 7:
         while True:
             modifier = random.choice(modifiers)
-            move = random.choice(moves)
+            try:
+                move = random.choice(moves)
+            except IndexError:
+                # The randomizer was unable to find a suffix that, when combined with the prefix,
+                #   was less than or equal to 10 in length. Just use the prefix.
+                move = ""
+                if len(modifier) > 10:
+                    # Truncate the modifier if it is too long
+                    modifier = modifier[:10]
+                break
             if len(modifier) + len(move) <= 10:
                 break
+    # Six in seven times, make a move with just a suffix
     else:
         modifier = ""
+        # Crimdahl: Considering that moves and modifiers are the same list derived from the same table,
+        #   I don't see the point in this roll.
         if random.randint(1, 4) != 4:
             candidates = list(moves)
         else:
@@ -98,6 +116,7 @@ def generate_attack():
 
     if len(modifier) + len(move) < 10:
         return ("%s %s" % (modifier, move)).strip()
+    # Crimdahl: Do we need to be truncating here if the combined length is over 10?
     return modifier + move
 
 

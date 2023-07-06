@@ -2304,7 +2304,7 @@ def manage_final_boss(freespaces: list):
     return freespaces
 
 
-def manage_monsters() -> List[MonsterBlock]:
+def manage_monsters(web_custom_moves=None) -> List[MonsterBlock]:
     monsters = get_monsters(infile_rom_buffer)
     safe_solo_terra = not Options_.is_flag_active("ancientcave")
     darkworld = Options_.is_flag_active("darkworld")
@@ -2346,7 +2346,11 @@ def manage_monsters() -> List[MonsterBlock]:
 
     shuffle_monsters(monsters, safe_solo_terra=safe_solo_terra)
     for m in monsters:
-        m.randomize_special_effect(outfile_rom_buffer, halloween=Options_.is_flag_active('halloween'))
+        m.randomize_special_effect(
+            outfile_rom_buffer,
+            halloween=Options_.is_flag_active('halloween'),
+            web_custom_moves=web_custom_moves
+        )
         m.write_stats(outfile_rom_buffer)
 
     return monsters
@@ -5499,7 +5503,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
         if Options_.is_flag_active("random_enemy_stats"):
             aispaces = manage_final_boss(aispaces)
-            monsters = manage_monsters()
+            monsters = manage_monsters(
+                web_custom_moves=kwargs.get("web_custom_monster_attack_names", None)
+            )
 
         reseed()
 
