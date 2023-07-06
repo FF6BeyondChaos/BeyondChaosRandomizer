@@ -50,8 +50,9 @@ from patches import (
     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break,
     title_gfx, apply_namingway, improved_party_gear, patch_doom_gaze,
     nicer_poison, fix_xzone, imp_skimp, hidden_relic, y_equip_relics,
-    fix_gogo_portrait, vanish_doom, mp_color_digits,
-    can_always_access_esper_menu, verify_randomtools_patches)
+    fix_gogo_portrait, vanish_doom, stacking_immunities, mp_color_digits,
+    can_always_access_esper_menu, alphabetized_lores, description_disruption,
+    informative_miss, improved_equipment_menus, verify_randomtools_patches)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -2177,6 +2178,7 @@ def manage_rng():
 
 def manage_balance(newslots: bool = True):
     vanish_doom(outfile_rom_buffer)
+    stacking_immunities(outfile_rom_buffer)
     evade_mblock(outfile_rom_buffer)
     fix_xzone(outfile_rom_buffer)
     imp_skimp(outfile_rom_buffer)
@@ -6055,7 +6057,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
         banon_life3(outfile_rom_buffer)
         allergic_dog(outfile_rom_buffer)
-        y_equip_relics(outfile_rom_buffer)
         fix_gogo_portrait(outfile_rom_buffer)
         cycle_statuses(outfile_rom_buffer)
         name_swd_techs(outfile_rom_buffer)
@@ -6063,7 +6064,15 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         title_gfx(outfile_rom_buffer)
         improved_party_gear(outfile_rom_buffer)
         mp_color_digits(outfile_rom_buffer)
+        alphabetized_lores(outfile_rom_buffer)
+        description_disruption(outfile_rom_buffer)
+        informative_miss(outfile_rom_buffer)
         manage_doom_gaze(outfile_rom_buffer)
+
+        if Options_.is_flag_active('relicmyhat'):
+            improved_equipment_menus(outfile_rom_buffer)
+        else:
+            y_equip_relics(outfile_rom_buffer)
 
         if Options_.is_flag_active("swdtechspeed"):
             swdtech_speed = Options_.get_flag_value('swdtechspeed')
