@@ -5002,6 +5002,7 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
                     item.write_stats(outfile_rom_buffer)
         jm.activated = True
 
+        shields = [i.itemid for i in items if i.equiptype == 'shield']
         for equiptype in ['weapon', 'shield', 'helm', 'armor',
                           'relic1', 'relic2']:
             pool = [i for i in items if i.equippable
@@ -5024,7 +5025,12 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
                 equipid = ord(outfile_rom_buffer.read(1))
                 junctions = jm.equip_whitelist[equipid]
                 if junctions:
-                    old_rank = pool.index(equipid) / (len(pool)-1)
+                    if equipid in pool:
+                        old_rank = pool.index(equipid) / (len(pool)-1)
+                    else:
+                        assert equiptype == 'weapon'
+                        assert equipid in shields
+                        old_rank = shields.index(equipid) / (len(shields)-1)
                     index = int(round(old_rank * (len(fallback)-1)))
                     new_equip = fallback[index]
                     old_item = [i for i in items if i.itemid == equipid][0]
