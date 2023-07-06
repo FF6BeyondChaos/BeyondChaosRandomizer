@@ -272,15 +272,21 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
 
 ## EXTERNAL PATCHES USED
 
-    Synchysi - esper restriction
-    Lenophis - unhardcoded tintinabar
-    Novalia Spirit - "Allergic Dog" bug fix, Selective Reequip
-    Leet Sketcher - Y Equip Relics, rotating statuses patch, Imp Skimp
-    Assassin - That Damn Yellow Streak fix, sketch fix
-    Power Panda - Divergent Paths: The 3 Scenarios
-    HatZen08 - Coliseum Rewards Display
-    madsiur, tsushiy, Lenophis - FF6 Music Player
-    SilentEnigma, Imzogelmo - MP damage color digits
+    Assassin        That Damn Yellow Streak fix, Sketch fix, Stacking Immunities fix
+    Bropedio        Informative Miss
+    darknil         Improved Shop Menu
+    GrayShadows     Combined Equipment/Relic Menu
+    Power Panda     Divergent Paths: The 3 Scenarios
+    HatZen08        Coliseum Rewards Display
+    Leet Sketcher   Y Equip Relics, Rotating Statuses, Imp Skimp
+    Lenophis        Unhardcoded Tintinabar
+    Novalia Spirit  "Allergic Dog" bug fix, Selective Reequip
+    SilentEnigma    Alphabetized Lores, Description Disruption
+    Synchysi        Esper Restriction
+    madsiur, tsushiy, Lenophis
+        FF6 Music Player
+    Imzogelmo, SilentEnigma
+        MP damage color digits
 
 ## SPECIAL THANKS
 
