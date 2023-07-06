@@ -54,11 +54,11 @@ class SpellBlock:
         self.target_one_side_only = targeting & 0x02
         self.target_one = targeting & 0x01
 
-        rom_file_buffer.seek(self.pointer+1)
+        rom_file_buffer.seek(self.pointer + 1)
         self.elements = ord(rom_file_buffer.read(1))
         self.elemental = self.elements > 0
 
-        rom_file_buffer.seek(self.pointer+2)
+        rom_file_buffer.seek(self.pointer + 2)
         effect1 = ord(rom_file_buffer.read(1))
         self.physical = effect1 & 0x01
         self.miss_if_death_prot = effect1 & 0x02
@@ -69,7 +69,7 @@ class SpellBlock:
         self.no_split_damage = effect1 & 0x40
         self.abort_on_allies = effect1 & 0x80
 
-        rom_file_buffer.seek(self.pointer+3)
+        rom_file_buffer.seek(self.pointer + 3)
         self.dmgtype = ord(rom_file_buffer.read(1))
         self.outsidebattle = self.dmgtype & 0x01
         self.unreflectable = self.dmgtype & 0x02
@@ -80,7 +80,7 @@ class SpellBlock:
         self.casterdies = self.dmgtype & 0x40
         self.concernsmp = self.dmgtype & 0x80
 
-        rom_file_buffer.seek(self.pointer+4)
+        rom_file_buffer.seek(self.pointer + 4)
         effect2 = ord(rom_file_buffer.read(1))
         self.healing = effect2 & 0x01
         self.draining = effect2 & 0x02
@@ -91,15 +91,15 @@ class SpellBlock:
         self.level_spell = effect2 & 0x40
         self.percentage = effect2 & 0x80
 
-        rom_file_buffer.seek(self.pointer+5)
+        rom_file_buffer.seek(self.pointer + 5)
         self.mp = ord(rom_file_buffer.read(1))
-        rom_file_buffer.seek(self.pointer+6)
+        rom_file_buffer.seek(self.pointer + 6)
         self.power = ord(rom_file_buffer.read(1))
-        rom_file_buffer.seek(self.pointer+8)
+        rom_file_buffer.seek(self.pointer + 8)
         self.accuracy = ord(rom_file_buffer.read(1))
-        rom_file_buffer.seek(self.pointer+9)
+        rom_file_buffer.seek(self.pointer + 9)
         self.special = ord(rom_file_buffer.read(1))
-        rom_file_buffer.seek(self.pointer+10)
+        rom_file_buffer.seek(self.pointer + 10)
         statuses = list(rom_file_buffer.read(4))
         self.death = statuses[0] & 0x80
         self.petrify = statuses[0] & 0x40
@@ -140,7 +140,7 @@ class SpellBlock:
 
     def fix_reflect(self, fout):
         self.dmgtype |= 0x02
-        fout.seek(self.pointer+3)
+        fout.seek(self.pointer + 3)
         fout.write(bytes([self.dmgtype]))
 
     def rank(self):
@@ -231,7 +231,7 @@ class CommandBlock:
 
     def set_id(self, i):
         self.id = i
-        self.proppointer = 0xFFE00 + (i*2)
+        self.proppointer = 0xFFE00 + (i * 2)
 
     @property
     def usable_as_imp(self):
@@ -333,7 +333,9 @@ class SpellSub(Substitution):
     def __repr__(self):
         return "Use the skill '{0}'".format(spellnames[self.spellid])
 
+
 wildspells = None
+
 
 def get_spellsets(spells=None):
     """Create various thematic groups of spells."""
@@ -341,17 +343,17 @@ def get_spellsets(spells=None):
     spellsets = {}
     spellset_bans = []
     spells = [s for s in spells if s.spellid not in spellset_bans]
-    limitSpellids = [s for s in spells if s.name == "Sabre Soul" or 
-                     s.name == "Star Prism" or 
-                     s.name == "Mirager" or 
-                     s.name == "TigerBreak" or 
-                     s.name == "Back Blade" or 
-                     s.name == "Riot Blade" or 
-                     s.name == "RoyalShock" or 
-                     s.name == "Spin Edge" or 
-                     s.name == "X-Meteo" or 
-                     s.name == "Red Card" or 
-                     s.name == "MoogleRush" or 
+    limitSpellids = [s for s in spells if s.name == "Sabre Soul" or
+                     s.name == "Star Prism" or
+                     s.name == "Mirager" or
+                     s.name == "TigerBreak" or
+                     s.name == "Back Blade" or
+                     s.name == "Riot Blade" or
+                     s.name == "RoyalShock" or
+                     s.name == "Spin Edge" or
+                     s.name == "X-Meteo" or
+                     s.name == "Red Card" or
+                     s.name == "MoogleRush" or
                      s.name == "ShadowFang"]
     # Each spellset is a tuple of (description, spell list)
     spellsets['Chaos'] = ('skill (including broken and glitchy skills)', [])
@@ -439,7 +441,7 @@ def get_spellsets(spells=None):
                          [0x10, 0x11, 0x12, 0x13, 0x19, 0x1B, 0x1F, 0x20, 0x22,
                           0x26, 0x27, 0x28, 0x2A, 0x2B, 0x34, 0x89, 0x9B, 0xA0,
                           0xC9, 0xDF])
-    spellsets['Limit'] = ('Limit breaker',[l for l in limitSpellids])
+    spellsets['Limit'] = ('Limit breaker', [l for l in limitSpellids])
 
     spellsets['Level'] = ('level-based skill',
                           [s for s in spells if s.level_spell or s.name in ["Flare Star", "Dischord", "Stone"]])
@@ -504,7 +506,7 @@ class RandomSpellSub(Substitution):
 
         pointer = self.location + len(self.bytestring) + 0xC00000
         self.bytestring[4] = len(self.spells) - 1
-        assert self.bytestring[4] in [(2**i)-1 for i in range(1, 8)]
+        assert self.bytestring[4] in [(2 ** i) - 1 for i in range(1, 8)]
         a, b, c = pointer >> 16, (pointer >> 8) & 0xFF, pointer & 0xFF
         self.bytestring[7:10] = bytearray([c, b, a])
         self.bytestring += bytearray(sorted([s.spellid for s in self.spells]))
@@ -609,12 +611,12 @@ class ComboSpellSub(Substitution):
                 self.bytestring += bytearray([
                     0xA9, 0x01,
                     0x04, 0xB2,
-                    ])
+                ])
             self.bytestring += bytearray([
                 0x5A,
                 0x20, low, high,
                 0x7A,
-                ])
+            ])
         self.bytestring.append(0x60)
         assert len(self.bytestring) == self.get_overhead()
 
@@ -626,7 +628,6 @@ class ComboSpellSub(Substitution):
     def __repr__(self):
         return "Use the combo {0}.".format(
             " + ".join([s.name for s in self.spells]))
-
 
 
 class MultiSpellSubMixin(Substitution):
@@ -717,14 +718,18 @@ class MultipleSpellSub(MultiSpellSubMixin):
         high, low = (subpointer >> 8) & 0xFF, subpointer & 0xFF
         if isinstance(self.spellsub, RandomSpellSub):
             if self.count <= 3:
-                self.bytestring = bytearray([0x5A, 0x20, low, high, 0x7A, 0xA9, 0x01, 0x04, 0xb2] * (self.count - 1) + [0x20, low, high])
+                self.bytestring = bytearray(
+                    [0x5A, 0x20, low, high, 0x7A, 0xA9, 0x01, 0x04, 0xb2] * (self.count - 1) + [0x20, low, high])
             else:
-                self.bytestring = bytearray([0xA9, self.count - 1, 0x48, 0x5A, 0x20, low, high, 0x7A, 0xA9, 0x01, 0x04, 0xb2, 0x68, 0x3A, 0xD0, 0xF2, 0x20, low, high])
+                self.bytestring = bytearray(
+                    [0xA9, self.count - 1, 0x48, 0x5A, 0x20, low, high, 0x7A, 0xA9, 0x01, 0x04, 0xb2, 0x68, 0x3A, 0xD0,
+                     0xF2, 0x20, low, high])
         else:
             if self.count <= 3:
                 self.bytestring = bytearray([0x5A, 0x20, low, high, 0x7A] * (self.count - 1) + [0x20, low, high])
             else:
-                self.bytestring = bytearray([0xA9, self.count - 1, 0x48, 0x5A, 0x20, low, high, 0x7A, 0x68, 0x3A, 0xD0, 0xF6, 0x20, low, high])
+                self.bytestring = bytearray(
+                    [0xA9, self.count - 1, 0x48, 0x5A, 0x20, low, high, 0x7A, 0x68, 0x3A, 0xD0, 0xF6, 0x20, low, high])
         self.bytestring += bytearray([0x60])
         self.bytestring += self.spellsub.bytestring
 

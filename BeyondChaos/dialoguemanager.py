@@ -15,7 +15,6 @@ from io import BytesIO
 
 try:
     from sys import _MEIPASS
-
     MEI = True
 except ImportError:
     MEI = False
@@ -60,8 +59,7 @@ def safepath(vpath):
         return vpath
     return [vpath, os.path.join(_MEIPASS, vpath)]
 
-
-# need to use a different table here, so redefined
+#need to use a different table here, so redefined
 def dialogue_to_bytes(text, null_terminate=True):
     bs = []
     i = 0

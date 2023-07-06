@@ -147,7 +147,7 @@ class NPCBlock():
         byte6 = self.graphics
         byte7 = (self.move_type & 0xF) | ((self.sprite_priority & 0x3) << 4) | ((self.vehicle & 0x3) << 6)
         byte8 = (self.facing & 0x03) | ((self.no_turn_when_speaking & 0x1) << 2) | (
-                    (self.layer_priority & 0x3) << 3) | ((self.special_anim & 0x7) << 5)
+                (self.layer_priority & 0x3) << 3) | ((self.special_anim & 0x7) << 5)
 
         outfile_rom_buffer.write(bytes([byte4, byte5, byte6, byte7, byte8]))
 
@@ -724,7 +724,8 @@ class Location():
 
         random.shuffle(self.chests)
         for c in self.chests:
-            if self.locid in range(0x139, 0x13d) and c.empty: #if the chest is in the Phoenix Cave and empty - fill with high level MIAB
+            if self.locid in range(0x139, 0x13d) and c.empty:
+                #if the chest is in the Phoenix Cave and empty - fill with high level MIAB
                 c.mutate_contents(monster=True, guideline=50000, crazy_prices=crazy_prices,
                                   uncapped_monsters=uncapped_monsters, no_monsters=no_monsters)
                 continue
