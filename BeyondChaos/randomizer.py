@@ -4742,10 +4742,12 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
                         fset.sixteen_pack = True
                     for i, v in enumerate(fset.formids):
                         if fset.formids[i] in salt_formations:
-                            fset.formids[
-                                i] -= 4  # any encounter that could turn into an event encounter, reduce by 4 so it can't
+                            while fset.formids[i] in event_formations or fset.formids[i] in salt_formations:
+                                fset.formids[i] -= 1  # any encounter that could turn into an
+                                                      # event encounter, keep reducing until it's not a salt or event formation
                             fset.sixteen_pack = True
-
+        #if fset.sixteen_pack == True:
+        #    print("FORM ID:" + str(fset.formids))
 
 def nerf_paladin_shield():
     paladin_shield = get_item(0x67)
