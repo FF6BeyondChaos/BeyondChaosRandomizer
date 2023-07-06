@@ -51,7 +51,7 @@ from patches import (
     title_gfx, apply_namingway, improved_party_gear, patch_doom_gaze,
     nicer_poison, fix_xzone, imp_skimp, hidden_relic, y_equip_relics,
     fix_gogo_portrait, vanish_doom, mp_color_digits,
-    can_always_access_esper_menu, verify_patchlist)
+    can_always_access_esper_menu, verify_randomtools_patches)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -6126,7 +6126,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         rewrite_title(text="FF6 BCCE %s" % seed)
         validate_rom_expansion()
         rewrite_checksum()
-        verify_patchlist(outfile_rom_buffer)
+        verify_randomtools_patches(outfile_rom_buffer)
 
         if not application or application in ["console", "gui"]:
             with open(outfile_rom_path, 'wb+') as f:

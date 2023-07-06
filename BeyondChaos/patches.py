@@ -2,8 +2,8 @@ from io import BytesIO
 import os
 
 from bcg_junction import (write_patch as jm_write_patch,
-                          tblpath as jm_tblpath,
-                          verify_patchlist as jm_verify_patchlist)
+                          tblpath as jm_tblpath)
+from randomtools.tablereader import verify_patches as rt_verify_patches
 from character import get_characters
 from utils import Substitution, RANDOM_MULTIPLIER, random
 
@@ -1803,5 +1803,5 @@ def can_always_access_esper_menu(output_rom_buffer: BytesIO):
     jm_write_patch(output_rom_buffer, enable_esper_menu_patch)
 
 
-def verify_patchlist(output_rom_buffer: BytesIO):
-    jm_verify_patchlist(output_rom_buffer, sorted(JM_PATCHLIST))
+def verify_randomtools_patches(output_rom_buffer: BytesIO):
+    rt_verify_patches(output_rom_buffer, strict=True)
