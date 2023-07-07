@@ -12,7 +12,7 @@ from multiprocessing import Pipe, Process
 import character
 import locationrandomizer
 import options
-from monsterrandomizer import MonsterBlock, solo_bosses
+from monsterrandomizer import MonsterBlock, early_bosses
 from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
@@ -50,8 +50,9 @@ from patches import (
     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break,
     title_gfx, apply_namingway, improved_party_gear, patch_doom_gaze,
     nicer_poison, fix_xzone, imp_skimp, hidden_relic, y_equip_relics,
-    fix_gogo_portrait, vanish_doom, mp_color_digits,
-    can_always_access_esper_menu, verify_patchlist)
+    fix_gogo_portrait, vanish_doom, stacking_immunities, mp_color_digits,
+    can_always_access_esper_menu, alphabetized_lores, description_disruption,
+    informative_miss, improved_equipment_menus, verify_randomtools_patches)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -2177,6 +2178,7 @@ def manage_rng():
 
 def manage_balance(newslots: bool = True):
     vanish_doom(outfile_rom_buffer)
+    stacking_immunities(outfile_rom_buffer)
     evade_mblock(outfile_rom_buffer)
     fix_xzone(outfile_rom_buffer)
     imp_skimp(outfile_rom_buffer)
@@ -5002,6 +5004,7 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
                     item.write_stats(outfile_rom_buffer)
         jm.activated = True
 
+        shields = [i.itemid for i in items if i.equiptype == 'shield']
         for equiptype in ['weapon', 'shield', 'helm', 'armor',
                           'relic1', 'relic2']:
             pool = [i for i in items if i.equippable
@@ -5024,7 +5027,12 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
                 equipid = ord(outfile_rom_buffer.read(1))
                 junctions = jm.equip_whitelist[equipid]
                 if junctions:
-                    old_rank = pool.index(equipid) / (len(pool)-1)
+                    if equipid in pool:
+                        old_rank = pool.index(equipid) / (len(pool)-1)
+                    else:
+                        assert equiptype == 'weapon'
+                        assert equipid in shields
+                        old_rank = shields.index(equipid) / (len(shields)-1)
                     index = int(round(old_rank * (len(fallback)-1)))
                     new_equip = fallback[index]
                     old_item = [i for i in items if i.itemid == equipid][0]
@@ -5037,7 +5045,7 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
         jm.reseed('premonster')
         valid_monsters = []
         for m in monsters:
-            if m.id in solo_bosses:
+            if m.id in early_bosses:
                 continue
             if m.id not in jm.monster_tags:
                 continue
@@ -5051,6 +5059,17 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
         jm.activated = True
 
     if Options_.is_flag_active('treaffect'):
+        monsters = get_monsters()
+        for m in monsters:
+            if m.id not in early_bosses:
+                continue
+            for item in m.steals + m.drops:
+                if item is None:
+                    continue
+                index = item.itemid
+                for effect_index in jm.equip_whitelist[index]:
+                    jm.add_junction(m.id, effect_index, 'blacklist',
+                                    force_category='monster')
         JUNCTION_MANAGER_PARAMETERS['monster-equip-steal-enabled'] = 1
         JUNCTION_MANAGER_PARAMETERS['monster-equip-drop-enabled'] = 1
 
@@ -6049,7 +6068,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
         banon_life3(outfile_rom_buffer)
         allergic_dog(outfile_rom_buffer)
-        y_equip_relics(outfile_rom_buffer)
         fix_gogo_portrait(outfile_rom_buffer)
         cycle_statuses(outfile_rom_buffer)
         name_swd_techs(outfile_rom_buffer)
@@ -6057,7 +6075,15 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         title_gfx(outfile_rom_buffer)
         improved_party_gear(outfile_rom_buffer)
         mp_color_digits(outfile_rom_buffer)
+        alphabetized_lores(outfile_rom_buffer)
+        description_disruption(outfile_rom_buffer)
+        informative_miss(outfile_rom_buffer)
         manage_doom_gaze(outfile_rom_buffer)
+
+        if Options_.is_flag_active('relicmyhat'):
+            improved_equipment_menus(outfile_rom_buffer)
+        else:
+            y_equip_relics(outfile_rom_buffer)
 
         if Options_.is_flag_active("swdtechspeed"):
             swdtech_speed = Options_.get_flag_value('swdtechspeed')
@@ -6126,7 +6152,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         rewrite_title(text="FF6 BCCE %s" % seed)
         validate_rom_expansion()
         rewrite_checksum()
-        verify_patchlist(outfile_rom_buffer)
+        verify_randomtools_patches(outfile_rom_buffer)
 
         if not application or application in ["console", "gui"]:
             with open(outfile_rom_path, 'wb+') as f:
