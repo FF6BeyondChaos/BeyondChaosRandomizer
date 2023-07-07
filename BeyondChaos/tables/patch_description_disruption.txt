@@ -4,15 +4,42 @@
 # Release Date: 2021-03-01
 # Applies to: FF3us 1.0, FF3us 1.1
 # Tested on: Final Fantasy III (v1.0) (U)
+# c3/0f25 and set $45:10 to allow drawing in myself's menu?
 
-0302a3: 30 ff                                               # 0302a5
-03a897: 20 3b ff                                            # 03a89a
-03ff30: a9 10 14 45  20 fd 0e 18  4c 83 89 48  a5 26 c9 5e
-:       f0 08 4a c9  32 f0 03 9e  49 36 68 60               # 03ff4c
+.addr   main1       03ff20
+
+0302a3: $main1,2                                            # 0302a5
+03899f: 20 @main3,2
+:       ea
+03a897: 20 @main2,2                                         # 03a89a
+
+$main1
+:       a9 10
+:       14 45
+:       20 fd 0e
+:       18
+:       4c 83 89
+
+.label main2
+:       48 a5 26 c9 5e f0 08 4a c9 32 f0 03 9e 49 36 68 60
+
+# allow equipment sub-sub-menu (Myself's feature) to redraw
+.label main3
+:       a9 5e
+:       85 27
+:       a9 10
+:       04 45
+:       20 25 0f
+:       20 89 0f
+:       60
+
 
 VALIDATION
 
 0302a3: 83 89                                               # 0302a5
+03899f: a9 5e
+:       85 27
 03a897: 9e 49 36                                            # 03a89a
-03ff30: ff ff ff ff  ff ff ff ff  ff ff ff ff  ff ff ff ff
-:       ff ff ff ff  ff ff ff ff  ff ff ff ff               # 03ff4c
+03ff20: ff ff ff ff  ff ff ff ff  ff ff ff ff  ff ff ff ff
+:       ff ff ff ff  ff ff ff ff  ff ff ff ff  ff ff ff ff
+:       ff ff ff ff  ff ff ff ff  ff ff ff ff  ff ff ff ff  # 03ff50
