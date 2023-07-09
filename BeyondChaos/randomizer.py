@@ -12,7 +12,7 @@ from multiprocessing import Pipe, Process
 import character
 import locationrandomizer
 import options
-from monsterrandomizer import MonsterBlock, early_bosses
+from monsterrandomizer import MonsterBlock, early_bosses, solo_bosses
 from randomizers.characterstats import CharacterStats
 from ancient import manage_ancient
 from appearance import manage_character_appearance, manage_coral
@@ -5040,12 +5040,13 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
                     outfile_rom_buffer.seek(equip_address)
                     outfile_rom_buffer.write(bytes([new_equip]))
 
+    banned_bosses = set(early_bosses + solo_bosses)
     if Options_.is_flag_active('effectster'):
         monsters = get_monsters()
         jm.reseed('premonster')
         valid_monsters = []
         for m in monsters:
-            if m.id in early_bosses:
+            if m.id in banned_bosses:
                 continue
             if m.id not in jm.monster_tags:
                 continue
@@ -5061,7 +5062,7 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
     if Options_.is_flag_active('treaffect'):
         monsters = get_monsters()
         for m in monsters:
-            if m.id not in early_bosses:
+            if m.id not in banned_bosses:
                 continue
             for item in m.steals + m.drops:
                 if item is None:

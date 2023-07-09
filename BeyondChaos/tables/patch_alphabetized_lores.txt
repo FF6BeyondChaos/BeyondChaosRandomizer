@@ -11,7 +11,7 @@
 #.addr   main-c3f        03ff4c
 
 .addr   main-c26        0267f0
-.addr   main-c3f        03ff4c
+.addr   main-c3f        03ff50
 .addr   lore-order      57f800
 
 025564: e8

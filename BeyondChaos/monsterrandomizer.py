@@ -86,6 +86,7 @@ solo_bosses = [
     259,  # vargas
     334,  # leader
     260,  # tunnel armor
+    371,  # thamasa kefka
 ]
 
 elemlist = ["fire", "ice", "bolt", "bio", "wind", "pearl", "earth", "water"]
