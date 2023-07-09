@@ -46,6 +46,7 @@ MAX_OPEN_FILE_COUNT = 100
 ADDRESSING_MODE = None
 MAPPINGS = {}
 PATCH_PARAMETERS = {}
+FULL_PATCH_CHANGELIST = {}
 
 
 def get_open_file(filepath, sandbox=False):
@@ -453,6 +454,11 @@ def patch_filename_to_bytecode(patchfilename, mapping=None, parameters=None):
                         length = 1
                     target_address, target_filename = labels[name]
                     assert target_filename == filename
+                    if direct and ADDRESSING_MODE is not None:
+                        assert target_address < 0x800000
+                        lorom = ADDRESSING_MODE == 'lorom'
+                        target_address = map_to_snes(target_address,
+                                                     lorom=lorom)
                     if direct:
                         jump = target_address & ((0x100**length)-1)
                     elif length == 1:
@@ -515,6 +521,16 @@ def select_patches():
         PATCH_FILENAMES.remove(pfn)
 
 
+def write_patch_line(outfile, address, code):
+    key = (outfile, address)
+    if key in FULL_PATCH_CHANGELIST:
+        assert FULL_PATCH_CHANGELIST[key].startswith(code)
+    else:
+        FULL_PATCH_CHANGELIST[key] = code
+    outfile.seek(address)
+    outfile.write(code)
+
+
 def write_patch(outfile, patchfilename, noverify=None, force=False,
                 mapping=None, parameters=None):
     if patchfilename in ALREADY_PATCHED and not force:
@@ -573,7 +589,7 @@ def write_patch(outfile, patchfilename, noverify=None, force=False,
                         raise Exception(error)
             else:
                 assert patchdict is patch
-                f.write(code)
+                write_patch_line(f, address, code)
 
     if patchfilename not in PATCH_FILENAMES:
         PATCH_FILENAMES.append(patchfilename)
@@ -604,7 +620,7 @@ def write_cmp_patch(outfile, patchfilename, verify=False):
             sourcefile.seek(address)
             s = sourcefile.read(chunksize)
             if not verify:
-                outfile.write(s)
+                write_patch_line(outfile, outfile.tell(), s)
             elif verify:
                 s2 = outfile.read(len(s))
                 if s != s2:
@@ -614,7 +630,7 @@ def write_cmp_patch(outfile, patchfilename, verify=False):
             chunksize = read_multi(patchfile, length=2)
             s = patchfile.read(chunksize)
             if not verify:
-                outfile.write(s)
+                write_patch_line(outfile, outfile.tell(), s)
             elif verify:
                 s2 = outfile.read(len(s))
                 if s != s2:
@@ -658,12 +674,31 @@ def verify_patchlist(outfile, patchlist):
                     "Patch %x conflicts with modified data." % address)
 
 
-def verify_patches(outfile):
-    if not PATCH_FILENAMES:
+def verify_patch_changes():
+    def sort_key(k):
+        if hasattr(k[0], 'name'):
+            return (k[0].name, k[1], k)
+        else:
+            return (None, k[1], k)
+    keys = sorted(FULL_PATCH_CHANGELIST, key=sort_key)
+    for outfile, address in keys:
+        code = FULL_PATCH_CHANGELIST[outfile, address]
+        outfile.seek(address)
+        test = outfile.read(len(code))
+        if code != test:
+            raise Exception(
+                    "Patch %x conflicts with modified data." % address)
+
+
+def verify_patches(outfile, strict=False):
+    if not (PATCH_FILENAMES or FULL_PATCH_CHANGELIST):
         return
 
     print("Verifying patches...")
-    verify_patchlist(outfile, PATCH_FILENAMES)
+    if strict:
+        verify_patch_changes()
+    else:
+        verify_patchlist(outfile, PATCH_FILENAMES)
 
 
 def get_activated_patches():

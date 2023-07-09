@@ -268,8 +268,8 @@ def int2bytes(value, length=2, reverse=True):
     return bytes(bs[:length])
 
 
-def read_multi(rom_buffer: BytesIO, length=2, reverse=True):
-    vals = list(rom_buffer.read(length))
+def read_multi(infile_rom_buffer: BytesIO, length=2, reverse=True):
+    vals = list(infile_rom_buffer.read(length))
     if reverse:
         vals = list(reversed(vals))
     value = 0

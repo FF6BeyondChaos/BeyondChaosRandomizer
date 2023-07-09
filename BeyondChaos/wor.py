@@ -93,7 +93,8 @@ def recruit_mog_insert(outfile_rom_buffer: BytesIO, recruit_info):
 
     name_jump = Substitution()
     name_jump.set_location(recruit_info.name_pointer)
-    name_jump.bytestring = bytes([0xB2, maybe_name_low, maybe_name_mid, maybe_name_high - 0x0A] + [0xFD] * (recruit_info.num_name_bytes-4))
+    name_jump.bytestring = bytes(
+        [0xB2, maybe_name_low, maybe_name_mid, maybe_name_high - 0x0A] + [0xFD] * (recruit_info.num_name_bytes - 4))
     name_jump.write(outfile_rom_buffer)
 
     palette = get_character(0xA).palette
@@ -109,7 +110,7 @@ def recruit_mog_insert(outfile_rom_buffer: BytesIO, recruit_info):
         c = _dir_to_camera_moves(recruit_info.name_camera)
         d = _dir_to_camera_moves((-recruit_info.name_camera[0], -recruit_info.name_camera[1]))
         name_camera = [0x38, 0x30, 0x82 + len(c), 0xC1] + c + [0xFF]
-        name_camera_reverse = [0x30, 0x82 + len(d), 0xC2] + d +[0xFF, 0x39]
+        name_camera_reverse = [0x30, 0x82 + len(d), 0xC2] + d + [0xFF, 0x39]
     for npc in recruit_info.name_npcs:
         hide_npcs += [0x42, 0x10 + npc]
         show_npcs += [0x41, 0x10 + npc]
@@ -180,7 +181,8 @@ def recruit_umaro_insert(outfile_rom_buffer: BytesIO, recruit_info):
 
     name_jump = Substitution()
     name_jump.set_location(recruit_info.name_pointer)
-    name_jump.bytestring = bytes([0xB2, name_low, name_mid, name_high - 0x0A] + [0xFD] * (recruit_info.num_name_bytes-4))
+    name_jump.bytestring = bytes(
+        [0xB2, name_low, name_mid, name_high - 0x0A] + [0xFD] * (recruit_info.num_name_bytes - 4))
     name_jump.write(outfile_rom_buffer)
 
     palette = get_character(0xD).palette
@@ -196,7 +198,7 @@ def recruit_umaro_insert(outfile_rom_buffer: BytesIO, recruit_info):
         c = _dir_to_camera_moves(recruit_info.name_camera)
         d = _dir_to_camera_moves((-recruit_info.name_camera[0], -recruit_info.name_camera[1]))
         name_camera = [0x38, 0x30, 0x82 + len(c), 0xC1] + c + [0xFF]
-        name_camera_reverse = [0x30, 0x82 + len(d), 0xC2] + d +[0xFF, 0x39]
+        name_camera_reverse = [0x30, 0x82 + len(d), 0xC2] + d + [0xFF, 0x39]
     for npc in recruit_info.name_npcs:
         hide_npcs += [0x42, 0x10 + npc]
         show_npcs += [0x41, 0x10 + npc]
@@ -255,7 +257,8 @@ def recruit_gogo_insert(outfile_rom_buffer: BytesIO, recruit_info):
 
     name_jump = Substitution()
     name_jump.set_location(recruit_info.name_pointer)
-    name_jump.bytestring = bytes([0xB2, name_low, name_mid, name_high - 0x0A] + [0xFD] * (recruit_info.num_name_bytes-4))
+    name_jump.bytestring = bytes(
+        [0xB2, name_low, name_mid, name_high - 0x0A] + [0xFD] * (recruit_info.num_name_bytes - 4))
     name_jump.write(outfile_rom_buffer)
 
     palette = get_character(0xD).palette
@@ -271,7 +274,7 @@ def recruit_gogo_insert(outfile_rom_buffer: BytesIO, recruit_info):
         c = _dir_to_camera_moves(recruit_info.name_camera)
         d = _dir_to_camera_moves((-recruit_info.name_camera[0], -recruit_info.name_camera[1]))
         name_camera = [0x38, 0x30, 0x82 + len(c), 0xC1] + c + [0xFF]
-        name_camera_reverse = [0x30, 0x82 + len(d), 0xC2] + d +[0xFF, 0x39]
+        name_camera_reverse = [0x30, 0x82 + len(d), 0xC2] + d + [0xFF, 0x39]
     for npc in recruit_info.name_npcs:
         hide_npcs += [0x42, 0x10 + npc]
         show_npcs += [0x41, 0x10 + npc]
@@ -551,7 +554,12 @@ def _start_of_wor_event(outfile_rom_buffer: BytesIO, alternate_gogo):
 
 def _shuffle_recruit_locations(outfile_rom_buffer: BytesIO, random_treasure, include_gau, alternate_gogo):
     candidates = [0x00, 0x01, 0x02, 0x05, 0x07, 0x08, 0x0A, 0x0D]
-    locke_event_pointers = [0xc2c48, 0xc2c51, 0xc2c91, 0xc2c9d, 0xc2c9e, 0xc2caf, 0xc2cb8, 0xc2cc5, 0xc2cca, 0xc2cd8, 0xc2ce3, 0xc2ce9, 0xc2cee, 0xc2cf4, 0xc2cfa, 0xc2d0b, 0xc2d33, 0xc2e32, 0xc2e4a, 0xc2e80, 0xc2e86, 0xc2e8b, 0xc2e91, 0xc2ea5, 0xc2eb1, 0xc2ec4, 0xc2f0b, 0xc2fe1, 0xc3102, 0xc3106, 0xc3117, 0xc311d, 0xc3124, 0xc3134, 0xc313d, 0xc3163, 0xc3183, 0xc3185, 0xc3189, 0xc318b, 0xc318e, 0xc3191, 0xc3197, 0xc31c7, 0xc31cb, 0xc31e2, 0xc31e8, 0xc31ed, 0xc31f2, 0xc31f8, 0xc3210, 0xc3215, 0xc321d, 0xc3229, 0xc322f, 0xc3235, 0xc323b]
+    locke_event_pointers = [0xc2c48, 0xc2c51, 0xc2c91, 0xc2c9d, 0xc2c9e, 0xc2caf, 0xc2cb8, 0xc2cc5, 0xc2cca, 0xc2cd8,
+                            0xc2ce3, 0xc2ce9, 0xc2cee, 0xc2cf4, 0xc2cfa, 0xc2d0b, 0xc2d33, 0xc2e32, 0xc2e4a, 0xc2e80,
+                            0xc2e86, 0xc2e8b, 0xc2e91, 0xc2ea5, 0xc2eb1, 0xc2ec4, 0xc2f0b, 0xc2fe1, 0xc3102, 0xc3106,
+                            0xc3117, 0xc311d, 0xc3124, 0xc3134, 0xc313d, 0xc3163, 0xc3183, 0xc3185, 0xc3189, 0xc318b,
+                            0xc318e, 0xc3191, 0xc3197, 0xc31c7, 0xc31cb, 0xc31e2, 0xc31e8, 0xc31ed, 0xc31f2, 0xc31f8,
+                            0xc3210, 0xc3215, 0xc321d, 0xc3229, 0xc322f, 0xc3235, 0xc323b]
     locke_event_pointers_2 = [0xc3244, 0xc324a, 0xc324f, 0xc3258, 0xc326a]
     if random_treasure:
         locke_event_pointers_2 = [p + 12 for p in locke_event_pointers_2]
@@ -561,7 +569,8 @@ def _shuffle_recruit_locations(outfile_rom_buffer: BytesIO, random_treasure, inc
             event_pointers=locke_event_pointers + locke_event_pointers_2,
             recruited_bit_pointers=[0xc3195],
             location_npcs=[(0x139, 0)],
-            dialogue_pointers=[0x984, 0x988, 0x989, 0xa20, 0xa21, 0xa22, 0xa23, 0xa24, 0xa28, 0xa2a, 0xa2c, 0xa2d, 0xa2e, 0xa2f, 0xa30, 0xa31, 0xa34, 0xa35],
+            dialogue_pointers=[0x984, 0x988, 0x989, 0xa20, 0xa21, 0xa22, 0xa23, 0xa24, 0xa28, 0xa2a, 0xa2c, 0xa2d,
+                               0xa2e, 0xa2f, 0xa30, 0xa31, 0xa34, 0xa35],
             old_char_id=1,
             name_pointer=0xC2B81,
             num_name_bytes=4,
@@ -571,7 +580,8 @@ def _shuffle_recruit_locations(outfile_rom_buffer: BytesIO, random_treasure, inc
             event_pointers=[0xc429c, 0xc429e, 0xc42a2, 0xc42a4, 0xc42a7, 0xc42aa],
             recruited_bit_pointers=[0xc42ae],
             location_npcs=[(0xb5, 2), (0xb4, 8)],
-            dialogue_pointers=[0x9f2, 0x9f9, 0x9fb, 0x9fd, 0x9fe, 0x9ff, 0xa00, 0xa01, 0xa02, 0xa03, 0xa04, 0xa05, 0xa06, 0xa08, 0xa0b, 0xa0c],
+            dialogue_pointers=[0x9f2, 0x9f9, 0x9fb, 0x9fd, 0x9fe, 0x9ff, 0xa00, 0xa01, 0xa02, 0xa03, 0xa04, 0xa05,
+                               0xa06, 0xa08, 0xa0b, 0xa0c],
             old_char_id=2,
             name_pointer=0xC402A,
             num_name_bytes=4),
@@ -604,26 +614,34 @@ def _shuffle_recruit_locations(outfile_rom_buffer: BytesIO, random_treasure, inc
             event_pointers=[0xb4e09, 0xb4e0b, 0xb4e0f, 0xb4e11, 0xb4e14, 0xb4e17],
             recruited_bit_pointers=[0xb4e1b],
             location_npcs=[(0x161, 3), (0x15d, 21), (0xd0, 3)],
-            dialogue_pointers=[0xa18, 0xa8d, 0xa99, 0xa9d, 0xa9d, 0xa9e, 0xa9f, 0xaa0, 0xabd, 0xabe, 0xabe, 0xac0, 0xac1, 0xac2],
+            dialogue_pointers=[0xa18, 0xa8d, 0xa99, 0xa9d, 0xa9d, 0xa9e, 0xa9f, 0xaa0, 0xabd, 0xabe, 0xabe, 0xac0,
+                               0xac1, 0xac2],
             old_char_id=8,
             name_pointer=0xB4D0D,
             num_name_bytes=5,
             name_npcs=list(range(3)) + list(range(4, 6))),
         WoRRecruitInfo(
             label="Mobliz",
-            event_pointers=[0xc49d1, 0xc49d3, 0xc49da, 0xc49de, 0xc49e2, 0xc4a01, 0xc4a03, 0xc4a0c, 0xc4a0d, 0xc4a2b, 0xc4a37, 0xc4a3a, 0xc4a43, 0xc4a79, 0xc4a7b, 0xc4ccf, 0xc4cd1, 0xc4cd5, 0xc4cd7, 0xc4cdb, 0xc4cde, 0xc4ce1, 0xc4ce5, 0xc4cf4, 0xc4cf6, 0xc5040, 0xc5042, 0xc5048, 0xc504a, 0xc504d, 0xc5050],
+            event_pointers=[0xc49d1, 0xc49d3, 0xc49da, 0xc49de, 0xc49e2, 0xc4a01, 0xc4a03, 0xc4a0c, 0xc4a0d, 0xc4a2b,
+                            0xc4a37, 0xc4a3a, 0xc4a43, 0xc4a79, 0xc4a7b, 0xc4ccf, 0xc4cd1, 0xc4cd5, 0xc4cd7, 0xc4cdb,
+                            0xc4cde, 0xc4ce1, 0xc4ce5, 0xc4cf4, 0xc4cf6, 0xc5040, 0xc5042, 0xc5048, 0xc504a, 0xc504d,
+                            0xc5050],
             recruited_bit_pointers=[0xc4cd9, 0xc4cfa, 0xc5046],
             location_npcs=[(0x09A, 1), (0x09A, 2), (0x096, 0), (0x09E, 13)],
-            dialogue_pointers=[0x8cf, 0x8d1, 0x8d2, 0x8d3, 0x8d4, 0x8d5, 0x8d6, 0x8d7, 0x8d8, 0x8d9, 0x8db, 0x8dc, 0x8dd, 0x8df, 0x8e0, 0x8e5, 0x8eb, 0x8ec, 0x8f0, 0x8f6, 0x8f7, 0x8f8, 0x8f9, 0x8fa, 0x8fb, 0x8fc, 0x8fe, 0x900, 0x903, 0x906, 0x90b],
+            dialogue_pointers=[0x8cf, 0x8d1, 0x8d2, 0x8d3, 0x8d4, 0x8d5, 0x8d6, 0x8d7, 0x8d8, 0x8d9, 0x8db, 0x8dc,
+                               0x8dd, 0x8df, 0x8e0, 0x8e5, 0x8eb, 0x8ec, 0x8f0, 0x8f6, 0x8f7, 0x8f8, 0x8f9, 0x8fa,
+                               0x8fb, 0x8fc, 0x8fe, 0x900, 0x903, 0x906, 0x90b],
             old_char_id=0,
             name_pointer=0xC446F,
             num_name_bytes=4,
             name_npcs=[0] + list(range(6, 15)),
-            name_extra=[0x73, 0x32, 0x33, 0x01, 0x02, 0x04, 0x14], # Keep door open
+            name_extra=[0x73, 0x32, 0x33, 0x01, 0x02, 0x04, 0x14],  # Keep door open
             name_camera=(-2, 4)),
         WoRRecruitInfo(
             label="Moogle Cave",
-            event_pointers=[0xC3A2D, 0xC3A2F, 0xC3A33, 0xC3A35, 0xC3A38, 0xC3A3B, 0xC3A4D, 0xC3A4E, 0xC3A50, 0xC3A52, 0xC3A53, 0xC3A55, 0xC3AAD, 0xC3AAE, 0xC3AB0, 0xC3ACC, 0xC3AD9, 0xC3ADB, 0xC3ADF, 0xC3AE2, 0xC3AE5],
+            event_pointers=[0xC3A2D, 0xC3A2F, 0xC3A33, 0xC3A35, 0xC3A38, 0xC3A3B, 0xC3A4D, 0xC3A4E, 0xC3A50, 0xC3A52,
+                            0xC3A53, 0xC3A55, 0xC3AAD, 0xC3AAE, 0xC3AB0, 0xC3ACC, 0xC3AD9, 0xC3ADB, 0xC3ADF, 0xC3AE2,
+                            0xC3AE5],
             recruited_bit_pointers=[0xC3A3F, 0xC3A58],
             shop_menu_bit_pointers=[0xC3A5A],
             location_npcs=[(0x02C, 0)],
@@ -655,14 +673,17 @@ def _shuffle_recruit_locations(outfile_rom_buffer: BytesIO, random_treasure, inc
         if alternate_gogo:
             recruit_info.append(alt_zone_eater_recruit)
         else:
-            recruit_info.append(WoRRecruitInfo("Falcon", [], [], [], dialogue_pointers=[0xa07], old_char_id=0xB, special=falcon_recruit, name_pointer=None, num_name_bytes=None))
+            recruit_info.append(
+                WoRRecruitInfo("Falcon", [], [], [], dialogue_pointers=[0xa07], old_char_id=0xB, special=falcon_recruit,
+                               name_pointer=None, num_name_bytes=None))
 
     if not alternate_gogo:
         candidates.append(0x0C)
         recruit_info.append(
             WoRRecruitInfo(
                 label="ZoneEater",
-                event_pointers=[0xB81DB, 0xB81DC, 0xB81DE, 0xB81E0, 0xB81E1, 0xB81E3, 0xB81E6, 0xB81E7, 0xB81E9, 0xB81EB, 0xB81EF, 0xB81F2, 0xB824A, 0xB824E],
+                event_pointers=[0xB81DB, 0xB81DC, 0xB81DE, 0xB81E0, 0xB81E1, 0xB81E3, 0xB81E6, 0xB81E7, 0xB81E9,
+                                0xB81EB, 0xB81EF, 0xB81F2, 0xB824A, 0xB824E],
                 recruited_bit_pointers=[0xB823E],
                 shop_menu_bit_pointers=[0xB823C],
                 location_npcs=[(0x116, 0)],
@@ -688,7 +709,8 @@ def _shuffle_recruit_locations(outfile_rom_buffer: BytesIO, random_treasure, inc
         if info.prerequisite:
             valid_candidates = [c for c in candidates
                                 if c != info.prerequisite and c not in prerequisite_dict.get(info.prerequisite, [])]
-        if (not info.name_pointer) and info.special not in [moogle_cave_recruit, sasquatch_cave_recruit, zone_eater_recruit]:
+        if (not info.name_pointer) and info.special not in [moogle_cave_recruit, sasquatch_cave_recruit,
+                                                            zone_eater_recruit]:
             valid_candidates = [c for c in valid_candidates if c not in [0xA, 0xC, 0xD]]
         candidate = random.choice(valid_candidates)
         candidates.remove(candidate)
@@ -1520,7 +1542,6 @@ def set_alternate_dragon_locations(outfile_rom_buffer: BytesIO):
     gold_dragon.membit = 3
     gold_dragon.memaddr = 0x1F56 - 0x1EE0
     gold_dragon.event_addr = 0x218F3
-
 
     # skull dragon: Owzer's mansion
     owzer = get_location(0xd1)

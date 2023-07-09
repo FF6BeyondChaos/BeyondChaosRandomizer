@@ -50,12 +50,26 @@ def randomize_poem(fout):
     wait_sub.bytestring = bytes([0xB5, wait])
     wait_sub.write(fout)
 
-def randomize_passwords():
+def randomize_passwords(custom_web_passwords=None):
     passwords = [[], [], []]
 
-    with open_mei_fallback(PASSWORDS_TABLE) as passwords_file:
+    if not custom_web_passwords:
+        with open_mei_fallback(PASSWORDS_TABLE) as passwords_file:
+            i = 0
+            for line in passwords_file:
+                line = line.split('#')[0].strip()
+
+                if not line:
+                    continue
+
+                if line.startswith("------") and i < len(passwords) - 1:
+                    i += 1
+                    continue
+
+                passwords[i].append(line)
+    else:
         i = 0
-        for line in passwords_file:
+        for line in custom_web_passwords.split("\n"):
             line = line.split('#')[0].strip()
 
             if not line:

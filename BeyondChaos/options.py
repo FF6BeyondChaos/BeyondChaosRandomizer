@@ -129,7 +129,7 @@ class Options:
                 pipe_print("The flag '" + flag.name + "' has been deactivated. It is incompatible with " +
                       self.mode.name + ".")
                 continue
-            if flag.name == 'sketch' and [f for f in flags if f.name == 'remonsterate']:
+            if flag.name == 'sketch' and 'remonsterate' in flags.keys():
                 pipe_print("The flag '" + flag.name + "' has been deactivated. It is incompatible with remonsterate.")
                 continue
 
@@ -592,6 +592,11 @@ NORMAL_FLAGS = [
          default_value="0",
          minimum_value=0,
          maximum_value=255),
+    Flag(name='relicmyhat',
+         description="COMBINED EQUIPMENT MENUS",
+         long_description="Combines the equipment and relic menus, and makes shop menus more informative.",
+         category="field",
+         inputtype="boolean"),
     Flag(name='worringtriad',
          description="START IN WOR",
          long_description="The player will start in the World of Ruin, with all of the World of Balance "

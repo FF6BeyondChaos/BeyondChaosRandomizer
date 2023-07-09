@@ -2,13 +2,10 @@ from io import BytesIO
 import os
 
 from bcg_junction import (write_patch as jm_write_patch,
-                          tblpath as jm_tblpath,
-                          verify_patchlist as jm_verify_patchlist)
+                          tblpath as jm_tblpath)
+from randomtools.tablereader import verify_patches as rt_verify_patches
 from character import get_characters
 from utils import Substitution, RANDOM_MULTIPLIER, random
-
-
-JM_PATCHLIST = set()
 
 
 def allergic_dog(output_rom_buffer: BytesIO):
@@ -1785,23 +1782,55 @@ def fewer_flashes(output_rom_buffer: BytesIO, flag_value):
 
 
 def vanish_doom(output_rom_buffer: BytesIO):
-    vanish_doom_patch = os.path.join(jm_tblpath, 'patch_vanish_doom.txt')
-    JM_PATCHLIST.add(vanish_doom_patch)
-    jm_write_patch(output_rom_buffer, vanish_doom_patch)
+    jm_write_patch(
+        output_rom_buffer,
+        os.path.join(jm_tblpath, 'patch_vanish_doom.txt'))
+
+
+def stacking_immunities(output_rom_buffer: BytesIO):
+    jm_write_patch(
+        output_rom_buffer,
+        os.path.join(jm_tblpath, 'patch_stacking_immunities_fix.txt'))
 
 
 def mp_color_digits(output_rom_buffer: BytesIO):
-    mp_patch = os.path.join(jm_tblpath, 'patch_mp_color_digits.txt')
-    JM_PATCHLIST.add(mp_patch)
-    jm_write_patch(output_rom_buffer, mp_patch)
+    jm_write_patch(
+        output_rom_buffer,
+        os.path.join(jm_tblpath, 'patch_mp_color_digits.txt'))
 
 
 def can_always_access_esper_menu(output_rom_buffer: BytesIO):
-    enable_esper_menu_patch = os.path.join(
-        jm_tblpath, 'patch_can_always_access_esper_menu.txt')
-    JM_PATCHLIST.add(enable_esper_menu_patch)
-    jm_write_patch(output_rom_buffer, enable_esper_menu_patch)
+    jm_write_patch(
+        output_rom_buffer,
+        os.path.join(jm_tblpath, 'patch_can_always_access_esper_menu.txt'))
 
 
-def verify_patchlist(output_rom_buffer: BytesIO):
-    jm_verify_patchlist(output_rom_buffer, sorted(JM_PATCHLIST))
+def alphabetized_lores(output_rom_buffer: BytesIO):
+    jm_write_patch(
+        output_rom_buffer,
+        os.path.join(jm_tblpath, 'patch_alphabetized_lores.txt'))
+
+
+def description_disruption(output_rom_buffer: BytesIO):
+    jm_write_patch(
+        output_rom_buffer,
+        os.path.join(jm_tblpath, 'patch_description_disruption.txt'))
+
+
+def informative_miss(output_rom_buffer: BytesIO):
+    jm_write_patch(
+        output_rom_buffer,
+        os.path.join(jm_tblpath, 'patch_informative_miss.txt'))
+
+
+def improved_equipment_menus(output_rom_buffer: BytesIO):
+    jm_write_patch(
+        output_rom_buffer,
+        os.path.join(jm_tblpath, 'patch_improved_equip_menu.txt'))
+    jm_write_patch(
+        output_rom_buffer,
+        os.path.join(jm_tblpath, 'patch_improved_shop_menu.txt'))
+
+
+def verify_randomtools_patches(output_rom_buffer: BytesIO):
+    rt_verify_patches(output_rom_buffer, strict=True)

@@ -1,9 +1,8 @@
 #! /usr/bin/env python3
-import monsterrandomizer
 from io import BytesIO
 from math import log, floor
 
-from monsterrandomizer import monsterdict, get_monsters
+from monsterrandomizer import monsterdict, updatePos, get_monsters
 from utils import read_multi, write_multi, utilrandom as random
 
 # Guardian x4, Broken Dirt Drgn, Kefka + Ice Dragon
@@ -260,7 +259,7 @@ class Formation():
             enemy_pos = self.enemy_pos[i]
             x, y = enemy_pos >> 4, enemy_pos & 0xF
             self.enemies[i].update_pos(x, y)
-            monsterrandomizer.updatePos(self.enemies[i].id, x, y)
+            updatePos(self.enemies[i].id, x, y)
         for e in self.enemies:
             if not e:
                 continue

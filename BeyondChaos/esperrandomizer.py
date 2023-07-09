@@ -259,7 +259,8 @@ class EsperBlock:
         rank = min(rank, max(rankbounds.keys()))
 
         if random.randint(1, 10) != 10:
-            candidates = self.get_candidates(rank, set_lower=not tierless, allow_quick=tierless, allow_ultima=allow_ultima)
+            candidates = self.get_candidates(rank, set_lower=not tierless, allow_quick=tierless,
+                allow_ultima=allow_ultima)
             if candidates:
                 s = random.choice(candidates)
                 self.spells.append(s)

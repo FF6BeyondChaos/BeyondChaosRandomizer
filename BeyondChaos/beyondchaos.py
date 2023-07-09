@@ -245,7 +245,7 @@ class Window(QMainWindow):
         # values to be sent to Randomizer
         self.romText = ""
         self.romOutputDirectory = ""
-        self.version = "CE-5.0.1"
+        self.version = "CE-5.0.3"
         self.mode = "normal"
         self.seed = ""
         self.flags = []
@@ -1020,42 +1020,42 @@ class Window(QMainWindow):
                 self.GamePresets['New Player'] = (
                     "b c e f g i n o p q r s t w y z makeover partyparty dancelessons lessfanatical "
                     "expboost:2.0 gpboost:2.0 mpboost:2.0 swdtechspeed:faster alasdraco capslockoff "
-                    "johnnydmad questionablecontent "
+                    "johnnydmad questionablecontent relicmyhat"
                 )
             elif mode == "intermediateplayer":
                 self.GamePresets['Intermediate Player'] = (
                     "b c d e f g i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo "
-                    "swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter remonsterate "
+                    "swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter remonsterate relicmyhat"
                 )
             elif mode == "advancedplayer":
                 self.GamePresets['Advanced Player'] = (
                     "b c d e f g h i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo "
                     "randombosses dancingmaduin:1 swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter "
-                    "remonsterate bsiab mimetime morefanatical questionablecontent "
+                    "remonsterate bsiab mimetime morefanatical questionablecontent relicmyhat"
                 )
             elif mode == "chaoticplayer":
                 self.GamePresets['Chaotic Player'] = (
                     "b c d e f g h i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo "
                     "masseffect randombosses dancingmaduin:chaos swdtechspeed:random alasdraco capslockoff "
                     "johnnyachaotic notawaiter remonsterate bsiab mimetime questionablecontent randomboost:2 "
-                    "allcombos supernatural mementomori:random thescenarionottaken "
+                    "allcombos supernatural mementomori:random thescenarionottaken relicmyhat"
                 )
             elif mode == "raceeasy":
                 self.GamePresets['KaN Race - Easy'] = (
                     "b c d e f g i j k m n o p q r s t w y z capslockoff "
-                    "johnnydmad makeover notawaiter partyparty madworld"
+                    "johnnydmad makeover notawaiter partyparty madworld relicmyhat"
                 )
             elif mode == "racemedium":
                 self.GamePresets['KaN Race - Medium'] = (
                     "b c d e f g i j k m n o p q r s t u w y z capslockoff "
                     "johnnydmad makeover notawaiter partyparty "
-                    "electricboogaloo randombosses madworld"
+                    "electricboogaloo randombosses madworld relicmyhat"
                 )
             elif mode == "raceinsane":
                 self.GamePresets['KaN Race - Insane'] = (
                     "b c d e f g i j k m n o p q r s t u w y z capslockoff "
                     "johnnydmad makeover notawaiter partyparty darkworld "
-                    "madworld bsiab electricboogaloo randombosses"
+                    "madworld bsiab electricboogaloo randombosses relicmyhat"
                 )
 
     # Get seed generation parameters from UI to prepare for
