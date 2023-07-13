@@ -431,6 +431,13 @@ def apply_namingway(output_rom_buffer: BytesIO):
     an_sub.bytestring = bytes([0xC0, 0xA4, 0x80, 0x9D, 0x09, 0x02])
     an_sub.write(output_rom_buffer)
 
+def fix_flyaway(output_rom_buffer: BytesIO):
+    #Osteoclave's Flyaway Bug event fix
+    ff_sub = Substitution()
+    ff_sub.set_location(0xACBAD)
+    ff_sub.bytestring = bytes([0xFD])
+    ff_sub.write(output_rom_buffer)
+
 
 def change_swdtech_speed(output_rom_buffer: BytesIO, speed: str = "Vanilla"):
     css_sub = Substitution()

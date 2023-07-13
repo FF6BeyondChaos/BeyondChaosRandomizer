@@ -49,7 +49,7 @@ from patches import (
     show_coliseum_rewards, cycle_statuses, no_dance_stumbles, fewer_flashes,
     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break,
     title_gfx, apply_namingway, improved_party_gear, patch_doom_gaze,
-    nicer_poison, fix_xzone, imp_skimp, hidden_relic, y_equip_relics,
+    nicer_poison, fix_xzone, imp_skimp, fix_flyaway, hidden_relic, y_equip_relics,
     fix_gogo_portrait, vanish_doom, stacking_immunities, mp_color_digits,
     can_always_access_esper_menu, alphabetized_lores, description_disruption,
     informative_miss, improved_equipment_menus, verify_randomtools_patches)
@@ -2182,6 +2182,7 @@ def manage_balance(newslots: bool = True):
     evade_mblock(outfile_rom_buffer)
     fix_xzone(outfile_rom_buffer)
     imp_skimp(outfile_rom_buffer)
+    fix_flyaway(outfile_rom_buffer)
 
     manage_rng()
     if newslots:
