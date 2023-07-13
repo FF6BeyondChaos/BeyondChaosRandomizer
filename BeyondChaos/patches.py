@@ -460,7 +460,7 @@ def change_swdtech_speed(output_rom_buffer: BytesIO, speed: str = "Vanilla"):
 # Unfortunate side-effect: can't peek Mog's relic.
 # Enables spell learning from the relic
 # ---------------------
-def hidden_relic(output_rom_buffer: BytesIO, amount):
+def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None):
     # Gives characters a random relic when the Memento Mori flag is on
     hidden_relic_sub = Substitution()
     hidden_relic_sub.set_location(0x20E9A)
@@ -499,6 +499,28 @@ def hidden_relic(output_rom_buffer: BytesIO, amount):
                   0xC2, 0xC3, 0xC4, 0xC7, 0xC9, 0xCC, 0xCD, 0xD0, 0xD2, 0xD4, 0xD5, 0xD9, 0xE1, 0xE2, 0xE3, 0xE5, 0xE6]
     # Offering, Merit Award, Economizer, Marvel Shoes, Safety Bit, Memento Ring, Ribbon, Moogle Charm, Charm Bangle, Blizzard Orb, Rage Ring, Genji Glove, Exp. Egg, Relic Ring, Pod Bracelet, Muscle Belt
     rare_relic_list = [0xD3, 0xDA, 0xCE, 0xE0, 0xDC, 0xDB, 0xCA, 0xDE, 0xDF, 0xC5, 0xC6, 0xD1, 0xE4, 0xDD, 0xC8, 0xCB]
+
+    #If dearestmolulu is on, don't allow an item with Moogle Charm effect to be innate
+    if feature_exclusion_list:
+        from itemrandomizer import get_items, STATPROTECT
+        for relic in [item for item in get_items() if item.is_relic]:
+            # The most convenient way of getting the feature categories
+            for feature_type in STATPROTECT.keys():
+                for bit in range(8):
+                    # Check if the relic has the feature active
+                    if relic.features[feature_type] & (0x01 << bit):
+                        # Get the friendly name of the feature
+                        feature = relic.get_feature(feature_type, 0x01 << bit)
+                        if feature.lower() in feature_exclusion_list:
+                            try:
+                                relic_list.remove(relic.itemid)
+                                continue
+                            except ValueError:
+                                pass
+                            try:
+                                rare_relic_list.remove(relic.itemid)
+                            except ValueError:
+                                pass
 
     # Equip Extra Relic
     hidden_relic_sub.set_location(0x4B8CF)

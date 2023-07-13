@@ -5550,7 +5550,11 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                         raise ValueError
                     except ValueError:
                         pipe_print("The supplied value was not a valid option. Please try again.")
-            hidden_relic(outfile_rom_buffer, amount)
+            feature_exclusion_list = []
+            if Options_.is_flag_active('dearestmolulu'):
+                feature_exclusion_list.append("no enc.")
+            hidden_relic(outfile_rom_buffer, amount, feature_exclusion_list)
+
 
         # This needs to be before manage_monster_appearance or some of the monster
         # palettes will be messed up.
