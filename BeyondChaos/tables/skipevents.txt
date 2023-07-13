@@ -267,8 +267,6 @@ Convergent B0903 F0 00 D0 1A B2 95 CB 00 44 00 00 44 04 00 44 0E 00 B2 4C AD 00 
 Normal AADB1 FE FD FE
 # Start of Terra's Scenario
 Normal B094E 97 5C
-Convergent B0976 FD
-Divergent B096C FD
 Convergent B0979 42 15 39 FD FD FD FD FD FD FD
 Divergent B096F 42 15 39 FD FD FD FD FD FD FD
 Convergent B0997 FD FD
