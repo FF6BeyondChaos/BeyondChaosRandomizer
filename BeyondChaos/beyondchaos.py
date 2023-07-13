@@ -292,7 +292,7 @@ class Window(QMainWindow):
 
         # tabs names for the tabs in flags box
         self.tabNames = [
-            "Flags", "Sprites", "SpriteCategories", "Battle", "Aesthetic/Accessibility",
+            "Core", "Sprites", "SpriteCategories", "Battle", "Aesthetic/Accessibility",
             "Field", "Characters", "Experimental", "Gamebreaking", "Beta"
         ]
 
