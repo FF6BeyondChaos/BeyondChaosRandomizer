@@ -2557,8 +2557,9 @@ def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
                     equipid = equipitem.itemid
                     if (equipitem.has_disabling_status and (0xE <= c.id <= 0xF or c.id > 0x1B)):
                         equipid = 0xFF
-                    elif equipitem.prevent_encounters and c.id in [0x1C, 0x1D]:
-                        equipid = 0xFF
+                    elif Options_.is_flag_active("dearestmolulu") and equipitem.prevent_encounters and c.id in [14, 16, 17]:
+                            #don't give moogle charm to Banon, or Guest Ghosts during dearestmolulu
+                            equipid = 0xFF
                     else:
                         if (equiptype not in ["weapon", "shield"] and random.randint(1, 100) == 100):
                             equipid = random.randint(0, 0xFF)
