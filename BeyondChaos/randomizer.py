@@ -4171,7 +4171,7 @@ def manage_auction_house():
         auction_sub.bytestring = bytes([0x6d, item.itemid, 0x45, 0x45, 0x45])
         auction_sub.write(outfile_rom_buffer)
 
-        addr = 0x304000 + i * 6
+        addr = 0x303F00 + i * 6
         auction_sub.set_location(addr)
         auction_sub.bytestring = bytes([0x66, auction_item[3] & 0xff, (auction_item[3] & 0xff00) >> 8, item.itemid,
                                         # Show text auction_item[3] with item item.itemid
