@@ -308,7 +308,7 @@ def init_playlist(path=PLAYLIST_PATH, fn=DEFAULT_PLAYLIST_FILE):
         from io import StringIO
         playlist_parser.read_file(StringIO(web_custom_playlist))
     else:
-        plfile = playlist_parser.read(fallback_path(os.path.join(path, fn)))
+        plfile = playlist_parser.read(os.path.join(os.getcwd(), path, fn))
         if not plfile:
             plfile = playlist_parser.read(fallback_path(os.path.join(path, fn + ".txt")))
             if not plfile:
