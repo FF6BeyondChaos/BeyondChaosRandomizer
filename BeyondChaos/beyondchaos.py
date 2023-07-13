@@ -726,6 +726,8 @@ class Window(QMainWindow):
         for t in self.tablist:
             children.extend(t.children())
         for child in children:
+            if type(child) in [QSpinBox, QDoubleSpinBox, QComboBox]:
+                child.setStyleSheet("background-color: white; border: none;")
             if child.isEnabled():
                 for v in values:
                     v = str(v).lower()
@@ -737,10 +739,12 @@ class Window(QMainWindow):
                         if ":" in v:
                             try:
                                 child.setValue(int(str(v).split(":")[1]))
+                                child.setStyleSheet("background-color: #CCE4F7; border: 1px solid darkblue;")
                                 self.flags.append(v)
                             except ValueError:
                                 if str(v).split(":")[1] == child.specialValueText().lower():
                                     child.setValue(child.minimum())
+                                    child.setStyleSheet("background-color: #CCE4F7; border: 1px solid darkblue;")
                                     self.flags.append(v)
                     elif type(child) in [QDoubleSpinBox] and str(v).startswith(child.text.lower()):
                         if ":" in v:
@@ -748,6 +752,7 @@ class Window(QMainWindow):
                                 value = float(str(v).split(":")[1])
                                 if value >= 0:
                                     child.setValue(value)
+                                    child.setStyleSheet("background-color: #CCE4F7; border: 1px solid darkblue;")
                                     self.flags.append(v)
                             except ValueError:
                                 pass
@@ -755,6 +760,7 @@ class Window(QMainWindow):
                         if ":" in v:
                             index_of_value = child.findText(str(v).split(":")[1], QtCore.Qt.MatchFixedString)
                             child.setCurrentIndex(index_of_value)
+                            child.setStyleSheet("background-color: #CCE4F7; border: 1px solid darkblue;")
                             self.flags.append(v)
         self.updateFlagString()
         self.flagsChanging = False
@@ -957,14 +963,20 @@ class Window(QMainWindow):
                 children = t.findChildren(QSpinBox) + t.findChildren(QDoubleSpinBox)
                 for c in children:
                     if not round(c.value(), 1) == c.default:
+                        c.setStyleSheet("background-color: #CCE4F7; border: 1px solid darkblue;")
                         if c.text == "cursepower" and c.value() == 0:
                             self.flags.append(c.text + ":random")
                         else:
                             self.flags.append(c.text + ":" + str(round(c.value(), 2)))
+                    else:
+                        c.setStyleSheet("background-color: white; border: none;")
                 children = t.findChildren(QComboBox)
                 for c in children:
                     if c.currentIndex() != c.flag.default_index:
+                        c.setStyleSheet("background-color: #CCE4F7; border: 1px solid darkblue;")
                         self.flags.append(c.text.lower() + ":" + c.currentText().lower())
+                    else:
+                        c.setStyleSheet("background-color: white; border: none;")
 
             self.updateFlagString()
 
