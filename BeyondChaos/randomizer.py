@@ -2451,7 +2451,7 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int] = None) -> L
     from itemrandomizer import (set_item_changed_commands, extend_item_breaks)
     always_break = Options_.is_flag_active('collateraldamage')
     crazy_prices = Options_.is_flag_active('madworld')
-    extra_effects = Options_.is_flag_active('masseffect')
+    extra_effects = Options_.get_flag_value('masseffect')
     wild_breaks = Options_.is_flag_active('electricboogaloo')
     no_breaks = Options_.is_flag_active('nobreaks')
     unbreakable = Options_.is_flag_active('unbreakable')
