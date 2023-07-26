@@ -6161,12 +6161,12 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         rewrite_checksum()
         verify_randomtools_patches(outfile_rom_buffer)
 
-        if not application or application in ["console", "gui"]:
+        if not application == "web" and kwargs.get("generate_output_rom", True):
             with open(outfile_rom_path, 'wb+') as f:
                 f.write(outfile_rom_buffer.getvalue())
             outfile_rom_buffer.close()
 
-        if not application == "tester":
+        if kwargs.get("generate_output_rom", True):
             pipe_print("\nWriting log...")
 
             for character in sorted(characters, key=lambda c: c.id):
@@ -6189,7 +6189,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                 log_chests()
             log_item_mutations()
 
-            if not application or application in ["console", "gui"]:
+            if not application == "web":
                 with open(outlog, 'w+') as f:
                     f.write(get_logstring(
                         ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers",
