@@ -769,7 +769,7 @@ class Window(QMainWindow):
     #   puts data into separate dictionaries
     def initFlags(self):
         for flag in sorted(NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS, key=lambda x: x.name):
-            if flag.category == "flags":
+            if flag.category == "core":
                 d = self.flag
             elif flag.category == "aesthetic":
                 d = self.aesthetic
