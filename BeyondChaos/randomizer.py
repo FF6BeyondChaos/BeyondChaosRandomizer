@@ -6080,7 +6080,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         name_swd_techs(outfile_rom_buffer)
         fix_flash_and_bioblaster(outfile_rom_buffer)
         title_gfx(outfile_rom_buffer)
-        improved_party_gear(outfile_rom_buffer)
+        improved_party_gear(outfile_rom_buffer,myself_locations["NAME_TABLE"],myself_locations["NAME_TABLE_BANK"])
         mp_color_digits(outfile_rom_buffer)
         alphabetized_lores(outfile_rom_buffer)
         description_disruption(outfile_rom_buffer)

@@ -673,4 +673,6 @@ def myself_patches(output_rom_buffer: BytesIO):
         "BLACKBELT_STAT": 0x302029,
         "BLACKBELT_MULTIPLIER": 0x30202a,
         "BLACKBELT_ADDER": 0x30202b,
+        "NAME_TABLE": [0x9D, 0x08],
+        "NAME_TABLE_BANK": [0xF0],
     }
