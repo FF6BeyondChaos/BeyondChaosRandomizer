@@ -5552,7 +5552,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                         raise ValueError
                     except ValueError:
                         pipe_print("The supplied value was not a valid option. Please try again.")
-            feature_exclusion_list = []
+            feature_exclusion_list = ["Auto stop", "Muddle", "Command Changer"]
             if Options_.is_flag_active('dearestmolulu'):
                 feature_exclusion_list.append("no enc.")
             hidden_relic(outfile_rom_buffer, amount, feature_exclusion_list)
