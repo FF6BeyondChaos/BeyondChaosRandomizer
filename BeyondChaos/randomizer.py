@@ -5617,6 +5617,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             manage_espers(esperrage_spaces, esper_replacements)
         reseed()
         myself_locations = myself_patches(outfile_rom_buffer)
+        myself_name_bank = [(myself_locations["NAME_TABLE"] >> 16) + 0xC0]
+        myself_name_address = [myself_locations["NAME_TABLE"] & 0x0000FF, (myself_locations["NAME_TABLE"] >> 8) & 0x00FF]
         manage_reorder_rages(myself_locations["RAGE_ORDER_TABLE"])
 
         titlesub = Substitution()
@@ -6080,7 +6082,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         name_swd_techs(outfile_rom_buffer)
         fix_flash_and_bioblaster(outfile_rom_buffer)
         title_gfx(outfile_rom_buffer)
-        improved_party_gear(outfile_rom_buffer,myself_locations["NAME_TABLE"],myself_locations["NAME_TABLE_BANK"])
+        improved_party_gear(outfile_rom_buffer,myself_name_address,myself_name_bank)
         mp_color_digits(outfile_rom_buffer)
         alphabetized_lores(outfile_rom_buffer)
         description_disruption(outfile_rom_buffer)
