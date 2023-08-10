@@ -8,10 +8,11 @@ from character import get_characters
 from utils import (CHARACTER_PALETTE_TABLE, EVENT_PALETTE_TABLE, FEMALE_NAMES_TABLE, MALE_NAMES_TABLE,
                    MOOGLE_NAMES_TABLE, RIDING_SPRITE_TABLE, SPRITE_REPLACEMENT_TABLE, CORAL_TABLE,
                    generate_character_palette, get_palette_transformer, hex2int, name_to_bytes,
-                   open_mei_fallback, read_multi, shuffle_char_hues,
+                   open_mei_fallback, read_multi, shuffle_char_hues, custom_path,
                    Substitution, utilrandom as random, write_multi)
 from io import BytesIO
 
+SPRITE_REPLACEMENT_PATH = os.path.join(custom_path, "sprites")
 sprite_replacement_list = None
 makeover_groups = None
 
@@ -494,7 +495,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps, web_custom_sprite_replaceme
         if not is_replaced[char_id]:
             continue
         if wild:
-            candidates = replace_candidates
+            candidates = replace_candidates[:]
         else:
             if female and char_id in female:
                 candidates = female_candidates
@@ -655,10 +656,7 @@ def manage_character_appearance(outfile_rom_buffer: BytesIO, preserve_graphics=F
         for line in f.readlines():
             char_id, filename = line.strip().split(',', 1)
             try:
-                g = open_mei_fallback(os.path.join(pathlib.Path(__file__).parent.absolute(),
-                                                   "custom",
-                                                   "sprites",
-                                                   filename), "rb")
+                g = open_mei_fallback(os.path.join(SPRITE_REPLACEMENT_PATH, "rb"))
             except IOError:
                 continue
 
@@ -725,14 +723,8 @@ def manage_character_appearance(outfile_rom_buffer: BytesIO, preserve_graphics=F
                 use_fallback = False
 
                 try:
-                    g = open_mei_fallback(os.path.join(pathlib.Path(__file__).parent.absolute(),
-                                                       "custom",
-                                                       "sprites",
-                                                       swap_to[c].portrait_filename), "rb")
-                    h = open_mei_fallback(os.path.join(pathlib.Path(__file__).parent.absolute(),
-                                                       "custom",
-                                                       "sprites",
-                                                       swap_to[c].portrait_palette_filename), "rb")
+                    g = open_mei_fallback(os.path.join(SPRITE_REPLACEMENT_PATH, swap_to[c].portrait_filename), "rb")
+                    h = open_mei_fallback(os.path.join(SPRITE_REPLACEMENT_PATH, swap_to[c].portrait_palette_filename), "rb")
                 except IOError:
                     use_fallback = True
                     print("failed to load portrait %s for %s, using fallback" % (
@@ -768,9 +760,7 @@ def manage_character_appearance(outfile_rom_buffer: BytesIO, preserve_graphics=F
 
         if sprite_swap_mode and c in swap_to:
             try:
-                g = open_mei_fallback(os.path.join(pathlib.Path(__file__).parent.absolute(),
-                                                   "custom",
-                                                   "sprites", swap_to[c].file), "rb")
+                g = open_mei_fallback(os.path.join(SPRITE_REPLACEMENT_PATH, swap_to[c].file), "rb")
             except IOError:
                 newsprite = sprites[change_to[c]]
                 for ch in characters:

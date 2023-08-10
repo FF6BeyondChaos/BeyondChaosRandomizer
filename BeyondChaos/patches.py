@@ -518,8 +518,10 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
                     if relic.features[feature_type] & (0x01 << bit):
                         # Get the friendly name of the feature
                         feature = relic.get_feature(feature_type, 0x01 << bit)
-                        if feature.lower() in feature_exclusion_list:
+                        # print("Item " + relic.name + " has feature " + str(feature))
+                        if feature.lower() in [str(feature).lower() for feature in feature_exclusion_list]:
                             try:
+                                # print("Relic found with bad effect " + feature_type + ": " + relic.name)
                                 relic_list.remove(relic.itemid)
                                 continue
                             except ValueError:
