@@ -725,14 +725,9 @@ class Location():
         random.shuffle(self.chests)
         for c in self.chests:
 
-            if self.locid in range(0x139, 0x13d) and c.empty and no_monsters:
-                # ensure Phoenix Cave chests don't have miabs if using 'nomiabs'
-                c.mutate_contents(monster=False, guideline=guideline, crazy_prices=crazy_prices,
-                                  uncapped_monsters=uncapped_monsters, no_monsters=no_monsters)
-                continue
             if self.locid in range(0x139, 0x13d) and c.empty:
-                #if the chest is in the Phoenix Cave and empty - fill with high level MIAB
-                c.mutate_contents(monster=True, guideline=50000, crazy_prices=crazy_prices,
+                #if the chest is in the Phoenix Cave and empty - fill with high level MIAB, otherwise fill with low tier stuff
+                c.mutate_contents(monster=True, guideline=guideline if no_monsters else 50000, crazy_prices=crazy_prices,
                                   uncapped_monsters=uncapped_monsters, no_monsters=no_monsters)
                 continue
             elif self.locid == 0x147:
