@@ -743,7 +743,7 @@ class Location():
             in_falling_ceiling_room = self.locid == 280 and c.memid in range(232, 235)
             monster = False if in_falling_ceiling_room or no_monsters else None
             c.mutate_contents(guideline=guideline, crazy_prices=crazy_prices, monster=monster,
-                              uncapped_monsters=uncapped_monsters)
+                              uncapped_monsters=uncapped_monsters, no_monsters=no_monsters)
             if guideline is None and hasattr(c, "value") and c.value:
                 guideline = c.value
 
