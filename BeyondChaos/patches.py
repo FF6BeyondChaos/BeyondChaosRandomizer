@@ -574,7 +574,7 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
             0x29, char_bit,  # AND math.pow(2, char_selection.id)   ; The power of 2 of the character ID is their bit
             0xD0, 0x03,  # BNE $03   ; If it was nonzero, this character is in the shop
             0x4C, 0xD2, 0xB9,  # JMP $B9D2 ; Elsewise go to the end and set them to empty hidden relic
-            0xA9, 0xC5,  # LDA
+            0xA9, char_selection.relic_selection,  # LDA
             0x6B,  # RTL       ; JSR to $0F9A, then resume vanilla code
         ])
         hidden_relic_sub.write(output_rom_buffer)
