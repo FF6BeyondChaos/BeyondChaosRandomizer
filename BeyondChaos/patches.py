@@ -574,7 +574,7 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
             0x29, char_bit,  # AND math.pow(2, char_selection.id)   ; The power of 2 of the character ID is their bit
             0xD0, 0x03,  # BNE $03   ; If it was nonzero, this character is in the shop
             0x4C, 0xD2, 0xB9,  # JMP $B9D2 ; Elsewise go to the end and set them to empty hidden relic
-            0xA9, char_selection.relic_selection,  # LDA
+            0xA9, 0xC5,  # LDA
             0x6B,  # RTL       ; JSR to $0F9A, then resume vanilla code
         ])
         hidden_relic_sub.write(output_rom_buffer)
@@ -682,6 +682,53 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
         0x5C, 0x29, 0x60, 0xC2,  # JML $C26029      ; Exit to vanilla code (goes to RTS)
     ])
     hidden_relic_sub.write(output_rom_buffer)
+
+    hidden_relic_sub.set_location(0x4B85D)
+    hidden_relic_sub.bytestring = bytes([0xB9, 0xD8, 0x3E,   # LDA $3ED8,Y    (Which character it is)
+        0x22, 0xE4, 0xB8, 0xC4,   # JSL $C4B8E4    (Get this character's hidden relic)
+        0xC9, 0xC6,   # CMP #$C6     (Is it Rage Ring?)
+        0xF0, 0x0C,   # BEQ yesRage
+        0xA9, 0xC6,   # LDA #$C6
+        0xD9, 0xD0, 0x3C,   # CMP $3CD0,Y    (Is Relic 1 a Rage Ring?)
+        0xF0, 0x05,   # BEQ yesRage
+        0xD9, 0xD1, 0x3C,   #CMP $3CD1,Y    (Is Relic 2 a Rage Ring?)
+        0xD0, 0x04,   # BNE noRage
+        # yesRage:
+        0x5C, 0x49, 0x16, 0xC2,   # JML $C21649
+        # noRage:
+        0x5C, 0x56, 0x16, 0xC2,   # JML $C21656
+    ])
+    hidden_relic_sub.write(output_rom_buffer)
+
+    hidden_relic_sub.set_location(0x4B87C)
+    hidden_relic_sub.bytestring = bytes([0xB9, 0xD8, 0x3E,   # LDA $3ED8,Y    (Which character it is)
+        0x22, 0xE4, 0xB8, 0xC4,   # JSL $C4B8E4    (Get this character's hidden relic)
+        0xC9, 0xC5,   # CMP #$C5     (Is it Blizzard Orb?)
+        0xF0, 0x0C,   # BEQ yesOrb
+        0xA9, 0xC5,   # LDA #$C5
+        0xD9, 0xD0, 0x3C,   # CMP $3CD0,Y    (Is Relic 1 a Blizzard Orb?)
+        0xF0, 0x05,   # BEQ yesOrb
+        0xD9, 0xD1, 0x3C,   #CMP $3CD1,Y    (Is Relic 2 a Blizzard Orb?)
+        0xD0, 0x04,   # BNE noOrb
+        # yesOrb:
+        0x5C, 0x62, 0x16, 0xC2,   # JML $C21662
+        # noOrb:
+        0x5C, 0x66, 0x16, 0xC2,   # JML $C21666
+    ])
+    hidden_relic_sub.write(output_rom_buffer)
+
+    hidden_relic_sub.set_location(0x2163D)
+    hidden_relic_sub.bytestring = bytes([0x5C, 0x5D, 0xB8, 0xC4,   # JML $C4B85D
+        0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,   # NOP #8
+    ])
+    hidden_relic_sub.write(output_rom_buffer)
+
+    hidden_relic_sub.set_location(0x21656)
+    hidden_relic_sub.bytestring = bytes([0x5C, 0x7C, 0xB8, 0xC4,   # JML $C4B87C
+        0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,   # NOP #8
+    ])
+    hidden_relic_sub.write(output_rom_buffer)
+
 
 
 def change_cursed_shield_battles(output_rom_buffer: BytesIO, amount: int = None):
