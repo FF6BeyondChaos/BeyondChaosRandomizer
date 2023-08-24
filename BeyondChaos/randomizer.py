@@ -5422,8 +5422,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             else:
                 diverge()
 
-        read_dialogue(infile_rom_buffer)
-        read_location_names(infile_rom_buffer)
+        read_dialogue(outfile_rom_buffer) # Uses outfile instead of infile for TheScenarioNotTaken compatibility
+        read_location_names(outfile_rom_buffer) # Uses outfile instead of infile for TheScenarioNotTaken compatibility
         relocate_ending_cinematic_data(0xF08A70)
 
         if Options_.is_flag_active("shuffle_commands") or \
