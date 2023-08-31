@@ -3159,7 +3159,7 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet]) ->
             formation.mp = 100  # Triad
         formation.write_data(outfile_rom_buffer)
 
-    return formations
+    return formations, fsets
 
 
 def manage_formations_hidden(formations: List[Formation],
@@ -4736,13 +4736,12 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
 
     salt_formations = [id for id in salt_formations if id not in event_formations]
 
-
     for fset in fsets:
         if Options_.is_flag_active("cursedencounters"):  # code that applies FC flag to allow 16 encounters in all zones
             if fset.setid < 252 or fset.setid in good_event_fsets:  # only do regular enemies, don't do sets that can risk Zone Eater or get event encounters
                 if fset.setid not in bad_event_fsets:
                     if not [value for value in fset.formids if
-                            value in event_formations]:
+                            value in event_formations or value in salt_formations]:
                         fset.sixteen_pack = True
                     for i, v in enumerate(fset.formids):
                         if fset.formids[i] in salt_formations:
@@ -4750,8 +4749,6 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
                                 fset.formids[i] -= 1  # any encounter that could turn into an
                                                       # event encounter, keep reducing until it's not a salt or event formation
                             fset.sixteen_pack = True
-        #if fset.sixteen_pack == True:
-        #    print("FORM ID:" + str(fset.formids))
 
 def nerf_paladin_shield():
     paladin_shield = get_item(0x67)
@@ -5688,14 +5685,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                 character.mutate_stats(outfile_rom_buffer, start_in_wor, read_only=True)
         reseed()
 
-        if Options_.is_flag_active("random_formations"):
-            formations = get_formations()
-            fsets = get_fsets()
-            manage_formations(formations, fsets)
-            manage_cursed_encounters(formations, fsets)
-            for fset in fsets:
-                fset.write_data(outfile_rom_buffer)
-
         if Options_.is_flag_active("random_formations") or Options_.is_flag_active('ancientcave'):
             manage_dragons()
         reseed()
@@ -5986,6 +5975,14 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                 house_hint()
         reseed()
         reseed()
+
+        if Options_.is_flag_active("random_formations"):
+            #formations = get_formations()
+            #fsets = get_fsets()
+            formations, fsets = manage_formations(formations, fsets)
+            manage_cursed_encounters(formations, fsets)
+            for fset in fsets:
+                fset.write_data(outfile_rom_buffer)
 
         randomize_poem(outfile_rom_buffer)
         randomize_passwords(custom_web_passwords=kwargs.get("web_custom_passwords", None))
