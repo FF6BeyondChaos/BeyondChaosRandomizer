@@ -899,7 +899,7 @@ def remonsterate(connection: Pipe, **kwargs):
         monsters_tags_filename = kwargs.get("monsters_tags_filename", "monsters_and_tags.txt")
         rom_type = kwargs.get("rom_type", None)
         list_of_monsters = kwargs.get("list_of_monsters", None)
-        5/0
+
         global randomize_connection
         randomize_connection = connection
         images = []
