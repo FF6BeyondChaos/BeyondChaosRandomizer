@@ -20,11 +20,10 @@ try:
             QTabWidget, QInputDialog, QScrollArea, QMessageBox,
             QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox,
             QDialog, QDialogButtonBox, QMenu, QMainWindow, QDesktopWidget,
-            QLayout, QFrame)
+            QLayout, QFrame, QStyle, QTextEdit, QSizePolicy)
     from PIL import Image, ImageOps
 except ImportError as e:
     print('ERROR: ' + str(e))
-    import traceback
 
     traceback.print_exc()
     input('Press enter to quit.')
@@ -52,48 +51,63 @@ class FlagButton(QPushButton):
         self.value = value
 
 
-class GenConfirmation(QDialog):
-    def __init__(self, header, flag_list):
+class QDialogScroll(QDialog):
+    def __init__(self, title: str = '', header: str = '', scroll_contents: QWidget = None,
+                 left_button: str = '', right_button: str = '', icon=None):
         super().__init__()
         self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowContextHelpButtonHint)
         screen_size = QDesktopWidget().screenGeometry(-1)
         self.setMinimumSize(
-            int(min(screen_size.width() / 2, 300)),
+            int(min(screen_size.width() * .5, 500)),
             int(screen_size.height() * .5)
         )
         self.left = int(screen_size.width() / 2 - self.width() / 2)
         self.top = int(screen_size.height() / 2 - self.height() / 2)
-        self.setWindowTitle("Confirm Seed Generation?")
+        self.setWindowTitle(title)
+
 
         grid_layout = QGridLayout()
         grid_layout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
 
         header_text = QLabel(header)
+        header_text.setOpenExternalLinks(True)
 
-        flag_list_label = QLabel(flag_list)
+        flag_list_label = scroll_contents
         flag_list_scroll = QScrollArea(self)
+        flag_list_scroll.setMinimumWidth(self.minimumWidth() - 100)
+        flag_list_scroll.setEnabled(True)
         flag_list_scroll.setWidgetResizable(True)
         flag_list_scroll.setWidget(flag_list_label)
-        flag_list_scroll.setStyleSheet("margin-bottom: 10px;")
 
         grid_layout.addWidget(header_text, 1, 0, 1, 9)
         grid_layout.addWidget(flag_list_scroll, 2, 0, 1, 9)
 
-        self.confirm_pushbutton = QPushButton("Confirm")
-        grid_layout.addWidget(self.confirm_pushbutton, 3, 1, 1, 3)
-        self.confirm_pushbutton.clicked.connect(self.button_pressed)
+        self.left_pushbutton = None
+        self.right_pushbutton = None
 
-        self.cancel_pushbutton = QPushButton("Cancel")
-        grid_layout.addWidget(self.cancel_pushbutton, 3, 5, 1, 3)
-        self.cancel_pushbutton.clicked.connect(self.button_pressed)
+        if left_button:
+            self.left_pushbutton = QPushButton(left_button)
+            grid_layout.addWidget(self.left_pushbutton, 3, 1, 1, 3)
+            self.left_pushbutton.clicked.connect(self.button_pressed)
+
+        if right_button:
+            self.right_pushbutton = QPushButton(right_button)
+            grid_layout.addWidget(self.right_pushbutton, 3, 5, 1, 3)
+            self.right_pushbutton.clicked.connect(self.button_pressed)
+
+        if icon:
+            self.setWindowIcon(self.style().standardIcon(icon))
 
         self.setLayout(grid_layout)
 
     def button_pressed(self):
-        if self.sender() == self.cancel_pushbutton:
-            self.reject()
-        elif self.sender() == self.confirm_pushbutton:
-            self.accept()
+        try:
+            if self.sender() == self.left_pushbutton:
+                self.reject()
+            elif self.sender() == self.right_pushbutton:
+                self.accept()
+        except Exception as exc:
+            pass
 
 
 class BingoPrompts(QDialog):
@@ -1201,9 +1215,15 @@ class Window(QMainWindow):
                     "Mode:", self.mode,
                     "Flags:")
             )
-            continue_confirmed = GenConfirmation(
-                message,
-                f"{flagMsg}"
+            flag_message = QLabel(f'{flagMsg}')
+            flag_message.setStyleSheet('margin-left: 2px;')
+            continue_confirmed = QDialogScroll(
+                title="Confirm Seed Generation?",
+                header=message,
+                scroll_contents=flag_message,
+                left_button='Cancel',
+                right_button='Confirm',
+                icon=QStyle.SP_MessageBoxQuestion
             ).exec()
             if continue_confirmed:
                 self.clearConsole()
@@ -1245,18 +1265,18 @@ class Window(QMainWindow):
                         randomize_process.start()
                         while True:
                             if not randomize_process.is_alive():
-                                raise RuntimeError("Unexpected error: The randomize child process died.")
+                                raise RuntimeError("Unexpected error: The process performing randomization died.")
                             if parent_connection.poll(timeout=5):
-                                item = parent_connection.recv()
+                                child_output = parent_connection.recv()
                             else:
-                                item = None
-                            if item:
+                                child_output = None
+                            if child_output:
                                 try:
-                                    if isinstance(item, str):
-                                        print(item)
-                                    elif isinstance(item, Exception):
-                                        raise item
-                                    elif isinstance(item, bool):
+                                    if isinstance(child_output, str):
+                                        print(child_output)
+                                    elif isinstance(child_output, Exception):
+                                        raise child_output
+                                    elif isinstance(child_output, bool):
                                         break
                                 except EOFError:
                                     break
@@ -1272,25 +1292,25 @@ class Window(QMainWindow):
                                                             str(seed), tempname[1]]))
                         if self.seed:
                             self.seed = str(int(self.seed) + 1)
-                    except Exception as e:
+                    except Exception as gen_exception:
                         traceback.print_exc()
-                        randomize_error_message = QMessageBox()
-                        randomize_error_message.setIcon(QMessageBox.Critical)
-                        randomize_error_message.setWindowTitle("Exception: " + str(type(e).__name__))
-                        randomize_error_message.setText("A " + str(type(e).__name__) + " exception occurred "
+                        gen_traceback = QTextEdit(
+                            "<br>".join(traceback.format_exc().splitlines())
+                        )
+                        gen_traceback.setStyleSheet('background-color: rgba(0,0,0,0); border: none;')
+                        gen_traceback.setReadOnly(True)
+                        QDialogScroll(
+                            title="Exception: " + str(type(gen_exception).__name__),
+                            header="A " + str(type(gen_exception).__name__) + " exception occurred "
                                                         "that prevented randomization: " +
                                                         "<br>" +
-                                                        str(e) +
                                                         "<br>" +
-                                                        "<br>" +
-                                                        "<b><u>Error Traceback for the Devs</u></b>:" +
-                                                        "<br>" +
-                                                        "<br>".join(traceback.format_exc().splitlines()))
-                        randomize_error_message.setStandardButtons(QMessageBox.Close)
-                        rem_button_clicked = randomize_error_message.exec()
-                        if rem_button_clicked == QMessageBox.Close:
-                            randomize_error_message.close()
-                        traceback.print_exc()
+                                                        'Please submit the following traceback over at the <a href="https://discord.gg/ZCHZp7qxws">Beyond Chaos Barracks discord</a> bugs channel:' +
+                                                        "<br>",
+                            scroll_contents=gen_traceback,
+                            right_button='Close',
+                            icon=QStyle.SP_MessageBoxCritical
+                        ).exec()
                     else:
                         resultFiles.append(resultFile)
                         if currentSeed + 1 == seedsToGenerate:

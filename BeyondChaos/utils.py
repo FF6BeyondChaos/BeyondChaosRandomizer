@@ -1,9 +1,9 @@
-from collections import defaultdict
-from os import path
 import random
-from typing import BinaryIO
+import traceback
 from io import BytesIO
 from multiprocessing import Pipe
+from collections import defaultdict
+from os import path
 
 try:
     from sys import _MEIPASS
@@ -85,9 +85,15 @@ parent_connection = None
 def pipe_print(output=""):
     global parent_connection
     if parent_connection:
-        parent_connection.send(output)
+        if isinstance(output, Exception):
+            parent_connection.send(type(output)(traceback.format_exc()))
+        else:
+            parent_connection.send(output)
     else:
-        print(str(output))
+        if isinstance(output, Exception):
+            pipe_print(traceback.format_exc())
+        else:
+            print(str(output))
 
 
 def set_parent_pipe(connection: Pipe):
