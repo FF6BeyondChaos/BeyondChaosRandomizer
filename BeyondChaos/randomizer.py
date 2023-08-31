@@ -3,6 +3,7 @@ from hashlib import md5
 import os
 import re
 import sys
+import traceback
 from io import BytesIO
 from sys import argv
 from time import time, sleep, gmtime
@@ -5878,27 +5879,32 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                     remonsterate_process.start()
                     while True:
                         try:
-                            response = randomize_connection.recv()
-                            if isinstance(response, str):
-                                pipe_print(response)
-                            elif isinstance(response, tuple):
-                                outfile_rom_buffer, remonsterate_results = response
-                                break
-                            elif isinstance(response, Exception):
-                                if not isinstance(response, OverflowError) and not \
-                                        isinstance(response, ReferenceError) and gui_connection:
-                                    gui_connection.send(response)
-                                else:
-                                    raise response
+                            if not remonsterate_process.is_alive():
+                                raise RuntimeError("Unexpected error: The process handling remonsteration died.")
+                            if randomize_connection.poll(timeout=5):
+                                child_output = randomize_connection.recv()
+                            else:
+                                child_output = None
+                            if child_output:
+                                if isinstance(child_output, str):
+                                    pipe_print(child_output)
+                                elif isinstance(child_output, tuple):
+                                    outfile_rom_buffer, remonsterate_results = child_output
+                                    break
+                                elif isinstance(child_output, Exception):
+                                    raise child_output
                         except EOFError:
                             break
-
-                except (OverflowError, ReferenceError) as e:
-                    pipe_print("Remonsterate: An error occurred attempting to remonsterate. Trying again...")
-                    # Replace backup file
-                    outfile_rom_buffer = outfile_backup
-                    attempt_number = attempt_number + 1
-                    continue
+                except Exception as remonsterate_exception:
+                    if isinstance(remonsterate_exception, OverflowError) or \
+                            isinstance(remonsterate_exception, ReferenceError):
+                        pipe_print("Remonsterate: An error occurred attempting to remonsterate. Trying again...")
+                        # Replace backup file
+                        outfile_rom_buffer = outfile_backup
+                        attempt_number = attempt_number + 1
+                        continue
+                    else:
+                        raise remonsterate_exception
                 break
 
             # Remonsterate finished
@@ -6272,9 +6278,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                      "remonsterate", "shops", "treasure chests", "junctions", "zozo clock", "secret items"])
             })
         return outfile_rom_path
-    except Exception as e:
-        import sys, traceback
-        pipe_print(traceback.format_exc())
+    except Exception as exc:
+        # pipe_print(type(exc)(traceback.print_exc()))
+        pipe_print(exc)
 
 
 if __name__ == "__main__":
