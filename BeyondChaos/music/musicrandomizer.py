@@ -134,6 +134,9 @@ def add_encoding_if_text(args, kwargs):
     if len(args) and 'b' not in args[0]:
         kwargs["encoding"] = "utf-8"
         
+class PlaylistError(Exception):
+    pass
+    
 class TrackMetadata:
     def __init__(self, file="", title="", album="", composer="", arranged="", menuname=""):
         self.file, self.title, self.album, self.composer, self.arranged, self.menuname = title, album, composer, arranged, menuname
@@ -275,21 +278,27 @@ def song_variant_id(name, idx):
     else:
         return name, ""
 
-def init_playlist(fn=DEFAULT_PLAYLIST_FILE):            
+def init_playlist(fn=DEFAULT_PLAYLIST_FILE, virtual=None):
     if fn is None:
         fn = DEFAULT_PLAYLIST_FILE
     playlist_parser = configparser.ConfigParser()
-    plfile = playlist_parser.read(fallback_path(os.path.join(PLAYLIST_PATH, fn)))
-    if not plfile:
-        plfile = playlist_parser.read(fallback_path(os.path.join(PLAYLIST_PATH, fn + ".txt")))
+    if virtual is not None:
+        print("virtual")
+        plfile = playlist_parser.read_string(virtual, source=fn)
+    else:
+        print(fallback_path(os.path.join(PLAYLIST_PATH, fn)))
+        plfile = playlist_parser.read(fallback_path(os.path.join(PLAYLIST_PATH, fn)))
         if not plfile:
-            print(f"Playlist file {fn} empty or not found, falling back to {DEFAULT_PLAYLIST_FILE}")
-            playlist_parser.read(fallback_path(os.path.join(PLAYLIST_PATH, DEFAULT_PLAYLIST_FILE)))
+            print(fallback_path(os.path.join(PLAYLIST_PATH, fn + ".txt")))
+            plfile = playlist_parser.read(fallback_path(os.path.join(PLAYLIST_PATH, fn + ".txt")))
+            if not plfile:
+                print(f"Playlist file {fn} empty or not found, falling back to {DEFAULT_PLAYLIST_FILE}")
+                playlist_parser.read(fallback_path(os.path.join(PLAYLIST_PATH, DEFAULT_PLAYLIST_FILE)))
     playlist_map = {}
     tierboss_pool = set()
     for section in playlist_parser:
         for k, v in playlist_parser[section].items():
-            if section == "tierboss":
+            if str(section).lower() == "tierboss":
                 tierboss_pool.update([s.strip() for s in v.split(',')])
             elif k in playlist_map:
                 playlist_map[k] += f", {v}"
@@ -725,7 +734,7 @@ def set_subpath(subpath):
         if os.path.isabs(subpath):
             BASEPATH = subpath
             
-def process_music(inrom, meta={}, f_chaos=False, f_battle=True, opera=None, eventmodes="", playlist_filename=DEFAULT_PLAYLIST_FILE, subpath=None, freespace=JOHNNYDMAD_FREESPACE, pool_test=False, ext_rng=random):
+def process_music(inrom, meta={}, f_chaos=False, f_battle=True, opera=None, eventmodes="", playlist_filename=DEFAULT_PLAYLIST_FILE, virtual_playlist=None, subpath=None, freespace=JOHNNYDMAD_FREESPACE, pool_test=False, ext_rng=random, enable_exceptions=False):
     global random
     global used_song_names
     global used_sample_ids
@@ -780,7 +789,7 @@ def process_music(inrom, meta={}, f_chaos=False, f_battle=True, opera=None, even
 
     # -- load random choices configuration for categories (playlist file)
     # moved to function for reuse in length test mode
-    playlist_map, tierboss_pool = init_playlist(fn=playlist_filename)
+    playlist_map, tierboss_pool = init_playlist(fn=playlist_filename, virtual=virtual_playlist)
     
     track_pools = {}
     intensitytable = {}
@@ -873,6 +882,8 @@ def process_music(inrom, meta={}, f_chaos=False, f_battle=True, opera=None, even
             
         if attempts >= 1000:
             print("Music randomization failed after 1000 attempts. Your custom music configuration files and/or filters may be too restrictive.")
+            if enable_exceptions:
+                raise PlaylistError("Music randomization failed after 1000 attempts.")
             return inrom
         attempts += 1
         

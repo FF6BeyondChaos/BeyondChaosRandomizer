@@ -5955,7 +5955,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
         has_music = Options_.is_any_flag_active(['johnnydmad', 'johnnyachaotic'])
         if has_music:
-            music_init(web_custom_playlist=kwargs.get("web_custom_playlist", None))
+            music_init()
 
         if Options_.is_flag_active('alasdraco'):
             opera = manage_opera(outfile_rom_buffer, has_music)
@@ -5966,8 +5966,10 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
         if has_music:
             from utils import custom_path
-            randomize_music(outfile_rom_buffer, Options_, playlist_path=custom_path, playlist_filename="songs.txt",
-                            opera=opera, form_music_overrides=form_music)
+            randomize_music(outfile_rom_buffer, Options_, playlist_path=custom_path,
+                    playlist_filename="songs.txt",
+                    virtual_playlist=kwargs.get("web_custom_playlist", None),
+                    opera=opera, form_music_overrides=form_music)
             log(get_music_spoiler(), section="music")
         reseed()
 

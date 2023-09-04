@@ -14,7 +14,7 @@ from utils import utilrandom as random, open_mei_fallback as open
 
 from music.jukebox import add_music_player
 from music.musicrandomizer import process_music, process_formation_music_by_table, process_map_music, get_legacy_import, \
-    get_spc_memory_usage, get_music_spoiler as get_spoiler, initialize as johnnydmad_initialize
+    get_spc_memory_usage, get_music_spoiler as get_spoiler, initialize as johnnydmad_initialize, PlaylistError
 
 from music.mfvitools.insertmfvi import byte_insert, bytes_to_int
 
@@ -23,11 +23,11 @@ BC_MUSIC_FREESPACE = ["53C5F-9FDFF", "310000-37FFFF", "410000-4FFFFF"]
 opera_log = ""
 
 
-def music_init(web_custom_playlist=None):
-    johnnydmad_initialize(rng=random, custom_playlist=web_custom_playlist)
+def music_init():
+    johnnydmad_initialize(rng=random)
 
 
-def randomize_music(fout, Options_, playlist_path, playlist_filename, opera=None, form_music_overrides={}, ):
+def randomize_music(fout, Options_, playlist_path, playlist_filename, virtual_playlist=None, opera=None, form_music_overrides={}, ):
     events = ""
     if Options_.is_flag_active('christmas'):
         events += "W"
@@ -40,11 +40,21 @@ def randomize_music(fout, Options_, playlist_path, playlist_filename, opera=None
     fout.seek(0)
     data = fout.read()
     metadata = {}
-    ## For anyone who wants to add UI for playlist selection:
-    ## If a playlist is selected, pass it as process_music(playlist_filename=...)
-    data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath="music",
-                         freespace=BC_MUSIC_FREESPACE, ext_rng=random, playlist_path=playlist_path,
-                         playlist_filename=playlist_filename)
+    
+    # Playlist priority: virtual > custom/songs.txt > music/playlists/default.txt
+    playlist_fileid = "[web-playlist]" if virtual_playlist else os.path.join(playlist_path, playlist_filename)
+    try:
+        data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath="music",
+                             freespace=BC_MUSIC_FREESPACE, ext_rng=random,
+                             playlist_filename=playlist_fileid,
+                             virtual_playlist=virtual_playlist, enable_exceptions=True)
+    except PlaylistError:
+        # If no successful randomization can be produced using the customized playlist
+        # (either from web or custom/songs.txt) then fall back to default johnnydmad
+        # playlist (music/default.txt) which will usually not be modified
+        print("Custom playlist failed, falling back to default.")
+        data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath="music",
+                             freespace=BC_MUSIC_FREESPACE, ext_rng=random)
     if not Options_.is_any_flag_active(['ancientcave', 'speedcave', 'racecave']):
         data = process_map_music(data)
     data = process_formation_music_by_table(data, form_music_overrides=form_music_overrides, kan_mode=kan_mode)
