@@ -6,11 +6,11 @@
 import configparser
 import os
 import string
-import pathlib
+#import pathlib
 
 from locationrandomizer import get_locations, get_location
 from dialoguemanager import set_dialogue_var, set_pronoun, patch_dialogue, load_patch_file
-from utils import utilrandom as random, open_mei_fallback as open
+from utils import utilrandom as random, open_mei_fallback as open, custom_path as BC_CUSTOM_PATH
 
 from music.jukebox import add_music_player
 from music.musicrandomizer import process_music, process_formation_music_by_table, process_map_music, get_legacy_import, \
@@ -137,7 +137,7 @@ def manage_opera(fout, affect_music):
     opera_config = configparser.ConfigParser(interpolation=None)
     opera_config.optionxform = lambda option: option
     try:
-        with open(os.path.join(pathlib.Path(__file__).parent.absolute(), 'custom', 'opera.txt'), "r") as f:
+        with open(os.path.join(BC_CUSTOM_PATH, 'opera.txt'), "r") as f:
             opera_config.read_file(f)
     except OSError:
         print("WARNING: failed to load opera config")
@@ -296,7 +296,7 @@ def manage_opera(fout, affect_music):
         'sleeping': [0x86, 0x87, 0x88, 0x89, 0x08, 0x09]
     }
 
-    opath = os.path.join(pathlib.Path(__file__).parent.absolute(), "custom", "opera")
+    opath = os.path.join(BC_CUSTOM_PATH, "opera")
     # load scholar graphics
     try:
         with open(os.path.join(opath, "ralse.bin"), "rb") as f:
@@ -314,8 +314,7 @@ def manage_opera(fout, affect_music):
             sprite = f.read()
     except IOError:
         try:
-            with open(os.path.join(pathlib.Path(__file__).parent.absolute(),
-                                   "custom", "sprites", f"{merge[4]}"), "rb") as f:
+            with open(os.path.join(BC_CUSTOM_PATH, "sprites", f"{merge[4]}"), "rb") as f:
                 sprite = f.read()
         except:
             print(f"failed to open custom/opera/{merge[4]} or custom/sprites/{merge[4]}")
@@ -338,7 +337,7 @@ def manage_opera(fout, affect_music):
                 sprite = f.read()
         except IOError:
             try:
-                with open(os.path.join(pathlib.Path(__file__).parent.absolute(), "custom",
+                with open(os.path.join(BC_CUSTOM_PATH,
                                        "sprites", f"{c.sprite}.bin"), "rb") as f:
                     sprite = f.read()
             except:
@@ -512,7 +511,7 @@ def get_opera_log():
 
 def read_opera_mml(file):
     try:
-        file = os.path.join(pathlib.Path(__file__).parent.absolute(), 'custom', 'opera', f'{file}.mml')
+        file = os.path.join(BC_CUSTOM_PATH, 'opera', f'{file}.mml')
         with open(file, "r") as f:
             mml = f.read()
         return mml
