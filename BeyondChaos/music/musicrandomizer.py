@@ -283,16 +283,12 @@ def init_playlist(fn=DEFAULT_PLAYLIST_FILE, virtual=None):
         fn = DEFAULT_PLAYLIST_FILE
     playlist_parser = configparser.ConfigParser()
     if virtual is not None:
-        print("virtual")
         plfile = playlist_parser.read_string(virtual, source=fn)
     else:
-        print(fallback_path(os.path.join(PLAYLIST_PATH, fn)))
         plfile = playlist_parser.read(fallback_path(os.path.join(PLAYLIST_PATH, fn)))
         if not plfile:
-            print(fallback_path(os.path.join(PLAYLIST_PATH, fn + ".txt")))
             plfile = playlist_parser.read(fallback_path(os.path.join(PLAYLIST_PATH, fn + ".txt")))
             if not plfile:
-                print(f"Playlist file {fn} empty or not found, falling back to {DEFAULT_PLAYLIST_FILE}")
                 playlist_parser.read(fallback_path(os.path.join(PLAYLIST_PATH, DEFAULT_PLAYLIST_FILE)))
     playlist_map = {}
     tierboss_pool = set()

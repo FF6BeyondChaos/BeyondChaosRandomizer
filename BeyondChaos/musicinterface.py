@@ -42,8 +42,22 @@ def randomize_music(fout, Options_, playlist_path, playlist_filename, virtual_pl
     metadata = {}
     
     # Playlist priority: virtual > custom/songs.txt > music/playlists/default.txt
-    playlist_fileid = "[web-playlist]" if virtual_playlist else os.path.join(playlist_path, playlist_filename)
+    # songs.txt will also be handled as a "virtual" playlist to keep BC-specific
+    # path interactions to this file
+    
+    if virtual_playlist:
+        playlist_fileid = "[web-playlist]"
+    else:
+        playlist_fileid = os.path.join(playlist_path, playlist_filename)
+        try:
+            with open(playlist_fileid, "r") as f:
+                virtual_playlist = f.read()
+        except IOError:
+            print(f"Failed to load {playlist_fileid}")
+            playlist_fileid = None
     try:
+        if not playlist_fileid:
+            raise PlaylistError("Failed to load custom file")
         data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath="music",
                              freespace=BC_MUSIC_FREESPACE, ext_rng=random,
                              playlist_filename=playlist_fileid,
