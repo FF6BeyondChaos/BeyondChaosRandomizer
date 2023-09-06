@@ -1,0 +1,174 @@
+#TITLE Lexis Shaia Lab
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#WAVE 0x20 0x23 marimba
+#WAVE 0x21 0x59 pizzicato strings
+#WAVE 0x22 0x83 trombone
+#WAVE 0x23 0x94 oboe
+#WAVE 0x24 0x93 oboe
+#WAVE 0x25 0x92 oboe
+#WAVE 0x26 0x91 oboe
+#WAVE 0x27 0x51 bass
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x5B timpani
+#WAVE 0x2B 0x3B hihat
+#WAVE 0x2C 0x2D cymbals
+
+#def init= t120 %v50 %b0,85 %f0,0
+
+#def marimba= |0 o5 %e0 m %r22
+#def pizzi=   |1 o4 %e1 m %r22 %y5%s3
+#def trumpet= |2 o6 %e1 m48,18,207 %y0%s4
+#def oboe=    |4 o5 %e1 m48,18,223
+#def bass=    |7 o7 %e0 m %a11%r11
+#def timpani= |A o6 %e1 m %r17
+
+#def m= v185
+#def mm= v149
+#def p= v200
+#def t= v149
+#def o= v185
+#def b= v198
+#def d= v133
+
+#def o2u= |4
+#def o3u= |5 >
+#def o4u= |6
+#def o3d= |5
+#def o2d= |4 <
+#def o1d= |3
+
+#def kickVol= v198
+#def snareVol= v198
+#def hihatVol= v120 %s0
+#def crashVol= v300 %y2%s5%r17
+
+#drum "k"=5a |8 %e0 p64 'kickVol*v.40'
+#drum "s"=6c+|9 %e0 p64 'snareVol*v.40' %a13%r19
+#drum "h"=5a |B %e0 p40 'hihatVol*v.49'
+#drum "i"=5a |B %e0 p40 'hihatVol*v.31'
+#drum "y"=5f |C %e1 p88 'crashVol*v.40'
+
+## adding a small delay to non-bass tracks to compensate for attack time
+#def delay= &1r
+
+{1} 'init''delay' $
+'marimba+o1' 'm*v.40' p96 l8
+[rfff reee rfc+>g+f2<]
+ra+a+a+ raaa ra+f+c+>a+2<
+d+c+cc+ c>a+g+f+ fd+c+d+ c+c>a+g+
+## 9
+'trumpet+o1' 't*v.32' p64 [
+c+32^48r24^32>g+32^48r24^32 g+8 g+32^48r24^32g32^48r24^32g+32^48r24^32 a+8g8
+g+12^48r8^48f12^48r8^48 c+12^48r3^16
+<c+32^48r24^32>g+32^48r24^32 g+8 g+32^48r24^32g32^48r24^32g+32^48r24^32 a+8g8
+g+12^48r8^48<c+12^48r8^48 >c+12^32&74r
+>a+32^48r24^32<c+32^48r24^32d+32^48r24^32c+32^48r24^32 >a+8 <c+32^48r24^32d+32^48r24^32c+32^48r24^32
+e12^48r8^48c+12^48r8^48 >a+4<c+4
+g+32^48r24^32g32^48r24^32 g+8a+8 <c32^48r24^32>a+32^48r24^32 <c8c+8
+d+12^32&26rg+12^32&26r >g+2<]
+## 25
+'oboe+o1' 'o*v.32' p64 l8
+c+2c+c>a+<c  c+1
+c+2c+c>a+<c  >a+2'o1d'g+2'o2u'<
+c+2c+c>a+<c  c+4>'o1d'g+4'o2u'<c+4'o3u'f4
+'o4u'g+2g+'o3d'f+ff+  f4d+4f+4'o2d'c4
+;
+
+{2} 'delay' $
+'marimba+o1' 'm*v.40' p96 l8
+[3
+[rg+g+g+ rggg rg+fc+>g+2<]
+<rc+c+c+ rccc rc+>a+f+c+2
+f+fd+f d+c+c>a+ g+f+ff+ fd+c+c<
+]
+## 25
+'mm*v.40'
+[a+<c+cc+>] [g+<c+cc+>] [f+<c+cc+>] f4f+4g4g+4
+[a+<c+cc+>] [g+<c+cc+>] [f+<c+cc+>] d+4d+4g+2
+;
+
+{3} $
+'bass-o2' 'b*v.40' p64 l8
+[3
+[c+4c+4>g+4a+<c    c+4f4>g+2<]
+ f+4f+4c+4d+f      f+4a+4c+2
+ g+1 g+1
+]
+## 25
+f+f+f+f+ f+f+f+f+ ffff ffff d+d+d+d+ d+d+d+d+ c+4d+4e4f4
+f+f+f+f+ f+f+f+f+ ffff ffff d+d+d+d+ d+d+d+d+ g+4g+4c4c4
+;
+
+{4} 'delay' $
+[3 [6 l8 "hi"] "h2"]
+[8 ":i:hi"]
+## 9
+[24 ":i:ki"]
+'timpani-o2' p64 'd*v.75' l4
+g+2 d+2 g+d+cd+
+## 17
+[4 c+2>g+2<] [f+2c+2] g+2d+2 g+d+cd+
+## 25
+f+c+f+c+ fcfc d+>a+<d+>a+< c+d+ef
+f+c+f+c+ fcfc d+>a+<d+>a+< g+g+cc
+;
+
+{5} 'delay' $
+[8r1]
+## 9
+'marimba+o1' 'm*v.40' p96 l8 [
+[rfff reee rfc+>g+f2<]
+ra+a+a+ raaa ra+f+c+>a+2<
+d+c+cc+ c>a+g+f+ fd+c+d+ c+c>a+g+<<]
+## 25
+'mm*v.40'
+[f+a+g+a+] [fg+g+g+] [d+f+f+f+] c+4d+4e4f4
+[f+a+g+a+] [fg+g+g+] [d+f+f+f+] c4c4d+2
+;
+
+{6} 'delay' $
+[8r1]
+## 9
+[24 "h4"]
+"y2y2 y4y4y4y4"
+## 17
+l8
+"y4s4kis4"
+[10 "kis4"]
+"y2y2 y4y4y4y4"
+## 25
+"y4s4kis4"
+[10 "kis4"]
+"y2y2 y4y4y4y4"
+;
+
+{7} 'delay' $
+[8r1]
+## 9
+'pizzi' p24 'p*v.24' l8 [
+[c+g+<c+>g+ c+g<c+>g c+d+ff+g+2]
+f+<c+f+c+> f+<cf+c> f+g+a+b<c+2>
+c+d+ff+ g+a+<cc+ d+ff+g+ a+<cc+c>> ]
+## 25
+[8r1]
+;
+
+{8} 'delay' $
+[8r1]
+## 9
+r1r1 r1r1 r1r1
+"k2s2 k4s4k4s4"
+## 17
+l8
+"k4hih4hi"
+[10 "h4hi"]
+"k2s2k4s4k4s4"
+## 25
+"k4hih4hi"
+[10 "h4hi"]
+"k2s2k4s4k4s4"
+;

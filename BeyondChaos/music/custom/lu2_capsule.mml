@@ -1,0 +1,151 @@
+#TITLE Capsule Monster
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+########## ------------------
+#SHORTNAME LU2 Capsule Monst.
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x21 0x94 oboe
+#WAVE 0x22 0x93 oboe
+#WAVE 0x23 0x25 marimba
+#WAVE 0x24 0x51 bass
+#WAVE 0x25 0x5B timpani
+#WAVE 0x28 0x7A conga op
+#WAVE 0x29 0x7B conga slp
+#WAVE 0x2A 0x6C tambourine
+
+#def init= t100 %v40 %b0,85 %f0,0
+
+#def strings= |0 o5 %e1 m %y0%s5
+#def oboe=    |1 o5 %e1 m48,24,199
+#def marimba= |3 o5 %e0 m %r22%s7
+#def bass=    |4 o7 %e0 m %a11%y0%s4%r11
+#def timpani= |5 o7 %e1 m %r17
+
+#def s= v400
+#def o= v333
+#def m= v267
+#def b= v200
+#def t= v282
+
+#def 1= |1
+#def 2= |2
+
+#def openVol= v250
+#def slapVol= v250
+#def tambVol= v150
+
+#drum "c"=5d  |8 p20  %e0 'openVol*v.24'
+#drum "d"=5f+ |8 p20  %e0 'openVol*v.24'
+#drum "s"=5b  |9 p20  %e0 'slapVol*v.24'
+#drum "t"=5b  |A p104 %e0 'tambVol*v.49' %y1%s6%r29
+#drum "u"=5b  |A p104 %e0 'tambVol*v.40' %y1%s6%r29
+#drum "v"=5b  |A p104 %e0 'tambVol*v.31' %y1%s6%r29
+
+{1} 'init'
+&90r r1 r1
+'oboe' p40 'o*v.24'
+g32^48r24^32 a16'2'b16 <c32^48r24^32 >b16'1'a16 g32^48r24^32'2'b32^48'1'r24^32 d4
+f32^48r24^32 e16d16 c32^48r24^32d32^48r24^32 >b4g4
+<g32^48r24^32 a16'2'b16 <c32^48r24^32 >b16'1'a16 g32^48r24^32'2'b32^48'1'r24^32 d4
+f32^48r24^32 e16d16 c32^48r24^32d32^48r24^32 >b4<g4
+f32^48r24^32 g16a16 '2'a+32^48r24^32'1' a16g16 f32^48r24^32a32^48r24^32 c4
+d+32^48r24^32 d16c16 >a+32^48r24^32<c32^48r24^32 >a4f4
+<f32^48r24^32 g16a16 '2'a+32^48r24^32'1' a16g16 f32^48r24^32a32^48r24^32 c4
+d+32^48r24^32 d16c16 >a+32^48r24^32<c32^48r24^32 >a2<
+r1r1r1r1
+$
+'oboe' p40 'o*v.24'
+g32^48r24^32 a16'2'b16 <c32^48r24^32 >b16'1'a16 g32^48r24^32'2'b32^48'1'r24^32 d4
+f32^48r24^32 e16d16 c32^48r24^32d32^48r24^32 >b4g4
+<g32^48r24^32 a16'2'b16 <c32^48r24^32 >b16'1'a16 g32^48r24^32'2'b32^48'1'r24^32 d4
+f32^48r24^32 e16d16 c32^48r24^32d32^48r24^32 >b4<g4
+f32^48r24^32 g16a16 '2'a+32^48r24^32'1' a16g16 f32^48r24^32a32^48r24^32 c4
+d+32^48r24^32 d16c16 >a+32^48r24^32<c32^48r24^32 >a4f4
+<f32^48r24^32 g16a16 '2'a+32^48r24^32'1' a16g16 f32^48r24^32a32^48r24^32 c4
+d+32^48r24^32 d16c16 >a+32^48r24^32<c32^48r24^32 >a2<
+'marimba' p104 'm*v.32'
+d2^4 d32d+32d32d+32d32d+32d32d+32
+d1
+d2^4 d32d+32d32d+32d32d+32d32d+32
+d1
+;
+
+{2}
+'bass-o1' p64 'b*v.32'
+d4. c32>b32a32 [4 g4.d8]
+$
+[8 g4.d8]
+[8 f4.c8]
+[8 g4.d8]
+;
+
+{3}
+r8. l32 "^uvvuuttt"
+$
+"t8t16t16 t8t16t16 t8t16u16 tttt uvut"
+;
+
+{4}
+'strings+o1' p72 's*v.24' f4. e32d32c32> l24
+br12 dr12 ar12 dr12 br12 dr12  a12^32&2r  dr12
+br12 dr12 ar12 dr12 br12 dr12 <c12^32&2r> dr12
+$[
+ br12 dr12 ar12 dr12 br12 dr12  a12^32&2r  dr12
+ br12 dr12 ar12 dr12 br12 dr12 <c12^32&2r> dr12
+][
+ ar12 cr12 gr12 cr12 ar12 cr12  g12^32&2r  cr12
+ ar12 cr12 gr12 cr12 ar12 cr12 a+12^32&2r  cr12
+][
+ br12 dr12 ar12 dr12 br12 dr12  a12^32&2r  dr12
+ br12 dr12 ar12 dr12 br12 dr12 <c12^32&2r> dr12
+];
+
+{5}
+'strings+o1' p72 's*v.24' d4. c32>b32a32 l24
+grr6 frr6 grr6 f8r8
+grr6 frr6 grr6 a8r8
+$[
+ grr6 frr6 grr6 f8r8
+ grr6 frr6 grr6 a8r8
+][
+ frr6 d+rr6 frr6 d+8r8
+ frr6 d+rr6 frr6 g8r8
+][
+ grr6 frr6 grr6 f8r8
+ grr6 frr6 grr6 a8r8
+];
+
+{6}
+'timpani-o3' p96 't*v.45' d4. c32>b32a32
+g2g2g2g2
+$
+[4 g2g2]
+[4 f2f2]
+[4 g2g2]
+;
+
+{7}
+&90r
+$
+l16 "c8s8d8c8 cc8sd8c8"
+;
+
+{8}
+&90r
+r1r1
+[12r1]
+'marimba' p104 'm*v.32'
+$
+g32^48r24^32 a16b16 <c32^48r24^32 >b16a16 g32^48r24^32b32^48r24^32 d32d+32d32d+32d32d+32d32d+32
+f32^48r24^32 e16d16 c32^48r24^32d32^48r24^32 >b4g4
+<g32^48r24^32 a16b16 <c32^48r24^32 >b16a16 g32^48r24^32b32^48r24^32 d32d+32d32d+32d32d+32d32d+32
+f32^48r24^32 e16d16 c32^48r24^32d32^48r24^32 >b4<g4
+f32^48r24^32 g16a16 a+32^48r24^32 a16g16 f32^48r24^32a32^48r24^32 c32c+32c32c+32c32c+32c32c+32
+d+32^48r24^32 d16c16 >a+32^48r24^32<c32^48r24^32 >a4f4
+<f32^48r24^32 g16a16 a+32^48r24^32 a16g16 f32^48r24^32a32^48r24^32 c32c+32c32c+32c32c+32c32c+32
+d+32^48r24^32 d16c16 >a+32^48r24^32<c32^48r24^32 >a2
+< r1r1r1r1
+;

@@ -1,0 +1,386 @@
+#TITLE Battle #2
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x21 0x7E horn
+#WAVE 0x22 0x81 trumpet
+#WAVE 0x23 0x51 ebass
+#WAVE 0x24 0x48 dist1
+#WAVE 0x25 0x49 dist2
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1D snare
+#WAVE 0x2A 0x3B hihat
+#WAVE 0x2B 0x3C hihat
+#WAVE 0x2C 0x2D crash cymbal
+
+#def init= t175 %v26 %b0,104 %f0,0
+
+#def strings= |0 %e1 o5 m          %y0%s6
+#def horn=    |1 %e1 o5 m48,18,199 %r8
+#def trumpet= |2 %e1 o5 m48,18,223
+#def bass=    |3 %e0 o7 m          %a12%r11
+#def dist=       %e1 o6 m
+
+#def s= v230
+#def h= v185
+#def t= v150
+#def b= v150
+#def d= v150
+
+#def kickVol= v200
+#def snareVol= v200
+#def openVol= v100
+#def closeVol= v100
+#def crashVol= v300
+
+## dist guitar mute/open
+#def m= |5 %s5%y1%r30
+#def o= |4       %r11
+
+#drum "k"=5a  |8 p64 %e0 'kickVol*v0.60' %r28
+#drum "q"=5a  |9 p64 %e1 'snareVol*v0.16'
+#drum "r"=5a  |9 p64 %e0 'snareVol*v0.51'
+#drum "s"=5a  |9 p64 %e0 'snareVol*v0.60'
+#drum "h"=5a  |A p48 %e0 'closeVol*v0.50' %s0
+#drum "i"=5a  |A p48 %e0 'closeVol*v0.41' %s0
+#drum "j"=5a  |A p48 %e0 'closeVol*v0.32' %s0
+#drum "o"=5f+ |B p48 %e0 'openVol*v0.50'
+#drum "y"=5g  |C p96 %e1 'crashVol*v0.56' %r17
+
+#def nonpercdelay= &2r
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init' 'nonpercdelay'
+'strings-o1''s*v.32'
+p20 b1^1 p96 << g1^4 m48,-1 ^4 m48,-2 ^4 m24,-3 ^8 m32,-6 ^8 m0,0
+$##
+'trumpet''t*v.48' p48
+r8 b8 <c+24r12d24r12 e4 >b8 <c+24r12
+d24r12 e4. d+24 e12 d8c+8>b8
+<c+4. d8 >f+2
+^1
+r8 b8 <c+24r12d24r12 e4 >b8 <c+24r12
+d24r12 e4. d+24 e12 d8c+8d8
+e4. a8 f+2
+^1
+## 13
+r8 >b8 <c+24r12d24r12 e4 >b8 <c+24r12
+ d24r12 e4. d+24 e12 d8c+8>b8
+ <c+4. d8 >(f+2
+ ^2) e4a4
+ f+4. >b8 b2
+r8 b8<c+8d8e8d8c+8>a8
+ <c+1
+ >b12^32&122r
+'strings+o1''s*v.32' p80 d8c+8 l8
+## 21
+>b2<f+2  ^4e4a4.b
+f+1      ^2^>a<dc+>
+b2..a    b2^a<dc+>
+b2.<c+>b a+2.<dc+>
+## 29
+b2<f+2     ^4e4a4.b
+f+1        r4d4c+4>a4
+b4.<f+f+2  ^rf++eagf+e
+f+1        ^1
+## 37
+p48 l8 m24,18,199
+f+4.<d4.c+4>  f+2^f+ed
+e4.f+4.a4     f+4.>b^2<
+d2^c+de       d4.>a4.<a4
+g2^f+ed       f+1
+## 45
+f+4.<d4.c+4>  f+2^f+ed
+e4.f+4.a4     f+4.>b^2<
+d2.c+d        e2a2
+b1            ^1
+;
+
+{2} 'nonpercdelay'
+'bass-o2''b*v.40' p64 l8
+[28b]aaaa
+$##
+[13g]f+ga
+[6b]<c+>a bbbbaaaa
+[5g]f+gg+ [5a]g+aa+
+[9b]<ag+ef+dec+>
+## 13
+[13g]f+ga
+[6b]<c+>a bbbbaaaa
+[5g]f+gg+ [5a]g+aa+
+[9b]rr2a4
+## 21
+[13g]f+ga
+[13f+]ef+d
+[13e]f+gf
+[16f+]
+## 29
+[13g]f+ga
+[13f+]ef+d
+[13e]f+gf
+f+4.f+4.f+4 f+1
+## 37
+[8b][8a+][8a][8g+]
+[8g][8f+][8e][8f+]
+[8b][8a+][8a][8g+]
+[8g][8a][8b]b1
+;
+
+{4} 'nonpercdelay'
+'strings''s*v.32'
+%g1 r2 p48 e2 p80 a2 p96 <d2 ^1^4 m48,-1 ^4 m48,-2 ^4 m24,-3 ^8 m32,-6 ^8 m0,0 %g0
+$##
+'dist-o1''d*v.24' p40 l8
+[
+ [5 'm'dd'o'<d>]'m'e
+ [4 f+f+'o'<f+>'m'] ee'o'<e>'m'e
+ [ dd'o'<d>'m']dd+ [3'o'<e>'m'j3ee]f
+ [3f+f+'o'j3<f+>'m'] j2 >f+<ed+>b<c+>abg+<
+]                       f+rr2e4
+## 21
+[
+ [5 'm'dd'o'<d>]'m'e
+ [5 c+c+'o'<c+>'m']c+>
+ [5 bb'o'<b>'m']b<
+ [5 c+c+'o'<c+>'m']c+
+]
+## 37
+>[[6 f+j6f+'o'<f+>'m']]<
+[3 ddj3'o'<d>'m'][3'o'<c+>'m'c+j3c+]
+[3 >bb<j3'o'b'm'][3'o'<c+>'m'c+j3c+]
+## 45
+[[6 f+j6f+'o'<f+>'m']]
+[3 ddj3'o'<d>'m'][3'o'<e >'m'e j3e ]
+ [6 f+j6f+'o'<f+>'m']
+;
+
+{5} 'nonpercdelay'
+'strings' v0
+r1 p80 ( a2's*v.32'a2a2a2 a4 m48,-1 ^4 m48,-2 ^4 m24,-3 ^8 m32,-6 ^8 m0,0
+$##
+'dist-o2''d*v.32' p48 l8
+[
+ [5 'm'gg'o'<g>]'m'a
+ [4 bb'o'<b>'m'] aa'o'<a>'m'a
+ [gg'o'<g>'m']gg+ [3'o'<a>'m'j3aa]a+
+ [3bb'o'j3<b>'m'] j2 b<ag+ef+dec+>
+]                    brr2a4
+## 21
+[
+ [5 'm'gg'o'<g>]'m'a
+ [5 f+f+'o'<f+>'m']f+
+ [5 ee'o'<e>'m']e
+ [5 f+f+'o'<f+>'m']f+
+]
+## 37
+[3 bbj3'o'<b>'m'][3'o'<a+>'m'a+j3a+]
+[3 aaj3'o'<a>'m'][3'o'<g+>'m'g+j3g+]
+[3 ggj3'o'<g>'m'][3'o'<f+>'m'f+j3f+]
+[3 eej3'o'<e>'m'][3'o'<f+>'m'f+j3f+]
+## 45
+[3 bbj3'o'<b>'m'][3'o'<a+>'m'a+j3a+]
+[3 aaj3'o'<a>'m'][3'o'<g+>'m'g+j3g+]
+[3 ggj3'o'<g>'m'][3'o'<a >'m'a j3a ]
+[6 bj6b'o'<b>'m']
+;
+
+{6}
+[8"k4"] "y4.y4.y4 q2^8"r8"y4" 'nonpercdelay'
+$##
+'strings+o1''s*v.32' p96
+r4 d32^48r6^32 d32^48&86r
+ d32^48r24^32 d32^48r6^32 e4 d8c+8>a8
+r4 <d32^48r6^32 d32^48&86r
+ d32^48r24^32 d32^48r6^32 c+4 c+8c+8>a8
+r4 b32^48r6^32 b32^48&86r
+ <c+32^48r24^32 c+32^48r6^32 d4 c+8d8e8
+r4 e32^48r6^32 f+32^48&86r
+p80 >b8<a8g+8e8f+8d8e8c+8 p96
+## 13
+r4 d32^48r6^32 d32^48&86r
+ d32^48r24^32 d32^48r6^32 e4 d8c+8>a8
+r4 <d32^48r6^32 d32^48&86r
+ d32^48r24^32 d32^48r6^32 c+4 c+8c+8>a8
+r4 b32^48r6^32 b32^48&86r
+ <c+32^48r24^32 c+32^48r6^32 d4e4 f+8
+r4 g4f+4e4
+ d32^48&182r>
+## 21
+'s*v.24' p96 l8
+d2a2    ^4g4d4.e
+f+2c+2  >a1
+b2<c+2  d2e4f+4
+g2.f+4  c+1
+## 29
+d2a2    ^4g4d4.e
+f+2c+2  >a1
+b2<c+2  d2e4f+4
+a+1     f+1
+## 37
+f+1     ^2g4f+e
+f+1     d1>
+b1      a1
+g1      b2a+2<
+## 45
+f+1     ^2g4f+e
+f+1     d1>
+b1<     c+1
+d+1     d+1
+;
+
+{7} 'nonpercdelay'
+'strings' v0
+r2 p48 ( e2's*v.32'e2e2e2e2 e4 m48,-1 ^4 m48,-2 ^4 m24,-3 ^8 m32,-6 ^8 m0,0 )
+$##
+'strings''s*v.32' p80
+r4 b32^48r6^32 b32^48&86r
+ b32^48r24^32 b32^48r6^32 <c+4 >b8a8f+8
+r4 b32^48r6^32 b32^48&86r
+ b32^48r24^32 b32^48r6^32 a4 a8a8f+8
+r4 g32^48r6^32 g32^48&86r
+ a32^48r24^32 a32^48r6^32 b4 a8b8<c+8
+r4 c+32^48r6^32 d32^48&86r
+p96 >>b8<a8g+8e8f+8d8e8c+8 p80
+## 13
+r4 b32^48r6^32 b32^48&86r
+ b32^48r24^32 b32^48r6^32 <c+4 >b8a8f+8
+r4 b32^48r6^32 b32^48&86r
+ b32^48r24^32 b32^48r6^32 a4 a8a8f+8
+r4 g32^48r6^32 g32^48&86r
+ a32^48r24^32 a32^48r6^32 b4<c+4 d8
+r4 >e4d4c+4
+ b32^48&134r 'horn''h*v.24' p48 d8c+8
+## 21
+>b2<f+2  ^4e4a4.b
+f+1      ^2^>a<dc+>
+b2..a    b2^a<dc+>
+b2.<c+>b a+2.<dc+>
+## 29
+b2<f+2     ^4e4a4.b
+f+1        r4d4c+4>a4
+b4.<f+f+2  ^rf++eagf+e
+f+1        ^1
+## 37
+'strings''s*v.32' p80 l8
+d1         ^2e4dc+
+d1         >b1
+g1         f+1
+e1         f+1<
+##45
+d1         ^2e4dc+
+d1         >b1
+g1         a1
+b1         b1
+;
+
+{3}
+l8 [8"oh"]
+l16 "s8kkk8s8 kkk8ssrs y2^8kks4"
+$##
+"!!!o" l8
+# "k4ki hkhs"
+# "kihk hks4"
+# "kiki hkhs"
+# "kihk hks4"
+# "kiki hkhs"
+# "kihk hks4"
+# "k4s4 kks4"
+# "kksk4k16k16s4"
+### 13
+# "k4ki hkhs"
+# "kihk hks4"
+# "kiki hkhs"
+# "kihk hks4"
+# "kiki hkhs"
+# "kihk hks4"
+# "k4s4 kks4"
+# "k4.k4k16k16s4"
+[   "k4ki hkhs"
+ [3 "kihk hks4" j3
+    "kiki hkhs"  
+ ]  "k4s4 kks4" j2
+    "kksk4k16k16s4"
+]   "k4.k4k16k16s4"
+## 21
+# "k4s4 hks4"
+# "kksk hks4"
+# "kjs4 hks4"
+# "kksk hks4"
+# "kjs4 hks4"
+# "kksk hks4"
+# "kjs4 hks4"
+# "kks4 ^k16k16s4"
+### 29
+# "k4s4 hks4"
+# "kksk hks4"
+# "kjs4 hks4"
+# "kksk hks4"
+# "kjs4 hks4"
+# "kksk hks4"
+# "kjhk hjkj"
+# "k4k4 kk16k16s4"
+[    "k4s4 hks4"
+ [3  "kksk hks4" j3
+     "kjs4 hks4"
+ ]j2 "khs4 hks4"
+     "kks4 ^k16k16s4"
+]    "kjhk hjkj"
+     "k4k4 kk16k16s4"
+## 37
+[    "k4s4 hks4"
+ [3  "kksk hks4" j3
+     "kjs4 hks4"
+ ]j2 "khs4 hks4"
+     "kks4 ^k16k16s4"
+]    "kjhk hjkj"
+     "k4s4 kk16k16s4"
+;
+
+{8} %e1
+r1r1r1r1
+$##
+"!!!o" l8
+"y4h4 ^i4i"
+"h4.i ^ihi"
+"h4h4 ^i4i"
+"h4.i ^ihi"
+"h4h4 ^i4i"
+"h4.i ^ihi"
+"^4y4 ^4y4"
+"^4y4 ^4y4"
+## 13
+"y4h4 ^i4i"
+"h4.i ^ihi"
+"h4h4 ^i4i"
+"h4.i ^ihi"
+"h4h4 ^i4i"
+"h4.i ^ihi"
+"^4y4 ^4y4"
+"y2.y4"
+## 21, 37
+[
+"y4hj ^jhj"
+"hjhj ^jhj"
+"h4hj ^jhj"
+"hjhj ^jhj"
+"h4hj ^jhj"
+"hjhj ^jhj"
+"h4hj ^jhj"
+"y2y2"
+## 29, 45
+"y4hj ^jhj"
+"hjhj ^jhj"
+"h4hj ^jhj"
+"hjhj ^jhj"
+"h4hj ^jhj"
+"hjhj ^jhj"
+"h4.j4.h4"
+"y2.y4"
+]
+;
+

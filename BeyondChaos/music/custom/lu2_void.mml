@@ -1,0 +1,185 @@
+#TITLE The Island in the Void
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+########## ------------------
+#SHORTNAME LU2 Void Island
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x21 0x66 strings (fast)
+#WAVE 0x23 0x28 t.bells
+#WAVE 0x24 0x5A timpani
+#WAVE 0x28 0x1F snare
+#WAVE 0x2C 0x2D crash
+
+#def init= t120 %v30 %b0,100 %f0,0 %x248
+
+#def strings= |0 o5 m %y0%s6%r1
+#def faststr= |1 o5 m %y0%s6%r1
+#def bells=   |3 o4 m %r9
+#def timpani= |4 o7 m %r17
+
+#def s= v279
+#def b= v225
+#def t= v250
+
+#def snareVol= v250
+#def crashVol= v313
+
+#drum "q"=5d |8 'snareVol*v0.17' p64
+#drum "r"=5d |8 'snareVol*v0.24' p64
+#drum "s"=5d |8 'snareVol*v0.31' p64
+#drum "y"=5g |C 'crashVol*v0.31' p80 %r17
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init' %e1
+r4
+##
+'strings+o1' p64 's*v.32' l8
+r4d+c+d+4f+4  f2d+4c+4
+d+c+d+2.      ^1
+'bells-o1' p72 'b*v.36'
+g+1^1 g+1^1
+$##
+[[
+  'strings+o1' p64 's*v.32' l16
+  d+2 'faststr+o1' g+rc+4 'strings+o1' f+1fe d+1^1
+ ]
+ j2
+ e4.ef+g+2  ^2f+4e4
+ d+2g+2     ^1
+ e4.ef+g+2  ^4 l8 g+f+bag+f+   g+1^1
+] l16
+ e4.ef+g+2  ^2f+4e4
+ d+2>g+2    ^1<
+ e4.ef+g+2  ^4 l8 g+f+bag+f+   g+1^1
+##
+l16
+d+2.c+4  f+2c+2
+d+1      >g+2.g+a+b<c+
+d+2.c+4  f+2c+2
+>a+1     a+2b4<c+4
+;
+
+{2}
+%e1 r4
+##
+'strings' p64 's*v.32' l8
+r4g+f+g+4b4  a+2g+4f+4
+g+f+g+2.     ^1
+'strings-o1' p80 's*v.24' l8
+[4 d+r4d+4d+c+e]
+$##
+[[
+  'strings' p64 's*v.32' l16
+  g+2 'faststr+o1' c+r>f+4 'strings' b1a+a g+1^1
+ ]
+ c+2d+2  e2d+4c+4
+ >b2<d+2 ^1
+ c+2d+2  e2.f+4   g+1 j2 ^1
+] l16 'faststr-o1' g+a+b<c+> a+b<c+d+> b<c+d+e c+d+ef+
+##
+'strings' l4
+a2.a   <c+2>a2
+g+1    d+1
+a2.a   <c+2>a2
+d+1    d+2ef+
+;
+
+{3}
+%e1 r4
+##
+'faststr-o1' p48 's*v.32' l8
+d+1^1 ^4d+c+d+4f+4 f2d+4c+4>
+[4 g+r4g+4g+f+a]
+$##
+[
+ [8 g+r4g+4g+f+a]
+ [  ar4a4ag+b ar4a4ag+f+
+ [2 g+r4g+4g+f+a]]
+]
+##
+a1    a2f+2
+g+1   ^1
+a1    a2f+2
+d+1   d+2e4f+4
+;
+
+{4}
+%e1
+'timpani-o3' p40 l24
+'t*v.20' d+d+ 't*v.31' d+ 't*v.36' d+ 't*v.41' d+ 't*v.50' d+
+##
+g+2.d+4 g+2.d+4 g+2d+2 g+2d+4 d+d+d+d+d+d+
+[4 g+4 d+4 g+4 e4]
+$##
+[8 g+4 d+4 g+4 e4]
+[[a4e4a4e4][g+4 d+4 g+4 e4]]
+[8 g+4 d+4 g+4 e4]
+[a4e4a4e4][g+4 d+4 g+4 e4]
+[a4e4a4e4] g+4 d+4 g+4 e4
+           g+4 d+4 g+4 eeeeee
+##
+l16
+a2.aaaa       a2f+2
+g+2.g+g+g+g+  g+2.g+g+g+g+
+a2.aaaa       a2f+2
+<d+2.d+d+d+d+ d+2.>g+g+g+g+
+;
+
+{5}
+%e1 r4 l16
+[3 "s2.ssss" ] "s1"
+$
+":q: s4.sq8.srsrsq"
+;
+
+{6}
+%e1 r4
+##
+'strings-o1' p80 's*v.24' l8
+(g+2g+2g+2g+2 g+4)g+f+g+4b4 a+2g+4f+4
+"!!!o y1^1 y1^1"
+$##
+'strings-o1' p80 's*v.24' l8
+[
+ [8 d+r4d+4d+c+e]
+ [  er4e4ed+f+
+    er4e4ed+c+
+ [2 d+r4d+4d+c+e]]
+]
+##
+e1  e2c+2
+d+1 d+1
+e1  e2c+2
+>a+1 a+2b4<c+4
+;
+
+{7}
+%e1 r4
+##
+'bells' p72 'b*v.36' l2
+g+1^1 g+d+g+d+
+r1r1r1r1>
+$##
+[
+ [4 g+1^1]
+ [2 a1^1 g+1^1]
+]
+##
+a1.f+2 g+1^1 a1.f+2 <d1.e4f+4>
+;
+
+{8}
+%e1 r4
+"y1 y1 y2y2y2 y4y4"
+r1r1r1r1
+$##
+[16 "y1^1"]
+##
+"y1 y2y2 y1 y1 y1 y2y2 y1 y2y4y4"
+;

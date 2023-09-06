@@ -357,7 +357,10 @@ def relpath(in_path):
         if "_MEI" in os.path.commonprefix([p, mei]):
             r = os.path.relpath(p, start=mei)
             return f"MEI::{r}"
-    return os.path.relpath(p)
+    try:
+        return os.path.relpath(p)
+    except ValueError:
+        return p
         
 def from_rom_address(addr):
     # NOTE ROM offset 7E0000-7E7FFF and 7F000-7F7FFF are inaccessible.
@@ -380,7 +383,7 @@ def byte_insert(data, position, newdata, maxlength=0, end=0):
         data += (b"\x00" * (position - len(data)))
     if end:
         maxlength = end - position + 1
-    if maxlength and len(data) > maxlength:
+    if maxlength and len(newdata) > maxlength:
         newdata = newdata[:maxlength]
     return data[:position] + newdata + data[position + len(newdata):]
 
@@ -597,8 +600,8 @@ def insertmfvi(inrom, argparam=None, virt_sample_list=None, virt_seq_list=None, 
     else:
         initialize()
         args = argparse.Namespace()
-        args.dump_brr = False
         args.quiet = quiet
+        args.dump_brr = False
         args.mmlfiles = None
         args.binfiles = None
         args.listfiles = None

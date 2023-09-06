@@ -1,0 +1,289 @@
+#TITLE Theme of Daos
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#VARIANT ~_
+#VARIANT ~` tier1
+#VARIANT ?` tier2
+#VARIANT ?_ tier3
+
+#WAVE 0x20  0xB0  strings
+#WAVE 0x21  0xD5  ostrings
+#WAVE 0x22  0x00  horn
+#WAVE 0x23  0x28  t.bells
+#WAVE 0x24  0x5A  timpani
+#WAVE 0x28  0x1B  orchestral snare drum
+#WAVE 0x2C  0x2D  clash cymbal
+
+#def init= t128 %v50 %b0,100 %f0,0 %x248
+
+#def strings=  |0  o5  m64,24,193 %a14%r1
+#def ostrings= |1  o3  m %y0%s5
+#def horn=     |1  o3  m48,18,215 %a14%r1
+#def bells=    |3  o4  m 'bsus'
+#def timpani=  |4  o7  m %r17
+
+#def s= v125
+#def o= v175
+#def h= v175
+#def b= v200
+#def t= v200
+
+#def bsus= %r11
+#def brel= %r24
+
+#def snareVol= v76
+#def cymbVol=  v76
+#def comboVol= v112
+
+#drum "s"=5d+|8 'snareVol*v1.00' p68 
+#drum "y"=5g |C 'cymbVol*v1.00'  p80 %r17
+#drum "c"=5g |C 'comboVol*v1.00' p74 %r17
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+$4441
+'init' %e1
+'strings-o1''s*v.32' p48 l16
+g+4.g+16g+16 g+4.g+16g+16    p96 's*v.24'
+<f+4.f+16f+16 b4.b16b16
+<e4.e16e16 a4.a16a16
+<d1 l8
+[3 d+rd+r4.] d+rd+1^1
+$## 10 / 26 / 42
+[3
+'strings-o1''s*v.32' p48 l16
+[4 brbr8.brr2  r8br8.<d+rc+4>a+4]
+## 18 / 34
+j3,150
+'s*v.40' p64 l8 <
+<d+1> g+1
+<d+2.c+d+ g+4.d+4.g+4
+g1^1 d1^1
+]$150
+## 50
+'s*v.40' p64 l8 < [
+e2f+4g+4    g4d+4a+4g4
+b2^a+g+d+   >b1<
+d+2c+4f+4   d+2c+4f+4
+j2 d+1^1 ] g+1^1
+## 66
+'s*v.32' p48 l8 <
+[d+rd+r4. d+rd+r4.
+erer4. erer4.]
+d+1^1
+`m:4441`
+;
+
+{2}
+$4442
+%e1
+'strings''s*v.32' p80 l16
+r2 c+4.c+16c+16
+c+4.c+16c+16 f+4.f+16f+16
+b4.b16b16 <e4.e16e16
+a1 l8
+[3 g+rg+r4.] g+rg+1^1
+$## 10 / 26 / 42
+[3
+'strings''s*v.32' p80 l16
+[4 d+rd+r8.d+rr2  r8d+r8.f+rf4c+4]
+## 18 / 34
+j3,250
+[2 d+rd+r8.d+rr2  r8d+r8.f+rf4c+4]
+[2 drdr8.drr2 r8dr8.fre4c4]
+]$250
+## 50
+## high notes are coming out a bit jank so i'm 
+## attenuating 1 volume point per semitone above G+6
+'horn''h*v.32' p40 l4
+g+2a+b    a+g<c+>a+
+<d+2f+2   g+2'h*v.29'b2's*v.32'
+g+2f+'h*v.29'b'h*v.32'  g+2f+'h*v.29'b'h*v.32'
+g+1 l8 >> g+a+ba+ b<c+d+f+ l4
+g+2a+b    a+g<c+>a+
+<d+2f+2   g+2'h*v.29'b2
+l8 <['h*v.25'd+2.'h*v.27'c+'h*v.22'f+]
+'h*v.20'g+1^1
+## 66
+'h*v.24' l8
+[d+rd+r4. d+rd+r4.
+erer4. erer4.]
+d+1^1
+`m:4442`
+;
+
+{3}
+$4443
+%e1
+'ostrings-o2''o*v.48' p64
+d+1^1^1^1 l8 [3d+rd+r4.] d+rd+1^1
+$## 10 / 26 / 42
+[3
+'ostrings-o2''o*v.48' p64 l16
+[8 g+ra+rbrg+r <c+r>bra+rf+r]
+## 18 / 34
+j3,350
+[4 g+ra+rbrg+r <c+r>bra+rf+r]
+[4 grara+rgr <cr>a+rarfr]
+]$350
+## 50
+l2
+#e1 d+1  g+f+ed+
+#e1 f+1  g+1 g+f+
+#e1 d+1  g+f+ed+
+#e1 f+1  g+1^1
+[e1 d+1  g+f+ed+
+ e1 f+1  g+1 j2 g+f+] ^1
+## 66
+l8
+[d+rd+r4. d+rd+r4.
+erer4. erer4.]
+d+1^1
+`:4443`
+;
+
+{4}
+$4444
+%e1
+'timpani-o3''t*v.50' p64 l16
+[4 d2..dd] [3 <d+4 d+8> d+16d+16 d+8d+8 ] <d+8r8d+2
+r1> l24 't*v.25'ddddd't*v.30'dd't*v.40'dd't*v.50'ddd
+$## 10 / 26
+[
+'timpani-o3''t*v.50' p64 l16
+#[4 g2g2 ^4g4g8g8g8gg]
+[6 g2g2 ^4g4g8g8g8gg]
+## 18 / 34
+#[2 g2g2 ^4g4g8g8g8gg]
+[2 f+2f+2 ^4f+4f+8f+8f+8f+f+]
+]
+## 42
+[4 g2g2 ^4g4j4g8g8g8gg]
+l24 't*v.25'gggg 't*v.30'gg 't*v.40'gg 't*v.45'gg 't*v.50'gg
+## 50
+"!!!o" l16 [
+["c2.ssss"]
+[4"c4ssss"]
+"c4.ss" [13"s8ss"] "ssss" ]
+## 66
+'timpani-o3''t*v.50' p64 l16
+[<d+4d+8>d+d+d+8d+8][<e4e8>eee8e8]
+[6a8d8][6a+8d+8]
+<d+1.>l24 't*v.25'ddddd't*v.30'dd't*v.40'dd't*v.50'ddd
+`:4444`
+;
+
+{5}
+$4445
+%e1 l16
+[3 "c4.sss4.ss"]
+"c2.ssss"
+[3 "!o c4c4.s8"] "c4c2" ^1.
+$## 10 / 26 / 42
+[3
+'ostrings-o1''o*v.24' p40
+[32 d+12^48r48^8]
+## 18 / 34
+j3,550
+[16 d+12^48r48^8]
+[16 d12^48r48^8]
+]$550
+## 50
+'strings-o2''o*v.48' p48 l2 %s4
+#(bb)(a+a+)  <d+c+>ba+
+#(bb)<(c+c+) (d+d+d+)c+>
+#(bb)(a+a+)  <d+c+>ba+
+#(bb)<(c+c+) (d+d+d+d+)
+[(bb)(a+a+)  <d+c+>ba+
+ (bb)<(c+c+) (d+d+d+j2)c+>]d+)
+## 66
+'strings''s*v.32' p80 l8
+[g+rg+r4. g+rg+r4.
+arar4. arar4. ]
+<g+1^1
+`m:4445`
+;
+
+{6}
+$4446
+'ostrings-o2''o*v.32' p40 %e1
+([8a+2]) l8 [3a+ra+r4.] a+r([4a+2])
+$## 10 / 26 / 42
+[3
+'bells''b*v.30' p96
+[4 g+1^1]
+## 18 / 34
+j3,650
+'strings-o1''s*v.32' p48 l16
+[2 brbr8.brr2  r8br8.<d+rc+4>a+4]
+[2 a+ra+r8.a+rr2 r8a+r8.<drc4>a4]
+]$650
+## 50
+'timpani-o2''t*v.50' p64 l16
+d+2.d+4 d2.d4>
+g2f2 d+2d2
+d+2.d+4 f2.f4
+g8g4g8 g8g4g8  g8g4g8
+l24 't*v.25'gg 't*v.30'gg 't*v.40'gg 't*v.45'gg 't*v.50'gggg
+'t*v.40' d+2.d+4 <d2.d4>
+g2f2 f2d+2
+l8 d+d+4d+ d+d+4d+ ff4f ff4f [4gg4g]
+## 66
+"!!!o" l4
+["y4y2y4  y2y4y4  ^4y4y2"] "y1^1"
+`:4446`
+;
+
+{7}
+$4447
+'strings-o1''s*v.32' p48 %e1 l16 
+r1
+g+4.g+g+ <c+4.c+c+
+f+4.f+f+ b4.bb
+<e1 l8
+[3 d+rd+r4.] d+r([4d+2])
+$## 10
+&180[8r1]
+'strings+o1''s*v.40' p64 c+32d32
+## 18 / 34
+[
+'bells''b*v.30' p96
+g+1^1 g+1^1
+g1^1 g1^1
+## 26 / 42
+[8r1]
+]
+## 50
+[e1 d+1  d+2f+2g+2b2
+g+1 g+1 g+1^1 ]
+## 66
+'b*v.40' p64 l8
+[ [g+'brel'^'bsus'g+'brel'^4.'bsus'] [a'brel'^'bsus'a'brel'^4.'bsus'] ]
+g+1^1
+`:4447`
+;
+
+{8}
+$4448
+'bells''b*v.40' p64 %e1 l8
+[4g+1] [3 g+'brel'^'bsus'g+'brel'^4.'bsus'] g+'brel'^'bsus'g+1^1
+$## 10
+"!!!o"
+[10"y1^1^1^1"]
+## 50
+'horn-o1''h*v.32' p80 [
+e2f+4g+4    g4d+4a+4g4
+b2^a+g+d+   >b1<
+d+2c+4f+4   d+2c+4f+4
+j2 d+1^1 ] g+1^1
+## 66
+'ostrings-o2''o*v.32' p40 l8
+[a+ra+r4. a+ra+r4.
+ brbr4. brbr4.]
+(a+2a+2a+2a+2)
+`:4448`
+;

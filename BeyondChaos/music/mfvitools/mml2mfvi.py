@@ -39,7 +39,7 @@ def byte_insert(data, position, newdata, maxlength=0, end=0):
         data = data + b"\x00"
     if end:
         maxlength = end - position + 1
-    if maxlength and len(data) > maxlength:
+    if maxlength and len(newdata) > maxlength:
         newdata = newdata[:maxlength]
     return data[:position] + newdata + data[position+len(newdata):]
 
@@ -64,6 +64,12 @@ def mlog(msg):
     
 class Drum:
     def __init__(self, st):
+        # hack - strip common variant markers from after delimiter before processing
+        a, b = st.split('=')
+        for c in ["~", "/", "`", "\?", "_"]:
+            b = re.sub(c, '', b)
+        st = "=".join([a, b])
+    
         s = re.findall('(.)(.[+-]?)\\1=\s*([0-9]?)([a-gr^])([+-]?)\s*(.*)', st)
         if s: s = s[0]
         mlog("{} -> {}".format(st, s))
@@ -73,7 +79,7 @@ class Drum:
             self.octave = int(s[2]) if s[2] else 5
             self.note = s[3] + s[4]
             s5 = re.sub('\s*', '', s[5]).lower()
-            params = re.findall("\|[0-9a-f]|@0x[0-9a-f][0-9a-f]|%?[^|0-9][0-9,]*", s5)
+            params = re.findall("\|[0-9a-f]|@0x[0-9a-f][0-9a-f]|%?[^|0-9][0-9,\-]*", s5)
             par = {}
             for p in params:
                 if p[0] == "@" and len(p) >= 5:
@@ -83,7 +89,7 @@ class Drum:
                 if p[0] == '|' and len(p) >= 2:
                     par['@0'] = str(int(p[1], 16) + 32)
                 else:
-                    pre = re.sub('[0-9]+', '0', p)
+                    pre = re.sub('[0-9\-]+', '0', p)
                     suf = re.sub('%?[^0-9]', '', p, 1)
                     if pre in equiv_tbl:
                         pre = equiv_tbl[pre]
@@ -530,8 +536,8 @@ def mml_to_akao_main(mml, ignore='', fileid='mml'):
                 except Exception:
                     c = "\\" + c
                     s = re.sub(re.escape(c)+".*?"+re.escape(c), "", s)
-            for c in ["~", "/", "`", "\?", "_"]:
-                s = re.sub(c, '', s)
+            #for c in ["~", "/", "`", "\?", "_"]:
+            #    s = re.sub(c, '', s)
             d = Drum(s.strip())
             if d.delim:
                 if d.delim not in drums: drums[d.delim] = {}

@@ -1,0 +1,182 @@
+#TITLE Shopping
+#ALBUM Lufia and the Fortress of Doom
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#WAVE 0x20 0x23 marimba
+#WAVE 0x21 0xB3 eorgan
+#WAVE 0x22 0x34 guitar
+#WAVE 0x23 0x56 slap bass
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x4B tom
+#WAVE 0x2B 0x3B hihat
+#WAVE 0x2C 0x2D crash cymbal
+
+#def init= t120 %v50 %b0,50 %f0,0 %x224
+
+#def marimba= |0 o5 %e1      m
+#def organ=   |1 o5 %e1      m24,18,195
+#def guitar=  |2 o5 %e1 %r13 m
+#def bass=    |3 o7 %e1 %r10 m
+
+#def m= v100
+#def o= v50
+#def g= v250
+#def gg=v375
+#def b= v100
+
+#def kickVol= v100
+#def snareVol= v100
+#def tomVol= v64
+#def hihatVol= v64
+#def crashVol= v80
+
+#drum "j"=5a |8 p64 %e0 'kickVol*v0.94'
+#drum "k"=5a |8 p64 %e0 'kickVol*v1.08'
+#drum "s"=5a |9 p64 %e0 'snareVol*v1.08'
+#drum "t"=5a |9 p64 %e0 'snareVol*v0.94' %y2%s3
+#drum "u"=5a |9 p64 %e0 'snareVol*v0.80' %y3%s3
+#drum "v"=5a |9 p64 %e0 'snareVol*v0.66' %y4%s3
+#drum "w"=5a |9 p64 %e0 'snareVol*v0.53' %y5%s3
+#drum "h"=5a |B p48 %e0 'hihatVol*v1.08' %s0  k0
+#drum "i"=5a |B p48 %e0 'hihatVol*v0.94' %s0  k0
+#drum "e"=5e |A p92 %e0 'tomVol*v1.08' %r21
+#drum "c"=5c |A p72 %e0 'tomVol*v1.08' %r21
+#drum "a"=4a |A p52 %e0 'tomVol*v1.08' %r21
+#drum "f"=4f |A p32 %e0 'tomVol*v1.08' %r21
+#drum "y-"=5a+|C p96 %e1 'crashVol*v1.08' %y1%s4%r19  k0
+#drum "y"=5a+|C p96 %e1 'crashVol*v1.18' %y1%s4%r19  k0
+#drum "x"=5a |C p32 %e1 'crashVol*v1.18' %y1%s4%r19  k9
+
+#drum "r"=5r
+
+{1}
+&1r
+'init'
+'marimba+o2''m*v.60'p64 l16 $1
+gfed fedc edc>b< dc>ba>
+## gfed fedc edc>b< d>bag>
+$##
+e32^48r24^32g32^48r24^32 <d8 c8. >e16 g8 <d32^48r24^32c32^48r24^32
+d8.e8. c2 c8
+f8e8d8c8>b8a8g8f8
+e4f4 f+8. g4 ^16
+e32^48r24^32g32^48r24^32 <d8 c8. >e16 g8 <d32^48r24^32c32^48r24^32
+d8.e8. c2 c8
+f8e8d8c8>b8a8b8<d8
+c12^32&26r>g12^32&26r c2
+##
+<f8e8d8 c16 f8 f16 e8d8c8
+e8r8d8r8c8r8>g8r8
+<d8c8>b8 g16 <d8 d16 c8>b8g8
+<e8r8f8r8f+8r8g8r8
+f8e8d8 c16 f8 f16 e8d8c8
+g8r8f8r8e8r8c8r8
+f+8e8d8 c16 f+8 f+16 d8e8f+8
+g2 g16f16e16d16c16>b16a16g+16
+;
+
+{5}
+&1r
+'organ+o2''o*v.60'p64 l16
+;1
+
+{2}
+&1r
+l16"y2kee8c8af"
+$##
+"!!!o"
+"k8s8k8s8 ^ks8j8s8"
+[6 "k8s8j8s8 ^ks8j8s8"]
+"k4k4kee8c8aa"
+##
+"k8k8k8hk ^khkk8s8"
+"k8k8k8hk ^kh8k8s8"
+"k8k8k8hk ^kh8k8s8"
+"k8s8k8sr rkskr8s8"
+[3 "k8k8k8hk ^khkk8s8" ]
+l32 %g1 "sttu uvwv wwvw wvwv" %g0 l16 "ks8ks8ss"
+;
+
+{8}
+&193r
+$##
+l8
+"y4" [15 "!o hi"]
+"y4" [11 "!o hi"]
+"y4x4y2"
+##
+"y-2..h8"
+"r8h4r4r4h8"
+"r8h4r4r4h8"
+"^8y4x4y4x8"
+"y2..h8"
+"r8h4r4r4h8"
+"r8h4r4r4h8"
+"y1"
+;
+
+{3}
+&1r
+'bass-o2''b*v.48'p64
+g1
+$##
+'b*v.72' p64 l8
+[
+  [4 c<c>]
+  [4 >f<f]
+  [3 >g<g]ab j2
+  c<c>d<d>d+<d+16>e.<e>
+] c4>g4<ccde
+##
+f32^48r24^32f32^48r24^32 f8 f16 f32^48r24^32 f16 f8f8f8
+e32^48r24^32e32^48r24^32 e8 e16 e32^48r24^32 e16 e8e8e8
+d32^48r24^32d32^48r24^32 d8 d16 d32^48r24^32 d16 d8d8d8
+c32^48r24^32 <c8>d8 <d16 >d+32^48r24^32 d+16 <d+8>e8<e8
+>f32^48r24^32f32^48r24^32 f8 f16 f32^48r24^32 f16 f8f8f8
+e32^48r24^32e32^48r24^32 e8 e16 e32^48r24^32 e16 e8e8e8
+d32^48r24^32d32^48r24^32 d8 d16 d32^48r24^32 d16 d8e8f+8
+g2 g4>g4<;
+
+{4}
+&2r
+'guitar''g*v.32'p64 $4
+b1
+$##
+l32 [
+e48^r24^ e48^r24^ e8. e48^r24^ e48^r24^ e16 e48^r24^ e48^r24^
+f48^r24^ f48^r24^ f8. f48^r24^ f48^r24^ f16 f48^r24^ f48^r24^
+d48^r24^ d48^r24^ d8. d48^r24^ d48^r24^ d16 d48^r24^ d48^r24^ j2
+r8 e48^ r6^ f48^r24^ f+48^r24^ r16 g16^4 ]
+e2^8 e8f8g8
+##
+[3 a48^r24^ a48^r24^ a8. a48^r24^ a48^r24^ a16 b48^r24^ a48^r24^ m-2] %k0
+r8 e48^ r6^ f48^r24^ f+48^r24^ r16 g16^4
+[2 a48^r24^ a48^r24^ a8. a48^r24^ a48^r24^ a16 b48^r24^ a48^r24^ m-2] %k0
+f+48^r24^ f+48^r24^ f+8. f+48^r24^ f+48^r24^ f+16 g48^r24^ a48^r24^
+b2^16 g48^r24^ r16 a8 g48^r24^
+;
+
+{6}
+'guitar''gg*v.32'p64
+&1r d1
+$##
+l32 [
+c48^r24^ c48^r24^ c8. c48^r24^ c48^r24^ c16 c48^r24^ c48^r24^
+d48^r24^ d48^r24^ d8. d48^r24^ d48^r24^ d16 d48^r24^ d48^r24^
+>b48^r24^ b48^r24^ b8. b48^r24^ b48^r24^ b16 b48^r24^ b48^r24^< j2
+r8 c48^ r6^ d48^r24^ d+48^r24^ r16 e16^4 ]
+c2^8 c8d8e8
+##
+[
+f48^r24^ f48^r24^ f8. f48^r24^ f48^r24^ f16 g48^r24^ f48^r24^
+e48^r24^ e48^r24^ e8. e48^r24^ e48^r24^ e16 f48^r24^ e48^r24^
+d48^r24^ d48^r24^ d8. d48^r24^ d48^r24^ d16 e48^r24^ j2 d48^r24^
+r8 c48^ r6^ d48^r24^ d+48^r24^ r16 e16^4 ]              f+48^r24^
+g2^16 e48^r24^ r16 f8 e48^r24^
+;
+
+{7}
+'guitar-o1''g*v.32'p64
+;4

@@ -1,0 +1,197 @@
+#TITLE Ending Credits
+#ALBUM Super Mario Bros. 3
+#COMPOSER Koji Kondo
+#ARRANGED emberling
+
+#WAVE 0x20 0x62 strings
+#WAVE 0x21 0xA8 harmonica
+#WAVE 0x22 0x50 bass
+#WAVE 0x23 0x02 piano
+#WAVE 0x24 0x13 dulcimer
+#WAVE 0x26 0x24
+#WAVE 0x27 0x8C wood block
+#WAVE 0x28 0x0A kick
+#WAVE 0x2A 0x4E timbale
+#WAVE 0x2B 0x1E snare
+#WAVE 0x2C 0x7A conga
+#WAVE 0x2F 0x3A hihat
+
+#def init= t68 %v50 %b0,70 %f0,0 %x255
+
+#def strings= |0 o4 m12,18,207 %e1 %a10%y6%s3%r10
+#def harmo= |1 o5 m12,18,223 %a9%y2%s3%r10
+#def bass= |2 o6 m %e0 %a14%s7%r14
+#def basss= |2 o5 m %e0 %a9%s7%r14
+#def piano= |3 o5 m %e1 %y0%s3%r21
+#def dulci= |4 o4 m %e1
+#def wood= |7 o5 m %e0 %k4
+#def woood= |6 o6 m %e0 %a12%y7%s0
+
+#def s= v175
+#def h= v140
+#def b= v93
+#def p= v175
+#def d= v175
+#def w= v93
+#def o= v47
+
+#def bs= v56
+#def ss= v105
+
+#cdef ~ %r24^16%r10
+
+#def snareVol= v70
+#def timbaleVol= v105
+#def congaVol= v93
+#def kickVol= v56
+#def hihatVol= v56
+
+#drum "k"=5a |8 p107 'kickVol*v1.06'
+#drum "s"=5a |B p107 'snareVol*v.68'
+#drum "g"=6a+ |C p107 'congaVol*v.869'
+#drum "b"=6a+ |C p107 'congaVol*v1.06'
+#drum "c"=6d+ |C p107 'congaVol*v1.06'
+#drum "d"=5a+ |C p107 'congaVol*v1.06'
+#drum "h"=5b |F p21 'hihatVol*v.775' %y7%s3%r27
+#drum "t"=5g |A p107 'timbaleVol*v.682' %y1%s2%r10 ##track4 timbale
+#drum "v"=5d |A p107 'timbaleVol*v.529' %y1%s2%r10 ##track4 timbale
+#drum "u"=5g |A p107 'timbaleVol*v.775' %y1%s2%r10 ##track8 timbale
+#drum "w"=5d |A p107 'timbaleVol*v.498' %y1%s2%r10 ##track8 timbale
+
+
+{1}
+'init'
+## piano - from track 1
+'piano''p*v.634'p64 l16
+gr<gf8d>bagrgr24
+## timbale - from track 4
+%e0 "!!!o t48^8 v24v12"
+$## 11 piano - from track 1
+'piano''p*v.634'p64 l16
+[ r8<efedc>b< d8d>a^4
+  r8b<c>bagf e8eg^4 ]
+## 15
+[3 'p*v.634'r8fg 'p*v.387'<fg+gf e8.j3c^4> ] g^4>
+   'p*v.634'r8ag+'p*v.387'ab<c>a <d^4>r
+'harmo''h*v.387'g8
+## 19 harmonica
+[ 'h*v.521'
+<e4 rdef g4 ^.r32a8
+g4 ^32r32fef c4 ^.r32g8
+f4 ^ede c4 >b12<c12e12
+d4 ^c>b<c j2 'h*v.427' d4 ^.r32>g8 ]
+'dulci+o1''d*v.521' grgr24
+%e0 "!!!o t48^8 v24v12"
+;
+
+{2}
+## piano harmony - from track 3
+'piano-o1''p*v.634'p39 l16
+br<ba8fdc>brbr
+## timbale - from track 8
+%e0 "!!!o u8^48 w24 u16"
+$## 11 piano harmony - from track 3
+'piano''p*v.634'p36 l16
+[ r8<cdc>bag a8af^4
+  r8gagfed c8ce^4 ]
+## 15 strings - from track 6
+'strings+o2''s*v.436'p98 l16
+[3 r8fgg+<c>a+g+ g8.j3e^4 ] <c^4>
+   r8ag+ab<c>a <d4.r8>
+## 19
+'s*v.458'p39
+[ c4..~> b4..~ a+4..~    a4..~
+  g+4..~ g4..~ f+4..~ j2 g4..~< ]
+'dulci+o1''d*v.458' cr>br
+%e0 "!!!o u8^48 w24 u16"
+;
+
+{3}
+## bass strings - from track 2
+'basss-o2''bs*v1.02'p64 l16
+gr<gf8d>bagrgrr4
+$## 11 bass - from track 2
+'bass-o2''b*v1.02'p64 l16
+[ c8re.r32eg.r32
+  f8ra.r32a<c.r32>
+  g8rb.r32b<d.r32>
+  c8re.r32eg.r32 ]
+## 15
+[ f8fg+rg+<c8>   c8cereg8 ]
+  f8fg+rg+<c8>   e8egrg<c8>
+  d+8d+grg<c8>   d8dgrgg8
+## 19
+[ <c8>g<c8>g<c.r32> b8gb8gb.r32
+  a+8ga+8ga+.r32    a8fa8fa.r32
+  g+8fg+8fg+.r32    g8eg8eg.r32
+  f+8df+8df+.r32   g8dgrdg8 ]
+;
+
+{4}
+## congas - from track 4
+l16 "s g32g32gg8ggg c8c8" r4
+$## 11 percs - from track 4
+[16 "!!!o kb32b32bk kcdk"]
+## 19
+[15 "!!!o kb32b32bk kcdk"]
+"c8c8" r4
+;
+
+{5}
+## hihats - from track 8
+l16 "hh32h32hhhhhh" r2
+$## 11 hihats - from track 8
+%e0 [8 "!!!o hh32h32hh hhhh"]
+## 15 piano harmony - from track 3
+'piano''p*v.634'p36 l16
+[3 r8cdg+<c>a+g+ g8.j3e^4 ] <c^4>
+r8f+f+f+f+f+f+f4.>b8
+## 19 strings harmony - from track 7
+'strings+o1''s*v.458'p89
+[ e4..~ d4..~ d4..~ c4..~
+  f4..~ e4..~ d4..~ j2 d4..~ ] frfrr4
+;
+
+{6}
+## bass strings - from track 2
+'strings-o2''ss*v1.02'p64 l16
+gr<gf8d>bagrgrr4
+$
+r1r1r1r1 l16 %e0
+## 15 hihats - from track 8
+[8 "!!!o hh32h32hh hhhh"]
+## 19
+[15 "!!!o hh32h32hh hhhh"] "hh32h32hh" r4
+;
+
+{7}
+r1
+$
+[8r1]
+## 19 wood block - from track 3
+'wood''w*v.634'p39 l16
+[ c<g32e32c>g ^>b<cd
+  d<f32d32>bg ^rf8
+  e<f32d32>a+g ^dcd
+  a<f32c32>af  r8d8
+  c<f32c32>g+f ^c>b<c
+  g<e32c32>ge >g12a12<c12
+  >a<<f+32c32>af+  >rag+a j2
+  b<<f32d32>bg  r8g8 ]   brbrr4
+;
+
+{8}
+r1
+$
+[8r1]
+## 19 wood block - from track 3
+'woood''o*v.634'p39 l16
+[ c<g32e32c>g ^>b<cd
+  d<f32d32>bg ^rf8
+  e<f32d32>a+g ^dcd
+  a<f32c32>af  r8d8
+  c<f32c32>g+f ^c>b<c
+  g<e32c32>ge >g12a12<c12
+  >a<<f+32c32>af+  >rag+a j2
+  b<<f32d32>bg  r8g8 ]   brbrr4
+;

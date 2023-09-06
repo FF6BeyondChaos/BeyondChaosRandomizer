@@ -1,0 +1,510 @@
+#TITLE Awakening
+#ALBUM Xenogears
+#COMPOSER Yasunori Mitsuda
+#ARRANGED emberling
+
+#WAVE 0x20 0x66 strings
+#WAVE 0x21 0x63 oct.strings
+#WAVE 0x22 0x82 trumpet
+#WAVE 0x23 0x80 oct.trumpet
+#WAVE 0x24 0xB7 vox
+#WAVE 0x25 0xC6 sweep
+#WAVE 0x26 0x29 t.bells
+#WAVE 0x27 0x5A timpani
+#WAVE 0x28 0x1F snare
+#WAVE 0x29 0x6C tambourine
+#WAVE 0x2A 0x9D triangle
+#WAVE 0x2B 0x9E triangle
+#WAVE 0x2C 0x2C clash cymbal
+#WAVE 0x2F 0x6A shaker
+
+#def init= t162 %v40 %b0,85 %f0,0
+
+#def strings=  |0 o5
+#def ostrings= |1 o5
+#def trumpet=  |2 o5
+#def otrumpet= |3 o5
+#def vox=      |4 o4 %a10
+#def sweep=    |5 o5
+#def bells=    |6 o4
+#def timpani=  |7 o5
+#def synth=    @5 o5 %a13%y2%s6%r24
+
+#def s= v165
+#def t= v150
+#def v= v133
+#def b= v120
+#def l= v165
+#def d= v208
+#def y= v500
+
+#def sf= v1,165
+#def tf= v1,150
+#def yf= v1,500
+
+#def sweepVib= m0,36,207
+#def hornVib= m48,18,223
+#def hornVleg= m0,18,223
+
+#def cymVol= v288
+#def snareVol= v111
+#def tambVol= v182
+#def taikoVol= v208
+#def clankVol= v190
+#def trioVol= v150
+#def tricVol= v300
+#def shakerVol= v165
+
+#drum "i"=  6d+ |B p36 'trioVol*v.220' %e0 ## ex 56 vel 120
+#drum "i+"= 6d+ |B p36 'trioVol*v.232' %e0 ## ex 56 vel 123
+#drum "a-"= 6d+ |A p36 'tricVol*v.121' %e0 ## ex 56 vel  89
+#drum "a"=  6d+ |A p36 'tricVol*v.124' %e0 ## ex 56 vel  90
+#drum "b+"= 6d+ |A p36 'tricVol*v.135' %e0 ## ex 56 vel  94
+#drum "c+"= 6d+ |A p36 'tricVol*v.144' %e0 ## ex 56 vel  97
+#drum "d-"= 6d+ |A p36 'tricVol*v.147' %e0 ## ex 56 vel  98
+#drum "d+"= 6d+ |A p36 'tricVol*v.153' %e0 ## ex 56 vel 100
+#drum "e-"= 6d+ |A p36 'tricVol*v.156' %e0 ## ex 56 vel 101
+#drum "e"=  6d+ |A p36 'tricVol*v.159' %e0 ## ex 56 vel 102
+#drum "e+"= 6d+ |A p36 'tricVol*v.162' %e0 ## ex 56 vel 103
+#drum "f-"= 6d+ |A p36 'tricVol*v.166' %e0 ## ex 56 vel 104
+#drum "f"=  6d+ |A p36 'tricVol*v.169' %e0 ## ex 56 vel 105
+#drum "g-"= 6d+ |A p36 'tricVol*v.175' %e0 ## ex 56 vel 107
+
+#drum `i`=  6d+ |B p36 'trioVol*v.183' %e0 ## ex 51 vel 120
+#drum `i+`= 6d+ |B p36 'trioVol*v.192' %e0 ## ex 51 vel 123
+#drum `a-`= 6d+ |A p36 'tricVol*v.101' %e0 ## ex 51 vel  89
+#drum `a`=  6d+ |A p36 'tricVol*v.103' %e0 ## ex 51 vel  90
+#drum `b+`= 6d+ |A p36 'tricVol*v.112' %e0 ## ex 51 vel  94
+#drum `c+`= 6d+ |A p36 'tricVol*v.119' %e0 ## ex 51 vel  97
+#drum `d-`= 6d+ |A p36 'tricVol*v.122' %e0 ## ex 51 vel  98
+#drum `d+`= 6d+ |A p36 'tricVol*v.127' %e0 ## ex 51 vel 100
+#drum `e-`= 6d+ |A p36 'tricVol*v.130' %e0 ## ex 51 vel 101
+#drum `e`=  6d+ |A p36 'tricVol*v.132' %e0 ## ex 51 vel 102
+#drum `e+`= 6d+ |A p36 'tricVol*v.135' %e0 ## ex 51 vel 103
+#drum `f-`= 6d+ |A p36 'tricVol*v.137' %e0 ## ex 51 vel 104
+#drum `f`=  6d+ |A p36 'tricVol*v.140' %e0 ## ex 51 vel 105
+#drum `g-`= 6d+ |A p36 'tricVol*v.145' %e0 ## ex 51 vel 107
+
+#drum /i/=  6d+ |B p36 'trioVol*v.270' %e0 ## ex 62 vel 120
+#drum /i+/= 6d+ |B p36 'trioVol*v.284' %e0 ## ex 62 vel 123
+#drum /a-/= 6d+ |A p36 'tricVol*v.123' %e0 ## ex 62 vel  81
+#drum /a+/= 6d+ |A p36 'tricVol*v.129' %e0 ## ex 62 vel  83
+#drum /c-/= 6d+ |A p36 'tricVol*v.142' %e0 ## ex 62 vel  87
+#drum /d-/= 6d+ |A p36 'tricVol*v.152' %e0 ## ex 62 vel  90
+#drum /d/=  6d+ |A p36 'tricVol*v.155' %e0 ## ex 62 vel  91
+#drum /e/=  6d+ |A p36 'tricVol*v.166' %e0 ## ex 62 vel  94
+#drum /f-/= 6d+ |A p36 'tricVol*v.173' %e0 ## ex 62 vel  96
+#drum /f+/= 6d+ |A p36 'tricVol*v.180' %e0 ## ex 62 vel  98
+#drum /g-/= 6d+ |A p36 'tricVol*v.184' %e0 ## ex 62 vel  99
+#drum /g+/= 6d+ |A p36 'tricVol*v.191' %e0 ## ex 62 vel 101
+
+#drum "k"=  3e |9 p72 'clankVol*v.560' ## ex 85 vel 126
+#drum "k-"= 3e |9 p72 'clankVol*v.424' ## ex 79 vel 118
+#drum "o"=  3b |7 p88 'taikoVol*v.280' ## ex 67 vel 113
+#drum "o-"= 3b |7 p88 'taikoVol*v.224' ## ex 67 vel 101
+#drum "q-"= 3b |7 p88 'taikoVol*v.323' ## ex 72 vel 113
+#drum "p-"= 3b |7 p88 'taikoVol*v.258' ## ex 72 vel 101
+#drum /q/=  3b |7 p88 'taikoVol*v.210' ## ex 58 vel 113
+#drum /p/=  3b |7 p88 'taikoVol*v.168' ## ex 58 vel 101
+#drum /o/=  3b |7 p88 
+#drum "p"=  4e |7 p50 'd*v.389' ## ex 85 vel 105
+#drum "p+"= 4e |7 p50 'd*v.435' ## ex 85 vel 111
+#drum "q"=  4e |7 p50 'd*v.483' ## ex 85 vel 117
+#drum "n-"= 4e |7 p50 'd*v.525' ## ex 85 vel 122
+#drum "n"=  4e |7 p50 'd*v.569' ## ex 85 vel 127
+#drum "l"=  4b |7 p50 'd*v.569' ## ex 85 vel 127
+#drum "m"=  4g |7 p50 'd*v.569' ## ex 85 vel 127
+#drum "k+"= 5c |7 p50 'd*v.435' ## ex 85 vel 111
+#drum "l+"= 5c |7 p50 'd*v.483' ## ex 85 vel 117
+#drum "m+"= 5c |7 p50 'd*v.525' ## ex 85 vel 122
+#drum "n+"= 5c |7 p50 'd*v.569' ## ex 85 vel 127
+
+#drum "r-"= 5f |8 p68 'snareVol*v.259' %a14%r23 ## ex 72 vel 101
+#drum "r"=  5f |8 p68 'snareVol*v.323' %a14%r23 ## ex 72 vel 113
+#drum "r+"= 5f |8 p68 'snareVol*v.383' %a14%r23 ## ex 72 vel 123
+#drum "s+"= 5f |8 p68 'snareVol*v.369' %a14%r23 ## ex 77 vel 113
+#drum "s"=  5f |8 p68 'snareVol*v.295' %a14%r23 ## ex 77 vel 101
+#drum "s-"= 5f |8 p68 'snareVol*v.185' %a14%r23 ## ex 77 vel  80
+
+#drum ~t+~= 5a+ |9 p96 'tambVol*v.382' ## ex 75 vel 118
+#drum ~t~=  5a+ |9 p96 'tambVol*v.243' ## ex 75 vel  94
+#drum ~u~=  5a+ |9 p96 'tambVol*v.176' ## ex 75 vel  80
+#drum ~u-~= 5a+ |9 p96 'tambVol*v.106' ## ex 75 vel  62
+
+#drum "t+"= 5a+ |9 p96 'tambVol*v.362' ## ex 73 vel 118
+#drum "t"=  5a+ |9 p96 'tambVol*v.230' ## ex 73 vel  94
+#drum "u"=  5a+ |9 p96 'tambVol*v.167' ## ex 73 vel  80
+#drum "u-"= 5a+ |9 p96 'tambVol*v.100' ## ex 73 vel  62
+
+#drum `t+`= 5a+ |9 p96 'tambVol*v.305' ## ex 67 vel 118
+#drum `t`=  5a+ |9 p96 'tambVol*v.194' ## ex 67 vel  94
+#drum `u`=  5a+ |9 p96 'tambVol*v.140' ## ex 67 vel  80
+#drum `u-`= 5a+ |9 p96 'tambVol*v.084' ## ex 67 vel  62
+
+#drum "h-"= 5g |F p92 'shakerVol*v.142' ## ex 62 vel  87
+#drum "h+"= 5g |F p92 'shakerVol*v.191' ## ex 62 vel 101
+
+#drum /h-/= 5g |F p92 'shakerVol*v.167' ## ex 77 vel 76 
+#drum /h+/= 5g |F p92 'shakerVol*v.240' ## ex 77 vel 91 
+
+#drum "x"=  5a |C %a3  'cymVol*v.44' p52
+#drum "y"=  5a |C %a15 'cymVol*v.44' p52 %r19
+#drum "y+"= 5a |C %a15 'cymVol*v.44' p52 %r17
+
+## Some brass notes will use percussion mode to benefit from
+## the lower sequence size overhead when woven with real percussion
+## compared to resetting every time.
+
+#drum ~d~= 6d  |3 't*v.274' %e1 p59 ## ex 72 vel 104
+#drum ~e~= 6e  |3 't*v.274' %e1 p59 ## ex 72 vel 104
+#drum ~f~= 6f+ |3 't*v.210' %e1 p59 ## ex 72 vel 91
+#drum ~f+~=6f+ |3 't*v.274' %e1 p59 ## ex 72 vel 104
+#drum ~g~= 6g  |3 't*v.274' %e1 p59 ## ex 72 vel 104
+
+#drum ~a~= 5a  |3 't*v.330' p78 ## ex 79 vel 104
+#drum ~b~= 5b  |3 't*v.330' p78 ## ex 79 vel 104
+#drum ~b-~=5b  |3 't*v.252' p78 ## ex 79 vel 91
+#drum ~e-~=6e  |3 't*v.330' p78 ## ex 79 vel 104
+
+#drum !b!=5b  |2 't*v.330' p78
+#drum !e!=5e  |2 't*v.330' p78
+
+{1} 'init' %e1
+r2
+'strings' 's*v.305' p44 %y0%s5%r20 l4
+[4 egb<d f+a<ce>>]
+$
+'trumpet' 't*v.415' p88 g12r24
+"!!!o h+4." [7"h-8h+4."]
+'strings+o1' 's*v.351' p44
+[d1^1 c+1^1 c1^1 >b1^1<] %r11 ^1^1
+'synth-o2''y*v.037' p0 l12
+'yf*v192,.112' p192,127
+eg<eg eg<eg eg<eg
+'yf*v180,.041' p192,0
+eg<f+b f+>bf+>b bf+>bf+
+## 34
+## (04 st) e79 v118 p44 [.424] + (13 hn) e82 v101 p88 [.335]
+['strings' 's*v.759' p63 l8
+ere12r24grf+ra rg12r24bra+rar    ere12r24grf+ra rd12r24d
+%e0 "!!!o f-aife-" %e1]
+['ostrings+o1' 's*v.592' p51 l8
+ere12r24grf+ra rg12r24bra+rar    ere12r24grf+ra rd12r24d
+%e0 "!!!o f-aife-" %e1]
+## 50
+'vox''v*v.534' p64
+f+4. %r25 ^2 %l1 %r19 g16f+16 %l0 e4
+'strings+o1'['s*v.424' p44 l4
+ef+g a2b2 g2a2
+
+f+2.. %l1 g16f+16 %l0 e4 r2.
+'s*v.389' p20
+e1d2g2 j2 f+1r4 ]
+## 66
+'s*v.446' %r2 f+1^1 %r11 ^1^1 ^1r1r1r1
+## 74
+%r0 's*v.248' p44
+e1 %r25^2%r0f+2 a1 ^2b4<c4>
+'s*v.267' b1^1 a+1.f+2 a1.d+2
+e1^1 'sf*v192,.358' ^1 'sf*v192,.534' ^1
+;
+
+{2} %e1
+r2
+[4
+'otrumpet+o1' 't*v.415' p78 e12r24
+'strings' 's*v.305' p44 l4 %y0%s5%r20
+f+a<ce gb<df+8
+]
+$
+'otrumpet+o1' 't*v.415' p78 e12r24
+l16 "!!!o"
+    "s-s- s s-s+8  s-s-s s- s+8 s-s-"
+"s+8 s-s- s s-s+8  s-s-s+s- s+8 s-s "
+"s+8 s-s- s s-s+8  s-s-s s- s+8 s-s-"
+"s+8 s-s- s s-s+8  s-s-s+s- s+8 s-s "
+'strings' 's*v.314' p20
+[a1^1 g+1^1 g1^1 f+1^1] %r11 ^1^1
+'synth-o2''y*v.037' p0 l12
+'yf*v192,.112' p192,127
+r24 f+b<f+b f+b<f+b f+b<f+b
+'yf*v180,.041' p192,0
+f+<egg e>gee >ge>ge24
+## 34
+"!!!o" l8 [4
+~e16~r16"b+d-"~e16~r16    "ig-e+d+"
+"a-"~e16~r16"i+f-"        ~e16~r16"ife"
+~e16~r16"b+d-"~e16~r16    "ig-e+d+"
+"a-"~f16~r16~f+16~r8.     ~g12~r24r~d16~r16"p-"]
+## 50
+'vox''v*v.534' p64 k-5
+r4. %l1 g16m12,-1^16k-1f+4. %r25 ^4. %l0 r2. 
+'strings''s*v.311' a1 g2 f+2
+
+e1^1^1 's*v.389' f+2g2
+
+'vox''v*v.534' 
+%r0 %l1 f+4.k-5g16m12,-1^16k-1f+4. %l0 %l1 %r19 g16f+16 %l0 e2..
+"!!!o p-8"
+'strings''s*v.311' p64 a1 g2 f+2
+e1^1^1 's*v.389' d1 k0
+## 66
+'s*v.446' p44 %r2 b1^1 %r11 ^1^1
+^1r1r1r2
+"!!!o x2"
+## 74
+%a15%r17 ^1
+'strings+o1'
+'s*v.248' p44 g2 %r25 ^2 %r0
+'s*v.229' p64 %a9>
+f+1^1 g1^1 f+1^1 a1^1 b1^1 'sf*v192,.314' ^1 'sf*v192,.468' ^1
+;
+
+{3}
+r2
+'sweep-o2' 'b*v.529' p64 %e1 'sweepVib'
+[4 e1^1]
+$
+##'sweep-o2' 'b*v.529' p64 'sweepVib'
+##[3 e1^1^1^1 ] ^1^1
+'sweep-o2' 'sweepVib' l16 ## +.534 `123) and +.360 `101)
+[6
+  %l1
+  [2
+    [2
+      p77 'b*v1.063' e p64 'b*v.529' ^
+      [3 p73 'b*v.889' ^ p64 'b*v.529' ^]
+    j2,311
+      [2
+        p77 'b*v1.063' ^ p64 'b*v.529' ^
+        p73 'b*v.889' ^ p64 'b*v.529' ^
+        p73 'b*v.889' ^ p64 'b*v.529' ^
+      ]
+    ]$311
+    p77 'b*v1.063' ^ p64 'b*v.529' ^
+    p73 'b*v.889' ^ p64 'b*v.529' ^
+  ]%l0
+]
+## 34
+[4
+  %l1 ## 123, 115, 107, 98 -> +.534, +.466, +.404, +.339 `p77, p75, p74, p72)
+  [2
+    p77 'b*v1.063' e12 p64 'b*v.529' ^6
+    p75 'b*v.995' ^12 p64 'b*v.529' ^6
+    p74 'b*v.933' ^12 p64 'b*v.529' ^6
+   [p72 'b*v.868' ^12 p64 'b*v.529' ^6]
+    p74 'b*v.933' ^12 p64 'b*v.529' ^6
+    p75 'b*v.995' ^12 p64 'b*v.529' ^6
+    p77 'b*v1.063' j2 ^12 p64 'b*v.529' ^6   
+  ]
+                     d12 p64 'b*v.529' e6
+  %l0
+]
+## 50
+[2
+  [2
+    %l1
+    [2
+      p77 'b*v1.063' e12 p64 'b*v.529' ^6
+      p75 'b*v.995' ^12 p64 'b*v.529' ^6
+      p74 'b*v.933' ^12 p64 'b*v.529' ^6
+     [p72 'b*v.868' ^12 p64 'b*v.529' ^6]
+      p74 'b*v.933' ^12 p64 'b*v.529' ^6
+      p75 'b*v.995' ^12 p64 'b*v.529' ^6
+      p77 'b*v1.063'^12 p64 'b*v.529' ^6
+    ]
+    %l0 %k-4
+  ]
+  %k0
+]
+## 66
+'b*v.529' p64
+[e1^1^1^1]
+## 74
+[3 e1^1^1^1] ^1^1
+;
+
+{4}
+'timpani-o1' p50 %e1
+r4.
+[3
+ 'd*v.335' e16 'd*v.419' e16
+j3
+ 'd*v.497' e1.^8
+ 'd*v.376' e8 'd*v.419' e8 'd*v.457' e8
+ 'd*v.497' e1...
+]
+$
+"!!!o" l8
+    "n"`u` [3 `:t: utt+`] `uuu u-u-`
+[11 "o"`u` [3 `:t: utt+`] `uuu u-u-`]
+## 34
+[8 "tu" [3 ":t: utt+"] "uuu u-u-"]
+## 50
+[4"!o" "y4." ~tt+ utt+ utt+ uuu u-u-~
+     ~tu~ [3 ~:t: utt+~] ~uuu u-u-~]
+## 66
+"n4.k-2p-" 
+'taikoVol*v.323'/o2../'taikoVol*v.258'/o/ ## exp 72
+"o2..o-"                                  ## exp 67
+'taikoVol*v.240'/o2../'taikoVol*v.191'/o/ ## exp 62
+[4 /q2..p/]                               ## exp 58
+## 74
+[7 /!o  d-c-d e   i g+f-e   a-f-i+f+  a+i g-/j7/e /] %e1 "p16q16"
+;
+
+{5} %e1
+"x2"
+[4 "y+1.x2"]
+$
+'bells+o1' 'l*v.415' p64 e1^1 'l*v.382' e1^1
+'strings' 's*v.264'
+[g1^1 f+1^1 f1^1 e1^1] %r11 ^1^1
+'bells+o1' 'l*v.415' e1^1
+## 34
+"!!!o" l8
+[4 "n4.n4."~e16~r16"p- q-n4.n4.p-  n4.n2p- q-nn4"!b12!r24r!e16!r8. ]
+## 50
+['strings' 's*v.269' p20
+%l1 [5b2] %l0 <d2>g2a2
+'vox''v*v.534' p64 
+%l1 f+4.k-5g16m12,-1^16k0f+4. %l0 %l1 %r19 g16f+16 %l0 e2..
+l8 "!!!o p-q-4." j2,564 ^8 [3"!o h-h+4."]
+]$564 ":q-: k-"^2 ["!o h-h+4."]
+## 66
+'strings-o2''s*v.265' p90
+%l1 [16 e2]
+## 74
+e2e2e2 'sf*v255,.212' e2e2e2 'sf*v255,.132'
+e2e2e2 'sf*v255,0' e2e2e2
+'strings''s*v.210' p112 %a7
+%l1 [4c+2] %l0 %l1 [4c2] %l0 %l1 >[4b2] 'sf*v192,.288' b2b2 'sf*v192,.429' b2b2 %l0
+;
+
+{6}
+r4. l16 [5 "r-r" j5
+'bells+o1' 'l*v.415' p64 %e1 e1...]
+$
+"!!!o" l8
+[10 "y4.k2o-o2..o-" ]
+[   "y4.k2o-o2x2"   ]
+## 34
+[4 "!!!o" l8
+"y4.k-2^  h-h+y2."
+"y4.k-2." ~b16~r16~b16~r8.~e-12~r24r~a16~r8.
+]
+## 50
+"n4.k-2p-  q-2^p+qn-"
+"n4.k-4.lp-  q-n4.l4np-"
+"n+4.k-2p-  q-2^k+l+m+"
+"n+4.k-4.n+p-  q-m4.n+4mp-"
+
+"n4.k-2p-  q-2^p+qn-"
+"n4.k-4.lp-  q-n4.l4np-"
+"n+4.k-2p-  q-2^k+l+m+"
+"n+4.n+4.mp-  q-n+4.m4n+p-"
+## 66
+"y+1" [7^1]
+## 74
+[6 /q4./"k-2"/p/  /q2..p/ ]
+'taikoVol*v.240'/o4./"!v k-2"'taikoVol*v.191'/o/
+"!v o2x2"
+;
+
+{7}
+r2
+'ostrings' 's*v.415' p42 %e1
+[4 b12r6 r1..]
+$
+'ostrings' 's*v.415' p42 %e1 b12r24
+`!!!o` l8 ## triangle
+## [12 "c+b+d-d+  i g-e+d+  a-e i+f-  a i f e-"]
+[12 `b+d-d+  i g-e+d+  a-e i+f-  a i f` j12 `e-`
+    `c+`] %e1 "p16q16"
+## 34
+"!!!o" l8 [4
+~b16~r16"h+4"~b16~r16   "h-h+"~b16~r16r8
+r8~b16~r16r4            ~b16~r16"h+4."
+~b16~r16"h+4"~b16~r16   "h-h+4."
+"h-h+y4."                 "h+np16q16" ]
+## 50
+# ##[
+# ##'strings''s*v.311' p64 %l1 [4f+2] %l0
+# ##r1r1
+# ##'strings''s*v.269' p20 %l1 [4b2] %l0
+# ##r1r1
+# ##]
+[[
+'strings' j1,750
+'s*v.269' p20 %l1 [4b2] %l0
+$752
+l8 "!!!o s+s- ss+ s-s s+s-    s+s- ss+ s-s+ s+s-"
+]]
+## 66
+'strings''s*v.424' p64 %r2 f+1^1 %r11 ^1^1 ^1r1r1r1
+## 74
+[6r1]
+'trumpet''t*v.142' p88
+%l1m [8c+4'hornVleg'] %l0 %l1m [6c4'hornVleg'] %l0 'hornVib' d+2
+%l1m [8e4'hornVleg'] 'tf*v192,.195' e4e4e4e4 'tf*v192,.291' e4e4e4e4 m
+;
+
+$750 's*v.311' p64 %l1 [4f+2] %l0 ;752
+
+{8}
+r2
+'trumpet' 't*v.415' p88 %e1
+[4 g12r6 r1..]
+$
+"!!!o" l16 ## snare
+## +.-- *-+. --*- +.--   +.-- *-+. --+- +.-*
+##  . . . .  . . . .  . . . .  . . . .
+"s+1^1^1^1"
+[18 "s+8 s-s- s s-s+8  s-s-s s- s+8 s-s-"
+    "s+8 s-s- s s-s+8  s-s-s+s- s+8 s-s " ]
+## 50
+l16
+[8 "c+8b+s-d-s-d+8  i s-g-s-e+8d+s-  a-8e s-i+s-f-8  a s-i s-f8 e-s-"] %e1
+## 66
+"q-1" [7^1]
+## 74
+l8 [28 "!o h-h+" j28 ^4] ^8 "o-"
+;
+
+## Weaving map for @34-37 `x4)
+##          | . , . v . , . | . , . v . , . | . , . v . , . | . , . v . , . 
+## 2 CYMBAL ******              ******      ******              ******        C `2x)
+## 4 LEADST **  ****  **  **  ****  **  **  **  ****  **  **  ****            L
+## 5 SHAKER - +     - +     - +     - +     - +     - +     - +     - +       S `8x)
+## 9 TRUMP1 2     2     2     2     2       2     2           : 2   2   2     B & 10/11/12
+##14 TAMBOR + - - + * - + * - + * - - - . . + - - + * - + * - + * - - - . .   T same as @10
+##   SNARE  * --+-* --+-* --* --+-* --*-* -+* --+-* --+-* --* --+-* --*-* -+    same as @10
+##17 CLANK        ****--                          ****--                      K `2x)
+##18 TIMPAN >-    >-          >-    >-      >-    >-          >->-      >-.,  D
+##19 TAIKO  +             - +             - +             - +             -   O `4x)
+##21 TRIANG + + + + o + + + - + o + - o + + + + + + o + + + - + o + - o + +   A same as @10
+## TOTALS   A 5 5 8 5 6 5 5 5 8 5 4 9 4 4 4 A 5 5 8 5 6 3 5 5 8 8 4 7 4 6 5
+
+## cut at 1|: shaker, taiko, triangle
+## 1.,.       triangle
+## 2.         triangle
+## 2.,.v      triangle, shaker
+## 3|         shaker, taiko, triangle
+## 3.,.       triangle
+## 4.         triangle
+## 4.,        triangle
+
+##   |.,. v.,.  |.,. v.,.  |.,. v.,.  |.,. v.,. 
+## 1 L.LL .L.L  .LL. L.L.  L.LL .L.L  .LLA AAAA
+## 2 BAAB AAAA  ABAA BAAA  BAAB AAAA  ABB. B.BO
+## 4 TTTT TTTT  TTTT TTTT  TTTT TTTT  TTTT TTTT
+## 5 D--D --BO  OD-- D--O  D--D ---O  ODD- B.B
+## 6 CccK kk-.  SSCc c---  CccK kk--  -BB. B.B
+## 7 BS.B SSB.  .B.. BS..  BS.B SS..  SSCc cSDD
+
+## "y-4.k-2^  h-h+y-2.    y-4.k-2." ~b16~r16~b16~r8.~e-12~r24r~a16~r8.
+
+## ~b16~r16"h+4"~b16~r16   "h-h+"~b16~r16r8
+## r8~b16~r16r4            ~b16~r16"h+4."
+## ~b16~r16"h+4"~b16~r16   "h-h+4."
+## "h-h+y4.                  "h+np16q16"
