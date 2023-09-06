@@ -289,6 +289,7 @@ def init_playlist(fn=DEFAULT_PLAYLIST_FILE, virtual=None):
         if not plfile:
             plfile = playlist_parser.read(fallback_path(os.path.join(PLAYLIST_PATH, fn + ".txt")))
             if not plfile:
+                print(f"Playlist file {fn} empty or not found, falling back to {DEFAULT_PLAYLIST_FILE}")
                 playlist_parser.read(fallback_path(os.path.join(PLAYLIST_PATH, DEFAULT_PLAYLIST_FILE)))
     playlist_map = {}
     tierboss_pool = set()

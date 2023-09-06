@@ -41,6 +41,19 @@ def randomize_music(fout, Options_, playlist_path, playlist_filename, virtual_pl
     data = fout.read()
     metadata = {}
     
+    # Like beyondchaos, johnnydmad uses relative paths for external files when
+    # _MEIPASS is set (pyinstaller) and absolute paths otherwise. However, 
+    # by default the absolute path conversions are done using the current directory
+    # instead of the file path.
+    # For consistency with other BC custom file handling (utils.py), we can use
+    # file-based absolute paths by passing an absolute path with the subpath parameter.
+    
+    if os.path.isabs(BC_CUSTOM_PATH):
+        subpath = os.path.dirname(os.path.abspath(__file__))
+        subpath = os.path.join(subpath, "music")
+    else:
+        subpath = "music"
+        
     # Playlist priority: virtual > custom/songs.txt > music/playlists/default.txt
     # songs.txt will also be handled as a "virtual" playlist to keep BC-specific
     # path interactions to this file
@@ -58,7 +71,7 @@ def randomize_music(fout, Options_, playlist_path, playlist_filename, virtual_pl
     try:
         if not playlist_fileid:
             raise PlaylistError("Failed to load custom file")
-        data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath="music",
+        data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath=subpath,
                              freespace=BC_MUSIC_FREESPACE, ext_rng=random,
                              playlist_filename=playlist_fileid,
                              virtual_playlist=virtual_playlist, enable_exceptions=True)
@@ -67,7 +80,7 @@ def randomize_music(fout, Options_, playlist_path, playlist_filename, virtual_pl
         # (either from web or custom/songs.txt) then fall back to default johnnydmad
         # playlist (music/default.txt) which will usually not be modified
         print("Custom playlist failed, falling back to default.")
-        data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath="music",
+        data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath=subpath,
                              freespace=BC_MUSIC_FREESPACE, ext_rng=random)
     if not Options_.is_any_flag_active(['ancientcave', 'speedcave', 'racecave']):
         data = process_map_music(data)
