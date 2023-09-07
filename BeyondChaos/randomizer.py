@@ -5029,10 +5029,10 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
                 if junctions:
                     if equipid in pool:
                         old_rank = pool.index(equipid) / (len(pool)-1)
-                    else:
-                        assert equiptype == 'weapon'
-                        assert equipid in shields
+                    elif equiptype == 'weapon' and equipid in shields:
                         old_rank = shields.index(equipid) / (len(shields)-1)
+                    else:
+                        old_rank = random.random()
                     index = int(round(old_rank * (len(fallback)-1)))
                     new_equip = fallback[index]
                     old_item = [i for i in items if i.itemid == equipid][0]
