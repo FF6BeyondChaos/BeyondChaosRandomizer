@@ -1,0 +1,162 @@
+#TITLE Cave
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x21 0x25 marimba
+#WAVE 0x22 0x53 bass
+#WAVE 0x23 0x51 bass
+#WAVE 0x27 0x5A timpani
+#WAVE 0x28 0x4C tom
+
+#def init= t90 %v31 %b0,96 %f0,0
+
+#def strings= |0 o5 m %e1 %y0%s6
+#def marimba= |1 o5 m %e1 
+#def bass=    |2 o6 m %e1 %r11 %a12
+#def bass2=   |3 o7 m %e1 %r11 %a12
+#def timpani= |7 o7 m %e1 %r17
+
+#def s= v300
+#def m= v270
+#def b= v200
+#def bb=v200
+#def t= v200
+#def d= v200
+
+#def sf= v1,250
+
+#drum "a"=5d  |8 p64 'd*v.50' %e0 %a13%y5%s2%r12
+#drum "f"=4a+ |8 p71 'd*v.50' %e0 %a13%y5%s2%r12 m3,-3
+#drum "b"=5^ %e1 m6,-1
+#drum "g"=4^ %e1 m3,-3
+
+#def tomA= "a32b32"
+#def tomF= "f48g24"
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} 'init'
+$
+[
+'strings+o1''s*v.32' p32 l16
+r8 drdr8. drdr8. dr
+'marimba''m*v.32' p32 l16
+dbg+bfbdb r8
+'timpani-o2''t*v.45' p64 l16
+d8dddd c+8
+'strings+o1''s*v.32' p32 l16
+   c+rc+r8. c+rc+r8. c+r
+'marimba''m*v.32' p32 l16
+c+a+ga+ea+c+a+ r8
+'timpani-o2''t*v.45' p64 l16
+c+8c+c+c+c+
+]
+##
+'strings-o1''s*v.32' p32 l16
+[
+drfr drg+r drbr drg+r
+drfr drg+r drbr d4
+c+rer c+rgr c+ra+r c+rgr
+c+rer c+rgr c+ra+r c+4
+]
+;
+
+{2}
+$
+'strings+o1' p96 l4
+[ 
+v0 'sf*v192,.18' (g+g+g+g+ 'sf*v192,.36' g+g+g+g+)
+v0 'sf*v192,.18' (gggg  'sf*v192,.36' gggg)
+]
+##
+[
+'strings''s*v.32' p96 l16
+g+rg+r r2 b4 g+rg+r r2
+'timpani-o2' 't*v.45' p64 l16 dddd
+'strings''s*v.32' p96 l16
+grgr r2 a+4 grgr r2
+'timpani-o2' 't*v.45' p64 l16 c+c+c+c+
+]
+;
+
+{3}
+'bass-o2' p64 'b*v.50' l32
+$
+[[4 d^48r^24 >b^48r^24< d^48r^24 f^48r^24]
+ [4 c+^48r^24 >a+^48r^24< c+^48r^24 e^48r^24]]
+##
+l16 'bass2-o2''bb*v.50' [
+drd2.. drd2..
+c+rc+2.. c+rc+2..
+]
+;
+
+{4}
+l16 $
+'tomA'^ 'tomF'^ 'tomA' 'tomF' ^ 'tomF' ^ 'tomA' 'tomF' 'tomA' 'tomF' ^ 'tomA' 'tomF'
+;
+
+{5}
+$
+'strings+o1' p24 l4
+[
+v0 'sf*v192,.18' (ffff 'sf*v192,.36' ffff)
+v0 'sf*v192,.18' (eeee 'sf*v192,.36' eeee)
+]
+##
+'s*v.32'> p24 l16
+[
+frfr r2 g+4 frfr r2.
+erer r2 g4 erer r2.
+]
+;
+
+{6}
+$
+[
+'strings''s*v.32' p32 l16
+r8 brbr8. brbr8. br
+'marimba''m*v.32' p96 l16
+>b<g+fg+dg+>b<g+ r2
+'strings''s*v.32' p32 l16
+r8 a+ra+r8. a+ra+r8. a+r
+'marimba''m*v.32' p96 l16
+>a+<gegc+g>a+<g r2
+]
+##
+'timpani-o2' 't*v.45' p64 l16
+[
+d8d4r4.dddd d8d4r4.r4
+c+8c+4r4.c+c+c+c+ c+8c+4r4.r4
+]
+;
+
+{7}
+$
+'timpani-o2' 't*v.45' p64 l16
+[
+r8 d4d4d8dddd d8d4d4 r4.
+r8 c+4c+4c+8c+c+c+c+ c+8c+4c+4 r4.
+]
+##
+'strings''s*v.32' p64 l16
+[
+drdr r2. drdr r2.
+c+rc+r r2. c+rc+r r2.
+]
+;
+
+{8}
+$
+r1r1r1r1
+r1r1r1r1
+##
+'strings-o1''s*v.32' p32 l16
+[
+arar r2. arar r2.
+grgr r2. grgr r2.
+]
+;

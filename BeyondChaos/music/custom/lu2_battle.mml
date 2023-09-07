@@ -1,0 +1,283 @@
+#TITLE Battle #1
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x21 0x86 horn
+#WAVE 0x22 0x94 oboe
+#WAVE 0x23 0x93 oboe
+#WAVE 0x24 0x92 oboe
+#WAVE 0x25 0x48 dist.open
+#WAVE 0x26 0x49 dist.closed
+#WAVE 0x27 0x50 acoustic bass
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1D snare
+#WAVE 0x2A 0x4A tom
+#WAVE 0x2B 0x3B hihat
+#WAVE 0x2C 0x2D crash cymbal
+#WAVE 0x2D 0x68 orch.hit
+#WAVE 0x2E 0x56 slap bass
+
+#def init= t184 %v50 %b0,70 %f0,0 %x204
+
+#def strings= |0 o5 %e1 m %y0%s6 %r8
+#def horn=    |1 o5 %e1 m48,18,223 %r5
+#def oboe=    |2 o5 %e1 m48,18,207
+#def dist=       o6 %e1 m
+#def pluck=   |7 o6 %e0 m %y5%s1%r22
+#def orch=    |D o4 %e1 m
+#def bass=    |E o7 %e0 m %r15 %a11%s7
+#def layer=   |0 o6 %e1 m12,18,215 %a9%y0%s7%r5
+
+#def s= v298
+#def h= v99
+#def o= v198
+#def d= v250
+#def p= v198
+#def x= v297
+#def b= v133
+#def y= v33
+
+#def kickVol= v190
+#def snareVol= v190
+#def hihatVol= v134
+#def tomVol= v134
+#def crashVol= v297
+
+
+#def o1= |2   
+#def o2= |3   
+#def o3= |4   
+#def o2u= |3  
+#def o3u= |4> 
+#def o1d= |2  
+#def o2d= |3< 
+
+## dist guitar mute/open
+#def m= |6 %s5%y1%r30
+#def u= |5       %r11
+
+#drum "k"=5a  |8 p64 %e0 'kickVol*v.59'
+#drum "l"=5a  |8 p64 %e0 'kickVol*v.48'
+#drum "k-"=5a |8 p64 %e0 'kickVol*v.56'
+#drum "l-"=5a |8 p64 %e0 'kickVol*v.45'
+#drum "t"=5a  |9 p64 %e0 'snareVol*v.66'
+#drum "s"=5a  |9 p64 %e0 'snareVol*v.56'
+#drum "r"=5a  |9 p64 %e0 'snareVol*v.45'
+#drum "q"=5a  |9 p64 %e0 'snareVol*v.34'
+#drum "p"=5a  |9 p64 %e0 'snareVol*v.24'
+#drum "o"=5a  |9 p64 %e0 'snareVol*v.13'
+#drum "n"=5a  |9 p64 %e0 'snareVol*v.03'
+#drum "c"=5f+ |A p52 %e0 'tomVol*v.80'
+#drum "a"=5d  |A p62 %e0 'tomVol*v.80'
+#drum "f"=4a  |A p72 %e0 'tomVol*v.80'
+#drum "h"=5a  |B p48 %e0 'hihatVol*v0.72' %s0
+#drum "i"=5a  |B p48 %e0 'hihatVol*v0.51' %s0
+#drum "y"=5g  |C p96 %e1 'crashVol*v0.56' %r17
+#drum "x"=5r
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} 'init'
+'strings-o1' p80 's*v.40' l16 %y
+( d+a+<d+f+> f<cfg+> f+<c+f+a+> g+<d+g+<c )
+$##
+'strings' p80 's*v.40' l8
+f2 ^d+c+d+    f4a+4<c4>a+4
+f1. fd+c+c
+d+2.>a+4<     d+4.f4.d+4
+c1. c+4d+4
+f2 ^d+c+d+    f4a+4<c4c+4
+d+1. d+c+c>g+<
+c4.>a+^2<     c4d+4c4>g+4<
+c1>a+16r8.r2
+'oboe' 'o*v.36' g+4
+##
+f+2^fd+c+    c2.'o2u'a+4'o1d'
+g+4.f4.g+4   c+4.d+4.f4
+f+2^fd+c+    c2.f+4
+f1           ^2.g+4'o2u'
+
+a+2^'o1d'g+f+f d+2.'o2u'a+4'o1d'
+g+4.f4.g+4     <'o2u'c+4.'o3u'd+4.f4
+f2.>'o2d'a+<c+ 'o3u'f2^>'o2d'a+a+<c+
+'o3u'f1r1
+;
+
+{2}
+'bass-o4' p64 'b*v.72' l16
+d+a+<d+f+> f<cfg+> f+<c+f+a+> g+<d+g+<c>
+$##
+l8
+a+4<a+>a+ ^a+<a+>a+
+a+a+<a+>a+ g+g+<g+>g+
+f+4<f+>f+ ^f+<f+>f+
+f+f+<f+>f+ f+<f+>f<f>
+d+4<d+>d+ ^d+<d+>d+
+d+4<d+>d+ ^d+<d+>e
+f4<f>f ^f<f>f
+ff<<c>>f <a+>f<a<c>>
+
+a+4<a+>a+ ^a+<a+>a+
+a+a+<a+>a+ g+g+<g+>g+
+f+4<f+>f+ ^f+<f+>f+
+f+f+<f+>f+ f+<f+>f<f>
+d+4<d+>d+ ^d+<d+>e
+ff<f>f f<f>f<g+>
+a+4<a+>a+ ^a+<a+>a+
+a+ l32 frfr l16 <a+<c>d+f> l8 a+<a+>g+<g+>
+##
+f+4<f+>f+ ^f+<f+>f+
+g+4<g+>g+ ^g+<g+>g+
+<c+c+<c+>c+ c<c>c<c>>
+a+a+<a+>a+ g+<g+>g+<g+>
+f+4<f+>f+ ^f+<f+>f+
+g+4<g+>g+ ^g+<g+>g+
+<c+4<c+>c+ ^c+<c+>c+>
+c+<c+>d+<d+> f<f>g+<g+>
+
+f+4<f+>f+ ^f+<f+>f+
+g+4<g+>g+ ^g+g+<g+
+c+c+<c+>c+ c<c>c<c>>
+a+a+<a+>g+ g+<g+>g+<g+>
+[f+4<f+>f+ ^f+<f+>f+]
+f4<f>d+ ^d+<d+>e
+f l32 crcr l16 <fg>a+<c> l8 f<f>a<a>
+;
+
+{3}
+l16 "nopq rsst kc32c32cc caaf"
+$##
+"!!!o" l8
+"k4skhksk" [5"litkhltk"]
+"lit.k16hltk" l16 "l8i8t4  kts8t8ts" l8
+"l4tkhltk" [6"litkhltk"]
+"l2^k16k16t4"
+##
+"l4tkhktk" [7"litkhltk"]
+"l4tkhltk"   "litkhltk"
+"tkktkltk" "tkkt16k16klt16s16t16s16"
+[3"l4tkhltk"] "k4k-4k-k16l-16t4"
+;
+
+{4}
+'orch''x*v.32' %r17
+p20 d+4 p96 f4 p20 f+4 p96 g+4
+$##
+[
+'dist-o1' 'd*v.18' p24 l8
+##[5'u'a+'m'>j5a+j3,1a+$1<] g+g+'u'<g+>g+
+##[5'u'<f+>'m'j5f+j3,0f+$0] ff'u'<f>f j2,414
+[3'u'a+'m'>a+j3a+<]'u'<a+>'m'a+a+'u'<a+>'m'g+g+'u'<g+>g+
+[3'u'<f+>'m'f+j3f+]'u'<f+>'m'f+f+'u'<f+>'m'ff'u'<f>f j2,414
+[3<d+>'m'd+j3d+'u']<['u'd+'m'd+d+]'u'd+d+
+[3'u'f'm'ff]f['u'f'm'f]'u'ff
+]$414
+[3'u'<d+>'m'j3d+d+]e [3'u'<fj3>'m'ff]g+
+##[4'u'a+j4>'m'a+j3,1a+<]rr2g+4
+[3'u'a+>'m'a+j3a+<]'u'<a+rr2g+4
+##
+[
+[3'u'f+>'m'f+j3f+<][3'u'<g+>'m'g+j3g+]
+'u'<<c+4.c^2>a+4.g+^2
+[3'u'f+>'m'f+j3f+<]j2,431[3'u'<g+>'m'g+j3g+]
+<[[3'u'g+'m'g+j3g+]]
+]$431
+       'u'<g+>'m'f+f+<'u'f+>'m'f+f+<'u'd+e
+       [3'u'f>'m'fj3f<]'u'f
+'pluck' 'p*v.40' p80 l8
+afd+c+c>a+a
+;
+
+{5}
+'orch-o1''x*v.48' %r17
+p20 d+4 p96 f4 p20 f+4 p96 g+4
+$##
+[
+'dist-o1' 'd*v.18' p24 l8
+##[5'u'f'm'fj3,0j5f]d+'u'd+d+
+[3'u'f'm'fj3f]'u'f'm'ff'u'f'm'fd+'u'd+d+
+[3'u'c+'m'c+j3c+] 'u'c+>'m'f+f+<'u'c>'m'f+f'u'd+f
+[3'u'a+'m'a+j3a+] j2,515 ['u'a+'m'a+a+]'u'a+a+
+<[3'u'c'm'cj3c]> a+a+'u'<<d+>>'m'a+<<'u'c+>>'m'a+<<'u'cd+>
+]$515
+      <['u'c'm'cc]'u'cc
+      [3'u'f'm'fj3f]'u'frr2d+4
+##
+[
+[3'u'c+'m'c+j3c+][3'u'd+'m'd+j3d+]
+'u'c+4.c^2 >a+4.g+^2<
+[3'u'c+'m'c+j3c+]j2,531[3'u'd+'m'd+j3d+]
+[[3'u'c+'m'c+j3c+]]
+]$531
+      [3'u'c+'m'c+j3c+]>
+      [3'u'a'm'aj3a]'u'ar2..
+;
+
+{6}
+'orch+o1''x*v.16' %y0%s5%r25
+p20 d+4 p96 f4 p20 f+4 p96 g+4
+$
+"!!!o" l8
+"y2^ihi" [6"h4hi ^ihi"] "h4hi hihi"
+"y2^ihi" [6"h4hi ^ihi"] r1
+##
+"y2^ihi" [7"h4hi ^ihi"]
+"y2^ihi"   "h4hi ^ihi"
+"y4.y4.y4" "y4.y4.y4"
+[3 "!o :i: y2^ihi"] r1
+;
+
+{7}
+r1
+$
+'pluck-o2' 'p*v.40' p80
+l16 a+r<fra+r<c+rfrc+r>a+rfr> l8 a+<fa+<c>>g+<d+g+<c>>
+f+<c+f+g+ a+g+f+c+> f+<c+f+g+a+f+g+f>
+d+a+<d+ff+fd+>a+ d+a+<d+ff+g+a+<c+
+fc>a+<c> fc>a+<c>  fa<c>a <cfa<c>>
+
+a+<fa+<c+fc+>a+f>  a+<fa+<c>> g+<d+g+<c>>
+f+<c+f+g+ a+g+f+c+> f+<c+f+g+ a+f+g+f>
+d+a+<d+f f+fd+>a+  f<cfg+ <cd+c>g+
+<c+cc+d+ c+c>a+g+ a+r2..>
+##
+f+a+<c+f+ a+f+c+>a+  g+<cd+g+ <c>g+d+c
+c+fg+<c+> cd+g+<c>  >a+<c+fa+ >g+<cd+g+>
+f+a+<c+f+ a+f+c+>a+  g+<cd+g+ <c>g+d+c
+c+fg+<c+ fc+>g+f     c+fg+<c+> fg+<c+f>>
+
+f+a+<c+f+ a+f+c+>a+  g+<cd+g+ <c>g+d+c
+<fc+d+c c+>a+<c>g+   a+f+g+f f+d+fc+>
+[4f+a+<c+f>]
+<af<c>a <d+caf       cr2..
+;
+
+{8}
+'layer-o1' p60 'y*v.40' l16
+( d+a+<d+f+> f<cfg+> f+<c+f+a+> g+<d+g+<c )
+$
+'orch-o1''x*v.48' %r17 p96 a+2^8
+'layer' p60 'y*v.40' l8
+    d+c+d+    f4a+4<c4>a+4
+f1. fd+c+c
+d+2.>a+4<     d+4.f4.d+4
+c1. c+4d+4
+f2 ^d+c+d+    f4a+4<c4c+4
+d+1. d+c+c>g+<
+c4.>a+^2<     c4d+4c4>g+4<
+c1>a+16r8.r2 
+'horn+o1' 'h*v.36' p32 l8 g+4
+##
+f+2^fd+c+    c2.a+4
+g+4.f4.g+4   c+4.d+4.f4
+f+2^fd+c+    c2.f+4
+f1           ^2.g+4
+
+a+2^g+f+f    d+2.a+4
+g+4.f4.g+4   <c+4.d+4.f4
+f2.>a+<c+    f2^>a+a+<c+
+f1r1
+;

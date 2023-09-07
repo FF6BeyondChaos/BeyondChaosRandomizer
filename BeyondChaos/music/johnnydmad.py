@@ -77,73 +77,105 @@ def print_progress_bar(cur, max):
     boxtext = cursor[-1] * full_boxes + cursor[cursor_idx]
     print(f"\r[{boxtext:<50}] {cur}/{max}", end="", flush=True)
     
-def johnnydmad():
-    print("johnnydmad EX5 test console")
+def generate_rom():
+    pass
     
+def johnnydmad(args):
+    print("johnnydmad EX5 test console")
+
+    allow_user_input = args.prompt_user
+    insert_music_player = args.music_player 
+    infile = args.input_file
+    outfile = args.output_file
+    playlist = args.playlist
+    spoiler_outfile = args.spoiler_output_file
+    freespace = args.free_space.split(",")
     try:
-        print("using ff6.smc as source")
-        with open("ff6.smc", "rb") as f:
+        print(f"Using {infile} as source")
+        with open(infile, "rb") as f:
             inrom = f.read()
     except IOError:
-        while True:
-            print("File not found. Enter source ROM filename:")
-            fn = input()
-            try:
-                with open(fn, "rb") as f:
-                    inrom = f.read()
-            except:
-                continue
-            break
+        if allow_user_input:
+            while True:
+                print("File not found. Enter source ROM filename:")
+                fn = input()
+                try:
+                    with open(fn, "rb") as f:
+                        inrom = f.read()
+                except:
+                    continue
+                break
+        else:
+            raise Exception(f"Input file {infile} not found")
         
     f_chaos = False
-    kw = {}
     force_dm = None
-    while True:
-        print()
-        if "playlist_filename" in kw:
-            print(f"Playlist file is set to {kw['playlist_filename']}")
-        print()
-        print("press enter to continue or type:")
-        print('    "chaos" to test chaotic mode')
-        print('    "sfxv" to check songs for errors, sorted by longest sequence variant')
-        print('    "mem" to check songs for errors, sorted by highest memory use variant')
-        print('    "pool" to simulate many seeds and report the observed probability pools for each track')
-        print('    "battle" to simulate many seeds and report probabilities for only battle music')
-        print('    "pl FILENAME" to set FILENAME as playlist instead of default')
-        print('    "dm FILENAME" to generate a test tierboss MML file including FILENAME')
-        i = input()
-        print()
-        if i.startswith("pl "):
-            kw["playlist_filename"] = i[3:]
-            continue
-        break
-    if i == "chaos":
-        f_chaos = True
-    if i == "sfxv":
-        mass_test("sfx", **kw)
-    elif i == "mem":
-        mass_test("mem", **kw)
-    elif i == "pool":
-        pool_test(inrom, **kw)
-    elif i == "battle":
-        pool_test(inrom, battle_only=True, **kw)
-    elif i.startswith("dm "):
-        tierboss_test(i[3:], **kw)
-    else:
-        print('generating..')
+    def generate_rom():
+        print('Generating rom with randomized music')
         metadata = {}
-        outrom = process_music(inrom, meta=metadata, f_chaos=f_chaos, **kw)
+        outrom = process_music(inrom, meta=metadata, f_chaos=f_chaos, freespace=freespace, playlist_filename=playlist)
         outrom = process_formation_music_by_table(outrom)
         outrom = process_map_music(outrom)
-        outrom = add_music_player(outrom, metadata)
-    
-        print("writing to mytest.smc")
-        with open("mytest.smc", "wb") as f:
+
+        print()
+        if insert_music_player:
+            print("Adding in-game music player")
+            outrom = add_music_player(outrom, metadata)
+        else:
+            print('Skipping in-game music player')
+        print()
+        print(f"Outputting generated rom to location {outfile}")
+        with open(outfile, "wb") as f:
             f.write(outrom)
         
+        print(f"Generating spoiler log")
         sp = get_music_spoiler()
-        with open("spoiler.txt", "w") as f:
+        print(f"Outputting spoiler log to location {spoiler_outfile}")
+        with open(spoiler_outfile, "w") as f:
             f.write(sp)
+            
+    kw = {}
+    kw["playlist_filename"] = playlist
+
+    def print_playlist(playlist_name):
+        print(f"Playlist file is set to {playlist_name}")
+
+    print_playlist(playlist)
+    if not allow_user_input:
+        generate_rom()
+    else:
+        while True:
+            print()
+            print("press enter to continue or type:")
+            print('    "chaos" to test chaotic mode')
+            print('    "sfxv" to check songs for errors, sorted by longest sequence variant')
+            print('    "mem" to check songs for errors, sorted by highest memory use variant')
+            print('    "pool" to simulate many seeds and report the observed probability pools for each track')
+            print('    "battle" to simulate many seeds and report probabilities for only battle music')
+            print('    "pl FILENAME" to set FILENAME as playlist instead of default')
+            print('    "dm FILENAME" to generate a test tierboss MML file including FILENAME')
+            i = input()
+            print()
+            if i.startswith("pl "):
+                playlist = i[3:]
+                kw["playlist_filename"] = playlist
+                print_playlist(playlist)
+                continue
+            break
+        if i == "chaos":
+            f_chaos = True
+        if i == "sfxv":
+            mass_test("sfx", **kw)
+        elif i == "mem":
+            mass_test("mem", **kw)
+        elif i == "pool":
+            pool_test(inrom, freespace=freespace, **kw)
+        elif i == "battle":
+            pool_test(inrom, battle_only=True, freespace=freespace, **kw)
+        elif i.startswith("dm "):
+            tierboss_test(i[3:], **kw)
+        else:
+            generate_rom()
             
 #################################
 
@@ -283,7 +315,49 @@ def mass_test(sort, playlist_filename=None, **kwargs):
             
 #################################
 
+
+
 if __name__ == "__main__":
-    johnnydmad()
-    print("end")
-    input()
+    import argparse
+    parser = argparse.ArgumentParser(description="Randomize the music in a Final Fantasy 6 rom")
+    
+    parser.add_argument('-i', '--in', 
+                            dest="input_file", 
+                            help="Set location for the input ROM",)
+    parser.add_argument('-o', '--out', 
+                            dest="output_file", 
+                            help="Set location for the output ROM")
+    parser.add_argument('-so', '--spoiler-out', 
+                            dest="spoiler_output_file", 
+                            help="Set location for the spoiler log")
+    parser.add_argument('-p', '--playlist',   
+                            dest="playlist",  
+                            help="Set playlist")
+    parser.add_argument('-fs', '--free-space',
+                            help="Set free space to be used. Comma-delimited list of free rom space to be used for music")
+    parser.add_argument('-prompt', '--prompt-user',
+                            action="store_true",
+                            dest="prompt_user",
+                            help="Prompt user for options. Uses set of defaults but allows configuration at runtime")
+    parser.add_argument('-noprompt', '--dont-prompt-user',
+                            action="store_false",
+                            dest="prompt_user",
+                            help="Automatically run johnnydmad against the specified arguments. Uses set of defaults if none are set.")
+
+    parser.add_argument('-mp', '--music-player', action='store_true', help="Add a music player to the in-game menu")
+    parser.add_argument('-nmp', '--no-music-player', dest='music_player', action='store_false', help = "Do not add the music player to the in-game menu")
+
+    parser.set_defaults(
+        free_space="53C5F-9FDFF,310000-37FFFF,410000-4FFFFF", 
+        input_file="ff6.smc",
+        music_player=True, 
+        output_file="mytest.smc",
+        playlist = "default.txt",
+        prompt_user = True,
+        spoiler_output_file="spoiler.txt",
+    )
+
+    args = parser.parse_args()
+    johnnydmad(args)
+    
+    print('end')

@@ -357,7 +357,10 @@ def relpath(in_path):
         if "_MEI" in os.path.commonprefix([p, mei]):
             r = os.path.relpath(p, start=mei)
             return f"MEI::{r}"
-    return os.path.relpath(p)
+    try:
+        return os.path.relpath(p)
+    except ValueError:
+        return p
         
 def from_rom_address(addr):
     # NOTE ROM offset 7E0000-7E7FFF and 7F000-7F7FFF are inaccessible.
@@ -380,7 +383,7 @@ def byte_insert(data, position, newdata, maxlength=0, end=0):
         data += (b"\x00" * (position - len(data)))
     if end:
         maxlength = end - position + 1
-    if maxlength and len(data) > maxlength:
+    if maxlength and len(newdata) > maxlength:
         newdata = newdata[:maxlength]
     return data[:position] + newdata + data[position + len(newdata):]
 
@@ -597,8 +600,8 @@ def insertmfvi(inrom, argparam=None, virt_sample_list=None, virt_seq_list=None, 
     else:
         initialize()
         args = argparse.Namespace()
-        args.dump_brr = False
         args.quiet = quiet
+        args.dump_brr = False
         args.mmlfiles = None
         args.binfiles = None
         args.listfiles = None
@@ -1126,14 +1129,14 @@ def insertmfvi(inrom, argparam=None, virt_sample_list=None, virt_seq_list=None, 
         print("brr dump test")
         brrdump_listfile = "[Samples]\n"
         for id, smp in sample_defs.items():
-            fn = outfile_rom_path + f"_{id:02X}.brr"
+            fn = outfile + f"_{id:02X}.brr"
             try:
                 with open(fn, "wb") as f:
                     f.write(smp.brr)
             except OSError:
                 print(f"I/O error: couldn't write to {fn}")
             brrdump_listfile += f"{id:02X}: {fn}, {smp.loop.hex().upper()}, {smp.tuning.hex().upper()}, {smp.adsr.hex().upper()}\n"
-        fn = outfile_rom_path + f"_BRRdump.txt"
+        fn = outfile + f"_BRRdump.txt"
         try:
             with open(fn, "w") as f:
                 f.write(brrdump_listfile)
@@ -1299,11 +1302,11 @@ if __name__ == "__main__":
         outfile_default = ".".join(outfile_default)
         print("Enter destination ROM filename.")
         print(f"Default: {outfile_default}")
-        outfile_rom_path = input(" > ").strip()
-        if not outfile_rom_path:
-            outfile_rom_path = outfile_default
+        outfile = input(" > ").strip()
+        if not outfile:
+            outfile = outfile_default
     else:
-        outfile_rom_path = args.outfile
+        outfile = args.outfile
     
     print()
     
@@ -1312,12 +1315,12 @@ if __name__ == "__main__":
     #snip
     
     try:
-        with open(outfile_rom_path, "wb") as f:
+        with open(outfile, "wb") as f:
             f.write(outrom)
     except OSError:
-        print(f"Couldn't write to output file {outfile_rom_path}")
+        print(f"Couldn't write to output file {outfile}")
         clean_end()
-    print(f"Wrote to {outfile_rom_path} successfully.")
+    print(f"Wrote to {outfile} successfully.")
     
     clean_end()
     

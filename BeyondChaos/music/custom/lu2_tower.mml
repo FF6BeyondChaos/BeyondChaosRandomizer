@@ -1,0 +1,178 @@
+#TITLE Tower
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x21 0x64 bass strings
+#WAVE 0x22 0x82 trumpet
+#WAVE 0x23 0x28 tubular bells
+#WAVE 0x24 0x5A timpani
+#WAVE 0x28 0x1F snare
+#WAVE 0x2C 0x2D crash cymbal
+
+#def init= t130 %v46 %b0,80 %f0,0 %x240
+
+#def strings= |0 o5 m %y0%s6
+#def bass=    |1 o7 m
+#def trumpet= |2 o5 m48,18,207 %r10
+#def bells=   |3 o4 m %r17
+#def timpani= |4 o7 m
+
+#def s= v342
+#def b= v342
+#def t= v171
+#def l= v228
+#def d= v228
+
+#def snareVol= v171
+#def crashVol= v228
+
+#drum "o"= 5e |8 p64 'snareVol*v.10' %a14 %r20
+#drum "p"= 5e |8 p64 'snareVol*v.25' %a14 %r20
+#drum "q"= 5e |8 p64 'snareVol*v.30' %a14 %r20
+#drum "r"= 5e |8 p64 'snareVol*v.35' %a14 %r20
+#drum "s"= 5e |8 p64 'snareVol*v.44' %a14 %r20
+#drum "y"= 5g |C p80 'crashVol*v0.55' p80 %r17
+
+{1} 'init' %e1
+r4 l4
+$
+'strings' p48 's*v.24'
+r1r1r1r2. f
+a+2.f  g+2gd+
+f>a+2. ^2.<f
+a+2.f  g+2gd+
+f>a+2. ^1<
+##
+g+2.d+  f+2fc+
+d+>g+2. ^2.<d+
+g+2.d+  f+2fc+
+d+>g+2. ^1<
+##
+r1r1r1..<
+'s*v.32' p64 l32
+f^48rf^48rf^48r
+##
+l4 f+2g+2 a+g+f+d+ f2a+2c+2. l32 f^48rf^48rf^48r
+l4 f+2g+2 a+g+f+d+ l16 f4.ff f4.ff a4a4 <c4c4
+;
+
+{6} %e1
+r4 l4
+$
+'trumpet' p64 't*v.40'
+r1r1r1r2. f
+a+2.f  g+2gd+
+f>a+2. ^2.<f
+a+2.f  g+2gd+
+f>a+2. ^1<
+##
+g+2.d+  f+2fc+
+d+>g+2. ^2.<d+
+g+2.d+  f+2fc+
+d+>g+2. ^1<
+##
+r1r1r1r1
+##
+[ l8
+ [ 'timpani-o3' p56 'd*v.45' b2.
+   'bass-o2' p64 'b*v.36' b12b12b12 ]
+ j2 a+rfr a+rfr a+rfr a+rf12f12f12
+]   fr fr r2
+    f4f4f4 l16 f+gg+a
+;
+
+{3} %e1
+'timpani-o3' p56 'd*v.45' l16 f+gg+a l4
+$
+[12 a+f a+f]
+##
+[8 g+d g+d]
+##
+[3 a+f a+f]
+   a+f a+f12f12f12
+##
+[
+ [ 'bass-o2' p64 'b*v.36' b2.
+ 'timpani-o3' p56 'd*v.45' j2
+ b12b12b12 ] b12'd*v.27'b24'd*v.32'b24'd*v.45'b24b24
+ j2 a+f a+f a+f a+f12f12f12
+]   f2
+'bass-o2' p64 'b*v.36' f8r8f8r8
+'timpani-o3' p56 'd*v.45' f2f4 l16 f+gg+a
+;
+
+{7} %e1
+'bass-o2' p64 'b*v.36' l16 f+gg+a l8
+$
+[12 a+rfr a+rfr]
+##
+[8 g+rd+rg+rd+r]
+##
+[3 a+rfr a+rfr]
+   a+rfra+r f12f12f12
+##
+'bells' p48 'l*v.45' l4
+f+2g+2  a+g+f+d+
+f1 >a+1<
+f+2g+2  a+g+f+d+
+f1 a1
+'bass-o2' p64 'b*v.36'
+;
+
+{2} %e1
+'strings' p80 's*v.24' l16 r4 k-1
+$
+[3 frr4g4g+r8.g8  f8g8d+2.
+   frr4g4g+r8.g8  g+8a+8f2. ]
+##
+[2 d+rr4f4f+r8.f8  d+8f8c+2.
+   d+rr4f4f+r8.f8  f+8g+8d+2. ]
+##
+   frr4g4g+r8.g8  f8g8d+2.
+   frr4g4g+r8.g8  g+8a+8f2.
+##
+l4
+d+2f2 f+fd+>b<
+c+2f2 f2.>a+12a+12a+12<
+d+2f2 f+fd+>b<
+ccaa <ccff>
+;
+
+{5} %e1
+'strings' p80 's*v.24' l16 r4 k-1
+$
+[3 c+rr4d+4fr8.d+8  c+8d+8c2.
+   c+rr4d+4fr8.d+8  f8g8c+2. ]
+##
+[2 >brr4<c+4d+r8.c+8  >b8<c+8>a+2.
+    brr4<c+4d+r8.c+8  d+8f8>b2.<]
+##
+   c+rr4d+4fr8.d+8  c+8d+8c2.
+   c+rr4d+4fr8.d+8  f8g8c+2. 
+##
+l4
+f+2g+2 a+g+f+d+  f2a+2>a+2.<f12f12f12
+f+2g+2 a+g+f+d+  ffff aa<cc>
+;
+
+{4} %e1
+l16 "oprs"
+$
+"!!!o"
+[12 "s4.ss s2    s8s8ssss s4" l32 %g1 "rqpp pppp" %g0 l16]
+##
+[ "s2. s12s12s12" ]
+    "s4.ss s2    s8s8ssss s4" l32 %g1 "srpp pppp" %g0 l16
+[ "s2. s12s12s12" ]
+    "s4.ss s4.ss s2s4s4"
+;
+
+{8} %e1
+r4
+$
+"y1" [23^1]
+##
+"y1 y1 y1^1 y1 y1 y1 y2y4y4"
+;
