@@ -730,33 +730,39 @@ NORMAL_FLAGS = [
     Flag(name='espffect',
          description='ESPER JUNCTION EFFECTS MODE',
          long_description='Attach random effects from the "Junction" patch '
-                          'set to espers. Low potential for softlocks.',
+                          'set to espers.',
          category='experimental',
          inputtype='boolean'),
     Flag(name='effectmas',
          description='EQUIPMENT JUNCTION EFFECTS MODE',
          long_description='Attach random effects from the "Junction" patch '
-                          'set to equipment (excluding relics). Medium '
+                          'set to equipment (excluding relics). Low '
                           'potential for softlocks.',
          category='experimental',
          inputtype='boolean'),
     Flag(name='effectory',
          description='RELIC JUNCTION EFFECTS MODE',
          long_description='Attach random effects from the "Junction" patch '
-                          'set to relics. Medium potential for softlocks.',
+                          'set to relics. Low potential for softlocks.',
          category='experimental',
          inputtype='boolean'),
     Flag(name='effectster',
          description='MONSTER JUNCTION EFFECTS MODE',
          long_description='Attach random effects from the "Junction" patch '
-                          'set to monsters, rages, and some statuses. High '
+                          'set to monsters, rages, and some statuses. Medium '
                           'potential for softlocks.',
          category='experimental',
          inputtype='boolean'),
     Flag(name='treaffect',
          description='MONSTER EQUIPMENT JUNCTION EFFECTS MODE',
          long_description='Monsters inherit the "Junction" effects of held '
-                          'items. High potential for softlocks.',
+                          'items. Medium potential for softlocks.',
+         category='experimental',
+         inputtype='boolean'),
+    Flag(name='jejentojori',
+         description='MEMENTO MORI JUNCTIONS MODE',
+         long_description='Innate "mementomori" relics retain their junction '
+                          'effects. High potential for softlocks.',
          category='experimental',
          inputtype='boolean'),
 

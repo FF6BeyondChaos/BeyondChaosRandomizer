@@ -5074,6 +5074,17 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
         JUNCTION_MANAGER_PARAMETERS['monster-equip-steal-enabled'] = 1
         JUNCTION_MANAGER_PARAMETERS['monster-equip-drop-enabled'] = 1
 
+    if Options_.is_flag_active("jejentojori"):
+        for c in get_characters():
+            if c.id >= 0x10:
+                continue
+            if not hasattr(c, 'relic_selection'):
+                continue
+            junctions = jm.equip_whitelist[c.relic_selection]
+            for j in junctions:
+                jm.add_junction(c.id, j, 'whitelist',
+                                force_category='character')
+
     if jm.activated:
         jm.match_esper_monster_junctions()
 
