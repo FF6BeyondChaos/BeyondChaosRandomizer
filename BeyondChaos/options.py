@@ -177,11 +177,15 @@ ANCIENT_CAVE_PROHIBITED_FLAGS = {
     "j",
     "airship",
     "alasdraco",
+    "lessfanatical",
+    "mimetime",
+    "morefanatical",
     "notawaiter",
+    "rushforpower",
     "strangejourney",
     "worringtriad",
     "thescenarionottaken",
-    "mimetime"
+
 }
 
 ALL_MODES = [
