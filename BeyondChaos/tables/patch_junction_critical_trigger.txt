@@ -1,7 +1,7 @@
-.addr   jun-checker                     610000
-.addr   jun-queue-command               610ff0
-.addr   jun-queue-self-spell            610fc0
-.addr   jun-set-target-counter          6107c0
+.addr   jun-checker                     {{jun-global-checker}}
+.addr   jun-queue-command               {{jun-global-queue-command}}
+.addr   jun-queue-self-spell            {{jun-global-queue-self-spell}}
+.addr   jun-set-target-counter          {{jun-global-set-target-counter}}
 .addr   main                            620480
 
 .addr   spell-indexes-address           620580
@@ -9,20 +9,15 @@
 .addr   command-indexes-address         620590
 .def    command-indexes-list    0b 18 40 41 15
 
-.def    first-spell-index           20
+.def    first-spell-index           {{jun-index-critical-haste=20}}
 .def    overflow-spell-index        2e
-.def    first-command-index         30
+.def    first-command-index         {{jun-index-critical-runic=30}}
 .def    overflow-command-index      35
 
 .addr   do-self-spell                   625000
 .addr   do-command                      626000
 
-.def    jun-index-morph             38
-.def    jun-index-revenge           39
-.def    jun-index-escape            3a
-
 .def    escape-spell-index          c2
-.def    revenge-spell-index         92
 
 020a5d: 22 $main
 :       ea ea
@@ -60,7 +55,7 @@ $main
 :       ad f6 1c
 :       c9 10
 :       90 no-morph
-:       a9 jun-index-morph
+:       a9 {{jun-index-critical-morph}}
 :       22 $jun-checker
 :       f0 no-morph
 :       a9 03
@@ -68,21 +63,10 @@ $main
 :       22 $jun-queue-command
 
 .label no-morph
-:       a9 jun-index-revenge
-:       22 $jun-checker
-:       f0 no-revenge
-:       22 $jun-set-target-counter
-:       a9 44
-:       8d 7a 3a
-:       a9 revenge-spell-index
-:       8d 7b 3a
-:       22 $jun-queue-command
-
-.label no-revenge
 :       a9 06
 :       24 b1
 :       d0 cant-escape
-:       a9 jun-index-escape
+:       a9 {{jun-index-critical-escape}}
 :       22 $jun-checker
 :       f0 cant-escape
 :       a9 escape-spell-index

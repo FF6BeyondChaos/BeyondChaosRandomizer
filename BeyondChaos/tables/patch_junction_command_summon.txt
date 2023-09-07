@@ -1,16 +1,21 @@
-.addr   jun-check-entity-living         610600
-.addr   main                            628000
+.addr   jun-check-entity-living         {{jun-global-check-entity-living}}
+.addr   jun-rng3                        {{jun-global-rng3}}
+.addr   main                            628180
 .addr   reentry-address                 02175f
 .addr   reentry-fail-address            02151e
 
-.addr   pointer-address                 61f180
-.def    command-index       40
+.addr   pointer-address                 {{jun-global-command-summon}}
 
 $main
 :       bb
 :       e0 08
-:       b0 no-esper
+:       90 is-player-character
+:       e2 30
+:       a9 1b
+:       22 $jun-rng3
+:       80 do-summon
 
+.label is-player-character
 :       c2 30
 :       bd 10 30
 :       aa
@@ -20,6 +25,7 @@ $main
 :       e2 10
 :       f0 no-esper
 
+.label do-summon
 :       18
 :       69 36
 :       85 b6

@@ -1,25 +1,29 @@
-.addr   jun-checker                     610000
+.addr   jun-checker                     {{jun-global-checker}}
 .addr   main                            6215c0
+
 # BCCE moves this code
-#.addr   banon_check                     0206db
+#.addr   banon_check                     0206d8
 #.addr   return-vip-fell                 0206df
 #.addr   return-normal                   0206e4
-.addr   banon_check                     0206f6
+.addr   banon_check                     0206f3
 .addr   return-vip-fell                 0206fa
 .addr   return-normal                   020700
 
-.def    jun-index-vip       97
-.def    jun-index-highwind  8a
-
 $banon_check
 :       5c $main
+:       ea ea ea
 
 $main
+:       bd f9 3e
+:       89 04
+:       d0 main-exit-normal
+:       bd d8 3e
 :       c9 0e
 :       f0 vip-fell
-:       a9 jun-index-vip
+:       a9 {{jun-index-vip}}
 :       22 $jun-checker
 :       d0 vip-fell
+.label main-exit-normal
 :       5c $return-normal
 .label vip-fell
 :       5c $return-vip-fell
@@ -27,5 +31,14 @@ $main
 VALIDATION
 
 $banon_check
+:       bd d8 3e
 :       c9 0e
 :       d0
+
+$return-vip-fell
+:       a9 06
+:       8d 6e 3a
+
+$return-normal
+:       ca ca
+:       10 99

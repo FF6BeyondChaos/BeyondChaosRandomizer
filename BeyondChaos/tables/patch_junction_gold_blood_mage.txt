@@ -1,4 +1,4 @@
-.addr   jun-checker                     610000
+.addr   jun-checker                     {{jun-global-checker}}
 .addr   menu-load-mp                    620880
 .addr   cast-check-deduct-mp            620980
 .addr   do-mp-critical                  620b00
@@ -12,9 +12,6 @@
 .addr   return-no-junction-check-mp     0232ba
 .addr   return-enough-mp                0232e0
 .addr   return-not-enough-mp            0232c2
-
-.def    jun-index-blood         0a
-.def    jun-index-gold          0b
 
 025d39: 5c $menu-load-mp
 
@@ -33,13 +30,13 @@ $menu-load-mp
 :       5c $menu-return
 
 $cast-check-deduct-mp
-:       a9 jun-index-blood 00
+:       a9 {{jun-index-blood-mage}} 00
 :       22 $jun-checker
 :       d0 blood-mage-check-mp
 
 :       e0 08
 :       b0 is-monster-no-gold
-:       a9 jun-index-gold 00
+:       a9 {{jun-index-gold-mage}} 00
 :       22 $jun-checker
 :       d0 gold-mage-check-mp
 
@@ -77,11 +74,11 @@ $cast-check-deduct-mp
 :       5c $return-enough-mp
 
 $set-end-battle-mp
-:       a9 jun-index-blood 00
+:       a9 {{jun-index-blood-mage}} 00
 :       22 $jun-checker
 :       d0 skip-set-mp
 
-:       a9 jun-index-gold 00
+:       a9 {{jun-index-gold-mage}} 00
 :       22 $jun-checker
 :       d0 skip-set-mp
 
@@ -95,11 +92,11 @@ $load-mp-routine
 :       08
 :       c2 20
 
-:       a9 jun-index-blood 00
+:       a9 {{jun-index-blood-mage}} 00
 :       22 $jun-checker
 :       d0 blood-mage-load-mp
 
-:       a9 jun-index-gold 00
+:       a9 {{jun-index-gold-mage}} 00
 :       22 $jun-checker
 :       d0 gold-mage-load-mp
 
@@ -143,7 +140,7 @@ $gold-to-mp
 :       29 ff 00
 :       d0 max-gold
 :       ad 60 18
-:       4a 4a 4a 4a
+:       4a 4a 4a 4a 4a
 :       c9 e7 03
 :       b0 max-gold
 :       60
@@ -162,13 +159,13 @@ $do-mp-critical
 :       bb
 :       c2 20
 
-:       a9 jun-index-blood 00
+:       a9 {{jun-index-blood-mage}} 00
 :       22 $jun-checker
 :       f0 no-blood
 :       20 $deduct-blood,2
 
 .label no-blood
-:       a9 jun-index-gold 00
+:       a9 {{jun-index-gold-mage}} 00
 :       22 $jun-checker
 :       f0 no-gold
 :       20 $deduct-gold,2
@@ -198,7 +195,7 @@ $deduct-blood
 $deduct-gold
 :       ad 4c 3a
 :       48
-:       0a 0a 0a 0a
+:       0a 0a 0a 0a 0a
 :       8d 4c 3a
 :       ad 60 18
 :       38

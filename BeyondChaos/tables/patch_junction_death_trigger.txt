@@ -1,19 +1,20 @@
-.addr   jun-checker                     610000
-.addr   jun-queue-command               610ff0
-.addr   jun-set-target-counter          6107c0
+.addr   jun-checker                     {{jun-global-checker}}
+.addr   jun-queue-command               {{jun-global-queue-command}}
+.addr   jun-set-target-counter          {{jun-global-set-target-counter}}
 
 .addr   main                            621700
 .addr   main-rippler-instant-death      6216c0
 
-.def    jun-index-immortal          90
-.def    jun-index-spiraler          91
-.def    jun-index-esper             92
-.def    jun-index-rippler           93
+# Since the "has died" flag can be reset for monsters, the
+# "update menu" flag 7e3a58 is repurposed here
+.addr   character-died-flag             7e3a56
+.addr   monster-died-flag               7e3a58
+
 .def    chokesmoke-index            a6
 .def    spiraler-index              63
 .def    rippler-index               9e
-.def    summon-command-index        40
-.def    final-attack-command-index  44
+.def    summon-command-index        {{jun-command-index-summon}}
+.def    final-attack-command-index  {{jun-command-index-final-attack}}
 
 .def    death-bit                   80 00
 .def    death-prot-bit              04 00
@@ -44,14 +45,14 @@ $main
 :       85 b8
 :       e2 20
 
-:       a9 jun-index-immortal
+:       a9 {{jun-index-immortal}}
 :       22 $jun-checker
 :       f0 no-immortal
 :       a9 chokesmoke-index
 :       20 @queue-final-attack,2
 
 .label no-immortal
-:       a9 jun-index-spiraler
+:       a9 {{jun-index-final-spiral}}
 :       22 $jun-checker
 :       f0 no-spiraler
 :       a9 spiraler-index
@@ -59,12 +60,11 @@ $main
 
 .label no-spiraler
 :       c2 20
-:       b9 18 30
-:       2c 56 3a
+:       20 @check-already-death,2
 :       d0 already-death-trigger
 :       e2 20
 
-:       a9 jun-index-esper
+:       a9 {{jun-index-final-esper}}
 :       22 $jun-checker
 :       f0 no-esper
 
@@ -78,7 +78,7 @@ $main
 :       22 $jun-queue-command
 
 .label no-esper
-:       a9 jun-index-rippler
+:       a9 {{jun-index-final-ripple}}
 :       22 $jun-checker
 :       f0 no-rippler
 
@@ -104,6 +104,15 @@ $main
 :       22 $jun-queue-command
 :       60
 
+.label check-already-death
+:       b9 18 30
+:       e0 08
+:       b0 already-death-is-monster
+:       2c $character-died-flag,2
+:       60
+.label already-death-is-monster
+:       0c $monster-died-flag,2
+:       60
 
 $main-rippler-instant-death
 :       bd a1 3a

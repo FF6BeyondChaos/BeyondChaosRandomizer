@@ -1,8 +1,8 @@
-.addr   jun-checker                     610000
-.addr   jun-check-are-same-team         6105e0
-.addr   jun-mult                        610800
-.addr   jun-rng2                        610830
-.addr   jun-get-equipped-esper          610900
+.addr   jun-checker                     {{jun-global-checker}}
+.addr   jun-check-are-same-team         {{jun-global-check-are-same-team}}
+.addr   jun-mult                        {{jun-global-mult}}
+.addr   jun-rng2                        {{jun-global-rng2}}
+.addr   jun-get-equipped-esper          {{jun-global-get-equipped-esper}}
 
 .addr   main                            6201c0
 .addr       get-esper-spell                 620100
@@ -10,8 +10,6 @@
 .addr               spell-data                      046ac0
 .addr           esper-data-learn                186e00
 .addr           esper-data-spell                186e01
-
-.def    jun-index-esper-magic   01
 
 023250: 22 $main
 :       ea
@@ -35,7 +33,7 @@ $main
 :       ad 70 3a
 :       d0 main-esper-proc-exit
 .label skip-strikes-number-check
-:       a9 jun-index-esper-magic
+:       a9 {{jun-index-esper-magic}}
 :       22 $jun-checker
 :       f0 main-esper-proc-exit
 :       20 $get-esper-spell,2
