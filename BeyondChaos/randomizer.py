@@ -3,6 +3,7 @@ from hashlib import md5
 import os
 import re
 import sys
+import traceback
 from io import BytesIO
 from sys import argv
 from time import time, sleep, gmtime
@@ -49,7 +50,7 @@ from patches import (
     show_coliseum_rewards, cycle_statuses, no_dance_stumbles, fewer_flashes,
     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break,
     title_gfx, apply_namingway, improved_party_gear, patch_doom_gaze,
-    nicer_poison, fix_xzone, imp_skimp, hidden_relic, y_equip_relics,
+    nicer_poison, fix_xzone, imp_skimp, fix_flyaway, hidden_relic, y_equip_relics,
     fix_gogo_portrait, vanish_doom, stacking_immunities, mp_color_digits,
     can_always_access_esper_menu, alphabetized_lores, description_disruption,
     informative_miss, improved_equipment_menus, verify_randomtools_patches)
@@ -73,7 +74,7 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-5.0.3"
+VERSION = "CE-5.1.0"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
@@ -2182,6 +2183,7 @@ def manage_balance(newslots: bool = True):
     evade_mblock(outfile_rom_buffer)
     fix_xzone(outfile_rom_buffer)
     imp_skimp(outfile_rom_buffer)
+    fix_flyaway(outfile_rom_buffer)
 
     manage_rng()
     if newslots:
@@ -2450,7 +2452,7 @@ def manage_items(items: List[ItemBlock], changed_commands: Set[int] = None) -> L
     from itemrandomizer import (set_item_changed_commands, extend_item_breaks)
     always_break = Options_.is_flag_active('collateraldamage')
     crazy_prices = Options_.is_flag_active('madworld')
-    extra_effects = Options_.is_flag_active('masseffect')
+    extra_effects = Options_.get_flag_value('masseffect')
     wild_breaks = Options_.is_flag_active('electricboogaloo')
     no_breaks = Options_.is_flag_active('nobreaks')
     unbreakable = Options_.is_flag_active('unbreakable')
@@ -2557,8 +2559,9 @@ def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
                     equipid = equipitem.itemid
                     if (equipitem.has_disabling_status and (0xE <= c.id <= 0xF or c.id > 0x1B)):
                         equipid = 0xFF
-                    elif equipitem.prevent_encounters and c.id in [0x1C, 0x1D]:
-                        equipid = 0xFF
+                    elif Options_.is_flag_active("dearestmolulu") and equipitem.prevent_encounters and c.id in [14, 16, 17]:
+                            #don't give moogle charm to Banon, or Guest Ghosts during dearestmolulu
+                            equipid = 0xFF
                     else:
                         if (equiptype not in ["weapon", "shield"] and random.randint(1, 100) == 100):
                             equipid = random.randint(0, 0xFF)
@@ -3157,7 +3160,7 @@ def manage_formations(formations: List[Formation], fsets: List[FormationSet]) ->
             formation.mp = 100  # Triad
         formation.write_data(outfile_rom_buffer)
 
-    return formations
+    return formations, fsets
 
 
 def manage_formations_hidden(formations: List[Formation],
@@ -4171,7 +4174,7 @@ def manage_auction_house():
         auction_sub.bytestring = bytes([0x6d, item.itemid, 0x45, 0x45, 0x45])
         auction_sub.write(outfile_rom_buffer)
 
-        addr = 0x304000 + i * 6
+        addr = 0x303F00 + i * 6
         auction_sub.set_location(addr)
         auction_sub.bytestring = bytes([0x66, auction_item[3] & 0xff, (auction_item[3] & 0xff00) >> 8, item.itemid,
                                         # Show text auction_item[3] with item item.itemid
@@ -4734,13 +4737,12 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
 
     salt_formations = [id for id in salt_formations if id not in event_formations]
 
-
     for fset in fsets:
         if Options_.is_flag_active("cursedencounters"):  # code that applies FC flag to allow 16 encounters in all zones
             if fset.setid < 252 or fset.setid in good_event_fsets:  # only do regular enemies, don't do sets that can risk Zone Eater or get event encounters
                 if fset.setid not in bad_event_fsets:
                     if not [value for value in fset.formids if
-                            value in event_formations]:
+                            value in event_formations or value in salt_formations]:
                         fset.sixteen_pack = True
                     for i, v in enumerate(fset.formids):
                         if fset.formids[i] in salt_formations:
@@ -4748,8 +4750,6 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
                                 fset.formids[i] -= 1  # any encounter that could turn into an
                                                       # event encounter, keep reducing until it's not a salt or event formation
                             fset.sixteen_pack = True
-        #if fset.sixteen_pack == True:
-        #    print("FORM ID:" + str(fset.formids))
 
 def nerf_paladin_shield():
     paladin_shield = get_item(0x67)
@@ -5029,10 +5029,10 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
                 if junctions:
                     if equipid in pool:
                         old_rank = pool.index(equipid) / (len(pool)-1)
-                    else:
-                        assert equiptype == 'weapon'
-                        assert equipid in shields
+                    elif equiptype == 'weapon' and equipid in shields:
                         old_rank = shields.index(equipid) / (len(shields)-1)
+                    else:
+                        old_rank = random.random()
                     index = int(round(old_rank * (len(fallback)-1)))
                     new_equip = fallback[index]
                     old_item = [i for i in items if i.itemid == equipid][0]
@@ -5073,6 +5073,17 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
                                     force_category='monster')
         JUNCTION_MANAGER_PARAMETERS['monster-equip-steal-enabled'] = 1
         JUNCTION_MANAGER_PARAMETERS['monster-equip-drop-enabled'] = 1
+
+    if Options_.is_flag_active("jejentojori"):
+        for c in get_characters():
+            if c.id >= 0x10:
+                continue
+            if not hasattr(c, 'relic_selection'):
+                continue
+            junctions = jm.equip_whitelist[c.relic_selection]
+            for j in junctions:
+                jm.add_junction(c.id, j, 'whitelist',
+                                force_category='character')
 
     if jm.activated:
         jm.match_esper_monster_junctions()
@@ -5420,8 +5431,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             else:
                 diverge()
 
-        read_dialogue(infile_rom_buffer)
-        read_location_names(infile_rom_buffer)
+        read_dialogue(outfile_rom_buffer) # Uses outfile instead of infile for TheScenarioNotTaken compatibility
+        read_location_names(outfile_rom_buffer) # Uses outfile instead of infile for TheScenarioNotTaken compatibility
         relocate_ending_cinematic_data(0xF08A70)
 
         if Options_.is_flag_active("shuffle_commands") or \
@@ -5550,7 +5561,11 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                         raise ValueError
                     except ValueError:
                         pipe_print("The supplied value was not a valid option. Please try again.")
-            hidden_relic(outfile_rom_buffer, amount)
+            feature_exclusion_list = ["Auto stop", "Muddle", "Command Changer"]
+            if Options_.is_flag_active('dearestmolulu'):
+                feature_exclusion_list.append("no enc.")
+            hidden_relic(outfile_rom_buffer, amount, feature_exclusion_list)
+
 
         # This needs to be before manage_monster_appearance or some of the monster
         # palettes will be messed up.
@@ -5611,6 +5626,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             manage_espers(esperrage_spaces, esper_replacements)
         reseed()
         myself_locations = myself_patches(outfile_rom_buffer)
+        myself_name_bank = [(myself_locations["NAME_TABLE"] >> 16) + 0xC0]
+        myself_name_address = [myself_locations["NAME_TABLE"] & 0x0000FF, (myself_locations["NAME_TABLE"] >> 8) & 0x00FF]
         manage_reorder_rages(myself_locations["RAGE_ORDER_TABLE"])
 
         titlesub = Substitution()
@@ -5679,14 +5696,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             for character in characters:
                 character.mutate_stats(outfile_rom_buffer, start_in_wor, read_only=True)
         reseed()
-
-        if Options_.is_flag_active("random_formations"):
-            formations = get_formations()
-            fsets = get_fsets()
-            manage_formations(formations, fsets)
-            manage_cursed_encounters(formations, fsets)
-            for fset in fsets:
-                fset.write_data(outfile_rom_buffer)
 
         if Options_.is_flag_active("random_formations") or Options_.is_flag_active('ancientcave'):
             manage_dragons()
@@ -5870,27 +5879,32 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                     remonsterate_process.start()
                     while True:
                         try:
-                            response = randomize_connection.recv()
-                            if isinstance(response, str):
-                                pipe_print(response)
-                            elif isinstance(response, tuple):
-                                outfile_rom_buffer, remonsterate_results = response
-                                break
-                            elif isinstance(response, Exception):
-                                if not isinstance(response, OverflowError) and not \
-                                        isinstance(response, ReferenceError) and gui_connection:
-                                    gui_connection.send(response)
-                                else:
-                                    raise response
+                            if not remonsterate_process.is_alive():
+                                raise RuntimeError("Unexpected error: The process handling remonsteration died.")
+                            if randomize_connection.poll(timeout=5):
+                                child_output = randomize_connection.recv()
+                            else:
+                                child_output = None
+                            if child_output:
+                                if isinstance(child_output, str):
+                                    pipe_print(child_output)
+                                elif isinstance(child_output, tuple):
+                                    outfile_rom_buffer, remonsterate_results = child_output
+                                    break
+                                elif isinstance(child_output, Exception):
+                                    raise child_output
                         except EOFError:
                             break
-
-                except (OverflowError, ReferenceError) as e:
-                    pipe_print("Remonsterate: An error occurred attempting to remonsterate. Trying again...")
-                    # Replace backup file
-                    outfile_rom_buffer = outfile_backup
-                    attempt_number = attempt_number + 1
-                    continue
+                except Exception as remonsterate_exception:
+                    if isinstance(remonsterate_exception, OverflowError) or \
+                            isinstance(remonsterate_exception, ReferenceError):
+                        pipe_print("Remonsterate: An error occurred attempting to remonsterate. Trying again...")
+                        # Replace backup file
+                        outfile_rom_buffer = outfile_backup
+                        attempt_number = attempt_number + 1
+                        continue
+                    else:
+                        raise remonsterate_exception
                 break
 
             # Remonsterate finished
@@ -5952,7 +5966,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
         has_music = Options_.is_any_flag_active(['johnnydmad', 'johnnyachaotic'])
         if has_music:
-            music_init(web_custom_playlist=kwargs.get("web_custom_playlist", None))
+            music_init()
 
         if Options_.is_flag_active('alasdraco'):
             opera = manage_opera(outfile_rom_buffer, has_music)
@@ -5963,8 +5977,10 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
         if has_music:
             from utils import custom_path
-            randomize_music(outfile_rom_buffer, Options_, playlist_path=custom_path, playlist_filename="songs.txt",
-                            opera=opera, form_music_overrides=form_music)
+            randomize_music(outfile_rom_buffer, Options_, playlist_path=custom_path,
+                    playlist_filename="songs.txt",
+                    virtual_playlist=kwargs.get("web_custom_playlist", None),
+                    opera=opera, form_music_overrides=form_music)
             log(get_music_spoiler(), section="music")
         reseed()
 
@@ -5978,6 +5994,14 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                 house_hint()
         reseed()
         reseed()
+
+        if Options_.is_flag_active("random_formations"):
+            #formations = get_formations()
+            #fsets = get_fsets()
+            formations, fsets = manage_formations(formations, fsets)
+            manage_cursed_encounters(formations, fsets)
+            for fset in fsets:
+                fset.write_data(outfile_rom_buffer)
 
         randomize_poem(outfile_rom_buffer)
         randomize_passwords(custom_web_passwords=kwargs.get("web_custom_passwords", None))
@@ -6074,7 +6098,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         name_swd_techs(outfile_rom_buffer)
         fix_flash_and_bioblaster(outfile_rom_buffer)
         title_gfx(outfile_rom_buffer)
-        improved_party_gear(outfile_rom_buffer)
+        improved_party_gear(outfile_rom_buffer,myself_name_address,myself_name_bank)
         mp_color_digits(outfile_rom_buffer)
         alphabetized_lores(outfile_rom_buffer)
         description_disruption(outfile_rom_buffer)
@@ -6155,12 +6179,12 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         rewrite_checksum()
         verify_randomtools_patches(outfile_rom_buffer)
 
-        if not application or application in ["console", "gui"]:
+        if not application == "web" and kwargs.get("generate_output_rom", True):
             with open(outfile_rom_path, 'wb+') as f:
                 f.write(outfile_rom_buffer.getvalue())
             outfile_rom_buffer.close()
 
-        if not application == "tester":
+        if kwargs.get("generate_output_rom", True):
             pipe_print("\nWriting log...")
 
             for character in sorted(characters, key=lambda c: c.id):
@@ -6183,7 +6207,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                 log_chests()
             log_item_mutations()
 
-            if not application or application in ["console", "gui"]:
+            if not application == "web":
                 with open(outlog, 'w+') as f:
                     f.write(get_logstring(
                         ["characters", "stats", "aesthetics", "commands", "blitz inputs", "magitek", "slots", "dances", "espers",
@@ -6264,9 +6288,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                      "remonsterate", "shops", "treasure chests", "junctions", "zozo clock", "secret items"])
             })
         return outfile_rom_path
-    except Exception as e:
-        import sys, traceback
-        pipe_print(traceback.format_exc())
+    except Exception as exc:
+        # pipe_print(type(exc)(traceback.print_exc()))
+        pipe_print(exc)
 
 
 if __name__ == "__main__":

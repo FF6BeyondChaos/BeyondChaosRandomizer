@@ -100,6 +100,8 @@ def allocate_espers(ancient_cave, espers, characters, user_choice,
         if e.id not in [crusader_id, ragnarok_id] and random.randint(1, 25) >= 25 - max_rank + e.rank:
             num_users += 1
             while num_users < 15 and random.choice([True] + [False] * (e.rank + 2)):
+                if num_users == len(characters):
+                    break
                 num_users += 1
         users = random.sample(characters, num_users)
         if e in preassignments:

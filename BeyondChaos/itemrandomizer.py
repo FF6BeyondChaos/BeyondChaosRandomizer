@@ -770,20 +770,34 @@ class ItemBlock:
             self.heavy = True
 
         if extra_effects:
-            if random.randint(1, 3) == 3:
+
+            extra_effects = str(extra_effects).lower()
+
+            if extra_effects == 'random':
+                extra_effects = random.choice(["low", "med", "high"])
+
+            if extra_effects == 'low':
+                extra_effects_modifier = [12, 15, 15, 9, 12]
+            elif extra_effects == 'med':
+                extra_effects_modifier = [9, 12, 12, 6, 9]
+            elif extra_effects == 'high':
+                extra_effects_modifier = [3, 4, 4, 2, 3]
+
+            if random.randint(1, extra_effects_modifier[0]) == extra_effects_modifier[0]:
                 self.mutate_special_action()
 
-            if not learned and random.randint(1, 4) == 4:
+            if not learned and random.randint(1, extra_effects_modifier[1]) == extra_effects_modifier[1]:
                 self.mutate_learning(allow_ultima)
                 learned = True
-            if not broken and random.randint(1, 4) == 4:
+            if not broken and random.randint(1, extra_effects_modifier[2]) == extra_effects_modifier[2]:
                 self.mutate_break_effect(wild_breaks=wild_breaks)
                 broken = True
 
-            if random.randint(1, 2) == 2:
+            if random.randint(1, extra_effects_modifier[3]) == extra_effects_modifier[3]:
                 self.mutate_feature()
-            while random.randint(1, 3) == 3:
+            while random.randint(1, extra_effects_modifier[4]) == extra_effects_modifier[4]:
                 self.mutate_feature()
+
         if no_breaks:
             self.mutate_break_effect(no_breaks=no_breaks)
         if unbreakable:

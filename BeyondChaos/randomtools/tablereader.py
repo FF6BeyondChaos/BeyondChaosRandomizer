@@ -284,6 +284,7 @@ def patch_filename_to_bytecode(patchfilename, mapping=None, parameters=None):
     next_address = None
     filename = None
     read_into = patch
+    valparmatcher = re.compile('({{([^:]*)=([^}]*)}})')
     defparmatcher = re.compile('({{([^:]*):([^}]*)}})')
     f = open(patchfilename)
     for line in f:
@@ -297,9 +298,18 @@ def patch_filename_to_bytecode(patchfilename, mapping=None, parameters=None):
         while "  " in line:
             line = line.replace("  ", " ")
 
+        valparmatches = valparmatcher.findall(line)
+        for to_replace, name, value in valparmatches:
+            if parameters is not None:
+                try:
+                    assert name in parameters
+                    assert parameters[name] == value
+                except:
+                    raise Exception('Parameter %s does not equal %s.'
+                                    % (name, value))
+            line = line.replace(to_replace, value)
         defparmatches = defparmatcher.findall(line)
-        for match in defparmatches:
-            to_replace, name, value = match
+        for to_replace, name, value in defparmatches:
             value = clean_parameter(value)
             if isinstance(value, int):
                 if (':' in line and

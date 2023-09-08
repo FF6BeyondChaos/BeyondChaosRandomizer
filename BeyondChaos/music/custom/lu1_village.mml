@@ -1,0 +1,271 @@
+#TITLE Village
+#ALBUM Lufia and the Fortress of Doom
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x21 0x85 horn sect.
+##WAVE 0x22 0x91 oboe
+##WAVE 0x23 0x92 oboe
+#WAVE 0x24 0x93 oboe
+#WAVE 0x25 0x94 oboe
+#WAVE 0x26 0xA5 flute
+#WAVE 0x27 0x06 epiano
+#WAVE 0x22 0x34 guitar
+#WAVE 0x23 0x50 acbass
+
+#def init= t100 %v35 %b0,100 %f0,0
+
+#def strings= |0 o5 m
+#def horn=    |1 o5 m48,18,199 %r5
+#def oboe=       o5 m48,18,223
+#def flute=   |6 o4 m48,18,239 %r10
+#def epiano=  |7 o3 m          %r13
+#def guitar=  |2 o5 m          %y1%s4%r14
+#def bass=    |3 o6 m          %r13%s7
+
+#def s= v106
+#def h= v160
+#def o= v160
+#def f= v67
+#def e= v133
+#def g= v133
+#def b= v100
+
+#def o1= |5   %r10
+#def o2= |4   %r10
+#def o3= |3   %r10
+#def o4= |2   %r10
+#def o2u= |4  %r10
+#def o3u= |3> %r10
+#def o4u= |2  %r10
+#def o1d= |5  %r10
+#def o2d= |4< %r10
+#def o3d= |3  %r10
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init' %e1 $
+'oboe-o1''o*v.48''o1' p48 l8
+a4<a4g4f+4  e4d4e4f+4>
+b2..<c+     d1
+c+2..d      e2g2
+f+1         e1>
+##
+a4<a4g4f+4  e4d4e4f+4>
+b2..<c+     d1
+c+2..d      e4>a4<g4f+e
+d1.^
+'flute+o1''f*v.60' p48 l8
+ddd
+##
+>b4<d4c+4de   f+4e4d2
+>b4<d4c+4de   >a4g4f+<f+ed
+>b4<d4c+4de   f+4eaf+4.d
+gf+ed>b<dag   e1
+^4
+'oboe''o*v.48''o1' p48 l8
+c+4d4e4
+##
+[f+4'o*v.36'd4>a4<'o*v.48''o2u'b'o1d'a    a2'o*v.36'e4'o*v.48'ef+
+gf+ed>b<deg              f+2j2e2]e4dc+
+d1 e2f+4g4 f+1^1
+;
+
+{2}
+%e1 $
+'guitar-o1''g*v.48' p24
+d8a8<d8>a8<e8>a8<f+8>a8
+d8a8<d8>a8<e8>a8<f+8>a8
+>g8<d8g8d8a8d8b8d8
+>g8<d8g8d8a8d8b8d8
+>a8<e8a8e8b8e8<c+8>e8
+>a8<e8a8e8b8e8<c+8>e8
+d8a8<d8>a8<e8>a8<f+8>a8
+>a8<e8a8e8<c+8>e8a8e8
+##
+d8a8<d8>a8<e8>a8<f+8>a8
+d8a8<d8>a8<e8>a8<f+8>a8
+>g8<d8g8d8a8d8b8d8
+>g8<d8g8d8a8d8b8d8
+>a8<e8a8e8b8e8<c+8>e8
+>a8<e8a8e8b8e8<c+8>e8
+d8a8<d8>a8<g8f+8d8>a8
+d8a8<d8>a8 d2
+##
+>g8<d8g8b8 >a8<e8a8<c+8
+d8>a8g8a8d8f+8a8<d8>>
+g8<d8g8b8>a8<e8a8<c+8
+d8>a8g8a8d8f+8a8<d8>>
+g8<d8g8b8>a8<e8a8<c+8>>
+b8<f+8b8f+8<d8>f+8b8f+8
+>g8<d8g8d8a8d8b8d8
+>a8<e8a8e8<c+8>e8a8e8
+r4e4f+4g4
+##
+d8a8<d8>a8<e8>a8<f+8>a8
+c8g8<c8>g8<d8>g8<e8>g8
+>g8<d8g8d8a8d8b8d8
+>a8<e8a8b8<d8c+8>b8<c+8
+>d8a8<d8>a8<e8>a8<f+8>a8
+c8g8<c8>g8<d8>g8<e8>g8
+>g8<d8g8d8a8d8b8d8
+>a8<e8a8<c+8e8c+8a8c+8>>
+a+8<f8a+8f8<c8>f8<d8>f8
+c8g8<c8>g8<d8>g8<e8>g8
+d8a8<d8>a8<e8>a8<f+8>a8
+d8a8<d8g8 f+2
+;
+
+{3}
+%e1 $
+'bass-o1''b*v1.23' p64 l8
+d2..>a<   d1>
+g2..d     g1
+a2..e     a1<
+d2..d>    a2<c+2
+##
+d2..>a<   d1>
+g2..d     g1
+a2..e     a1<
+d2..>a<   d1>
+##
+g2a2      d2.a4
+g2a2      d2.a4
+g2a2      b2a2
+g1        a1
+ara4b4<c+4
+##
+d1 c1 >g1 a1<
+d1 c1 >g1 a1
+a+1 <c1 d1> d1
+;
+
+{6}
+%e1 $
+'strings''s*v.32' p72 l4
+d1.ef+
+g1.f+e
+c+1.>b<c+
+>a1<c+1
+##
+d1.ef+
+g1.f+e
+c+1.>b<c+
+d1^1
+##
+>g2a2< d2>af+
+ g2a2< d2>df+
+ g2a2  b2ba
+ g1a1  r<c+de
+##
+a2f+2  e2g2
+d1     ^2e2
+a2f+2  e2g2
+d1     ^2e2
+f1     g1
+a1     ^1
+;
+
+{7}
+%e1 $
+'strings-o1''s*v.32' p104 l4
+a1^1
+<d1.dd>
+a1.ga
+f+1e1
+##
+a1^1
+<d1.dc+>
+a1.aa
+a2g2f+1
+##
+e2e2 a2f+d
+e2e2 a2f+a
+e2e2 f+2f+f+
+e1c+1 raag<
+##
+f+2d2 c2e2
+>b1.<c+2
+f+2d2 c2e2
+>b1.<c+2
+d1e1f+1^1
+;
+
+{8}
+%e1 $
+'epiano''e*v.25' p96 l8
+a4<a4g4f+4  e4d4e4f+4>
+b2..<c+     d1
+c+2..d      e2g2
+f+1         e1>
+##
+a4<a4g4f+4  e4d4e4f+4>
+b2..<c+     d1
+c+2..d      e4>a4<g4f+e
+d1.^
+ddd
+##
+>b4<d4c+4de   f+4e4d2
+>b4<d4c+4de   >a4g4f+<f+ed
+>b4<d4c+4de   f+4eaf+4.d
+gf+ed>b<dag   e1
+^4c+4d4e4
+##
+[f+4d4>a4<ba    a2e4ef+
+gf+ed>b<deg     f+2j2e2]e4dc+
+d1 e2f+4g4 f+1^1
+;
+
+{4}
+%e1 $
+'horn''h*v.32' p72 l4
+d1.ef+
+g1.f+e
+c+1.>b<c+
+>a1<c+1
+##
+d1.ef+
+g1.f+e
+c+1.>b<c+
+d1^1
+##
+>g2a2< d2>af+
+ g2a2< d2>df+
+ g2a2  b2ba
+ g1a1  r<c+de
+##
+a2f+2  e2g2
+d1     ^2e2
+a2f+2  e2g2
+d1     ^2e2
+f1     g1
+a1     ^1
+;
+
+{5}
+%e1 $
+'horn-o1''h*v.32' p104 l4
+a1^1
+<d1.dd>
+a1.ga
+f+1e1
+##
+a1^1
+<d1.dc+>
+a1.aa
+a2g2f+1
+##
+e2e2 a2f+d
+e2e2 a2f+a
+e2e2 f+2f+f+
+e1c+1 raag<
+##
+f+2d2 c2e2
+>b1.<c+2
+f+2d2 c2e2
+>b1.<c+2
+d1e1f+1^1
+;

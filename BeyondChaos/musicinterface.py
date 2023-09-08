@@ -6,15 +6,15 @@
 import configparser
 import os
 import string
-import pathlib
+#import pathlib
 
 from locationrandomizer import get_locations, get_location
 from dialoguemanager import set_dialogue_var, set_pronoun, patch_dialogue, load_patch_file
-from utils import utilrandom as random, open_mei_fallback as open
+from utils import utilrandom as random, open_mei_fallback as open, custom_path as BC_CUSTOM_PATH
 
 from music.jukebox import add_music_player
 from music.musicrandomizer import process_music, process_formation_music_by_table, process_map_music, get_legacy_import, \
-    get_spc_memory_usage, get_music_spoiler as get_spoiler, initialize as johnnydmad_initialize
+    get_spc_memory_usage, get_music_spoiler as get_spoiler, initialize as johnnydmad_initialize, PlaylistError
 
 from music.mfvitools.insertmfvi import byte_insert, bytes_to_int
 
@@ -23,11 +23,11 @@ BC_MUSIC_FREESPACE = ["53C5F-9FDFF", "310000-37FFFF", "410000-4FFFFF"]
 opera_log = ""
 
 
-def music_init(web_custom_playlist=None):
-    johnnydmad_initialize(rng=random, custom_playlist=web_custom_playlist)
+def music_init():
+    johnnydmad_initialize(rng=random)
 
 
-def randomize_music(fout, Options_, playlist_path, playlist_filename, opera=None, form_music_overrides={}, ):
+def randomize_music(fout, Options_, playlist_path, playlist_filename, virtual_playlist=None, opera=None, form_music_overrides={}, ):
     events = ""
     if Options_.is_flag_active('christmas'):
         events += "W"
@@ -40,11 +40,48 @@ def randomize_music(fout, Options_, playlist_path, playlist_filename, opera=None
     fout.seek(0)
     data = fout.read()
     metadata = {}
-    ## For anyone who wants to add UI for playlist selection:
-    ## If a playlist is selected, pass it as process_music(playlist_filename=...)
-    data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath="music",
-                         freespace=BC_MUSIC_FREESPACE, ext_rng=random, playlist_path=playlist_path,
-                         playlist_filename=playlist_filename)
+    
+    # Like beyondchaos, johnnydmad uses relative paths for external files when
+    # _MEIPASS is set (pyinstaller) and absolute paths otherwise. However, 
+    # by default the absolute path conversions are done using the current directory
+    # instead of the file path.
+    # For consistency with other BC custom file handling (utils.py), we can use
+    # file-based absolute paths by passing an absolute path with the subpath parameter.
+    
+    if os.path.isabs(BC_CUSTOM_PATH):
+        subpath = os.path.dirname(os.path.abspath(__file__))
+        subpath = os.path.join(subpath, "music")
+    else:
+        subpath = "music"
+        
+    # Playlist priority: virtual > custom/songs.txt > music/playlists/default.txt
+    # songs.txt will also be handled as a "virtual" playlist to keep BC-specific
+    # path interactions to this file
+    
+    if virtual_playlist:
+        playlist_fileid = "[web-playlist]"
+    else:
+        playlist_fileid = os.path.join(playlist_path, playlist_filename)
+        try:
+            with open(playlist_fileid, "r") as f:
+                virtual_playlist = f.read()
+        except IOError:
+            print(f"Failed to load {playlist_fileid}")
+            playlist_fileid = None
+    try:
+        if not playlist_fileid:
+            raise PlaylistError("Failed to load custom file")
+        data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath=subpath,
+                             freespace=BC_MUSIC_FREESPACE, ext_rng=random,
+                             playlist_filename=playlist_fileid,
+                             virtual_playlist=virtual_playlist, enable_exceptions=True)
+    except PlaylistError:
+        # If no successful randomization can be produced using the customized playlist
+        # (either from web or custom/songs.txt) then fall back to default johnnydmad
+        # playlist (music/default.txt) which will usually not be modified
+        print("Custom playlist failed, falling back to default.")
+        data = process_music(data, metadata, f_chaos=f_chaos, eventmodes=events, opera=opera, subpath=subpath,
+                             freespace=BC_MUSIC_FREESPACE, ext_rng=random)
     if not Options_.is_any_flag_active(['ancientcave', 'speedcave', 'racecave']):
         data = process_map_music(data)
     data = process_formation_music_by_table(data, form_music_overrides=form_music_overrides, kan_mode=kan_mode)
@@ -113,7 +150,7 @@ def manage_opera(fout, affect_music):
     opera_config = configparser.ConfigParser(interpolation=None)
     opera_config.optionxform = lambda option: option
     try:
-        with open(os.path.join(pathlib.Path(__file__).parent.absolute(), 'custom', 'opera.txt'), "r") as f:
+        with open(os.path.join(BC_CUSTOM_PATH, 'opera.txt'), "r") as f:
             opera_config.read_file(f)
     except OSError:
         print("WARNING: failed to load opera config")
@@ -272,7 +309,7 @@ def manage_opera(fout, affect_music):
         'sleeping': [0x86, 0x87, 0x88, 0x89, 0x08, 0x09]
     }
 
-    opath = os.path.join(pathlib.Path(__file__).parent.absolute(), "custom", "opera")
+    opath = os.path.join(BC_CUSTOM_PATH, "opera")
     # load scholar graphics
     try:
         with open(os.path.join(opath, "ralse.bin"), "rb") as f:
@@ -290,8 +327,7 @@ def manage_opera(fout, affect_music):
             sprite = f.read()
     except IOError:
         try:
-            with open(os.path.join(pathlib.Path(__file__).parent.absolute(),
-                                   "custom", "sprites", f"{merge[4]}"), "rb") as f:
+            with open(os.path.join(BC_CUSTOM_PATH, "sprites", f"{merge[4]}"), "rb") as f:
                 sprite = f.read()
         except:
             print(f"failed to open custom/opera/{merge[4]} or custom/sprites/{merge[4]}")
@@ -314,7 +350,7 @@ def manage_opera(fout, affect_music):
                 sprite = f.read()
         except IOError:
             try:
-                with open(os.path.join(pathlib.Path(__file__).parent.absolute(), "custom",
+                with open(os.path.join(BC_CUSTOM_PATH,
                                        "sprites", f"{c.sprite}.bin"), "rb") as f:
                     sprite = f.read()
             except:
@@ -488,7 +524,7 @@ def get_opera_log():
 
 def read_opera_mml(file):
     try:
-        file = os.path.join(pathlib.Path(__file__).parent.absolute(), 'custom', 'opera', f'{file}.mml')
+        file = os.path.join(BC_CUSTOM_PATH, 'opera', f'{file}.mml')
         with open(file, "r") as f:
             mml = f.read()
         return mml

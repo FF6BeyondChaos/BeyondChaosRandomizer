@@ -1,0 +1,186 @@
+#TITLE Village
+#ALBUM Lufia II: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x21 0x72 fiddle
+#WAVE 0x22 0xA8 harmonica
+#WAVE 0x23 0x81 trumpet
+#WAVE 0x24 0x61 harp
+#WAVE 0x25 0x51 bass
+#WAVE 0x26 0x63 contrabass
+#WAVE 0x28 0x6C tambourine
+
+#def init= t83 %v46 %b0,72 %f0,0
+
+#def strings=   |0 o5 m          %y0%s6
+#def fiddle=    |1 o5 m24,18,207
+#def harmonica= |2 o6 m12,18,199
+#def trumpet=   |3 o5 m48,18,223
+#def harp=      |4 o5 m          %r18
+#def bass=      |5 o7 m          %a12%r11
+#def basstr=    |6 o5 m
+
+#def s= v312
+#def f= v120
+#def m= v240
+#def t= v210
+#def h= v240
+#def b= v240
+#def c= v312
+
+#def tamVol= v120
+
+#drum "m"= 6c |8 p64 'tamVol*v.65' %y4%s3
+#drum "l"= 6c |8 p64 'tamVol*v.60' %y4%s3
+#drum "k"= 6c |8 p64 'tamVol*v.55' %y4%s3
+#drum "j"= 6c |8 p64 'tamVol*v.50' %y4%s3
+#drum "i"= 6c |8 p64 'tamVol*v.45' %y4%s3
+#drum "h"= 6c |8 p64 'tamVol*v.40' %y4%s3
+#drum "g"= 6c |8 p64 'tamVol*v.35' %y4%s3
+#drum "f"= 6c |8 p64 'tamVol*v.30' %y4%s3
+#drum "f-"=6c |8 p64 'tamVol*v.30' %y4%s1
+
+{1} 'init' %e1 $
+'harmonica''m*v.17' p64 l8
+ef
+
+g2c4      d2ef
+g4.eg<d>  b<c^2>
+ab<c2>    gb<c2>
+d4.ef<c>  b2ef
+
+g2c4      d2ef
+g4.eg<d>  b<c^2>
+ab<c2>    gb<c2>
+fga>b<cd  c2
+'trumpet''t*v.32' p64 l8
+cd
+##
+d+2g4       f2dc
+>a+4.ga+<d  c2cd
+d+2d+g      f2a+4
+g2.         ^2cd
+
+d+2d+g      f2dc
+>a+4.ga+<d  c2cd
+d+2cd+      f4.d>a+<f
+g2.         ^2
+;
+
+{2} %e1
+'strings''s*v.24' p48 l8
+$2 r4
+$
+e2>g4    a2<cd
+e4g4b4   <dc>b<c>ge
+f2.      e2.>
+a2.      g4a4b4<
+
+e2>g4    a2<cd
+e4g4b4   <dc>b<c>ge
+f2.      e2.
+def>b<cd c2.
+##
+g+gfd+dc    >a+2.<
+fd+dd+d>a+< c2cd
+g+gfd+dc    d2f4
+d+2.        cdd+fga+
+
+<c>a+g+gfd+ d2<c4>
+a+g+gfd+d   c2d4
+d+4.>g+<cd+ f4.>a+<df
+d2c4        >b2.<
+;
+
+{7} %e1
+'fiddle''f*v.24' p48 l8
+;2
+
+{4} %e1
+r4
+$
+'harp-o1''h*v.24' p32 l8
+cg<cde4  fedec>g
+cg<cdeg  b<c>abg4
+agab<c4> gf+gb<c4>
+>ab<c4a4 gagfed>
+
+cg<cde4  fedec>g
+cg<cdeg  b<c>abge
+agab<c4> gf+gb<c4>
+fefgab   <c2.>>
+##
+g+<cd+2>    a+<df2>
+ga+<d2      dd+a+d+d>a+
+g+<cd+2>    a+<df2
+dd+a+d+dd+  dd+a+2>
+
+g+<cd+2>    a+<df2>
+ga+<d2      dd+a+d+d>a+
+g+<cd+2>    a+<df2>
+gb<d>b<dg   bgb<dgb    
+;
+
+{3} %e0
+r4
+$
+'bass-o1''b*v.36' p64 l8
+c2.     >f2.<
+c2>b4   a2g4
+f2.     e2.
+d2f<c>  b4a4g4<
+
+c2.     >f2.<
+c2>b4   a2g4
+f2.     e2.
+d2b4    <c2.>
+##
+g+2.    a+2.
+g2.     <c4>a+4g4
+g+2.    a+2.
+<c2>g4  <c2.>
+
+g+2.    a+2.
+g2.     <c4>a+4g4
+g+2.    a+2.
+g2.     <g2>g4
+;
+
+{5} %e1
+'basstr-o1''c*v.18' p80 l8
+r4 $5
+$
+<c2.>   f2.<
+c2>b4   a2g4
+f2.     e2.
+d2f<c>  b4a4g4
+
+<c2.>   f2.<
+c2>b4   a2g4
+f2.     e2.
+d2>b4<  c2.
+##
+g+2.    a+2.
+g2.     <c4>a+4g4
+g+2.    a+2.
+<c2>g4  c2.
+
+g+2.    a+2.
+g2.     <c4>a+4g4
+g+2.    a+2.
+g2.     >g2.<
+;
+
+{8} %e1
+'fiddle-o1''f*v.18' p80 l8
+&47r
+;5
+
+{6} %e1
+r4 %g1
+$
+[7 ^4 "l4 l4"]
+l32 %g1 "ijmk jihg gff-8.m4"
+;

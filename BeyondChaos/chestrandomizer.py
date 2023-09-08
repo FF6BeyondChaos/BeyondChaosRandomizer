@@ -462,7 +462,7 @@ class ChestBlock:
             if orphaned_formations or extra_miabs:
                 chance -= 2 if uncapped_monsters else 1
                 chance = max(chance, 1)
-        if no_monsters is True:
+        if no_monsters:
             chance = random.randint(4, 50)
         formations = get_appropriate_formations()
         formations = [f for f in formations if

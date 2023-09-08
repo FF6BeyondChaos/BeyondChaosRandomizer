@@ -1,12 +1,12 @@
-.addr   jun-checker                     610000
-.addr   jun-check-entity-living         610600
-.addr   jun-check-entity-can-act        6106c0
-.addr   jun-check-are-same-team         6105e0
-.addr   jun-deduct-item-if-possible     610740
-.addr   jun-mult                        610800
-.addr   jun-rng1                        610820
-.addr   jun-count-bits                  6108c0
-.addr   jun-queue-command               610ff0
+.addr   jun-checker                     {{jun-global-checker}}
+.addr   jun-check-entity-living         {{jun-global-check-entity-living}}
+.addr   jun-check-entity-can-act        {{jun-global-check-entity-can-act}}
+.addr   jun-check-are-same-team         {{jun-global-check-are-same-team}}
+.addr   jun-deduct-item-if-possible     {{jun-global-deduct-item-if-possible}}
+.addr   jun-mult                        {{jun-global-mult}}
+.addr   jun-rng1                        {{jun-global-rng1}}
+.addr   jun-count-bits                  {{jun-global-count-bits}}
+.addr   jun-queue-command               {{jun-global-queue-command}}
 .addr   main                            622080
 .addr   main-auto-item                  6222c0
 .addr   use-best-item                   622200
@@ -16,9 +16,6 @@
 .addr       item-properties-status-byte     185015
 .addr   do-auto-item                    622280
 
-.def    jun-index-auto-down         81
-.def    jun-index-auto-revivify     82
-.def    jun-index-auto-remedy       83
 .def    wound-status                80 00
 .def    zombie-status               02 00
 .def    remedy-status               65 48
@@ -31,7 +28,7 @@ $main
 :       c0 08
 :       90 main-is-human
 :       22 $jun-rng1
-:       90 exit-main
+:       b0 exit-main
 .label main-is-human
 :       20 $main-auto-item,2
 
@@ -50,7 +47,7 @@ $main-auto-item
 :       29 wound-status
 :       f0 no-fenix
 :       83 01
-:       a9 jun-index-auto-down 00
+:       a9 {{jun-index-auto-down}} 00
 :       20 $do-auto-item,2
 
 .label no-fenix
@@ -58,7 +55,7 @@ $main-auto-item
 :       29 zombie-status
 :       f0 no-revivify
 :       83 01
-:       a9 jun-index-auto-revivify 00
+:       a9 {{jun-index-auto-revivify}} 00
 :       20 $do-auto-item,2
 
 .label no-revivify
@@ -66,7 +63,7 @@ $main-auto-item
 :       29 remedy-status
 :       f0 no-remedy
 :       83 01
-:       a9 jun-index-auto-remedy 00
+:       a9 {{jun-index-auto-remedy}} 00
 :       20 $do-auto-item,2
 
 .label no-remedy

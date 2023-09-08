@@ -724,9 +724,10 @@ class Location():
 
         random.shuffle(self.chests)
         for c in self.chests:
+
             if self.locid in range(0x139, 0x13d) and c.empty:
-                #if the chest is in the Phoenix Cave and empty - fill with high level MIAB
-                c.mutate_contents(monster=True, guideline=50000, crazy_prices=crazy_prices,
+                #if the chest is in the Phoenix Cave and empty - fill with high level MIAB, otherwise fill with low tier stuff
+                c.mutate_contents(monster=True, guideline=guideline if no_monsters else 50000, crazy_prices=crazy_prices,
                                   uncapped_monsters=uncapped_monsters, no_monsters=no_monsters)
                 continue
             elif self.locid == 0x147:
@@ -737,7 +738,7 @@ class Location():
             in_falling_ceiling_room = self.locid == 280 and c.memid in range(232, 235)
             monster = False if in_falling_ceiling_room or no_monsters else None
             c.mutate_contents(guideline=guideline, crazy_prices=crazy_prices, monster=monster,
-                              uncapped_monsters=uncapped_monsters)
+                              uncapped_monsters=uncapped_monsters, no_monsters=no_monsters)
             if guideline is None and hasattr(c, "value") and c.value:
                 guideline = c.value
 

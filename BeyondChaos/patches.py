@@ -6,6 +6,7 @@ from bcg_junction import (write_patch as jm_write_patch,
 from randomtools.tablereader import verify_patches as rt_verify_patches
 from character import get_characters
 from utils import Substitution, RANDOM_MULTIPLIER, random
+import math
 
 
 def allergic_dog(output_rom_buffer: BytesIO):
@@ -430,6 +431,13 @@ def apply_namingway(output_rom_buffer: BytesIO):
     an_sub.bytestring = bytes([0xC0, 0xA4, 0x80, 0x9D, 0x09, 0x02])
     an_sub.write(output_rom_buffer)
 
+def fix_flyaway(output_rom_buffer: BytesIO):
+    #Osteoclave's Flyaway Bug event fix
+    ff_sub = Substitution()
+    ff_sub.set_location(0xACBAD)
+    ff_sub.bytestring = bytes([0xFD])
+    ff_sub.write(output_rom_buffer)
+
 
 def change_swdtech_speed(output_rom_buffer: BytesIO, speed: str = "Vanilla"):
     css_sub = Substitution()
@@ -452,7 +460,14 @@ def change_swdtech_speed(output_rom_buffer: BytesIO, speed: str = "Vanilla"):
         css_sub.write(output_rom_buffer)
 
 
-def hidden_relic(output_rom_buffer: BytesIO, amount):
+# ---------------------
+# Memento Mori  07/12/23
+#
+# Denies relics for unrecruited characters (Moogle Defense, Ghost Train), hiding what the relic will be on the real character
+# Unfortunate side-effect: can't peek Mog's relic.
+# Enables spell learning from the relic
+# ---------------------
+def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None):
     # Gives characters a random relic when the Memento Mori flag is on
     hidden_relic_sub = Substitution()
     hidden_relic_sub.set_location(0x20E9A)
@@ -464,10 +479,15 @@ def hidden_relic(output_rom_buffer: BytesIO, amount):
         0xA0, 0x06, 0x00,  # ; Code nudged forward by the PHA
         # 0x20ED4
         0x68,  # PLA			; Get the character ID back, necessary for stack preservation
-        0x22, 0x5B, 0xB9, 0xC4,  # JSL $C4B95B		; Jump to freespace
-        0x80, 0x08,  # BRA $08
-        # 0x20ED8
-        0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,  # NOP #8	; Created by displacing code
+        0x22, 0xCF, 0xB8, 0xC4,
+        # JSL $C4B8CF		; Hook: Load character stats, store status byte 1 for imp gear, and then put hidden relic in A
+        0x80, 0x08,  # BRA $08          ; Skip two long access hooks used by other Hidden Relic routine
+        # 0x20EDB
+        0x20, 0x81, 0x47, 0x6B,
+        # JSR $4781, RTL        ; 16-bit A = item ID * 30 [size of item data block], long access
+        # 0x20EDF
+        0x20, 0x4B, 0x60, 0x6B,
+        # JSR $604B, RTL        ; Progress towards learning spell for equipped item, long access
         # 0x20EE3
         0x20, 0x9A, 0x0F,  # JSR $0F9A		; Load item properties from character's hidden relic
         # 0x20EE6
@@ -482,23 +502,59 @@ def hidden_relic(output_rom_buffer: BytesIO, amount):
     char_list = sorted(get_characters(), key=lambda char: char.id)[:14]
 
     # All relics not on rare list or command changer
-    relic_list = [0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xC0, 0xC1, 0xC2, 0xC3, 0xC4, 0xC7, 0xC9, 0xCC, 0xCD, 0xD0, 0xD2, 0xD4, 0xD5, 0xD9, 0xE1, 0xE2, 0xE3, 0xE5, 0xE6]
+    relic_list = [0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xC0, 0xC1,
+                  0xC2, 0xC3, 0xC4, 0xC7, 0xC9, 0xCC, 0xCD, 0xD0, 0xD2, 0xD4, 0xD5, 0xD9, 0xE1, 0xE2, 0xE3, 0xE5, 0xE6]
     # Offering, Merit Award, Economizer, Marvel Shoes, Safety Bit, Memento Ring, Ribbon, Moogle Charm, Charm Bangle, Blizzard Orb, Rage Ring, Genji Glove, Exp. Egg, Relic Ring, Pod Bracelet, Muscle Belt
     rare_relic_list = [0xD3, 0xDA, 0xCE, 0xE0, 0xDC, 0xDB, 0xCA, 0xDE, 0xDF, 0xC5, 0xC6, 0xD1, 0xE4, 0xDD, 0xC8, 0xCB]
 
-    hidden_relic_sub.set_location(0x4B95B)
+    #If dearestmolulu is on, don't allow an item with Moogle Charm effect to be innate
+    if feature_exclusion_list:
+        from itemrandomizer import get_items, STATPROTECT
+        for relic in [item for item in get_items() if item.is_relic]:
+            # The most convenient way of getting the feature categories
+            for feature_type in STATPROTECT.keys():
+                for bit in range(8):
+                    # Check if the relic has the feature active
+                    if relic.features[feature_type] & (0x01 << bit):
+                        # Get the friendly name of the feature
+                        feature = relic.get_feature(feature_type, 0x01 << bit)
+                        # print("Item " + relic.name + " has feature " + str(feature))
+                        if feature.lower() in [str(feature).lower() for feature in feature_exclusion_list]:
+                            try:
+                                # print("Relic found with bad effect " + feature_type + ": " + relic.name)
+                                relic_list.remove(relic.itemid)
+                                continue
+                            except ValueError:
+                                pass
+                            try:
+                                rare_relic_list.remove(relic.itemid)
+                            except ValueError:
+                                pass
+
+    # Equip Extra Relic
+    hidden_relic_sub.set_location(0x4B8CF)
     hidden_relic_sub.bytestring = bytes([
         0x48,  # PHA			; Store character ID on the stack again
         0xBD, 0xF5, 0x15, 0x99, 0xA0, 0x11, 0xE8, 0x88, 0x88, 0x10, 0xF5,  # ; Displaced loop to load character stats
         0xBD, 0xEB, 0x15, 0x85, 0xFE,  # ; Store Status Byte 1 for Imp equipment check
         0xA0, 0x05, 0x00,  # LDY #$0005		; Displaced Y index for later equipment read loop
         0x68,  # PLA			; Fetch back the character ID from the stack
-        ])
+    ])
     hidden_relic_sub.write(output_rom_buffer)
 
     while iteration < 14:
 
         char_selection = char_list.pop(random.randint(0, len(char_list) - 1))
+
+        # Set event byte based on character ID
+        if char_selection.id >= 8:
+            event_byte = 0xDD
+            char_bit = int(math.pow(2, char_selection.id - 8))
+        else:
+            event_byte = 0xDC
+            char_bit = int(math.pow(2, char_selection.id))
+
+
         if iteration < int(amount):
 
             if random.randint(1, 10) == 10:
@@ -509,82 +565,170 @@ def hidden_relic(output_rom_buffer: BytesIO, amount):
         else:
             char_selection.relic_selection = 0xFF  # Set their relic to Empty
 
-        hidden_relic_sub.set_location(0x4B970 + (char_selection.id * 7))
+        hidden_relic_sub.set_location(0x4B8E4 + (char_selection.id * 0x11))
         hidden_relic_sub.bytestring = bytes([
-            # Character relic checks 0x4B970
-            0xC9, char_selection.id,  # CMP #$00
-            0xD0, 0x03,  # BNE $03
+            # Character relic checks 0x4B8E4
+            0xC9, char_selection.id,  # CMP id
+            0xD0, 0x0D,  # BNE $0D
+            0xAD, event_byte, 0x1E,  # LDA $1EDC if id < 8, $1EDD if >8     ; shop event bytes
+            0x29, char_bit,  # AND math.pow(2, char_selection.id)   ; The power of 2 of the character ID is their bit
+            0xD0, 0x03,  # BNE $03   ; If it was nonzero, this character is in the shop
+            0x4C, 0xD2, 0xB9,  # JMP $B9D2 ; Elsewise go to the end and set them to empty hidden relic
             0xA9, char_selection.relic_selection,  # LDA
-            0x6B,  # RTL				; JSR to $0F9A, then resume vanilla code
+            0x6B,  # RTL       ; JSR to $0F9A, then resume vanilla code
         ])
         hidden_relic_sub.write(output_rom_buffer)
 
         iteration += 1
 
+
     hidden_relic_sub.set_location(0x4B9D2)
     hidden_relic_sub.bytestring = bytes([
         0xA9, 0xFF,  # LDA Empty
-        0x6B  # RTL	; JSR to $0F9A, then resume vanilla code
-        ])
+        0x6B,  # RTL	         ; JSR to $0F9A, then resume vanilla code
+    ])
     hidden_relic_sub.write(output_rom_buffer)
 
+    # Status Screen Display
     hidden_relic_sub.set_location(0x35FC2)
     hidden_relic_sub.bytestring = bytes([
-        0x22, 0xA5, 0xFF, 0xC3  # JSL $C3FFA5  ; Display hidden relic before reading character stats
-        ])
+        0x22, 0xA5, 0xFF, 0xC3,  # JSL $C3FFA5  ; Hook: Display hidden relic before reading character stats
+    ])
     hidden_relic_sub.write(output_rom_buffer)
 
     hidden_relic_sub.set_location(0x3FFA5)
     hidden_relic_sub.bytestring = bytes([
-        0x48,                    # PHA			    ; Save Actor on the stack
-        0x22, 0x70, 0xB9, 0xC4,  # JSL $C4B970	    ; Get actor's hidden relic into A
-        0x48,                    # PHA			    ; Save hidden relic ID on the stack
-        0xA0, 0x1D, 0x39,        # LDY #$391D	    ; One row higher than statuses/class name
-        0x20, 0x19, 0x35,        # JSR $3519        ; Set pos/WRAM/Y
+        0x48,  # PHA			    ; Save Actor on the stack
+        0x22, 0xE4, 0xB8, 0xC4,  # JSL $C4B8E4	    ; Get actor's hidden relic into A
+        0x48,  # PHA			    ; Save hidden relic ID on the stack
+        0xA0, 0x1D, 0x39,  # LDY #$391D	    ; One row higher than statuses/class name
+        0x20, 0x19, 0x35,  # JSR $3519        ; Set pos/WRAM/Y
         0xA9, 0x20,
-        0x85, 0x29,              # Set font to player colour
-        0x68,                    # PLA			    ; Get hidden relic ID back
-        0x20, 0xBF, 0xFF,        # JSR $FFBF		; Freespace at the very end of the C3 bank
-        0x68,                    # PLA			    ; Get Actor back
+        0x85, 0x29,  # Set font to player colour
+        0x68,  # PLA			    ; Get hidden relic ID back
+        0x20, 0xBF, 0xFF,  # JSR $FFBF		; Freespace at the very end of the C3 bank
+        0x68,  # PLA			    ; Get Actor back
         0x22, 0x06, 0x00, 0xC2,  # JSL $C20006	    ; Code displaced by the hook
-        0x6B,                    # RTL
+        0x6B,  # RTL
         # 0x3FFBF
-        0xC9, 0xFF,              # CMP #$FF		    ; Is the hidden relic empty?
-        0xF0, 0x2C,              # BRA $2C		    ; If it is, draw a blank string
-        0x08,                    # PHP
-        0xC2, 0x20,              # REP #$20		    ; Set 16-bit A
-        0x48,                    # PHA			    ; Put the hidden relic ID on the stack
-        0x0A, 0x0A, 0x0A,        # ASL A #3         ; x8
-        0x85, 0xE0,              # STA $E0		    ; Store in scratch
-        0x68,                    # PLA              ; Get hidden relic in A again
-        0x48,                    # PHA			    ; And store it on the stack again
-        0x0A, 0x0A,              # ASL A #2         ; x4
-        0x18,                    # CLC
-        0x65, 0xE0,              # ADC $E0
-        0x85, 0xE0,              # STA $E0		    ; $E0 is now hidden relic ID x 12...
-        0x68,                    # PLA			    ; Get hidden relic in A AGAIN
-        0x18,                    # CLC
-        0x65, 0xE0,              # ADC $E0		    ; Now $E0 is hidden relic ID x 13
-        0xAA,                    # TAX              ; Index it in X
-        0x28,                    # PLP			    ; Restore P state, so A is 8-bit again
-        0xA0, 0x0D, 0x00,        # LDY #$000D	    ; Loop counter, item strings are 13 characters long
+        0xC9, 0xFF,  # CMP #$FF		    ; Is the hidden relic empty?
+        0xF0, 0x2C,  # BRA $2C		    ; If it is, draw a blank string
+        0x08,  # PHP
+        0xC2, 0x20,  # REP #$20		    ; Set 16-bit A
+        0x48,  # PHA			    ; Put the hidden relic ID on the stack
+        0x0A, 0x0A, 0x0A,  # ASL A #3         ; x8
+        0x85, 0xE0,  # STA $E0		    ; Store in scratch
+        0x68,  # PLA              ; Get hidden relic in A again
+        0x48,  # PHA			    ; And store it on the stack again
+        0x0A, 0x0A,  # ASL A #2         ; x4
+        0x18,  # CLC
+        0x65, 0xE0,  # ADC $E0
+        0x85, 0xE0,  # STA $E0		    ; $E0 is now hidden relic ID x 12...
+        0x68,  # PLA			    ; Get hidden relic in A AGAIN
+        0x18,  # CLC
+        0x65, 0xE0,  # ADC $E0		    ; Now $E0 is hidden relic ID x 13
+        0xAA,  # TAX              ; Index it in X
+        0x28,  # PLP			    ; Restore P state, so A is 8-bit again
+        0xA0, 0x0D, 0x00,  # LDY #$000D	    ; Loop counter, item strings are 13 characters long
         0xBF, 0x00, 0xB3, 0xD2,  # LDA $D2B300,X	; Hidden relic item name
-        0x8D, 0x80, 0x21,        # STA $2180		; Store the current letter in the string
-        0xE8,                    # INX
-        0x88,                    # DEY
-        0xD0, 0xF5,              # BNE $F5		    ; Loop until all 13 letters are done
-        0x9C, 0x80, 0x21,        # STZ $2180		; Mark that the string has ended
-        0x4C, 0xD9, 0x7F,        # JMP $7FD9		; Draw the string
+        0x8D, 0x80, 0x21,  # STA $2180		; Store the current letter in the string
+        0xE8,  # INX
+        0x88,  # DEY
+        0xD0, 0xF5,  # BNE $F5		    ; Loop until all 13 letters are done
+        0x9C, 0x80, 0x21,  # STZ $2180		; Mark that the string has ended
+        0x4C, 0xD9, 0x7F,  # JMP $7FD9		; Draw the string
         # Empty string branch
-        0xA0, 0x0D, 0x00,        # LDY $000D		; Loop counter, the empty string is 13 characters too
-        0xA9, 0xFF,              # LDA #$FF		    ; Empty character
-        0x8D, 0x80, 0x21,        # STA $2180		; Store the current letter as empty
-        0x88,                    # DEY
-        0xD0, 0xFA,              # BNE $FA		    ; Loop until all 13 letters are blanked
-        0x9C, 0x80, 0x21,        # STZ $2180		; Mark that the string has ended
-        0x4C, 0xD9, 0x7F         # JMP $7FD9		; Draw the string
-        ])
+        0xA0, 0x0D, 0x00,  # LDY $000D		; Loop counter, the empty string is 13 characters too
+        0xA9, 0xFF,  # LDA #$FF		    ; Empty character
+        0x8D, 0x80, 0x21,  # STA $2180		; Store the current letter as empty
+        0x88,  # DEY
+        0xD0, 0xFA,  # BNE $FA		    ; Loop until all 13 letters are blanked
+        0x9C, 0x80, 0x21,  # STZ $2180		; Mark that the string has ended
+        0x4C, 0xD9, 0x7F,  # JMP $7FD9		; Draw the string
+    ])
     hidden_relic_sub.write(output_rom_buffer)
+
+    # Spell Learning from Hidden Relic
+    hidden_relic_sub.set_location(0x26025)
+    hidden_relic_sub.bytestring = bytes([
+        0x5C, 0x9B, 0xB8, 0xC4,  # JML $C4B89B	    ; Hook: Relocate loop check to freespace
+    ])
+    hidden_relic_sub.write(output_rom_buffer)
+
+    hidden_relic_sub.set_location(0x4B89B)
+    hidden_relic_sub.bytestring = bytes([
+        0x88,  # DEY              ; Displaced code, check next slot
+        0xF0, 0x04,  # BEQ $04          ; If we've checked all slots, continue
+        0x5C, 0xF3, 0x5F, 0xC2,  # JML $C25FF3	    ; Otherwise loop to next slot's uncurse and learn routine
+        0xC2, 0x20,  # REP #$20         ; Set 16-bit A
+        0xA3, 0x05,
+        # LDA $05,S        ; Get Y back from C2/5E66. This is a stack relative load! If the routine gets nested deeper, this has to change!
+        0xA8,  # TAY              ; Move it from A to Y
+        0xE2, 0x20,  # SEP #$20         ; Set 8-bit A
+        0xB9, 0xD8, 0x3E,  # LDA $3ED8,Y      ; Get which character this is
+        0x22, 0xE4, 0xB8, 0xC4,  # JSL $C4B8E4      ; Load actor's hidden relic into A
+        0xC9, 0xFF,  # CMP #$FF         ; Is it empty?
+        0xF0, 0x16,  # BEQ $16          ; Exit if so
+        0xEB,  # XBA
+        0xA9, 0x1E,  # LDA #$1E
+        0x22, 0xDB, 0x0E, 0xC2,  # JSL $C20EDB      ; Item ID * 30 -> 16-bit A, long access
+        0xAA,  # TAX
+        0x7B,  # TDC
+        0xBF, 0x04, 0x50, 0xD8,  # LDA $D85004,X    ; Spell the item teaches
+        0xA8,  # TAY
+        0xBF, 0x03, 0x50, 0xD8,  # LDA $D85003,X    ; Rate spell is learned
+        0x22, 0xDF, 0x0E, 0xC2,  # JSL $C20EDF      ; Progress towards learning equipped item spell, long access
+        0xFA,  # PLX				; Restore X, displaced by the hook
+        0x5C, 0x29, 0x60, 0xC2,  # JML $C26029      ; Exit to vanilla code (goes to RTS)
+    ])
+    hidden_relic_sub.write(output_rom_buffer)
+
+    hidden_relic_sub.set_location(0x4B85D)
+    hidden_relic_sub.bytestring = bytes([0xB9, 0xD8, 0x3E,   # LDA $3ED8,Y    (Which character it is)
+        0x22, 0xE4, 0xB8, 0xC4,   # JSL $C4B8E4    (Get this character's hidden relic)
+        0xC9, 0xC6,   # CMP #$C6     (Is it Rage Ring?)
+        0xF0, 0x0C,   # BEQ yesRage
+        0xA9, 0xC6,   # LDA #$C6
+        0xD9, 0xD0, 0x3C,   # CMP $3CD0,Y    (Is Relic 1 a Rage Ring?)
+        0xF0, 0x05,   # BEQ yesRage
+        0xD9, 0xD1, 0x3C,   #CMP $3CD1,Y    (Is Relic 2 a Rage Ring?)
+        0xD0, 0x04,   # BNE noRage
+        # yesRage:
+        0x5C, 0x49, 0x16, 0xC2,   # JML $C21649
+        # noRage:
+        0x5C, 0x56, 0x16, 0xC2,   # JML $C21656
+    ])
+    hidden_relic_sub.write(output_rom_buffer)
+
+    hidden_relic_sub.set_location(0x4B87C)
+    hidden_relic_sub.bytestring = bytes([0xB9, 0xD8, 0x3E,   # LDA $3ED8,Y    (Which character it is)
+        0x22, 0xE4, 0xB8, 0xC4,   # JSL $C4B8E4    (Get this character's hidden relic)
+        0xC9, 0xC5,   # CMP #$C5     (Is it Blizzard Orb?)
+        0xF0, 0x0C,   # BEQ yesOrb
+        0xA9, 0xC5,   # LDA #$C5
+        0xD9, 0xD0, 0x3C,   # CMP $3CD0,Y    (Is Relic 1 a Blizzard Orb?)
+        0xF0, 0x05,   # BEQ yesOrb
+        0xD9, 0xD1, 0x3C,   #CMP $3CD1,Y    (Is Relic 2 a Blizzard Orb?)
+        0xD0, 0x04,   # BNE noOrb
+        # yesOrb:
+        0x5C, 0x62, 0x16, 0xC2,   # JML $C21662
+        # noOrb:
+        0x5C, 0x66, 0x16, 0xC2,   # JML $C21666
+    ])
+    hidden_relic_sub.write(output_rom_buffer)
+
+    hidden_relic_sub.set_location(0x2163D)
+    hidden_relic_sub.bytestring = bytes([0x5C, 0x5D, 0xB8, 0xC4,   # JML $C4B85D
+        0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,   # NOP #8
+    ])
+    hidden_relic_sub.write(output_rom_buffer)
+
+    hidden_relic_sub.set_location(0x21656)
+    hidden_relic_sub.bytestring = bytes([0x5C, 0x7C, 0xB8, 0xC4,   # JML $C4B87C
+        0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,   # NOP #8
+    ])
+    hidden_relic_sub.write(output_rom_buffer)
+
 
 
 def change_cursed_shield_battles(output_rom_buffer: BytesIO, amount: int = None):
@@ -627,15 +771,15 @@ def title_gfx(output_rom_buffer: BytesIO):
     title_gfx_sub.write(output_rom_buffer)
 
 
-def improved_party_gear(output_rom_buffer: BytesIO):
+def improved_party_gear(output_rom_buffer: BytesIO, myself_name_address, myself_name_bank):
     ipg_sub = Substitution()
     ipg_sub.set_location(0x038F04)
     ipg_sub.bytestring = bytes([0x64,
         0x28, 0x22, 0x01, 0xAF, 0xEE, 0xA9, 0x00, 0xEB, 0xA5, 0x28, 0xAA, 0xB5, 0x69, 0x30, 0x60, 0x48,
         0x8A, 0x0A, 0xA8, 0x69, 0x39, 0xEB, 0xA9, 0x0D, 0xB6, 0x6D, 0x86, 0x67, 0xA8, 0x5A, 0xA9, 0x24,
         0x85, 0x29, 0x20, 0xCF, 0x34, 0x7A, 0xA9, 0x28, 0x85, 0x29, 0xC2, 0x21, 0x98, 0x69, 0x10, 0x00,
-        0x8F, 0x89, 0x9E, 0x7E, 0xA9, 0x08, 0x00, 0x85, 0xEB, 0xA9, 0xCA, 0x07, 0x85, 0xEF, 0xE2, 0x20,
-        0xA9, 0xF0, 0x85, 0xF1, 0x68, 0xC9, 0x0E, 0xB0, 0x08, 0x5A, 0x20, 0x67, 0x84, 0x20, 0xD9, 0x7F,
+        0x8F, 0x89, 0x9E, 0x7E, 0xA9, 0x08, 0x00, 0x85, 0xEB, 0xA9] + myself_name_address + [0x85, 0xEF, 0xE2, 0x20,
+        0xA9] + myself_name_bank + [0x85, 0xF1, 0x68, 0xC9, 0x0E, 0xB0, 0x08, 0x5A, 0x20, 0x67, 0x84, 0x20, 0xD9, 0x7F,
         0x7A, 0xA9, 0x34, 0x85, 0x29, 0xC2, 0x21, 0x98, 0x69, 0x20, 0x00, 0xA8, 0xE2, 0x20, 0x20, 0xE6,
         0x34, 0xA9, 0x20, 0x85, 0x29, 0xA5, 0x28, 0x0A, 0x0A, 0x0A, 0x69, 0x04, 0x20, 0x8A, 0x8F, 0xA5,
         0x28, 0x1A, 0x85, 0x28, 0xC9, 0x04, 0xD0, 0x8D, 0x20, 0x28, 0x0E, 0x20, 0x36, 0x0E, 0x20, 0x3C,

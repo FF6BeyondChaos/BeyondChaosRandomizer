@@ -1,4 +1,5 @@
 import os
+import traceback
 from .tools.tablereader import (
     set_global_label, set_global_table_filename, determine_global_table,
     set_table_specs, set_global_output_file_buffer, sort_good_order,
@@ -886,94 +887,97 @@ def prepare_image(image: Image) -> Image:
 
 
 def remonsterate(connection: Pipe, **kwargs):
-    if "outfile_rom_buffer" not in kwargs.keys():
-        connection.send(RuntimeError("Remonsterate was not supplied an output file."))
-
-    global outfile_rom_buffer
-    global seed
-    outfile_rom_buffer = kwargs.get("outfile_rom_buffer")
-    seed = kwargs.get("seed", int(time()))
-
-    images_tags_filename = kwargs.get("images_tags_filename", "images_and_tags.txt")
-    monsters_tags_filename = kwargs.get("monsters_tags_filename", "monsters_and_tags.txt")
-    rom_type = kwargs.get("rom_type", None)
-    list_of_monsters = kwargs.get("list_of_monsters", None)
-
-    global randomize_connection
-    randomize_connection = connection
-    images = []
     try:
-        for line in open(os.path.join(file_paths, images_tags_filename)):
-            if '#' in line:
-                line, comment = line.split('#', 1)
-            line = line.strip()
-            if not line:
-                continue
-            if ':' in line:
-                image_filename, tags = line.split(':')
-                tags = tags.split(',')
-                tags = {t for t in tags if t.strip()}
-            else:
-                image_filename, tags = line, set([])
-            try:
-                image = prepare_image(Image.open(os.path.join(sprite_paths, image_filename)))
-                image.tags = tags
-                # image.close()
-                images.append(image)
-            except FileNotFoundError:
-                connection.send("Remonsterate: %s was listed in images_and_tags.txt, "
-                                "but was not found in the sprites directory." % image_filename)
-        if len(images) == 0:
-            connection.send("Remonsterate: images_and_tags.txt is empty. To use remonsterate, "
-                            "place .png images into the sprites folder and document the file paths to those images in "
-                            "images_and_tags.txt along with any applicable tags")
-            return
-    except FileNotFoundError as e:
-        connection.send(e)
-        return
+        if "outfile_rom_buffer" not in kwargs.keys():
+            connection.send(RuntimeError("Remonsterate was not supplied an output file."))
 
-    begin_remonsterate(rom_type=rom_type)
+        global outfile_rom_buffer
+        global seed
+        outfile_rom_buffer = kwargs.get("outfile_rom_buffer")
+        seed = kwargs.get("seed", int(time()))
+        images_tags_filename = kwargs.get("images_tags_filename", "images_and_tags.txt")
+        monsters_tags_filename = kwargs.get("monsters_tags_filename", "monsters_and_tags.txt")
+        rom_type = kwargs.get("rom_type", None)
+        list_of_monsters = kwargs.get("list_of_monsters", None)
 
-    try:
-        if monsters_tags_filename is not None:
-            for line in open(os.path.join(file_paths, monsters_tags_filename)):
+        global randomize_connection
+        randomize_connection = connection
+        images = []
+        try:
+            for line in open(os.path.join(file_paths, images_tags_filename)):
                 if '#' in line:
                     line, comment = line.split('#', 1)
                 line = line.strip()
-                if ':' not in line:
+                if not line:
                     continue
-                index, tags = line.split(':')
-                index = int(index, 0x10)
-                tags = tags.split(',')
-                tags = {t for t in tags if t.strip()}
-                whitelist = {t for t in tags if not t.startswith('!')}
-                blacklist = {t[1:] for t in tags if t.startswith('!')}
-                MonsterSpriteObject.get(index).whitelist = whitelist
-                MonsterSpriteObject.get(index).blacklist = blacklist
-    except FileNotFoundError:
-        connection.send("Remonsterate: No monsters_and_tags.txt file was found in the remonsterate directory.")
-    MonsterSpriteObject.import_images = sorted(images,
-                                               key=lambda i: i.filename)
+                if ':' in line:
+                    image_filename, tags = line.split(':')
+                    tags = tags.split(',')
+                    tags = {t for t in tags if t.strip()}
+                else:
+                    image_filename, tags = line, set([])
+                try:
+                    image = prepare_image(Image.open(os.path.join(sprite_paths, image_filename)))
+                    image.tags = tags
+                    # image.close()
+                    images.append(image)
+                except FileNotFoundError:
+                    connection.send("Remonsterate: %s was listed in images_and_tags.txt, "
+                                    "but was not found in the sprites directory." % image_filename)
+            if len(images) == 0:
+                connection.send("Remonsterate: images_and_tags.txt is empty. To use remonsterate, "
+                                "place .png images into the sprites folder and document the file paths to those images in "
+                                "images_and_tags.txt along with any applicable tags")
+                return
+        except FileNotFoundError as e:
+            connection.send(e)
+            return
 
-    msos = list(MonsterSpriteObject.every)
-    random.shuffle(msos)
-    for mso in msos:
-        if not mso.select_image(list_of_monsters=list_of_monsters):
-            connection.send("Remonsterate: All usable images have been exhausted. "
-                            "Some monsters may not be randomized.")
-            break
+        begin_remonsterate(rom_type=rom_type)
 
-    # Wrapped in a try/except/finally block so that even if finish_remonsterate errors, the images are closed
-    try:
+        try:
+            if monsters_tags_filename is not None:
+                for line in open(os.path.join(file_paths, monsters_tags_filename)):
+                    if '#' in line:
+                        line, comment = line.split('#', 1)
+                    line = line.strip()
+                    if ':' not in line:
+                        continue
+                    index, tags = line.split(':')
+                    index = int(index, 0x10)
+                    tags = tags.split(',')
+                    tags = {t for t in tags if t.strip()}
+                    whitelist = {t for t in tags if not t.startswith('!')}
+                    blacklist = {t[1:] for t in tags if t.startswith('!')}
+                    MonsterSpriteObject.get(index).whitelist = whitelist
+                    MonsterSpriteObject.get(index).blacklist = blacklist
+        except FileNotFoundError:
+            connection.send("Remonsterate: No monsters_and_tags.txt file was found in the remonsterate directory.")
+        MonsterSpriteObject.import_images = sorted(images,
+                                                   key=lambda i: i.filename)
+
+        msos = list(MonsterSpriteObject.every)
+        random.shuffle(msos)
+        for mso in msos:
+            if not mso.select_image(list_of_monsters=list_of_monsters):
+                connection.send("Remonsterate: All usable images have been exhausted. "
+                                "Some monsters may not be randomized.")
+                break
+
+        # Wrapped in a try/except/finally block so that even if finish_remonsterate errors, the images are closed
         results = finish_remonsterate(list_of_monsters)
         connection.send((outfile_rom_buffer, results))
-    except OverflowError as e:
-        connection.send(e)
+    except Exception as exc:
+        # connection.send(type(exc)(traceback.format_exc()))
+        connection.send(exc)
     finally:
-        if images:
-            for image in images:
-                # Remonsterate is finished. Close all the image files.
-                image.close()
+        try:
+            if images:
+                for image in images:
+                    # Remonsterate is finished. Close all the image files.
+                    image.close()
+        except UnboundLocalError:
+            pass
 
 
 def begin_remonsterate(rom_type=None):

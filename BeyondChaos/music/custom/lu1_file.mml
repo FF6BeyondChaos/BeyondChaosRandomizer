@@ -1,0 +1,234 @@
+#TITLE Departure
+#ALBUM Lufia and the Fortress of Doom
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#VARIANT ! vic
+#VARIANT `
+
+#WAVE 0x20 `0x17` !0x17! epiano
+#WAVE 0x21 `0xA5` !0xA4! flute
+#WAVE 0x22 `0x34` !0x89! guitar
+#WAVE 0x23 `0x51` !0x51! ebass
+#WAVE 0x28 `0x0A` !0x0A! kick
+#WAVE 0x29 `0x1C` !0x1F! snare
+#WAVE 0x2A `0x4B` !0x4A! tom
+#WAVE 0x2B `0x3B` !0x3B! hihat
+#WAVE 0x2C `0x2D` !0x2D! crash cymbal
+
+#def init= t150 %v50 %b0,70 %f0,0 %x255
+
+#def epiano= |0  o5  m          %r13
+#def flute=  |1 `o4` m48,18,223 %r10 !o4!
+#def guitar= |2 `o5  m` !o6!   `%r14` !%r10!
+#def bass=   |3  o7  m          %a12%r7
+
+#def e=  v125
+#def ee= v100
+#def f=  v75
+#def g= `v250` !v200!
+#def b=  v75
+
+#def kickVol= v100
+#def snareVol= `v100` !v80!
+#def tomVol= v64
+#def hihatVol= v56
+#def crashVol= v100
+
+#drum "k"=5a |8 p64 %e0 'kickVol*v1.23'
+#drum "s"=5g |9 p64 %e0 'snareVol*v1.23'
+#drum "h"=5a |B p64 %e0 'hihatVol*v1.16' %s0
+#drum "i"=5a |B p64 %e0 'hihatVol*v0.96' %s0
+#drum "j"=5a |B p64 %e0 'hihatVol*v0.74' %s0
+#drum "e"=5e |A p92 %e0 'tomVol*v1.23' %r21
+#drum "c"=5c |A p72 %e0 'tomVol*v1.23' %r21
+#drum "a"=4a |A p52 %e0 'tomVol*v1.23' %r21
+#drum "f"=4f |A p32 %e0 'tomVol*v1.23' %r21
+#drum "z"=5a+|C p64 %e1 'crashVol*v1.16' %y1%s4%r19
+#drum "y"=5a+|C p64 %e1 'crashVol*v1.20' %y1%s4%r19
+#drum "x"=5a+|C p64 %e1 'crashVol*v0.48' %y1%s4%r19
+
+#cdef ~ r24
+
+{1}$
+'init' %e1
+'guitar''g*v.32' p48 l12
+e~g~<c~d4 c~>g~e~
+g~f~c~c4  c~d~c~
+[3 f+32 g32^48r24 > g32^48r24^32 j3 g32^48r24^32 <]
+b8<c4d8 !m24,18,207! ^2
+##
+['guitar-o1''g*v.48' l8 !< %y4%s3 m12,18,207!
+e4fgr<c4r   d4cdre4r
+f4ec^2      ^2d4f4
+e1          ^1
+c1    j2    ^1 ] !%r14! ^2^8
+'flute+o1''f*v.48' c32^48r24^32c32^48r24^32c32^48r24^32
+##
+l8
+g4gf4ec4  ^2^cdc
+g4gf4ec4  ^2^cdc
+g4gf4.e4  fe4c4cdc
+d4ee^2    ^2^ccc
+g4gf4ec4  ^2^cdc
+g4gf4ec4  ^2^cdc
+g4gf4.d+4 fd+4f4d+fg
+g2^>gb<d  g1
+;
+
+{8}$
+'epiano''ee*v.32' %s1 p80 %e1 l12
+e~g~<c~d4 c~>g~e~
+g~f~c~c4  c~d~c~
+[3 f+32 g32^48r24 > g32^48r24^32 j3 g32^48r24^32 <]
+b8<c4d8^2
+##
+['ee*v.32' l8 !>!
+e4fgr<c4r   d4cdre4r
+f4ec^2      ^2d4f4
+e1          ^1
+c1    j2    ^1 ] ^2^8
+'ee*v.40' !<! c32^48r24^32c32^48r24^32c32^48r24^32
+##
+l8
+g4gf4ec4  ^2^cdc
+g4gf4ec4  ^2^cdc
+g4gf4.e4  fe4c4cdc
+d4ee^2    ^2^ccc
+g4gf4ec4  ^2^cdc
+g4gf4ec4  ^2^cdc
+g4gf4.d+4 fd+4f4d+fg
+g2^>gb<d  g1
+;
+
+{3}$
+'bass-o2''b*v1.04' p64 %e1 l8
+c4.>a+^2  a4.g+^2
+g4.g4.g4 g2^gab
+##
+<c8 c32^48r24^32c32^48r24^32 c8 c32^48r24^32c32^48r24^32 c8 c16c16
+c8 c32^48r24^32c32^48r24^32 c8 c32^48r24^32c32^48r24^32 c8 c16c16
+>a+8 a+32^48r24^32a+32^48r24^32 a+8 a+32^48r24^32a+32^48r24^32 a+8 a+16a+16
+a8 a+32^48r24^32a+32^48r24^32 a+8 a+32^48r24^32a+32^48r24^32 a+8 a+16a+16
+<c8 c32^48r24^32c32^48r24^32 c8 c32^48r24^32c32^48r24^32 c8 c16c16
+c8 c32^48r24^32c32^48r24^32 c8 c32^48r24^32c32^48r24^32 c8 c16c16
+>a+8 a+32^48r24^32a+32^48r24^32 a+8 a+32^48r24^32a+32^48r24^32 a+8 a+16a+16
+a8 a+32^48r24^32a+32^48r24^32 a+8 a+32^48r24^32a+32^48r24^32 a+8 a+16a+16
+<c8 c32^48r24^32c32^48r24^32 c8 c32^48r24^32c32^48r24^32 c8 c16c16
+c8 c32^48r24^32c32^48r24^32 c8 c32^48r24^32c32^48r24^32 c8 c16c16
+>a+8 a+32^48r24^32a+32^48r24^32 a+8 a+32^48r24^32a+32^48r24^32 a+8 a+16a+16
+a8 a+32^48r24^32a+32^48r24^32 a+8 a+32^48r24^32a+32^48r24^32 a+8 a+16a+16
+<c8 c32^48r24^32c32^48r24^32 c8 c32^48r24^32c32^48r24^32 c8 c16c16
+c8 c32^48r24^32c32^48r24^32 c8 c32^48r24^32c32^48r24^32 c8 c16c16
+>a+8 a+32^48r24^32a+32^48r24^32 a+8 a+32^48r24^32a+32^48r24^32 a+8 a+16a+16
+a8 a+32^48r24^32a+32^48r24^32 a+8 a+32^48r24^32a+32^48r24^32 a+8 a+16a+16
+##
+<f8 f32^48r24^32f32^48r24^32 f8 f32^48r24^32f32^48r24^32 f8f8
+f8 f32^48r24^32f32^48r24^32 f8 f32^48r24^32f32^48r24^32 f8f8
+e8 e32^48r24^32e32^48r24^32 e8 e32^48r24^32e32^48r24^32 e8e8
+e8 e32^48r24^32e32^48r24^32 e8 e32^48r24^32e32^48r24^32 e8e8
+d8 d32^48r24^32d32^48r24^32 d8 d32^48r24^32d32^48r24^32 d8d8
+d8 d32^48r24^32d32^48r24^32 d8 d32^48r24^32d32^48r24^32 d8d8
+c8 c32^48r24^32c32^48r24^32 c8 c32^48r24^32c32^48r24^32 c8c8
+>b8 <c32^48r24^32c32^48r24^32 c8 c32^48r24^32c32^48r24^32 d8e8
+f8 f32^48r24^32f32^48r24^32 f8 f32^48r24^32f32^48r24^32 f8f8
+f8 f32^48r24^32f32^48r24^32 f8 f32^48r24^32f32^48r24^32 f8f8
+e8 e32^48r24^32e32^48r24^32 e8 e32^48r24^32e32^48r24^32 e8e8
+e8 e32^48r24^32e32^48r24^32 e8 e32^48r24^32e32^48r24^32 e8e8
+d+8 d+32^48r24^32d+32^48r24^32 d+8 d+32^48r24^32d+32^48r24^32 d+8d+8
+d+8 d+32^48r24^32d+32^48r24^32 d+8 d+32^48r24^32d+32^48r24^32 d+8d+8
+g8 g32^48r24^32g32^48r24^32 g8 g32^48r24^32g32^48r24^32 g8g8
+>g8 g32^48r24^32g32^48r24^32 g8 g32^48r24^32g32^48r24^32 a8b8
+;
+
+{5}$
+'epiano-o1''e*v.24' p20 %e1 l48
+c4.d8^2  c4.c8^2>
+b12^r4^b12^r4^b12^r8^  b1<
+##
+l4 [4
+g1.gg
+f1.f2 ]
+##
+f1..f
+g1..g
+f1..f
+e1..e
+f1..f
+g1..g
+g1..g
+d1dfa<d
+;
+
+{7}$
+'epiano-o1''e*v.24' p64 %e1 l48
+e4.f8^2  e4.d+8^2
+d12^r4^d12^r4^d12^r8^  d1<
+##
+l4 [4
+c1.cc>
+a+1.a+2< ]>
+##
+a1..a
+b1..b
+a1..a
+g1..g
+a1..a
+b1..b
+a+1..a+
+f1fa<df
+;
+
+{4}$
+'epiano-o1''e*v.24' p100 %e1 l48
+g4.a+8^2  a4.g+8^2
+g12^r4^g12^r4^g12^r8^  g1<
+##
+l4 [4
+e1.ee
+d1.d2 ]
+##
+c1..c
+e1..e
+d1..d
+c1..c
+c1..c
+e1..e
+d+1..d+
+>a1a<dfa
+;
+
+{2}$
+l8
+"y4.y^2 y4.y^2"
+"skkskksk k4h4hk16k16sk"
+##
+"!!!o" l16
+[7 "k8hi s8ki h8ki s8kk" ]
+   "k8hi s8ki k8kk eeaa" "!o"
+[7 "k8hi s8ki h8ki s8kk" ]
+   "k8hi s8ki h8ee ccaa" "!o"
+##
+[7 "k8hi s8ki h8ki f8ki"
+   "k8ki s8ki h8ei c8ai" ]
+   "k8hi s8ki h8ki s8kk"
+   "k8ki s8ki h8h32e32e ccaf"
+;
+
+{6}$
+l16
+r1r1
+"y4.y4.y4 y1"
+##
+   "y4 h8h8 ^8h8 h8hi"
+[6 "h4 h8h8 ^8h8 h8hi" ]
+   "h4 h8h8 ^2"
+   "y4 h8h8 ^8h8 h8hi"
+[6 "h4 h8h8 ^8h8 h8hi" ]
+   "h4 h8h8 ^8hi h8hi"
+##
+[7 "z4   h8h8 ^8h8 h8h8"
+   "h8h8 h8h8 ^8h8 h8h8" ]
+   "h4   h8h8 ^8h8 h8hi"
+   "x8h8 h8h8 ^8^32i32j h8hi"
+;

@@ -303,9 +303,9 @@ def recruit_gogo_insert(outfile_rom_buffer: BytesIO, recruit_info):
         0x92, # pause for 30 frames
         0xB2, 0x15, 0xD0, 0x00, # Lighten background
         0x41, 0x31, # show party
-        0x41, 0x32, # show party
-        0x41, 0x33, # show party
-        0x41, 0x34, # show party
+        #0x41, 0x32, # show party #commenting out to remove ghosting when recruiting Gogo in other areas than Zone Eater
+        #0x41, 0x33, # show party
+        #0x41, 0x34, # show party
     ] + show_npcs + recruit_info.name_extra + [
         0x45, # refresh objects
     ] + name_camera_reverse + [

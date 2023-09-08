@@ -1,7 +1,7 @@
-.addr   jun-checker                             610000
-.addr   jun-rng2                                610830
-.addr   jun-mult                                610800
-.addr   jun-check-is-damage-over-time           610920
+.addr   jun-checker                             {{jun-global-checker}}
+.addr   jun-rng2                                {{jun-global-rng2}}
+.addr   jun-mult                                {{jun-global-mult}}
+.addr   jun-check-is-damage-over-time           {{jun-global-check-is-damage-over-time}}
 .addr   main                                    621340
 .addr   main-esper-attack-misc-effect           621b00
 .addr   fix-force-field                         6203a0
@@ -17,17 +17,7 @@
 .addr   return-force-field-nullify              020bfa
 .addr   bits                                    00bafc
 
-.def    jun-index-fire          18
-.def    jun-index-ice           19
-.def    jun-index-bolt          1a
-.def    jun-index-poison        1b
-.def    jun-index-wind          1c
-.def    jun-index-pearl         1d
-.def    jun-index-earth         1e
-.def    jun-index-water         1f
-.def    jun-index-prism-wall    79
-.def    jun-index-art-license   96
-.def    jun-index-esper-attack  9a
+.def    esper-attack-rate                       40
 
 020b8e: 5c $main-esper-attack-misc-effect
 :       ea
@@ -44,7 +34,7 @@ $main-esper-attack-misc-effect
 :       d0 no-esper-attack-misc-junction
 :       20 $check-has-esper,2
 :       f0 no-esper-attack-misc-junction
-:       a9 jun-index-esper-attack
+:       a9 {{jun-index-esper-attack}}
 :       22 $jun-checker
 :       f0 no-esper-attack-misc-junction
 :       da
@@ -53,8 +43,8 @@ $main-esper-attack-misc-effect
 :       29 03
 :       0c a4 11
 :       22 $jun-rng2
-:       29 03
-:       d0 esper-attack-misc-cleanup
+:       c9 esper-attack-rate
+:       b0 esper-attack-misc-cleanup
 
 :       c2 20
 :       bf 04 00 c4
@@ -104,7 +94,7 @@ $main
 
 :       ec 17 34
 :       d0 not-sketching
-:       a9 jun-index-art-license
+:       a9 {{jun-index-art-license}}
 :       22 $jun-checker
 :       f0 not-sketching
 :       64 10
@@ -112,7 +102,7 @@ $main
 .label not-sketching
 :       20 $check-has-esper,2
 :       f0 no-esper-main
-:       a9 jun-index-esper-attack
+:       a9 {{jun-index-esper-attack}}
 :       22 $jun-checker
 :       f0 no-esper-main
 :       da
@@ -130,21 +120,21 @@ $main
 
 .label elemental
 :       fa da
-:       a9 jun-index-fire
+:       a9 {{jun-index-pierce-fire}}
 :       20 $check-element,2
-:       a9 jun-index-ice
+:       a9 {{jun-index-pierce-ice}}
 :       20 $check-element,2
-:       a9 jun-index-bolt
+:       a9 {{jun-index-pierce-bolt}}
 :       20 $check-element,2
-:       a9 jun-index-poison
+:       a9 {{jun-index-pierce-poison}}
 :       20 $check-element,2
-:       a9 jun-index-wind
+:       a9 {{jun-index-pierce-wind}}
 :       20 $check-element,2
-:       a9 jun-index-pearl
+:       a9 {{jun-index-pierce-pearl}}
 :       20 $check-element,2
-:       a9 jun-index-earth
+:       a9 {{jun-index-pierce-earth}}
 :       20 $check-element,2
-:       a9 jun-index-water
+:       a9 {{jun-index-pierce-water}}
 :       20 $check-element,2
 
 :       fa
@@ -173,7 +163,7 @@ $check-prism
 :       ad a2 11
 :       89 20
 :       f0 exit-no-prism
-:       a9 jun-index-prism-wall
+:       a9 {{jun-index-prism-wall}}
 :       22 $jun-checker
 :       d0 prism-wall
 :       bb

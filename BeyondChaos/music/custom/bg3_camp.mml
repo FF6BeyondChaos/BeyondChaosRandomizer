@@ -1,0 +1,585 @@
+#TITLE I Want To Live
+#ALBUM Baldur's Gate 3
+#COMPOSER Borislav Slavov
+#ARRANGED emberling
+
+#VARIANT ~ 
+#VARIANT _ tr
+#SFXV ` *
+
+#WAVE 0x20 0x62 violins
+#WAVE 0x21 0x63 violas
+#WAVE 0x22 ~0x01~ _0x09_ piano high
+#WAVE 0x23 0x02 piano mid
+#WAVE 0x24 0x07 piano lo-mid
+#WAVE 0x25 0x04 piano low
+##WAVE 0x26 0x06 piano x-high
+#WAVE 0x27 0x75 vox
+#WAVE 0x28 0x7E horn
+#WAVE 0x29 0x92 oboe
+
+#def violins= |0 o5
+#def strings= |1 o5
+#def pianohi= |2 o4
+#def pigrand= |3 o5
+#def pianolq= |4 o5 %r12
+#def pibass=  |5 o5 %r12
+#def pianoxh= |6 o2
+#def choir=   |7 o4
+#def horn=    |8 o4
+#def oboe=    |9 o4
+#def flute=   @3 o5 %a10%y1%s5
+
+#def init= t122 %v50 %b0,100 %f0,0
+
+#def pimute= %a12
+
+#def s= v190
+#def p= v200
+#def c= v100
+#def h= v175
+#def o= v175
+#def f= v160
+
+#def pf= v1,190
+#def sf= v1,200
+#def cf= v1,100
+#def hf= v1,175
+
+#def up= |2 >
+#def down= |3 <
+
+#def up<= |2
+#def down>= |3
+
+#def hvib= m32,22,207
+#def fvib= m16,18,207
+
+#cdef ( %l1
+#cdef ) %l0
+
+*{2}* `{2}` 'init' %e1 &2r
+'pigrand' 'p*v.75' p88
+d1 d1 $
+'pigrand' 'p*v.75' p88 l8
+d4< [j2 $9004 d4c4>ag4. a4g4df4. a4g4af4. d4f4]d4
+^2 'p*v.50' d1 d1
+## 13
+d4'p*v.75'<d4c4>ag4. a4g4df4. a4g4af4. d4^64&45fd4
+'up<' r2 'p*v.2' d1 'p*v.4' d2
+## 19
+^4 'p*v.75' l4 dag  fefg e2.c d1
+fefg a2.c d1^1
+## 27
+l8 aa+4<c2d> aa+4<c2>a
+l4 ^64<&45dcc>a gfga
+^2 'p*v.50'd1.
+## 33
+'p*v.75' l4 <dcc>a gfga
+'p*v.50' r2d2d2d2
+^'p*v.75'<fec> agfe d1^1
+## 41
+<rafd e2fd> a+2ag f1
+'down>'p32 'p*v.33' a1 'p*v.50' 'up<' p88
+f2af e1 d1^1
+## 50
+'p*v.75'
+l8 aa+4<c2>d aa+4<c2>a
+l4 <dcc>a gfga
+'pianolq-o1''p*v.50' p64 d1d1
+## 56
+'pianohi+o2''p*v.75' p88 l4
+dcc>a gfga ^1  'p*v.25' <d1>
+## 60
+'down>''p*v.75''pimute-%a1' l8
+d4<d4c4>ag4. a4g4df4. a4g4af4.
+l4 [5'p*v.40'd'p*v.60' j3,165 j5,167 f 'p*v.40'd2] $165 ec2] $167 ge
+## 68
+r48
+'up<'< r
+##'p*v.50'd'p*v.75'f'p*v.25'd2 'p*v.50'de'p*v.33'd2
+##'p*v.50'd'p*v.75'f'p*v.25'd2 'p*v.50'd'p*v.75'a2.
+##'p*v.50'd'p*v.75'f'p*v.25'd2 'p*v.75'd'p*v.67'c'p*v.75'd
+[3'p*v.40'd'p*v.60'f'p*v.20'd2 j3,172 'p*v.40'd j2,170 e'p*v.20' d2]
+$170 'p*v.60'a2.] $172 'p*v.60'd'p*v.50'c'p*v.60'd
+'p*v.40'>a<'p*v.30'dd2. d< &92 d2>
+## 76
+'p*v.15''pimute' ^2 ed2. 'p*v.20'e'p*v.15'>a2.< 'p*v.40' df ^1>
+'p*v.10'a2a2a2a2a1 ^64'p*v.50'd1
+## 84
+%a 'p*v.60' aaa+'p*v.55'<c>a'p*v.70'<d^64>'p*v.60'&93a2^1
+<ffe'p*v.50'd'p*v.65'cd>'p*v.55'a1.
+a'p*v.75'a'p*v.60'a+<c>'p*v.50'fe'p*v.45'f1.
+'pf*v144,.65'cfag 'pf*v96,.50'gf &189d1
+>d2d2
+## 93-99
+l4 d<<%a10[ dc>a8g. agd8f. aga8f.
+ 'p*v.33'd'p*v.50'f'p*v.33'd2. 'p*v.50'd1 j2 %r 'p*v.33'<d2. 'p*v.50''pimute'] ^2
+## 105
+a8a+<c2d8> a8a+<c2>a8
+<dcc>agfga ^2 d1.
+## 111
+<dcc>agfga ^2'p*v.33' d2d2d2
+## 116 (Tempo changes in 4th listed track)
+d1^1^1 &190 ^1
+'strings' p84 's*v.25' %a6%r9 a1<c2d2>a1 &194 ^1
+## 123
+^4 'pianohi+o2' p88
+'p*v.40' dcd>'p*v.50'a1
+        ^fga 'p*v.60'g1
+        ^1^1
+        ^fgf^1 'p*v.67'd1
+'pigrand''p*v.40'd1'p*v.60'd1
+;
+
+*
+{3} %e1
+'strings-o2' p44 's*v.24' %a2 %l1
+d1 ^1 $$22
+%r3 d1 ^1 %r7 ^1) %r0 g1 d1 ^1.
+## 13
+'sf*v192,.18' ^1 %a8 c1 >a+1< g1 d1^1
+## 19
+[6^1] %r9 ^1^1
+## 27
+^1^1^1 p64 %r0 's*v.24' g1 d1^1
+## 33
+'s*v.15' f1 g1 's*v.24' d1^1^1^1^1 %r10 ^1
+## 41
+'s*v.15' %r%a0 d1^1 'sf*v192,.24' ^1^1 %r13 ^1
+'violins-o2''s*v.15' %a2%r7 'sf*v192,.20' g1 a1 a+1 'sf*v192,.10' a1
+## 50
+'strings''s*v.15' %a3%r8 p64
+c1 d1 f1 'sf*v192,.25' d1^1^1
+## 56
+'s*v.15' >a+2f2 a+2g2 d1^1
+## 60
+'s*v.05' p44 %a%a1 <<<d1^1^1 %r12 ^1
+'s*v.20' p84 %a%a4 >>>d1^1^1 %r12 ^1
+## 68-76
+> p44 %r0 d1[14^1] %r14 ^1 <
+## 84
+p84 %a%a1 's*v.15' d1^1^1 ^1. 'sf*v255,.25' ^1. 'sf*v192,.10' ^1
+'sf*v192,.17' %a3 f1 'sf*v192,.24' ^1 's*v.18' %r9 a1a+2a1^1
+## 93
+'violins+o2' p44 's*v.08' %a0%r6 f1^1 %a3 c1> a+1 a1 %r10 ^1
+## 99
+p64 's*v.20' >> a1 g1 f1 d1 > 's*v.10' a1^1
+## 105
+'strings' %a4%r8 c1>a1f1g1 's*v.20' d1^1
+## 111
+l4 <f2ga gfga ^1 ^1
+## 116
+^1^1^1^1>> p84
+d1f2g2d1^1
+## 123
+'s*v.15'< %a3
+d1f1d1c1  d1e1.g1.d1 %r11 ^1
+## loop
+'strings-o2' p44 's*v.24' %a2 %l1 d1
+;
+*
+
+*{4}* `{3}` %e1 r64
+'pigrand' 'p*v.25' p16 'pimute'
+d1 d1 $
+'pianolq' 'p*v.50' p64 'pimute' l4
+dff2 c1 >g1 b2<d2
+'pibass-o2' p32 d1 'p*v.33' d1 'p*v.20' d2
+## 13
+'pianolq' 'p*v.50' p64 'pimute' l4
+df'p*v.33'f2'p*v.50' r2c2 >a+1< 'p*v.25'f 'p*v.50'dc 'p*v.25' d
+'pigrand''p*v.50' r2 d1 d2
+## 19
+l4 ^ 'up<'<'pimute' 'p*v.33' p32 d4d4d4 d2d2 c1>a1
+'pigrand' 'pimute' a+2<c1.> a+1^1
+## 27
+'up<''pimute' r1 f.f.^ f2 'down>''pimute' r8a8a4 a+1
+^2 p64 d1 d2
+## 33
+'up<''pimute' l4 dfcf 'down>''pimute' f2a+2
+^2 >a2a+2<c2
+d4'pianohi+o2''pimute''p*v.25'd>a+a 'down>''pimute' da<d>a <d1
+'pianolq-o1''pimute''p*v.33' d1
+## 41
+'pianohi+o2''pimute' l4 p48   rfd>a <c2dr> f2fr d1
+'down>''p*v.25' d1'up<'
+d2dd e2cd r1 r1
+## 50
+'p*v.33' r1 r1 c2f2d2d2
+'pibass-o2''p*v.18' d1 d1
+## 56
+'pianohi+o1''pimute''p*v.33' p32 l4 d2cc d2d2
+'pianolq-o1''p*v.50' d1 d1
+## 60
+<'pimute' p64 dff2 c1> g1 b2<d2
+^1^1'up<' 'p*v.20' r2f2 r2ge
+## 68
+'pimute''p*v.33'
+r>a<ed2 'p*v.25' ded2 'p*v.33'ded2 >a<'p*v.25'a+2.
+ >a<ed2 >aa+a2< ded2 >a<g2
+## 76
+'down>''pimute''p*v.33' [d'p*v.25'a'p*v.33'<d>a] dg'p*v.12'<d>a 'p*v.33'da<d>'p*v.12'a
+'p*v.25'd'p*v.15'a'p*v.33'<d>a  da<d2> d 'p*v.25'g'p*v.3'a'p*v.35'<d>a1
+## 84
+'up<''pimute' rdd'p*v.25'c'p*v.30'd'p*v.35'g'p*v.25'f1.
+'p*v.50'c'p*v.30'd'p*v.35'c'down>''pimute'f'p*v.30'aa+'p*v.25'f1.
+'pf*v144,.40'aa+<c>'p*v.35'f'p*v.20'a+'p*v.25'a'p*v.30'a+1.
+'p*v.10'<cdcdc>'p*v.20'ga2
+'p*v.50'd2d2d2
+## 93
+d'up<''p*v.25'ff8'p*v.08'f4.'p*v.33' c1 'down>''pimute'f1 g1 a1.'up<''pimute''p*v.20'a2
+## 99
+'p*v.40'd p48 l4 'pianohi+o1''p*v.20'
+fe'p*v.10'd8'p*v.20'c.cc'p*v.10'c8'p*v.20'f.dfd8f.>bgf2.
+p64'pimute' a1 &93 ^2
+## 105
+c8g<c2d8 f8ff2^8
+f2>fa a+2g1 d1 'pigrand''pimute'd2
+^64
+## 111
+p52 'p*v.25''up<''pimute'dfcc>a+a+ga &93^2
+'down>''p*v.33'a2a+2<c2
+## 116
+'violins''s*v.18' p74 v0,9,180
+%a1 (d1d1d2 %r8 ^2d1) %a3 >d1f2g2(d1d1)
+v
+## 123
+p48 'pianohi+o1''pimute' l4 'p*v.20'
+rd>a2<c1
+p64'down>''pimute''p*v.25'd2'up<''p*v.20'd2'down>''pimute'c1^1^1.
+'up'r64 p48 a+1. a1^1^1
+;
+
+*{1}* `{1}` %e1
+r1 r1 $
+'pianolq' 'p*v.25' p64 'pimute'
+r1 f1 r1
+'violins-o1' 's*v.10' p64
+%a2 g1 %a15%r9 f1^1.
+## 13
+%r 's*v.10' d1 c1 >a+1< c1 (d1d1
+## 19
+[8d1])
+## 27
+p84 'strings-o1''sf*v255,.20' e1 f1 a1 g1 d1^1
+## 33
+'violins-o1' a+2f2 a+2g2 (a1a1 %r6 a1a1a1a1)
+## 41
+'s*v.28' <p72 %a0 c1 %a3 e1 %a4 c4d2. ^1^1
+'horn''h*v.33''hvib' %r5 d1 c1 c8m3,2^2.. %r16 ^1 m
+## 50
+'violins+o1''s*v.35' p84 %a2%r9 e1 %a3 f1a1e1f1 e2f2
+## 56
+<d2c2> g1 a1^1
+## 60
+%r12 ^1^1^1^1>> r2. a4^1 %r9 g1^1
+## 68
+'horn' p56 'h*v.25''hvib''hf*v96,.4' %r5
+d1 m6,7d2. 'h*v.33'g4'hf*v192,.25'a1%a0a+1%a15
+d1 'hf*v48,.4' m6,5d2.a4 %r10 g1^1
+## 76
+# continuing vibrato from horn
+'oboe' p60 'o*v.5' %r10 l8
+[a2a4.f  g2.fg]
+a2<c2> g2.a4
+f6%r20^12%r10d2.^1 m
+## 84
+'choir''c*v.44' p72
+%a2 (a1a1a1 a1'cf*v192,.33'a1'cf*v192,.22'a1 a1 %r15 ^2)
+%r7 'cf*v255,.44' a+1. a1 g2 %r0 ('cf*v192,.55'd1'cf*v192,.66'd1
+## 93
+d1) %a5%r8 f1 'c*v.50' c1>a+1 'c*v.40' a1^1
+## 99
+a1 <'cf*v255,.85'e1 f1 'cf*v255,.50'd1 d1^1
+## 105
+'violins''s*v.25' p84 %a4%r7
+c1d1f1g1a1^1
+## 111
+'s*v.20''sf*v192,.25' p54 l4
+>a+2<cf 'sf*v192,.30' d2>a+(a a1 %r11 a1)
+## 116
+p48 'horn''h*v.33''hf*v192,.50''hvib' %y0%s5
+t111 d1 %r7 t120 a1. t141 g4%r13^4 t120 g8f8 t110 d2.
+t120 %r0 a1 m3,3a2 <m3,2c2 m4,-5 %r8 d1 t65 ^1 t122 %r19
+## 123
+^1r1r1r1> l4
+%r5 'h*v.33' rfga g1.. %r0 'hf*v240,.67'^^1 'h*v.33' %r5 a1^1 %r7 ^1
+m
+;
+
+*{6}* `{5}` %e1 &1r
+r1 r1 $
+'pianolq-o1' 'p*v.50' p36 'pimute'
+r1 f1 c1 g1 r1 r1.
+## 13
+r1 'p*v.33' c2 'p*v.50' g2 f1 c1 d1^1
+## 19
+<'up<''pimute''p*v.33' l4
+rdcd >a+2<c2 c1> a1
+'pigrand''pimute' f2f1.f1^1
+## 27
+l8 cg4<c2>a2<c^2> a2f2f2
+'up<'< p96 r64g4a4 &189 ^1^1
+## 33
+'down>'> p36 l4  a+<d>a<c> d2d2
+'pibass-o2' d1^1
+'pianohi+o1' 'pimute' l4 rdag d1^1 > 'p*v.25' d1
+## 41
+'pigrand''pimute' l4
+da'up<''pimute'de cddd 'down>''pimute'a+2<c>a+ a1 r1
+'p*v.33' f2af e2ac d1^1
+## 50
+c1 d1 f1 a+2a+2 r1 d1
+## 56
+a+2fa a+2a+2
+'pibass-o2''p*v.18' d1d1
+## 60
+'pianolq-o1' 'p*v.50' 'pimute'
+r1 f1 c1 g1 %a15
+d1 'p*v.25' d2'p*v.50'd2'p*v.25'd1'p*v.50'd1
+## 68
+'pigrand''pimute''p*v.25' p48
+d1 d1 'p*v.50' d1 'p*v.33' d2<d2>
+d1 d1 d1 d1
+## 76
+'violins+o1' 's*v.08' p54 v0,9,191 %a3
+'sf*v255,.15' a1 %r8 ^1 'sf*v192,.06' f1 e1 'sf*v192,.15' a1 g1 %r19 ^8 v%r13 f4.^1.
+## 84
+'pibass-o2' p40
+'p*v.50' d1^1^1 'p*v.33' d1^1^1 d1^1^1 'p*v.25' f1 'p*v.40' g2 'p*v.50' d1^1
+## 93
+'pigrand+o1''pimute' 'p*v.20' l4 rd 'p*v.10' d2 'p*v.25'>f1 c1 d1 d1. <'p*v.20'd2
+## 99
+^4 'pianohi+o1''p*v.15' dc>a8g.ggg8<d.>a+<d>a+8<d.>gd1
+'pimute' f1.
+## 105
+r2.. << d8 &189a1> d1> g2^64 <<ga ^2 d1.
+## 111
+>> 'p*v.20' a+<c>ga ggd&47d
+'pibass-o2' 'p*v.33' d1^1
+## 116
+'choir''c*v.25' p56 %a6
+'cf*v192,.40' (d1 %r5 d1d2 'cf*v255,.10' ^1.)
+d1'c*v.25'c2d2'c*v.10'd1^1
+## 123
+'pianolq-o1''p*v.28' p40 &189d1
+'pianohi''pimute''p*v.20' f1. <c1.> ^1^1. r48g1. d1^1^1
+;
+
+*{5}* `{4}` %e1
+r1 r1 $
+'pianolq-o1' 'p*v.50' p40 'pimute'
+r1 c1 r1 >g1< r1 r1.
+## 13
+r1 r2c2 >a+1 'pibass-o2''pimute''p*v.33' g1 r1r1
+## 19
+'pianolq''pimute' l4
+raaa f2g2 g1 r1
+>a+2<c1.>a+1^1<
+## 27
+r1r1 'choir''c*v.25''cf*v192,1' p72 %a4%r8 a1 g1 %a2 a1^1
+## 33
+<d2 c2> f2 a+2 (a1 %r5 a1a1a1a1a1)
+## 41
+f1e1(f1 %r11 f1f1)
+%a5%r8 'c*v.35' f2a2 e2a2 f2d2 'cf*v192,.25' d1
+## 50
+'violins''s*v.25' p84 %a2%r10 g1a1<c1>a+1a1^1
+## 56
+'flute+o2''f*v.25''fvib' %r7 d2c2>g1a1^1 m
+## 60
+^1 'pianolq-o1' 'p*v.50' p40 'pimute'
+c1 r1 >g1 ^2
+'violins-o1''s*v.35' p64 %a2%r13 f1.
+'choir''c*v.60' p72 %a4%r7 d1^1
+## 68
+d1 a2.g4 a1 a+1
+d1 g2.a4 g1^1
+## 76
+'violins+o2''s*v.08' p34 v0,11,191 %a4
+'sf*v255,.15' d1 %r9 ^1 'sf*v192,.04' c1>g1'sf*v255,.15'<c1 d1 v%r15 ^3>%a1%r10d3^3
+v192,0 ^1
+## 84
+> p56 %a4%r1 r1^1^1 ^1.
+'sf*v144,.15' d2. 'sf*v144,.30' ^2. a1 f1 %r7 ^1
+'s*v.25' a1 g2 d1 %r9 ^1
+## 93
+^1^1^1 's*v.10' << %a0 a+1 's*v.05' %a2 a1 %r12 ^1
+## 99
+'choir''c*v.20' p78 %a8 a1^1 %r10 'c*v.50' <d2> 'cf*v255,.20' a2g2f2 %r19 ^1^1
+## 105
+'c*v.33'%r6 c1> a1 f1 g1 d1^1
+## 111
+'violins''s*v.15''sf*v192,.20' p44 l4 %a5%r8
+f2(ga) 'sf*v192,.25' gfg(a %a0^1^1)
+## 116
+[13^2] 'pianohi' p72
+'p*v.15'g8'p*v.10'a8'p*v.20'<d4^2
+## 123
+'violins'p44's*v.08' v0,9,180
+%a0 (d2 [10d1] 'sf*v192,.02' d1)
+v
+;
+
+*{7}* `{6}` %e1
+'strings+o2' p44 's*v.04' %a0 %l1
+d1 d1 $
+p44
+%r5 d1 d1 %r10 d1^1) %r0 p84 ('sf*v192,.045' d1 'sf*v255,.055' d1.
+## 13
+'sf*v192,.04' d1d1d1d1 'sf*v192,.045' d1 'sf*v192,.05' d1
+## 19
+d1d1d1 %r8 ^1^1^1^1^1)
+## 27
+'pianohi+o1''pimute''p*v.33' p44 r1 d4.&117c 'down>''pimute'f64^2r2d1 r1r1
+## 33
+l4 'p*v.22' ra+ra r1r1r1
+'pibass-o2''p*v.28' d1^1^1^1
+## 41
+'strings' v0 'sf*v255,.15' %a0%r9 p84 c1 %a3 >g1 f1^1^1
+'violins' p64 'sf*v192,.20' d1 'sf*v192,.15'>g1 'sf*v192,.20' a+1 'sf*v192,.15' a1
+## 50
+'choir' p54 'c*v.67' %a4 r1 r1 r1 r1 r1 e2f2
+## 56
+'c*v.33' a+2f2 a+2g2 a1^1
+## 60
+[8r1]
+## 68 (Switching to missing bass part for sfxv)
+*> ([8d1 %a0]) *
+`'pibass-o2' p32 'p*v.5''pf*v192,.2' %r2%s7 (d1 %a0 'pf*v255,.1' [7d1])`
+## 76
+%r7 ^1^1^1^1^2
+'violins+o2''s*v.08' p34 v0,11,191 %a4 e2 %r19 ^1^1^1 v
+## 84
+'pianolq''pimute' p52 l4
+'p*v.10'a'p*v.20'aaaaa<d1.>
+'p*v.15'faffff'p*v.20'd1.
+fffafff1.
+'pigrand''pimute''p*v.25'afaf'p*v.20'aa+f1^1
+## 93
+r1r1r1 > 'p*v.25' a+1 a1.
+'pibass-o2''p*v.20' d2
+## 99
+^1
+'strings-o1' p84 's*v.05' %a3 %r9 c1>a+1 'sf*v255,.24' g1 d1^1
+## 105
+&186 ^1 'pianohi+o1''pimute' p36 'p*v.15' d1
+'down>''pimute'a1d1 ^32
+'pianolq-o1''p*v.33' d1^1
+## 111
+'strings-o2' p84 's*v.25' %r5
+%a0 a+2gagf %a4 g2(d1d1)
+## 116
+^1^1^1^1
+'violins-o1' p84 's*v.10' %a4%r8 a1<c2d2>a1^1
+## 123
+^1^1&90r2 'pigrand''pimute''p*v.15' p40
+f1. r1 r1. r64 r1. >a1. r64
+## loop
+'strings+o2' p44 's*v.04' %a0 %l1 d1.
+;
+
+*
+~ ## Track 8, normal version
+{8} %e1
+r1 r1 ^24 $ 
+'pigrand' 'p*v.25' p16 l8 'pimute'
+d4< ##d4c4>ag4. a4g4df4. a4g4af4. d4f4d4
+[j1,9004]d4
+^2 d1 d1
+## 13
+d4< ##d4c4>ag4. a4g4df4. a4g4af4. d4^64&45fd4
+[j1,9004]d4
+'up<' r1 r1
+## 19
+r4 l4 dag  fefg e2.c d1
+fefg a2.c d1^1
+## 27
+l8 aa+4<c2d> aa+4<c2>a
+'violins' p64 's*v.15' %a2%r7 f1 g1 a1^1
+## 33
+'pianohi+o1''p*v.25' p16 'pimute' l4
+<dcc>a gfga
+r2d2d2d2
+^<fec> agfe d1^1
+## 41
+<rafd e2fd> a+2ag 
+'strings-o1' p84 's*v.15' %a3%r9 a1^1
+'pianohi+o1''p*v.25' p16 'pimute'
+f2af e1 d1^1
+## 50
+l8 aa+4<c2>d aa+4<c2>a
+l4 <dcc>a gfga r1r1
+## 56
+<dcc>a g&40f
+'pianolq-o1' p64 g2
+'choir''c*v.33' %a4%r15 f1
+'pianohi+o1''p*v.33' d1
+## 60
+'down''pimute''p*v.25' p16 r24r4 [j1,9004]&40d4 ^1r1r1r1
+## 68
+'pibass-o2' p32 'p*v.5' d1 &100 [7^1]
+'pianohi+o2' p96 'p*v.15' &92 g2
+## 76
+[7r1] >> 'p*v.25'a1
+## 84
+< 'p*v.10' p16 r24 aaa+<c>a<d>a1. 'p*v.06' <ffedcd>a1. v192,0 aaa+<c6^24
+'choir''c*v.33' p72
+%a4%r10 f1^1^1.^1^1
+## 93-99
+r24r4 'pianohi+o2' p16 'p*v.12' [[j1,9004]d2. d1 j2 <d2.] ^2
+## 105
+&176r1 ## from 8t late to 8t early
+'pigrand+o1''pimute' p32 'p*v.15' c1>f1
+'pianolq-o1' g1^1^1 r24
+## 111
+'choir' p72 'c*v.25' %a6%r6 l4
+f2ga gfga > 'cf*v255,.75' %a0 (d1d1)
+## 116
+[8^1]
+## 123
+r24 'pianohi+o2''pimute''p*v.19' p16 l4
+rdcd >a1  rfga g1 r1r1 rfgf1 rd1
+'down>''pimute'd1d1
+;
+~
+
+_
+## Track 8, truncated for train variant
+## All piano "echo" notes removed
+{8} %e1
+r1 r1 ^24 $ 
+[45r2]
+'violins' p64 's*v.15' %a2%r7 f1 g1 a1^1
+[11r1]
+'strings-o1' p84 's*v.15' %a3%r9 a1^1
+[11r1] &88r2
+'pianolq-o1' 'p*v.25' p64 g2
+'choir''c*v.33' %a4%r15 f1
+'pianohi+o1''p*v.33' d1
+[8r1]
+## 68
+'pibass-o2' p32 'p*v.5' d1 &100 [7^1]
+'pianohi+o2' p96 'p*v.15' &92 g2
+## 76
+[7r1] >> 'p*v.25'a1
+[7r1]
+'choir''c*v.33' p72
+%a4%r10 f1^1^1.^1^1
+## 93-99
+[12r1]
+## 105
+&184r1 ## from 0 late to 8t early
+'pigrand+o1''pimute' p32 'p*v.15' c1>f1
+'pianolq-o1' g1^1^1 r24
+## 111
+'choir' p72 'c*v.25' %a6%r6 l4
+f2ga gfga > 'cf*v255,.75' %a0 (d1d1)
+## 116
+[8^1]
+## 123
+r24 [11r1]
+;
+_
+*

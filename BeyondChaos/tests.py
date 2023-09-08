@@ -1,7 +1,7 @@
-VERSION = "CE-5.0.0"
+from randomizer import VERSION
 SOURCE_FILE = "D:\\Emulation\\SNES\\Beyond Chaos\\FF3.smc"
 OUTPUT_PATH = "D:\\Emulation\\SNES\\Beyond Chaos\\"
-TEST_SEED = "CE-5.0.0|normal|e dancingmaduin:off electricboogaloo mpboost:16.44 playsitself bsiab equipanything espffect cloneparty makeover|1688017607"
+TEST_SEED = VERSION + "|normal|b c d e f g h i j k m n o p q r s t u w y z frenchvanilla makeover partyparty girls:like object:hate dancelessons electricboogaloo expboost:2.0 madworld masseffect randombosses swdtechspeed:fast alasdraco capslockoff johnnydmad nicerpoison notawaiter cursedencounters dearestmolulu mimetime morefanatical questionablecontent randomboost:255 relicmyhat allcombos desperation mementomori:14 nocombos supernatural effectmas effectory effectster espercutegf espffect|1688017607"
 # FLARE GLITCH TEST_SEED = "CE-5.0.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
 # REMONSTERATE ASSERTION TEST_SEED = "CE-5.0.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
 #TEST_SEED = "CE-5.0.0|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
@@ -12,47 +12,51 @@ TEST_SEED = "CE-5.0.0|normal|e dancingmaduin:off electricboogaloo mpboost:16.44 
 
 
 # Test a single generation, just like using TEST = True previously in randomizer.py
-def test_generation():
+def test_generation(iterations: int = 1, generate_output_rom=True):
     from randomizer import randomize
     from multiprocessing import Pipe, Process
-
-    print("Running generation with seed " + str(TEST_SEED))
-    kwargs = {
-        "infile_rom_path": SOURCE_FILE,
-        "outfile_rom_path": OUTPUT_PATH,
-        "seed": TEST_SEED,
-        "application": "tester"
-    }
-    parent_connection, child_connection = Pipe()
-    randomize_process = Process(
-        target=randomize,
-        args=(child_connection,),
-        kwargs=kwargs
-    )
-    randomize_process.start()
-    while True:
-        if not randomize_process.is_alive():
-            raise RuntimeError("Unexpected error: The randomize child process died.")
-        if parent_connection.poll(timeout=5):
-            item = parent_connection.recv()
-        else:
-            item = None
-        if item:
-            try:
-                if isinstance(item, str):
-                    print(item)
-                elif isinstance(item, Exception):
-                    raise item
-                elif isinstance(item, bool):
+    for i in range(iterations):
+        test_bundle = TEST_SEED.split("|")
+        test_seed = test_bundle[len(test_bundle) - 1]
+        test_seed = str(int(test_seed) + i)
+        test_bundle[len(test_bundle) - 1] = test_seed
+        kwargs = {
+            "infile_rom_path": SOURCE_FILE,
+            "outfile_rom_path": OUTPUT_PATH,
+            "seed": "|".join(test_bundle),
+            "application": "tester",
+            "generate_output_rom": generate_output_rom
+        }
+        parent_connection, child_connection = Pipe()
+        randomize_process = Process(
+            target=randomize,
+            args=(child_connection,),
+            kwargs=kwargs
+        )
+        randomize_process.start()
+        while True:
+            if not randomize_process.is_alive():
+                raise RuntimeError("Unexpected error: The randomize child process died.")
+            if parent_connection.poll(timeout=5):
+                item = parent_connection.recv()
+            else:
+                item = None
+            if item:
+                try:
+                    if isinstance(item, str):
+                        print(item)
+                    elif isinstance(item, Exception):
+                        raise item
+                    elif isinstance(item, bool):
+                        break
+                except EOFError:
                     break
-            except EOFError:
-                break
 
 
 # Test multiple generations. Choose a number of seeds to generate and a number of random flags those seeds should have.
 # The selected mode is random too.
 # Note that this method does not write any of the generated roms to disk.
-def test_random_generation(iterations: int, num_flags: int):
+def test_random_generation(iterations: int, num_flags: int, generate_output_rom=False):
     from options import ALL_FLAGS
     from options import ALL_MODES
     from randomizer import randomize
@@ -98,7 +102,8 @@ def test_random_generation(iterations: int, num_flags: int):
                 "infile_rom_path": SOURCE_FILE,
                 "outfile_rom_path": OUTPUT_PATH,
                 "seed": current_seed,
-                "application": "tester"
+                "application": "tester",
+                "generate_output_rom": generate_output_rom
             }
             parent_connection, child_connection = Pipe()
             randomize_process = Process(
@@ -228,5 +233,5 @@ def test_esper_allocation():
 
 
 if __name__ == "__main__":
-    # test_generation()
-    test_random_generation(50, 10)
+    test_generation(iterations=1, generate_output_rom=True)
+    # test_random_generation(iterations=, num_flags=10, generate_output_rom=False)

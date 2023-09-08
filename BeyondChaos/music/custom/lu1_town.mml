@@ -1,0 +1,195 @@
+#TITLE Town
+#ALBUM Lufia and the Fortress of Doom
+#COMPOSER Yasunori Shiono
+#ARRANGED emberling
+
+#WAVE 0x20 0x02 piano
+#WAVE 0x21 0xC4 pad
+#WAVE 0x22 0x81 trumpet
+#WAVE 0x23 0xB9 accordion
+#WAVE 0x24 0xA5 flute
+#WAVE 0x25 0x33 guitar
+#WAVE 0x26 0x51 bass
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x3B hihat
+#WAVE 0x2B 0x4A tom
+
+#def init= t120 %v40 %b0,85 %f0,0 %x255
+
+#def piano=   |0 o5 m %a10
+#def pad=     |1 o5 m24,18,195 %a15%y6%s3%r13
+#def trumpet= |2 o5 m48,18,239 %r3
+#def accord=  |3 o5 m %r0
+#def flute=   |4 o5 m48,18,223 %r10
+#def guitar=  |5 o6 m12,18,193 %y1%s2%r14
+#def bass=    |6 o5 m %a10%r7
+
+#def p= v201
+#def d= v86
+#def t= v86
+#def a= v73
+#def f= v60
+#def g= v92
+#def b= v115
+
+#def ff= v1,60
+
+#def guitarenv2= %y2
+
+#def kickVol= v115
+#def snareVol= v115
+#def hihatVol= v73
+#def tomVol= v73
+
+#drum "k"=5a |8 p64 'kickVol*v.76'
+#drum "q"=5a |9 p64 'snareVol*v.49'
+#drum "r"=5a |9 p64 'snareVol*v.63'
+#drum "s"=5a |9 p64 'snareVol*v.76'
+#drum "g"=5a |A p48 'hihatVol*v.49' %s0
+#drum "h"=5a |A p48 'hihatVol*v.76' %s0
+#drum "c"=5c+|B p72 'tomVol*v.76' %r21
+#drum "f"=4f |B p32 'tomVol*v.76' %r21
+
+{1}
+'init' %e1 $
+'piano''p*v.60' p64 l8
+cc+d+g+ rga+g+ d+1
+dd+fa+ ra<c>a+ f1
+g4gg+ ra+4a+   g+d+rc ^c+d+4
+d4dd+ rf4d     g4f4d+2
+## 9
+cc+d+g+ rga+g+ d+1
+dd+fa+ ra<c>a+ f1
+g4gg+ ra+4a+   g+d+4<d+ ^c+c>g+
+f4fg  ^g+4a+   g+1
+## 17
+'trumpet''t*v.48' l8
+fg+gg+a+g+gg+    d+g+c+g+c4c+d+
+fg+gg+a+g+gg+    <c>d+a+d+g+4g+<d+
+d+c+c>g+4g+a+g+  <c4>a+4g+g+a+g+
+<c+4.c+4c>a+g+   <d+1
+;
+
+{2}
+%e1 $
+'pad''d*v.60' p82 l8
+cc+d+g+ rga+g+ d+1
+dd+fa+ ra<c>a+ f1
+g4gg+ ra+4a+   g+d+rc ^c+d+4
+d4dd+ rf4d     g4f4d+2
+## 9
+'flute''f*v.33' p82 l8
+r8 <g+16g16 g+32^48r24^32 d+32^48r6^32 c16>b16 <c32^48r24^32>g+32^48r24^32
+r8 <g+16g16 g+32^48r24^32 d+16d16 d+32^48r24^32 c16>b16 <c8>g+8
+r8 <a+16a16 a+32^48r24^32 f32^48r6^32 d16c+16 d32^48r24^32>a+32^48r24^32
+r8 <a+16a16 a+8 f16e16 f8 d16c+16 d8>a+8
+<d+2c+2        d+c4g+4g+g+d+
+c+4c+c+4d+4c+  c1
+## 17
+f2^gg+a+       d+4c+4c4c+d+
+f2^gg+a+       d+4c+4c2
+c+2c+c+d+c+    c4>a+4g+4g+g
+f2^fgf         'ff*v96,.20' [8 %l1 d+32f32 %l0] d+2
+;
+
+{3}
+$
+'bass-o1''b*v.72' p64 l8
+g+g+4g+4g+g+g+  g+g+4g+4g+g+g+
+a+a+4a+4a+a+a+  a+a+4a+4a+a+g+
+<d+d+4c+4c+c+c+ cc4>g+4g+g+g+
+a+a+4a+4a+<cd   d+d+4d+4d+d+d+>
+## 9
+g+g+4g+4g+g+g+   g+g+4g+4g+g+g+
+a+a+4a+4a+a+a+   a+a+4a+4a+a+g+
+<d+d+4c+4c+c+c+  cc4>g+4g+g+g+
+a+a+4<d+4d+d+d+> g+g+4g+4g+a+<c
+## 17
+c+c+4c+4c+d+c+   c4>a+4g+4a+<c
+c+c+4c+4c+d+c+   c4>a+4g+g+a+<c
+c+c+4c+4c+d+c+   f4e4d+4d4
+c+4.c+4>a+<cc+   d+4.d+4>d+fg
+;
+
+{4}
+l16 $
+[7 "k8kg s8kg h8kg s8kk" ]
+   "k8kg s8kg h8kg s8ss"
+## 9
+[7 "k8kg s8kg h8kg s8kk" ]
+   "kss8 s8cc kf8g s8ss"
+## 17
+[7 "k8kg s8kg h8kg s8kk" ]
+   "k8s8 s8kk kqrr s8ss"
+;
+
+{5}
+%e1 $
+'guitar-o1''g*v.50' p40 l4 p0,48,24
+r8 d+d+d+d+ d+d+d+d+8
+r8 ffff ffff8
+r8a+a+8 r8g+g+8  r8d+d+d+d+8
+r8 ffff8 r8 a+a+a+a+8
+## 9
+r8 d+d+d+d+ d+d+d+d+8
+r8 ffff ffff8
+r8a+a+8 r8g+g+8  r8d+d+d+d+8
+r8ff8 r8a+a+8    r8d+d+8^2
+## 17
+'guitarenv2'
+c+<c+g+c+     d+8d+8 c8c8 >g+<g+>
+c+<c+g+c+     d+8d+8 f8f8 g+<d+>>
+c+g+<f>g+  l8 f<c>e<c>d+<c>d<c>
+c+g+f<c+>  g+<f<c+>f>
+d+a+g<d+>  a+<gd+a+
+;
+
+{6}
+%e1 $
+'guitar-o2''g*v.50' p40 l4 p0,48,24
+g+<g+a+g+>    g+<g+a+g+>
+a+<a+<c>a+>   a+<a+<c>a+
+d+<d+>c+<c+>> g+<g+a+g+>
+a+<a+<cd>     d+<d+fg>>
+## 9
+g+<g+a+g+>    g+<g+a+g+>
+a+<a+<c>a+>   a+<a+<c>a+
+d+<d+>c+<c+>> g+<g+a+g+>
+a+<a+d+<d+>>  g+<g+>g+2<
+## 17
+'guitarenv2'
+r8g+g+<d+d+8     r16<c8>c+16 r16g+8>a+16 r8<cd+8>
+r8g+g+<d+d+8     r16<c8>c+16 r16<c+8>d+16 r8<cg+8>>
+r8f<c+c+>f8  l16 rg+8<f> rg+8<e> rg+8<d+> rg+8<d> l8
+r16 f<c+>g+<f  c+g+g+c+16>
+r16 g<d+>a+<g  d+a+g<d+16
+;
+
+{7}
+l16 $
+[8 "h8h8 h8h8 ^8h8 h8hg" ]
+## 9
+[7 "h8h8 h8h8 ^8h8 h8hg" ]
+   "h8hg h8hg h8h8 h8hg"
+## 17
+[7 "h8h8 h8h8 ^8h8 h8hg" ]
+   "h8hg h8hg h8hg h8hg"
+;
+
+{8}
+$
+[8r1]
+## 9
+'pad''d*v.60' p82 l8 %e1
+cc+d+g+ rga+g+ d+1
+dd+fa+ ra<c>a+ f1
+g4gg+ ra+4a+   g+d+4<d+ ^c+c>g+
+f4fg  ^g+4a+   g+1
+## 17
+'accord''a*v.48' l8
+fg+gg+a+g+gg+    l16%l1 d+<c>d+c+ %l0%l1 cg+c>a+ l8%l0 <c4c+d+
+fg+gg+a+g+gg+    l16%l1 d+<c>d+c+ %l0%l1 f<c+>fd+ l8%l0 g+<cd+g+
+d+c+c>g+4g+a+g+  <c4>a+4g+g+a+g+
+<c+4.c+4c>a+g+   <d+1
+;
