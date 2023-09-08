@@ -1,30 +1,50 @@
-.addr   jun-checker                     610000
+.addr   jun-checker                     {{jun-global-checker}}
+.addr   jun-checker-y                   {{jun-global-checker-y}}
+.addr   jun-compare-x-y                 {{jun-global-compare-x-y}}
+.addr   boost-damage-quarter            621440
 .addr   main                            620a00
-
-.def    jun-index               0c
 
 0234bb: 22 $main
 :       ea
 
 $main
+:       a3 06
+:       aa
 :       c2 20
-:       9b
-:       a6 ee
-:       a9 jun-index 00
-:       22 $jun-checker
-:       d0 has-reflect-boost
+:       a9 00 00
+:       48
+:       a0 12
+.label loop
+:       b9 18 30
+:       23 06
+:       d0 test-for-boost
+:       22 $jun-compare-x-y
+:       f0 test-for-boost
+:       80 skip
+.label test-for-boost
+:       a9 {{jun-index-reflect-boost}} 00
+:       22 $jun-checker-y
+:       f0 skip
+
+:       a3 01
+:       1a
+:       83 01
+
+.label skip
+:       88 88
+:       10 loop
+
+:       68
+:       d0 boost-reflect
 :       4e b0 11
-:       bb
 :       6b
-.label has-reflect-boost
-:       ad b0 11
-:       4a
-:       6d b0 11
-:       90 no-overflow
-:       a9 ff ff
-.label no-overflow
-:       8d b0 11
-:       bb
+
+.label boost-reflect
+:       3a
+:       f0 exit
+:       20 $boost-damage-quarter,2
+:       80 boost-reflect
+.label exit
 :       6b
 
 VALIDATION

@@ -5029,10 +5029,10 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
                 if junctions:
                     if equipid in pool:
                         old_rank = pool.index(equipid) / (len(pool)-1)
-                    else:
-                        assert equiptype == 'weapon'
-                        assert equipid in shields
+                    elif equiptype == 'weapon' and equipid in shields:
                         old_rank = shields.index(equipid) / (len(shields)-1)
+                    else:
+                        old_rank = random.random()
                     index = int(round(old_rank * (len(fallback)-1)))
                     new_equip = fallback[index]
                     old_item = [i for i in items if i.itemid == equipid][0]
@@ -5073,6 +5073,17 @@ def junction_everything(jm: JunctionManager, outfile_rom_buffer: BytesIO):
                                     force_category='monster')
         JUNCTION_MANAGER_PARAMETERS['monster-equip-steal-enabled'] = 1
         JUNCTION_MANAGER_PARAMETERS['monster-equip-drop-enabled'] = 1
+
+    if Options_.is_flag_active("jejentojori"):
+        for c in get_characters():
+            if c.id >= 0x10:
+                continue
+            if not hasattr(c, 'relic_selection'):
+                continue
+            junctions = jm.equip_whitelist[c.relic_selection]
+            for j in junctions:
+                jm.add_junction(c.id, j, 'whitelist',
+                                force_category='character')
 
     if jm.activated:
         jm.match_esper_monster_junctions()

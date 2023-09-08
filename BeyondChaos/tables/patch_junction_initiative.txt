@@ -1,16 +1,14 @@
-.addr   jun-checker                     610000
-.addr   jun-check-are-same-team         6105e0
-.addr   jun-check-entity-living         610600
+.addr   jun-checker                     {{jun-global-checker}}
+.addr   jun-check-are-same-team         {{jun-global-check-are-same-team}}
+.addr   jun-check-entity-living         {{jun-global-check-entity-living}}
 .addr   main                            621600
 .addr   check-esper-defense             6200c0
 .addr   return-loop                     022594
 .addr   return-terminate                022600
 
-.def    jun-index-initiative    04
-.def    jun-index-regenerator   51
-.def    jun-index-auto-reraise  75
-.def    jun-index-final-fenix   98
-.def    jun-index-plague        a4
+.addr   do-juggernaut-burst             622900
+
+.addr   current-level-address           7e3b18
 
 0225fa: 5c $main
 :       ea ea
@@ -18,7 +16,9 @@
 $main
 :       bb
 
-:       a9 jun-index-regenerator
+:       20 $do-juggernaut-burst,2
+
+:       a9 {{jun-index-regenerator}}
 :       22 $jun-checker
 :       f0 no-regenerator
 :       bd e8 3d
@@ -28,10 +28,10 @@ $main
 .label no-regenerator
 :       22 $jun-check-entity-living
 :       f0 no-auto-reraise
-:       a9 jun-index-final-fenix
+:       a9 {{jun-index-final-fenix}}
 :       22 $jun-checker
 :       d0 yes-auto-reraise
-:       a9 jun-index-auto-reraise
+:       a9 {{jun-index-auto-reraise}}
 :       22 $jun-checker
 :       f0 no-auto-reraise
 .label yes-auto-reraise
@@ -61,14 +61,14 @@ $main
 
 .label no-esper-defense
 :       e2 30
-:       a9 jun-index-plague
+:       a9 {{jun-index-plague}}
 :       22 $jun-checker
 :       f0 no-plague
 :       20 @do-plague,2
 
 .label no-plague
 :       fa
-:       a9 jun-index-initiative
+:       a9 {{jun-index-initiative}}
 :       22 $jun-checker
 :       f0 main-exit
 :       a9 ff
@@ -97,6 +97,29 @@ $main
 :       88 88
 :       10 plague-loop
 :       7a
+:       60
+
+$do-juggernaut-burst
+:       a9 {{jun-index-juggernaut}}
+:       22 $jun-checker
+:       f0 no-juggernaut
+:       bd $current-level-address,2
+:       1a
+:       4a
+:       9d $current-level-address,2
+
+.label no-juggernaut
+:       a9 {{jun-index-burst}}
+:       22 $jun-checker
+:       f0 no-burst
+:       bd $current-level-address,2
+:       1a
+:       4a
+:       18
+:       7d $current-level-address,2
+:       9d $current-level-address,2
+
+.label no-burst
 :       60
 
 VALIDATION

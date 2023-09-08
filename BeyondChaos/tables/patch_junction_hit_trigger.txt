@@ -1,23 +1,24 @@
-.addr   jun-checker                     610000
-.addr   jun-deduct-item-if-possible     610740
-.addr   jun-rng1                        610820
-.addr   jun-queue-command               610ff0
-.addr   jun-check-is-damage-over-time   610920
+.addr   jun-checker                     {{jun-global-checker}}
+.addr   jun-check-entity-can-act        {{jun-global-check-entity-can-act}}
+.addr   jun-deduct-item-if-possible     {{jun-global-deduct-item-if-possible}}
+.addr   jun-rng1                        {{jun-global-rng1}}
+.addr   jun-queue-command               {{jun-global-queue-command}}
+.addr   jun-check-is-damage-over-time   {{jun-global-check-is-damage-over-time}}
 .addr   main                            622400
-.addr   null-secondary-data             6224e0
+.addr   null-secondary-data             6227e0
+.addr   do-quickening-penalty           622780
 
 .addr   living-characters               7e3a74
+.addr   current-level-address           7e3b18
+.addr   current-current-hp-address      7e3bf4
+.addr   current-current-mp-address      7e3c08
+.addr   current-max-hp-address          7e3c1c
+.addr   current-max-mp-address          7e3c30
 
-.def    jun-index-add-steal     2f
-.def    jun-index-astral        7d
-.def    jun-index-vorpal        7e
-.def    jun-index-vampire       8f
-.def    jun-index-quickening    94
-.def    jun-index-gunblade      95
-
-.def    super-ball-item-index   fa
-.def    hyperdrive-index        d1
-.def    custom-mp-command-index 42
+.def    super-ball-item-index       fa
+.def    hyperdrive-index            d1
+.def    custom-mp-command-index     {{jun-command-index-custom-mp-spell}}
+.def    fixed-damage-command-index  {{jun-command-index-fixed-damage}}
 
 021771: 22 $null-secondary-data
 
@@ -34,8 +35,8 @@ $main
 :       ad a9 11
 :       d0 no-add-steal
 :       22 $jun-rng1
-:       90 no-add-steal
-:       a9 jun-index-add-steal
+:       b0 no-add-steal
+:       a9 {{jun-index-add-steal}}
 :       22 $jun-checker
 :       f0 no-add-steal
 :       a9 a4
@@ -45,7 +46,7 @@ $main
 :       a9 01
 :       2c a2 11
 :       f0 not-physical
-:       a9 jun-index-vorpal
+:       a9 {{jun-index-vorpal}}
 :       22 $jun-checker
 :       f0 no-vorpal
 :       a9 20
@@ -54,7 +55,7 @@ $main
 .label no-vorpal
 :       a5 b5
 :       d0 no-gunblade
-:       a9 jun-index-gunblade
+:       a9 {{jun-index-gunblade}}
 :       22 $jun-checker
 :       f0 no-gunblade
 :       a9 super-ball-item-index
@@ -75,13 +76,19 @@ $main
 .label not-physical
 :       ad a5 11
 :       f0 no-quickening
+:       ad 4c 3a
+:       f0 no-quickening
 :       a5 b7
 :       1a
 :       d0 no-quickening
-:       a9 jun-index-quickening
-:       22 $jun-checker
+:       22 $jun-check-entity-can-act
 :       f0 no-quickening
 :       c2 20
+:       bd $current-current-hp-address,2
+:       f0 no-quickening
+:       a9 {{jun-index-quickening}} 00
+:       22 $jun-checker
+:       f0 no-quickening
 :       a5 b8
 :       2c $living-characters,2
 :       e2 20
@@ -90,6 +97,7 @@ $main
 :       4a
 :       6d 4c 3a
 :       90 quickening-no-overflow
+:       20 $do-quickening-penalty,2
 :       a9 ff
 .label quickening-no-overflow
 :       cd a5 11
@@ -104,6 +112,7 @@ $main
 :       b0 no-quickening
 :       1a
 :       85 b7
+:       20 @quickening-add-hp-damage,2
 :       a9 custom-mp-command-index
 :       8d 7a 3a
 :       a5 b6
@@ -111,7 +120,8 @@ $main
 :       22 $jun-queue-command
 
 .label no-quickening
-:       a9 jun-index-astral
+:       e2 20
+:       a9 {{jun-index-astral}}
 :       22 $jun-checker
 :       f0 no-astral
 :       a9 80
@@ -121,7 +131,7 @@ $main
 :       a9 01
 :       2c a4 11
 :       d0 no-vampire
-:       a9 jun-index-vampire
+:       a9 {{jun-index-vampire}}
 :       22 $jun-checker
 :       f0 no-vampire
 :       a9 02
@@ -134,6 +144,55 @@ $main
 :       a9 20
 :       14 b2
 :       6b
+
+$do-quickening-penalty
+:       5a
+
+:       c2 20
+:       bd $current-max-hp-address,2
+:       20 @reduce-three-quarters,2
+:       9d $current-max-hp-address,2
+:       bd $current-current-hp-address,2
+:       20 @reduce-three-quarters,2
+:       9d $current-current-hp-address,2
+:       bd $current-max-mp-address,2
+:       20 @reduce-three-quarters,2
+:       9d $current-max-mp-address,2
+:       bd $current-current-mp-address,2
+:       20 @reduce-three-quarters,2
+:       9d $current-current-mp-address,2
+:       a9 00 00
+:       e2 20
+:       bd $current-level-address,2
+:       20 @reduce-three-quarters,2
+:       9d $current-level-address,2
+:       7a
+:       60
+
+.label reduce-three-quarters
+:       1a 4a
+:       48
+:       4a
+:       18
+:       63 01
+:       83 01
+:       68
+:       60
+
+.label quickening-add-hp-damage
+:       a9 fixed-damage-command-index
+:       8d 7a 3a
+:       c2 20
+:       a5 b8
+:       48
+:       a5 b7
+:       29 ff 00
+:       85 b8
+:       22 $jun-queue-command
+:       68
+:       85 b8
+:       e2 20
+:       60
 
 $null-secondary-data
 :       a5 b5

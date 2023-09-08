@@ -1,78 +1,82 @@
-.addr   jun-checker                         610000
+.addr   jun-checker                         {{jun-global-checker}}
 .addr       character-info                      7e3010
-.addr   jun-checker-y                       6100a0
+.addr       combatant-bits                      7e3018
+.addr   jun-checker-y                       {{jun-global-checker-y}}
 
-.addr   jun-check-whitelist                 610100
-.addr   jun-check-blacklist                 610180
-.addr   jun-check-list                      6101e0
-.addr   jun-check-equip-whitelist           610200
-.addr   jun-check-equip-blacklist           610210
-.addr   jun-check-whitelist-monster-version 610280
-.addr   jun-check-blacklist-monster-version 6102c0
-.addr   jun-check-rage                      610300
+.addr   jun-check-whitelist                 {{jun-global-check-whitelist}}
+.addr   jun-check-blacklist                 {{jun-global-check-blacklist}}
+.addr   jun-check-list                      {{jun-global-check-list}}
+.addr   jun-check-equip-whitelist           {{jun-global-check-equip-whitelist}}
+.addr   jun-check-equip-blacklist           {{jun-global-check-equip-blacklist}}
+.addr   jun-check-whitelist-monster-version {{jun-global-check-whitelist-monster-version}}
+.addr   jun-check-blacklist-monster-version {{jun-global-check-blacklist-monster-version}}
+.addr   jun-check-rage                      {{jun-global-check-rage}}
 .addr       rage-indexes                        7e33a8
-.addr   jun-check-status-whitelist          610340
-.addr   jun-check-status-blacklist          6103a0
-.addr   jun-check-monster-equip-whitelist   610400
-.addr   jun-check-monster-equip-blacklist   610480
+.addr   jun-check-status-whitelist          {{jun-global-check-status-whitelist}}
+.addr   jun-check-status-blacklist          {{jun-global-check-status-blacklist}}
+.addr   jun-check-monster-equip-whitelist   {{jun-global-check-monster-equip-whitelist}}
+.addr   jun-check-monster-equip-blacklist   {{jun-global-check-monster-equip-blacklist}}
 .addr       stealable-items-address         7e3308
 .addr       dropped-items-address           0f3002
-.addr       monster-equip-steal-enabled     6104fc
-.addr       monster-equip-drop-enabled      6104fe
+.addr       monster-equip-steal-enabled     {{jun-global-monster-equip-steal-enabled}}
+.addr       monster-equip-drop-enabled      {{jun-global-monster-equip-drop-enabled}}
 
-.addr   jun-always-whitelist                611000
-.addr   jun-character-whitelist             611800
-.addr   jun-character-blacklist             611c00
-.addr   jun-esper-whitelist                 612000
-.addr   jun-esper-blacklist                 612400
-.addr   jun-status-whitelist                612800
-.addr   jun-status-blacklist                612c00
-.addr   jun-equip-whitelist                 613000
-.addr   jun-equip-blacklist                 613800
-.addr   jun-monster-whitelist               614000
-.addr   jun-monster-blacklist               614800
+.addr   jun-always-whitelist                {{jun-global-always-whitelist}}
+.addr   jun-character-whitelist             {{jun-global-character-whitelist}}
+.addr   jun-character-blacklist             {{jun-global-character-blacklist}}
+.addr   jun-esper-whitelist                 {{jun-global-esper-whitelist}}
+.addr   jun-esper-blacklist                 {{jun-global-esper-blacklist}}
+.addr   jun-status-whitelist                {{jun-global-status-whitelist}}
+.addr   jun-status-blacklist                {{jun-global-status-blacklist}}
+.addr   jun-equip-whitelist                 {{jun-global-equip-whitelist}}
+.addr   jun-equip-blacklist                 {{jun-global-equip-blacklist}}
+.addr   jun-monster-whitelist               {{jun-global-monster-whitelist}}
+.addr   jun-monster-blacklist               {{jun-global-monster-blacklist}}
 
-.addr   jun-mult                            610800
-.addr   jun-divide                          610860
-.addr   jun-rng1                            610820
-.addr   jun-rng2                            610830
-.addr   jun-rng3                            610840
-.addr   jun-select-bit                      6108a0
-.addr   jun-bit-to-index                    6108d0
-.addr   jun-count-bits                      6108c0
+.addr   jun-mult                            {{jun-global-mult}}
+.addr   jun-divide                          {{jun-global-divide}}
+.addr   jun-rng1                            {{jun-global-rng1}}
+.addr   jun-rng2                            {{jun-global-rng2}}
+.addr   jun-rng2-noluck                     {{jun-global-rng2-noluck}}
+.addr   jun-rng3                            {{jun-global-rng3}}
+.addr   jun-select-bit                      {{jun-global-select-bit}}
+.addr   jun-bit-to-index                    {{jun-global-bit-to-index}}
+.addr   jun-count-bits                      {{jun-global-count-bits}}
+.addr   jun-bit-to-combatant-index          {{jun-global-bit-to-combatant-index}}
 
 .addr   jun-dispatcher-address-c2           02af18
-.addr   jun-dispatcher-return               610fff
-.addr   jun-queue-command                   610ff0
+.addr   jun-dispatcher-return               {{jun-global-dispatcher-return}}
+.addr   jun-queue-command                   {{jun-global-queue-command}}
 .addr       command-queue-routine               024eb2
-.addr   jun-queue-self-spell                610fc0
+.addr   jun-queue-self-spell                {{jun-global-queue-self-spell}}
 .addr       self-spell-queue-routine            024e91
-.addr   jun-reload-character-commands       610f80
+.addr   jun-reload-character-commands       {{jun-global-reload-character-commands}}
 .addr       load-character-commands-routine     02532c
 .addr       command-change-byte-address     18500a
-.addr   jun-force-update                    610fe0
+.addr   jun-force-update                    {{jun-global-force-update}}
 .addr       force-update-routine                02083f
-.addr   jun-generic-dispatch                610f00
+.addr   jun-generic-dispatch                {{jun-global-generic-dispatch}}
 
-.addr   jun-check-entity-living             610600
+.addr   jun-check-entity-living             {{jun-global-check-entity-living}}
 .addr       living-characters                   7e3a74
 .addr       living-enemies                      7e3a75
-.addr   jun-check-entity-present            610640
+.addr   jun-check-entity-present            {{jun-global-check-entity-present}}
 .addr       present-characters                  7e3a78
 .addr       present-enemies                     7e3a79
-.addr   jun-check-entity-can-act            6106c0
-.addr   jun-check-count-all-living          610680
-.addr   jun-deduct-item-if-possible         610740
-.addr       jun-check-inventory                 610700
+.addr   jun-check-entity-can-act            {{jun-global-check-entity-can-act}}
+.addr   jun-check-count-all-living          {{jun-global-check-count-all-living}}
+.addr   jun-deduct-item-if-possible         {{jun-global-deduct-item-if-possible}}
+.addr       jun-check-inventory                 {{jun-global-check-inventory}}
 .addr           inventory-address                   7e2686
 .addr           inventory-quantity-address          7e2689
-.addr   jun-set-target-allies               610780
-.addr   jun-set-target-counter              6107c0
-.addr   jun-check-are-same-team             6105e0
-.addr   jun-get-equipped-esper              610900
-.addr   jun-check-is-damage-over-time       610920
-.addr   jun-check-spell-targets-ally        610960
+.addr   jun-set-target-allies               {{jun-global-set-target-allies}}
+.addr   jun-set-target-counter              {{jun-global-set-target-counter}}
+.addr   jun-check-are-same-team             {{jun-global-check-are-same-team}}
+.addr   jun-get-equipped-esper              {{jun-global-get-equipped-esper}}
+.addr   jun-check-is-damage-over-time       {{jun-global-check-is-damage-over-time}}
+.addr   jun-check-spell-targets-ally        {{jun-global-check-spell-targets-ally}}
 .addr       spell-data-address                  046ac0
+.addr   jun-compare-x-y                     {{jun-global-compare-x-y}}
 
 .addr   bits                                00bafc
 .addr   wide-bits                           00b4f3
@@ -80,11 +84,41 @@
 
 .addr   monster-indexes                     7e1ff9
 
-.def    jun-data-bank       61
+.def    jun-data-bank       {{jun-data-bank}}
 
 # PARAMETERS:   junction index in A, (actor index * 2) in X
 # RETURNS:      sets zero bit if check passes, otherwise clears zero bit
 $jun-checker
+:   20 @jun-checker-body,2
+:   f0 jun-checker-wrapper-fail
+.label jun-checker-wrapper-success
+:   08
+:   c2 30
+:   48 da
+:   29 ff 00
+:   c9 {{jun-index-luck-font}} 00
+:   f0 no-jammer
+:   c9 {{jun-index-luck-sink}} 00
+:   f0 no-jammer
+:   a9 {{jun-index-junction-jammer}} 00
+:   f0 no-jammer
+:   ad $living-characters,2
+:   f0 no-jammer
+:   22 $jun-select-bit
+:   22 $jun-bit-to-combatant-index
+:   a9 {{jun-index-junction-jammer}} 00
+:   20 @jun-checker-body,2
+:   f0 no-jammer
+:   fa 68 28
+:   e2 02
+:   6b
+.label no-jammer
+:   fa 68 28
+:   6b
+.label jun-checker-wrapper-fail
+:   6b
+
+.label jun-checker-body
 :   48 eb 48 eb da 5a 8b 08
 :   e2 30
 :   e0 08
@@ -156,11 +190,11 @@ $jun-checker
 .label final-exit-check-failed
 :   28 ab 7a fa 68 eb 68
 :   e2 02
-:   6b
+:   60
 .label final-exit-check-passed
 :   28 ab 7a fa 68 eb 68
 :   c2 02
-:   6b
+:   60
 
 $jun-check-list
 #   X   - list address
@@ -270,7 +304,7 @@ $jun-check-whitelist-monster-version
 :   20 $jun-check-list,2
 :   d0 found-whitelist-monster-version
 
-:   a9 {{every_monster_index}}
+:   a9 {{every-monster-index}}
 :   0a
 :   a8
 :   be $jun-monster-whitelist,2
@@ -531,7 +565,7 @@ $jun-check-blacklist
 :   60
 
 $jun-check-blacklist-monster-version
-:   a9 {{every_monster_index}}
+:   a9 {{every-monster-index}}
 :   0a
 :   a8
 :   be $jun-monster-blacklist,2
@@ -635,20 +669,87 @@ $jun-divide
 
 # 0 or 1 (in carry bit)
 $jun-rng1
-:   48
+:   48 08
+:   e2 20
 :   22 $jun-rng2
-:   4a
-:   68
+:   0a
+:   90 rng1-carry-clear
+:   28 68
+:   38
+:   6b
+.label rng1-carry-clear
+:   28 68
+:   18
 :   6b
 
 # 0 to 255
 $jun-rng2
 :   da 08
 :   e2 30
+:   a9 {{jun-index-luck-sink}}
+:   22 $jun-check-count-all-living
+:   48
+:   a9 {{jun-index-luck-font}}
+:   22 $jun-check-count-all-living
+:   38
+:   e3 01
+:   83 01
+:   30 rng2-sink-mode
+
+.label rng2-font-mode
+:   fa
+:   20 @jun-rng2-raw,2
+:   48
+.label rng2-font-loop
+:   ca
+:   30 rng2-exit
+#:   20 @jun-rng2-raw,2
+#:   4a
+#:   90 rng2-font-loop
+:   20 @jun-rng2-raw,2
+:   c3 01
+:   b0 rng2-font-loop
+:   83 01
+:   80 rng2-font-loop
+
+.label rng2-sink-mode
+:   68
+:   49 ff
+:   1a
+:   aa
+:   20 @jun-rng2-raw,2
+:   48
+.label rng2-sink-loop
+:   ca
+:   30 rng2-exit
+#:   20 @jun-rng2-raw,2
+#:   4a
+#:   90 rng2-sink-loop
+:   20 @jun-rng2-raw,2
+:   c3 01
+:   90 rng2-sink-loop
+:   83 01
+:   80 rng2-sink-loop
+
+.label rng2-exit
+:   68
+:   28 fa
+:   6b
+.label jun-rng2-raw
+:   da 08
+:   e2 30
 :   e6 be
 :   a6 be
 :   bf 00 fd c0
 :   28 fa
+:   60
+
+$jun-rng2-noluck
+:   da
+:   e6 be
+:   a6 be
+:   bf 00 fd c0
+:   fa
 :   6b
 
 # 0 to A-1
@@ -658,9 +759,12 @@ $jun-rng3
 :   e2 30
 :   eb
 :   48
-:   e6 be
-:   a6 be
-:   bf 00 fd c0
+:   eb
+:   48
+:   22 $jun-rng2
+:   eb
+:   68
+:   eb
 :   22 $jun-mult
 :   68
 :   eb
@@ -730,6 +834,9 @@ $jun-check-entity-living
 :   f0 check-living-no
 :   bd f9 3e
 :   89 20
+:   d0 check-living-no
+:   bd f9 3e
+:   89 80
 :   d0 check-living-no
 :   80 check-living-yes
 .label check-living-is-monster
@@ -965,8 +1072,9 @@ $jun-force-update
 :       6b
 
 $jun-generic-dispatch
-:       48 08
+:       08
 :       c2 20
+:       48
 :       62 generic-dispatch-reentry,2
 :       f4 $jun-dispatcher-address-c2,2
 # push bank (high byte)
@@ -975,14 +1083,16 @@ $jun-generic-dispatch
 :       48
 # push low bytes of target routine
 :       c2 20
-:       a3 0b
+:       a3 0c
 :       3a
 :       48
 # restore status register and accumulator
 :       e2 20
-:       a3 08
-:       48 28
+:       a3 0a
+:       48
+:       c2 20
 :       a3 09
+:       28
 :       6b
 .label generic-dispatch-reentry
 # automatically handle removing target from stack
@@ -991,10 +1101,10 @@ $jun-generic-dispatch
 :       c2 20
 :       48
 # shift call address
+:       a3 08
+:       83 0a
 :       a3 07
 :       83 09
-:       a3 06
-:       83 08
 # shift accumulator
 :       a3 01
 :       83 04
@@ -1003,10 +1113,11 @@ $jun-generic-dispatch
 :       e2 20
 :       a3 03
 :       83 07
+:       83 08
 :       c2 20
 :       68 68 68
 :       eb
-:       28
+:       28 28
 :       6b
 
 $jun-check-are-same-team
@@ -1050,9 +1161,16 @@ $jun-get-equipped-esper
 $jun-check-is-damage-over-time
 :       08
 :       c2 20
+:       8a
+:       c9 13 00
+:       b0 dot-bad-indexes
+:       98
+:       c9 13 00
+:       b0 dot-bad-indexes
 :       b9 18 30
 :       3c 18 30
 :       f0 dot-not-targeting-self
+.label dot-bad-indexes
 :       e2 20
 :       ad 7c 3a
 :       c9 22
@@ -1091,6 +1209,37 @@ $jun-check-spell-targets-ally
 :       28 fa 68
 :       c2 02
 :       6b
+
+$jun-compare-x-y
+:       08
+:       c2 30
+:       48 da
+:       98
+:       c3 01
+:       f0 jun-compare-x-y-are-equal
+:       fa 68
+:       28
+:       c2 02
+:       6b
+.label jun-compare-x-y-are-equal
+:       fa 68
+:       28
+:       e2 02
+:       6b
+
+$jun-bit-to-combatant-index
+:   08
+:   c2 30
+:   a2 12 00
+.label bit-to-combatant-loop
+:   dd $combatant-bits,2
+:   f0 bit-to-combatant-found
+:   ca ca
+:   10 bit-to-combatant-loop
+:   a2 ff ff
+.label bit-to-combatant-found
+:   28
+:   6b
 
 VALIDATION
 
