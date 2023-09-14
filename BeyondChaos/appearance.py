@@ -455,7 +455,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps, web_custom_sprite_replaceme
                 SpriteReplacement("ogleo.bin", "Leo", "male", "true", 16, None, "leo"),
                 SpriteReplacement("ogbanon.bin", "Banon", "male", "true", 17, None, "banon"),
                 SpriteReplacement("ogesperterra.bin", "Esper Terra", "female", "true", 0, "esperterra-p.bin", "terra"),
-                SpriteReplacement("ogmerchant.bin", "Merchant", "male", "true", 1),
+                SpriteReplacement("ogmerchant.bin", "Merchant", "male", "true", 1, "merchant-p.bin", "merchant"),
                 SpriteReplacement("ogghost.bin", "Ghost", "neutral", "true", 18),
                 SpriteReplacement("ogkefka.bin", "Kefka", "male", "true", 17, "kefka-p.bin", "kefka")])
         if clone_mode:

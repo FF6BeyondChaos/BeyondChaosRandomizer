@@ -74,7 +74,7 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-5.1.0"
+VERSION = "CE-5.1.1"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
@@ -4714,7 +4714,7 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
                         281, 282, 283, 285, 286, 287,
                         297, 303, 400, 382, 402, 403,
                         404]  # event formation sets that can be shuffled with cursedencounters
-    bad_event_fsets = [58, 108, 128] # Narshe Cave, Magitek Factory Escape, Collapsing House
+    bad_event_fsets = [58, 108, 128, 138, 139, 140] # Narshe Cave, Magitek Factory Escape, Collapsing House, South Figaro Cave WoR, Castle Figaro Basement
     event_formations = set()
     salt_formations = set()
 
@@ -4728,7 +4728,7 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
         for i, v in enumerate(formation.big_enemy_ids):
             if formation.big_enemy_ids[i] in [273, 293, 295, 296, 297, 299, 304, 306, 307, 313, 314, 315, 323, 355, 356, 357, 358, 362,
                                               363, 364, 365, 369, 373, 381, 408, 418, 471, 512, 513, 514, 515]:  # don't do Zone Eater, Naughty, L.X Magic,
-                # Phunbaba, Guardian, Merchant, Officer, Banquet encounters, Warring Triad, Atma, Tier 1, 2, 3, Final Kefka
+                # Phunbaba, Guardian, Merchant, Officer, Banquet encounters, Pugs, Paster Pug, KatanaSoul, Warring Triad, Atma, Tier 1, 2, 3, Final Kefka
                 event_formations.add(formation.formid)
                 salt_formations.add((formation.formid - 1))
                 salt_formations.add((formation.formid - 2))
@@ -5964,6 +5964,15 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                  0x0A, 0x0A, 0x0A, 0x7B, 0x2A, 0x8D, 0xAB, 0x81, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, ])
             sketch_fix_sub.write(outfile_rom_buffer)
 
+        # Code must be below assign_unused_enemy_formations and above randomize_music
+        if Options_.is_flag_active("random_formations"):
+            #formations = get_formations()
+            #fsets = get_fsets()
+            formations, fsets = manage_formations(formations, fsets)
+            manage_cursed_encounters(formations, fsets)
+            for fset in fsets:
+                fset.write_data(outfile_rom_buffer)
+
         has_music = Options_.is_any_flag_active(['johnnydmad', 'johnnyachaotic'])
         if has_music:
             music_init()
@@ -5994,14 +6003,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                 house_hint()
         reseed()
         reseed()
-
-        if Options_.is_flag_active("random_formations"):
-            #formations = get_formations()
-            #fsets = get_fsets()
-            formations, fsets = manage_formations(formations, fsets)
-            manage_cursed_encounters(formations, fsets)
-            for fset in fsets:
-                fset.write_data(outfile_rom_buffer)
 
         randomize_poem(outfile_rom_buffer)
         randomize_passwords(custom_web_passwords=kwargs.get("web_custom_passwords", None))
