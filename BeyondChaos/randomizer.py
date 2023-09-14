@@ -5964,6 +5964,15 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                  0x0A, 0x0A, 0x0A, 0x7B, 0x2A, 0x8D, 0xAB, 0x81, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, ])
             sketch_fix_sub.write(outfile_rom_buffer)
 
+        # Code must be below assign_unused_enemy_formations and above randomize_music
+        if Options_.is_flag_active("random_formations"):
+            #formations = get_formations()
+            #fsets = get_fsets()
+            formations, fsets = manage_formations(formations, fsets)
+            manage_cursed_encounters(formations, fsets)
+            for fset in fsets:
+                fset.write_data(outfile_rom_buffer)
+
         has_music = Options_.is_any_flag_active(['johnnydmad', 'johnnyachaotic'])
         if has_music:
             music_init()
@@ -5994,14 +6003,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
                 house_hint()
         reseed()
         reseed()
-
-        if Options_.is_flag_active("random_formations"):
-            #formations = get_formations()
-            #fsets = get_fsets()
-            formations, fsets = manage_formations(formations, fsets)
-            manage_cursed_encounters(formations, fsets)
-            for fset in fsets:
-                fset.write_data(outfile_rom_buffer)
 
         randomize_poem(outfile_rom_buffer)
         randomize_passwords(custom_web_passwords=kwargs.get("web_custom_passwords", None))
