@@ -1819,12 +1819,45 @@ def manage_skips():
         writeToAddress(split_line[0], split_line[1:])
 
     def handleGau(split_line: List[str]):  # Replace events that should be replaced if we are auto-recruiting Gau
-        # at least for now, divergent paths doesn't skip the cutscene with Gau
-        if Options_.is_flag_active("thescenarionottaken"):
-            return
         if Options_.is_flag_active("shuffle_commands") or \
                 Options_.is_flag_active("replace_commands") or \
                 Options_.is_flag_active("random_treasure"):
+            writeToAddress(split_line[0], split_line[1:])
+
+    def handleGauDivergent(split_line: List[str]):  # Replace events if we ARE auto-recruiting Gau in TheScenarioNotTaken
+
+        if not (Options_.is_flag_active("thescenarionottaken")):
+            return
+        if (Options_.is_flag_active("shuffle_commands") or \
+                Options_.is_flag_active("replace_commands") or \
+                Options_.is_flag_active("random_treasure")):
+            writeToAddress(split_line[0], split_line[1:])
+
+    def handleNoGauDivergent(split_line: List[str]):  # Replace events if we are NOT auto-recruiting Gau in TheScenarioNotTaken
+
+        if not (Options_.is_flag_active("thescenarionottaken")):
+            return
+        if not (Options_.is_flag_active("shuffle_commands") or \
+                Options_.is_flag_active("replace_commands") or \
+                Options_.is_flag_active("random_treasure")):
+            writeToAddress(split_line[0], split_line[1:])
+
+    def handleNoGauConvergent(split_line: List[str]):  # Replace events if we are NOT auto-recruiting Gau in a regular seed
+
+        if (Options_.is_flag_active("thescenarionottaken")):
+            return
+        if not (Options_.is_flag_active("shuffle_commands") or \
+                Options_.is_flag_active("replace_commands") or \
+                Options_.is_flag_active("random_treasure")):
+            writeToAddress(split_line[0], split_line[1:])
+
+    def handleGauConvergent(split_line: List[str]):  # Replace events if we ARE auto-recruiting Gau in a regular seed
+
+        if (Options_.is_flag_active("thescenarionottaken")):
+            return
+        if (Options_.is_flag_active("shuffle_commands") or \
+                Options_.is_flag_active("replace_commands") or \
+                Options_.is_flag_active("random_treasure")):
             writeToAddress(split_line[0], split_line[1:])
 
     def handlePalette(split_line: List[str]):  # Fix palettes so that they are randomized
@@ -5650,7 +5683,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         savecheck_sub.write(outfile_rom_buffer)
         reseed()
 
-        if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
+        if (Options_.is_flag_active("shuffle_commands") or Options_.is_flag_active("supernatural")) and not Options_.is_flag_active('suplexwrecks'):
             # do this after swapping beserk
             manage_natural_magic(myself_locations["NATURAL_MAGIC_TABLE"])
         reseed()
