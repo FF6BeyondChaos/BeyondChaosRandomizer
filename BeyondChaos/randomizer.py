@@ -76,9 +76,28 @@ from remonsterate.remonsterate import remonsterate
 
 VERSION = "CE-5.1.1"
 BETA = False
-VERSION_ROMAN = "IV"
-if BETA:
-    VERSION_ROMAN += " BETA"
+VERSION_ROMAN = 'V BETA' if BETA else 'V'
+NEVER_REPLACE = ["fight", "item", "magic", "row", "def", "magitek", "lore",
+                 "jump", "mimic", "xmagic", "summon", "morph", "revert"]
+RESTRICTED_REPLACE = ["throw", "steal"]
+ALWAYS_REPLACE = ["leap", "possess", "health", "shock"]
+FORBIDDEN_COMMANDS = ["leap", "possess"]
+TEK_SKILLS = (  # [0x18, 0x6E, 0x70, 0x7D, 0x7E] +
+        list(range(0x86, 0x8B)) + [0xA7, 0xB1] +
+        list(range(0xB4, 0xBA)) +
+        [0xBF, 0xCD, 0xD1, 0xD4, 0xD7, 0xDD, 0xE3])
+JUNCTION_MANAGER_PARAMETERS = {
+    'morpher-index': 0x0,
+    'berserker-index': 0xd,
+    'monster-equip-steal-enabled': 0,
+    'monster-equip-drop-enabled': 0,
+    'esper-allocations-address': 0x3f858,
+}
+
+MD5HASHNORMAL = "e986575b98300f721ce27c180264d890"
+MD5HASHTEXTLESS = "f08bf13a6819c421eee33ee29e640a1d"
+MD5HASHTEXTLESS2 = "e0984abc9e5dd99e4bc54e8f9e0ff8d0"
+
 seed, flags = None, None
 seedcounter = 1
 infile_rom_path = None
@@ -86,34 +105,9 @@ outfile_rom_path = None
 infile_rom_buffer = None
 outfile_rom_buffer = None
 gui_connection = None
-
-NEVER_REPLACE = ["fight", "item", "magic", "row", "def", "magitek", "lore",
-                 "jump", "mimic", "xmagic", "summon", "morph", "revert"]
-RESTRICTED_REPLACE = ["throw", "steal"]
-ALWAYS_REPLACE = ["leap", "possess", "health", "shock"]
-FORBIDDEN_COMMANDS = ["leap", "possess"]
-
-MD5HASHNORMAL = "e986575b98300f721ce27c180264d890"
-MD5HASHTEXTLESS = "f08bf13a6819c421eee33ee29e640a1d"
-MD5HASHTEXTLESS2 = "e0984abc9e5dd99e4bc54e8f9e0ff8d0"
-
-TEK_SKILLS = (  # [0x18, 0x6E, 0x70, 0x7D, 0x7E] +
-        list(range(0x86, 0x8B)) + [0xA7, 0xB1] +
-        list(range(0xB4, 0xBA)) +
-        [0xBF, 0xCD, 0xD1, 0xD4, 0xD7, 0xDD, 0xE3])
-
 namelocdict = {}
 changed_commands = set([])
-
 randlog = {}
-
-JUNCTION_MANAGER_PARAMETERS = {
-    'morpher-index': 0x0,
-    'berserker-index': 0xd,
-    'monster-equip-steal-enabled': 0,
-    'monster-equip-drop-enabled': 0,
-    'esper-allocations-address': 0x3f858,
-    }
 
 
 def log(text: str, section: str):
