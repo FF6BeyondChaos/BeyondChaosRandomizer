@@ -275,7 +275,8 @@ def validate_files():
 
     for version_type, version in read_version_information().items():
         if not version:
-            error_string = "-" + version_type.replace("_", " ").capitalize() + " have not been downloaded and are available."
+            error_string = ("-" + version_type.replace("_", " ").capitalize() +
+                            " have not been downloaded and are available.")
             if version_type == "character_sprites":
                 version_errors.append(error_string + " Character sprites are required for the makeover flag to "
                                                      "randomize party and NPC sprites with community-made "
