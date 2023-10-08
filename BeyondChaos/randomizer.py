@@ -3,13 +3,13 @@ from hashlib import md5
 import os
 import re
 import sys
-import traceback
 from io import BytesIO
 from sys import argv
 from time import time, sleep, gmtime
 from typing import Callable, Dict, List, Set, Tuple
 from multiprocessing import Pipe, Process
 
+import requests.exceptions
 import character
 import locationrandomizer
 import options
@@ -20,8 +20,8 @@ from appearance import manage_character_appearance, manage_coral
 from character import get_characters, get_character, equip_offsets, character_list, load_characters
 from bcg_junction import JunctionManager
 from chestrandomizer import mutate_event_items, get_event_items
-from config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
-                    set_value)
+from config import (get_config_items, set_config_value, VERSION, VERSION_ROMAN, BETA, config, MD5HASHTEXTLESS2,
+                    MD5HASHTEXTLESS, MD5HASHNORMAL)
 from decompress import Decompressor
 from dialoguemanager import (manage_dialogue_patches, get_dialogue,
                              set_dialogue, read_dialogue,
@@ -74,9 +74,6 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-5.1.1"
-BETA = False
-VERSION_ROMAN = 'V BETA' if BETA else 'V'
 NEVER_REPLACE = ["fight", "item", "magic", "row", "def", "magitek", "lore",
                  "jump", "mimic", "xmagic", "summon", "morph", "revert"]
 RESTRICTED_REPLACE = ["throw", "steal"]
@@ -94,17 +91,14 @@ JUNCTION_MANAGER_PARAMETERS = {
     'esper-allocations-address': 0x3f858,
 }
 
-MD5HASHNORMAL = "e986575b98300f721ce27c180264d890"
-MD5HASHTEXTLESS = "f08bf13a6819c421eee33ee29e640a1d"
-MD5HASHTEXTLESS2 = "e0984abc9e5dd99e4bc54e8f9e0ff8d0"
-
-seed, flags = None, None
+# seed = None
+flags = None
 seedcounter = 1
-infile_rom_path = None
-outfile_rom_path = None
-infile_rom_buffer = None
-outfile_rom_buffer = None
-gui_connection = None
+# infile_rom_path = None
+# outfile_rom_path = None
+# infile_rom_buffer = None
+# outfile_rom_buffer = None
+# gui_connection = None
 namelocdict = {}
 changed_commands = set([])
 randlog = {}
@@ -5137,12 +5131,12 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             infile_rom_path = kwargs.get('infile_rom_path')
             outfile_rom_path = kwargs.get('outfile_rom_path')
             pass
-        if application in ["gui", "tester"]:
+        elif application in ["gui", "tester"]:
             # The gui (beyondchaos.py) should supply these kwargs
             infile_rom_path = kwargs.get('infile_rom_path')
             outfile_rom_path = kwargs.get('outfile_rom_path')
             set_parent_pipe(connection)
-        if application == "web":
+        elif application == "web":
             infile_rom_buffer = kwargs.get('infile_rom_buffer')
             outfile_rom_buffer = kwargs.get('outfile_rom_buffer')
             set_parent_pipe(connection)
@@ -5162,8 +5156,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             #    prompt the user for the directory of their FF3 rom file.
             # TODO: Refactor this part?
             if not infile_rom_path:
-                config_infile_rom_path = get_input_path()
-                config_outfile_rom_path = get_output_path()
+                config_infile_rom_path = config.get('Settings', 'input_path', fallback='')
+                config_outfile_rom_path = config.get('Settings', 'output_path', fallback='')
                 previous_input = f" (blank for default: {config_infile_rom_path})" if config_infile_rom_path else ""
                 infile_rom_path = input(f"Please input the file name of your copy of "
                                         f"the FF3 US 1.0 rom{previous_input}:\n> ").strip()
@@ -5252,7 +5246,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
             pipe_print()
 
             if '.' not in fullseed:
-                speeddials = get_items("Speeddial").items()
+                speeddials = get_config_items("Speeddial").items()
                 mode_num = None
                 while mode_num not in range(len(ALL_MODES)):
                     pipe_print("Available modes:\n")
@@ -5290,7 +5284,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
                 saving_speeddial = re.search("^[0-9]:", flags)
                 if saving_speeddial:
-                    set_value("Speeddial", flags[:1], flags[3:].strip())
+                    set_config_value("Speeddial", flags[:1], flags[3:].strip())
                     pipe_print("Flags saved under speeddial number " + str(flags[:1]))
                     flags = flags[3:]
 
@@ -5338,8 +5332,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
             if infile_rom_path != config_infile_rom_path or outfile_rom_path != config_outfile_rom_path:
                 try:
-                    save_input_path(infile_rom_path)
-                    save_output_path(os.path.dirname(outfile_rom_path))
+                    set_config_value('Settings', 'input_path', str(infile_rom_path))
+                    set_config_value('Settings', 'output_path', str(outfile_rom_path))
                 except:
                     pipe_print("Couldn't save flag string\n")
 
@@ -6342,6 +6336,39 @@ if __name__ == "__main__":
         )
         sys.exit()
     try:
+        if not BETA:
+            from update import validate_files, run_updates, list_available_updates
+            try:
+                requests.head(url='http://www.google.com')
+                validation_result = validate_files()
+                print(str(validation_result))
+                print(str(os.getcwd()))
+                if validation_result is not None:
+                    print(
+                        'Welcome to Beyond Chaos Community Edition!\n\n',
+                        'As part of first time setup, ',
+                        'we need to download the required custom '
+                        'files and folders for randomization.\n',
+                    )
+                    input('Press enter to launch the updater to download the required files.')
+                    run_updates(calling_program='console')
+                available_updates = list_available_updates().replace('<br><br>', '\n').strip()
+                print(
+                    f'Updates to Beyond Chaos are available!\n\n{str(available_updates)}\n'
+                )
+                while True:
+                    response = input('Would you like to update? Y/N\n>')
+                    if response.lower() == 'n':
+                        os.system('cls' if os.name == 'nt' else 'clear')
+                        break
+                    elif response.lower() == 'y':
+                        os.system('cls' if os.name == 'nt' else 'clear')
+                        run_updates(calling_program='console')
+                        break
+                    else:
+                        print('Please press "Y" to update or "N" to skip.')
+            except requests.exceptions.ConnectionError:
+                pass
         source_arg = None
         seed_arg = None
         destination_arg = None
@@ -6380,6 +6407,8 @@ if __name__ == "__main__":
         )
         input('Press enter to close this program.')
     except Exception as e:
+        global outfile_rom_buffer
+        global outfile_rom_path
         pipe_print('ERROR: ' + str(e) + '\nTo view valid keyword arguments, use "python randomizer.py ?"')
         import traceback
 
