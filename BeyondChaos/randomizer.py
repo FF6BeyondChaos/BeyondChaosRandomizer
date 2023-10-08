@@ -1873,7 +1873,6 @@ def manage_skips():
             continue
         split_line = line.strip().split(' ')
         handler = "handle_" + split_line[0].lower()
-        print(str(handler))
         split_line = split_line[1:]
         locals()[handler]()
 
