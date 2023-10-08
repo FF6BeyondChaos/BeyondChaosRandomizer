@@ -544,9 +544,9 @@ class WindowBlock:
             return
 
         def cluster_colors(colors: List) -> List:
-            def distance(cluster_d: List, value: int) -> int:
+            def distance(cluster_d: List, value: tuple) -> int:
                 average = sum([sum(cluster_d) for (index_d, cluster_d) in cluster_d]) / len(cluster_d)
-                return abs(int(value - average))
+                return int(abs(sum(value) - average))
 
             clusters_cc = [{colors[0]}]
             colors = colors[1:]
@@ -1872,7 +1872,8 @@ def manage_skips():
         if not line:
             continue
         split_line = line.strip().split(' ')
-        handler = "handle" + split_line[0]
+        handler = "handle_" + split_line[0].lower()
+        print(str(handler))
         split_line = split_line[1:]
         locals()[handler]()
 
@@ -3510,7 +3511,7 @@ def manage_colorize_dungeons(locations=None):
         palettes = [int(palette, 0x10) for palette in palettes]
         backgrounds = [int(background, 0x10) for background in backgrounds]
         candidates = set()
-        for index, name, palette in enumerate(product(names, palettes)):
+        for index, (name, palette) in enumerate(product(names, palettes)):
             if name.endswith('*'):
                 names[index] = name.strip('*')
                 break
@@ -6367,6 +6368,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
     except Exception as exc_r:
         # pipe_print(type(exc)(traceback.print_exc()))
         pipe_print(exc_r)
+        raise exc_r
 
 
 if __name__ == "__main__":

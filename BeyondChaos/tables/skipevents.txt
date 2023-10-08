@@ -277,8 +277,8 @@ Divergent B09EF FD
 # Naming Gau at falls basin
 Divergent BC166 FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD
 Divergent BC1A0 FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD 59 10
-GauDivergent BC1B2 31 82 CE FF FD FD FD FD FD FD FD FD FD FD 78 10 10 82 83 FF 3D 10 42 10 45 D3 CC D0 3F B2 B2 C5 01 FE
-NoGauDivergent BC19C FD FD FD FD
+Gau_Divergent BC1B2 31 82 CE FF FD FD FD FD FD FD FD FD FD FD 78 10 10 82 83 FF 3D 10 42 10 45 D3 CC D0 3F B2 B2 C5 01 FE
+No_Gau_Divergent BC19C FD FD FD FD
 Divergent BC1E3 FD FD FD FD
 # Banon at falls basin
 Divergent BC5B2 B2 95 CB 00 FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD FD
@@ -392,8 +392,8 @@ Normal BB9E6 D0 3A D3 79 4D 44 21 F0 00 B2 A9 5E 00 D0 3B DB 17 D2 CC DA F7 DE B
 Normal BBFA7 DE BE 01 E9 BF 31 3B 31 82 CE FF 3A 39 FE
 Normal BBFE9 97 5C B2 AC C6 00 3F 03 00 B2 95 CB 00 D5 F3 3E 03 96 FE
 Convergent BC05A 97 5C C0 3F 80 FB C1 01 D2 CC F0 00 B2 BD CF 00 4D 12 3F B2 A9 5E 00 D3 CC 6B 9F 10 0A 0B 40 F0 09 40 0B 0B 3D 0B 37 0B 0B 43 0B 03 3F 0B 00 D4 EB 7F 0B 0B 98 0B 88 0B 08 40 8B 0B 7F 8C 0B 7F D0 3F 39 3A B2 37 6A 01 96 5C
-GauConvergent BC0A4 B2 1A FE 02 FE
-NoGauConvergent BC0A4 FE
+Gau_Convergent BC0A4 B2 1A FE 02 FE
+No_Gau_Convergent BC0A4 FE
 Normal BC228 D2 84 DB F7 FE
 Normal BC608 D3 BB D0 41 D3 84 D3 85 D3 86 D3 7B D3 7C DB F7 B2 37 6A 01 C0 27 01 E3 8A 00 FE
 # Sabin meets Shadow on the Veldt
@@ -489,9 +489,9 @@ Palette CA3E9 0A
 Palette A663D 04
 Palette A6CA3 05
 Palette A86BA 06
-ConvergentPalette B9ABC 02
-DivergentPalette B9AB6 02
+Convergent_Palette B9ABC 02
+Divergent_Palette B9AB6 02
 Palette B113A 15
-ConvergentPalette BC085 0B
+Convergent_Palette BC085 0B
 # Gau auto-recruitment for all NotAWaiter modes, modifies the auto-recruit event code to skip the fadeout
 Gau CFE1A 3F 0B 01 D4 FB B8 49 FE
