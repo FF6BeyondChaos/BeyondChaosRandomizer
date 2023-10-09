@@ -2,6 +2,7 @@ import random
 import traceback
 import hashlib
 import time
+from functools import wraps
 from io import BytesIO
 from multiprocessing import Pipe
 from collections import defaultdict
@@ -1015,6 +1016,17 @@ def md5_update_from_file(filename, hash_value):
 
 def get_directory_hash(directory):
     return md5_update_from_dir(directory, hashlib.md5())
+
+  
+def timer(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        import time
+        start_time = time.time()
+        func(*args, **kwargs)
+        end_time = time.time()
+        print(f'Function {func.__name__} took {str(round(end_time - start_time, 2))} seconds to run.')
+    return wrapper
 
 
 if __name__ == "__main__":
