@@ -75,11 +75,11 @@ from random import Random
 from remonsterate.remonsterate import remonsterate
 
 
-NEVER_REPLACE = ["fight", "item", "magic", "row", "def", "magitek", "lore",
-                 "jump", "mimic", "xmagic", "summon", "morph", "revert"]
-RESTRICTED_REPLACE = ["throw", "steal"]
-ALWAYS_REPLACE = ["leap", "possess", "health", "shock"]
-FORBIDDEN_COMMANDS = ["leap", "possess"]
+NEVER_REPLACE = ['fight', 'item', 'magic', 'row', 'def', 'magitek', 'lore',
+                 'jump', 'mimic', 'xmagic', 'summon', 'morph', 'revert']
+RESTRICTED_REPLACE = ['throw', 'steal']
+ALWAYS_REPLACE = ['leap', 'possess', 'health', 'shock']
+FORBIDDEN_COMMANDS = ['leap', 'possess']
 TEK_SKILLS = (  # [0x18, 0x6E, 0x70, 0x7D, 0x7E] +
         list(range(0x86, 0x8B)) + [0xA7, 0xB1] +
         list(range(0xB4, 0xBA)) +
@@ -5166,12 +5166,12 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             infile_rom_path = kwargs.get('infile_rom_path')
             outfile_rom_path = kwargs.get('outfile_rom_path')
             pass
-        elif application in ["gui", "tester"]:
+        elif application in ['gui', 'tester']:
             # The gui (beyondchaos.py) should supply these kwargs
             infile_rom_path = kwargs.get('infile_rom_path')
             outfile_rom_path = kwargs.get('outfile_rom_path')
             set_parent_pipe(connection)
-        elif application == "web":
+        elif application == 'web':
             infile_rom_buffer = kwargs.get('infile_rom_buffer')
             outfile_rom_buffer = kwargs.get('outfile_rom_buffer')
             set_parent_pipe(connection)
@@ -5194,9 +5194,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             if not infile_rom_path:
                 config_infile_rom_path = config.get('Settings', 'input_path', fallback='')
                 config_outfile_rom_path = config.get('Settings', 'output_path', fallback='')
-                previous_input = f" (blank for default: {config_infile_rom_path})" if config_infile_rom_path else ""
-                infile_rom_path = input(f"Please input the file name of your copy of "
-                                        f"the FF3 US 1.0 rom{previous_input}:\n> ").strip()
+                previous_input = f' (blank for default: {config_infile_rom_path})' if config_infile_rom_path else ''
+                infile_rom_path = input(f'Please input the file name of your copy of '
+                                        f'the FF3 US 1.0 rom{previous_input}:\n> ').strip()
                 pipe_print()
 
             # If there is a saved rom path and the user input was blank, use the saved rom path
@@ -5284,7 +5284,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             pipe_print()
 
             if '.' not in full_seed:
-                speeddials = get_config_items("Speeddial").items()
+                speeddials = get_config_items('Speeddial').items()
                 mode_num = None
                 while mode_num not in range(len(ALL_MODES)):
                     pipe_print('Available modes:\n')
@@ -5324,8 +5324,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
                 saving_speeddial = re.search('^[0-9]:', flags)
                 if saving_speeddial:
-                    set_config_value("Speeddial", flags[:1], flags[3:].strip())
-                    pipe_print("Flags saved under speeddial number " + str(flags[:1]))
+                    set_config_value('Speeddial', flags[:1], flags[3:].strip())
+                    pipe_print('Flags saved under speeddial number ' + str(flags[:1]))
                     flags = flags[3:]
 
                 full_seed = '|%i|%s|%s' % (mode_num + 1, flags, full_seed)
@@ -6394,8 +6394,6 @@ if __name__ == '__main__':
             try:
                 requests.head(url='http://www.google.com')
                 validation_result = validate_files()
-                print(str(validation_result))
-                print(str(os.getcwd()))
                 if validation_result is not None:
                     print(
                         'Welcome to Beyond Chaos Community Edition!\n\n',
