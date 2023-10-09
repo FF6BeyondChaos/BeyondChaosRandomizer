@@ -92,9 +92,9 @@ JUNCTION_MANAGER_PARAMETERS = {
 }
 
 
+seed_counter = 1
 # seed = None
 flags = None
-seed_counter = 1
 # infile_rom_path = None
 # outfile_rom_path = None
 # infile_rom_buffer = None
