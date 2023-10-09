@@ -1,10 +1,14 @@
 import random
 import traceback
+import hashlib
+import time
 from functools import wraps
 from io import BytesIO
 from multiprocessing import Pipe
 from collections import defaultdict
-from os import path
+from os import path, makedirs
+from pathlib import Path
+from zipfile import ZipFile
 
 try:
     from sys import _MEIPASS
@@ -978,6 +982,42 @@ def make_table(cols):
     return table
 
 
+def extract_archive(archive, destination):
+    with ZipFile(archive, 'r') as zip_obj:
+        # Extract all the contents of zip file
+        if not path.exists(destination):
+            makedirs(destination)
+        zip_obj.extractall(destination)
+        # wait 3 seconds
+        time.sleep(3)
+
+
+def md5_update_from_dir(directory, hash_value):
+    if not Path(directory).is_dir():
+        return
+    for subdirectory in sorted(Path(directory).iterdir(), key=lambda p: str(p).lower()):
+        hash_value.update(subdirectory.name.encode())
+        if subdirectory.is_file():
+            with open(subdirectory, "rb") as f:
+                for chunk in iter(lambda: f.read(4096), b""):
+                    hash_value.update(chunk)
+        elif subdirectory.is_dir():
+            hash_value = md5_update_from_dir(subdirectory, hash_value)
+    return hash_value
+
+
+def md5_update_from_file(filename, hash_value):
+    assert Path(filename).is_file()
+    with open(str(filename), "rb") as f:
+        for chunk in iter(lambda: f.read(4096), b""):
+            hash_value.update(chunk)
+    return hash_value
+
+
+def get_directory_hash(directory):
+    return md5_update_from_dir(directory, hashlib.md5())
+
+  
 def timer(func):
     @wraps(func)
     def wrapper(*args, **kwargs):

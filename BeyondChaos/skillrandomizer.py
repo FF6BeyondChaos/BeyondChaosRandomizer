@@ -123,6 +123,12 @@ class SpellBlock:
                 not self.valid)
 
     @property
+    def is_desperation(self):
+        return self.name in ["Sabre Soul", "Star Prism", "Mirager", "TigerBreak", "Back Blade",
+                             "Riot Blade", "RoyalShock", "Spin Edge", "X-Meteo", "Red Card",
+                             "MoogleRush", "ShadowFang"]
+
+    @property
     def is_blitz(self):
         return self.spellid in range(0x5D, 0x65)
 
