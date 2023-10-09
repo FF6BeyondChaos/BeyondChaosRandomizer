@@ -14,12 +14,12 @@ try:
     from PyQt5 import QtGui, QtCore
     from PyQt5.QtGui import QCursor
     from PyQt5.QtWidgets import (
-            QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel, QGroupBox,
-            QHBoxLayout, QLineEdit, QComboBox, QFileDialog, QApplication,
-            QTabWidget, QInputDialog, QScrollArea, QMessageBox,
-            QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox,
-            QDialog, QDialogButtonBox, QMenu, QMainWindow, QDesktopWidget,
-            QLayout, QFrame, QStyle, QTextEdit, QSizePolicy)
+        QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel, QGroupBox,
+        QHBoxLayout, QLineEdit, QComboBox, QFileDialog, QApplication,
+        QTabWidget, QInputDialog, QScrollArea, QMessageBox,
+        QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox,
+        QDialog, QDialogButtonBox, QMenu, QMainWindow, QDesktopWidget,
+        QLayout, QFrame, QStyle, QTextEdit, QSizePolicy)
     from PIL import Image, ImageOps
 except ImportError as e:
     print('ERROR: ' + str(e))
@@ -38,8 +38,8 @@ from update import (get_updater)
 from randomizer import randomize, VERSION, BETA, MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2
 
 if sys.version_info[0] < 3:
-    raise Exception("Python 3 or a more recent version is required. "
-                    "Report this to https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/issues")
+    raise Exception('Python 3 or a more recent version is required. '
+                    'Report this to https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/issues')
 
 
 # Extended QButton widget to hold flag value - NOT USED PRESENTLY
@@ -63,7 +63,6 @@ class QDialogScroll(QDialog):
         self.left = int(screen_size.width() / 2 - self.width() / 2)
         self.top = int(screen_size.height() / 2 - self.height() / 2)
         self.setWindowTitle(title)
-
 
         grid_layout = QGridLayout()
         grid_layout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
@@ -105,29 +104,29 @@ class QDialogScroll(QDialog):
                 self.reject()
             elif self.sender() == self.right_pushbutton:
                 self.accept()
-        except Exception as exc:
+        except Exception:
             pass
 
 
 class BingoPrompts(QDialog):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("WELCOME TO BEYOND CHAOS BINGO MODE")
+        self.setWindowTitle('WELCOME TO BEYOND CHAOS BINGO MODE')
         self.setMinimumWidth(600)
         self.abilities = False
         self.monsters = False
         self.items = False
         self.spells = False
-        self.abilities_box = QCheckBox("Abilities", self)
+        self.abilities_box = QCheckBox('Abilities', self)
         self.abilities_box.stateChanged.connect(self._toggle_abilities)
-        self.monsters_box = QCheckBox("Monsters", self)
+        self.monsters_box = QCheckBox('Monsters', self)
         self.monsters_box.stateChanged.connect(self._toggle_monsters)
-        self.items_box = QCheckBox("Items", self)
+        self.items_box = QCheckBox('Items', self)
         self.items_box.stateChanged.connect(self._toggle_items)
-        self.spells_box = QCheckBox("Spells", self)
+        self.spells_box = QCheckBox('Spells', self)
         self.spells_box.stateChanged.connect(self._toggle_spells)
 
-        boxes_label = QLabel("Include what type of squares?", self)
+        boxes_label = QLabel('Include what type of squares?', self)
         layout = QGridLayout(self)
         layout.addWidget(boxes_label)
         layout.addWidget(self.abilities_box)
@@ -136,7 +135,7 @@ class BingoPrompts(QDialog):
         layout.addWidget(self.spells_box)
 
         self.grid_size = 5
-        grid_size_label = QLabel("What size grid? (2-7)")
+        grid_size_label = QLabel('What size grid? (2-7)')
         self.grid_size_box = QSpinBox()
         self.grid_size_box.setRange(2, 7)
         self.grid_size_box.setValue(self.grid_size)
@@ -144,10 +143,10 @@ class BingoPrompts(QDialog):
         layout.addWidget(grid_size_label)
         layout.addWidget(self.grid_size_box)
 
-        self.difficulty = "n"
-        difficulty_label = QLabel("What difficulty level?")
+        self.difficulty = 'n'
+        difficulty_label = QLabel('What difficulty level?')
         self.difficulty_dropdown = QComboBox(self)
-        for difficulty in ["Easy", "Normal", "Hard"]:
+        for difficulty in ['Easy', 'Normal', 'Hard']:
             self.difficulty_dropdown.addItem(difficulty)
         self.difficulty_dropdown.setCurrentIndex(1)  # Normal
         self.difficulty_dropdown.currentTextChanged.connect(self._set_difficulty)
@@ -155,7 +154,7 @@ class BingoPrompts(QDialog):
         layout.addWidget(self.difficulty_dropdown)
 
         self.num_cards = 1
-        num_cards_label = QLabel("Generate how many cards?")
+        num_cards_label = QLabel('Generate how many cards?')
         self.num_cards_box = QSpinBox()
         self.num_cards_box.setValue(self.num_cards)
         self.num_cards_box.valueChanged.connect(self._set_num_cards)
@@ -248,7 +247,7 @@ class Window(QMainWindow):
         super().__init__()
 
         # window geometry data
-        self.title = "Beyond Chaos Randomizer " + VERSION
+        self.title = 'Beyond Chaos Randomizer ' + VERSION
         screen_size = QDesktopWidget().screenGeometry(-1)
         self.width = int(min(screen_size.width() / 2, 1000))
         self.height = int(screen_size.height() * .8)
@@ -256,21 +255,21 @@ class Window(QMainWindow):
         self.top = int(screen_size.height() / 2 - self.height / 2)
 
         # values to be sent to Randomizer
-        self.romText = ""
-        self.romOutputDirectory = ""
-        self.version = "CE-5.1.1"
-        self.mode = "normal"
-        self.seed = ""
+        self.rom_text = ''
+        self.rom_output_directory = ''
+        self.version = 'CE-5.1.1'
+        self.mode = 'normal'
+        self.seed = ''
         self.flags = []
-        self.bingotype = []
-        self.bingosize = 5
-        self.bingodiff = ""
-        self.bingocards = 1
+        self.bingo_type = []
+        self.bingo_size = 5
+        self.bingo_diff = ''
+        self.bingo_cards = 1
 
         # dictionaries to hold flag data
         self.aesthetic = {}
         self.sprite = {}
-        self.spriteCategories = {}
+        self.sprite_categories = {}
         self.experimental = {}
         self.gamebreaking = {}
         self.field = {}
@@ -279,42 +278,42 @@ class Window(QMainWindow):
         self.battle = {}
         self.beta = {}
         self.dictionaries = [
-            self.flag, self.sprite, self.spriteCategories, self.battle,
+            self.flag, self.sprite, self.sprite_categories, self.battle,
             self.aesthetic, self.field, self.characters, self.experimental, self.gamebreaking,
             self.beta
         ]
         self.makeover_groups = get_makeover_groups()
         # keep a list of all checkboxes
-        self.checkBoxes = []
+        self.check_boxes = []
 
         # array of supported game modes
-        self.supportedGameModes = [
-            "normal", "katn", "ancientcave", "speedcave", "racecave",
-            "dragonhunt"
+        self.supported_game_modes = [
+            'normal', 'katn', 'ancientcave', 'speedcave', 'racecave',
+            'dragonhunt'
         ]
         # dictionary of game modes for drop down
-        self.GameModes = {}
+        self.game_modes = {}
 
         # array of preset flags and codes
-        self.supportedPresets = [
-            "newplayer", "intermediateplayer", "advancedplayer", "chaoticplayer", "raceeasy",
-            "racemedium", "raceinsane"
+        self.supported_presets = [
+            'new_player', 'intermediate_player', 'advanced_player', 'chaotic_player', 'race_easy',
+            'race_medium', 'race_insane'
         ]
         # dictionary of game presets from drop down
-        self.GamePresets = {}
+        self.game_presets = {}
 
         # tabs names for the tabs in flags box
-        self.tabNames = [
-            "Core", "Sprites", "SpriteCategories", "Battle", "Aesthetic/Accessibility",
-            "Field", "Characters", "Experimental", "Gamebreaking", "Beta"
+        self.tab_names = [
+            'Core', 'Sprites', 'SpriteCategories', 'Battle', 'Aesthetic/Accessibility',
+            'Field', 'Characters', 'Experimental', 'Gamebreaking', 'Beta'
         ]
 
         # ui elements
-        self.flagString = QLineEdit()
-        self.modeBox = QComboBox()
-        self.presetBox = QComboBox()
-        self.modeDescription = QLabel("Pick a Game Mode!")
-        self.flagDescription = QLabel("Pick a Flag Set!")
+        self.flag_string = QLineEdit()
+        self.mode_box = QComboBox()
+        self.preset_box = QComboBox()
+        self.mode_description = QLabel('Pick a Game Mode!')
+        self.flag_description = QLabel('Pick a Flag Set!')
 
         # tabs: Flags, Sprites, Battle, etc...
         self.central_widget = QWidget()
@@ -336,15 +335,15 @@ class Window(QMainWindow):
         # global busy notifications
         self.flags_changing = False
 
-        # Begin buiding program/window
+        # Begin building program/window
         # pull data from files
         self.init_flags()
 
         # create window using geometry data
         self.init_window()
 
-        self.rom_input.setText(self.romText)
-        self.rom_output.setText(self.romOutputDirectory)
+        self.rom_input.setText(self.rom_text)
+        self.rom_output.setText(self.rom_output_directory)
         self.update_flag_string()
         # self.updateFlagCheckboxes()
         self.flag_button_clicked()
@@ -358,36 +357,36 @@ class Window(QMainWindow):
         # build the UI
         self.create_layout()
 
-        previousRomPath = get_input_path()
-        previousOutputDirectory = get_output_path()
+        previous_rom_path = get_input_path()
+        previous_output_directory = get_output_path()
 
-        self.romText = previousRomPath
-        self.romOutputDirectory = previousOutputDirectory
+        self.rom_text = previous_rom_path
+        self.rom_output_directory = previous_output_directory
 
         # show program onscreen
         self.show()  # maximize the randomizer
 
-        index = self.presetBox.currentIndex()
+        # index = self.presetBox.currentIndex()
 
     def create_layout(self):
         # Menubar
-        file_menu = QMenu("File", self)
-        file_menu.addAction("Quit", App.quit)
+        file_menu = QMenu('File', self)
+        file_menu.addAction('Quit', App.quit)
         self.menuBar().addMenu(file_menu)
 
-        menu_separator = self.menuBar().addMenu("|")
+        menu_separator = self.menuBar().addMenu('|')
         menu_separator.setEnabled(False)
 
         if not BETA and validation_result:
-            self.menuBar().addAction("Update Available", update_bc)
+            self.menuBar().addAction('Update Available', update_bc)
         else:
-            self.menuBar().addAction("Check for Updates", update_bc)
+            self.menuBar().addAction('Check for Updates', update_bc)
 
         # Primary Vertical Box Layout
         vbox = QVBoxLayout()
 
-        title_label = QLabel("Beyond Chaos Randomizer")
-        font = QtGui.QFont("Arial", 24, QtGui.QFont.Black)
+        title_label = QLabel('Beyond Chaos Randomizer')
+        font = QtGui.QFont('Arial', 24, QtGui.QFont.Black)
         title_label.setFont(font)
         title_label.setAlignment(QtCore.Qt.AlignCenter)
         title_label.setMargin(10)
@@ -405,35 +404,35 @@ class Window(QMainWindow):
 
     # Top groupbox consisting of ROM selection, and Seed number input
     def group_box_one_layout(self):
-        group_layout = QGroupBox("Input and Output")
+        group_layout = QGroupBox('Input and Output')
 
         grid_layout = QGridLayout()
 
         # ROM INPUT
-        label_rom_input = QLabel("ROM File:")
+        label_rom_input = QLabel('ROM File:')
         label_rom_input.setAlignment(QtCore.Qt.AlignRight |
-                                   QtCore.Qt.AlignVCenter)
+                                     QtCore.Qt.AlignVCenter)
         grid_layout.addWidget(label_rom_input, 1, 1)
 
         self.rom_input = QLineEdit()
-        self.rom_input.setPlaceholderText("Required")
+        self.rom_input.setPlaceholderText('Required')
         self.rom_input.setReadOnly(True)
         grid_layout.addWidget(self.rom_input, 1, 2, 1, 3)
 
         self.label_rom_error = QLabel()
-        self.label_rom_error.setStyleSheet("color: darkred;")
+        self.label_rom_error.setStyleSheet('color: darkred;')
         self.label_rom_error.setHidden(True)
         grid_layout.addWidget(self.label_rom_error, 2, 2, 1, 3)
 
-        btn_rom_input = QPushButton("Browse")
+        btn_rom_input = QPushButton('Browse')
         btn_rom_input.setMaximumWidth(self.width)
         btn_rom_input.setMaximumHeight(self.height)
         btn_rom_input.setStyleSheet(
-            "font:bold;"
-            "font-size:18px;"
-            "height:24px;"
-            "background-color: #5A8DBE;"
-            "color:#E4E4E4;"
+            'font:bold;'
+            'font-size:18px;'
+            'height:24px;'
+            'background-color: #5A8DBE;'
+            'color:#E4E4E4;'
         )
         btn_rom_input.clicked.connect(lambda: self.open_file_chooser())
         btn_rom_input.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
@@ -444,7 +443,7 @@ class Window(QMainWindow):
         grid_layout.addWidget(btn_rom_input, 1, 5)
 
         # ROM OUTPUT
-        lbl_rom_output = QLabel("Output Directory:")
+        lbl_rom_output = QLabel('Output Directory:')
         lbl_rom_output.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignVCenter)
         grid_layout.addWidget(lbl_rom_output, 3, 1)
 
@@ -452,15 +451,15 @@ class Window(QMainWindow):
         self.rom_input.textChanged[str].connect(self.validate_input_rom)
         grid_layout.addWidget(self.rom_output, 3, 2, 1, 3)
 
-        btn_rom_output = QPushButton("Browse")
+        btn_rom_output = QPushButton('Browse')
         btn_rom_output.setMaximumWidth(self.width)
         btn_rom_output.setMaximumHeight(self.height)
         btn_rom_output.setStyleSheet(
-            "font:bold;"
-            "font-size:18px;"
-            "height:24px;"
-            "background-color:#5A8DBE;"
-            "color:#E4E4E4;"
+            'font:bold;'
+            'font-size:18px;'
+            'height:24px;'
+            'background-color:#5A8DBE;'
+            'color:#E4E4E4;'
         )
         btn_rom_output.clicked.connect(lambda: self.open_directory_chooser())
         btn_rom_output.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
@@ -471,18 +470,18 @@ class Window(QMainWindow):
         grid_layout.addWidget(btn_rom_output, 3, 5)
 
         # SEED INPUT
-        lbl_seed_input = QLabel("Seed Number:")
+        lbl_seed_input = QLabel('Seed Number:')
         lbl_seed_input.setAlignment(QtCore.Qt.AlignRight |
-                                  QtCore.Qt.AlignVCenter)
+                                    QtCore.Qt.AlignVCenter)
         grid_layout.addWidget(lbl_seed_input, 4, 1)
 
         self.seed_input = QLineEdit()
-        self.seed_input.setPlaceholderText("Optional")
+        self.seed_input.setPlaceholderText('Optional')
         grid_layout.addWidget(self.seed_input, 4, 2)
 
-        lbl_seed_count = QLabel("Number to Generate:")
+        lbl_seed_count = QLabel('Number to Generate:')
         lbl_seed_count.setAlignment(QtCore.Qt.AlignRight |
-                                  QtCore.Qt.AlignVCenter)
+                                    QtCore.Qt.AlignVCenter)
         grid_layout.addWidget(lbl_seed_count, 4, 3)
 
         self.seed_count = QSpinBox()
@@ -492,16 +491,16 @@ class Window(QMainWindow):
         self.seed_count.setFixedWidth(40)
         grid_layout.addWidget(self.seed_count, 4, 4)
 
-        btn_generate = QPushButton("Generate")
+        btn_generate = QPushButton('Generate')
         btn_generate.setMinimumWidth(125)
         btn_generate.setMaximumWidth(self.width)
         btn_generate.setMaximumHeight(self.height)
         btn_generate.setStyleSheet(
-            "font:bold;"
-            "font-size:18px;"
-            "height:24px;"
-            "background-color:#5A8DBE;"
-            "color:#E4E4E4;"
+            'font:bold;'
+            'font-size:18px;'
+            'height:24px;'
+            'background-color:#5A8DBE;'
+            'color:#E4E4E4;'
         )
         btn_generate.clicked.connect(lambda: self.generate_seed())
         btn_generate.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
@@ -521,45 +520,45 @@ class Window(QMainWindow):
         layout_mode_and_preset = QGridLayout()
 
         # ---- Game Mode Drop Down ---- #
-        label_game_mode = QLabel("Game Mode:")
-        label_game_mode.setStyleSheet("padding-left: 22px;")
+        label_game_mode = QLabel('Game Mode:')
+        label_game_mode.setStyleSheet('padding-left: 22px;')
         layout_mode_and_preset.addWidget(label_game_mode, 1, 1)
-        for item in self.GameModes.items():
-            self.modeBox.addItem(item[0])
-        self.modeBox.currentTextChanged.connect(
+        for item in self.game_modes.items():
+            self.mode_box.addItem(item[0])
+        self.mode_box.currentTextChanged.connect(
             lambda: self.update_game_description()
         )
-        layout_mode_and_preset.addWidget(self.modeBox, 1, 2)
+        layout_mode_and_preset.addWidget(self.mode_box, 1, 2)
 
         # ---- Preset Flags Drop Down ---- #
-        label_preset_mode = QLabel("Preset Flags:")
-        label_preset_mode.setStyleSheet("padding-left: 22px;")
+        label_preset_mode = QLabel('Preset Flags:')
+        label_preset_mode.setStyleSheet('padding-left: 22px;')
         layout_mode_and_preset.addWidget(label_preset_mode, 1, 3)
-        self.presetBox.addItem("Select a flagset")
+        self.preset_box.addItem('Select a flag set')
         self.load_saved_flags()
-        for item in self.GamePresets.items():
-            self.presetBox.addItem(item[0])
+        for item in self.game_presets.items():
+            self.preset_box.addItem(item[0])
 
-        self.presetBox.currentTextChanged.connect(
+        self.preset_box.currentTextChanged.connect(
             lambda: self.update_preset_dropdown()
         )
-        layout_mode_and_preset.addWidget(self.presetBox, 1, 4)
+        layout_mode_and_preset.addWidget(self.preset_box, 1, 4)
 
-        label_flag_description = QLabel("Preset Description:")
+        label_flag_description = QLabel('Preset Description:')
         label_flag_description.setStyleSheet(
-            "font-size:14px;"
-            "height:24px;"
-            "color:#253340;"
-            "padding-left: 22px;"
+            'font-size:14px;'
+            'height:24px;'
+            'color:#253340;'
+            'padding-left: 22px;'
         )
-        layout_mode_and_preset.addWidget(label_flag_description,1, 5)
+        layout_mode_and_preset.addWidget(label_flag_description, 1, 5)
 
-        self.flagDescription.setStyleSheet(
-            "font-size:14px;"
-            "height:24px;"
-            "color:#253340;"
+        self.flag_description.setStyleSheet(
+            'font-size:14px;'
+            'height:24px;'
+            'color:#253340;'
         )
-        layout_mode_and_preset.addWidget(self.flagDescription, 1, 6)
+        layout_mode_and_preset.addWidget(self.flag_description, 1, 6)
 
         layout_mode_and_preset.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
         group_mode_and_preset.setLayout(layout_mode_and_preset)
@@ -569,7 +568,7 @@ class Window(QMainWindow):
     def flag_box_layout(self):
         group_box_two = QGroupBox()
         middle_h_box = QHBoxLayout()
-        middle_right_group_box = QGroupBox("Flag Selection")
+        middle_right_group_box = QGroupBox('Flag Selection')
         layout_tab_v_box = QVBoxLayout()
         tabs = QTabWidget()
         control_fixed_width = 70
@@ -578,7 +577,7 @@ class Window(QMainWindow):
         # loop to add tab objects to 'tabs' TabWidget
         for t, d, names in zip(self.tablist,
                                self.dictionaries,
-                               self.tabNames):
+                               self.tab_names):
             tab_obj = QScrollArea()
             tabs.addTab(tab_obj, names)
             tab_layout = QGridLayout()
@@ -587,20 +586,20 @@ class Window(QMainWindow):
             current_row = 0
             for flag_name, flag in d.items():
                 if flag['object'].inputtype == 'boolean':
-                    # cbox = FlagCheckBox("", flag_name)
-                    cbox = QPushButton("No")
+                    # cbox = FlagCheckBox('', flag_name)
+                    cbox = QPushButton('No')
                     cbox.flag = flag['object']
-                    if (flag_name == "remonsterate" and not len(check_remonsterate()) == 0) or\
-                       (flag_name == "makeover" and not len(check_player_sprites()) == 0):
+                    if (flag_name == 'remonsterate' and not len(check_remonsterate()) == 0) or \
+                            (flag_name == 'makeover' and not len(check_player_sprites()) == 0):
                         cbox.setEnabled(False)
-                    self.checkBoxes.append(cbox)
+                    self.check_boxes.append(cbox)
                     cbox.setFixedWidth(control_fixed_width)
                     cbox.setFixedHeight(control_fixed_height)
                     cbox.setCheckable(True)
                     cbox.value = flag_name
 
-                    flag_label = QLabel(f"{flag_name}")
-                    flag_description = QLabel(f"{flag['object'].long_description}")
+                    flag_label = QLabel(f'{flag_name}')
+                    flag_description = QLabel(f'{flag["object"].long_description}')
 
                     tab_layout.addWidget(cbox, current_row, 1)
                     tab_layout.addWidget(flag_label, current_row, 2)
@@ -615,14 +614,14 @@ class Window(QMainWindow):
                     float_box.setMinimum(0)
                     float_box.setSingleStep(.1)
                     float_box.default = 1.00
-                    float_box.setSuffix("x")
+                    float_box.setSuffix('x')
                     float_box.setValue(float_box.default)
                     float_box.text = flag_name
                     float_box.setFixedWidth(control_fixed_width)
                     float_box.setFixedHeight(control_fixed_height)
 
-                    flag_label = QLabel(f"{flag_name}")
-                    flag_description = QLabel(f"{flag['object'].long_description}")
+                    flag_label = QLabel(f'{flag_name}')
+                    flag_description = QLabel(f'{flag["object"].long_description}')
 
                     tab_layout.addWidget(float_box, current_row, 1)
                     tab_layout.addWidget(flag_label, current_row, 2)
@@ -637,15 +636,15 @@ class Window(QMainWindow):
                     integer_box.setMaximum(int(flag['object'].maximum_value))
                     integer_box.setFixedWidth(control_fixed_width)
                     integer_box.setFixedHeight(control_fixed_height)
-                    if flag_name == "cursepower":
-                        integer_box.setSpecialValueText("Random")
+                    if flag_name == 'cursepower':
+                        integer_box.setSpecialValueText('Random')
                     else:
-                        integer_box.setSpecialValueText("Off")
+                        integer_box.setSpecialValueText('Off')
                     integer_box.setValue(integer_box.default)
                     integer_box.text = flag_name
 
-                    flag_label = QLabel(f"{flag_name}")
-                    flag_description = QLabel(f"{flag['object'].long_description}")
+                    flag_label = QLabel(f'{flag_name}')
+                    flag_description = QLabel(f'{flag["object"].long_description}')
 
                     tab_layout.addWidget(integer_box, current_row, 1)
                     tab_layout.addWidget(flag_label, current_row, 2)
@@ -661,12 +660,12 @@ class Window(QMainWindow):
                     combo_box.setFixedHeight(control_fixed_height)
                     combo_box.setCurrentIndex(flag['object'].default_index)
                     if self.makeover_groups and flag_name in self.makeover_groups:
-                        flag_label = QLabel(f"{flag_name} (" + str(self.makeover_groups[flag_name]) +
-                                            ")")
-                        flag_description = QLabel(f"{flag['object'].long_description}")
+                        flag_label = QLabel(f'{flag_name} (' + str(self.makeover_groups[flag_name]) +
+                                            ')')
+                        flag_description = QLabel(f'{flag["object"].long_description}')
                     else:
-                        flag_label = QLabel(f"{flag_name}")
-                        flag_description = QLabel(f"{flag['object'].long_description}")
+                        flag_label = QLabel(f'{flag_name}')
+                        flag_description = QLabel(f'{flag["object"].long_description}')
                     tab_layout.addWidget(combo_box, current_row, 1)
                     tab_layout.addWidget(flag_label, current_row, 2)
                     tab_layout.addWidget(flag_description, current_row, 4)
@@ -678,7 +677,7 @@ class Window(QMainWindow):
             v_spacer.setFrameShape(QFrame.VLine)
             v_spacer.setFrameShadow(QFrame.Sunken)
             v_spacer.setFixedWidth(5)
-            v_spacer.setStyleSheet("margin: 5px 0 5px 0;")
+            v_spacer.setStyleSheet('margin: 5px 0 5px 0;')
             tab_layout.addWidget(v_spacer, 0, 3, flag_count, 1)
 
             t.setLayout(tab_layout)
@@ -693,11 +692,11 @@ class Window(QMainWindow):
         widget_v_box_layout = QVBoxLayout()
         widget_v.setLayout(widget_v_box_layout)
 
-        widget_v_box_layout.addWidget(QLabel("Text-string of selected flags:"))
-        self.flagString.textChanged.connect(self.text_changed)
-        widget_v_box_layout.addWidget(self.flagString)
+        widget_v_box_layout.addWidget(QLabel('Text-string of selected flags:'))
+        self.flag_string.textChanged.connect(self.text_changed)
+        widget_v_box_layout.addWidget(self.flag_string)
 
-        btn_save = QPushButton("Save flags selection")
+        btn_save = QPushButton('Save flags selection')
         btn_save.clicked.connect(lambda: self.save_flags())
         widget_v_box_layout.addWidget(btn_save)
 
@@ -706,8 +705,8 @@ class Window(QMainWindow):
         widget_flag_text = QGroupBox()
         flag_text_h_box = QHBoxLayout()
         flag_text_h_box.addWidget(widget_v)
-        btn_clear_ui = QPushButton("Reset")
-        btn_clear_ui.setStyleSheet("font-size:12px; height:60px")
+        btn_clear_ui = QPushButton('Reset')
+        btn_clear_ui.setStyleSheet('font-size:12px; height:60px')
         btn_clear_ui.clicked.connect(lambda: self.clear_ui())
         flag_text_h_box.addWidget(btn_clear_ui)
         widget_flag_text.setLayout(flag_text_h_box)
@@ -734,46 +733,46 @@ class Window(QMainWindow):
         self.clear_controls()
         values = text.split()
         self.flags.clear()
-        self.flagString.clear()
+        self.flag_string.clear()
         children = []
         for t in self.tablist:
             children.extend(t.children())
         for child in children:
             if type(child) in [QSpinBox, QDoubleSpinBox, QComboBox]:
-                child.setStyleSheet("background-color: white; border: none;")
+                child.setStyleSheet('background-color: white; border: none;')
             if child.isEnabled():
                 for v in values:
                     v = str(v).lower()
                     if type(child) == QPushButton and v == child.value:
                         child.setChecked(True)
-                        child.setText("Yes")
+                        child.setText('Yes')
                         self.flags.append(v)
                     elif type(child) in [QSpinBox] and str(v).startswith(child.text.lower()):
-                        if ":" in v:
+                        if ':' in v:
                             try:
-                                child.setValue(int(str(v).split(":")[1]))
-                                child.setStyleSheet("background-color: #CCE4F7; border: 1px solid darkblue;")
+                                child.setValue(int(str(v).split(':')[1]))
+                                child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
                                 self.flags.append(v)
                             except ValueError:
-                                if str(v).split(":")[1] == child.specialValueText().lower():
+                                if str(v).split(':')[1] == child.specialValueText().lower():
                                     child.setValue(child.minimum())
-                                    child.setStyleSheet("background-color: #CCE4F7; border: 1px solid darkblue;")
+                                    child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
                                     self.flags.append(v)
                     elif type(child) in [QDoubleSpinBox] and str(v).startswith(child.text.lower()):
-                        if ":" in v:
+                        if ':' in v:
                             try:
-                                value = float(str(v).split(":")[1])
+                                value = float(str(v).split(':')[1])
                                 if value >= 0:
                                     child.setValue(value)
-                                    child.setStyleSheet("background-color: #CCE4F7; border: 1px solid darkblue;")
+                                    child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
                                     self.flags.append(v)
                             except ValueError:
                                 pass
                     elif type(child) in [QComboBox] and str(v).startswith(child.text.lower()):
-                        if ":" in v:
-                            index_of_value = child.findText(str(v).split(":")[1], QtCore.Qt.MatchFixedString)
+                        if ':' in v:
+                            index_of_value = child.findText(str(v).split(':')[1], QtCore.Qt.MatchFixedString)
                             child.setCurrentIndex(index_of_value)
-                            child.setStyleSheet("background-color: #CCE4F7; border: 1px solid darkblue;")
+                            child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
                             self.flags.append(v)
         self.update_flag_string()
         self.flags_changing = False
@@ -782,28 +781,28 @@ class Window(QMainWindow):
     #   puts data into separate dictionaries
     def init_flags(self):
         for flag in sorted(NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS, key=lambda x: x.name):
-            if flag.category == "core":
+            if flag.category == 'core':
                 d = self.flag
-            elif flag.category == "aesthetic":
+            elif flag.category == 'aesthetic':
                 d = self.aesthetic
-            elif flag.category == "sprite":
+            elif flag.category == 'sprite':
                 d = self.sprite
-            elif flag.category == "spriteCategories":
-                d = self.spriteCategories
-            elif flag.category == "experimental":
+            elif flag.category == 'spriteCategories':
+                d = self.sprite_categories
+            elif flag.category == 'experimental':
                 d = self.experimental
-            elif flag.category == "gamebreaking":
+            elif flag.category == 'gamebreaking':
                 d = self.gamebreaking
-            elif flag.category == "field":
+            elif flag.category == 'field':
                 d = self.field
-            elif flag.category == "characters":
+            elif flag.category == 'characters':
                 d = self.characters
-            elif flag.category == "beta":
+            elif flag.category == 'beta':
                 d = self.beta
-            elif flag.category == "battle":
+            elif flag.category == 'battle':
                 d = self.battle
             else:
-                print(f"Flag {flag.name} does not have a valid category.")
+                print(f'Flag {flag.name} does not have a valid category.')
                 continue
 
             d[flag.name] = {
@@ -811,136 +810,136 @@ class Window(QMainWindow):
                 'object': flag
             }
 
-    # opens input dialog to get a name to assign a desired seed flagset, then
+    # opens input dialog to get a name to assign a desired seed flag set, then
     # saves flags and selected mode to the cfg file
     def save_flags(self):
         text, ok_pressed = QInputDialog.getText(
             self,
-            "Save Seed",
-            "Enter a name for this flagset",
+            'Save Seed',
+            'Enter a name for this flag set',
             QLineEdit.Normal,
-            ""
+            ''
         )
         if ok_pressed and text != '':
-            self.GamePresets[text] = (
-                    self.flagString.text() + "|" + self.mode
+            self.game_presets[text] = (
+                    self.flag_string.text() + '|' + self.mode
             )
             write_flags(
                 text,
-                (self.flagString.text() + "|" + self.mode)
+                (self.flag_string.text() + '|' + self.mode)
             )
-            index = self.presetBox.findText(text)
+            index = self.preset_box.findText(text)
             if index == -1:
-                self.presetBox.addItem(text)
+                self.preset_box.addItem(text)
             else:
-                self.presetBox.removeItem(index)
-                self.presetBox.addItem(text)
+                self.preset_box.removeItem(index)
+                self.preset_box.addItem(text)
 
-            index = self.presetBox.findText(text)
-            self.presetBox.setCurrentIndex(index)
+            index = self.preset_box.findText(text)
+            self.preset_box.setCurrentIndex(index)
 
     def load_saved_flags(self):
         flag_set = read_flags()
         if flag_set is not None:
             for text, flags in flag_set.items():
-                self.GamePresets[text] = flags
+                self.game_presets[text] = flags
 
     def update_game_description(self):
-        self.modeDescription.clear()
-        modes = {0: ("Normal", "normal"),
-                 1: ("Race - Kefka @ Narshe", "katn"),
-                 2: ("Ancient Cave", "ancientcave"),
-                 3: ("Speed Cave", "speedcave"),
-                 4: ("Race - Randomized Cave", "racecave"),
-                 5: ("Race - Dragon Hunt", "dragonhunt"),
+        self.mode_description.clear()
+        modes = {0: ('Normal', 'normal'),
+                 1: ('Race - Kefka @ Narshe', 'katn'),
+                 2: ('Ancient Cave', 'ancientcave'),
+                 3: ('Speed Cave', 'speedcave'),
+                 4: ('Race - Randomized Cave', 'racecave'),
+                 5: ('Race - Dragon Hunt', 'dragonhunt'),
                  }
-        index = self.modeBox.currentIndex()
-        self.modeDescription.setText(modes.get(index, "Pick a Game Mode!")[0])
+        index = self.mode_box.currentIndex()
+        self.mode_description.setText(modes.get(index, 'Pick a Game Mode!')[0])
         self.mode = \
             [x[1] for x in modes.values() if x[1] == modes.get(index)[1]][0]
 
-    def update_preset_dropdown(self, index=-1):
+    def update_preset_dropdown(self):
 
-        modes = {0: ("Normal", "normal"),
-                 1: ("Race - Kefka @ Narshe", "katn"),
-                 2: ("Ancient Cave", "ancientcave"),
-                 3: ("Speed Cave", "speedcave"),
-                 4: ("Race - Randomized Cave", "racecave"),
-                 5: ("Race - Dragon Hunt", "dragonhunt")}
-        text = self.presetBox.currentText()
-        index = self.presetBox.findText(text)
-        flags = self.GamePresets.get(text)
+        modes = {0: ('Normal', 'normal'),
+                 1: ('Race - Kefka @ Narshe', 'katn'),
+                 2: ('Ancient Cave', 'ancientcave'),
+                 3: ('Speed Cave', 'speedcave'),
+                 4: ('Race - Randomized Cave', 'racecave'),
+                 5: ('Race - Dragon Hunt', 'dragonhunt')}
+        text = self.preset_box.currentText()
+        index = self.preset_box.findText(text)
+        flags = self.game_presets.get(text)
         if index == 0:
             self.clear_ui()
-            self.flagDescription.clear()
-            self.flagDescription.setText("Pick a flag set!")
+            self.flag_description.clear()
+            self.flag_description.setText('Pick a flag set!')
         elif index == 1:
-            self.flagDescription.setText("Flags designed for a new player")
-            self.flagString.setText(flags)
-            self.mode = "normal"
-            self.modeBox.setCurrentIndex(0)
+            self.flag_description.setText('Flags designed for a new player')
+            self.flag_string.setText(flags)
+            self.mode = 'normal'
+            self.mode_box.setCurrentIndex(0)
         elif index == 2:
-            self.flagDescription.setText(
-                "Flags designed for an intermediate player"
+            self.flag_description.setText(
+                'Flags designed for an intermediate player'
             )
-            self.flagString.setText(flags)
-            self.mode = "normal"
-            self.modeBox.setCurrentIndex(0)
+            self.flag_string.setText(flags)
+            self.mode = 'normal'
+            self.mode_box.setCurrentIndex(0)
         elif index == 3:
-            self.flagDescription.setText(
-                "Flags designed for an advanced player"
+            self.flag_description.setText(
+                'Flags designed for an advanced player'
             )
-            self.flagString.setText(flags)
-            self.mode = "normal"
-            self.modeBox.setCurrentIndex(0)
+            self.flag_string.setText(flags)
+            self.mode = 'normal'
+            self.mode_box.setCurrentIndex(0)
         elif index == 4:
-            self.flagDescription.setText(
-                "Flags designed for a chaotic player"
+            self.flag_description.setText(
+                'Flags designed for a chaotic player'
             )
-            self.flagString.setText(flags)
-            self.mode = "normal"
-            self.modeBox.setCurrentIndex(0)
+            self.flag_string.setText(flags)
+            self.mode = 'normal'
+            self.mode_box.setCurrentIndex(0)
         elif index == 5:
-            self.flagDescription.setText(
-                "Flags designed for KaN easy difficulty races"
+            self.flag_description.setText(
+                'Flags designed for KaN easy difficulty races'
             )
-            self.flagString.setText(flags)
-            self.mode = "katn"
-            self.modeBox.setCurrentIndex(1)
+            self.flag_string.setText(flags)
+            self.mode = 'katn'
+            self.mode_box.setCurrentIndex(1)
         elif index == 6:
-            self.flagDescription.setText(
-                "Flags designed for KaN medium difficulty races"
+            self.flag_description.setText(
+                'Flags designed for KaN medium difficulty races'
             )
-            self.flagString.setText(flags)
-            self.mode = "katn"
-            self.modeBox.setCurrentIndex(1)
+            self.flag_string.setText(flags)
+            self.mode = 'katn'
+            self.mode_box.setCurrentIndex(1)
         elif index == 7:
-            self.flagDescription.setText(
-                "Flags designed for KaN insane difficulty races"
+            self.flag_description.setText(
+                'Flags designed for KaN insane difficulty races'
             )
-            self.flagString.setText(flags)
-            self.mode = "katn"
-            self.modeBox.setCurrentIndex(1)
+            self.flag_string.setText(flags)
+            self.mode = 'katn'
+            self.mode_box.setCurrentIndex(1)
         else:
-            customflags = flags.split("|")[0]
-            mode = flags.split("|")[1]
-            self.flagDescription.setText("Custom saved flags")
-            self.flagString.setText(customflags)
+            custom_flags = flags.split('|')[0]
+            mode = flags.split('|')[1]
+            self.flag_description.setText('Custom saved flags')
+            self.flag_string.setText(custom_flags)
             self.mode = mode
-            self.modeBox.setCurrentIndex(
+            self.mode_box.setCurrentIndex(
                 [k for k, v in modes.items() if v[1] == mode][0]
             )
 
     def clear_ui(self):
-        self.seed = ""
+        self.seed = ''
         self.flags.clear()
         self.seed_input.setText(self.seed)
 
-        self.modeBox.setCurrentIndex(0)
-        self.presetBox.setCurrentIndex(0)
+        self.mode_box.setCurrentIndex(0)
+        self.preset_box.setCurrentIndex(0)
         self.init_flags()
         self.clear_controls()
-        self.flagString.clear()
+        self.flag_string.clear()
         self.flags.clear()
         self.update_game_description()
 
@@ -949,7 +948,7 @@ class Window(QMainWindow):
             for child in tab.children():
                 if type(child) == QPushButton:
                     child.setChecked(False)
-                    child.setText("No")
+                    child.setText('No')
                 elif type(child) == QSpinBox or type(child) == QDoubleSpinBox:
                     child.setValue(child.default)
                 elif type(child) == QComboBox:
@@ -967,29 +966,29 @@ class Window(QMainWindow):
                 children = t.findChildren(QPushButton)
                 for c in children:
                     if c.isChecked():
-                        c.setText("Yes")
+                        c.setText('Yes')
                         d[c.value]['checked'] = True
                         self.flags.append(c.value)
                     else:
-                        c.setText("No")
+                        c.setText('No')
                         d[c.value]['checked'] = False
                 children = t.findChildren(QSpinBox) + t.findChildren(QDoubleSpinBox)
                 for c in children:
                     if not round(c.value(), 1) == c.default:
-                        c.setStyleSheet("background-color: #CCE4F7; border: 1px solid darkblue;")
-                        if c.text == "cursepower" and c.value() == 0:
-                            self.flags.append(c.text + ":random")
+                        c.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                        if c.text == 'cursepower' and c.value() == 0:
+                            self.flags.append(c.text + ':random')
                         else:
-                            self.flags.append(c.text + ":" + str(round(c.value(), 2)))
+                            self.flags.append(c.text + ':' + str(round(c.value(), 2)))
                     else:
-                        c.setStyleSheet("background-color: white; border: none;")
+                        c.setStyleSheet('background-color: white; border: none;')
                 children = t.findChildren(QComboBox)
                 for c in children:
                     if c.currentIndex() != c.flag.default_index:
-                        c.setStyleSheet("background-color: #CCE4F7; border: 1px solid darkblue;")
-                        self.flags.append(c.text.lower() + ":" + c.currentText().lower())
+                        c.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                        self.flags.append(c.text.lower() + ':' + c.currentText().lower())
                     else:
-                        c.setStyleSheet("background-color: white; border: none;")
+                        c.setStyleSheet('background-color: white; border: none;')
 
             self.update_flag_string()
 
@@ -1000,7 +999,7 @@ class Window(QMainWindow):
             self,
             'Open File',
             './',
-            filter="ROMs (*.smc *.sfc *.fig);;All Files(*.*)"
+            filter='ROMs (*.smc *.sfc *.fig);;All Files(*.*)'
         )
 
         # display file location in text input field
@@ -1013,74 +1012,74 @@ class Window(QMainWindow):
         self.rom_output.setText(str(file_path))
 
     def compile_modes(self):
-        for mode in self.supportedGameModes:
-            if mode == "normal":
-                self.GameModes['Normal'] = (
-                    "Play through the normal story with randomized gameplay."
+        for mode in self.supported_game_modes:
+            if mode == 'normal':
+                self.game_modes['Normal'] = (
+                    'Play through the normal story with randomized gameplay.'
                 )
-            elif mode == "katn":
-                self.GameModes['Race - Kefka @ Narshe'] = (
-                    "Race through the story and defeat Kefka at Narshe"
+            elif mode == 'katn':
+                self.game_modes['Race - Kefka @ Narshe'] = (
+                    'Race through the story and defeat Kefka at Narshe'
                 )
-            elif mode == "ancientcave":
-                self.GameModes['Ancient Cave'] = (
-                    "Play though a long randomized dungeon."
+            elif mode == 'ancientcave':
+                self.game_modes['Ancient Cave'] = (
+                    'Play though a long randomized dungeon.'
                 )
-            elif mode == "speedcave":
-                self.GameModes['Speed Cave'] = (
-                    "Play through a medium randomized dungeon."
+            elif mode == 'speedcave':
+                self.game_modes['Speed Cave'] = (
+                    'Play through a medium randomized dungeon.'
                 )
-            elif mode == "racecave":
-                self.GameModes['Race - Randomized Cave'] = (
-                    "Race through a short randomized dungeon."
+            elif mode == 'racecave':
+                self.game_modes['Race - Randomized Cave'] = (
+                    'Race through a short randomized dungeon.'
                 )
-            elif mode == "dragonhunt":
-                self.GameModes['Race - Dragon Hunt'] = (
-                    "Race to kill all 8 dragons."
+            elif mode == 'dragonhunt':
+                self.game_modes['Race - Dragon Hunt'] = (
+                    'Race to kill all 8 dragons.'
                 )
 
     def compile_supported_presets(self):
-        for mode in self.supportedPresets:
-            if mode == "newplayer":
-                self.GamePresets['New Player'] = (
-                    "b c e f g i n o p q r s t w y z makeover partyparty dancelessons lessfanatical "
-                    "expboost:2.0 gpboost:2.0 mpboost:2.0 swdtechspeed:faster alasdraco capslockoff "
-                    "johnnydmad questionablecontent relicmyhat"
+        for mode in self.supported_presets:
+            if mode == 'new_player':
+                self.game_presets['New Player'] = (
+                    'b c e f g i n o p q r s t w y z makeover partyparty dancelessons lessfanatical '
+                    'expboost:2.0 gpboost:2.0 mpboost:2.0 swdtechspeed:faster alasdraco capslockoff '
+                    'johnnydmad questionablecontent relicmyhat'
                 )
-            elif mode == "intermediateplayer":
-                self.GamePresets['Intermediate Player'] = (
-                    "b c d e f g i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo "
-                    "swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter remonsterate relicmyhat"
+            elif mode == 'intermediate_player':
+                self.game_presets['Intermediate Player'] = (
+                    'b c d e f g i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo '
+                    'swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter remonsterate relicmyhat'
                 )
-            elif mode == "advancedplayer":
-                self.GamePresets['Advanced Player'] = (
-                    "b c d e f g h i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo "
-                    "randombosses dancingmaduin:1 swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter "
-                    "remonsterate bsiab mimetime morefanatical questionablecontent relicmyhat"
+            elif mode == 'advanced_player':
+                self.game_presets['Advanced Player'] = (
+                    'b c d e f g h i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo '
+                    'randombosses dancingmaduin:1 swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter '
+                    'remonsterate bsiab mimetime morefanatical questionablecontent relicmyhat'
                 )
-            elif mode == "chaoticplayer":
-                self.GamePresets['Chaotic Player'] = (
-                    "b c d e f g h i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo "
-                    "masseffect randombosses dancingmaduin:chaos swdtechspeed:random alasdraco capslockoff "
-                    "johnnyachaotic notawaiter remonsterate bsiab mimetime questionablecontent randomboost:2 "
-                    "allcombos supernatural mementomori:random thescenarionottaken relicmyhat"
+            elif mode == 'chaotic_player':
+                self.game_presets['Chaotic Player'] = (
+                    'b c d e f g h i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo '
+                    'masseffect randombosses dancingmaduin:chaos swdtechspeed:random alasdraco capslockoff '
+                    'johnnyachaotic notawaiter remonsterate bsiab mimetime questionablecontent randomboost:2 '
+                    'allcombos supernatural mementomori:random thescenarionottaken relicmyhat'
                 )
-            elif mode == "raceeasy":
-                self.GamePresets['KaN Race - Easy'] = (
-                    "b c d e f g i j k m n o p q r s t w y z capslockoff "
-                    "johnnydmad makeover notawaiter partyparty madworld relicmyhat"
+            elif mode == 'race_easy':
+                self.game_presets['KaN Race - Easy'] = (
+                    'b c d e f g i j k m n o p q r s t w y z capslockoff '
+                    'johnnydmad makeover notawaiter partyparty madworld relicmyhat'
                 )
-            elif mode == "racemedium":
-                self.GamePresets['KaN Race - Medium'] = (
-                    "b c d e f g i j k m n o p q r s t u w y z capslockoff "
-                    "johnnydmad makeover notawaiter partyparty "
-                    "electricboogaloo randombosses madworld relicmyhat"
+            elif mode == 'race_medium':
+                self.game_presets['KaN Race - Medium'] = (
+                    'b c d e f g i j k m n o p q r s t u w y z capslockoff '
+                    'johnnydmad makeover notawaiter partyparty '
+                    'electricboogaloo randombosses madworld relicmyhat'
                 )
-            elif mode == "raceinsane":
-                self.GamePresets['KaN Race - Insane'] = (
-                    "b c d e f g i j k m n o p q r s t u w y z capslockoff "
-                    "johnnydmad makeover notawaiter partyparty darkworld "
-                    "madworld bsiab electricboogaloo randombosses relicmyhat"
+            elif mode == 'race_insane':
+                self.game_presets['KaN Race - Insane'] = (
+                    'b c d e f g i j k m n o p q r s t u w y z capslockoff '
+                    'johnnydmad makeover notawaiter partyparty darkworld '
+                    'madworld bsiab electricboogaloo randombosses relicmyhat'
                 )
 
     # Get seed generation parameters from UI to prepare for
@@ -1089,135 +1088,133 @@ class Window(QMainWindow):
     # to it
     def generate_seed(self):
 
-        self.romText = self.rom_input.text()
+        self.rom_text = self.rom_input.text()
 
         # Check to see if the supplied output directory exists.
         if os.path.isdir(self.rom_output.text()):
             # It does, use that directory.
-            self.romOutputDirectory = self.rom_output.text()
+            self.rom_output_directory = self.rom_output.text()
         elif self.rom_output.text() == '':
             # It does not, but the text box is blank. Use the
             # directory that the ROM file is in.
-            self.romOutputDirectory = self.rom_output.placeholderText()
+            self.rom_output_directory = self.rom_output.placeholderText()
         else:
             # The supplied path is invalid. Raise an error.
             QMessageBox.about(
                 self,
-                "Error",
-                "That output directory does not exist."
+                'Error',
+                'That output directory does not exist.'
             )
             return
 
-        if self.romText == "":
+        if self.rom_text == '':
             QMessageBox.about(
                 self,
-                "Error",
-                "You need to select a FFVI rom!"
+                'Error',
+                'You need to select a FFVI rom!'
             )
         else:
-            if not os.path.exists(self.romText):
+            if not os.path.exists(self.rom_text):
                 self.rom_input.setText('')
                 QMessageBox.about(
                     self,
-                    "Error",
-                    "No ROM was found at the path "
-                    + str(self.romText)
-                    + ". Please choose a different ROM file."
+                    'Error',
+                    f'No ROM was found at the path {str(self.rom_text)}. Please choose a different ROM file.'
                 )
                 return
             try:
-                f = open(self.romText, 'rb')
+                f = open(self.rom_text, 'rb')
                 data = f.read()
                 f.close()
                 md5_hash = hashlib.md5(data).hexdigest()
                 if md5_hash not in utils.WELL_KNOWN_ROM_HASHES:
                     confirm_hash = QMessageBox.question(
                         self,
-                        "WARNING!",
-                        "The md5 hash of this file does not match the known hashes of the english FF6 1.0 rom!"
+                        'WARNING!',
+                        'The md5 hash of this file does not match the known hashes of the english FF6 1.0 rom!'
                         + os.linesep
-                        + "Continue Anyway?",
+                        + 'Continue Anyway?',
                         QMessageBox.Yes | QMessageBox.Cancel
                     ) == QMessageBox.Yes
                     if not confirm_hash:
                         return
-            except IOError as e:
-                QMessageBox.about(self, "Error", str(e))
+            except IOError as io_exception:
+                QMessageBox.about(self, 'Error', str(io_exception))
                 return
 
             self.seed = self.seed_input.text()
 
-            displaySeed = self.seed
+            display_seed = self.seed
 
-            flagMsg = ""
+            flag_msg = ''
 
-            if self.seed == "":
-                displaySeed = "(none)"
+            if self.seed == '':
+                display_seed = '(none)'
 
-            flagMode = ""
+            flag_mode = ''
             for flag in self.flags:
-                flagMode += " " + flag
+                flag_mode += ' ' + flag
 
-                flagMsg = ""
-            flagMode = flagMode.strip()
+                flag_msg = ''
+            flag_mode = flag_mode.strip()
             for flag in self.flags:
-                if flagMsg:
+                if flag_msg:
                     if len(flag) == 1:
-                        flagMsg += " "
+                        flag_msg += ' '
                     else:
-                        flagMsg += "\n"
-                flagMsg += flag
-            if flagMsg == "":
+                        flag_msg += '\n'
+                flag_msg += flag
+            if flag_msg == '':
                 QMessageBox.about(
                     self,
-                    "Error",
-                    "You need to select a flag!"
+                    'Error',
+                    'You need to select a flag!'
                 )
                 return
 
-            if "bingoboingo" in self.flags:
+            if 'bingoboingo' in self.flags:
                 bingo = BingoPrompts()
                 bingo.setModal(True)
                 bingo.exec()
 
-                bingotype = ""
+                bingotype = ''
                 if bingo.abilities:
-                    bingotype += "a"
+                    bingotype += 'a'
                 if bingo.items:
-                    bingotype += "i"
+                    bingotype += 'i'
                 if bingo.monsters:
-                    bingotype += "m"
+                    bingotype += 'm'
                 if bingo.spells:
-                    bingotype += "s"
+                    bingotype += 's'
 
-                if bingotype != "":
-                    self.bingotype = bingotype
+                if bingotype != '':
+                    self.bingo_type = bingotype
                 else:
                     return
-                self.bingodiff = bingo.difficulty
-                self.bingosize = bingo.grid_size
-                self.bingocards = bingo.num_cards
+                self.bingo_diff = bingo.difficulty
+                self.bingo_size = bingo.grid_size
+                self.bingo_cards = bingo.num_cards
 
             # This makes the flag string more readable in
             # the confirm dialog
             message = (
-                "{0: <10} {1}\n"
-                "{2: <9} {3}\n"
-                "{4: <10} {5}\n"
-                "{6: <10} {7}\n"
-                "{8: <10} {9}\n"
-                "{10: <10}".format(
-                    "Rom:", self.romText,
-                    "Output:", self.romOutputDirectory,
-                    "Seed:", displaySeed,
-                    "Batch:", self.seed_count.text(),
-                    "Mode:", self.mode,
-                    "Flags:")
+                '{0: <10} {1}\n'
+                '{2: <9} {3}\n'
+                '{4: <10} {5}\n'
+                '{6: <10} {7}\n'
+                '{8: <10} {9}\n'
+                '{10: <10}'.format(
+                    'Rom:', self.rom_text,
+                    'Output:', self.rom_output_directory,
+                    'Seed:', display_seed,
+                    'Batch:', self.seed_count.text(),
+                    'Mode:', self.mode,
+                    'Flags:')
             )
-            flag_message = QLabel(f'{flagMsg}')
+            flag_message = QLabel(f'{flag_msg}')
             flag_message.setStyleSheet('margin-left: 2px;')
             continue_confirmed = QDialogScroll(
-                title="Confirm Seed Generation?",
+                title='Confirm Seed Generation?',
                 header=message,
                 scroll_contents=flag_message,
                 left_button='Cancel',
@@ -1227,12 +1224,12 @@ class Window(QMainWindow):
             if continue_confirmed:
                 self.clear_console()
                 self.seed = self.seed or int(time.time())
-                seedsToGenerate = int(self.seed_count.text())
-                resultFiles = []
-                for currentSeed in range(seedsToGenerate):
-                    print("Rolling seed " + str(currentSeed + 1) + " of " + str(seedsToGenerate) + ".")
+                seeds_to_generate = int(self.seed_count.text())
+                result_files = []
+                for currentSeed in range(seeds_to_generate):
+                    print('Rolling seed ' + str(currentSeed + 1) + ' of ' + str(seeds_to_generate) + '.')
                     # User selects confirm/accept/yes option
-                    bundle = f"{self.version}|{self.mode}|{flagMode}|{self.seed}"
+                    bundle = f'{self.version}|{self.mode}|{flag_mode}|{self.seed}'
                     # remove spam if the Randomizer asks for input
                     # TODO: guify that stuff
                     # Hash check can be moved out to when you pick
@@ -1246,14 +1243,14 @@ class Window(QMainWindow):
                     # TODO: put this in a new thread
                     try:
                         kwargs = {
-                            "infile_rom_path": self.romText,
-                            "outfile_rom_path": self.romOutputDirectory,
-                            "seed": bundle,
-                            "bingotype": self.bingotype,
-                            "bingosize": self.bingosize,
-                            "bingodifficulty": self.bingodiff,
-                            "bingocards": self.bingocards,
-                            "application": "gui"
+                            'infile_rom_path': self.rom_text,
+                            'outfile_rom_path': self.rom_output_directory,
+                            'seed': bundle,
+                            'bingo_type': self.bingo_type,
+                            'bingo_size': self.bingo_size,
+                            'bingo_difficulty': self.bingo_diff,
+                            'bingo_cards': self.bingo_cards,
+                            'application': 'gui'
                         }
                         parent_connection, child_connection = Pipe()
                         randomize_process = Process(
@@ -1264,7 +1261,7 @@ class Window(QMainWindow):
                         randomize_process.start()
                         while True:
                             if not randomize_process.is_alive():
-                                raise RuntimeError("Unexpected error: The process performing randomization died.")
+                                raise RuntimeError('Unexpected error: The process performing randomization died.')
                             if parent_connection.poll(timeout=5):
                                 child_output = parent_connection.recv()
                             else:
@@ -1281,58 +1278,61 @@ class Window(QMainWindow):
                                     break
 
                         # generate the output file name since we're using subprocess now instead of a direct call
-                        if '.' in self.romText:
-                            tempname = os.path.basename(self.romText).rsplit('.', 1)
+                        if '.' in self.rom_text:
+                            temp_name = os.path.basename(self.rom_text).rsplit('.', 1)
                         else:
-                            tempname = [os.path.basename(self.romText), 'smc']
-                        seed = bundle.split("|")[-1]
-                        resultFile = os.path.join(self.romOutputDirectory,
-                                                  '.'.join([os.path.basename(tempname[0]),
-                                                            str(seed), tempname[1]]))
+                            temp_name = [os.path.basename(self.rom_text), 'smc']
+                        seed = bundle.split('|')[-1]
+                        result_file = os.path.join(self.rom_output_directory,
+                                                   '.'.join([os.path.basename(temp_name[0]),
+                                                             str(seed), temp_name[1]]))
                         if self.seed:
                             self.seed = str(int(self.seed) + 1)
                     except Exception as gen_exception:
                         traceback.print_exc()
                         gen_traceback = QTextEdit(
-                            "<br>".join(traceback.format_exc().splitlines())
+                            '<br>'.join(traceback.format_exc().splitlines())
                         )
                         gen_traceback.setStyleSheet('background-color: rgba(0,0,0,0); border: none;')
                         gen_traceback.setReadOnly(True)
                         QDialogScroll(
-                            title="Exception: " + str(type(gen_exception).__name__),
-                            header="A " + str(type(gen_exception).__name__) + " exception occurred "
-                                                        "that prevented randomization: " +
-                                                        "<br>" +
-                                                        "<br>" +
-                                                        'Please submit the following traceback over at the <a href="https://discord.gg/ZCHZp7qxws">Beyond Chaos Barracks discord</a> bugs channel:' +
-                                                        "<br>",
+                            title=f'Exception: {str(type(gen_exception).__name__)}',
+                            header=f'A {str(type(gen_exception).__name__)} ' +
+                                   'exception occurred '
+                                   'that prevented randomization: ' +
+                                   '<br>' +
+                                   '<br>' +
+                                   'Please submit the following traceback over at the '
+                                   '<a href="https://discord.gg/ZCHZp7qxws">Beyond Chaos Barracks discord</a> '
+                                   'bugs channel:' +
+                                   '<br>',
                             scroll_contents=gen_traceback,
                             right_button='Close',
                             icon=QStyle.SP_MessageBoxCritical
                         ).exec()
                     else:
-                        resultFiles.append(resultFile)
-                        if currentSeed + 1 == seedsToGenerate:
-                            if seedsToGenerate == 1:
+                        result_files.append(result_file)
+                        if currentSeed + 1 == seeds_to_generate:
+                            if seeds_to_generate == 1:
                                 QMessageBox.information(
                                     self,
-                                    "Successfully created ROM",
-                                    "Result file\n------------\n" + f"{resultFile}",
+                                    'Successfully created ROM',
+                                    f'Result file\n------------\n{result_file}',
                                     QMessageBox.Ok
                                 )
-                            elif seedsToGenerate > 10:
+                            elif seeds_to_generate > 10:
                                 QMessageBox.information(
                                     self,
-                                    f"Successfully created {seedsToGenerate} ROMs",
-                                    f"{seedsToGenerate} ROMs have been created in {self.romOutputDirectory}.",
+                                    f'Successfully created {seeds_to_generate} ROMs',
+                                    f'{seeds_to_generate} ROMs have been created in {self.rom_output_directory}.',
                                     QMessageBox.Ok
                                 )
                             else:
-                                resultFilesString = "\n------------\n".join(resultFiles)
+                                result_files_string = '\n------------\n'.join(result_files)
                                 QMessageBox.information(
                                     self,
-                                    f"Successfully created {seedsToGenerate} ROMs",
-                                    "Result files\n------------\n" + f"{resultFilesString}",
+                                    f'Successfully created {seeds_to_generate} ROMs',
+                                    f'Result files\n------------\n{result_files_string}',
                                     QMessageBox.Ok
                                 )
                         else:
@@ -1346,48 +1346,31 @@ class Window(QMainWindow):
     # flags denoted as 'True'
     def update_flag_string(self):
         self.flags_changing = True
-        self.flagString.clear()
-        temp = ""
+        self.flag_string.clear()
+        temp = ''
         for x in range(0, len(self.flags)):
             flag = self.flags[x]
-            temp += flag + " "
-        self.flagString.setText(temp)
+            temp += flag + ' '
+        self.flag_string.setText(temp)
         self.flags_changing = False
-
-    # read through dictionaries and set flag checkboxes as 'checked'
-    # def updateFlagCheckboxes(self):
-    #     for t, d in zip(self.tablist, self.dictionaries):
-    #         # create a list of all checkbox objects from the
-    #         # current QTabWidget
-    #         children = t.findChildren(FlagCheckBox)
-    #
-    #         # enumerate checkbox objects and set them to 'checked' if
-    #         # corresponding
-    #         #   flag value is true
-    #         for c in children:
-    #             value = c.value
-    #             if d[value]['checked']:
-    #                 c.setProperty('checked', True)
-    #             else:
-    #                 c.setProperty('checked', False)
 
     def validate_input_rom(self, value):
         try:
-            if not value == "":
+            if not value == '':
                 try:
                     with open(value, 'rb') as rom_file:
                         rom_hash = md5(rom_file.read()).hexdigest()
                     if rom_hash in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2]:
                         self.label_rom_error.setHidden(True)
                     else:
-                        self.label_rom_error.setText("WARNING! The selected file does not match supported "
-                                                   "English FF3/FF6 v1.0 ROM files!")
+                        self.label_rom_error.setText('WARNING! The selected file does not match supported '
+                                                     'English FF3/FF6 v1.0 ROM files!')
                         self.label_rom_error.setHidden(False)
                 except FileNotFoundError:
-                    self.rom_input.setText("")
-                    self.rom_input.setPlaceholderText("")
-                    self.label_rom_error.setText("The previously used ROM file could not be found. Please select a "
-                                               "new FF6 ROM file.")
+                    self.rom_input.setText('')
+                    self.rom_input.setPlaceholderText('')
+                    self.label_rom_error.setText('The previously used ROM file could not be found. Please select a '
+                                                 'new FF6 ROM file.')
                     self.label_rom_error.setHidden(False)
 
             self.rom_output.setPlaceholderText(os.path.dirname(os.path.normpath(value)))
@@ -1399,12 +1382,12 @@ class Window(QMainWindow):
         os.system('cls' if os.name == 'nt' else 'clear')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     multiprocessing.freeze_support()
     args = sys.argv
     QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
     App = QApplication(sys.argv)
-    os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    os.environ['QT_AUTO_SCREEN_SCALE_FACTOR'] = '1'
     try:
         if not BETA:
             required_update = False
@@ -1418,41 +1401,44 @@ if __name__ == "__main__":
                     update_message = QMessageBox()
                     if first_time_setup:
                         update_message.setIcon(QMessageBox.Information)
-                        update_message.setWindowTitle("First Time Setup")
-                        update_message.setText("<b>Welcome to Beyond Chaos Community Edition!</b>" +
-                                               "<br>" +
-                                               "<br>" +
-                                               "As part of first time setup, "
-                                               "we need to download some required files and folders."
-                                               "<br>" +
-                                               "<br>" +
-                                               "Press OK to launch the updater to download the required files."
-                                               "<br>" +
-                                               "Press Close to exit the program.")
+                        update_message.setWindowTitle('First Time Setup')
+                        update_message.setText('<b>Welcome to Beyond Chaos Community Edition!</b>' +
+                                               '<br>' +
+                                               '<br>' +
+                                               'As part of first time setup, '
+                                               'we need to download some required files and folders.'
+                                               '<br>' +
+                                               '<br>' +
+                                               'Press OK to launch the updater to download the required files.'
+                                               '<br>' +
+                                               'Press Close to exit the program.')
                     elif required_update:
                         update_message.setIcon(QMessageBox.Warning)
-                        update_message.setWindowTitle("Missing Required Files")
-                        update_message.setText("Files that are required for the randomizer to function properly are missing "
-                                               "from the randomizer directory:" +
-                                               "<br>" +
-                                               "<br>" +
-                                               str(validation_result) +
-                                               "<br>" +
-                                               "<br>" +
-                                               "Press OK to launch the updater to download the required files." +
-                                               "<br>" +
-                                               "Press Close to exit the program.")
+                        update_message.setWindowTitle('Missing Required Files')
+                        update_message.setText(
+                            'Files that are required for the randomizer to function properly are missing '
+                            'from the randomizer directory:' +
+                            '<br>' +
+                            '<br>' +
+                            str(validation_result) +
+                            '<br>' +
+                            '<br>' +
+                            'Press OK to launch the updater to download the required files.' +
+                            '<br>' +
+                            'Press Close to exit the program.')
                     else:
                         update_message.setIcon(QMessageBox.Question)
-                        update_message.setWindowTitle("Update Available")
-                        update_message.setText("Updates to Beyond Chaos are available!" +
-                                               "<br>" +
-                                               "<br>" +
-                                               str(validation_result) +
-                                               "<br>" +
-                                               "<br>" +
-                                               "Press OK to launch the updater or Close to skip updating. This pop-up will "
-                                               "only show once per update.")
+                        update_message.setWindowTitle('Update Available')
+                        update_message.setText(
+                            'Updates to Beyond Chaos are available!' +
+                            '<br>' +
+                            '<br>' +
+                            str(validation_result) +
+                            '<br>' +
+                            '<br>' +
+                            'Press OK to launch the updater or Close to skip updating. This pop-up will '
+                            'only show once per update.'
+                        )
 
                     update_message.setStandardButtons(QMessageBox.Close | QMessageBox.Ok)
                     button_clicked = update_message.exec()
@@ -1464,9 +1450,10 @@ if __name__ == "__main__":
                         else:
                             update_dismiss_message = QMessageBox()
                             update_dismiss_message.setIcon(QMessageBox.Information)
-                            update_dismiss_message.setWindowTitle("Information")
-                            update_dismiss_message.setText("The update will be available using the Update button on the "
-                                                           "randomizer's menu bar.")
+                            update_dismiss_message.setWindowTitle('Information')
+                            update_dismiss_message.setText(
+                                'The update will be available using the Update button on the '
+                                "randomizer's menu bar.")
                             update_dismiss_message.setStandardButtons(QMessageBox.Close)
                             button_clicked = update_dismiss_message.exec()
                             if button_clicked == QMessageBox.Close:
@@ -1485,16 +1472,16 @@ if __name__ == "__main__":
                 if required_update:
                     failure_message = QMessageBox()
                     failure_message.setIcon(QMessageBox.Warning)
-                    failure_message.setWindowTitle("No Internet Connection")
-                    failure_message.setText("Beyond Chaos was unable to perform the required update because " +
-                                            "no internet connection was available." +
-                                            "<br><br>" +
-                                            "Please connect to the internet and then try again.")
+                    failure_message.setWindowTitle('No Internet Connection')
+                    failure_message.setText('Beyond Chaos was unable to perform the required update because ' +
+                                            'no internet connection was available.' +
+                                            '<br><br>' +
+                                            'Please connect to the internet and then try again.')
                     failure_message.setStandardButtons(QMessageBox.Close)
                     failure_message.exec()
                     sys.exit()
                 else:
-                    print("You are currently offline. Skipping the update check.")
+                    print('You are currently offline. Skipping the update check.')
                 pass
         window = Window()
         time.sleep(3)
@@ -1502,17 +1489,17 @@ if __name__ == "__main__":
     except Exception as e:
         error_message = QMessageBox()
         error_message.setIcon(QMessageBox.Critical)
-        error_message.setWindowTitle("Exception: " + str(type(e).__name__))
-        error_message.setText("A fatal " + str(type(e).__name__) + " exception occurred: " +
+        error_message.setWindowTitle('Exception: ' + str(type(e).__name__))
+        error_message.setText('A fatal ' + str(type(e).__name__) + ' exception occurred: ' +
                               str(e) +
-                              "<br>" +
-                              "<br>" +
-                              "<br>" +
-                              "<br>" +
-                              "<b><u>Error Traceback for the Devs</u></b>:" +
-                              "<br>" +
-                              "<br>" +
-                              "<br>".join(traceback.format_exc().splitlines()))
+                              '<br>' +
+                              '<br>' +
+                              '<br>' +
+                              '<br>' +
+                              '<b><u>Error Traceback for the Devs</u></b>:' +
+                              '<br>' +
+                              '<br>' +
+                              '<br>'.join(traceback.format_exc().splitlines()))
         error_message.setStandardButtons(QMessageBox.Close)
         button_clicked = error_message.exec()
         if button_clicked == QMessageBox.Close:
