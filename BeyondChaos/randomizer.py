@@ -9,6 +9,8 @@ from time import time, sleep, gmtime
 from typing import Callable, Dict, List, Set, Tuple
 from multiprocessing import Pipe, Process
 
+
+import requests.exceptions
 import locationrandomizer
 import options
 from monsterrandomizer import MonsterBlock, early_bosses, solo_bosses
@@ -18,8 +20,8 @@ from appearance import manage_character_appearance, manage_coral
 from character import get_characters, get_character, equip_offsets, character_list, load_characters
 from bcg_junction import JunctionManager
 from chestrandomizer import mutate_event_items, get_event_items
-from config import (get_input_path, get_output_path, save_input_path, save_output_path, get_items,
-                    set_value)
+from config import (get_config_items, set_config_value, VERSION, VERSION_ROMAN, BETA, config, MD5HASHTEXTLESS2,
+                    MD5HASHTEXTLESS, MD5HASHNORMAL)
 from decompress import Decompressor
 from dialoguemanager import (manage_dialogue_patches, get_dialogue,
                              set_dialogue, read_dialogue,
@@ -72,14 +74,11 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = 'CE-5.1.1'
-BETA = False
-VERSION_ROMAN = 'V BETA' if BETA else 'V'
-NEVER_REPLACE = ['fight', 'item', 'magic', 'row', 'def', 'magitek', 'lore',
-                 'jump', 'mimic', 'xmagic', 'summon', 'morph', 'revert']
-RESTRICTED_REPLACE = ['throw', 'steal']
-ALWAYS_REPLACE = ['leap', 'possess', 'health', 'shock']
-FORBIDDEN_COMMANDS = ['leap', 'possess']
+NEVER_REPLACE = ["fight", "item", "magic", "row", "def", "magitek", "lore",
+                 "jump", "mimic", "xmagic", "summon", "morph", "revert"]
+RESTRICTED_REPLACE = ["throw", "steal"]
+ALWAYS_REPLACE = ["leap", "possess", "health", "shock"]
+FORBIDDEN_COMMANDS = ["leap", "possess"]
 TEK_SKILLS = (  # [0x18, 0x6E, 0x70, 0x7D, 0x7E] +
         list(range(0x86, 0x8B)) + [0xA7, 0xB1] +
         list(range(0xB4, 0xBA)) +
@@ -92,13 +91,10 @@ JUNCTION_MANAGER_PARAMETERS = {
     'esper-allocations-address': 0x3f858,
 }
 
-MD5HASHNORMAL = 'e986575b98300f721ce27c180264d890'
-MD5HASHTEXTLESS = 'f08bf13a6819c421eee33ee29e640a1d'
-MD5HASHTEXTLESS2 = 'e0984abc9e5dd99e4bc54e8f9e0ff8d0'
 
+seed_counter = 1
 # seed = None
 flags = None
-seed_counter = 1
 # infile_rom_path = None
 # outfile_rom_path = None
 # infile_rom_buffer = None
@@ -5169,12 +5165,12 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             infile_rom_path = kwargs.get('infile_rom_path')
             outfile_rom_path = kwargs.get('outfile_rom_path')
             pass
-        if application in ['gui', 'tester']:
+        elif application in ["gui", "tester"]:
             # The gui (beyondchaos.py) should supply these kwargs
             infile_rom_path = kwargs.get('infile_rom_path')
             outfile_rom_path = kwargs.get('outfile_rom_path')
             set_parent_pipe(connection)
-        if application == 'web':
+        elif application == "web":
             infile_rom_buffer = kwargs.get('infile_rom_buffer')
             outfile_rom_buffer = kwargs.get('outfile_rom_buffer')
             set_parent_pipe(connection)
@@ -5195,11 +5191,11 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             #    prompt the user for the directory of their FF3 rom file.
             # TODO: Refactor this part?
             if not infile_rom_path:
-                config_infile_rom_path = get_input_path()
-                config_outfile_rom_path = get_output_path()
-                previous_input = f' (blank for default: {config_infile_rom_path})' if config_infile_rom_path else ''
-                infile_rom_path = input(f'Please input the file name of your copy of '
-                                        f'the FF3 US 1.0 rom{previous_input}:\n> ').strip()
+                config_infile_rom_path = config.get('Settings', 'input_path', fallback='')
+                config_outfile_rom_path = config.get('Settings', 'output_path', fallback='')
+                previous_input = f" (blank for default: {config_infile_rom_path})" if config_infile_rom_path else ""
+                infile_rom_path = input(f"Please input the file name of your copy of "
+                                        f"the FF3 US 1.0 rom{previous_input}:\n> ").strip()
                 pipe_print()
 
             # If there is a saved rom path and the user input was blank, use the saved rom path
@@ -5287,7 +5283,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             pipe_print()
 
             if '.' not in full_seed:
-                speeddials = get_items('Speeddial').items()
+                speeddials = get_config_items("Speeddial").items()
                 mode_num = None
                 while mode_num not in range(len(ALL_MODES)):
                     pipe_print('Available modes:\n')
@@ -5327,8 +5323,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
                 saving_speeddial = re.search('^[0-9]:', flags)
                 if saving_speeddial:
-                    set_value('Speeddial', flags[:1], flags[3:].strip())
-                    pipe_print('Flags saved under speeddial number ' + str(flags[:1]))
+                    set_config_value("Speeddial", flags[:1], flags[3:].strip())
+                    pipe_print("Flags saved under speeddial number " + str(flags[:1]))
                     flags = flags[3:]
 
                 full_seed = '|%i|%s|%s' % (mode_num + 1, flags, full_seed)
@@ -5375,8 +5371,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                                             str(seed), 'txt']))
 
             if infile_rom_path != config_infile_rom_path or outfile_rom_path != config_outfile_rom_path:
-                save_input_path(infile_rom_path)
-                save_output_path(os.path.dirname(outfile_rom_path))
+                set_config_value('Settings', 'input_path', str(infile_rom_path))
+                set_config_value('Settings', 'output_path', str(outfile_rom_path))
 
             infile_rom_buffer = BytesIO(open(infile_rom_path, 'rb').read())
             outfile_rom_buffer = BytesIO(open(infile_rom_path, 'rb').read())
@@ -6392,6 +6388,39 @@ if __name__ == '__main__':
         )
         sys.exit()
     try:
+        if not BETA:
+            from update import validate_files, run_updates, list_available_updates
+            try:
+                requests.head(url='http://www.google.com')
+                validation_result = validate_files()
+                print(str(validation_result))
+                print(str(os.getcwd()))
+                if validation_result is not None:
+                    print(
+                        'Welcome to Beyond Chaos Community Edition!\n\n',
+                        'As part of first time setup, ',
+                        'we need to download the required custom '
+                        'files and folders for randomization.\n',
+                    )
+                    input('Press enter to launch the updater to download the required files.')
+                    run_updates(calling_program='console')
+                available_updates = list_available_updates().replace('<br><br>', '\n').strip()
+                print(
+                    f'Updates to Beyond Chaos are available!\n\n{str(available_updates)}\n'
+                )
+                while True:
+                    response = input('Would you like to update? Y/N\n>')
+                    if response.lower() == 'n':
+                        os.system('cls' if os.name == 'nt' else 'clear')
+                        break
+                    elif response.lower() == 'y':
+                        os.system('cls' if os.name == 'nt' else 'clear')
+                        run_updates(calling_program='console')
+                        break
+                    else:
+                        print('Please press "Y" to update or "N" to skip.')
+            except requests.exceptions.ConnectionError:
+                pass
         source_arg = None
         seed_arg = None
         destination_arg = None
