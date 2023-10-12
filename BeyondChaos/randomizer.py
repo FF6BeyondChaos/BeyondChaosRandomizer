@@ -74,7 +74,7 @@ from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
 from remonsterate.remonsterate import remonsterate
 
-VERSION = "CE-5.1.1"
+VERSION = "CE-5.1.2"
 BETA = False
 VERSION_ROMAN = "IV"
 if BETA:
@@ -1819,12 +1819,45 @@ def manage_skips():
         writeToAddress(split_line[0], split_line[1:])
 
     def handleGau(split_line: List[str]):  # Replace events that should be replaced if we are auto-recruiting Gau
-        # at least for now, divergent paths doesn't skip the cutscene with Gau
-        if Options_.is_flag_active("thescenarionottaken"):
-            return
         if Options_.is_flag_active("shuffle_commands") or \
                 Options_.is_flag_active("replace_commands") or \
                 Options_.is_flag_active("random_treasure"):
+            writeToAddress(split_line[0], split_line[1:])
+
+    def handleGauDivergent(split_line: List[str]):  # Replace events if we ARE auto-recruiting Gau in TheScenarioNotTaken
+
+        if not (Options_.is_flag_active("thescenarionottaken")):
+            return
+        if (Options_.is_flag_active("shuffle_commands") or \
+                Options_.is_flag_active("replace_commands") or \
+                Options_.is_flag_active("random_treasure")):
+            writeToAddress(split_line[0], split_line[1:])
+
+    def handleNoGauDivergent(split_line: List[str]):  # Replace events if we are NOT auto-recruiting Gau in TheScenarioNotTaken
+
+        if not (Options_.is_flag_active("thescenarionottaken")):
+            return
+        if not (Options_.is_flag_active("shuffle_commands") or \
+                Options_.is_flag_active("replace_commands") or \
+                Options_.is_flag_active("random_treasure")):
+            writeToAddress(split_line[0], split_line[1:])
+
+    def handleNoGauConvergent(split_line: List[str]):  # Replace events if we are NOT auto-recruiting Gau in a regular seed
+
+        if (Options_.is_flag_active("thescenarionottaken")):
+            return
+        if not (Options_.is_flag_active("shuffle_commands") or \
+                Options_.is_flag_active("replace_commands") or \
+                Options_.is_flag_active("random_treasure")):
+            writeToAddress(split_line[0], split_line[1:])
+
+    def handleGauConvergent(split_line: List[str]):  # Replace events if we ARE auto-recruiting Gau in a regular seed
+
+        if (Options_.is_flag_active("thescenarionottaken")):
+            return
+        if (Options_.is_flag_active("shuffle_commands") or \
+                Options_.is_flag_active("replace_commands") or \
+                Options_.is_flag_active("random_treasure")):
             writeToAddress(split_line[0], split_line[1:])
 
     def handlePalette(split_line: List[str]):  # Fix palettes so that they are randomized
@@ -4714,7 +4747,7 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
                         281, 282, 283, 285, 286, 287,
                         297, 303, 400, 382, 402, 403,
                         404]  # event formation sets that can be shuffled with cursedencounters
-    bad_event_fsets = [58, 108, 128, 138, 139, 140] # Narshe Cave, Magitek Factory Escape, Collapsing House, South Figaro Cave WoR, Castle Figaro Basement
+    bad_event_fsets = [58, 108, 128, 138] # Narshe Cave, Magitek Factory Escape, Collapsing House
     event_formations = set()
     salt_formations = set()
 
@@ -4725,10 +4758,17 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
             salt_formations.add((formation.formid - 2))
             salt_formations.add((formation.formid - 3))
             salt_formations.add((formation.formid - 4))
+        for i, v in enumerate(formation.enemy_ids):
+            if formation.enemy_ids[i] in [184, 199, 255]: #don't do Commando, Sp Forces, Pugs
+                event_formations.add(formation.formid)
+                salt_formations.add((formation.formid - 1))
+                salt_formations.add((formation.formid - 2))
+                salt_formations.add((formation.formid - 3))
+                salt_formations.add((formation.formid - 4))
         for i, v in enumerate(formation.big_enemy_ids):
-            if formation.big_enemy_ids[i] in [273, 293, 295, 296, 297, 299, 304, 306, 307, 313, 314, 315, 323, 355, 356, 357, 358, 362,
-                                              363, 364, 365, 369, 373, 381, 408, 418, 471, 512, 513, 514, 515]:  # don't do Zone Eater, Naughty, L.X Magic,
-                # Phunbaba, Guardian, Merchant, Officer, Banquet encounters, Pugs, Paster Pug, KatanaSoul, Warring Triad, Atma, Tier 1, 2, 3, Final Kefka
+            if formation.big_enemy_ids[i] in [258, 264, 265, 268, 273, 274, 276, 277, 280, 282, 292, 293, 295, 296, 297, 298, 299, 304, 306, 307, 312, 313, 314, 315, 321, 322, 323, 343, 344, 345, 346, 347, 348, 349, 350, 351, 355, 356, 358, 361, 362,
+                                              363, 364, 365, 369, 373, 381]:  # don't do Zone Eater, Naughty, L.X Magic, Phunbaba, Guardian, Merchant, Officer, Mega Armor,
+                #Master Pug, KatanaSoul, Warring Triad, Atma, Inferno, Guardian, Tier 1, 2, 3, Final Kefka, Ifrit, Shiva, Tritoch, Nerapa,
                 event_formations.add(formation.formid)
                 salt_formations.add((formation.formid - 1))
                 salt_formations.add((formation.formid - 2))
@@ -5650,7 +5690,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
         savecheck_sub.write(outfile_rom_buffer)
         reseed()
 
-        if Options_.is_flag_active("shuffle_commands") and not Options_.is_flag_active('suplexwrecks'):
+        if (Options_.is_flag_active("shuffle_commands") or Options_.is_flag_active("supernatural")) and not Options_.is_flag_active('suplexwrecks'):
             # do this after swapping beserk
             manage_natural_magic(myself_locations["NATURAL_MAGIC_TABLE"])
         reseed()
