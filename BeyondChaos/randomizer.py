@@ -1525,6 +1525,7 @@ def beta_manageDesperation():
 
 
 def manage_natural_magic(NATURAL_MAGIC_TABLE):
+
     characters = get_characters()
     candidates = [c for c in characters if c.id < 12 and (0x02 in c.battle_commands or 0x17 in c.battle_commands)]
 
@@ -4759,7 +4760,7 @@ def manage_cursed_encounters(formations: List[Formation], fsets: List[FormationS
             salt_formations.add((formation.formid - 3))
             salt_formations.add((formation.formid - 4))
         for i, v in enumerate(formation.enemy_ids):
-            if formation.enemy_ids[i] in [184, 199, 255]: #don't do Commando, Sp Forces, Pugs
+            if formation.enemy_ids[i] in [184, 199] or formation.formid == 235: #don't do Commando, Sp Forces, Pugs
                 event_formations.add(formation.formid)
                 salt_formations.add((formation.formid - 1))
                 salt_formations.add((formation.formid - 2))
