@@ -4775,52 +4775,49 @@ def manage_cursed_encounters(formations: List[Formation], formation_sets: List[F
     event_formations = set()
     salt_formations = set()
 
+    # Don't do: Commando, Sp Forces, Pugs, Zone Eater, Naughty, L.X Magic, Phunbaba, Guardian,
+    #   Merchant, Officer, Mega Armor, Master Pug, KatanaSoul, Warring Triad, Atma, Inferno,
+    #   Guardian, Tier 1, 2, 3, Final Kefka, Ifrit, Shiva, Tritoch, Nerapa,
+    bad_enemy_ids = {
+        184, 199, 258, 264, 265,
+        268, 273, 274, 276, 277,
+        280, 282, 292, 293, 295,
+        296, 297, 298, 299, 304,
+        306, 307, 312, 313, 314,
+        315, 321, 322, 323, 343,
+        344, 345, 346, 347, 348,
+        349, 350, 351, 355, 356,
+        358, 361, 362, 363, 364,
+        365, 369, 373, 381
+    }
     for formation in formations:
-        if formation.has_event:
+        if (formation.has_event or
+                (bad_enemy_ids & set(formation.enemy_ids + formation.big_enemy_ids)) or
+                formation.formid == 235):
             event_formations.add(formation.formid)
             salt_formations.add((formation.formid - 1))
             salt_formations.add((formation.formid - 2))
             salt_formations.add((formation.formid - 3))
             salt_formations.add((formation.formid - 4))
-        for index, big_enemy_id in enumerate(formation.enemy_ids):
-            if formation.enemy_ids[index] in [184, 199] or formation.formid == 235: #don't do Commando, Sp Forces, Pugs
-                event_formations.add(formation.formid)
-                salt_formations.add((formation.formid - 1))
-                salt_formations.add((formation.formid - 2))
-                salt_formations.add((formation.formid - 3))
-                salt_formations.add((formation.formid - 4))
-        for index, big_enemy_id in enumerate(formation.big_enemy_ids):
-            # Don't do Zone Eater, Naughty, L.X Magic, Phunbaba, Guardian, Merchant, Officer, Mega Armor,
-            #   Master Pug, KatanaSoul, Warring Triad, Atma, Inferno, Guardian, Tier 1, 2, 3, Final Kefka,
-            #   Ifrit, Shiva, Tritoch, Nerapa,
-            if formation.big_enemy_ids[index] in [258, 264, 265, 268, 273, 274, 276, 277, 280, 282, 292, 293, 295, 296, 297, 298, 299, 304, 306, 307, 312, 313, 314, 315, 321, 322, 323, 343, 344, 345, 346, 347, 348, 349, 350, 351, 355, 356, 358, 361, 362,
-                                                  363, 364, 365, 369, 373, 381]:
-
-                event_formations.add(formation.formid)
-                salt_formations.add((formation.formid - 1))
-                salt_formations.add((formation.formid - 2))
-                salt_formations.add((formation.formid - 3))
-                salt_formations.add((formation.formid - 4))
 
     salt_formations = [formation_id for formation_id in salt_formations if formation_id not in event_formations]
 
     for formation_set in formation_sets:
         # code that applies FC flag to allow 16 encounters in all zones
-        if Options_.is_flag_active('cursedencounters'):
-            # only do regular enemies, don't do sets that can risk Zone Eater or get event encounters
-            if formation_set.setid < 252 or formation_set.setid in good_event_formation_sets:
-                if formation_set.setid not in bad_event_fsets:
-                    if not [value for value in formation_set.formids if
-                            value in event_formations or value in salt_formations]:
+        #   only do regular enemies, don't do sets that can risk Zone Eater or get event encounters
+        if formation_set.setid < 252 or formation_set.setid in good_event_formation_sets:
+            if formation_set.setid not in bad_event_fsets:
+                if not [value for value in formation_set.formids if
+                        value in event_formations or value in salt_formations]:
+                    formation_set.sixteen_pack = True
+                for index, big_enemy_id in enumerate(formation_set.formids):
+                    if formation_set.formids[index] in salt_formations:
+                        # any encounter that could turn into an event encounter,
+                        #   keep reducing until it's not a salt or event formation
+                        while (formation_set.formids[index] in event_formations or
+                               formation_set.formids[index] in salt_formations):
+                            formation_set.formids[index] -= 1
                         formation_set.sixteen_pack = True
-                    for index, big_enemy_id in enumerate(formation_set.formids):
-                        if formation_set.formids[index] in salt_formations:
-                            # any encounter that could turn into an event encounter,
-                            #   keep reducing until it's not a salt or event formation
-                            while (formation_set.formids[index] in event_formations or
-                                   formation_set.formids[index] in salt_formations):
-                                formation_set.formids[index] -= 1
-                            formation_set.sixteen_pack = True
 
 
 def nerf_paladin_shield():
@@ -6053,7 +6050,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             # formations = get_formations()
             # fsets = get_fsets()
             formations, fsets = manage_formations(formations, fsets)
-            manage_cursed_encounters(formations, fsets)
+            if Options_.is_flag_active('cursedencounters'):
+                manage_cursed_encounters(formations, fsets)
             for fset in fsets:
                 fset.write_data(outfile_rom_buffer)
 
