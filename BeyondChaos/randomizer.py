@@ -864,7 +864,6 @@ def manage_commands(commands: Dict[str, CommandBlock]):
         invalid_commands.extend(FORBIDDEN_COMMANDS)
 
     invalid_commands = {c for c in commands.values() if c.name in invalid_commands}
-
     def populate_unused():
         unused_commands = set(commands.values())
         unused_commands = unused_commands - invalid_commands
@@ -1527,6 +1526,13 @@ def beta_manageDesperation():
 def manage_natural_magic(NATURAL_MAGIC_TABLE):
 
     characters = get_characters()
+
+    if not (Options_.is_flag_active("shuffle_commands") or (Options_.is_flag_active("replace_commands"))):
+        for c in characters:
+            if c.id <12:
+                c.set_battle_command(2, command_id=2)
+                c.write_battle_commands(outfile_rom_buffer)
+
     candidates = [c for c in characters if c.id < 12 and (0x02 in c.battle_commands or 0x17 in c.battle_commands)]
 
     num_natural_mages = 1
@@ -6260,7 +6266,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str:
 
             target_score = 200.0
 
-            if kwargs.get("from_gui", False):
+            if kwargs.get('application', False) == "gui":
                 bingoflags = kwargs.get('bingotype')
                 size = kwargs.get('bingosize')
                 difficulty = kwargs.get('bingodifficulty')
