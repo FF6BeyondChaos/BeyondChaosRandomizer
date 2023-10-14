@@ -610,14 +610,14 @@ def randomize_colosseum(pointer: int) -> List:
     items = [item.itemid for item in item_objs]
     monsters = [monster.id for monster in monster_objs]
     results = []
-    for index in range(0xFF):
+    for index1 in range(0xFF):
         try:
-            index = items.index(index)
+            index2 = items.index(index1)
         except ValueError:
             continue
-        trade = index
-        while index == trade:
-            trade = index
+        trade = index2
+        while index2 == trade:
+            trade = index2
             while random.randint(1, 3) < 3:
                 trade += random.randint(-3, 3)
                 trade = max(0, min(trade, len(items) - 1))
@@ -629,12 +629,12 @@ def randomize_colosseum(pointer: int) -> List:
             opponent = max(0, min(opponent, len(monsters) - 1))
         trade = items[trade]
         opponent = monsters[opponent]
-        wager_obj = [item for item in item_objs if item.itemid == index][0]
+        wager_obj = [item for item in item_objs if item.itemid == index1][0]
         opponent_obj = [monster for monster in monster_objs if monster.id == opponent][0]
         win_obj = [item for item in item_objs if item.itemid == trade][0]
-        outfile_rom_buffer.seek(pointer + (index * 4))
+        outfile_rom_buffer.seek(pointer + (index1 * 4))
         outfile_rom_buffer.write(bytes([opponent]))
-        outfile_rom_buffer.seek(pointer + (index * 4) + 2)
+        outfile_rom_buffer.seek(pointer + (index1 * 4) + 2)
         outfile_rom_buffer.write(bytes([trade]))
 
         if abs(wager_obj.rank() - win_obj.rank()) >= 5000 and random.randint(1, 2) == 2:
