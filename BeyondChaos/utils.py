@@ -1023,9 +1023,10 @@ def timer(func):
     def wrapper(*args, **kwargs):
         import time
         start_time = time.time()
-        func(*args, **kwargs)
+        result = func(*args, **kwargs)
         end_time = time.time()
         print(f'Function {func.__name__} took {str(round(end_time - start_time, 2))} seconds to run.')
+        return result
     return wrapper
 
 
