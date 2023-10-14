@@ -243,9 +243,9 @@ class Window(QMainWindow):
         self.top = int(screen_size.height() / 2 - self.height / 2)
 
         # values to be sent to Randomizer
-        self.rom_text = ''
-        self.rom_output_directory = ''
-        self.version = 'CE-5.1.1'
+        self.romText = ''
+        self.romOutputDirectory = ''
+        self.version = 'CE-5.1.3'
         self.mode = 'normal'
         self.seed = ''
         self.flags = []

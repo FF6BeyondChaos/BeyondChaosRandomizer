@@ -1469,9 +1469,16 @@ def manage_suplex(commands: Dict[str, CommandBlock], monsters: List[MonsterBlock
 
 def manage_natural_magic(natural_magic_table):
     characters = get_characters()
+
+    if not (Options_.is_flag_active("shuffle_commands") or (Options_.is_flag_active("replace_commands"))):
+        for character_mnm in characters:
+            if character_mnm.id <12:
+                character_mnm.set_battle_command(2, command_id=2)
+                character_mnm.write_battle_commands(outfile_rom_buffer)
+
     candidates = [character_mnm for character_mnm in characters if
-                  character_mnm.id < 12 and (0x02 in character_mnm.battle_commands or
-                                             0x17 in character_mnm.battle_commands)]
+                  character_mnm.id < 12 and
+                  (0x02 in character_mnm.battle_commands or 0x17 in character_mnm.battle_commands)]
 
     num_natural_mages = 1
     if Options_.is_flag_active('supernatural'):
@@ -4775,12 +4782,20 @@ def manage_cursed_encounters(formations: List[Formation], formation_sets: List[F
             salt_formations.add((formation.formid - 2))
             salt_formations.add((formation.formid - 3))
             salt_formations.add((formation.formid - 4))
+        for index, big_enemy_id in enumerate(formation.enemy_ids):
+            if formation.enemy_ids[index] in [184, 199] or formation.formid == 235: #don't do Commando, Sp Forces, Pugs
+                event_formations.add(formation.formid)
+                salt_formations.add((formation.formid - 1))
+                salt_formations.add((formation.formid - 2))
+                salt_formations.add((formation.formid - 3))
+                salt_formations.add((formation.formid - 4))
         for index, big_enemy_id in enumerate(formation.big_enemy_ids):
-            # Don't do Zone Eater, Naughty, L.X Magic, Phunbaba, Guardian, Merchant, Officer,
-            #   Banquet encounters, Pugs, Paster Pug, KatanaSoul, Warring Triad, Atma, Tier 1, 2, 3, Final Kefka
-            if formation.big_enemy_ids[index] in [273, 293, 295, 296, 297, 299, 304, 306, 307, 313, 314, 315, 323,
-                                                  355, 356, 357, 358, 362, 363, 364, 365, 369, 373, 381, 408, 418,
-                                                  471, 512, 513, 514, 515]:
+            # Don't do Zone Eater, Naughty, L.X Magic, Phunbaba, Guardian, Merchant, Officer, Mega Armor,
+            #   Master Pug, KatanaSoul, Warring Triad, Atma, Inferno, Guardian, Tier 1, 2, 3, Final Kefka,
+            #   Ifrit, Shiva, Tritoch, Nerapa,
+            if formation.big_enemy_ids[index] in [258, 264, 265, 268, 273, 274, 276, 277, 280, 282, 292, 293, 295, 296, 297, 298, 299, 304, 306, 307, 312, 313, 314, 315, 321, 322, 323, 343, 344, 345, 346, 347, 348, 349, 350, 351, 355, 356, 358, 361, 362,
+                                                  363, 364, 365, 369, 373, 381]:
+
                 event_formations.add(formation.formid)
                 salt_formations.add((formation.formid - 1))
                 salt_formations.add((formation.formid - 2))
