@@ -4337,8 +4337,8 @@ def manage_bingo(bingo_flags, size=5, difficulty='', num_cards=1, target_score=2
         bingo_string = 'Beyond Chaos Bingo Card %s-%s\n' % (index, difficulty)
         bingo_string += 'Seed: %s\n' % seed
         for index2 in range(size):
-            for grid in [grid, flag_grid, display_grid]:
-                grid.append([])
+            for all_grids in [grid, flag_grid, display_grid]:
+                all_grids.append([])
             for index3 in range(size):
                 flag_options = set(bingo_flags)
                 if index2 > 0 and flag_grid[index2 - 1][index3] in flag_options:
