@@ -5385,7 +5385,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
             if infile_rom_path != config_infile_rom_path or outfile_rom_path != config_outfile_rom_path:
                 set_config_value('Settings', 'input_path', str(infile_rom_path))
-                set_config_value('Settings', 'output_path', str(outfile_rom_path))
+                set_config_value('Settings', 'output_path', str(os.path.dirname(outfile_rom_path)))
 
             infile_rom_buffer = BytesIO(open(infile_rom_path, 'rb').read())
             outfile_rom_buffer = BytesIO(open(infile_rom_path, 'rb').read())
