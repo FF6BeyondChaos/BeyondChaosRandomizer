@@ -56,9 +56,9 @@ def run_console():
     infile_rom_path = None
     while not infile_rom_path:
         saved_infile_path = config.get('Settings', 'input_path', fallback='')
-        saved_path_text = f" (blank for default: {saved_infile_path})" if saved_infile_path else ""
-        infile_rom_path = input(f"Please input the path to your copy of the FF3 US 1.0 rom. "
-                                f"{saved_path_text}:\n> ").strip()
+        saved_path_text = f' (blank for default: {saved_infile_path})' if saved_infile_path else ''
+        infile_rom_path = input(f'Please input the path to your copy of the FF3 US 1.0 rom. '
+                                f'{saved_path_text}:\n> ').strip()
 
         # If no input was supplied
         if not infile_rom_path:
@@ -80,7 +80,7 @@ def run_console():
                         md5(rom_data).hexdigest() not in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2]:
                     continue_randomization = input('The supplied ROM had an unusual size or did not match the '
                                                    'hash of known good ROM files. Continue? (Y/N)>')
-                    if str(continue_randomization).lower() == "n":
+                    if str(continue_randomization).lower() == 'n':
                         infile_rom_path = None
             except IOError:
                 input('The file at the supplied path could not be read. Press enter to try again.')
@@ -95,10 +95,10 @@ def run_console():
     while not outfile_rom_path:
         saved_outfile_path = config.get('Settings', 'output_path', fallback='')
         # Use the last directory from config.ini. If no last directory, default to the same directory as the infile.
-        saved_outfile_text = f" (blank for default: {saved_outfile_path})" if saved_outfile_path else \
-            f" (blank for default: {os.path.dirname(infile_rom_path)})"
-        outfile_rom_path = input(f"Please input the directory to place the randomized ROM file. "
-                                 f"{saved_outfile_text}:\n> ").strip().strip('"')
+        saved_outfile_text = f' (blank for default: {saved_outfile_path})' if saved_outfile_path else \
+            f' (blank for default: {os.path.dirname(infile_rom_path)})'
+        outfile_rom_path = input(f'Please input the directory to place the randomized ROM file. '
+                                 f'{saved_outfile_text}:\n> ').strip().strip('"')
 
         if not outfile_rom_path and saved_outfile_path:
             outfile_rom_path = saved_outfile_path
@@ -120,8 +120,8 @@ def run_console():
     selected_mode = None
     while not selected_mode:
         for i, mode in enumerate(ALL_MODES):
-            pipe_print("{}. {} - {}".format(i + 1, mode.name, mode.description))
-        selected_mode = input("\nEnter desired mode number or name:\n>").strip()
+            pipe_print('{}. {} - {}'.format(i + 1, mode.name, mode.description))
+        selected_mode = input('\nEnter desired mode number or name:\n>').strip()
         try:
             selected_mode = int(selected_mode) - 1
             selected_mode = ALL_MODES[selected_mode]
@@ -234,13 +234,13 @@ def run_console():
         if flag_string:
             pipe_print(f'Current flag string: {flag_string}')
 
-        pipe_print(f"Perform one of the following actions:\n" +
-                   operation_string + "\n" +
-                   "Valid categories are: ".ljust(23) + category_string + ".\n" +
-                   "Valid presets are: ".ljust(23) + preset_string + ".")
+        pipe_print(f'Perform one of the following actions:\n' +
+                   operation_string + '\n' +
+                   'Valid categories are: '.ljust(23) + category_string + '.\n' +
+                   'Valid presets are: '.ljust(23) + preset_string + '.')
         if speed_dial_list:
-            pipe_print("Valid speed dial numbers are: \n" + speed_dial_list)
-        flag_input = input(">")
+            pipe_print('Valid speed dial numbers are: \n' + speed_dial_list)
+        flag_input = input('>')
         skip_error = False
         if flag_input.lower().startswith('list'):
             skip_error = True
@@ -432,8 +432,8 @@ def run_console():
 
     # Speed dial save
     while True:
-        save_speed_dial = input("If you would like to save these flags to a speeddial, enter a single-digit integer. "
-                                "Otherwise, leave blank to skip:\n").strip()
+        save_speed_dial = input('If you would like to save these flags to a speeddial, enter a single-digit integer. '
+                                'Otherwise, leave blank to skip:\n').strip()
         if not save_speed_dial:
             break
         elif len(save_speed_dial) == 1 and re.match('[0-9]', save_speed_dial):
@@ -454,14 +454,14 @@ def run_console():
                        '  •m   Monsters\n'
                        '  •s   Spells')
             pipe_print('Example: Type "am" or "ma" for Abilities and Monsters.')
-            bingo_type = input(">")
+            bingo_type = input('>')
             if not bingo_type:
                 bingo_type = 'aims'
             unknown_characters = [character for character in bingo_type if character not in ['a', 'i', 'm', 's']]
             if unknown_characters:
-                input("The following options were not recognized: " +
+                input('The following options were not recognized: ' +
                       str(unknown_characters).replace('[', '').replace(']', '') +
-                      ". Press enter to try again."
+                      '. Press enter to try again.'
                       )
                 bingo_type = ''
             os.system('cls' if os.name == 'nt' else 'clear')
@@ -514,7 +514,7 @@ def run_console():
 
     # Seed
     while not seed:
-        seed = input("Enter a seed number or leave blank to generate a random seed:\n>").strip()
+        seed = input('Enter a seed number or leave blank to generate a random seed:\n>').strip()
         if not seed:
             from time import time
             seed = int(time())
@@ -529,7 +529,7 @@ def run_console():
 
     # Batch
     while batch == 0:
-        batch = input("Enter a batch number or leave blank to generate 1 rom file:\n>").strip()
+        batch = input('Enter a batch number or leave blank to generate 1 rom file:\n>').strip()
         if not batch:
             batch = 1
         else:
@@ -578,7 +578,7 @@ def run_console():
                     break
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     args = list(sys.argv)
     if len(args) == 1:
         run_console()
