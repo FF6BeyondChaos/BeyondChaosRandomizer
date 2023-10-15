@@ -2,12 +2,9 @@ from randomizer import VERSION
 
 SOURCE_FILE = ''
 OUTPUT_PATH = ''
-TEST_SEED = ('CE-5.1.1|normal|c f h i m n o p q r s t u y z makeover partyparty capslockoff nicerpoison notawaiter '
-             'removeflashing:all cursepower:1 dancingmaduin:chaos expboost:2.0 gpboost:1.5 madworld masseffect:random '
-             'mpboost:1.5 rushforpower mimetime nomiabs questionablecontent randomboost:0 relicmyhat mementomori:14 '
-             'naturalmagic supernatural thescenarionottaken treaffect frenchvanilla girls:only|1695090942')
+TEST_SEED = ''
 SKIP_FLAGS = ['remonsterate', 'bingoboingo']
-INCLUDE_FLAGS = ['cursedencounters']
+INCLUDE_FLAGS = []
 
 
 # Test a single generation, just like using TEST = True previously in randomizer.py
@@ -67,7 +64,7 @@ def test_random_generation(iterations: int, num_flags: int, generate_output_rom=
     for index in range(iterations):
         try:
             all_testing_flags = [flag for flag in ALL_FLAGS if flag.name not in SKIP_FLAGS]
-            current_flagstring = '' if not INCLUDE_FLAGS else ', '.join(INCLUDE_FLAGS) + ' '
+            current_flagstring = '' if not INCLUDE_FLAGS else ' '.join(INCLUDE_FLAGS) + ' '
             new_flags = random.sample(all_testing_flags, num_flags)
             for flag in new_flags:
                 try:
@@ -151,7 +148,7 @@ def thorough_test(starting_combination=5):
         every_flag_combination = combinations(ALL_FLAGS, num_flags)
         for mode in ALL_MODES:
             for combination in every_flag_combination:
-                flag_string = '' if not INCLUDE_FLAGS else ', '.join(INCLUDE_FLAGS)
+                flag_string = '' if not INCLUDE_FLAGS else ' '.join(INCLUDE_FLAGS)
                 for flag in combination:
                     if flag.name in SKIP_FLAGS or (len(flag.name) > 1 and flag.name in flag_string):
                         continue
@@ -242,7 +239,8 @@ def test_esper_allocation():
         assert len(unique_users) == len(char_ids)
 
         for key, value in users_per_tier.items():
-            # Average the number of users per tier by dividing by the number of users by the number of espers in that tier
+            # Average the number of users per tier by dividing by the
+            #   number of users by the number of espers in that tier
             users_per_tier[key] = value / espers_per_tier[key]
             average_users_per_tier[key] = average_users_per_tier.get(key, 0) + users_per_tier.get(key, 0)
 
@@ -295,5 +293,5 @@ def test_esper_allocation():
 
 if __name__ == "__main__":
     # test_generation(iterations=1, generate_output_rom=False)
-    test_random_generation(iterations=100, num_flags=10, generate_output_rom=False, halt_on_exception=True)
+    test_random_generation(iterations=100, num_flags=15, generate_output_rom=False, halt_on_exception=True)
     # thorough_test()
