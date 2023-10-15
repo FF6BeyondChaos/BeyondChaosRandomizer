@@ -265,15 +265,17 @@ def run_console():
                             if index >= set_length:
                                 pipe_print(f'\nValid flags in category {help_category} are as follows:')
                                 pipe_print(flag_output_string[:-1])
-                                flag_input += input(f'Enter any flags you would like to activate and then '
-                                                    f'press enter to view the next {str(set_length)} flags.\n>') + ' '
+                                flag_input += input(f'If you see any flags you would like to activate, '
+                                                    f'enter them separated by spaces and then press enter '
+                                                    f'to view the next {str(set_length)} flags.\n>') + ' '
                                 os.system('cls' if os.name == 'nt' else 'clear')
                                 flag_output_string = ''
                                 index = 0
                     if flag_output_string:
                         pipe_print(f'\nValid flags in category {help_category} are as follows:')
                         pipe_print(flag_output_string)
-                        flag_input += input('Enter any flags you would like to activate and then press enter '
+                        flag_input += input('If you see any flags you would like to activate, '
+                                            'enter them separated by spaces and then press enter '
                                             'to continue back to flag selection.\n>')
                     os.system('cls' if os.name == 'nt' else 'clear')
                     flag_input = flag_input.strip()

@@ -32,6 +32,7 @@ remaining_api_calls = 0
 request_headers = {}
 available_updates = []
 
+TEST = True
 BASE_DIRECTORY = os.getcwd()
 CONFIG_PATH = os.path.join(BASE_DIRECTORY, 'config.ini')
 CONSOLE_PATH = os.path.join(BASE_DIRECTORY, 'beyondchaos_console.exe')
@@ -310,7 +311,16 @@ def run_updates(calling_program=None):
             continue
         elif choice.lower() == "y":
             print(f"Updating the Beyond Chaos {asset.replace('_', ' ')}...")
-            update_asset_from_web(asset)
+            if asset == 'core' and not TEST:
+                update_asset_from_web(asset)
+            elif not asset == 'core':
+                update_asset_from_web(asset)
+            else:
+                print("Skipping core download because we're testing.")
+                if asset == 'core':
+                    shutil.copy(CONSOLE_PATH, os.path.splitext(CONSOLE_PATH)[0] + '.old' +
+                                os.path.splitext(CONSOLE_PATH)[1])
+
             if asset == "core":
                 if running_os == "Windows" and os.path.isfile(os.path.join(BASE_DIRECTORY, "BeyondChaos.exe")):
                     print(f"The Beyond Chaos {asset.replace('_', ' ')} " +
