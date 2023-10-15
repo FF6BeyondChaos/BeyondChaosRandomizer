@@ -32,7 +32,7 @@ import utils
 import update
 from multiprocessing import Process, Pipe
 from config import (read_flags, write_flags, set_config_value, check_player_sprites, check_remonsterate, VERSION,
-                    BETA, MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2, config)
+                    BETA, MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2, SUPPORTED_PRESETS, config)
 from options import (NORMAL_FLAGS, MAKEOVER_MODIFIER_FLAGS, get_makeover_groups)
 from randomizer import randomize
 
@@ -282,13 +282,8 @@ class Window(QMainWindow):
         # dictionary of game modes for drop down
         self.game_modes = {}
 
-        # array of preset flags and codes
-        self.supported_presets = [
-            'new_player', 'intermediate_player', 'advanced_player', 'chaotic_player', 'race_easy',
-            'race_medium', 'race_insane'
-        ]
         # dictionary of game presets from drop down
-        self.game_presets = {}
+        self.game_presets = SUPPORTED_PRESETS
 
         # tabs names for the tabs in flags box
         self.tab_names = [
@@ -503,7 +498,6 @@ class Window(QMainWindow):
 
     def group_box_two_layout(self):
         self.compile_modes()
-        self.compile_supported_presets()
         group_mode_and_preset = QGroupBox()
         layout_mode_and_preset = QGridLayout()
 
@@ -524,8 +518,8 @@ class Window(QMainWindow):
         layout_mode_and_preset.addWidget(label_preset_mode, 1, 3)
         self.preset_box.addItem('Select a flag set')
         self.load_saved_flags()
-        for item in self.game_presets.items():
-            self.preset_box.addItem(item[0])
+        for key in self.game_presets.keys():
+            self.preset_box.addItem(key.title())
 
         self.preset_box.currentTextChanged.connect(
             lambda: self.update_preset_dropdown()
@@ -856,7 +850,7 @@ class Window(QMainWindow):
                  5: ('Race - Dragon Hunt', 'dragonhunt')}
         text = self.preset_box.currentText()
         index = self.preset_box.findText(text)
-        flags = self.game_presets.get(text)
+        flags = self.game_presets.get(text.lower())
         if index == 0:
             self.clear_ui()
             self.flag_description.clear()
@@ -1024,50 +1018,6 @@ class Window(QMainWindow):
             elif mode == 'dragonhunt':
                 self.game_modes['Race - Dragon Hunt'] = (
                     'Race to kill all 8 dragons.'
-                )
-
-    def compile_supported_presets(self):
-        for mode in self.supported_presets:
-            if mode == 'new_player':
-                self.game_presets['New Player'] = (
-                    'b c e f g i n o p q r s t w y z makeover partyparty dancelessons lessfanatical '
-                    'expboost:2.0 gpboost:2.0 mpboost:2.0 swdtechspeed:faster alasdraco capslockoff '
-                    'johnnydmad questionablecontent relicmyhat'
-                )
-            elif mode == 'intermediate_player':
-                self.game_presets['Intermediate Player'] = (
-                    'b c d e f g i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo '
-                    'swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter remonsterate relicmyhat'
-                )
-            elif mode == 'advanced_player':
-                self.game_presets['Advanced Player'] = (
-                    'b c d e f g h i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo '
-                    'randombosses dancingmaduin:1 swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter '
-                    'remonsterate bsiab mimetime morefanatical questionablecontent relicmyhat'
-                )
-            elif mode == 'chaotic_player':
-                self.game_presets['Chaotic Player'] = (
-                    'b c d e f g h i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo '
-                    'masseffect randombosses dancingmaduin:chaos swdtechspeed:random alasdraco capslockoff '
-                    'johnnyachaotic notawaiter remonsterate bsiab mimetime questionablecontent randomboost:2 '
-                    'allcombos supernatural mementomori:random thescenarionottaken relicmyhat'
-                )
-            elif mode == 'race_easy':
-                self.game_presets['KaN Race - Easy'] = (
-                    'b c d e f g i j k m n o p q r s t w y z capslockoff '
-                    'johnnydmad makeover notawaiter partyparty madworld relicmyhat'
-                )
-            elif mode == 'race_medium':
-                self.game_presets['KaN Race - Medium'] = (
-                    'b c d e f g i j k m n o p q r s t u w y z capslockoff '
-                    'johnnydmad makeover notawaiter partyparty '
-                    'electricboogaloo randombosses madworld relicmyhat'
-                )
-            elif mode == 'race_insane':
-                self.game_presets['KaN Race - Insane'] = (
-                    'b c d e f g i j k m n o p q r s t u w y z capslockoff '
-                    'johnnydmad makeover notawaiter partyparty darkworld '
-                    'madworld bsiab electricboogaloo randombosses relicmyhat'
                 )
 
     # Get seed generation parameters from UI to prepare for
@@ -1377,6 +1327,8 @@ if __name__ == '__main__':
         # Continue the updating process after updating the core files.
         if os.path.isfile(os.path.join(os.getcwd(), 'beyondchaos.old.exe')):
             os.remove(os.path.join(os.getcwd(), 'beyondchaos.old.exe'))
+        if os.path.isfile(os.path.join(os.getcwd(), 'beyondchaos_console.old.exe')):
+            os.remove(os.path.join(os.getcwd(), 'beyondchaos_console.old.exe'))
         update_bc(suppress_prompt=True)
     QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
     App = QApplication(sys.argv)

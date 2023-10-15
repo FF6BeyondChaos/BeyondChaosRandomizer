@@ -2,15 +2,12 @@
 from hashlib import md5
 import os
 import re
-import sys
 from io import BytesIO
-from sys import argv
 from time import time, sleep, gmtime
 from typing import Callable, Dict, List, Set, Tuple
 from multiprocessing import Pipe, Process
 
 
-import requests.exceptions
 import locationrandomizer
 import options
 from monsterrandomizer import MonsterBlock, early_bosses, solo_bosses
@@ -5173,12 +5170,11 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
         application = kwargs.get('application', None)
 
-        if not application or application == 'console':
+        if not application:
             # The console should supply these kwargs
             infile_rom_path = kwargs.get('infile_rom_path')
             outfile_rom_path = kwargs.get('outfile_rom_path')
-            pass
-        elif application in ['gui', 'tester']:
+        elif application in ['console', 'gui', 'tester']:
             # The gui (beyondchaos.py) should supply these kwargs
             infile_rom_path = kwargs.get('infile_rom_path')
             outfile_rom_path = kwargs.get('outfile_rom_path')
@@ -5198,7 +5194,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         config_outfile_rom_path = ''
 
         flag_help_text = ''
-        if not application or application == 'console':
+        if not application:
             # If an input rom path is supplied, use that. Otherwise, check config.ini to see if a previously used
             #    input path was used. If so, prompt the user if they would like to use the saved input path. Otherwise
             #    prompt the user for the directory of their FF3 rom file.
@@ -5289,7 +5285,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         if full_seed:
             full_seed = str(full_seed).strip()
         else:
-            if not application or application != 'console':
+            if application:
                 raise Exception('No seed was supplied.')
             full_seed = input('Please input a seed value (blank for a random '
                               'seed):\n> ').strip()
@@ -5399,7 +5395,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
             rom_hash = md5(outfile_rom_buffer.getbuffer()).hexdigest()
             if rom_hash not in [MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2] and \
-                    (not application or application == 'console'):
+                    not application:
                 pipe_print('WARNING! The md5 hash of this file does not match the known '
                            'hashes of the english FF6 1.0 rom!')
                 response = input('Continue? y/n ')
@@ -5448,7 +5444,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                     except ValueError:
                         error_message = 'The supplied value for ' + flag_name + ' was not a number.'
 
-                    if not application or application != 'console':
+                    if not application:
                         # Users in the GUI or web cannot fix the flags after generation begins, so deactivate the flag.
                         pipe_print(error_message + ' Deactivating flag.')
                         Options_.deactivate_flag(flag_name)
@@ -6197,8 +6193,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
         if Options_.is_flag_active('swdtechspeed'):
             swdtech_speed = Options_.get_flag_value('swdtechspeed')
-            if type(swdtech_speed) == bool:
-                if application and application != 'console':
+            if isinstance(swdtech_speed, bool):
+                if application:
                     pipe_print('ERROR: No value was supplied for swdtechspeed flag. Skipping flag.')
                 else:
                     while True:
@@ -6301,49 +6297,11 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                          'remonsterate', 'shops', 'treasure chests', 'junctions', 'zozo clock', 'secret items']))
 
         if Options_.is_flag_active('bingoboingo'):
-
             target_score = 200.0
-
-            if kwargs.get('application', '') == 'gui':
-                bingo_flags = kwargs.get('bingo_type')
-                size = kwargs.get('bingo_size')
-                difficulty = kwargs.get('bingo_difficulty')
-                num_cards = kwargs.get('bingo_cards')
-
-            else:
-                pipe_print('WELCOME TO BEYOND CHAOS BINGO MODE')
-                pipe_print('Include what type of squares? (blank for all)')
-                pipe_print('    a   Abilities\n'
-                           '    i   Items\n'
-                           '    m   Monsters\n'
-                           '    s   Spells')
-                bingo_flags = input('> ').strip()
-                if not bingo_flags:
-                    bingo_flags = 'aims'
-                bingo_flags = [flag for flag in 'aims' if flag in bingo_flags]
-
-                pipe_print('What size grid? (default: 5)')
-                size = input('> ').strip()
-                if not size:
-                    size = 5
-                else:
-                    size = int(size)
-
-                pipe_print('What difficulty level? Easy, Normal, or Hard? (e/n/h)')
-                difficulty = input('> ').strip()
-                if not difficulty:
-                    difficulty = 'n'
-                else:
-                    difficulty = difficulty[0].lower()
-                    if difficulty not in 'enh':
-                        difficulty = 'n'
-
-                pipe_print('Generate how many cards? (default: 1)')
-                num_cards = input('> ').strip()
-                if not num_cards:
-                    num_cards = 1
-                else:
-                    num_cards = int(num_cards)
+            bingo_flags = kwargs.get('bingo_type')
+            size = kwargs.get('bingo_size')
+            difficulty = kwargs.get('bingo_difficulty')
+            num_cards = kwargs.get('bingo_cards')
 
             pipe_print('Generating Bingo cards, please wait.')
             target_score = float(target_score) * (size ** 2)
@@ -6357,8 +6315,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             pipe_print(True)
         elif application in ['console', 'gui']:
             pipe_print('Randomization successful. Output filename: %s\n' % outfile_rom_path)
-            if application == 'gui':
-                pipe_print(True)
+            pipe_print(True)
         elif application == 'web':
             pipe_print('Randomization successful.')
             pipe_print({
@@ -6381,107 +6338,4 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
 
 if __name__ == '__main__':
-    args = list(argv)
-    # if len(argv) > 3 and argv[3].strip().lower() == 'test' or TEST_ON:
-    #    randomize(args=args)
-    #    sys.exit()
-    if len(args) > 1 and args[1] == '?':
-        pipe_print(
-            '\tBeyond Chaos Randomizer Community Edition, version ' +
-            VERSION + '\n'
-            '\t\tOptional Keyword Arguments:\n'
-            '\t\tsource=<file path to your vanilla Final Fantasy 3 v1.0 ROM file>\n'
-            '\t\tdestination=<directory path where you want the randomized ROM and spoiler log created>\n'
-            '\t\tseed=<flag and seed information in the format version.mode.flags.seed>\n'
-            '\t\tbingo_type=<The desired bingo options, if you are using the bingoboingo flag>\n'
-            '\t\tbingo_size=<The desired positive integer for the size of bingo card, '
-            'if you are using the bingoboingo flag>\n'
-            '\t\tbingo_difficulty=<The desired bingo difficulty selection, if you are using the bingoboingo flag>\n'
-            '\t\tbingo_cards=<The desired positive integer for number of bingo cards to generate, '
-            'if you are using the bingoboingo flag>\n'
-        )
-        sys.exit()
-    try:
-        if not BETA:
-            from update import validate_files, run_updates, list_available_updates
-            try:
-                requests.head(url='http://www.google.com')
-                validation_result = validate_files()
-                if validation_result is not None:
-                    print(
-                        'Welcome to Beyond Chaos Community Edition!\n\n',
-                        'As part of first time setup, ',
-                        'we need to download the required custom '
-                        'files and folders for randomization.\n',
-                    )
-                    input('Press enter to launch the updater to download the required files.')
-                    run_updates(calling_program='console')
-                available_updates = list_available_updates().replace('<br><br>', '\n').strip()
-                print(
-                    f'Updates to Beyond Chaos are available!\n\n{str(available_updates)}\n'
-                )
-                while True:
-                    response = input('Would you like to update? Y/N\n>')
-                    if response.lower() == 'n':
-                        os.system('cls' if os.name == 'nt' else 'clear')
-                        break
-                    elif response.lower() == 'y':
-                        os.system('cls' if os.name == 'nt' else 'clear')
-                        run_updates(calling_program='console')
-                        break
-                    else:
-                        print('Please press "Y" to update or "N" to skip.')
-            except requests.exceptions.ConnectionError:
-                pass
-        source_arg = None
-        seed_arg = None
-        destination_arg = None
-        bingo_type = 'aims'
-        bingo_size = 5
-        bingo_difficulty = 'n'
-        bingo_cards = 1
-        for argument in args[1:]:
-            if 'source=' in argument:
-                source_arg = argument[argument.index('=') + 1:]
-            elif 'seed=' in argument:
-                seed_arg = argument[argument.index('=') + 1:]
-            elif 'destination=' in argument:
-                destination_arg = argument[argument.index('=') + 1:]
-            elif 'bingo_type=' in argument:
-                bingo_type = argument[argument.index('=') + 1:]
-            elif 'bingo_size=' in argument:
-                bingo_size = int(argument[argument.index('=') + 1:])
-            elif 'bingo_difficulty=' in argument:
-                bingo_difficulty = argument[argument.index('=') + 1:]
-            elif 'bingo_cards=' in argument:
-                bingo_cards = int(argument[argument.index('=') + 1:])
-            else:
-                pipe_print('Keyword unrecognized or missing: ' + str(
-                    argument) + '.\nUse "python randomizer.py ?" to view a list of valid keyword arguments.')
-
-        randomize(
-            infile_rom_path=source_arg,
-            seed=seed_arg,
-            outfile_rom_path=destination_arg,
-            bingotype=bingo_type,
-            bingosize=bingo_size,
-            bingodifficulty=bingo_difficulty,
-            bingocards=bingo_cards,
-            application='console'
-        )
-        input('Press enter to close this program.')
-    except Exception as exc:
-        global outfile_rom_buffer
-        global outfile_rom_path
-        pipe_print('ERROR: ' + str(exc) + '\nTo view valid keyword arguments, use "python randomizer.py ?"')
-        import traceback
-
-        traceback.print_exc()
-        if outfile_rom_buffer:
-            outfile_rom_buffer.close()
-        if outfile_rom_path is not None:
-            pipe_print('Please try again with a different seed.')
-            input('Press enter to delete %s and quit. ' % outfile_rom_path)
-            os.remove(outfile_rom_path)
-        else:
-            input('Press enter to quit.')
+    pass

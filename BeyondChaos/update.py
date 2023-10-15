@@ -29,7 +29,8 @@ except ImportError:
 
 caller = None
 remaining_api_calls = 0
-get_request_headers = {}
+request_headers = {}
+available_updates = []
 
 BASE_DIRECTORY = os.getcwd()
 CONFIG_PATH = os.path.join(BASE_DIRECTORY, 'config.ini')
@@ -70,8 +71,14 @@ _ASSETS = {
 }
 
 
+def get_remaining_api_calls():
+    return send_get_request(url="https://api.github.com/rate_limit")['resources']['core']['remaining']
+
+
 def get_web_token():
-    global get_request_headers
+    global request_headers
+    if request_headers:
+        return request_headers
     # Application has read-only access to the BeyondChaosRandomizer repository
     # Web token lasts 9 minutes
     payload = {
@@ -117,7 +124,7 @@ IUDMfyYGvvrC9Ajz+gQkT5Lp6flc1aPL5pqtiT/eBi3Tu8xMCH8d
         url='https://api.github.com/app/installations/35180196/access_tokens')
 
     access_token = response.json()['token']
-    get_request_headers = {
+    request_headers = {
         'Accept': 'application/vnd.github+json',
         'Authorization': 'Bearer ' + access_token,
         'X-GitHub-Api-Version': '2022-11-28'
@@ -125,18 +132,20 @@ IUDMfyYGvvrC9Ajz+gQkT5Lp6flc1aPL5pqtiT/eBi3Tu8xMCH8d
 
 
 def send_get_request(url: str, stream=False):
+    global request_headers
     resp = requests.get(
         url,
-        headers=get_request_headers,
+        headers=request_headers,
         stream=stream
     )
     # check request result
     if not resp.ok:
         # Try refreshing the web token
+        request_headers = {}
         get_web_token()
         resp = requests.get(
             url,
-            headers=get_request_headers,
+            headers=request_headers,
             stream=stream
         )
         if not resp.ok:
@@ -262,9 +271,7 @@ def run_updates(calling_program=None):
     ordered_assets = {'core': _ASSETS.get('core'), **_ASSETS}
 
     for asset in ordered_assets:
-        remaining_api_calls = \
-            send_get_request(url="https://api.github.com/rate_limit")['resources']['core']['remaining']
-        print(f'Remaining API calls: {str(remaining_api_calls)}.')
+        remaining_api_calls = get_remaining_api_calls()
         if remaining_api_calls < 2:
             # Updating an asset requires two API calls: To get the release info, then to download the update
             print('Unable to update remaining assets: GitHub API calls have been exhausted. '
@@ -340,7 +347,8 @@ def run_updates(calling_program=None):
     with open(CONFIG_PATH, 'w') as new_config_file:
         config.write(new_config_file)
 
-    print("Completed all update tasks!")
+    input("Completed all update tasks! Press enter to return to randomization.")
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def update_remonsterate():
@@ -404,8 +412,12 @@ def validate_files():
 
 
 def list_available_updates():
-    available_updates = []
+    global available_updates
+    if available_updates:
+        # Returned cached updates
+        return '<br><br>'.join(available_updates)
 
+    get_web_token()
     for asset in _ASSETS:
         version = config.get(section='Version', option=asset, fallback='Unknown')
         github_version = send_get_request(
