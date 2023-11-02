@@ -5456,15 +5456,15 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             if version and version != VERSION:
                 pipe_print('WARNING! Version mismatch! '
                            'This seed will not produce the expected result!')
-        secret_item = ('Using seed: %s|%s|%s|%s' %
+        log_string = ('Using seed: %s|%s|%s|%s' %
                        (VERSION,
                         Options_.mode.name,
                         ' '.join(
                             [flag.name if isinstance(flag.value, bool) else
                              flag.name + ':' + str(flag.value) for flag in Options_.active_flags]),
                         seed))
-        pipe_print(secret_item)
-        log(secret_item, section=None)
+        pipe_print(log_string)
+        log(log_string, section=None)
         log('This is a game guide generated for the Beyond Chaos CE FF6 Randomizer.',
             section=None)
         log('For more information, visit https://github.com/FF6BeyondChaos/BeyondChaosRandomizer',
@@ -5526,9 +5526,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         spells = get_ranked_spells(infile_rom_buffer)
         if Options_.is_flag_active('madworld'):
             random.shuffle(spells)
-            for index, secret_item in enumerate(spells):
-                secret_item._rank = index + 1
-                secret_item.valid = True
+            for index, spell in enumerate(spells):
+                spell._rank = index + 1
+                spell.valid = True
         if Options_.is_flag_active('replace_commands') and not Options_.is_flag_active('suplexwrecks'):
             if Options_.is_flag_active('quikdraw'):
                 ALWAYS_REPLACE += ['rage']
@@ -5657,7 +5657,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                 Options_.is_any_flag_active(
                     ['partyparty', 'bravenudeworld', 'suplexwrecks',
                      'christmas', 'halloween', 'kupokupo', 'quikdraw', 'makeover']):
-            secret_item = manage_character_appearance(
+            sprite_log = manage_character_appearance(
                 outfile_rom_buffer,
                 preserve_graphics=preserve_graphics,
                 web_custom_moogle_names=kwargs.get('web_custom_moogle_names', None),
@@ -5665,7 +5665,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                 web_custom_female_names=kwargs.get('web_custom_female_names', None),
                 web_custom_sprite_replacements=kwargs.get('web_custom_sprite_replacements', None)
             )
-            log(secret_item, 'aesthetics')
+            log(sprite_log, 'aesthetics')
             # show_original_names(outfile_rom_buffer)
         reseed()
 
@@ -5763,11 +5763,11 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                         outfile_rom_buffer.seek(substitution_address)
                         outfile_rom_buffer.write(substitutions[substitution_address])
             else:
-                for log_character in characters:
-                    log_character.mutate_stats(outfile_rom_buffer, start_in_wor)
+                for character in characters:
+                    character.mutate_stats(outfile_rom_buffer, start_in_wor)
         else:
-            for log_character in characters:
-                log_character.mutate_stats(outfile_rom_buffer, start_in_wor, read_only=True)
+            for character in characters:
+                character.mutate_stats(outfile_rom_buffer, start_in_wor, read_only=True)
         reseed()
 
         if Options_.is_flag_active('random_formations') or Options_.is_flag_active('ancientcave'):
@@ -6140,10 +6140,10 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                 esper.write_data(outfile_rom_buffer)
 
         if Options_.is_flag_active('canttouchthis'):
-            for log_character in characters:
-                if log_character.id >= 14:
+            for character in characters:
+                if character.id >= 14:
                     continue
-                log_character.become_invincible(outfile_rom_buffer)
+                character.become_invincible(outfile_rom_buffer)
 
         if Options_.is_flag_active('equipanything'):
             manage_equip_anything()
@@ -6211,8 +6211,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         if Options_.is_flag_active('cursepower'):
             change_cursed_shield_battles(outfile_rom_buffer, Options_.get_flag_value('cursepower'))
 
-        secret_item = manage_coral(outfile_rom_buffer, kwargs.get('web_custom_coral_names', None))
-        log(secret_item, 'aesthetics')
+        coral_log = manage_coral(outfile_rom_buffer, kwargs.get('web_custom_coral_names', None))
+        log(coral_log, 'aesthetics')
 
         # TODO Does not work currently - needs fixing to allow Lenophis' esper bonus patch to work correctly
         # add_esper_bonuses(outfile_rom_buffer)
@@ -6268,14 +6268,14 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         if kwargs.get('generate_output_rom', True):
             pipe_print('\nWriting log...')
 
-            for log_character in sorted(characters, key=lambda character: character.id):
+            for log_character in sorted(characters, key=lambda character_r: character_r.id):
                 log_character.associate_command_objects(list(commands.values()))
                 if log_character.id > 13:
                     continue
                 log(str(log_character), section='characters')
 
             if options.Use_new_randomizer:
-                for log_character in sorted(character_list, key=lambda character: character.id):
+                for log_character in sorted(character_list, key=lambda character_r: character_r.id):
                     if log_character.id <= 14:
                         log(str(log_character), section='stats')
 
