@@ -1,20 +1,63 @@
-import configparser
-import requests
-from configparser import ConfigParser
+from configparser import ConfigParser, DuplicateSectionError, NoSectionError, NoOptionError
 from pathlib import Path
 import os
 
 try:
     from sys import _MEIPASS
+
     TABLE_PATH = os.path.dirname(os.path.abspath(__file__))
 except ImportError:
     TABLE_PATH = os.path.join(os.getcwd(), "tables")
 
-config = ConfigParser()
+VERSION = "CE-5.1.1"
+BETA = False
+VERSION_ROMAN = 'V BETA' if BETA else 'V'
+DEFAULT_CONFIG = {
+    "Version": {
+        'core': VERSION
+    }
+}
 CONFIG_PATH = Path(os.path.join(os.getcwd(), "config.ini"))
 
+MD5HASHNORMAL = "e986575b98300f721ce27c180264d890"
+MD5HASHTEXTLESS = "f08bf13a6819c421eee33ee29e640a1d"
+MD5HASHTEXTLESS2 = "e0984abc9e5dd99e4bc54e8f9e0ff8d0"
 
-def set_value(section, option, value):
+# Supported preset names must be lowercase.
+SUPPORTED_PRESETS = {
+    'new player': 'b c e f g i n o p q r s t w y z makeover partyparty dancelessons lessfanatical '
+                  'expboost:2.0 gpboost:2.0 mpboost:2.0 swdtechspeed:faster alasdraco capslockoff '
+                  'johnnydmad questionablecontent relicmyhat',
+    'intermediate player': 'b c d e f g i j k m n o p q r s t u w y z makeover partyparty dancelessons '
+                           'electricboogaloo swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter '
+                           'remonsterate relicmyhat',
+    'advanced player': 'b c d e f g h i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo '
+                       'randombosses dancingmaduin:1 swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter '
+                       'remonsterate bsiab mimetime morefanatical questionablecontent relicmyhat',
+    'chaotic player': 'b c d e f g h i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo '
+                      'masseffect:med randombosses dancingmaduin:chaos swdtechspeed:random alasdraco capslockoff '
+                      'johnnyachaotic notawaiter remonsterate bsiab mimetime questionablecontent randomboost:2 '
+                      'allcombos supernatural mementomori:random thescenarionottaken relicmyhat',
+    'race easy': 'b c d e f g i j k m n o p q r s t w y z capslockoff '
+                 'johnnydmad makeover notawaiter partyparty madworld relicmyhat',
+    'race medium': 'b c d e f g i j k m n o p q r s t u w y z capslockoff '
+                   'johnnydmad makeover notawaiter partyparty '
+                   'electricboogaloo randombosses madworld relicmyhat',
+    'race insane': 'b c d e f g i j k m n o p q r s t u w y z capslockoff '
+                   'johnnydmad makeover notawaiter partyparty darkworld '
+                   'madworld bsiab electricboogaloo randombosses relicmyhat'
+}
+
+# Load configuration data
+# Read DEFAULT CONFIG and then read the config.ini file in the directory to fill in any missing values
+config = ConfigParser()
+config.read_dict(DEFAULT_CONFIG)
+files_loaded = config.read(CONFIG_PATH)
+with open(CONFIG_PATH, 'w') as config_file:
+    config.write(config_file)
+
+
+def set_config_value(section, option, value):
     config.read(CONFIG_PATH)
     if not config.has_section(section):
         config.add_section(section)
@@ -23,15 +66,7 @@ def set_value(section, option, value):
         config.write(f)
 
 
-def get_value(section, option):
-    config.read(CONFIG_PATH)
-    if config.has_section(section) and config.has_option(section, option):
-        return config.get(section, option)
-    else:
-        return ''
-
-
-def get_items(section):
+def get_config_items(section):
     config.read(CONFIG_PATH)
     results = {}
     if config.has_section(section):
@@ -43,10 +78,10 @@ def get_items(section):
 def write_flags(name, flags):
     config.read(CONFIG_PATH)
     try:
-        config.add_section('Flags')    
-    except Exception:
+        config.add_section('Flags')
+    except DuplicateSectionError:
         pass
-    
+
     config.set('Flags', name, flags)
     with open('config.ini', 'w') as f:
         config.write(f)
@@ -57,28 +92,10 @@ def read_flags():
     config.read(CONFIG_PATH)
     try:
         flags = dict(config.items('Flags'))
-    except Exception:
+    except (NoSectionError, NoOptionError):
         print("No saved flags to load.")
         return
     return flags
-
-
-def read_version_information():
-    version_information = {}
-    config.read(CONFIG_PATH)
-    try:
-        version_information['core'] = config.get('Version', 'core')
-    except (configparser.NoSectionError, configparser.NoOptionError):
-        version_information['core'] = ''
-    try:
-        version_information['character_sprites'] = config.get('Version', 'character_sprites')
-    except (configparser.NoSectionError, configparser.NoOptionError):
-        version_information['character_sprites'] = ''
-    try:
-        version_information['monster_sprites'] = config.get('Version', 'monster_sprites')
-    except (configparser.NoSectionError, configparser.NoOptionError):
-        version_information['monster_sprites'] = ''
-    return version_information
 
 
 def save_version(version_type, value):
@@ -87,35 +104,7 @@ def save_version(version_type, value):
     if version_type not in valid_version_types:
         raise ValueError('An invalid version type was specified: ' + version_type + '. Valid version types are ' +
                          ', '.join(valid_version_types))
-    set_value('Version', version_type, value)
-
-
-def get_input_path():
-    return get_value('Settings', 'input_path')
-
-
-def save_input_path(path):
-    set_value('Settings', 'input_path', str(path))
-
-
-def get_output_path():
-    return get_value('Settings', 'output_path')
-
-
-def save_output_path(path):
-    set_value('Settings', 'output_path', str(path))
-
-
-def get_core_version():
-    return read_version_information()['core']
-
-
-def get_character_sprite_version():
-    return read_version_information()['character_sprites']
-
-
-def get_monster_sprite_version():
-    return read_version_information()['monster_sprites']
+    set_config_value('Version', version_type, value)
 
 
 def check_custom():
@@ -139,8 +128,8 @@ def check_custom():
             missing_files.append('/custom/opera/')
         # Put opera files here, if the opera files are required
 
-        #character_sprites_directory = Path(os.path.join(custom_directory, 'Sprites'))
-        #if not character_sprites_directory.is_dir():
+        # character_sprites_directory = Path(os.path.join(custom_directory, 'Sprites'))
+        # if not character_sprites_directory.is_dir():
         #    missing_files.append('/custom/Sprites/')
         # Put Sprite files here, if any are required
 
@@ -165,7 +154,7 @@ def check_player_sprites():
 
     character_sprites_directory = Path(os.path.join(custom_directory, 'Sprites'))
     if not character_sprites_directory.is_dir():
-       missing_files.append('/custom/Sprites/')
+        missing_files.append('/custom/Sprites/')
 
     return missing_files
 
@@ -178,16 +167,16 @@ def check_tables():
         # List of all files in /tables/. Some of these may not be required or may depend on chosen flags, but better
         #   safe than sorry
         required_table_files = ['ancientcheckpoints.txt', 'battlebgpalettes.txt', 'charcodes.txt',
-                                 'charpaloptions.txt', 'chestcodes.txt', 'commandcodes.txt', 'customitems.txt',
-                                 'defaultsongs.txt', 'dialoguetext.txt', 'divergentedits.txt', 'enemycodes.txt',
-                                 'enemynames.txt', 'espercodes.txt', 'eventpalettes.txt', 'finalai.txt',
-                                 'finaldungeoncheckpoints.txt', 'finaldungeonmaps.txt', 'formationmusic.txt',
-                                 'generator.txt', 'itemcodes.txt', 'locationformations.txt', 'locationmaps.txt',
-                                 'locationpaletteswaps.txt', 'magicite.txt', 'mapbattlebgs.txt', 'mapnames.txt',
-                                 'reachability.txt', 'ridingsprites.txt', 'samples.txt', 'shopcodes.txt',
-                                 'shorttext.txt', 'skipevents.txt', 'spellbans.txt', 'spellcodes.txt', 'text.txt',
-                                 'treasurerooms.txt', 'unusedlocs.txt', 'usedlocs.txt', 'wobeventbits.txt',
-                                 'wobonlytreasure.txt', 'worstartingitems.txt']
+                                'charpaloptions.txt', 'chestcodes.txt', 'commandcodes.txt', 'customitems.txt',
+                                'defaultsongs.txt', 'dialoguetext.txt', 'divergentedits.txt', 'enemycodes.txt',
+                                'enemynames.txt', 'espercodes.txt', 'eventpalettes.txt', 'finalai.txt',
+                                'finaldungeoncheckpoints.txt', 'finaldungeonmaps.txt', 'formationmusic.txt',
+                                'generator.txt', 'itemcodes.txt', 'locationformations.txt', 'locationmaps.txt',
+                                'locationpaletteswaps.txt', 'magicite.txt', 'mapbattlebgs.txt', 'mapnames.txt',
+                                'reachability.txt', 'ridingsprites.txt', 'samples.txt', 'shopcodes.txt',
+                                'shorttext.txt', 'skipevents.txt', 'spellbans.txt', 'spellcodes.txt', 'text.txt',
+                                'treasurerooms.txt', 'unusedlocs.txt', 'usedlocs.txt', 'wobeventbits.txt',
+                                'wobonlytreasure.txt', 'worstartingitems.txt']
         for file in required_table_files:
             file_path = Path(os.path.join(TABLE_PATH, file))
             if not file_path.exists():
@@ -231,85 +220,3 @@ def check_remonsterate():
               "unavailable.")
 
     return missing_files
-
-
-def are_updates_hidden():
-    config.read(CONFIG_PATH)
-    if not config.has_section('Settings') or not config.has_option('Settings', 'updates_hidden'):
-        # If the config file does not have this setting, write it and then return false
-        updates_hidden(False)
-        return False
-    try:
-        if config.get('Settings', 'updates_hidden') == "True":
-            return True
-        else:
-            return False
-    except Exception:
-        return False
-
-
-def updates_hidden(hidden=False):
-    set_value('Settings', 'updates_hidden', str(hidden))
-
-
-def validate_files():
-    # Return values:
-    # 1) Array of strings representing missing information
-    # 2) Boolean that indicates whether the update is required or optional
-    # May raise requests.exceptions.ConnectionError if the user is offline
-    missing_files = []
-    missing_files.extend(check_custom())
-    # missing_files.extend(check_tables())
-    missing_files.extend(check_ini())
-    #missing_files.extend(check_remonsterate())
-
-    # Missing files are required for the randomizer to function properly, so it triggers a forced update
-    if missing_files:
-        return '<br>'.join(missing_files), True
-
-    version_errors = []
-    base_github_url = 'https://api.github.com/repos/FF6BeyondChaos/'
-    core_github_url = base_github_url + 'BeyondChaosRandomizer/releases/latest'
-    character_sprites_github_url = base_github_url + 'BeyondChaosSprites/releases/latest'
-    monster_sprites_github_url = base_github_url + 'BeyondChaosMonsterSprites/releases/latest'
-
-    for version_type, version in read_version_information().items():
-        if not version:
-            error_string = "-" + version_type.replace("_", " ").capitalize() + " have not been downloaded and are available."
-            if version_type == "character_sprites":
-                version_errors.append(error_string + " Character sprites are required for the makeover flag to "
-                                                     "randomize party and NPC sprites with community-made "
-                                                     "custom sprites.")
-            elif version_type == "monster_sprites":
-                version_errors.append(error_string + " Monster sprites are required for the remonsterate flag to "
-                                                     "randomize monster sprites with sprites from various other "
-                                                     "video games and media.")
-
-        else:
-            # Note: Updater version is not checked.
-            if version_type == 'core':
-                response = requests.get(core_github_url)
-                if response.ok:
-                    github_version = response.json()['tag_name']
-                    if not version == github_version:
-                        version_errors.append('The core Beyond Chaos files are currently version ' + str(version) + '. '
-                                              'Version ' + github_version + ' is available.')
-            if version_type == 'character_sprites':
-                response = requests.get(character_sprites_github_url)
-                if response.ok:
-                    github_version = response.json()['tag_name']
-                    if not version == github_version:
-                        version_errors.append('The Character Sprite files are currently version ' + str(version) + '. '
-                                              'Version ' + github_version + ' is available.')
-            if version_type == 'monster_sprites':
-                response = requests.get(monster_sprites_github_url)
-                if response.ok:
-                    github_version = response.json()['tag_name']
-                    if not version == github_version:
-                        version_errors.append('The Monster Sprite files are currently version ' + str(version) + '. '
-                                              'Version ' + github_version + ' is available.')
-
-    if version_errors:
-        return '<br><br>'.join(version_errors), False
-    return None, False
-
