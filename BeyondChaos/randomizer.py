@@ -6292,12 +6292,25 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             log_item_mutations()
 
             if not application == 'web':
-                with open(outlog, 'w+') as log_file:
-                    log_file.write(get_log_string(
-                        ['characters', 'stats', 'aesthetics', 'commands', 'blitz inputs', 'magitek', 'slots', 'dances',
-                         'espers',
-                         'item magic', 'item effects', 'command-change relics', 'colosseum', 'monsters', 'music',
-                         'remonsterate', 'shops', 'treasure chests', 'junctions', 'zozo clock', 'secret items']))
+                try:
+                    with open(outlog, 'w+') as log_file:
+                        log_file.write(get_log_string(
+                            ['characters', 'stats', 'aesthetics', 'commands', 'blitz inputs', 'magitek',
+                             'slots', 'dances', 'espers', 'item magic', 'item effects',
+                             'command-change relics', 'colosseum', 'monsters', 'music', 'remonsterate',
+                             'shops', 'treasure chests', 'junctions', 'zozo clock', 'secret items']))
+                except UnicodeEncodeError:
+                    # Computer's locale does not support all unicode characters being written. Try again with UTF-8.
+                    try:
+                        with open(outlog, 'w', encoding='UTF-8') as log_file:
+                            log_file.write(get_log_string(
+                                ['characters', 'stats', 'aesthetics', 'commands', 'blitz inputs', 'magitek',
+                                 'slots', 'dances', 'espers', 'item magic', 'item effects',
+                                 'command-change relics', 'colosseum', 'monsters', 'music', 'remonsterate',
+                                 'shops', 'treasure chests', 'junctions', 'zozo clock', 'secret items']))
+                    except Exception as ex:
+                        pipe_print("ERROR: The randomizer encountered an error generating the spoiler log. No "
+                                   "spoiler log was generated. Error text: " + str(ex))
 
         if Options_.is_flag_active('bingoboingo'):
             target_score = 200.0
