@@ -5487,8 +5487,11 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         pipe_print(activation_string)
 
         if Options_.is_flag_active('randomboost'):
-            set_randomness_multiplier(int(Options_.get_flag_value('randomboost')))
-        elif Options_.is_flag_active('madworld'):
+            if int(Options_.get_flag_value('randomboost')) == 0 or int(Options_.get_flag_value('randomboost')) == 255:
+                set_randomness_multiplier(None)
+            else:
+                set_randomness_multiplier(int(Options_.get_flag_value('randomboost')))
+        if Options_.is_flag_active('madworld'):
             set_randomness_multiplier(None)
 
         expand_rom()
