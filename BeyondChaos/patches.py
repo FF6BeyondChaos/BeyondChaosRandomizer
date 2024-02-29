@@ -729,7 +729,18 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
     ])
     hidden_relic_sub.write(output_rom_buffer)
 
+def slow_background_scrolling(output_rom_buffer: BytesIO):
+    sbs_sub = Substitution()
 
+    #slow scrolling for Clouds
+    sbs_sub.set_location(0x2B1B1)
+    sbs_sub.bytestring = bytes([0x69, 0x01, 0x00])
+    sbs_sub.write(output_rom_buffer)
+
+    #slow scrolling for Waterfall
+    sbs_sub.set_location(0x2B1F7)
+    sbs_sub.bytestring = bytes([0x69, 0x02, 0x00])
+    sbs_sub.write(output_rom_buffer)
 
 def change_cursed_shield_battles(output_rom_buffer: BytesIO, amount: int = None):
     if not amount or amount == "random":

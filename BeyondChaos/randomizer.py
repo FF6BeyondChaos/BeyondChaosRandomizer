@@ -50,7 +50,7 @@ from patches import (
     nicer_poison, fix_xzone, imp_skimp, fix_flyaway, hidden_relic, y_equip_relics,
     fix_gogo_portrait, vanish_doom, stacking_immunities, mp_color_digits,
     can_always_access_esper_menu, alphabetized_lores, description_disruption,
-    informative_miss, improved_equipment_menus, verify_randomtools_patches)
+    informative_miss, improved_equipment_menus, verify_randomtools_patches, slow_background_scrolling)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -6225,6 +6225,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
         if Options_.is_flag_active('nicerpoison'):
             nicer_poison(outfile_rom_buffer)
+
+        if Options_.is_flag_active('slowerbg'):
+            slow_background_scrolling(outfile_rom_buffer)
 
         if not Options_.is_flag_active('fightclub'):
             show_coliseum_rewards(outfile_rom_buffer)
