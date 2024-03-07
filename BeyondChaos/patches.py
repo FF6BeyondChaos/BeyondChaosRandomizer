@@ -742,6 +742,13 @@ def slow_background_scrolling(output_rom_buffer: BytesIO):
     sbs_sub.bytestring = bytes([0x69, 0x02, 0x00])
     sbs_sub.write(output_rom_buffer)
 
+def shadow_stays(output_rom_buffer: BytesIO):
+    # Shadow will never leave after combat
+    shadow_stays_sub = Substitution()
+    shadow_stays_sub.set_location(0x24885)
+    shadow_stays_sub.bytestring = bytes([0x80, 0x05]) # BRA $05 ; Always branch, regardless of the state of the Shadow Stays bit
+    shadow_stays_sub.write(output_rom_buffer)
+
 def change_cursed_shield_battles(output_rom_buffer: BytesIO, amount: int = None):
     if not amount or amount == "random":
         base_cursed_shield_battle_amount = 48
