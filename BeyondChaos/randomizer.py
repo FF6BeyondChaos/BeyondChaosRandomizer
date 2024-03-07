@@ -51,7 +51,7 @@ from patches import (
     fix_gogo_portrait, vanish_doom, stacking_immunities, mp_color_digits,
     can_always_access_esper_menu, alphabetized_lores, description_disruption,
     informative_miss, improved_equipment_menus, verify_randomtools_patches, slow_background_scrolling,
-    shadow_stays)
+    shadow_stays, level_cap)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -4760,7 +4760,6 @@ def manage_dances(dance_names=None):
     outfile_rom_buffer.seek(0x2D8E79)
     outfile_rom_buffer.write(bytes([3]))
 
-
 def manage_cursed_encounters(formations: List[Formation], formation_sets: List[FormationSet]):
     # event formation sets that can be shuffled with cursedencounters
     good_event_formation_sets = [256, 257, 258, 259, 260, 261, 263, 264, 268, 269, 270, 271, 272,
@@ -4889,7 +4888,6 @@ def sprint_shoes_hint():
     sprint_sub.set_location(0xA790E)
     sprint_sub.bytestring = b'\xFE'
     sprint_sub.write(outfile_rom_buffer)
-
 
 def sabin_hint(commands: Dict[str, CommandBlock]):
     sabin = get_character(0x05)
@@ -6229,6 +6227,15 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
         if Options_.is_flag_active('nicerpoison'):
             nicer_poison(outfile_rom_buffer)
+        if Options_.is_flag_active('levelcap'):
+
+            maxlevel = int(Options_.get_flag_value('levelcap'))
+            if maxlevel == 0:
+                maxlevel = rng.randint(1, 99)
+
+            level_cap(outfile_rom_buffer, maxlevel)
+
+            log(str("\n MAX LEVEL: " + str(maxlevel)), section='characters')
 
         if Options_.is_flag_active('slowerbg'):
             slow_background_scrolling(outfile_rom_buffer)

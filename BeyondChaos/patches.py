@@ -742,6 +742,24 @@ def slow_background_scrolling(output_rom_buffer: BytesIO):
     sbs_sub.bytestring = bytes([0x69, 0x02, 0x00])
     sbs_sub.write(output_rom_buffer)
 
+def level_cap(output_rom_buffer: BytesIO, maxlevel):
+
+    lc_sub = Substitution()
+
+    lc_sub.bytestring = bytes([maxlevel])
+
+    lc_sub.set_location(0x26074)
+    lc_sub.write(output_rom_buffer)
+
+    lc_sub.set_location(0x360A7)
+    lc_sub.write(output_rom_buffer)
+
+    lc_sub.set_location(0x0A132)
+    lc_sub.write(output_rom_buffer)
+
+    lc_sub.set_location(0x0A136)
+    lc_sub.write(output_rom_buffer)
+
 def shadow_stays(output_rom_buffer: BytesIO):
     # Shadow will never leave after combat
     shadow_stays_sub = Substitution()
