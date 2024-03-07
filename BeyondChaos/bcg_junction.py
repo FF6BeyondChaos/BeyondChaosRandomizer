@@ -137,9 +137,9 @@ class JunctionManager:
                     assert k not in new_dict
                     new_dict[k] = v
                     if key == 'junction_short_names' and commands:
-                        if v.lower() == "sos gp rain":
+                        if commands["gprain"].name != "gprain" and v.lower() == "sos gp rain":
                             new_dict[k] = "SOS " + commands["gprain"].name
-                        if v.lower() == "sos runic":
+                        if commands["runic"].name != "runic" and v.lower() == "sos runic":
                             new_dict[k] = "SOS " + commands["runic"].name
                 value = new_dict
                 full_data[key] = value
