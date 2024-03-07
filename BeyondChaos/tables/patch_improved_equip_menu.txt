@@ -10,7 +10,7 @@
 032e72: eb 1e                                               # 032e74
 03372d: 81 f3                                               # 03372f
 038e64: 40 08 70 08  a0 08 c8 08                            # 038e6c
-038e76: 9d f2 4c 40  06 81 00 00  02 03                     # 038e80
+038e76: 9d f2 4c 40  06 00 00 00  02 03                     # 038e80
 038fb4: ea ea ea ea  ea ea ea ea  ea ea ea ea               # 038fc0
 039038:                           20 ab a6 ea  ea ea ea ea
 :       ea ea ea ea  ea 20 4e 90  4c                        # 039049

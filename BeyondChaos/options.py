@@ -413,6 +413,11 @@ NORMAL_FLAGS = [
          choices=("Vanilla", "All", "BumRush"),
          default_value="Vanilla",
          default_index=0),
+Flag(name='slowerbg',
+         description="SLOWER BG MODE",
+         long_description="Drastically reduces the speed of vertical scrolling backgrounds.",
+         category="aesthetic",
+         inputtype="boolean"),
 
     # battle codes
     Flag(name='collateraldamage',

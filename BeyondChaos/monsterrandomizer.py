@@ -776,7 +776,7 @@ class MonsterBlock:
         if Options_.mode.name == "katn" or Options_.is_flag_active("madworld"):
             restricted = [0xEA, 0xC8] # restrict Baba Breath and Seize
         else:
-            restricted = [0x13, 0x14] # restrict Meteor and Ultima for normal playthroughs
+            restricted = [0x13, 0x14, 0xEA] # restrict Meteor, Ultima and Baba Breath for normal playthroughs
         if Options_.is_flag_active("darkworld"):
             restricted = []  # All skills are fair game sucka
 

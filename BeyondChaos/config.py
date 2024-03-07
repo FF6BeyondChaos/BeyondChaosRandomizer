@@ -9,7 +9,7 @@ try:
 except ImportError:
     TABLE_PATH = os.path.join(os.getcwd(), "tables")
 
-VERSION = "CE-5.1.1"
+VERSION = "CE-5.1.3"
 BETA = False
 VERSION_ROMAN = 'V BETA' if BETA else 'V'
 DEFAULT_CONFIG = {

@@ -590,7 +590,7 @@ class ItemBlock:
         if not self.is_armor and not self.is_relic:
             return
 
-        if allow_ultima:
+        if not allow_ultima:
             filter_func = lambda s: s.name != 'Ultima'
         else:
             filter_func = lambda s: True
