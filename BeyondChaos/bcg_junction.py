@@ -138,10 +138,8 @@ class JunctionManager:
                     new_dict[k] = v
                     if key == 'junction_short_names' and commands:
                         if v.lower() == "sos gp rain":
-                            print("SOS GP Rain being changed to " + str("SOS " + commands["gprain"].name))
                             new_dict[k] = "SOS " + commands["gprain"].name
                         if v.lower() == "sos runic":
-                            print("SOS Runic being changed to " + str("SOS " + commands["runic"].name))
                             new_dict[k] = "SOS " + commands["runic"].name
                 value = new_dict
                 full_data[key] = value
