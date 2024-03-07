@@ -6089,7 +6089,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         if Options_.is_flag_active('thescenarionottaken'):
             chocobo_merchant()
 
-        jm = JunctionManager(outfile_rom_buffer, 'bcg_junction_manifest.json')
+        jm = JunctionManager(outfile_rom_buffer, 'bcg_junction_manifest.json', commands=commands)
         jm.activated = False
         junction_everything(jm)
 
