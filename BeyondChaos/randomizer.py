@@ -4795,7 +4795,6 @@ def manage_cursed_encounters(formations: List[Formation], formation_sets: List[F
             salt_formations.add((formation.formid - 2))
             salt_formations.add((formation.formid - 3))
             salt_formations.add((formation.formid - 4))
-            salt_formations.add((formation.formid - 5))
 
     salt_formations = [formation_id for formation_id in salt_formations if formation_id not in event_formations]
 
@@ -6177,19 +6176,23 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         if Options_.is_flag_active('dancelessons'):
             no_dance_stumbles(outfile_rom_buffer)
 
-        banon_life3(outfile_rom_buffer)
-        allergic_dog(outfile_rom_buffer)
-        fix_gogo_portrait(outfile_rom_buffer)
-        cycle_statuses(outfile_rom_buffer)
-        name_swd_techs()
-        fix_flash_and_bioblaster()
-        title_gfx(outfile_rom_buffer)
-        improved_party_gear(outfile_rom_buffer, myself_name_address, myself_name_bank)
-        mp_color_digits(outfile_rom_buffer)
-        alphabetized_lores(outfile_rom_buffer)
-        description_disruption(outfile_rom_buffer)
-        informative_miss(outfile_rom_buffer)
-        manage_doom_gaze()
+        title_gfx(outfile_rom_buffer) #always on
+
+        cycle_statuses(outfile_rom_buffer) #QoL Flag
+        improved_party_gear(outfile_rom_buffer, myself_name_address, myself_name_bank) #QoL Flag
+        mp_color_digits(outfile_rom_buffer) #QoL Flag
+        alphabetized_lores(outfile_rom_buffer) #QoL Flag
+        informative_miss(outfile_rom_buffer) #QoL Flag
+        manage_doom_gaze() #QoL Flag
+
+        allergic_dog(outfile_rom_buffer) #add to bug fix flag
+        fix_gogo_portrait(outfile_rom_buffer) #add to bug fix flag
+        banon_life3(outfile_rom_buffer)  # add to bug fix flag
+
+        name_swd_techs() #add to rando commands flag
+        fix_flash_and_bioblaster() #add to rando commands flag
+
+        description_disruption(outfile_rom_buffer) #add to item junctions code
 
         if Options_.is_flag_active('relicmyhat'):
             improved_equipment_menus(outfile_rom_buffer)
