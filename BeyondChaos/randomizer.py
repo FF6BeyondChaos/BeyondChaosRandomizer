@@ -4762,13 +4762,12 @@ def manage_dances(dance_names=None):
 
 def manage_cursed_encounters(formations: List[Formation], formation_sets: List[FormationSet]):
     # event formation sets that can be shuffled with cursedencounters
-    good_event_formation_sets = [256, 257, 258, 259, 260, 261, 263, 264, 268, 269, 270, 271, 272,
-                                 273, 275, 276, 277, 278, 279,
+    good_event_formation_sets = [263, 264, 275, 276, 277, 278, 279,
                                  281, 282, 283, 285, 286, 287,
                                  297, 303, 400, 382, 402, 403,
                                  404]
     # Narshe Cave, Magitek Factory Escape, Collapsing House, South Figaro Cave WoR, Castle Figaro Basement
-    bad_event_fsets = [58, 108, 128, 138, 139, 140]
+    bad_event_fsets = [57, 58, 108, 128, 138, 139, 140]
     event_formations = set()
     salt_formations = set()
 
@@ -4796,6 +4795,7 @@ def manage_cursed_encounters(formations: List[Formation], formation_sets: List[F
             salt_formations.add((formation.formid - 2))
             salt_formations.add((formation.formid - 3))
             salt_formations.add((formation.formid - 4))
+            salt_formations.add((formation.formid - 5))
 
     salt_formations = [formation_id for formation_id in salt_formations if formation_id not in event_formations]
 
