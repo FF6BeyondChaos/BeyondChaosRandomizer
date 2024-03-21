@@ -4771,7 +4771,7 @@ def manage_cursed_encounters(formations: List[Formation], formation_sets: List[F
     event_formations = set()
     salt_formations = set()
 
-    # Don't do: Commando, Sp Forces, Pugs, Zone Eater, Naughty, L.X Magic, Phunbaba, Guardian,
+    # Don't do: Commando, Sp Forces, Zone Eater, Naughty, L.X Magic, Phunbaba, Guardian,
     #   Merchant, Officer, Mega Armor, Master Pug, KatanaSoul, Warring Triad, Atma, Inferno,
     #   Guardian, Tier 1, 2, 3, Final Kefka, Ifrit, Shiva, Tritoch, Nerapa,
     bad_enemy_ids = {
@@ -4784,12 +4784,17 @@ def manage_cursed_encounters(formations: List[Formation], formation_sets: List[F
         344, 345, 346, 347, 348,
         349, 350, 351, 355, 356,
         358, 361, 362, 363, 364,
-        365, 369, 373, 381
+        365, 369, 373, 381,
     }
+
+    #Don't do: Pugs, Dummy Dullahan, Dummy Umaro, Dummy Colossus, Dummy Czar Dragon, Dummy Guardian Fight
+
+    bad_formations = {235, 252, 443, 526, 560, 561}
+
     for formation in formations:
         if (formation.has_event or
                 (bad_enemy_ids & set(formation.enemy_ids + formation.big_enemy_ids)) or
-                formation.formid == 235):
+                formation.formid in bad_formations):
             event_formations.add(formation.formid)
             salt_formations.add((formation.formid - 1))
             salt_formations.add((formation.formid - 2))
