@@ -2176,18 +2176,9 @@ def manage_rng():
 
 
 def manage_balance(newslots: bool = True):
-    vanish_doom(outfile_rom_buffer)
-    stacking_immunities(outfile_rom_buffer)
-    evade_mblock(outfile_rom_buffer)
-    fix_xzone(outfile_rom_buffer)
-    imp_skimp(outfile_rom_buffer)
-    fix_flyaway(outfile_rom_buffer)
-
     manage_rng()
     if newslots:
         randomize_slots(0x24E4A)
-
-    death_abuse(outfile_rom_buffer)
 
     get_monsters(infile_rom_buffer)
     get_monster(0x174)
@@ -6181,23 +6172,62 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         if Options_.is_flag_active('dancelessons'):
             no_dance_stumbles(outfile_rom_buffer)
 
-        title_gfx(outfile_rom_buffer) #always on
+        title_gfx(outfile_rom_buffer)  # always on
 
-        cycle_statuses(outfile_rom_buffer) #QoL Flag
-        improved_party_gear(outfile_rom_buffer, myself_name_address, myself_name_bank) #QoL Flag
-        mp_color_digits(outfile_rom_buffer) #QoL Flag
-        alphabetized_lores(outfile_rom_buffer) #QoL Flag
-        informative_miss(outfile_rom_buffer) #QoL Flag
-        manage_doom_gaze() #QoL Flag
+        if Options_.is_flag_active('novanishdoom'):
+            vanish_doom(outfile_rom_buffer)
 
-        allergic_dog(outfile_rom_buffer) #add to bug fix flag
-        fix_gogo_portrait(outfile_rom_buffer) #add to bug fix flag
-        banon_life3(outfile_rom_buffer)  # add to bug fix flag
+        if Options_.is_flag_active('stackingimmunities'):
+            stacking_immunities(outfile_rom_buffer)
 
-        name_swd_techs() #add to rando commands flag
-        fix_flash_and_bioblaster() #add to rando commands flag
+        if Options_.is_flag_active('wiccaphobia'):
+            evade_mblock(outfile_rom_buffer)
 
-        description_disruption(outfile_rom_buffer) #add to item junctions code
+        if Options_.is_flag_active('returnfromxzone'):
+            fix_xzone(outfile_rom_buffer)
+
+        if Options_.is_flag_active('impskimp'):
+            imp_skimp(outfile_rom_buffer)
+
+        if Options_.is_flag_active('infrequentflier'):
+            fix_flyaway(outfile_rom_buffer)
+
+        if Options_.is_flag_active('deathabuse'):
+            death_abuse(outfile_rom_buffer)
+
+        if Options_.is_flag_active('tastetherainbow'):
+            cycle_statuses(outfile_rom_buffer)  # QoL Flag
+
+        if Options_.is_flag_active('improvedpartygear'):
+            improved_party_gear(outfile_rom_buffer, myself_name_address, myself_name_bank)  # QoL Flag
+
+        if Options_.is_flag_active('magicnumbers'):
+            mp_color_digits(outfile_rom_buffer)  # QoL Flag
+
+        if Options_.is_flag_active('alphalores'):
+            alphabetized_lores(outfile_rom_buffer)  # QoL Flag
+
+        if Options_.is_flag_active('informativemiss'):
+            informative_miss(outfile_rom_buffer)  # QoL Flag
+
+        if Options_.is_flag_active('regionofdoom'):
+            manage_doom_gaze()  # QoL Flag
+
+        if Options_.is_flag_active('friendsforever'):
+            allergic_dog(outfile_rom_buffer)  # add to bug fix flag
+
+        if Options_.is_flag_active('gogoportrait'):
+            fix_gogo_portrait(outfile_rom_buffer)  # add to bug fix flag
+
+        if Options_.is_flag_active('banonlives'):
+            banon_life3(outfile_rom_buffer)  # add to bug fix flag
+
+        if Options_.is_flag_active('shuffle_commands'):
+            name_swd_techs()  # add to rando commands flag
+            fix_flash_and_bioblaster()  # add to rando commands flag
+
+        if Options_.is_flag_active('effectmas'):
+            description_disruption(outfile_rom_buffer)  # add to item junctions code
 
         if Options_.is_flag_active('relicmyhat'):
             improved_equipment_menus(outfile_rom_buffer)

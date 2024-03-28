@@ -265,8 +265,10 @@ class Window(QMainWindow):
         self.flag = {}
         self.battle = {}
         self.beta = {}
+        self.bug_fixes = {}
+        self.quality_of_life = {}
         self.dictionaries = [
-            self.flag, self.sprite, self.sprite_categories, self.battle,
+            self.flag, self.bug_fixes, self.quality_of_life, self.sprite, self.sprite_categories, self.battle,
             self.aesthetic, self.field, self.characters, self.experimental, self.gamebreaking,
             self.beta
         ]
@@ -287,7 +289,7 @@ class Window(QMainWindow):
 
         # tabs names for the tabs in flags box
         self.tab_names = [
-            'Core', 'Sprites', 'SpriteCategories', 'Battle', 'Aesthetic/Accessibility',
+            'Core', 'Bug Fixes', 'Quality of Life', 'Sprites', 'SpriteCategories', 'Battle', 'Aesthetic/Accessibility',
             'Field', 'Characters', 'Experimental', 'Gamebreaking', 'Beta'
         ]
 
@@ -765,6 +767,10 @@ class Window(QMainWindow):
         for flag in sorted(NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS, key=lambda x: x.name):
             if flag.category == 'core':
                 d = self.flag
+            elif flag.category == 'bug_fixes':
+                d = self.bug_fixes
+            elif flag.category == 'quality_of_life':
+                d = self.quality_of_life
             elif flag.category == 'aesthetic':
                 d = self.aesthetic
             elif flag.category == 'sprite':
