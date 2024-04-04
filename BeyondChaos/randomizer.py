@@ -51,7 +51,7 @@ from patches import (
     fix_gogo_portrait, vanish_doom, stacking_immunities, mp_color_digits,
     can_always_access_esper_menu, alphabetized_lores, description_disruption,
     informative_miss, improved_equipment_menus, verify_randomtools_patches, slow_background_scrolling,
-    shadow_stays, level_cap)
+    shadow_stays, level_cap, mp_refills)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -6199,6 +6199,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
         name_swd_techs() #add to rando commands flag
         fix_flash_and_bioblaster() #add to rando commands flag
+        mp_refills(outfile_rom_buffer)
 
         description_disruption(outfile_rom_buffer) #add to item junctions code
 
