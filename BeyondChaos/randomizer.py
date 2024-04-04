@@ -51,7 +51,7 @@ from patches import (
     fix_gogo_portrait, vanish_doom, stacking_immunities, mp_color_digits,
     can_always_access_esper_menu, alphabetized_lores, description_disruption,
     informative_miss, improved_equipment_menus, verify_randomtools_patches, slow_background_scrolling,
-    shadow_stays, level_cap)
+    shadow_stays, level_cap, mp_refills)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -1134,11 +1134,11 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
                 else:
                     if skill_count >= 4 or random.choice([True, False]):
                         spell = MultipleSpellSub()
-                        spell.set_spells(sb.spellid)
+                        spell.set_spells(sb.spellid, outfile_rom_buffer=outfile_rom_buffer)
                         spell.set_count(skill_count)
                     else:
                         spell = ChainSpellSub()
-                        spell.set_spells(sb.spellid)
+                        spell.set_spells(sb.spellid, outfile_rom_buffer=outfile_rom_buffer)
 
                 new_name = sb.name
             elif random_skill:
@@ -1165,14 +1165,16 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
 
                 try:
                     if limit_counter != 1 and Options_.is_flag_active('desperation'):
-                        spell.set_spells(valid_spells, 'Limit', None)
+                        spell.set_spells(valid_spells, 'Limit', None, outfile_rom_buffer=outfile_rom_buffer)
                         limit_counter = limit_counter + 1
                     else:
                         limit_bad = True
-                        spell.set_spells(valid_spells)
+                        spell.set_spells(valid_spells, outfile_rom_buffer=outfile_rom_buffer)
+                        if spell.name == 'Dance':
+                            spell.set_spells(all_spells, 'Dance', None, outfile_rom_buffer=outfile_rom_buffer)
                         while limit_bad:
                             if spell.name == 'Limit' and not Options_.is_flag_active('desperation'):
-                                spell.set_spells(valid_spells)
+                                spell.set_spells(valid_spells, outfile_rom_buffer=outfile_rom_buffer)
                             else:
                                 limit_bad = False
                 except ValueError:
@@ -1199,6 +1201,7 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
 
                 command.write_properties(outfile_rom_buffer)
                 new_name = spell.name
+
             elif combo_skill:
                 always_first = []
                 always_last = ['Palidor', 'Quadra Slam', 'Quadra Slice', 'Spiraler',
@@ -1321,11 +1324,11 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
                 if skill_count >= 2:
                     if skill_count >= 4 or random.choice([True, False]):
                         new_s = MultipleSpellSub()
-                        new_s.set_spells(css)
+                        new_s.set_spells(css, outfile_rom_buffer=outfile_rom_buffer)
                         new_s.set_count(skill_count)
                     else:
                         new_s = ChainSpellSub()
-                        new_s.set_spells(css)
+                        new_s.set_spells(css, outfile_rom_buffer=outfile_rom_buffer)
                     if len(css.spells) == len(multibanned(css.spells)):
                         css = new_s
 
@@ -1399,11 +1402,11 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
             spell = MultipleSpellSub()
             spell.set_count(9)
             magitek.newname('9xChaos', outfile_rom_buffer)
-            spell.set_spells([])
+            spell.set_spells([], outfile_rom_buffer=outfile_rom_buffer)
         else:
             spell = RandomSpellSub()
             magitek.newname('R-Chaos', outfile_rom_buffer)
-            spell.set_spells([], 'Chaos', [])
+            spell.set_spells([], 'Chaos', [], outfile_rom_buffer=outfile_rom_buffer)
         magitek.write_properties(outfile_rom_buffer)
         magitek.unsetmenu(outfile_rom_buffer)
         magitek.allow_while_confused(outfile_rom_buffer)
@@ -5520,6 +5523,10 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
         reseed()
 
+        if Options_.is_flag_active('random_dances'):
+            if 0x13 not in changed_commands:
+                manage_dances(kwargs.get('web_custom_dance_names', None))
+
         spells = get_ranked_spells(infile_rom_buffer)
         if Options_.is_flag_active('madworld'):
             random.shuffle(spells)
@@ -5923,10 +5930,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             manage_clock()
         reseed()
 
-        if Options_.is_flag_active('random_dances'):
-            if 0x13 not in changed_commands:
-                manage_dances(kwargs.get('web_custom_dance_names', None))
-
         reseed()
 
         if Options_.is_flag_active('remonsterate'):
@@ -6233,6 +6236,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             improved_equipment_menus(outfile_rom_buffer)
         else:
             y_equip_relics(outfile_rom_buffer)
+            
+        mp_refills(outfile_rom_buffer)
 
         if Options_.is_flag_active('swdtechspeed'):
             swdtech_speed = Options_.get_flag_value('swdtechspeed')
