@@ -2177,7 +2177,6 @@ def manage_rng():
     random.shuffle(numbers)
     outfile_rom_buffer.write(bytes(numbers))
 
-
 def manage_balance(newslots: bool = True):
     manage_rng()
     if newslots:
@@ -2186,6 +2185,14 @@ def manage_balance(newslots: bool = True):
     get_monsters(infile_rom_buffer)
     get_monster(0x174)
 
+    vanish_doom(outfile_rom_buffer)
+    evade_mblock(outfile_rom_buffer)
+    fix_xzone(outfile_rom_buffer)
+    imp_skimp(outfile_rom_buffer)
+    allergic_dog(outfile_rom_buffer)
+    fix_flyaway(outfile_rom_buffer)
+    death_abuse(outfile_rom_buffer)
+    fix_gogo_portrait(outfile_rom_buffer)
 
 def manage_magitek():
     magitek_log = ''
@@ -6176,27 +6183,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             no_dance_stumbles(outfile_rom_buffer)
 
         title_gfx(outfile_rom_buffer)  # always on
-
-        if Options_.is_flag_active('novanishdoom'):
-            vanish_doom(outfile_rom_buffer)
-
-        if Options_.is_flag_active('stackingimmunities'):
-            stacking_immunities(outfile_rom_buffer)
-
-        if Options_.is_flag_active('wiccaphobia'):
-            evade_mblock(outfile_rom_buffer)
-
-        if Options_.is_flag_active('returnfromxzone'):
-            fix_xzone(outfile_rom_buffer)
-
-        if Options_.is_flag_active('impskimp'):
-            imp_skimp(outfile_rom_buffer)
-
-        if Options_.is_flag_active('infrequentflier'):
-            fix_flyaway(outfile_rom_buffer)
-
-        if Options_.is_flag_active('deathabuse'):
-            death_abuse(outfile_rom_buffer)
+        stacking_immunities(outfile_rom_buffer) # always on
+        banon_life3(outfile_rom_buffer) #always on
 
         if Options_.is_flag_active('tastetherainbow'):
             cycle_statuses(outfile_rom_buffer)  # QoL Flag
@@ -6216,28 +6204,20 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         if Options_.is_flag_active('regionofdoom'):
             manage_doom_gaze()  # QoL Flag
 
-        if Options_.is_flag_active('friendsforever'):
-            allergic_dog(outfile_rom_buffer)  # add to bug fix flag
-
-        if Options_.is_flag_active('gogoportrait'):
-            fix_gogo_portrait(outfile_rom_buffer)  # add to bug fix flag
-
-        if Options_.is_flag_active('banonlives'):
-            banon_life3(outfile_rom_buffer)  # add to bug fix flag
-
         if Options_.is_flag_active('shuffle_commands'):
-            name_swd_techs()  # add to rando commands flag
-            fix_flash_and_bioblaster()  # add to rando commands flag
+            name_swd_techs()
+            fix_flash_and_bioblaster()
 
         if Options_.is_flag_active('effectmas'):
             description_disruption(outfile_rom_buffer)  # add to item junctions code
+
+        if Options_.is_flag_active('mpparty'):
+            mp_refills(outfile_rom_buffer) # QoL Flag
 
         if Options_.is_flag_active('relicmyhat'):
             improved_equipment_menus(outfile_rom_buffer)
         else:
             y_equip_relics(outfile_rom_buffer)
-            
-        mp_refills(outfile_rom_buffer)
 
         if Options_.is_flag_active('swdtechspeed'):
             swdtech_speed = Options_.get_flag_value('swdtechspeed')
@@ -6272,11 +6252,12 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             nicer_poison(outfile_rom_buffer)
         if Options_.is_flag_active('levelcap'):
 
-            maxlevel = int(Options_.get_flag_value('levelcap'))
-            if maxlevel == 0:
+            maxlevel = Options_.get_flag_value('levelcap')
+
+            if str(maxlevel).lower() == "random":
                 maxlevel = rng.randint(1, 99)
 
-            level_cap(outfile_rom_buffer, maxlevel)
+            level_cap(outfile_rom_buffer, int(maxlevel))
 
             log(str("\n MAX LEVEL: " + str(maxlevel)), section='characters')
 

@@ -265,11 +265,10 @@ class Window(QMainWindow):
         self.flag = {}
         self.battle = {}
         self.beta = {}
-        self.bug_fixes = {}
         self.quality_of_life = {}
         self.dictionaries = [
-            self.flag, self.bug_fixes, self.quality_of_life, self.sprite, self.sprite_categories, self.battle,
-            self.aesthetic, self.field, self.characters, self.experimental, self.gamebreaking,
+            self.flag, self.quality_of_life, self.sprite, self.sprite_categories, self.aesthetic, self.battle,
+            self.field, self.characters, self.experimental, self.gamebreaking,
             self.beta
         ]
         self.makeover_groups = get_makeover_groups()
@@ -289,7 +288,7 @@ class Window(QMainWindow):
 
         # tabs names for the tabs in flags box
         self.tab_names = [
-            'Core', 'Bug Fixes', 'Quality of Life', 'Sprites', 'SpriteCategories', 'Battle', 'Aesthetic/Accessibility',
+            'Core', 'Quality of Life', 'Sprites', 'SpriteCategories', 'Aesthetic', 'Battle',
             'Field', 'Characters', 'Experimental', 'Gamebreaking', 'Beta'
         ]
 
@@ -620,7 +619,7 @@ class Window(QMainWindow):
                     integer_box.setMaximum(int(flag['object'].maximum_value))
                     integer_box.setFixedWidth(control_fixed_width)
                     integer_box.setFixedHeight(control_fixed_height)
-                    if flag_name == 'cursepower':
+                    if flag_name == 'cursepower' or flag_name == 'levelcap':
                         integer_box.setSpecialValueText('Random')
                     else:
                         integer_box.setSpecialValueText('Off')
@@ -767,8 +766,6 @@ class Window(QMainWindow):
         for flag in sorted(NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS, key=lambda x: x.name):
             if flag.category == 'core':
                 d = self.flag
-            elif flag.category == 'bug_fixes':
-                d = self.bug_fixes
             elif flag.category == 'quality_of_life':
                 d = self.quality_of_life
             elif flag.category == 'aesthetic':
@@ -964,7 +961,7 @@ class Window(QMainWindow):
                 for c in children:
                     if not round(c.value(), 1) == c.default:
                         c.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
-                        if c.text == 'cursepower' and c.value() == 0:
+                        if (c.text == 'cursepower' and c.value() == 0) or (c.text == 'levelcap' and c.value() == 0):
                             self.flags.append(c.text + ':random')
                         else:
                             self.flags.append(c.text + ':' + str(round(c.value(), 2)))
