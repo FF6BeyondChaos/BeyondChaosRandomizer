@@ -11,7 +11,7 @@ from hashlib import md5
 try:
     import requests.exceptions
     from PyQt5 import QtGui, QtCore
-    from PyQt5.QtGui import QCursor
+    from PyQt5.QtGui import QCursor, QPalette, QColor, QColorConstants
     from PyQt5.QtWidgets import (
         QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel, QGroupBox,
         QHBoxLayout, QLineEdit, QComboBox, QFileDialog, QApplication,
@@ -230,6 +230,47 @@ def update_bc(suppress_prompt=False):
         update_bc_failure_message.exec()
 
 
+def set_palette(style=None):
+    if not style:
+        style = config.get('Settings', 'gui_theme', fallback='Light')
+
+    if style == 'Light':
+        light_palette = QPalette()
+        QApplication.setPalette(light_palette)
+    elif style == 'Dark':
+        dark_palette = QPalette()
+        dark_palette.setColor(QPalette.Window, QColor(53, 53, 53))
+        dark_palette.setColor(QPalette.WindowText, QColorConstants.White)
+        dark_palette.setColor(QPalette.Base, QColor(35, 35, 35))
+        dark_palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
+        dark_palette.setColor(QPalette.ToolTipBase, QColor(25, 25, 25))
+        dark_palette.setColor(QPalette.ToolTipText, QColorConstants.White)
+        dark_palette.setColor(QPalette.Text, QColorConstants.White)
+        dark_palette.setColor(QPalette.Button, QColor(53, 53, 53))
+        dark_palette.setColor(QPalette.ButtonText, QColorConstants.White)
+        dark_palette.setColor(QPalette.BrightText, QColorConstants.Red)
+        dark_palette.setColor(QPalette.Link, QColor(42, 130, 218))
+        dark_palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
+        dark_palette.setColor(QPalette.HighlightedText, QColor(35, 35, 35))
+        dark_palette.setColor(QPalette.Active, QPalette.Button, QColor(53, 53, 53))
+        dark_palette.setColor(QPalette.Disabled, QPalette.ButtonText, QColorConstants.DarkGray)
+        dark_palette.setColor(QPalette.Disabled, QPalette.WindowText, QColorConstants.DarkGray)
+        dark_palette.setColor(QPalette.Disabled, QPalette.Text, QColorConstants.DarkGray)
+        dark_palette.setColor(QPalette.Disabled, QPalette.Light, QColor(53, 53, 53))
+        QApplication.setPalette(dark_palette)
+    else:
+        raise ValueError('Set Palette function received an unrecognized style: "' + str(style) + '".')
+
+    set_config_value('Settings', 'gui_theme', style)
+
+
+def toggle_palette():
+    if config.get('Settings', 'gui_theme', fallback='Light') == 'Light':
+        set_palette('Dark')
+    else:
+        set_palette('Light')
+
+
 class Window(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -366,6 +407,11 @@ class Window(QMainWindow):
             self.menuBar().addAction('Update Available', update_bc)
         else:
             self.menuBar().addAction('Check for Updates', update_bc)
+
+        menu_separator2 = self.menuBar().addMenu('|')
+        menu_separator2.setEnabled(False)
+
+        self.menuBar().addAction('Toggle Dark Mode', toggle_palette)
 
         # Primary Vertical Box Layout
         vbox = QVBoxLayout()
@@ -1335,6 +1381,8 @@ if __name__ == '__main__':
             os.remove(os.path.join(os.getcwd(), 'beyondchaos_console.old.exe'))
         update_bc(suppress_prompt=True)
     QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
+    QApplication.setStyle('fusion')
+    set_palette()
     App = QApplication(sys.argv)
     os.environ['QT_AUTO_SCREEN_SCALE_FACTOR'] = '1'
     try:
