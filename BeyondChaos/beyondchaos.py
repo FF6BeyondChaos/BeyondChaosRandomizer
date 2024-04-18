@@ -310,10 +310,11 @@ class Window(QMainWindow):
         self.tab7 = QWidget()
         self.tab8 = QWidget()
         self.tab9 = QWidget()
+        self.tab10 = QWidget()
 
         self.tablist = [
             self.tab1, self.tab2, self.tab3, self.tab4, self.tab5, self.tab6,
-            self.tab7, self.tab8, self.tab9
+            self.tab7, self.tab8, self.tab9, self.tab10
         ]
 
         # global busy notifications
