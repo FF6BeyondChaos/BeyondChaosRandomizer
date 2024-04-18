@@ -5594,8 +5594,11 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                 Options_.is_flag_active('random_character_stats'):
             rename_card = get_item(231)
             if rename_card is not None:
+
                 secret_item = rename_card.become_another(tier='low')
                 rename_card.write_stats(outfile_rom_buffer)
+
+                # Make sure the secret item uses the proper weapon animation
 
                 weapon_anim_fix = Substitution()
                 weapon_anim_fix.set_location(0x19DB8)
@@ -5608,6 +5611,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                      0x6B, 0xDA, 0xC2, 0x20, 0x8A, 0xE9, 0xF0, 0x02, 0xAA,
                      0x29, 0xFF, 0x00, 0xE2, 0x20, 0xBF, 0x00, 0x31, 0xF0, 0xFA, 0x6B])
                 weapon_anim_fix.write(outfile_rom_buffer)
+
                 log(secret_item, section='secret items')
         reseed()
 

@@ -290,9 +290,12 @@ def show_coliseum_rewards(output_rom_buffer: BytesIO):
 
 
 def sprint_shoes_break(output_rom_buffer: BytesIO):
+
+    #Also make Rename Card item slot usable in battle
+
     sprint_shoes_sub = Substitution()
     sprint_shoes_sub.set_location(0x2273D)
-    sprint_shoes_sub.bytestring = bytes([0xE7])
+    sprint_shoes_sub.bytestring = bytes([0xE8])
     sprint_shoes_sub.write(output_rom_buffer)
 
 
