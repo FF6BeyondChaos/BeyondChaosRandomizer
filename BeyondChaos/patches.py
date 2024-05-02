@@ -441,6 +441,12 @@ def fix_flyaway(output_rom_buffer: BytesIO):
     ff_sub.bytestring = bytes([0xFD])
     ff_sub.write(output_rom_buffer)
 
+def item_return_buffer_fix(output_rom_buffer: BytesIO):
+
+    irbf_sub = Substitution()
+    irbf_sub.set_location(0x112D5)
+    irbf_sub.bytestring = bytes([0xE0, 0x50, 0x00])
+    irbf_sub.write(output_rom_buffer)
 
 def change_swdtech_speed(output_rom_buffer: BytesIO, speed: str = "Vanilla"):
     css_sub = Substitution()

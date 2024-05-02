@@ -51,7 +51,7 @@ from patches import (
     fix_gogo_portrait, vanish_doom, stacking_immunities, mp_color_digits,
     can_always_access_esper_menu, alphabetized_lores, description_disruption,
     informative_miss, improved_equipment_menus, verify_randomtools_patches, slow_background_scrolling,
-    shadow_stays, level_cap, mp_refills)
+    shadow_stays, level_cap, mp_refills, item_return_buffer_fix)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -2193,6 +2193,7 @@ def manage_balance(newslots: bool = True):
     fix_flyaway(outfile_rom_buffer)
     death_abuse(outfile_rom_buffer)
     fix_gogo_portrait(outfile_rom_buffer)
+    item_return_buffer_fix(outfile_rom_buffer)
 
 def manage_magitek():
     magitek_log = ''
