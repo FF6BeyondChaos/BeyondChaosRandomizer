@@ -4494,7 +4494,7 @@ def manage_clock():
     hour = (hour + 1) * 2
     minute = (minute + 1) * 10
     second = (second + 1) * 10
-    clock_string = f'{hour}:{minute:02}:%{second:02}'
+    clock_string = f'{hour}:{minute:02}:{second:02}'
     log(clock_string, section='zozo clock')
 
     # Change text of hints
