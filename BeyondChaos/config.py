@@ -25,27 +25,39 @@ MD5HASHTEXTLESS2 = "e0984abc9e5dd99e4bc54e8f9e0ff8d0"
 
 # Supported preset names must be lowercase.
 SUPPORTED_PRESETS = {
-    'new player': 'b c e f g i n o p q r s t w y z makeover partyparty dancelessons lessfanatical '
-                  'expboost:2.0 gpboost:2.0 mpboost:2.0 swdtechspeed:faster alasdraco capslockoff '
-                  'johnnydmad questionablecontent relicmyhat',
-    'intermediate player': 'b c d e f g i j k m n o p q r s t u w y z makeover partyparty dancelessons '
-                           'electricboogaloo swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter '
-                           'remonsterate relicmyhat',
-    'advanced player': 'b c d e f g h i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo '
-                       'randombosses dancingmaduin:1 swdtechspeed:random alasdraco capslockoff johnnydmad notawaiter '
-                       'remonsterate bsiab mimetime morefanatical questionablecontent relicmyhat',
-    'chaotic player': 'b c d e f g h i j k m n o p q r s t u w y z makeover partyparty dancelessons electricboogaloo '
-                      'masseffect:med randombosses dancingmaduin:chaos swdtechspeed:random alasdraco capslockoff '
-                      'johnnyachaotic notawaiter remonsterate bsiab mimetime questionablecontent randomboost:2 '
-                      'allcombos supernatural mementomori:random thescenarionottaken relicmyhat',
-    'race easy': 'b c d e f g i j k m n o p q r s t w y z capslockoff '
-                 'johnnydmad makeover notawaiter partyparty madworld relicmyhat',
-    'race medium': 'b c d e f g i j k m n o p q r s t u w y z capslockoff '
-                   'johnnydmad makeover notawaiter partyparty '
-                   'electricboogaloo randombosses madworld relicmyhat',
-    'race insane': 'b c d e f g i j k m n o p q r s t u w y z capslockoff '
-                   'johnnydmad makeover notawaiter partyparty darkworld '
-                   'madworld bsiab electricboogaloo randombosses relicmyhat'
+    'new player': 'b c e f g i n o p q r s t w y z alphalores improvedpartygear informativemiss '
+                  'magicnumbers mpparty nicerpoison questionablecontent regionofdoom relicmyhat '
+                  'slowerbg tastetherainbow makeover partyparty alasdraco capslockoff johnnydmad '
+                  'dancelessons lessfanatical expboost:2.0 gpboost:2.0 mpboost:2.0 '
+                  'swdtechspeed:faster shadowstays ',
+    'intermediate player': 'b c d e f g i j k m n o p q r s t u w y z alphalores improvedpartygear '
+                           'informativemiss magicnumbers mpparty nicerpoison questionablecontent '
+                           'regionofdoom relicmyhat slowerbg tastetherainbow makeover partyparty '
+                           'alasdraco capslockoff johnnydmad notawaiter remonsterate dancelessons '
+                           'electricboogaloo lessfanatical swdtechspeed:faster shadowstays ',
+    'advanced player': 'b c d e f g h i j k m n o p q r s t u w y z alphalores improvedpartygear '
+                       'informativemiss magicnumbers mpparty nicerpoison questionablecontent '
+                       'regionofdoom relicmyhat slowerbg tastetherainbow makeover partyparty '
+                       'alasdraco capslockoff johnnydmad notawaiter remonsterate dancelessons '
+                       'electricboogaloo randombosses dancingmaduin:1 swdtechspeed:random '
+                       'bsiab mimetime morefanatical mementomori:14',
+    'chaotic player': 'b c d e f g h i j k m n o p q r s t u w y z improvedpartygear informativemiss '
+                      'magicnumbers mpparty nicerpoison questionablecontent regionofdoom relicmyhat '
+                      'slowerbg tastetherainbow makeover partyparty alasdraco capslockoff johnnyachaotic '
+                      'notawaiter remonsterate dancelessons electricboogaloo randombosses dancingmaduin:chaos '
+                      'masseffect:med swdtechspeed:random bsiab mimetime randomboost:2 allcombos supernatural '
+                      'mementomori:random thescenarionottaken',
+    'race easy': 'b c d e f g i j k m n o p q r s t w y z improvedpartygear informativemiss magicnumbers mpparty '
+                 'nicerpoison questionablecontent regionofdoom relicmyhat slowerbg tastetherainbow makeover '
+                 'partyparty capslockoff johnnydmad notawaiter remonsterate madworld',
+    'race medium': 'b c d e f g i j k m n o p q r s t u w y z improvedpartygear informativemiss magicnumbers '
+                   'mpparty nicerpoison questionablecontent regionofdoom relicmyhat slowerbg tastetherainbow '
+                   'makeover partyparty capslockoff johnnydmad notawaiter remonsterate electricboogaloo '
+                   'madworld randombosses',
+    'race insane': 'b c d e f g i j k m n o p q r s t u w y z improvedpartygear informativemiss magicnumbers '
+                   'mpparty nicerpoison questionablecontent regionofdoom relicmyhat slowerbg tastetherainbow '
+                   'makeover partyparty capslockoff johnnydmad notawaiter remonsterate darkworld electricboogaloo '
+                   'madworld nobreaks randombosses bsiab mementomori:14'
 }
 
 # Load configuration data
