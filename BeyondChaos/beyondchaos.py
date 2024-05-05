@@ -378,7 +378,9 @@ class Window(QMainWindow):
         self.flag_string.setText(config.get(
             'Settings',
             'default_flagstring',
-            fallback=''  # SUPPORTED_PRESETS['new player'])
+            fallback='b c d e f g h i m n o p q r s t w y z alphalores improvedpartygear informativemiss magicnumbers '
+                     'mpparty nicerpoison questionablecontent regionofdoom tastetherainbow makeover partyparty '
+                     'alasdraco capslockoff johnnydmad dancelessons lessfanatical swdtechspeed:faster shadowstays'
         ))
 
     def init_window(self):
