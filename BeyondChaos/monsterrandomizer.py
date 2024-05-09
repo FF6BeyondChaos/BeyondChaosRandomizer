@@ -1815,7 +1815,7 @@ def _randomweight(key: str):
               'hp': (30, 100)}
     min_weight, max_weight = ranges.get(key, (2, 100))
     delta = max_weight - min_weight
-    return min_weight + random.randint(0, delta / 2 + delta % 2) + random.randint(0, delta / 2)
+    return min_weight + random.randint(0, delta // 2 + delta % 2) + random.randint(0, delta // 2)
 
 
 def monsters_from_table(tablefile):
