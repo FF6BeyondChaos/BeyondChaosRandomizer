@@ -1495,14 +1495,11 @@ def manage_natural_magic(natural_magic_table):
     except ValueError:
         return
 
-    # natmag_learn_sub = Substitution()
-    # natmag_learn_sub.set_location(0xa182)
-    # natmag_learn_sub.bytestring = bytes([0x22, 0x73, 0x08, 0xF0] + [0xEA] * 4)
-    # natmag_learn_sub.write(outfile_rom_buffer)
-    #
-    # natmag_learn_sub.set_location(0x261b6)
-    # natmag_learn_sub.bytestring = bytes([0x22, 0x4B, 0x08, 0xF0] + [0xEA] * 10)
-    # natmag_learn_sub.write(outfile_rom_buffer)
+    #Ensure Celes does not learn her vanilla natural magic
+    natmag_learn_sub = Substitution()
+    natmag_learn_sub.set_location(0xa186)
+    natmag_learn_sub.bytestring = bytes([0xEA] * 4)
+    natmag_learn_sub.write(outfile_rom_buffer)
 
     # natmag_learn_sub.set_location(NATURAL_MAGIC_TABLE)
     # natmag_learn_sub.bytestring = bytes(
