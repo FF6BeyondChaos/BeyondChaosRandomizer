@@ -823,7 +823,7 @@ Iro nq
 Isa abi
 Ish imt
 Isi ad
-Isl ae
+Isk ae
 Iso blt
 Iss au
 Ist ah
