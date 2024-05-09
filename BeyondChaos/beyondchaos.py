@@ -375,6 +375,13 @@ class Window(QMainWindow):
         self.flag_button_clicked()
         self.update_preset_dropdown()
         self.clear_ui()
+        self.flag_string.setText(config.get(
+            'Settings',
+            'default_flagstring',
+            fallback='b c d e f g h i m n o p q r s t w y z alphalores improvedpartygear informativemiss magicnumbers '
+                     'mpparty nicerpoison questionablecontent regionofdoom tastetherainbow makeover partyparty '
+                     'alasdraco capslockoff johnnydmad dancelessons lessfanatical swdtechspeed:faster shadowstays'
+        ))
 
     def init_window(self):
         self.setWindowTitle(self.title)
@@ -408,10 +415,10 @@ class Window(QMainWindow):
         else:
             self.menuBar().addAction('Check for Updates', update_bc)
 
-        menu_separator2 = self.menuBar().addMenu('|')
-        menu_separator2.setEnabled(False)
+        # menu_separator2 = self.menuBar().addMenu('|')
+        # menu_separator2.setEnabled(False)
 
-        self.menuBar().addAction('Toggle Dark Mode', toggle_palette)
+        # self.menuBar().addAction('Toggle Dark Mode', toggle_palette)
 
         # Primary Vertical Box Layout
         vbox = QVBoxLayout()
@@ -1301,6 +1308,9 @@ class Window(QMainWindow):
                     else:
                         result_files.append(result_file)
                         if currentSeed + 1 == seeds_to_generate:
+                            # If generation succeeded, set the default flagstring to the last one used.
+                            set_config_value('Settings', 'default_flagstring', self.flag_string.text())
+
                             if seeds_to_generate == 1:
                                 QMessageBox.information(
                                     self,
@@ -1381,8 +1391,8 @@ if __name__ == '__main__':
             os.remove(os.path.join(os.getcwd(), 'beyondchaos_console.old.exe'))
         update_bc(suppress_prompt=True)
     QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True)
-    QApplication.setStyle('fusion')
-    set_palette()
+    # QApplication.setStyle('fusion')
+    # set_palette()
     App = QApplication(sys.argv)
     os.environ['QT_AUTO_SCREEN_SCALE_FACTOR'] = '1'
     try:
