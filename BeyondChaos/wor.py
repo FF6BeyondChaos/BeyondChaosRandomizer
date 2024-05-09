@@ -881,8 +881,8 @@ def _manage_gogo_recruitment(outfile_rom_buffer: BytesIO, collapsing_house_char)
     recruit_event.bytestring = [
         0xDE, # Load caseword with current party
         0xC0, 0xA0 + char_index, 0x01, 0xA6, 0x33, 0x02, # If target character is not in the party, jump to message blowing them off
+        0xB2, 0x34, 0x2E, 0x01,  # disable collision for party
         0xB2, 0x8D, 0xCA, 0x00, # move party to tile below gogo
-        0xB2, 0x34, 0x2E, 0x01, # disable collision for party
         0xB2, 0xAC, 0xC6, 0x00, # Call subroutine CAC6AC
 
         0x3C, char_index, 0xFF, 0xFF, 0xFF, # Set up the party
