@@ -773,7 +773,7 @@
         "every_monster":    ["quickening", "reverse"]
     },
 
-    "always_banlist":       [],
+    "always_banlist":       ["luck_font", "luck_sink"],
     "character_banlist":    [],
     "esper_banlist":        ["repel_nuke", "caller"],
     "equip_banlist":        ["repel_nuke", "boost_nuke"],
