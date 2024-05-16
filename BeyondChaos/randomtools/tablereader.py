@@ -541,14 +541,17 @@ def write_patch_line(outfile, address, code):
     outfile.write(code)
 
 
-def write_patch(outfile, patchfilename, noverify=None, force=False,
-                mapping=None, parameters=None):
+def write_patch(outfile, patchfilename, parameters=None, mapping=None,
+                noverify=None, validate=None, force=False):
     if patchfilename in ALREADY_PATCHED and not force:
         return
+    if validate is None:
+        validate = not noverify
     if noverify and patchfilename not in NOVERIFY_PATCHES:
         NOVERIFY_PATCHES.append(patchfilename)
     elif noverify is None and patchfilename in NOVERIFY_PATCHES:
         noverify = True
+
     patchpath = path.join(tblpath, patchfilename)
     pf = open(patchpath, 'r+b')
     magic_word = pf.read(5)
@@ -568,8 +571,8 @@ def write_patch(outfile, patchfilename, noverify=None, force=False,
                 create_psx_file_manager(outfile)
             f = get_open_file(filename, sandbox=True)
         f.seek(address)
-        validate = f.read(len(code))
-        if validate != code[:len(validate)]:
+        validation_str = f.read(len(code))
+        if validation_str != code[:len(validation)]:
             break
     else:
         # this patch has already been applied
@@ -589,11 +592,11 @@ def write_patch(outfile, patchfilename, noverify=None, force=False,
             f.seek(address)
 
             if patchdict is validation:
-                validate = f.read(len(code))
-                if validate != code[:len(validate)]:
+                validation_str = f.read(len(code))
+                if validation_str != code[:len(validation_str)]:
                     error = ('Patch %s-%x did not pass validation.'
                              % (patchfilename, address))
-                    if noverify:
+                    if not validate:
                         print('WARNING: %s' % error)
                     else:
                         raise Exception(error)
@@ -892,10 +895,11 @@ class TableSpecs:
 
             if size[:3] == "bit":
                 size, bitnames = tuple(size.split(':'))
-                size = 1
                 bitnames = bitnames.split(" ")
+                assert len(bitnames) % 8 == 0
+                size = len(bitnames) // 8
                 assert all([bn.strip() for bn in bitnames])
-                assert len(bitnames) == len(set(bitnames)) == 8
+                assert len(bitnames) == len(set(bitnames)) == size * 8
                 self.bitnames[name] = bitnames
             elif size == '?':
                 size = 0
@@ -1227,7 +1231,6 @@ class TableObject(object):
         for key, value in self.specs.bitnames.items():
             if bitname in value:
                 index = value.index(bitname)
-                assert index <= 7
                 byte = getattr(self, key)
                 if bitvalue:
                     byte = byte | (1 << index)
@@ -1943,6 +1946,125 @@ class TableObject(object):
             o.index = index
             o.pointer = pointer
 
+    @property
+    def full_bitnames(self):
+        bitnames = dict(self.specs.bitnames)
+        if hasattr(self, 'extra_bitnames'):
+            for attr in self.extra_bitnames:
+                bitnames[attr] = self.extra_bitnames[attr]
+        return bitnames
+
+    def export_data(self):
+        import json
+        data = {}
+        index_length = len('%x' % (len(self.every)-1))
+        data['!index'] = ('{0:0>%sx}' % index_length).format(self.index)
+        for attribute in dir(self):
+            if not hasattr(self.__class__, attribute):
+                continue
+            if hasattr(TableObject, attribute):
+                continue
+            if (hasattr(self, 'export_blacklist')
+                    and attribute in self.export_blacklist):
+                continue
+            if isinstance(getattr(self.__class__, attribute), property):
+                value = getattr(self, attribute)
+                if isinstance(value, int):
+                    value = '%x' % value
+                if isinstance(value, list) or isinstance(value, set):
+                    value = ['%x' % v if isinstance(v, int) else v
+                             for v in value]
+                try:
+                    json.dumps(value)
+                    data['#%s' % attribute] = value
+                except TypeError:
+                    value = str(value)
+                    data['#%s' % attribute] = value
+        for attribute, length, other in self.specs.attributes:
+            value = getattr(self, attribute)
+            if attribute in self.full_bitnames:
+                bitnames = self.full_bitnames[attribute]
+                setbits = []
+                for i, bitname in enumerate(bitnames):
+                    if value & (1 << i):
+                        setbits.append(bitname)
+                value = setbits
+            if other == 'str':
+                if hasattr(self, 'decode_bytes'):
+                    value = self.decode_bytes(value)
+                else:
+                    value = [c for c in value]
+            if other == 'list':
+                if isinstance(length, str):
+                    value_length, value_width = length.split('x')
+                    value_length = int(value_length)
+                    value_width = int(value_width)
+                else:
+                    value_length = int(length)
+                    value_width = 1
+                assert len(value) == value_length
+                value = [('{0:0>%sx}' % (value_width*2)).format(v)
+                         for v in value]
+            if isinstance(value, int):
+                value = ('{0:0>%sx}' % (length * 2)).format(value)
+            data[attribute] = value
+        return data
+
+    def import_data(self, data):
+        assert int(data['!index'], 0x10) == self.index
+        attributes = [a for (a, _ , _) in self.specs.attributes]
+
+        for key in data:
+            if key in attributes:
+                continue
+            if key.startswith('#') or key.startswith('!'):
+                continue
+            setattr(self, key, data[key])
+
+        for attribute, length, other in self.specs.attributes:
+            if attribute not in data:
+                continue
+            value = data[attribute]
+            if other == 'str':
+                if hasattr(self, 'encode_bytes'):
+                    value = self.encode_bytes(value)
+                else:
+                    value = bytes(value)
+            elif other == 'list':
+                assert type(self.old_data[attribute]) is list
+                value = [int(v, 0x10) if isinstance(v, str) else v
+                         for v in value]
+                if isinstance(length, str):
+                    value_length, _ = length.split('x')
+                    value_length = int(value_length)
+                else:
+                    value_length = length
+                assert value_length == len(value)
+            elif isinstance(value, list):
+                assert attribute in self.full_bitnames
+                assert type(self.old_data[attribute]) is int
+                bitnames = self.full_bitnames[attribute]
+                new_value = 0
+                for name in value:
+                    assert bitnames.count(name) == 1
+                    new_value |= 1 << bitnames.index(name)
+                value = new_value
+            else:
+                if isinstance(value, str):
+                    value = int(value, 0x10)
+            assert type(value) is type(self.old_data[attribute])
+            setattr(self, attribute, value)
+
+    @classmethod
+    def export_all(cls):
+        return [o.export_data() for o in cls.every]
+
+    @classmethod
+    def import_all(cls, datas):
+        for data in datas:
+            index = int(data['!index'], 0x10)
+            cls.get(index).import_data(data)
+
 
 already_gotten = {}
 
@@ -2081,8 +2203,10 @@ def set_table_specs(objects, filename=None):
         filename = GLOBAL_TABLE
     tablesfile = path.join(tblpath, filename)
     for line in open(tablesfile):
+        if '#' in line:
+            line = line.split('#')[0]
         line = line.strip()
-        if not line or line[0] == "#":
+        if not line:
             continue
 
         if line[0] == '$':

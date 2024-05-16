@@ -100,6 +100,39 @@ def snescopy(sourcefile, outfile):
         raise Exception("Inappropriate file size for SNES rom file.")
 
 
+def n64copy(sourcefile, outfile):
+    simple_copy = False
+    with open(outfile, 'w+') as g:
+        pass
+    with open(sourcefile, 'r+b') as f:
+        with open(outfile, 'r+b') as g:
+            first_word = f.read(4)
+            f.seek(0)
+            if first_word == b'\x80\x37\x12\x40':
+                # big-endian
+                simple_copy = True
+            elif first_word == b'\x37\x80\x40\x12':
+                # byte swapped
+                print('Byte-swapped ROM detected. Converting to big-endian.')
+                while True:
+                    data = f.read(2)
+                    if not data:
+                        break
+                    g.write(data[::-1])
+            elif first_word == b'\x40\x12\x37\x80':
+                # little-endian
+                print('Little-endian ROM detected. Converting to big-endian.')
+                while True:
+                    data = f.read(4)
+                    if not data:
+                        break
+                    g.write(data[::-1])
+            else:
+                raise Exception('Unknown N64 ROM format.')
+    if simple_copy:
+        copyfile(sourcefile, outfile)
+
+
 def write_cue_file():
     filename = get_outfile()
     cue_filename = '.'.join(filename.split('.')[:-1] + ['cue'])
@@ -112,7 +145,7 @@ def write_cue_file():
 
 
 def run_interface(objects, custom_degree=False, custom_difficulty=False,
-                  codes=None, snes=False, lorom=False, args=None,
+                  codes=None, snes=False, n64=False, lorom=False, args=None,
                   setup_only=False, override_outfile=None):
     global sourcefile, outfile, flags, user_input_flags
     global activated_codes, all_objects
@@ -224,6 +257,8 @@ def run_interface(objects, custom_degree=False, custom_difficulty=False,
                 set_addressing_mode('lorom')
             else:
                 set_addressing_mode('hirom')
+        elif n64:
+            n64copy(sourcefile, outfile)
         else:
             if (DELTA_FILE is not None
                     and DELTA_FILE in listdir() and outfile in listdir()):
@@ -431,6 +466,7 @@ def clean_and_write(objects):
 
 
 def finish_interface():
+    close_file(outfile)
     print()
     print("Randomization completed successfully.")
     print("Output filename: %s" % outfile)
