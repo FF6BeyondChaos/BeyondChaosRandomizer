@@ -67,7 +67,7 @@ def recursive_merge(original, update):
 class JunctionManager:
     MAX_LINE_LENGTH = 32
 
-    def __init__(self, outfile, manifest=None, data=None, update=None, commands=None):
+    def __init__(self, outfile, manifest=None, data=None, update=None):
         self.outfile = get_open_file(outfile)
         self.directory = tblpath
         self.patches = set()
@@ -136,11 +136,6 @@ class JunctionManager:
                     k = self.get_junction_index(k)
                     assert k not in new_dict
                     new_dict[k] = v
-                    if key == 'junction_short_names' and commands:
-                        if commands["gprain"].name != "gprain" and v.lower() == "sos gp rain":
-                            new_dict[k] = "SOS " + commands["gprain"].name
-                        if commands["runic"].name != "runic" and v.lower() == "sos runic":
-                            new_dict[k] = "SOS " + commands["runic"].name
                 value = new_dict
                 full_data[key] = value
 
