@@ -5010,7 +5010,8 @@ def initialize_esper_allocation_table():
     outfile_rom_buffer.write(data)
 
 
-def junction_everything(jm: JunctionManager):
+def junction_everything(jm: JunctionManager,
+                        commands: Dict[str, CommandBlock]):
     jm.set_seed(seed)
 
     monsters = get_monsters()
@@ -5020,6 +5021,14 @@ def junction_everything(jm: JunctionManager):
             old_length = len(monster.name.rstrip('_'))
             old_suffix = jm.monster_names[monster.id][old_length:]
             jm.monster_names[monster.id] = monster.changed_name + old_suffix
+
+    for k, v in sorted(jm.junction_short_names.items()):
+        if commands["gprain"].name != "gprain" and v.lower() == "sos gp rain":
+            jm.junction_short_names[k] = "SOS " + commands["gprain"].name
+        if commands["runic"].name != "runic" and v.lower() == "sos runic":
+            jm.junction_short_names[k] = "SOS " + commands["runic"].name
+        if commands["dance"].name != "dance" and v.lower() == "sos dance":
+            jm.junction_short_names[k] = "SOS " + commands["dance"].name
 
     if Options_.is_flag_active('espercutegf'):
         jm.add_junction(None, 'esper_magic', 'whitelist')
@@ -6101,9 +6110,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         if Options_.is_flag_active('thescenarionottaken'):
             chocobo_merchant()
 
-        jm = JunctionManager(outfile_rom_buffer, 'bcg_junction_manifest.json', commands=commands)
+        jm = JunctionManager(outfile_rom_buffer, 'bcg_junction_manifest.json')
         jm.activated = False
-        junction_everything(jm)
+        junction_everything(jm, commands=commands)
 
         # ----- NO MORE RANDOMNESS PAST THIS LINE -----
         if Options_.is_flag_active('thescenarionottaken'):

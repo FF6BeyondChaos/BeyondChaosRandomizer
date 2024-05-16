@@ -75,6 +75,7 @@
         "critical_esper":       "32",
         "critical_jump":        "33",
         "critical_defend":      "34",
+        "critical_dance":       "35",
         "leech":                "36",
         "sneeze_guard":         "37",
         "critical_morph":       "38",
@@ -192,7 +193,10 @@
         "luck_sink":            "a8",
         "juggernaut":           "a9",
         "burst":                "aa",
-        "life_force":           "ab"
+        "atma_force":           "ab",
+        "corrosive":            "ac",
+        "overheal":             "ad",
+        "juggler":              "ae"
     },
 
     "junction_short_names": {
@@ -246,6 +250,7 @@
         "critical_morph":       "SOS Morph",
         "critical_runic":       "SOS Runic",
         "critical_defend":      "SOS Defend",
+        "critical_dance":       "SOS Dance",
         "leech":                "Leech",
         "sneeze_guard":         "Sneeze Guard",
         "critical_gprain":      "SOS GP Rain",
@@ -364,7 +369,10 @@
         "luck_sink":            "Luck Sink",
         "juggernaut":           "Juggernaut",
         "burst":                "Burst",
-        "life_force":           "Life Force"
+        "atma_force":           "Atma Force",
+        "corrosive":            "Corrosive",
+        "overheal":             "Overheal",
+        "juggler":              "Juggler"
     },
 
     "junction_tags": {
@@ -419,6 +427,7 @@
         "critical_esper":       ["esper"],
         "critical_jump":        ["hide"],
         "critical_defend":      ["defend"],
+        "critical_dance":       ["luck"],
         "leech":                ["drain", "status", "debuff", "poison", "seizure", "regen"],
         "sneeze_guard":         ["hide"],
         "critical_morph":       ["buff"],
@@ -536,7 +545,10 @@
         "luck_sink":            ["-luck"],
         "juggernaut":           ["buff", "slow"],
         "burst":                ["buff", "haste"],
-        "life_force":           ["life", "-death", "heal"]
+        "atma_force":           ["life", "-death", "heal"],
+        "corrosive":            ["poison", "debuff", "-heal"],
+        "overheal":             ["heal"],
+        "juggler":              ["defend"]
     },
 
     "esper_tags":       "tags_esper.json",
@@ -761,7 +773,7 @@
         "every_monster":    ["quickening", "reverse"]
     },
 
-    "always_banlist":       [],
+    "always_banlist":       ["luck_font", "luck_sink"],
     "character_banlist":    [],
     "esper_banlist":        ["repel_nuke", "caller"],
     "equip_banlist":        ["repel_nuke", "boost_nuke"],
@@ -818,7 +830,7 @@
         "command-summon":                   "61f180",
         "command-table-address":            "61f100",
         "compare-x-y":                      "6109a0",
-        "count-bits":                       "6108c0",
+        "count-bits":                       "6108f0",
         "deduct-item-if-possible":          "610740",
         "dispatcher-return":                "610fff",
         "divide":                           "610860",
@@ -1006,6 +1018,9 @@
             "patch_junction_critical_trigger.txt"
         ],
         "critical_defend": [
+            "patch_junction_critical_trigger.txt"
+        ],
+        "critical_dance": [
             "patch_junction_critical_trigger.txt"
         ],
         "leech": [
@@ -1380,8 +1395,18 @@
             "patch_junction_miasma.txt",
             "patch_junction_initiative.txt"
         ],
-        "life_force": [
+        "atma_force": [
             "patch_junction_damage_modification.txt"
+        ],
+        "corrosive": [
+            "patch_junction_damage_trigger.txt"
+        ],
+        "overheal": [
+            "patch_junction_overheal.txt",
+            "patch_over_9999_maxhp.txt"
+        ],
+        "juggler": [
+            "patch_junction_damage_trigger.txt"
         ]
     }
 }

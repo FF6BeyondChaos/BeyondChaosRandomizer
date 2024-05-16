@@ -2224,54 +2224,36 @@ def fewer_flashes(output_rom_buffer: BytesIO, flag_value):
 
 
 def vanish_doom(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_vanish_doom.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_vanish_doom.txt')
 
 
 def stacking_immunities(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_stacking_immunities_fix.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_stacking_immunities_fix.txt')
 
 
 def mp_color_digits(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_mp_color_digits.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_mp_color_digits.txt')
 
 
 def can_always_access_esper_menu(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_can_always_access_esper_menu.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_can_always_access_esper_menu.txt')
 
 
 def alphabetized_lores(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_alphabetized_lores.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_alphabetized_lores.txt')
 
 
 def description_disruption(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_description_disruption.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_description_disruption.txt')
 
 
 def informative_miss(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_informative_miss.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_informative_miss.txt')
 
 
 def improved_equipment_menus(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_improved_equip_menu.txt'))
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_improved_shop_menu.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_improved_equip_menu.txt')
+    jm_write_patch(output_rom_buffer, 'patch_improved_shop_menu.txt')
 
 
 def verify_randomtools_patches(output_rom_buffer: BytesIO):
