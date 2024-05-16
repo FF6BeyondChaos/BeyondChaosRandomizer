@@ -855,24 +855,138 @@ def title_gfx(output_rom_buffer: BytesIO):
 
 
 def improved_party_gear(output_rom_buffer: BytesIO, myself_name_address, myself_name_bank):
+    # On the party gear display screen, display the original character slot name
+    # and their equipped esper.  This is similar to the functionality of RotDS,
+    # but we add the character slot name for Beyond Chaos since it's useful.
     ipg_sub = Substitution()
     ipg_sub.set_location(0x038F04)
-    ipg_sub.bytestring = bytes([0x64,
-        0x28, 0x22, 0x01, 0xAF, 0xEE, 0xA9, 0x00, 0xEB, 0xA5, 0x28, 0xAA, 0xB5, 0x69, 0x30, 0x60, 0x48,
-        0x8A, 0x0A, 0xA8, 0x69, 0x39, 0xEB, 0xA9, 0x0D, 0xB6, 0x6D, 0x86, 0x67, 0xA8, 0x5A, 0xA9, 0x24,
-        0x85, 0x29, 0x20, 0xCF, 0x34, 0x7A, 0xA9, 0x28, 0x85, 0x29, 0xC2, 0x21, 0x98, 0x69, 0x10, 0x00,
-        0x8F, 0x89, 0x9E, 0x7E, 0xA9, 0x08, 0x00, 0x85, 0xEB, 0xA9] + myself_name_address + [0x85, 0xEF, 0xE2, 0x20,
-        0xA9] + myself_name_bank + [0x85, 0xF1, 0x68, 0xC9, 0x0E, 0xB0, 0x08, 0x5A, 0x20, 0x67, 0x84, 0x20, 0xD9, 0x7F,
-        0x7A, 0xA9, 0x34, 0x85, 0x29, 0xC2, 0x21, 0x98, 0x69, 0x20, 0x00, 0xA8, 0xE2, 0x20, 0x20, 0xE6,
-        0x34, 0xA9, 0x20, 0x85, 0x29, 0xA5, 0x28, 0x0A, 0x0A, 0x0A, 0x69, 0x04, 0x20, 0x8A, 0x8F, 0xA5,
-        0x28, 0x1A, 0x85, 0x28, 0xC9, 0x04, 0xD0, 0x8D, 0x20, 0x28, 0x0E, 0x20, 0x36, 0x0E, 0x20, 0x3C,
-        0x6A, 0x4C, 0x6E, 0x0E])
+    ipg_sub.bytestring = bytes([
+        # We start overwriting from the beginning of the routine to draw party gear.
+        # The original code has four subroutines that each do the same thing except
+        # read different addresses for the character slots.  This is a waste of space
+        # for non-time-critical code.  We can overwrite these four routines by
+        # replacing their functionality with a loop.  Note that these four
+        # subroutines follow the routine at C38EED, so we can just keep writing.
+        #
+        # Start at first slot.
+        0x64, 0x28,                 # STZ.B $28
+        # Initialize extra palette color.  The original game doesn't use this
+        # palette for anything in the menu system, so make it yellow.
+        0x22, 0x01, 0xAF, 0xEE,     # JSL yellow_palette
+                                # member_loop:
+        # Clear high part of A.
+        0xA9, 0x00,                 # LDA.B #0
+        0xEB,                       # XBA
+        # Is anyone in this slot?
+        0xA5, 0x28,                 # LDA.B $28
+        0xAA,                       # TAX
+        0xB5, 0x69,                 # LDA.B $69,x
+        0x30, 0x60,                 # BMI nobody
+        # Save the character ID.
+        0x48,                       # PHA
+        # While we have the slot in A, let's do some things.
+        # Double slot and give to Y.  Clears carry because slot < 128.
+        0x8A,                       # TXA
+        0x0A,                       # ASL
+        0xA8,                       # TAY
+        # Calculate high byte of text position for this slot:
+        # $390D + (slot * $200).
+        0x69, 0x39,                 # ADC.B #$39
+        0xEB,                       # XBA
+        0xA9, 0x0D,                 # LDA.B #$0D
+        # Copy actor's address.  They're words at 69, 6B, 6D, 6F.
+        0xB6, 0x6D,                 # LDX.B $6D,y
+        0x86, 0x67,                 # STX.B $67
+        # Set palette to cyan and draw actor's name.
+        # Y = text address (the 390D calculation above).
+        0xA8,                       # TAY
+        0x5A,                       # PHY
+        0xA9, 0x24,                 # LDA.B #$24
+        0x85, 0x29,                 # STA.B $29
+        0x20, 0xCF, 0x34,           # JSR.W $C334CF
+        0x7A,                       # PLY
+        # Palette for slot name.
+        0xA9, 0x28,                 # lda.b #$28
+        0x85, 0x29,                 # sta.b $29
+        # Compute tile address for slot's name.
+        0xC2, 0x21,                 # REP #$21   ; clear carry too
+        0x98,                       # TYA
+        0x69, 0x10, 0x00,           # ADC.W #8 * 2
+        0x8F, 0x89, 0x9E, 0x7E,     # STA.L $7E9E89
+        # Set up parameters for fixed-size table.
+        0xA9, 0x08, 0x00,           # LDA.W #8
+        0x85, 0xEB,                 # STA.B $EB
+        0xA9] + myself_name_address + [ # LDA.W #myself_name_address & $FFFF
+        0x85, 0xEF,                 # STA.B $EF
+        0xE2, 0x20,                 # SEP #$20
+        0xA9] + myself_name_bank + [# LDA.B #myself_name_bank
+        0x85, 0xF1,                 # STA.B $F1
+        # Get back the character ID.
+        0x68,                       # PLA
+        # Don't draw slot's name if not a usual character.
+        0xC9, 0x0E,                 # CMP.B #14
+        0xB0, 0x08,                 # BCS special_character
+        # Copy fixed-size string to write buffer.
+        # A = index of fixed-size string, just set.
+        0x5A,                       # PHY
+        0x20, 0x67, 0x84,           # JSR.W $C38467
+        # Draw write buffer to tilemap.
+        0x20, 0xD9, 0x7F,           # JSR.W $C37FD9
+        0x7A,                       # PLY
+                                # special_character:
+        # Use special yellow palette.
+        0xA9, 0x34,                 # LDA.B #$34
+        0x85, 0x29,                 # STA.B $29
+        # Draw esper's name.
+        # Get tilemap address and move over 18 tiles.
+        0xC2, 0x21,                 # REP #$21   ; clear carry too
+        0x98,                       # TYA
+        0x69, 0x20, 0x00,           # ADC.W #16 * 2
+        0xA8,                       # TAY
+        0xE2, 0x20,                 # SEP #$20
+        # This routine wants the actor address in D+$67 and tilemap in Y.
+        0x20, 0xE6, 0x34,           # JSR.W $C334E6
+        # Reset palette to normal.
+        0xA9, 0x20,                 # LDA.B #$20
+        0x85, 0x29,                 # STA.B $29
+        # Draw gear for this party member.
+        # Row = 4 + (slot * 8).
+        0xA5, 0x28,                 # LDA.B $28
+        0x0A,                       # ASL
+        0x0A,                       # ASL
+        0x0A,                       # ASL
+        0x69, 0x04,                 # ADC.B #$04
+        0x20, 0x8A, 0x8F,           # JSR.W $C38F8A
+        # Next party member.
+                                # nobody:
+        0xA5, 0x28,                 # LDA.B $28
+        0x1A,                       # INC
+        0x85, 0x28,                 # STA.B $28
+        0xC9, 0x04,                 # CMP.B #4
+        0xD0, 0x8D,                 # BNE member_loop
+        # Do stuff from the original code after the menu draws.
+        0x20, 0x28, 0x0E,           # JSR.W $C30E28
+        0x20, 0x36, 0x0E,           # JSR.W $C30E36
+        0x20, 0x3C, 0x6A,           # JSR.W $C36A3C
+        0x4C, 0x6E, 0x0E])          # JMP.W $C30E6E
     ipg_sub.write(output_rom_buffer)
 
+    # The subroutine writes the yellow color palette on top of an
+    # existing palette that wasn't being used in the menu.
+    # It's here because it didn't fit in the above code cave.
     ipg_sub.set_location(0x2EAF01)
-    ipg_sub.bytestring = bytes([0xC2, 0x20, 0xA9, 0x00,
-        0x00, 0x8F, 0xE9, 0x30, 0x7E, 0x8F, 0xEB, 0x30, 0x7E, 0xA9, 0xCE, 0x39, 0x8F, 0xED, 0x30, 0x7E,
-        0xA9, 0xBF, 0x03, 0x8F, 0xEF, 0x30, 0x7E, 0xE2, 0x20, 0x6B])
+    ipg_sub.bytestring = bytes([
+                                # yellow_palette:
+        0xC2, 0x20,                 # REP $20
+        0xA9, 0x00, 0x00,           # LDA.W #$0000
+        0x8F, 0xE9, 0x30, 0x7E,     # STA.L $7E3049 + (((5 * 16) + 0) * 2)
+        0x8F, 0xEB, 0x30, 0x7E,     # STA.L $7E3049 + (((5 * 16) + 1) * 2)
+        0xA9, 0xCE, 0x39,           # LDA.W #$39CE
+        0x8F, 0xED, 0x30, 0x7E,     # STA.L $7E3049 + (((5 * 16) + 2) * 2)
+        0xA9, 0xBF, 0x03,           # LDA.W #$03BF
+        0x8F, 0xEF, 0x30, 0x7E,     # STA.L $7E3049 + (((5 * 16) + 3) * 2)
+        0xE2, 0x20,                 # SEP #$20
+        0x6B])                      # RTL
     ipg_sub.write(output_rom_buffer)
 
 def y_equip_relics(output_rom_buffer: BytesIO):
