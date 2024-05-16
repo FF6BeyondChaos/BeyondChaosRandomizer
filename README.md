@@ -7,9 +7,9 @@ a fork of SubtractionSoup's FF6 Beyond Chaos EX Randomizer
 a fork of Abyssonym's FF6 Beyond Chaos Randomizer
 <p>
 
-__Version__: 5.1.3
+__Version__: 6.0.0
 <br />
-__Date__: 2023-10-13
+__Date__: 2024-05-15
 <br />
 __URL__: https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/releases/latest
 <br />
@@ -80,15 +80,13 @@ In the GUI, on the left, you can select a mode.
 
 ### Flags
 
-There are a LOT of options that affect what gets randomized and add additional changes to the game. __If this is your first seed__, I recommend going down to bottom where it says "Saved flag selection", and picking "Recommend new player flags" from the dropdown menu.
+There are a LOT of options that affect what gets randomized and add additional changes to the game. __If this is your first seed__, I recommend going down to bottom where it says "Saved flag selection", and picking "New Player" from the dropdown menu.
 This will give you a good taste of Beyond Chaos CE while leaving out a few things that can sometimes be frustrating for new players.
-
-__If you find that too hard__, try also unchecking the `m` flag.
 
 __The "typical" flags used by veterans are__:
 
 ```
-(all simple flags except l and k) partyparty makeover capslockoff johnnydmad
+b c d e f g h i j k m n o p q r s t u w y z alphalores improvedpartygear informativemiss magicnumbers mpparty nicerpoison questionablecontent regionofdoom relicmyhat slowerbg tastetherainbow makeover partyparty alasdraco capslockoff johnnydmad notawaiter remonsterate dancelessons electricboogaloo randombosses dancingmaduin:1 swdtechspeed:random mimetime mementomori:14 
 ```
 
 But the important thing is to pick flags that are fun for you. If you're having fun, you aren't doing it wrong! When you find options you like, click the "Save flag selection" button to save it as a preset so you can quickly select the same flags again.
@@ -262,11 +260,11 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
     myself086 - new menu features and natural magic expansion
     Dracovious - Created new GUI and R-Limit, and some other codes
     GreenKnight5 - First GUI, Cecilbot
-    DrInsanoPHD - Refactoring code, character stats randomizer, bug fixes, lots of help with CE releases
-    Crimdahl - Rotating status patch, dancelessons code, removeflashing code, lots of help with CE releases,
-    fusoyeahhh - lots of help with CE releases
-    RazzleStorm - refactoring some code, adding type hints, lots of help with CE releases
-    CDude - lots of help with event codes for CE versions, fixing Bio Blast and Flash/Schiller animations
+    DrInsanoPHD - Refactoring code, character stats randomizer, bug fixes, lots of help with early CE releases
+    Crimdahl - Rotating status patch, dancelessons code, removeflashing code, lots of help with CE releases, lots of GUI updates
+    fusoyeahhh - lots of help with early CE releases
+    RazzleStorm - refactoring some code, adding type hints, lots of help with early CE releases
+    CDude - lots of help with event codes for CE versions, major bug fixer and code wrangler, and overall a HUGE help
     Cecil188 - ported over music, owner of the Discord, and overall helper with everything
 
 
@@ -283,6 +281,7 @@ A: The best way to report it is on the Beyond Chaos Discord in the #bugs channel
     Novalia Spirit  "Allergic Dog" bug fix, Selective Reequip
     SilentEnigma    Alphabetized Lores, Description Disruption
     Synchysi        Esper Restriction
+    madsiur         Esper Mastery Patch
     madsiur, tsushiy, Lenophis
         FF6 Music Player
     Imzogelmo, SilentEnigma
