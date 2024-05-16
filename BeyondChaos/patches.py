@@ -259,6 +259,107 @@ def no_kutan_skip(output_rom_buffer: BytesIO):
     no_kutan_skip_sub.bytestring = bytes([0x27, 0x01])
     no_kutan_skip_sub.write(output_rom_buffer)
 
+def mastered_espers(output_rom_buffer: BytesIO):
+    me_sub = Substitution()
+
+    #Turn empty small font icon $7F into a star
+    me_sub.set_location(0x487B0)
+    me_sub.bytestring = bytes([0x18, 0x00, 0x3C, 0x18, 0xFF, 0x18, 0xFF, 0x7E, 0x7E,
+                               0x3C, 0xFF, 0x7E, 0xFF, 0x66, 0xE7, 0x00])
+    me_sub.write(output_rom_buffer)
+
+    #Hook into the Skills menu initiation to run a subroutine in freespace
+    me_sub.set_location(0x31B5E)
+    me_sub.bytestring = bytes([0x22, 0xD4, 0xAF, 0xEE]) #Hook - calculate actor's spell starting RAM offset
+    me_sub.write(output_rom_buffer)
+
+    #Hook into "Draw Esper name and MP cost" function to run a check from freespace and draw the star
+    me_sub.set_location(0x3552E)
+    me_sub.bytestring = bytes([0x22, 0xF5, 0xAF, 0xEE]) #Hook - check if current esper is mastered; 0x21 after first hook address
+    me_sub.write(output_rom_buffer)
+
+    me_sub.set_location(0x35554)
+    me_sub.bytestring = bytes([0x22, 0x42, 0xB0, 0xEE, 0xEA, 0xEA])  #Hook - add star icon; 0x6E bytes after first hook address
+    me_sub.write(output_rom_buffer)
+
+    me_sub.set_location(0x3555D)
+    me_sub.bytestring = bytes([0xA0, 0x0D, 0x00])  #Constant adjustment - Blank 13 tiles
+    me_sub.write(output_rom_buffer)
+
+    #Freespace after "Improved Party Gear" Patch
+    me_sub.set_location(0x2EAFD4)
+    me_sub.bytestring = bytes([0x7B,									# TDC, in this context puts 0 into A register
+		                        0xA5, 0x28,								# LDA $28
+		                        0xAA,									# TAX
+		                        0xB5, 0x69,								# LDA $69,X
+                                0xEB,									# XBA
+                                0xA9, 0x36,								# LDA #$36
+                                0xC2, 0x20,								# REP #$20, puts A into 16-bit mode
+                                0x8F, 0x02, 0x42, 0x00,					# STA $004202, prepare for SNES hardware multiplication of A and B
+                                0xEA, 0xEA, 0xEA, 0xEA,					# NOP #4, wait for it to finish
+                                0xAF, 0x16, 0x42, 0x00,					# LDA $004216, get the result
+                                0x8D, 0x03, 0x02,						# STA $0203
+                                0xE2, 0x20,								# SEP #$20, back to A in 8-bit mode
+                                0x7B,									# TDC
+                                0xA5, 0x28,								# LDA $28
+                                0xAA,									# TAX
+                                0x6B,									# RTL, end of routine "Calculate Actor's spell starting RAM offset"
+
+                                0xDA,									# PHX
+                                0x5A,									# PHY
+                                0x7B,									# TDC
+                                0x85, 0xFB,								# STA $FB, clear the Mastered Esper byte
+                                0xBF, 0x89, 0x9D, 0x7E,					# LDA $7E9D89, load Esper ID
+                                0xC2, 0x20,								# REP #$20, puts A into 16-bit mode
+                                0x85, 0xFC,								# STA $FC
+                                0x0A,									# ASL
+                                0x85, 0xFE,								# STA $FE
+                                0x0A, 0x0A,								# ASL #2
+                                0x18,									# CLC
+                                0x65, 0xFE,								# ADC $FE
+                                0x18,									# CLC
+                                0x65, 0xFC,								# ADC $FC, now eleven times the Esper ID
+                                0xAA,									# TAX
+                                0x64, 0xFC,								# STZ $FC
+                                0xA0, 0x05, 0x00,						# LDY #$0005, Five spells max per Esper
+                                0xE2, 0x20,								# SEP #$20, back to 8-Bit A
+                                0x7B,									# TDC, Clear A.  [This is the start of the loop]
+                                0xBF, 0x01, 0x6E, 0xD8,					# LDA $D86E01,X, Esper Spell
+                                0xC9, 0xFF,								# CMP #$FF, is it empty?
+                                0xF0, 0x1B,								# BEQ $1B, branch if so
+                                0x85, 0xFC,								# STA $FC
+                                0xC2, 0x20,								# REP #$20, back to 16-Bit A
+                                0xAD, 0x03, 0x02,						# LDA $0203, current character spell offset
+                                0x18,									# CLC
+                                0x65, 0xFC,								# ADC $FC, Spell Offset + Spell ID
+                                0xDA,									# PHX, save Esper data index
+                                0xAA,									# TAX, set X as spell learnt percentage
+                                0xE2, 0x20,								# SEP #$20, back to 8-Bit A
+                                0xBD, 0x6E, 0x1A,						# LDA $1A6E,X, spell learnt percentage
+                                0xFA,									# PLX, restore Esper data index
+                                0xC9, 0xFF,								# CMP #$FF, is the spell learned?
+                                0xD0, 0x07,								# BNE $07, Branch if not, out of loop, to prevent marking the Esper as mastered
+                                0xE8, 0xE8,								# INX #2
+                                0x88,									# DEY
+                                0xD0, 0xDC,								# BNE $DC, go back to the start of the loop if we haven't checked five spells
+                                0xE6, 0xFB,								# INC $FB, mark Esper as mastered
+                                0x7A,									# PLY
+                                0xFA,									# PLX
+                                0xBF, 0x89, 0x9D, 0x7E,					# LDA $7E8D89,X, load Esper ID
+                                0x6B,									# RTL, end of routine "Check if current Esper is mastered"
+
+                                0x8D, 0x80, 0x21,						# STA $2180, add letter to string
+                                0xA5, 0xFB,								# LDA $FB
+                                0xF0, 0x04,								# BEQ $04, branch if not mastered
+                                0xA9, 0x7F,								# LDA #$7F, load Star small font icon
+                                0x80, 0x02,								# BRA $02, skip the next line
+                                0xA9, 0xFF,								# LDA #$FF, if Esper is not mastered we load an empty space instead
+                                0x8D, 0x80, 0x21,						# STA $2180, add letter to string
+                                0x9C, 0x80, 0x21,						# STZ $2180, end string
+                                0x6B])									# RTL, end of routine "Add star icon"
+    me_sub.write(output_rom_buffer)
+
+    ## Next free byte is 0x2EB056
 
 def show_coliseum_rewards(output_rom_buffer: BytesIO):
     rewards_sub = Substitution()

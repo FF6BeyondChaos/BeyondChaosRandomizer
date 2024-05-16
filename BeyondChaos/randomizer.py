@@ -51,7 +51,7 @@ from patches import (
     fix_gogo_portrait, vanish_doom, stacking_immunities, mp_color_digits,
     can_always_access_esper_menu, alphabetized_lores, description_disruption,
     informative_miss, improved_equipment_menus, verify_randomtools_patches, slow_background_scrolling,
-    shadow_stays, level_cap, mp_refills, item_return_buffer_fix)
+    shadow_stays, level_cap, mp_refills, item_return_buffer_fix, mastered_espers)
 from shoprandomizer import (get_shops, buy_owned_breakable_tools)
 from sillyclowns import randomize_passwords, randomize_poem
 from skillrandomizer import (SpellBlock, CommandBlock, SpellSub, ComboSpellSub,
@@ -6187,6 +6187,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         title_gfx(outfile_rom_buffer)  # always on
         stacking_immunities(outfile_rom_buffer) # always on
         banon_life3(outfile_rom_buffer) #always on
+        mastered_espers(outfile_rom_buffer) #always on
 
         if Options_.is_flag_active('tastetherainbow'):
             cycle_statuses(outfile_rom_buffer)  # QoL Flag
