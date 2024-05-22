@@ -6,6 +6,7 @@ from bcg_junction import (write_patch as jm_write_patch,
 from randomtools.tablereader import verify_patches as rt_verify_patches
 from character import get_characters
 from utils import Substitution, RANDOM_MULTIPLIER, random
+
 import math
 
 
@@ -259,7 +260,8 @@ def no_kutan_skip(output_rom_buffer: BytesIO):
     no_kutan_skip_sub.bytestring = bytes([0x27, 0x01])
     no_kutan_skip_sub.write(output_rom_buffer)
 
-def mastered_espers(output_rom_buffer: BytesIO):
+def mastered_espers(output_rom_buffer: BytesIO, dancingmaduin=False):
+
     me_sub = Substitution()
 
     #Turn empty small font icon $7F into a star
@@ -269,8 +271,15 @@ def mastered_espers(output_rom_buffer: BytesIO):
     me_sub.write(output_rom_buffer)
 
     #Hook into the Skills menu initiation to run a subroutine in freespace
-    me_sub.set_location(0x31B5E)
-    me_sub.bytestring = bytes([0x22, 0xA6, 0xB0, 0xEE]) #Hook - calculate actor's spell starting RAM offset; # JSL $EEB0A6, Set up Yellow font and Calculate actor's spell offset, 0xD2 bytes after start of code block
+    me_sub.set_location(0x31B61)
+    me_sub.bytestring = bytes([0x20, 0xB0, 0xFE]) #Hook - calculate actor's spell starting RAM offset; # JSL $EEB0A6, Set up Yellow font and Calculate actor's spell offset, 0xD2 bytes after start of code block
+    me_sub.write(output_rom_buffer)
+
+    me_sub.set_location(0x3FEB0)
+    if dancingmaduin:
+         me_sub.bytestring = bytes([ 0x22, 0xA6, 0xB0, 0xEE, 0x20, 0x00, 0xF8, 0x60])
+    else:
+        me_sub.bytestring = bytes([0x22, 0xA6, 0xB0, 0xEE, 0x60])
     me_sub.write(output_rom_buffer)
 
     #Hook into "Draw Esper name and MP cost" function to run a check from freespace and draw the star
