@@ -41,20 +41,20 @@ SUPPORTED_PRESETS = {
                        'alasdraco capslockoff johnnydmad notawaiter remonsterate dancelessons '
                        'electricboogaloo randombosses dancingmaduin:1 swdtechspeed:random '
                        'bsiab mimetime morefanatical mementomori:14',
-    'chaotic player': 'b c d e f g h i j k m n o p q r s t u w y z improvedpartygear informativemiss '
+    'chaotic player': 'b c d e f g h i j k m n o p q r s t u w y z alphalores improvedpartygear informativemiss '
                       'magicnumbers mpparty nicerpoison questionablecontent regionofdoom relicmyhat '
                       'slowerbg tastetherainbow makeover partyparty alasdraco capslockoff johnnyachaotic '
                       'notawaiter remonsterate dancelessons electricboogaloo randombosses dancingmaduin:chaos '
                       'masseffect:med swdtechspeed:random bsiab mimetime randomboost:2 allcombos supernatural '
                       'mementomori:random thescenarionottaken',
-    'race easy': 'b c d e f g i j k m n o p q r s t w y z improvedpartygear informativemiss magicnumbers mpparty '
+    'race easy': 'b c d e f g i j k m n o p q r s t w y z alphalores improvedpartygear informativemiss magicnumbers mpparty '
                  'nicerpoison questionablecontent regionofdoom relicmyhat slowerbg tastetherainbow makeover '
                  'partyparty capslockoff johnnydmad notawaiter remonsterate madworld',
-    'race medium': 'b c d e f g i j k m n o p q r s t u w y z improvedpartygear informativemiss magicnumbers '
+    'race medium': 'b c d e f g i j k m n o p q r s t u w y z alphalores improvedpartygear informativemiss magicnumbers '
                    'mpparty nicerpoison questionablecontent regionofdoom relicmyhat slowerbg tastetherainbow '
                    'makeover partyparty capslockoff johnnydmad notawaiter remonsterate electricboogaloo '
                    'madworld randombosses',
-    'race insane': 'b c d e f g i j k m n o p q r s t u w y z improvedpartygear informativemiss magicnumbers '
+    'race insane': 'b c d e f g i j k m n o p q r s t u w y z alphalores improvedpartygear informativemiss magicnumbers '
                    'mpparty nicerpoison questionablecontent regionofdoom relicmyhat slowerbg tastetherainbow '
                    'makeover partyparty capslockoff johnnydmad notawaiter remonsterate darkworld electricboogaloo '
                    'madworld nobreaks randombosses bsiab mementomori:14'
