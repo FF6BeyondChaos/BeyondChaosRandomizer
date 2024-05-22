@@ -6196,13 +6196,11 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         title_gfx(outfile_rom_buffer)  # always on
         stacking_immunities(outfile_rom_buffer) # always on
         banon_life3(outfile_rom_buffer) #always on
+        improved_party_gear(outfile_rom_buffer, myself_name_address, myself_name_bank)  # always on
         mastered_espers(outfile_rom_buffer) #always on
 
         if Options_.is_flag_active('tastetherainbow'):
             cycle_statuses(outfile_rom_buffer)  # QoL Flag
-
-        if Options_.is_flag_active('improvedpartygear'):
-            improved_party_gear(outfile_rom_buffer, myself_name_address, myself_name_bank)  # QoL Flag
 
         if Options_.is_flag_active('magicnumbers'):
             mp_color_digits(outfile_rom_buffer)  # QoL Flag
