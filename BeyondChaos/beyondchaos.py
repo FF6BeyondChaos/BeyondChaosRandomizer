@@ -1488,7 +1488,7 @@ if __name__ == '__main__':
                             set_config_value('Settings', 'updates_hidden', str(True))
                             break
                     elif button_clicked == QMessageBox.Ok:
-                        update_bc(suppress_prompt=True, calling_program=App)
+                        update_bc(suppress_prompt=True)
                         available_updates = update.list_available_updates(refresh=True)
 
         window = Window()
