@@ -343,7 +343,7 @@ class SpellSub(Substitution):
 wildspells = None
 
 
-def get_spellsets(spells=None, outfile_rom_buffer=None):
+def get_spellsets(spells=None, outfile_rom_buffer: BytesIO = None):
     """Create various thematic groups of spells."""
     global wildspells
     spellsets = {}
@@ -361,7 +361,7 @@ def get_spellsets(spells=None, outfile_rom_buffer=None):
                      s.name == "Red Card" or
                      s.name == "MoogleRush" or
                      s.name == "ShadowFang"]
-    #Each spellset is a tuple of (description, spell list)
+    # Each spellset is a tuple of (description, spell list)
     spellsets['Chaos'] = ('skill (including broken and glitchy skills)', [])
     if wildspells is None:
         wildspells = random.sample(spells, 8)
@@ -411,7 +411,7 @@ def get_spellsets(spells=None, outfile_rom_buffer=None):
         'enemy harmful-status skill',
         [s for s in spells if all(
             [s.target_enemy_default, not s.miss_if_death_prot, not s.power])])
-    #Explicitly exclude Clear (0xA4) as that's actually a debuff
+    # Explicitly exclude Clear (0xA4) as that's actually a debuff
     spellsets['Bless'] = (
         'ally beneficial-status skill',
         [s for s in spells if not any(
@@ -524,7 +524,7 @@ class RandomSpellSub(Substitution):
     def write(self, outfile_rom_buffer):
         super(RandomSpellSub, self).write(outfile_rom_buffer)
 
-    def set_spells(self, valid_spells, spellclass=None, spellsets=None, outfile_rom_buffer=None):
+    def set_spells(self, valid_spells, spellclass=None, spellsets=None, outfile_rom_buffer: BytesIO = None):
         spellsets = spellsets or get_spellsets(spells=valid_spells, outfile_rom_buffer=outfile_rom_buffer)
         spellclass = spellclass or random.choice(list(spellsets.keys()))
 
@@ -645,7 +645,7 @@ class MultiSpellSubMixin(Substitution):
     def size(self):
         return self.spellsub.size + self.get_overhead()
 
-    def set_spells(self, spells, spellclass=None, spellsets=None, outfile_rom_buffer=None):
+    def set_spells(self, spells, spellclass=None, spellsets=None, outfile_rom_buffer: BytesIO = None):
         if isinstance(spells, int):
             self.spellsub = SpellSub(spellid=spells)
         elif isinstance(spells, list) or isinstance(spells, set):
