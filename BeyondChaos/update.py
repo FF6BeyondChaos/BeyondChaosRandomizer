@@ -45,6 +45,7 @@ remaining_api_calls = 0
 request_headers = {}
 available_updates = []
 back_up_skip = []
+updated = False
 
 TEST = False
 BASE_DIRECTORY = os.getcwd()
@@ -225,6 +226,8 @@ def prompt(prompt_type, message):
 
 
 def update_asset_from_web(asset):
+    global updated
+
     data = _ASSETS[asset]['data']
     # get the link to download the latest package
     download_link = data['assets'][0]['browser_download_url']
@@ -246,6 +249,7 @@ def update_asset_from_web(asset):
         extract_archive(local_filename, _ASSETS[asset]['location'] or os.getcwd())
 
         set_config_value('Version', asset, data['tag_name'])
+        updated = True
 
     if asset == 'custom':
         # If a hash value for the custom folder exists in config.ini and that value is different from the folder's
@@ -281,6 +285,7 @@ def update_asset_from_web(asset):
                   str(os.path.join(os.getcwd(), 'temp')) + '.')
 
         print(f'{str.replace(asset.title(), "_", " ")} files have been updated.\n')
+        updated = True
 
     if asset == 'character_sprites':
         def get_character_sprite_hash() -> str:
@@ -313,6 +318,7 @@ def update_asset_from_web(asset):
         set_config_value('Hashes', asset, get_character_sprite_hash())
         set_config_value('Version', asset, data['tag_name'])
         print(f'{str.replace(asset.title(), "_", " ")} have been updated.\n')
+        updated = True
 
     if asset == 'monster_sprites':
         def get_monster_sprite_hash() -> str:
@@ -343,10 +349,11 @@ def update_asset_from_web(asset):
             back_up_skip.append(_ASSETS[asset]['location'])
 
         extract_archive(local_filename, _ASSETS[asset]['location'])
-        update_remonsterate()
+        update_remonsterate(force=True)
         set_config_value('Hashes', asset, get_monster_sprite_hash())
         set_config_value('Version', asset, data['tag_name'])
         print(f'{str.replace(asset.title(), "_", " ")} have been updated.\n')
+        updated = True
 
     # if asset == 'character_sprites' or asset == 'monster_sprites':
     #     update_sprites = True
@@ -422,6 +429,7 @@ def update_asset_from_web(asset):
 
 
 def run_updates(force_download=False, calling_program=None):
+    global updated
     global caller
     global remaining_api_calls
 
@@ -569,18 +577,41 @@ def run_updates(force_download=False, calling_program=None):
                 print(f'The Beyond Chaos {asset.replace("_", " ")} ' +
                       ('have' if asset.endswith('s') else 'has') + ' been updated.\n')
 
+    update_remonsterate()
+
     print('Recording version information in config.ini.')
     with open(CONFIG_PATH, 'w') as new_config_file:
         config.write(new_config_file)
 
-    prompt(
-        prompt_type='notify',
-        message='All update tasks have been completed successfully!'
-    )
-    os.system('cls' if os.name == 'nt' else 'clear')
+    if updated:
+        prompt(
+            prompt_type='notify',
+            message='All update tasks have been completed successfully! '+
+                    'The application must now restart to apply all updates.'
+        )
+        if isinstance(caller, QApplication):
+            subprocess.Popen(
+                args=[],
+                executable='BeyondChaos.exe'
+            )
+        elif caller == 'console':
+            subprocess.Popen(
+                args=[],
+                executable='beyondchaos_console.exe'
+            )
+        # Still clear the console, otherwise console output will still be there after restart
+        os.system('cls' if os.name == 'nt' else 'clear')
+        sys.exit()
+    else:
+        prompt(
+            prompt_type='notify',
+            message='No updates were performed.'
+        )
+        os.system('cls' if os.name == 'nt' else 'clear')
 
 
-def update_remonsterate():
+def update_remonsterate(force=False):
+    global updated
     from remonsterate.remonsterate import (construct_tag_file_from_dirs, generate_sample_monster_list,
                                            generate_tag_file)
     # Create the remonsterate directory in the game directory
@@ -598,21 +629,26 @@ def update_remonsterate():
         print('Created the sprites subfolder in the remonsterate folder.')
 
     # Generate images_and_tags.txt file for remonsterate based on the sprites in the sprites folder
-    tag_file = os.path.join(os.getcwd(), 'remonsterate\\images_and_tags.txt')
-    try:
-        construct_tag_file_from_dirs(sprite_directory, tag_file)
-        print('New images_and_tags.txt file generated in the remonsterate folder.')
-    except IOError:
-        generate_tag_file(tag_file)
-        if not os.path.isfile(image_file):
-            print('Error: Failed to automatically generate an image_and_tags.txt file using the contents of your '
-                  'remonsterate sprites subfolder. Also failed to generate a blank template image_and_tags.txt file.')
-        else:
-            print('Error: Failed to automatically generate an image_and_tags.txt file using the contents of your '
-                  'remonsterate sprites subfolder. A blank template image_and_tags.txt file has been created instead.')
+    if not os.path.isfile(image_file) or force:
+        try:
+            construct_tag_file_from_dirs(sprite_directory, image_file)
+            print('New images_and_tags.txt file generated in the remonsterate folder.')
+            updated = True
+        except IOError:
+            generate_tag_file(image_file)
+            if not os.path.isfile(image_file):
+                print('Error: Failed to automatically generate an image_and_tags.txt file using the contents of your '
+                      'remonsterate sprites subfolder. '
+                      'Also failed to generate a blank template image_and_tags.txt file.')
+                updated = True
+            else:
+                print('Error: Failed to automatically generate an image_and_tags.txt file using the contents of your '
+                      'remonsterate sprites subfolder. '
+                      'A blank template image_and_tags.txt file has been created instead.')
 
-    if not os.path.isfile(monster_file):
+    if not os.path.isfile(monster_file) or force:
         generate_sample_monster_list(monster_file)
+        updated = True
         print('Generated a template monsters_and_tags.txt file in the remonsterate folder.')
 
 
