@@ -207,6 +207,10 @@ def prompt(prompt_type, message):
             prompt.setIcon(QMessageBox.Information)
             prompt.setStandardButtons(QMessageBox.Ok)
             prompt.exec()
+        elif prompt_type == 'error':
+            prompt.setIcon(QMessageBox.Critical)
+            prompt.setStandardButtons(QMessageBox.Ok)
+            prompt.exec()
     elif caller == 'console':
         while True:
             if prompt_type == 'yesno':
@@ -219,6 +223,9 @@ def prompt(prompt_type, message):
                 else:
                     print('Please choose either (Y)es or (N)o.')
             elif prompt_type == 'notify':
+                input('Press any button to continue.')
+                return True
+            elif prompt_type == 'Error':
                 input('Press any button to continue.')
                 return True
     else:
@@ -590,15 +597,29 @@ def run_updates(force_download=False, calling_program=None):
                     'The application must now restart to apply all updates.'
         )
         if isinstance(caller, QApplication):
-            subprocess.Popen(
-                args=[],
-                executable='BeyondChaos.exe'
-            )
+            try:
+                subprocess.Popen(
+                    args=[],
+                    executable='BeyondChaos.exe'
+                )
+            except FileNotFoundError:
+                prompt(
+                    prompt_type='error',
+                    message='Failed to restart the randomizer: Could not locate BeyondChaos.exe. '
+                            'Please restart the application manually.'
+                )
         elif caller == 'console':
-            subprocess.Popen(
-                args=[],
-                executable='beyondchaos_console.exe'
-            )
+            try:
+                subprocess.Popen(
+                    args=[],
+                    executable='beyondchaos_console.exe'
+                )
+            except FileNotFoundError:
+                prompt(
+                    prompt_type='error',
+                    message='Failed to restart the randomizer: Could not locate BeyondChaos_Console.exe. '
+                            'Please restart the application manually.'
+                )
         # Still clear the console, otherwise console output will still be there after restart
         os.system('cls' if os.name == 'nt' else 'clear')
         sys.exit()
