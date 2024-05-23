@@ -4759,6 +4759,7 @@ def manage_dances(dance_names=None):
     outfile_rom_buffer.seek(0x2D8E79)
     outfile_rom_buffer.write(bytes([3]))
 
+
 def manage_cursed_encounters(formations: List[Formation], formation_sets: List[FormationSet]):
     # event formation sets that can be shuffled with cursedencounters
     good_event_formation_sets = [263, 264, 275, 276, 277, 278, 279,
@@ -4891,6 +4892,7 @@ def sprint_shoes_hint():
     sprint_sub.set_location(0xA790E)
     sprint_sub.bytestring = b'\xFE'
     sprint_sub.write(outfile_rom_buffer)
+
 
 def sabin_hint(commands: Dict[str, CommandBlock]):
     sabin = get_character(0x05)

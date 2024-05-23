@@ -18,6 +18,10 @@ DEFAULT_CONFIG = {
     }
 }
 CONFIG_PATH = Path(os.path.join(os.getcwd(), "config.ini"))
+CUSTOM_PATH = Path(os.path.join(os.getcwd(), 'custom'))
+REQUIRED_CUSTOM_FILES = ['coralnames.txt', 'dancenames.txt', 'femalenames.txt', 'malenames.txt',
+                         'mooglenames.txt', 'moves.txt', 'opera.txt', 'passwords.txt', 'poems.txt',
+                         'songs.txt']
 
 MD5HASHNORMAL = "e986575b98300f721ce27c180264d890"
 MD5HASHTEXTLESS = "f08bf13a6819c421eee33ee29e640a1d"
@@ -65,8 +69,11 @@ SUPPORTED_PRESETS = {
 config = ConfigParser()
 config.read_dict(DEFAULT_CONFIG)
 files_loaded = config.read(CONFIG_PATH)
-with open(CONFIG_PATH, 'w') as config_file:
-    config.write(config_file)
+
+
+def write_config():
+    with open(CONFIG_PATH, 'w') as config_file:
+        config.write(config_file)
 
 
 def set_config_value(section, option, value):
@@ -76,6 +83,13 @@ def set_config_value(section, option, value):
     config.set(section, option, value)
     with open(CONFIG_PATH, 'w') as f:
         config.write(f)
+
+
+def get_config_value(section, option):
+    config.read(CONFIG_PATH)
+    if not config.has_section(section) or not config.has_option(section, option):
+        return None
+    return config.get(section, option, fallback=None)
 
 
 def get_config_items(section):
@@ -124,13 +138,12 @@ def check_custom():
     custom_directory = Path(os.path.join(os.getcwd(), 'custom'))
     if not custom_directory.is_dir():
         missing_files.append('/custom/')
+        for file in REQUIRED_CUSTOM_FILES:
+            missing_files.append("/custom/" + file)
     else:
         # List of all files in /custom/. Some of these may not be required or may depend on chosen flags, but better
         #   safe than sorry
-        required_custom_files = ['coralnames.txt', 'dancenames.txt', 'femalenames.txt', 'malenames.txt',
-                                 'mooglenames.txt', 'moves.txt', 'opera.txt', 'passwords.txt', 'poems.txt',
-                                 'songs.txt']
-        for file in required_custom_files:
+        for file in REQUIRED_CUSTOM_FILES:
             file_path = Path(os.path.join(custom_directory, file))
             if not file_path.exists():
                 missing_files.append("/custom/" + file)
@@ -150,21 +163,20 @@ def check_custom():
 
 def check_player_sprites():
     missing_files = []
-    custom_directory = Path(os.path.join(os.getcwd(), 'custom'))
-    if not custom_directory.is_dir():
+    if not CUSTOM_PATH.is_dir():
         missing_files.append('/custom/')
     else:
         # List of all files in /custom/. Some of these may not be required or may depend on chosen flags, but better
         #   safe than sorry
         required_custom_files = ['spritereplacements.txt']
         for file in required_custom_files:
-            file_path = Path(os.path.join(custom_directory, file))
+            file_path = Path(os.path.join(CUSTOM_PATH, file))
             if not file_path.exists():
                 missing_files.append("/custom/" + file)
                 print("spritereplacements.txt is missing from the Custom directory. The SpriteReplacements category "
                       "and custom character sprite flags will be unavailable.")
 
-    character_sprites_directory = Path(os.path.join(custom_directory, 'Sprites'))
+    character_sprites_directory = Path(os.path.join(CUSTOM_PATH, 'Sprites'))
     if not character_sprites_directory.is_dir():
         missing_files.append('/custom/Sprites/')
 

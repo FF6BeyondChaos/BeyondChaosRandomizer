@@ -994,7 +994,7 @@ def extract_archive(archive, destination):
 
 def md5_update_from_dir(directory, hash_value):
     if not Path(directory).is_dir():
-        return
+        return hash_value
     for subdirectory in sorted(Path(directory).iterdir(), key=lambda p: str(p).lower()):
         hash_value.update(subdirectory.name.encode())
         if subdirectory.is_file():
@@ -1007,7 +1007,8 @@ def md5_update_from_dir(directory, hash_value):
 
 
 def md5_update_from_file(filename, hash_value):
-    assert Path(filename).is_file()
+    if not Path(filename).is_file():
+        return hash_value
     with open(str(filename), "rb") as f:
         for chunk in iter(lambda: f.read(4096), b""):
             hash_value.update(chunk)

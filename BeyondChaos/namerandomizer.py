@@ -5,11 +5,13 @@ from utils import (ENEMY_NAMES_TABLE, MODIFIERS_TABLE, MOVES_TABLE,
 try:
     modifiers = [line.strip() for line in open(MODIFIERS_TABLE).readlines()]
 except FileNotFoundError:
-    print("Error: " + MODIFIERS_TABLE + " was not found in the custom folder.")
+    pass
+    # print("Error: " + MODIFIERS_TABLE + " was not found in the custom folder.")
 try:
     moves = [line.strip() for line in open(MOVES_TABLE).readlines()]
 except FileNotFoundError:
-    print("Error: " + MOVES_TABLE + " was not found in the custom folder.")
+    pass
+    # print("Error: " + MOVES_TABLE + " was not found in the custom folder.")
 try:
     enemynames = [line.strip() for line in open(ENEMY_NAMES_TABLE).readlines()]
 except FileNotFoundError:
