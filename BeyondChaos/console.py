@@ -5,7 +5,7 @@ import sys
 from multiprocessing import Process, Pipe
 
 from randomizer import randomize
-from update import validate_files, run_updates, list_available_updates
+from update import validate_required_files, run_updates, list_available_updates, check_ini
 from config import (VERSION, BETA, SUPPORTED_PRESETS, MD5HASHNORMAL, MD5HASHTEXTLESS, MD5HASHTEXTLESS2,
                     get_config_items, set_config_value, config)
 from utils import pipe_print
@@ -18,36 +18,64 @@ def run_console():
     if not BETA:
         try:
             requests.head(url='http://www.google.com')
-            validation_result = validate_files()
+            validation_result = validate_required_files()
+            pipe_print(f'You are using Beyond Chaos CE Randomizer version {VERSION}.')
 
-            while True:
-                pipe_print(f'You are using Beyond Chaos CE Randomizer version {VERSION}.')
-                if validation_result is not None:
-                    print(
-                        'Welcome to Beyond Chaos Community Edition!\n\n',
-                        'As part of first time setup, ',
-                        'we need to download the required custom '
-                        'files and folders for randomization.\n',
-                    )
-                    input('Press enter to launch the updater to download the required files.')
-                    run_updates(calling_program='console')
+            while check_ini():
+                print(
+                    'Welcome to Beyond Chaos Community Edition!\n\n',
+                    'As part of first time setup, ',
+                    'we need to download the required custom '
+                    'files and folders for randomization.\n',
+                    'Enter "Y" to launch the updater and download the required files, otherwise enter '
+                    '"N" to exit the program.'
+                )
+                response = input('>')
+                if response.lower() == 'n':
+                    sys.exit()
+                elif response.lower() == 'y':
+                    os.system('cls' if os.name == 'nt' else 'clear')
+                    run_updates(force_download=True, calling_program='console')
                 else:
-                    available_updates = list_available_updates().replace('<br><br>', '\n').strip()
-                    pipe_print(
-                        f'Updates to Beyond Chaos are available!\n\n{str(available_updates)}\n'
-                    )
-                    response = input('Would you like to update? Y/N\n>')
-                    if response.lower() == 'n':
-                        os.system('cls' if os.name == 'nt' else 'clear')
-                        break
-                    elif response.lower() == 'y':
-                        os.system('cls' if os.name == 'nt' else 'clear')
-                        run_updates(calling_program='console')
-                        break
-                    else:
-                        input('Please press "Y" to update or "N" to skip. Press enter to try again.')
+                    input('Please press "Y" to update or "N" to exit. Press enter to try again.')
 
-                os.system('cls' if os.name == 'nt' else 'clear')
+            while validation_result:
+                print(
+                    'Welcome to Beyond Chaos Community Edition!\n\n' +
+                    'Files required for the randomizer to function are currently missing: \n' +
+                    '\n'.join(validation_result) +
+                    '\n\n' +
+                    'Enter "Y" to launch the updater and download the required files, otherwise enter '
+                    '"N" to exit the program.'
+                )
+                response = input('>')
+                if response.lower() == 'n':
+                    sys.exit()
+                elif response.lower() == 'y':
+                    os.system('cls' if os.name == 'nt' else 'clear')
+                    run_updates(force_download=True, calling_program='console')
+                    validation_result = validate_required_files()
+                else:
+                    input('Please press "Y" to update or "N" to exit. Press enter to try again.')
+
+            available_updates = list_available_updates(refresh=True)
+            while available_updates:
+                pipe_print(
+                    'Updates to Beyond Chaos are available!\n\n' +
+                    str('\n\n'.join(available_updates)) +
+                    '\nWould you like to update? Y/N'
+                )
+                response = input('>')
+                if response.lower() == 'n':
+                    os.system('cls' if os.name == 'nt' else 'clear')
+                    break
+                elif response.lower() == 'y':
+                    os.system('cls' if os.name == 'nt' else 'clear')
+                    run_updates(calling_program='console')
+                    available_updates = list_available_updates(refresh=True)
+                else:
+                    input('Please press "Y" to update or "N" to skip. Press enter to try again.')
+
         except requests.exceptions.ConnectionError:
             pipe_print('No internet connection detected. Skipping update check.')
             pass

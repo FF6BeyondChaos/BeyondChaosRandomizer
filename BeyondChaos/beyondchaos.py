@@ -1434,7 +1434,7 @@ if __name__ == '__main__':
             while missing_required_files is not None:
                 validation_message = QMessageBox()
                 validation_message.setIcon(QMessageBox.Critical)
-                validation_message.setWindowTitle('First Time Setup')
+                validation_message.setWindowTitle('Required Files Missing')
                 validation_message.setText('<b>Welcome to Beyond Chaos Community Edition!</b>' +
                                            '<br>' +
                                            '<br>' +
@@ -1465,7 +1465,7 @@ if __name__ == '__main__':
                     update_message.setText('Updates to Beyond Chaos are available!' +
                                            '<br>' +
                                            '<br>' +
-                                           str(available_updates) +
+                                           str('<br><br>'.join(available_updates)) +
                                            '<br>' +
                                            '<br>' +
                                            'Press OK to launch the updater or Close to skip updating. '

@@ -209,6 +209,7 @@ def prompt(prompt_type, message):
     elif caller == 'console':
         while True:
             if prompt_type == 'yesno':
+                print(message)
                 response = input('Y/N: ')
                 if response.lower() in ['y', 'yes']:
                     return True
@@ -537,9 +538,9 @@ def run_updates(force_download=False, calling_program=None):
                     prompt(
                         prompt_type='notify',
                         message=f'The Beyond Chaos {asset.replace("_", " ")} ' +
-                        ('have' if asset.endswith('s') else 'has') +
-                        ' been updated. The application must now '
-                        'restart and continue updating.'
+                                ('have' if asset.endswith('s') else 'has') +
+                                ' been updated. The application must now '
+                                'restart and continue updating.'
                     )
                     new_args = sys.argv
                     new_args.append('update')
@@ -559,8 +560,8 @@ def run_updates(force_download=False, calling_program=None):
                     prompt(
                         prompt_type='notify',
                         message=f'The Beyond Chaos {asset.replace("_", " ")} ' +
-                        ('have' if asset.endswith('s') else 'has') +
-                        ' been updated. Please restart the application and continue updating.'
+                                ('have' if asset.endswith('s') else 'has') +
+                                ' been updated. Please restart the application and continue updating.'
                     )
                     sys.exit()
 
@@ -643,9 +644,10 @@ def list_available_updates(refresh=False):
     global available_updates
     if available_updates and not refresh:
         # Returned cached updates
-        return '<br><br>'.join(available_updates)
+        return available_updates
 
     get_web_token()
+    available_updates = []
     for asset in _ASSETS:
         # Don't look for custom here. Custom is only updated if required files are missing.
         if asset == 'custom':
@@ -661,12 +663,10 @@ def list_available_updates(refresh=False):
                                      f'' + github_version + ' is available for download.')
         elif not version >= github_version:
             available_updates.append(f'The Beyond Chaos {asset.replace("_", " ")} are '
-                                     f'currently version ' + str(version) + '. '
-                                                                            'Version ' + github_version + ' is available.')
-    if available_updates:
-        print(str(available_updates))
-        return '<br><br>'.join(available_updates)
-    return None
+                                     f'currently version ' +
+                                     str(version) + '. '
+                                     'Version ' + github_version + ' is available.')
+    return available_updates
 
 
 if __name__ == '__main__':
