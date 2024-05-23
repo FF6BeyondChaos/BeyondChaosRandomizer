@@ -29,36 +29,36 @@ MD5HASHTEXTLESS2 = "e0984abc9e5dd99e4bc54e8f9e0ff8d0"
 
 # Supported preset names must be lowercase.
 SUPPORTED_PRESETS = {
-    'new player': 'b c e f g i n o p q r s t w y z alphalores informativemiss '
+    'New Player': 'b c e f g i n o p q r s t w y z alphalores informativemiss '
                   'magicnumbers mpparty nicerpoison questionablecontent regionofdoom relicmyhat '
                   'slowerbg tastetherainbow makeover partyparty alasdraco capslockoff johnnydmad '
                   'dancelessons lessfanatical expboost:2.0 gpboost:2.0 mpboost:2.0 '
                   'swdtechspeed:faster shadowstays ',
-    'intermediate player': 'b c d e f g i j k m n o p q r s t u w y z alphalores '
+    'Intermediate Player': 'b c d e f g i j k m n o p q r s t u w y z alphalores '
                            'informativemiss magicnumbers mpparty nicerpoison questionablecontent '
                            'regionofdoom relicmyhat slowerbg tastetherainbow makeover partyparty '
                            'alasdraco capslockoff johnnydmad notawaiter remonsterate dancelessons '
                            'electricboogaloo lessfanatical swdtechspeed:faster shadowstays ',
-    'advanced player': 'b c d e f g h i j k m n o p q r s t u w y z alphalores '
+    'Advanced Player': 'b c d e f g h i j k m n o p q r s t u w y z alphalores '
                        'informativemiss magicnumbers mpparty nicerpoison questionablecontent '
                        'regionofdoom relicmyhat slowerbg tastetherainbow makeover partyparty '
                        'alasdraco capslockoff johnnydmad notawaiter remonsterate dancelessons '
                        'electricboogaloo randombosses dancingmaduin:1 swdtechspeed:random '
                        'bsiab mimetime morefanatical mementomori:14',
-    'chaotic player': 'b c d e f g h i j k m n o p q r s t u w y z alphalores informativemiss '
+    'Chaotic Player': 'b c d e f g h i j k m n o p q r s t u w y z alphalores informativemiss '
                       'magicnumbers mpparty nicerpoison questionablecontent regionofdoom relicmyhat '
                       'slowerbg tastetherainbow makeover partyparty alasdraco capslockoff johnnyachaotic '
                       'notawaiter remonsterate dancelessons electricboogaloo randombosses dancingmaduin:chaos '
                       'masseffect:med swdtechspeed:random bsiab mimetime randomboost:2 allcombos supernatural '
                       'mementomori:random thescenarionottaken',
-    'race easy': 'b c d e f g i j k m n o p q r s t w y z alphalores informativemiss magicnumbers mpparty '
+    'Race Easy': 'b c d e f g i j k m n o p q r s t w y z alphalores informativemiss magicnumbers mpparty '
                  'nicerpoison questionablecontent regionofdoom relicmyhat slowerbg tastetherainbow makeover '
                  'partyparty capslockoff johnnydmad notawaiter remonsterate madworld',
-    'race medium': 'b c d e f g i j k m n o p q r s t u w y z alphalores informativemiss magicnumbers '
+    'Race Medium': 'b c d e f g i j k m n o p q r s t u w y z alphalores informativemiss magicnumbers '
                    'mpparty nicerpoison questionablecontent regionofdoom relicmyhat slowerbg tastetherainbow '
                    'makeover partyparty capslockoff johnnydmad notawaiter remonsterate electricboogaloo '
                    'madworld randombosses',
-    'race insane': 'b c d e f g i j k m n o p q r s t u w y z alphalores informativemiss magicnumbers '
+    'Race Insane': 'b c d e f g i j k m n o p q r s t u w y z alphalores informativemiss magicnumbers '
                    'mpparty nicerpoison questionablecontent regionofdoom relicmyhat slowerbg tastetherainbow '
                    'makeover partyparty capslockoff johnnydmad notawaiter remonsterate darkworld electricboogaloo '
                    'madworld nobreaks randombosses bsiab mementomori:14'
@@ -67,6 +67,7 @@ SUPPORTED_PRESETS = {
 # Load configuration data
 # Read DEFAULT CONFIG and then read the config.ini file in the directory to fill in any missing values
 config = ConfigParser()
+config.optionxform = str
 config.read_dict(DEFAULT_CONFIG)
 files_loaded = config.read(CONFIG_PATH)
 

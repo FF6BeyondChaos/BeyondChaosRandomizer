@@ -582,7 +582,7 @@ class Window(QMainWindow):
         self.preset_box.addItem('Select a flag set')
         self.load_saved_flags()
         for key in self.game_presets.keys():
-            self.preset_box.addItem(key.title())
+            self.preset_box.addItem(key)
 
         self.preset_box.currentTextChanged.connect(
             lambda: self.update_preset_dropdown()
@@ -915,7 +915,7 @@ class Window(QMainWindow):
                  5: ('Race - Dragon Hunt', 'dragonhunt')}
         text = self.preset_box.currentText()
         index = self.preset_box.findText(text)
-        flags = self.game_presets.get(text.lower())
+        flags = self.game_presets.get(text)
         if index == 0:
             self.clear_ui()
             self.flag_description.clear()
@@ -1415,7 +1415,7 @@ if __name__ == '__main__':
                                          '<br>' +
                                          'As part of first time setup, '
                                          'we need to download the required custom '
-                                         'files and folders for randomization.'
+                                         'sprite files and folders for randomization.'
                                          '<br>' +
                                          '<br>' +
                                          'Press OK to launch the updater to download the required files.'
