@@ -1456,8 +1456,8 @@ if __name__ == '__main__':
                     missing_required_files = update.validate_required_files()
 
             available_updates = update.list_available_updates(refresh=True)
-            skip_updates = config.get('Settings', 'updates_hidden', fallback=False)
-            if not skip_updates and available_updates:
+            skip_updates = config.get('Settings', 'updates_hidden', fallback='False')
+            if available_updates and skip_updates.lower() == 'false':
                 while available_updates:
                     update_message = QMessageBox()
                     update_message.setIcon(QMessageBox.Question)
@@ -1486,6 +1486,7 @@ if __name__ == '__main__':
                         if button_clicked == QMessageBox.Close:
                             update_dismiss_message.close()
                             set_config_value('Settings', 'updates_hidden', str(True))
+                            break
                     elif button_clicked == QMessageBox.Ok:
                         update_bc(suppress_prompt=True, calling_program=App)
                         available_updates = update.list_available_updates(refresh=True)
