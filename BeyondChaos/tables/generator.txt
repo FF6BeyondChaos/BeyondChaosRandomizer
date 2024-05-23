@@ -390,7 +390,7 @@ Did adeo
 Die dghmrst
 Dig eginr
 Dij ko
-Dik ei
+Dik ai
 Dil abeilu
 Dim eilmnpw
 Din aegiknot
@@ -823,7 +823,7 @@ Iro nq
 Isa abi
 Ish imt
 Isi ad
-Isl ae
+Isk ae
 Iso blt
 Iss au
 Ist ah
@@ -3240,8 +3240,7 @@ isg oru
 ish abefhiklmnoprtwy
 isi abeglnostv
 isj ou
-isk eily
-isl aeioy
+isk aeioy
 ism aeiou
 isn eo
 iso bdglmnrw

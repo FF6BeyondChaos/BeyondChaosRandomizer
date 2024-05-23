@@ -233,6 +233,7 @@ ff12_ozmone:        chocobo, johnny, what, moogles, gogo, strago, veldt*2, mount
 ff12_paramina:      omen3, empire, espers, umaro, zozo, narshe, martiallaw, ruin*2, forest, train, tomb, gate, ancient
 ff14_azyslla:       zozo, ruin, train, magitek, floating*2, ktower
 ff14_battlem:       metamorphosis, grandfinale, unforgiven, assault, savethem
+ff14_burn:          ruin*2, train, omen3, narshe, ancient, martiallaw, ruintown
 ff14_forthesky:     grandfinale, cyan, figaro, assault, savethem*2, falcon
 ff14_labten:        unforgiven, locke, savethem, falcon, mount2*2, floating
 ff14_remnants:      falcon*2, dream, floating

@@ -776,7 +776,7 @@ class MonsterBlock:
         if Options_.mode.name == "katn" or Options_.is_flag_active("madworld"):
             restricted = [0xEA, 0xC8] # restrict Baba Breath and Seize
         else:
-            restricted = [0x13, 0x14] # restrict Meteor and Ultima for normal playthroughs
+            restricted = [0x13, 0x14, 0xEA] # restrict Meteor, Ultima and Baba Breath for normal playthroughs
         if Options_.is_flag_active("darkworld"):
             restricted = []  # All skills are fair game sucka
 
@@ -1815,7 +1815,7 @@ def _randomweight(key: str):
               'hp': (30, 100)}
     min_weight, max_weight = ranges.get(key, (2, 100))
     delta = max_weight - min_weight
-    return min_weight + random.randint(0, delta / 2 + delta % 2) + random.randint(0, delta / 2)
+    return min_weight + random.randint(0, delta // 2 + delta % 2) + random.randint(0, delta // 2)
 
 
 def monsters_from_table(tablefile):

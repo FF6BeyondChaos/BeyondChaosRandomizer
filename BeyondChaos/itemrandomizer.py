@@ -37,6 +37,9 @@ itemdict = {}
 customs = {}
 changed_commands = []
 
+# mutated_names keeps track of which item's names have been mutated and how many times they have been mutated
+mutated_names = {}
+
 break_unused_dict = {0x09: list(range(0xA3, 0xAB)),
                      0x08: list(range(0xAB, 0xB0)) + list(range(0x41, 0x44))}
 
@@ -587,7 +590,7 @@ class ItemBlock:
         if not self.is_armor and not self.is_relic:
             return
 
-        if allow_ultima:
+        if not allow_ultima:
             filter_func = lambda s: s.name != 'Ultima'
         else:
             filter_func = lambda s: True
@@ -804,11 +807,24 @@ class ItemBlock:
             self.mutate_break_effect(unbreakable=unbreakable)
 
     def mutate_name(self, vanilla=False, character='?'):
+        global mutated_names
         if vanilla:
             self.name = self.vanilla_data.name
             self.dataname[1:] = name_to_bytes(self.name, len(self.name))
-        elif options.Options_.is_flag_active("questionablecontent") and not self.is_consumable and character not in self.name:
-            self.name = self.name[:11] + character
+            if self.vanilla_data.name in mutated_names.keys():
+                mutated_names[self.vanilla_data.name] = 0
+        elif (options.Options_.is_flag_active("questionablecontent") and not self.is_consumable
+              and character not in self.name):
+            if self.vanilla_data.name not in mutated_names.keys():
+                mutated_names[self.vanilla_data.name] = 0
+            if len(self.name) == 12:
+                # Item name length is at max. Replace the rightmost vanilla character with the custom character.
+                self.name = (self.name[:11 - mutated_names[self.vanilla_data.name]] + character +
+                             self.name[len(self.name) - mutated_names[self.vanilla_data.name]:])
+            else:
+                # Item length is not at max. Add the character to the end.
+                self.name = self.name + character
+            mutated_names[self.vanilla_data.name] = mutated_names[self.vanilla_data.name] + 1
             # Index on self.dataname is [1:] because the first character determines the
             #   equipment symbol (helmet/shield/etc).
             if isinstance(self.dataname, bytes):
@@ -1028,7 +1044,7 @@ sperelic2 = {0x04: (0x3619C, 0x361A1),
              0x20: (0x36199, 0x3619E),
              0x40: (0x36198, 0x3619D)}
 
-invalid_commands = [0x00, 0x04, 0x14, 0x15, 0x19, 0xFF]
+invalid_commands = [0x00, 0x04, 0x11, 0x14, 0x15, 0x19, 0x1C, 0xFF]
 
 
 def reset_cursed_shield(output_rom_buffer: BytesIO):
@@ -1095,10 +1111,10 @@ def reset_special_relics(items, characters, output_rom_buffer: BytesIO):
             if random.randint(1, 5) != 5:
                 unused = unused - doneafter
 
-            # Umaro can't get magic/x-magic.
+            # Umaro can't get magic/x-magic/lore.
             for t in tempchars:
                 if t.id == UMARO_ID:
-                    unused = unused - {0x02, 0x17}
+                    unused = unused - {0x02, 0x0C, 0x17}
                     break
 
             if not unused:

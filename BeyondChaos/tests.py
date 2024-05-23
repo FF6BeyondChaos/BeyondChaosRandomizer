@@ -1,14 +1,10 @@
 from randomizer import VERSION
-SOURCE_FILE = "D:\\Emulation\\SNES\\Beyond Chaos\\FF3.smc"
-OUTPUT_PATH = "D:\\Emulation\\SNES\\Beyond Chaos\\"
-TEST_SEED = VERSION + "|normal|b c d e f g h i j k m n o p q r s t u w y z frenchvanilla makeover partyparty girls:like object:hate dancelessons electricboogaloo expboost:2.0 madworld masseffect randombosses swdtechspeed:fast alasdraco capslockoff johnnydmad nicerpoison notawaiter cursedencounters dearestmolulu mimetime morefanatical questionablecontent randomboost:255 relicmyhat allcombos desperation mementomori:14 nocombos supernatural effectmas effectory effectster espercutegf espffect|1688017607"
-# FLARE GLITCH TEST_SEED = "CE-5.0.0|normal|bcdefgimnopqrstuwyzmakeoverpartypartynovanillarandombossessupernaturalalasdracocapslockoffjohnnydmadnotawaitermimetimedancingmaduinquestionablecontenteasymodocanttouchthisdearestmolulu|1635554018"
-# REMONSTERATE ASSERTION TEST_SEED = "CE-5.0.0|normal|bcdefgijklmnopqrstuwyzmakeoverpartypartyrandombossesalasdracocapslockoffjohnnydmadnotawaiterbsiabmimetimedancingmaduinremonsterate|1642044398"
-#TEST_SEED = "CE-5.0.0|normal|b d e f g h i j k m n o p q r s t u w y z makeover partyparty novanilla electricboogaloo randombosses dancingmaduin dancelessons cursepower:16 swdtechspeed:faster alasdraco capslockoff johnnydmad notawaiter canttouchthis easymodo cursedencounters|1672183987"
 
-
-"CE-5.0.0|speedcave|c g i lessfanatical playsitself allcombos equipanything espercutegf novanilla makeover speedcave ancientcave|1688014999"
-# "patch_junction_focus_umaro.txt-20928 did not pass validation"
+SOURCE_FILE = ''
+OUTPUT_PATH = ''
+TEST_SEED = ''
+SKIP_FLAGS = ['remonsterate', 'bingoboingo']
+INCLUDE_FLAGS = []
 
 
 # Test a single generation, just like using TEST = True previously in randomizer.py
@@ -16,16 +12,16 @@ def test_generation(iterations: int = 1, generate_output_rom=True):
     from randomizer import randomize
     from multiprocessing import Pipe, Process
     for i in range(iterations):
-        test_bundle = TEST_SEED.split("|")
+        test_bundle = TEST_SEED.split('|')
         test_seed = test_bundle[len(test_bundle) - 1]
         test_seed = str(int(test_seed) + i)
         test_bundle[len(test_bundle) - 1] = test_seed
         kwargs = {
-            "infile_rom_path": SOURCE_FILE,
-            "outfile_rom_path": OUTPUT_PATH,
-            "seed": "|".join(test_bundle),
-            "application": "tester",
-            "generate_output_rom": generate_output_rom
+            'infile_rom_path': SOURCE_FILE,
+            'outfile_rom_path': OUTPUT_PATH,
+            'seed': '|'.join(test_bundle),
+            'application': 'tester',
+            'generate_output_rom': generate_output_rom
         }
         parent_connection, child_connection = Pipe()
         randomize_process = Process(
@@ -36,18 +32,18 @@ def test_generation(iterations: int = 1, generate_output_rom=True):
         randomize_process.start()
         while True:
             if not randomize_process.is_alive():
-                raise RuntimeError("Unexpected error: The randomize child process died.")
+                raise RuntimeError('Unexpected error: The randomize child process died.')
             if parent_connection.poll(timeout=5):
-                item = parent_connection.recv()
+                child_output = parent_connection.recv()
             else:
-                item = None
-            if item:
+                child_output = None
+            if child_output:
                 try:
-                    if isinstance(item, str):
-                        print(item)
-                    elif isinstance(item, Exception):
-                        raise item
-                    elif isinstance(item, bool):
+                    if isinstance(child_output, str):
+                        print(child_output)
+                    elif isinstance(child_output, Exception):
+                        raise child_output
+                    elif isinstance(child_output, bool):
                         break
                 except EOFError:
                     break
@@ -56,7 +52,7 @@ def test_generation(iterations: int = 1, generate_output_rom=True):
 # Test multiple generations. Choose a number of seeds to generate and a number of random flags those seeds should have.
 # The selected mode is random too.
 # Note that this method does not write any of the generated roms to disk.
-def test_random_generation(iterations: int, num_flags: int, generate_output_rom=False):
+def test_random_generation(iterations: int, num_flags: int, generate_output_rom=False, halt_on_exception=False):
     from options import ALL_FLAGS
     from options import ALL_MODES
     from randomizer import randomize
@@ -67,18 +63,22 @@ def test_random_generation(iterations: int, num_flags: int, generate_output_rom=
     random = Random()
     for index in range(iterations):
         try:
-            ALL_TESTING_FLAGS = [flag for flag in ALL_FLAGS if flag.name not in ["remonsterate", "bingoboingo"]]
-            current_flagstring = ""
-            new_flags = random.sample(ALL_TESTING_FLAGS, num_flags)
+            all_testing_flags = [flag for flag in ALL_FLAGS if flag.name not in SKIP_FLAGS]
+            current_flagstring = '' if not INCLUDE_FLAGS else ' '.join(INCLUDE_FLAGS) + ' '
+            new_flags = random.sample(all_testing_flags, num_flags)
             for flag in new_flags:
                 try:
                     if flag.inputtype == "integer":
                         # Choose a random value from within the allowed values
                         flag.value = random.randint(flag.minimum_value, flag.maximum_value)
+                        if flag.value == flag.default_value:
+                            continue
                         current_flagstring += str(flag.name) + ":" + str(flag.value)
                     elif flag.inputtype == "float2":
                         # Choose a random value from within the allowed values
                         flag.value = round(random.uniform(flag.minimum_value, flag.maximum_value), 2)
+                        if flag.value == flag.default_value:
+                            continue
                         current_flagstring += str(flag.name) + ":" + str(flag.value)
                     elif flag.inputtype == "combobox":
                         # Choose a random value from within the allowed values
@@ -97,7 +97,7 @@ def test_random_generation(iterations: int, num_flags: int, generate_output_rom=
                            str(random.choice(ALL_MODES).name) + "|" + \
                            str(current_flagstring) + "|" + \
                            str(int(time()))
-            print("Running generation with seed " + str(current_seed))
+            print(f"Running generation {index} with seed {str(current_seed)}")
             kwargs = {
                 "infile_rom_path": SOURCE_FILE,
                 "outfile_rom_path": OUTPUT_PATH,
@@ -131,7 +131,66 @@ def test_random_generation(iterations: int, num_flags: int, generate_output_rom=
                         break
             print("\n")
         except Exception as e:
-            print(e)
+            if halt_on_exception:
+                raise e
+
+
+def thorough_test(starting_combination=5):
+    from options import ALL_FLAGS
+    from options import ALL_MODES
+    from itertools import combinations
+    from multiprocessing import Pipe, Process
+    from time import time
+    from randomizer import randomize
+    from random import choice, randint
+
+    for num_flags in range(starting_combination, len(ALL_FLAGS) + 1):
+        every_flag_combination = combinations(ALL_FLAGS, num_flags)
+        for mode in ALL_MODES:
+            for combination in every_flag_combination:
+                flag_string = '' if not INCLUDE_FLAGS else ' '.join(INCLUDE_FLAGS)
+                for flag in combination:
+                    if flag.name in SKIP_FLAGS or (len(flag.name) > 1 and flag.name in flag_string):
+                        continue
+                    if flag.inputtype == 'combobox':
+                        flag_string += flag.name + ':' + choice(flag.choices) + ' '
+                    elif flag.inputtype == 'integer':
+                        flag_string += flag.name + ':' + str(randint(flag.minimum_value, flag.maximum_value)) + ' '
+                    elif flag.inputtype == 'float2':
+                        flag_string += flag.name + ':' + str(randint(flag.minimum_value, flag.maximum_value)) + ' '
+                    else:
+                        flag_string += flag.name + ' '
+                kwargs = {
+                    'infile_rom_path': SOURCE_FILE,
+                    'outfile_rom_path': OUTPUT_PATH,
+                    'seed': '|'.join([VERSION, mode.name, flag_string, str(int(time()))]),
+                    'application': 'tester',
+                    'generate_output_rom': False
+                }
+                parent_connection, child_connection = Pipe()
+                randomize_process = Process(
+                    target=randomize,
+                    args=(child_connection,),
+                    kwargs=kwargs
+                )
+                randomize_process.start()
+                while True:
+                    if not randomize_process.is_alive():
+                        raise RuntimeError('An unexpected error preventing the randomize process from completing.')
+                    if parent_connection.poll(timeout=5):
+                        child_output = parent_connection.recv()
+                    else:
+                        child_output = None
+                    if child_output:
+                        try:
+                            if isinstance(child_output, str):
+                                print(child_output)
+                            elif isinstance(child_output, Exception):
+                                raise child_output
+                            elif isinstance(child_output, bool):
+                                break
+                        except EOFError:
+                            break
 
 
 def test_esper_allocation():
@@ -142,7 +201,7 @@ def test_esper_allocation():
 
     random = Random()
     char_ids = list(range(12)) + [13]
-    espers = get_espers(BytesIO(open(SOURCE_FILE, "rb").read()))
+    espers = get_espers(BytesIO(open(SOURCE_FILE, 'rb').read()))
     characters = [c for c in get_characters() if c.id in char_ids]
     preassigned_espers = random.sample(espers, len(characters))
     preassignments = {e: c for (e, c) in zip(preassigned_espers, characters)}
@@ -179,9 +238,9 @@ def test_esper_allocation():
             users_per_esper[e.name] = users_per_esper.get(e.name, 0) + num_users
         assert len(unique_users) == len(char_ids)
 
-
         for key, value in users_per_tier.items():
-            # Average the number of users per tier by dividing by the number of users by the number of espers in that tier
+            # Average the number of users per tier by dividing by the
+            #   number of users by the number of espers in that tier
             users_per_tier[key] = value / espers_per_tier[key]
             average_users_per_tier[key] = average_users_per_tier.get(key, 0) + users_per_tier.get(key, 0)
 
@@ -195,11 +254,11 @@ def test_esper_allocation():
     for key, value in average_users_per_esper.items():
         average_users_per_esper[key] = average_users_per_esper.get(key, 0) / test_range
 
-    print("Average esperless characters: " + str(esperless_users / test_range))
-    print("Average users by esper tier (Original): " + str(average_users_per_tier))
-    print("Average users by esper (Original): " + str(average_users_per_esper))
+    print('Average esperless characters: ' + str(esperless_users / test_range))
+    print('Average users by esper tier (Original): ' + str(average_users_per_tier))
+    print('Average users by esper (Original): ' + str(average_users_per_esper))
 
-    print("\n")
+    print('\n')
     average_users_per_tier = {}
     average_users_per_esper = {}
     from math import pow
@@ -228,10 +287,11 @@ def test_esper_allocation():
     for key, value in average_users_per_esper.items():
         average_users_per_esper[key] = average_users_per_esper.get(key, 0) / test_range
 
-    print("Average users by esper tier (Modified): " + str(average_users_per_tier))
-    print("Average users by esper (Modified): " + str(average_users_per_esper))
+    print('Average users by esper tier (Modified): ' + str(average_users_per_tier))
+    print('Average users by esper (Modified): ' + str(average_users_per_esper))
 
 
 if __name__ == "__main__":
-    test_generation(iterations=1, generate_output_rom=True)
-    # test_random_generation(iterations=, num_flags=10, generate_output_rom=False)
+    # test_generation(iterations=1, generate_output_rom=False)
+    test_random_generation(iterations=100, num_flags=15, generate_output_rom=False, halt_on_exception=True)
+    # thorough_test()

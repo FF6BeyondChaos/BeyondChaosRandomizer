@@ -6,6 +6,7 @@ from bcg_junction import (write_patch as jm_write_patch,
 from randomtools.tablereader import verify_patches as rt_verify_patches
 from character import get_characters
 from utils import Substitution, RANDOM_MULTIPLIER, random
+
 import math
 
 
@@ -259,6 +260,171 @@ def no_kutan_skip(output_rom_buffer: BytesIO):
     no_kutan_skip_sub.bytestring = bytes([0x27, 0x01])
     no_kutan_skip_sub.write(output_rom_buffer)
 
+def mastered_espers(output_rom_buffer: BytesIO, dancingmaduin=False):
+
+    me_sub = Substitution()
+
+    #Turn empty small font icon $7F into a star
+    me_sub.set_location(0x487B0)
+    me_sub.bytestring = bytes([0x18, 0x00, 0x3C, 0x18, 0xFF, 0x18, 0xFF, 0x7E, 0x7E,
+                               0x3C, 0xFF, 0x7E, 0xFF, 0x66, 0xE7, 0x00])
+    me_sub.write(output_rom_buffer)
+
+    #Hook into the Skills menu initiation to run a subroutine in freespace
+    me_sub.set_location(0x31B61)
+    me_sub.bytestring = bytes([0x20, 0xB0, 0xFE]) #Hook - calculate actor's spell starting RAM offset; # JSL $EEB0A6, Set up Yellow font and Calculate actor's spell offset, 0xD2 bytes after start of code block
+    me_sub.write(output_rom_buffer)
+
+    me_sub.set_location(0x3FEB0)
+    if dancingmaduin:
+         me_sub.bytestring = bytes([ 0x22, 0xA6, 0xB0, 0xEE, 0x20, 0x00, 0xF8, 0x60])
+    else:
+        me_sub.bytestring = bytes([0x22, 0xA6, 0xB0, 0xEE, 0x60])
+    me_sub.write(output_rom_buffer)
+
+    #Hook into "Draw Esper name and MP cost" function to run a check from freespace and draw the star
+    me_sub.set_location(0x35509)
+    me_sub.bytestring = bytes([0x22, 0xD4, 0xAF, 0xEE,					# JSL $EEAFD4, Draw Esper name and MP cost
+		                        0x20, 0x9F, 0x80,						# JSR $809F, Compute string map pointer
+		                        0xC2, 0x20,])							# REP #$20
+    me_sub.write(output_rom_buffer)
+
+    me_sub.set_location(0x3552E)
+    me_sub.bytestring = bytes([0x22, 0x04, 0xB0, 0xEE])  #Hook - check if current esper is mastered; # JSL $EEB004, Check if mastered, 0x30 bytes after start of code block
+    me_sub.write(output_rom_buffer)
+
+    me_sub.set_location(0x35548)
+    me_sub.bytestring = bytes([0x22, 0x51, 0xB0, 0xEE,					# Draw Digits, 0x7D bytes after start of code block
+		                        0x20, 0xD9, 0x7F,						# JSR $7FD9, Draw string
+		                        0x22, 0x64, 0xB0, 0xEE,					# JSL $EEB064, Add Star, 0x90 bytes after start of code block
+		                        0x20, 0xD9, 0x7F,						# JSR $7FD9, Draw string
+		                        0x60])  								# RTS  #Hook - add star Icon
+    me_sub.write(output_rom_buffer)
+
+    me_sub.set_location(0x3555D)
+    me_sub.bytestring = bytes([0xA0, 0x0D, 0x00]) #Constant adjustment - Blank 13 tiles
+    me_sub.write(output_rom_buffer)
+
+    #Freespace after "Improved Party Gear" Patch
+    me_sub.set_location(0x2EAFD4)
+    me_sub.bytestring = bytes([0xC2, 0x20,							# REP #$20
+                                0x8A,								# TXA
+                                0x18,								# CLC
+                                0x69, 0x0C, 0x00,					# ADC $000C
+                                0x85, 0xF5,							# STA $F5, save icon position
+                                0xE2, 0x20,							# SEP #$20
+                                0xA5, 0xE6,							# LDA $E6
+                                0x1A,								# INC
+                                0x6B,								# RTL
+
+                                0x7B,								# TDC, in this context puts 0 into A register
+                                0xA5, 0x28,							# LDA $28
+                                0xAA,								# TAX
+                                0xB5, 0x69,							# LDA $69,X
+                                0xEB,								# XBA
+                                0xA9, 0x36,							# LDA #$36
+                                0xC2, 0x20,							# REP #$20, puts A into 16-bit mode
+                                0x8F, 0x02, 0x42, 0x00,				# STA $004202, prepare for SNES hardware multiplication of A and B
+                                0xEA, 0xEA, 0xEA, 0xEA,				# NOP #4, wait for it to finish
+                                0xAF, 0x16, 0x42, 0x00,				# LDA $004216, get the result
+                                0x8D, 0x03, 0x02,					# STA $0203
+                                0xE2, 0x20,							# SEP #$20, back to A in 8-bit mode
+                                0x7B,								# TDC
+                                0xA5, 0x28,							# LDA $28
+                                0xAA,								# TAX
+                                0x6B,								# RTL, end of routine "Calculate Actor's spell starting RAM offset"
+
+                                0xDA,								# PHX
+                                0x5A,								# PHY
+                                0x7B,								# TDC
+                                0x85, 0xFB,							# STA $FB, clear the Mastered Esper byte
+                                0xBF, 0x89, 0x9D, 0x7E,				# LDA $7E9D89, load Esper ID
+                                0xC2, 0x20,							# REP #$20, puts A into 16-bit mode
+                                0x85, 0xFC,							# STA $FC
+                                0x0A,								# ASL
+                                0x85, 0xFE,							# STA $FE
+                                0x0A, 0x0A,							# ASL #2
+                                0x18,								# CLC
+                                0x65, 0xFE,							# ADC $FE
+                                0x18,								# CLC
+                                0x65, 0xFC,							# ADC $FC, now eleven times the Esper ID
+                                0xAA,								# TAX
+                                0x64, 0xFC,							# STZ $FC
+                                0xA0, 0x05, 0x00,					# LDY #$0005, Five spells max per Esper
+                                0xE2, 0x20,							# SEP #$20, back to 8-Bit A
+                                0x7B,								# TDC, Clear A.  [This is the start of the loop]
+                                0xBF, 0x01, 0x6E, 0xD8,				# LDA $D86E01,X, Esper Spell
+                                0xC9, 0xFF,							# CMP #$FF, is it empty?
+                                0xF0, 0x1B,							# BEQ $1B, branch if so
+                                0x85, 0xFC,							# STA $FC
+                                0xC2, 0x20,							# REP #$20, back to 16-Bit A
+                                0xAD, 0x03, 0x02,					# LDA $0203, current character spell offset
+                                0x18,								# CLC
+                                0x65, 0xFC,							# ADC $FC, Spell Offset + Spell ID
+                                0xDA,								# PHX, save Esper data index
+                                0xAA,								# TAX, set X as spell learnt percentage
+                                0xE2, 0x20,							# SEP #$20, back to 8-Bit A
+                                0xBD, 0x6E, 0x1A,					# LDA $1A6E,X, spell learnt percentage
+                                0xFA,								# PLX, restore Esper data index
+                                0xC9, 0xFF,							# CMP #$FF, is the spell learned?
+                                0xD0, 0x07,							# BNE $07, Branch if not, out of loop, to prevent marking the Esper as mastered
+                                0xE8, 0xE8,							# INX #2
+                                0x88,								# DEY
+                                0xD0, 0xDC,							# BNE $DC, go back to the start of the loop if we haven't checked five spells
+                                0xE6, 0xFB,							# INC $FB, mark Esper as mastered
+                                0x7A,								# PLY
+                                0xFA,								# PLX
+                                0xBF, 0x89, 0x9D, 0x7E,				# LDA $7E8D89,X, load Esper ID
+                                0x6B,								# RTL, end of routine "Check if current Esper is mastered"
+
+                                0xA5, 0xF7,							# LDA $F7, hundreds digit
+                                0x8D, 0x80, 0x21,					# STA $2180, add to string
+                                0xA5, 0xF8,							# LDA $F8, tens digit
+                                0x8D, 0x80, 0x21,					# STA $2180, add to string
+                                0xA5, 0xF9,							# LDA $F9, ones digit
+                                0x8D, 0x80, 0x21,					# STA $2180, add to string
+                                0x9C, 0x80, 0x21,					# STZ $2180, end string
+                                0x6B,								# RTL, end of routine "Draw Digits"
+
+                                0xA6, 0xF5,							# LDX $F5, Icon's X position
+                                0xA5, 0xE6,							# LDA $E6, BG1 write row
+                                0x1A,								# INC, go down one row
+                                0xEB,								# XBA
+                                0xA5, 0x00,							# LDA $00
+                                0xEB,								# XBA
+                                0xC2, 0x20,							# REP #$20, set 16-Bit A
+                                0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A,	# ASL #6, times sixty-four
+                                0x85, 0xE7,							# STA $E7
+                                0x8A,								# TXA
+                                0x0A,								# ASL
+                                0x18,								# CLC
+                                0x65, 0xE7,							# ADC $E7
+                                0x69, 0x49, 0x38,					# ADC #$3849
+                                0x8F, 0x89, 0x9E, 0x7E,				# STA $7E9E89, set position
+                                0xE2, 0x20,							# SEP #$20, set 8-Bit A
+                                0xA5, 0x29,							# LDA $29, load font palette
+                                0xC9, 0x20,							# CMP #$20, check if it's the active character palette
+                                0xD0, 0x04,							# BNE $04, branch if it's grayed out
+                                0xA9, 0x34,							# LDA #$34, set palette to yellow (using Myria's code)
+                                0x85, 0x29,							# STA $29
+                                0xA2, 0x8B, 0x9E,					# LDX #$9E8B
+                                0x8E, 0x81, 0x21,					# STX $2181
+                                0xA5, 0xFB,							# LDA $FB, mastered Esper byte
+                                0xF0, 0x04,							# BEQ $04, branch if not mastered
+                                0xA9, 0x7F,							# LDA #$7F, Esper star icon
+                                0x80, 0x02,							# BRA $02
+                                0xA9, 0xFF,							# LDA #$FF, empty glyph
+                                0x8D, 0x80, 0x21,					# STA $2180, add to string
+                                0x9C, 0x80, 0x21,					# STZ $2180, end string
+                                0x6B,								# RTL, end of routine "Add Star"
+
+                                0x22, 0x01, 0xAF, 0xEE,				# JSL Myria's Yellow Font code
+                                0x22, 0xE3, 0xAF, 0xEE,				# JSL Calculate actor's spell offset, 0x0F bytes after start of code block
+                                0x6B])								# RTL
+
+    me_sub.write(output_rom_buffer)
+
+    ## Next free byte is 0x2EB0AF
 
 def show_coliseum_rewards(output_rom_buffer: BytesIO):
     rewards_sub = Substitution()
@@ -290,9 +456,12 @@ def show_coliseum_rewards(output_rom_buffer: BytesIO):
 
 
 def sprint_shoes_break(output_rom_buffer: BytesIO):
+
+    #Also make Rename Card item slot usable in battle
+
     sprint_shoes_sub = Substitution()
     sprint_shoes_sub.set_location(0x2273D)
-    sprint_shoes_sub.bytestring = bytes([0xE7])
+    sprint_shoes_sub.bytestring = bytes([0xE8])
     sprint_shoes_sub.write(output_rom_buffer)
 
 
@@ -438,6 +607,12 @@ def fix_flyaway(output_rom_buffer: BytesIO):
     ff_sub.bytestring = bytes([0xFD])
     ff_sub.write(output_rom_buffer)
 
+def item_return_buffer_fix(output_rom_buffer: BytesIO):
+
+    irbf_sub = Substitution()
+    irbf_sub.set_location(0x112D5)
+    irbf_sub.bytestring = bytes([0xE0, 0x50, 0x00])
+    irbf_sub.write(output_rom_buffer)
 
 def change_swdtech_speed(output_rom_buffer: BytesIO, speed: str = "Vanilla"):
     css_sub = Substitution()
@@ -729,7 +904,81 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
     ])
     hidden_relic_sub.write(output_rom_buffer)
 
+def slow_background_scrolling(output_rom_buffer: BytesIO):
+    sbs_sub = Substitution()
 
+    #slow scrolling for Clouds
+    sbs_sub.set_location(0x2B1B1)
+    sbs_sub.bytestring = bytes([0x69, 0x01, 0x00])
+    sbs_sub.write(output_rom_buffer)
+
+    #slow scrolling for Waterfall
+    sbs_sub.set_location(0x2B1F7)
+    sbs_sub.bytestring = bytes([0x69, 0x02, 0x00])
+    sbs_sub.write(output_rom_buffer)
+
+def level_cap(output_rom_buffer: BytesIO, maxlevel):
+
+    lc_sub = Substitution()
+
+    lc_sub.bytestring = bytes([maxlevel])
+
+    lc_sub.set_location(0x26074)
+    lc_sub.write(output_rom_buffer)
+
+    lc_sub.set_location(0x360A7)
+    lc_sub.write(output_rom_buffer)
+
+    lc_sub.set_location(0x0A132)
+    lc_sub.write(output_rom_buffer)
+
+    lc_sub.set_location(0x0A136)
+    lc_sub.write(output_rom_buffer)
+
+def shadow_stays(output_rom_buffer: BytesIO):
+    # Shadow will never leave after combat
+    shadow_stays_sub = Substitution()
+    shadow_stays_sub.set_location(0x24885)
+    shadow_stays_sub.bytestring = bytes([0x80, 0x05]) # BRA $05 ; Always branch, regardless of the state of the Shadow Stays bit
+    shadow_stays_sub.write(output_rom_buffer)
+
+def mp_refills(output_rom_buffer: BytesIO):
+
+    mp_refill_sub = Substitution()
+    mp_refill_sub.set_location(0x2EAF64)
+    mp_refill_sub.bytestring = bytes([0x88, 0x00, 0x08, 0x40, 0x8C, 0x00, 0x7F, 0xFE, 0x88, 0x01, 0x08,
+                                      0x40, 0x8C, 0x01, 0x7F, 0xFE, 0x88, 0x02, 0x08, 0x40, 0x8C, 0x02,
+                                      0x7F, 0xFE, 0x88, 0x03, 0x08, 0x40, 0x8C, 0x03, 0x7F, 0xFE, 0x88,
+                                      0x04, 0x08, 0x40, 0x8C, 0x04, 0x7F, 0xFE, 0x88, 0x05, 0x08, 0x40,
+                                      0x8C, 0x05, 0x7F, 0xFE, 0x88, 0x06, 0x08, 0x40, 0x8C, 0x06, 0x7F,
+                                      0xFE, 0x88, 0x07, 0x08, 0x40, 0x8C, 0x07, 0x7F, 0xFE, 0x88, 0x08,
+                                      0x08, 0x40, 0x8C, 0x08, 0x7F, 0xFE, 0x88, 0x09, 0x08, 0x40, 0x8C,
+                                      0x09, 0x7F, 0xFE, 0x88, 0x0A, 0x08, 0x40, 0x8C, 0x0A, 0x7F, 0xFE,
+                                      0x88, 0x0B, 0x08, 0x40, 0x8C, 0x0B, 0x7F, 0xFE, 0x88, 0x0C, 0x08,
+                                      0x40, 0x8C, 0x0C, 0x7F, 0xFE, 0x88, 0x0D, 0x08, 0x40, 0x8C, 0x0D,
+                                      0x7F, 0xFE])
+    mp_refill_sub.write(output_rom_buffer)
+
+    mp_refill_patches = {
+        0xACBD8: [0xB2, 0x64, 0xAF, 0x24],  # Terra
+        0xACBE7: [0xB2, 0x6C, 0xAF, 0x24],  # Locke
+        0xACBF6: [0xB2, 0x74, 0xAF, 0x24],  # Cyan
+        0xACC05: [0xB2, 0x7C, 0xAF, 0x24],  # Shadow
+        0xACC14: [0xB2, 0x84, 0xAF, 0x24],  # Edgar
+        0xACC23: [0xB2, 0x8C, 0xAF, 0x24],  # Sabin
+        0xACC32: [0xB2, 0x94, 0xAF, 0x24],  # Celes
+        0xACC41: [0xB2, 0x9C, 0xAF, 0x24],  # Strago
+        0xACC50: [0xB2, 0xA4, 0xAF, 0x24],  # Relm
+        0xACC5F: [0xB2, 0xAC, 0xAF, 0x24],  # Setzer
+        0xACC6E: [0xB2, 0xBC, 0xAF, 0x24],  # Gau
+        0xACC7D: [0xB2, 0xC4, 0xAF, 0x24],  # Gogo
+        0xACC8C: [0xB2, 0xCC, 0xAF, 0x24],  # Umaro
+        0xACC9B: [0xB2, 0xB4, 0xAF, 0x24]  # Mog
+    }
+    for location, byte_array in mp_refill_patches.items():
+        mp_refill_sub.set_location(location)
+        mp_refill_sub.bytestring = bytes(byte_array)
+        mp_refill_sub.write(output_rom_buffer)
 
 def change_cursed_shield_battles(output_rom_buffer: BytesIO, amount: int = None):
     if not amount or amount == "random":
@@ -772,24 +1021,138 @@ def title_gfx(output_rom_buffer: BytesIO):
 
 
 def improved_party_gear(output_rom_buffer: BytesIO, myself_name_address, myself_name_bank):
+    # On the party gear display screen, display the original character slot name
+    # and their equipped esper.  This is similar to the functionality of RotDS,
+    # but we add the character slot name for Beyond Chaos since it's useful.
     ipg_sub = Substitution()
     ipg_sub.set_location(0x038F04)
-    ipg_sub.bytestring = bytes([0x64,
-        0x28, 0x22, 0x01, 0xAF, 0xEE, 0xA9, 0x00, 0xEB, 0xA5, 0x28, 0xAA, 0xB5, 0x69, 0x30, 0x60, 0x48,
-        0x8A, 0x0A, 0xA8, 0x69, 0x39, 0xEB, 0xA9, 0x0D, 0xB6, 0x6D, 0x86, 0x67, 0xA8, 0x5A, 0xA9, 0x24,
-        0x85, 0x29, 0x20, 0xCF, 0x34, 0x7A, 0xA9, 0x28, 0x85, 0x29, 0xC2, 0x21, 0x98, 0x69, 0x10, 0x00,
-        0x8F, 0x89, 0x9E, 0x7E, 0xA9, 0x08, 0x00, 0x85, 0xEB, 0xA9] + myself_name_address + [0x85, 0xEF, 0xE2, 0x20,
-        0xA9] + myself_name_bank + [0x85, 0xF1, 0x68, 0xC9, 0x0E, 0xB0, 0x08, 0x5A, 0x20, 0x67, 0x84, 0x20, 0xD9, 0x7F,
-        0x7A, 0xA9, 0x34, 0x85, 0x29, 0xC2, 0x21, 0x98, 0x69, 0x20, 0x00, 0xA8, 0xE2, 0x20, 0x20, 0xE6,
-        0x34, 0xA9, 0x20, 0x85, 0x29, 0xA5, 0x28, 0x0A, 0x0A, 0x0A, 0x69, 0x04, 0x20, 0x8A, 0x8F, 0xA5,
-        0x28, 0x1A, 0x85, 0x28, 0xC9, 0x04, 0xD0, 0x8D, 0x20, 0x28, 0x0E, 0x20, 0x36, 0x0E, 0x20, 0x3C,
-        0x6A, 0x4C, 0x6E, 0x0E])
+    ipg_sub.bytestring = bytes([
+        # We start overwriting from the beginning of the routine to draw party gear.
+        # The original code has four subroutines that each do the same thing except
+        # read different addresses for the character slots.  This is a waste of space
+        # for non-time-critical code.  We can overwrite these four routines by
+        # replacing their functionality with a loop.  Note that these four
+        # subroutines follow the routine at C38EED, so we can just keep writing.
+        #
+        # Start at first slot.
+        0x64, 0x28,                 # STZ.B $28
+        # Initialize extra palette color.  The original game doesn't use this
+        # palette for anything in the menu system, so make it yellow.
+        0x22, 0x01, 0xAF, 0xEE,     # JSL yellow_palette
+                                # member_loop:
+        # Clear high part of A.
+        0xA9, 0x00,                 # LDA.B #0
+        0xEB,                       # XBA
+        # Is anyone in this slot?
+        0xA5, 0x28,                 # LDA.B $28
+        0xAA,                       # TAX
+        0xB5, 0x69,                 # LDA.B $69,x
+        0x30, 0x60,                 # BMI nobody
+        # Save the character ID.
+        0x48,                       # PHA
+        # While we have the slot in A, let's do some things.
+        # Double slot and give to Y.  Clears carry because slot < 128.
+        0x8A,                       # TXA
+        0x0A,                       # ASL
+        0xA8,                       # TAY
+        # Calculate high byte of text position for this slot:
+        # $390D + (slot * $200).
+        0x69, 0x39,                 # ADC.B #$39
+        0xEB,                       # XBA
+        0xA9, 0x0D,                 # LDA.B #$0D
+        # Copy actor's address.  They're words at 69, 6B, 6D, 6F.
+        0xB6, 0x6D,                 # LDX.B $6D,y
+        0x86, 0x67,                 # STX.B $67
+        # Set palette to cyan and draw actor's name.
+        # Y = text address (the 390D calculation above).
+        0xA8,                       # TAY
+        0x5A,                       # PHY
+        0xA9, 0x24,                 # LDA.B #$24
+        0x85, 0x29,                 # STA.B $29
+        0x20, 0xCF, 0x34,           # JSR.W $C334CF
+        0x7A,                       # PLY
+        # Palette for slot name.
+        0xA9, 0x28,                 # lda.b #$28
+        0x85, 0x29,                 # sta.b $29
+        # Compute tile address for slot's name.
+        0xC2, 0x21,                 # REP #$21   ; clear carry too
+        0x98,                       # TYA
+        0x69, 0x10, 0x00,           # ADC.W #8 * 2
+        0x8F, 0x89, 0x9E, 0x7E,     # STA.L $7E9E89
+        # Set up parameters for fixed-size table.
+        0xA9, 0x08, 0x00,           # LDA.W #8
+        0x85, 0xEB,                 # STA.B $EB
+        0xA9] + myself_name_address + [ # LDA.W #myself_name_address & $FFFF
+        0x85, 0xEF,                 # STA.B $EF
+        0xE2, 0x20,                 # SEP #$20
+        0xA9] + myself_name_bank + [# LDA.B #myself_name_bank
+        0x85, 0xF1,                 # STA.B $F1
+        # Get back the character ID.
+        0x68,                       # PLA
+        # Don't draw slot's name if not a usual character.
+        0xC9, 0x0E,                 # CMP.B #14
+        0xB0, 0x08,                 # BCS special_character
+        # Copy fixed-size string to write buffer.
+        # A = index of fixed-size string, just set.
+        0x5A,                       # PHY
+        0x20, 0x67, 0x84,           # JSR.W $C38467
+        # Draw write buffer to tilemap.
+        0x20, 0xD9, 0x7F,           # JSR.W $C37FD9
+        0x7A,                       # PLY
+                                # special_character:
+        # Use special yellow palette.
+        0xA9, 0x34,                 # LDA.B #$34
+        0x85, 0x29,                 # STA.B $29
+        # Draw esper's name.
+        # Get tilemap address and move over 18 tiles.
+        0xC2, 0x21,                 # REP #$21   ; clear carry too
+        0x98,                       # TYA
+        0x69, 0x20, 0x00,           # ADC.W #16 * 2
+        0xA8,                       # TAY
+        0xE2, 0x20,                 # SEP #$20
+        # This routine wants the actor address in D+$67 and tilemap in Y.
+        0x20, 0xE6, 0x34,           # JSR.W $C334E6
+        # Reset palette to normal.
+        0xA9, 0x20,                 # LDA.B #$20
+        0x85, 0x29,                 # STA.B $29
+        # Draw gear for this party member.
+        # Row = 4 + (slot * 8).
+        0xA5, 0x28,                 # LDA.B $28
+        0x0A,                       # ASL
+        0x0A,                       # ASL
+        0x0A,                       # ASL
+        0x69, 0x04,                 # ADC.B #$04
+        0x20, 0x8A, 0x8F,           # JSR.W $C38F8A
+        # Next party member.
+                                # nobody:
+        0xA5, 0x28,                 # LDA.B $28
+        0x1A,                       # INC
+        0x85, 0x28,                 # STA.B $28
+        0xC9, 0x04,                 # CMP.B #4
+        0xD0, 0x8D,                 # BNE member_loop
+        # Do stuff from the original code after the menu draws.
+        0x20, 0x28, 0x0E,           # JSR.W $C30E28
+        0x20, 0x36, 0x0E,           # JSR.W $C30E36
+        0x20, 0x3C, 0x6A,           # JSR.W $C36A3C
+        0x4C, 0x6E, 0x0E])          # JMP.W $C30E6E
     ipg_sub.write(output_rom_buffer)
 
+    # The subroutine writes the yellow color palette on top of an
+    # existing palette that wasn't being used in the menu.
+    # It's here because it didn't fit in the above code cave.
     ipg_sub.set_location(0x2EAF01)
-    ipg_sub.bytestring = bytes([0xC2, 0x20, 0xA9, 0x00,
-        0x00, 0x8F, 0xE9, 0x30, 0x7E, 0x8F, 0xEB, 0x30, 0x7E, 0xA9, 0xCE, 0x39, 0x8F, 0xED, 0x30, 0x7E,
-        0xA9, 0xBF, 0x03, 0x8F, 0xEF, 0x30, 0x7E, 0xE2, 0x20, 0x6B])
+    ipg_sub.bytestring = bytes([
+                                # yellow_palette:
+        0xC2, 0x20,                 # REP $20
+        0xA9, 0x00, 0x00,           # LDA.W #$0000
+        0x8F, 0xE9, 0x30, 0x7E,     # STA.L $7E3049 + (((5 * 16) + 0) * 2)
+        0x8F, 0xEB, 0x30, 0x7E,     # STA.L $7E3049 + (((5 * 16) + 1) * 2)
+        0xA9, 0xCE, 0x39,           # LDA.W #$39CE
+        0x8F, 0xED, 0x30, 0x7E,     # STA.L $7E3049 + (((5 * 16) + 2) * 2)
+        0xA9, 0xBF, 0x03,           # LDA.W #$03BF
+        0x8F, 0xEF, 0x30, 0x7E,     # STA.L $7E3049 + (((5 * 16) + 3) * 2)
+        0xE2, 0x20,                 # SEP #$20
+        0x6B])                      # RTL
     ipg_sub.write(output_rom_buffer)
 
 def y_equip_relics(output_rom_buffer: BytesIO):
@@ -1926,54 +2289,36 @@ def fewer_flashes(output_rom_buffer: BytesIO, flag_value):
 
 
 def vanish_doom(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_vanish_doom.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_vanish_doom.txt')
 
 
 def stacking_immunities(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_stacking_immunities_fix.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_stacking_immunities_fix.txt')
 
 
 def mp_color_digits(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_mp_color_digits.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_mp_color_digits.txt')
 
 
 def can_always_access_esper_menu(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_can_always_access_esper_menu.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_can_always_access_esper_menu.txt')
 
 
 def alphabetized_lores(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_alphabetized_lores.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_alphabetized_lores.txt')
 
 
 def description_disruption(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_description_disruption.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_description_disruption.txt')
 
 
 def informative_miss(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_informative_miss.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_informative_miss.txt')
 
 
 def improved_equipment_menus(output_rom_buffer: BytesIO):
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_improved_equip_menu.txt'))
-    jm_write_patch(
-        output_rom_buffer,
-        os.path.join(jm_tblpath, 'patch_improved_shop_menu.txt'))
+    jm_write_patch(output_rom_buffer, 'patch_improved_equip_menu.txt')
+    jm_write_patch(output_rom_buffer, 'patch_improved_shop_menu.txt')
 
 
 def verify_randomtools_patches(output_rom_buffer: BytesIO):

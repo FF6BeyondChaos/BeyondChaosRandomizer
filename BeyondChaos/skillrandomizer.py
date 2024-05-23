@@ -123,6 +123,12 @@ class SpellBlock:
                 not self.valid)
 
     @property
+    def is_desperation(self):
+        return self.name in ["Sabre Soul", "Star Prism", "Mirager", "TigerBreak", "Back Blade",
+                             "Riot Blade", "RoyalShock", "Spin Edge", "X-Meteo", "Red Card",
+                             "MoogleRush", "ShadowFang"]
+
+    @property
     def is_blitz(self):
         return self.spellid in range(0x5D, 0x65)
 
@@ -337,7 +343,7 @@ class SpellSub(Substitution):
 wildspells = None
 
 
-def get_spellsets(spells=None):
+def get_spellsets(spells=None, outfile_rom_buffer: BytesIO = None):
     """Create various thematic groups of spells."""
     global wildspells
     spellsets = {}
@@ -447,6 +453,10 @@ def get_spellsets(spells=None):
                           [s for s in spells if s.level_spell or s.name in ["Flare Star", "Dischord", "Stone"]])
     spellsets['Miss'] = ('skill with low accuracy',
                          [s for s in spells if not s.unblockable and not s.level_spell and 0 < s.accuracy < 90])
+    if outfile_rom_buffer:
+        outfile_rom_buffer.seek(0x0FFE80)
+        dances = bytes(outfile_rom_buffer.read(32))
+        spellsets['Dance'] = ('Skills from this seed\'s dances', dances)
 
     for key, desc_and_spellset in list(spellsets.items()):
         if not desc_and_spellset:
@@ -514,8 +524,8 @@ class RandomSpellSub(Substitution):
     def write(self, outfile_rom_buffer):
         super(RandomSpellSub, self).write(outfile_rom_buffer)
 
-    def set_spells(self, valid_spells, spellclass=None, spellsets=None):
-        spellsets = spellsets or get_spellsets(spells=valid_spells)
+    def set_spells(self, valid_spells, spellclass=None, spellsets=None, outfile_rom_buffer: BytesIO = None):
+        spellsets = spellsets or get_spellsets(spells=valid_spells, outfile_rom_buffer=outfile_rom_buffer)
         spellclass = spellclass or random.choice(list(spellsets.keys()))
 
         self.name = spellclass
@@ -635,12 +645,12 @@ class MultiSpellSubMixin(Substitution):
     def size(self):
         return self.spellsub.size + self.get_overhead()
 
-    def set_spells(self, spells, spellclass=None, spellsets=None):
+    def set_spells(self, spells, spellclass=None, spellsets=None, outfile_rom_buffer: BytesIO = None):
         if isinstance(spells, int):
             self.spellsub = SpellSub(spellid=spells)
         elif isinstance(spells, list) or isinstance(spells, set):
             self.spellsub = RandomSpellSub()
-            self.spellsub.set_spells(spells, spellclass, spellsets)
+            self.spellsub.set_spells(spells, spellclass, spellsets, outfile_rom_buffer=outfile_rom_buffer)
             self.name = self.spellsub.name
             self.spells = self.spellsub.spells
         else:

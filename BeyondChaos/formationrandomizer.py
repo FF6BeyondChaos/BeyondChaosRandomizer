@@ -337,12 +337,13 @@ class Formation():
                 self.misc1 |= 0x90
 
     def get_special_mp(self):
-        levels = [e.stats['level'] for e in self.present_enemies if e]
-        mp = int(sum(levels) // len(levels))
-        low = mp // 2
-        mp = low + random.randint(0, low) + random.randint(0, low)
-        mp = random.randint(0, mp)
-        self.mp = min(100, max(mp, 0))
+        if self.formid < 512:
+            levels = [e.stats['level'] for e in self.present_enemies if e]
+            mp = int(sum(levels) // len(levels))
+            low = mp // 2
+            mp = low + random.randint(0, low) + random.randint(0, low)
+            mp = random.randint(0, mp)
+            self.mp = min(100, max(mp, 0))
 
 
 class FormationSet():
