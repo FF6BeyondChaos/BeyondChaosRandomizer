@@ -1,3 +1,4 @@
+
 .addr   jun-checker-y                   {{jun-global-checker-y}}
 .addr   jun-rng1                        {{jun-global-rng1}}
 .addr   jun-queue-command               {{jun-global-queue-command}}
@@ -16,6 +17,9 @@
 :       ea
 :       ea ea
 :       ea ea
+
+025402: ea ea ea
+:       ea ea ea
 
 $main
 # 16-bit A
@@ -79,3 +83,6 @@ VALIDATION
 :       ad a2 11
 :       30 02
 :       a2 00
+
+025402: 9e 08 3c
+:       9e 30 3c
