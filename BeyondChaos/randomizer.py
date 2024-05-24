@@ -5969,7 +5969,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                     }
                     remonsterate_process = Process(
                         target=remonsterate,
-                        args=(remonsterate_connection,),
+                        args=(remonsterate_connection, pipe_print),
                         kwargs=remonsterate_kwargs
                     )
                     remonsterate_process.start()

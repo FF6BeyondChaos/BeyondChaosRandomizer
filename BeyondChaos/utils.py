@@ -87,13 +87,15 @@ SONGS_TABLE = path.join(custom_path, "songs.txt")
 parent_connection = None
 
 
-def pipe_print(output=""):
-    global parent_connection
-    if parent_connection:
+def pipe_print(output="", connection: Pipe = None):
+    if not connection:
+        global parent_connection
+        connection = parent_connection
+    if connection:
         if isinstance(output, Exception):
-            parent_connection.send(type(output)(traceback.format_exc()))
+            connection.send(type(output)(traceback.format_exc()))
         else:
-            parent_connection.send(output)
+            connection.send(output)
     else:
         if isinstance(output, Exception):
             pipe_print(traceback.format_exc())
