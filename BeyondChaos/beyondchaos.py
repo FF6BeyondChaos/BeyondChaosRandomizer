@@ -294,7 +294,7 @@ class Window(QMainWindow):
         # values to be sent to Randomizer
         self.romText = ''
         self.romOutputDirectory = ''
-        self.version = 'CE-6.0.1'
+        self.version = 'CE-6.0.2'
         self.mode = 'normal'
         self.seed = ''
         self.flags = []
