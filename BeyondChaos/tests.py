@@ -1,21 +1,86 @@
+import os
 from randomizer import VERSION
+from time import time
+from utils import extract_archive, get_directory_hash, md5_update_from_file
+from options import Flag
+
 
 SOURCE_FILE = ''
 OUTPUT_PATH = ''
 TEST_SEED = ''
 SKIP_FLAGS = ['remonsterate', 'bingoboingo']
-INCLUDE_FLAGS = []
+INCLUDE_FLAGS = {}
+
+
+def get_random_flag_value(flag: Flag):
+    from random import Random
+    random = Random()
+
+    result = ''
+    if flag.inputtype == 'integer':
+        # Choose a random value from within the allowed values, except the default value
+        value = random.randint(int(flag.minimum_value), int(flag.maximum_value))
+        while value == flag.default_value:
+            value = random.randint(int(flag.minimum_value), int(flag.maximum_value))
+        result = ':' + str(value)
+    elif flag.inputtype == 'float2':
+        # Choose a random value from within the allowed values, except the default value
+        value = round(random.uniform(flag.minimum_value, flag.maximum_value), 2)
+        while value == flag.default_value:
+            value = round(random.uniform(flag.minimum_value, flag.maximum_value), 2)
+        result = ':' + str(value)
+    elif flag.inputtype == 'combobox':
+        # Choose a random value from within the allowed values, except the default value
+        value = random.choice(flag.choices)
+        while value == flag.default_value:
+            value = random.choice(flag.choices)
+        result = ':' + str(value)
+    return result
+
+
+def apply_included_flags(flag_string: str):
+    from options import ALL_FLAGS
+    global INCLUDE_FLAGS
+    included_flags = [(flag, INCLUDE_FLAGS[flag.name]) for flag in ALL_FLAGS if flag.name in INCLUDE_FLAGS.keys()]
+    for flag, value in included_flags:
+        if flag.name not in flag_string:
+            if value is False:
+                continue
+            elif flag.inputtype == 'boolean' and value is True:
+                flag_string = flag_string + ' ' + flag.name
+            elif value is None or value.lower() == 'random':
+                flag_string = flag_string + ' ' + flag.name + get_random_flag_value(flag)
+            else:
+                flag_string = flag_string + ' ' + flag.name + ':' + value
+    return flag_string
 
 
 # Test a single generation, just like using TEST = True previously in randomizer.py
 def test_generation(iterations: int = 1, generate_output_rom=True):
+    global TEST_SEED
     from randomizer import randomize
     from multiprocessing import Pipe, Process
-    for i in range(iterations):
+    for batch_number in range(iterations):
         test_bundle = TEST_SEED.split('|')
-        test_seed = test_bundle[len(test_bundle) - 1]
-        test_seed = str(int(test_seed) + i)
-        test_bundle[len(test_bundle) - 1] = test_seed
+
+        # For each of the included flags, get the Flag object and the supplied value for the flag and add it to bundle.
+        test_bundle[2] = apply_included_flags(test_bundle[2])
+
+        # If the skip flag is present in the bundle, remove it.
+        for skip_flag in SKIP_FLAGS:
+            # I use a split here to get both the flag and any value. If I simply do a replace operation on the
+            #   bundle, it may leave behind a value. Eg. Randomboost:2.00 - Randomboost = :2.00
+            for active_flag_and_value in test_bundle[2].split(' '):
+                if str(active_flag_and_value).startswith(skip_flag):
+                    test_bundle[2] = test_bundle[2].replace(active_flag_and_value, '')
+
+        # If no seed is supplied with the bundle, use the current time to make one
+        if len(test_bundle) == 3:
+            test_bundle.append(str(int(time())))
+
+        # Increment the seed number with the batch number
+        test_bundle[len(test_bundle) - 1] = str(int(test_bundle[len(test_bundle) - 1]) + batch_number)
+
         kwargs = {
             'infile_rom_path': SOURCE_FILE,
             'outfile_rom_path': OUTPUT_PATH,
@@ -52,7 +117,8 @@ def test_generation(iterations: int = 1, generate_output_rom=True):
 # Test multiple generations. Choose a number of seeds to generate and a number of random flags those seeds should have.
 # The selected mode is random too.
 # Note that this method does not write any of the generated roms to disk.
-def test_random_generation(iterations: int, num_flags: int, generate_output_rom=False, halt_on_exception=False):
+def test_random_generation(iterations: int, num_flags: int, mode=None,
+                           generate_output_rom=False, halt_on_exception=False):
     from options import ALL_FLAGS
     from options import ALL_MODES
     from randomizer import randomize
@@ -63,47 +129,34 @@ def test_random_generation(iterations: int, num_flags: int, generate_output_rom=
     random = Random()
     for index in range(iterations):
         try:
-            all_testing_flags = [flag for flag in ALL_FLAGS if flag.name not in SKIP_FLAGS]
-            current_flagstring = '' if not INCLUDE_FLAGS else ' '.join(INCLUDE_FLAGS) + ' '
+            current_flag_string = ''
+
+            # Randomly grab flags from all valid Flag objects
+            all_testing_flags = [flag for flag in ALL_FLAGS if flag.name not in SKIP_FLAGS and
+                                 flag.name not in INCLUDE_FLAGS.keys()]
             new_flags = random.sample(all_testing_flags, num_flags)
+
+            # Generate values for the new flags
             for flag in new_flags:
-                try:
-                    if flag.inputtype == "integer":
-                        # Choose a random value from within the allowed values
-                        flag.value = random.randint(flag.minimum_value, flag.maximum_value)
-                        if flag.value == flag.default_value:
-                            continue
-                        current_flagstring += str(flag.name) + ":" + str(flag.value)
-                    elif flag.inputtype == "float2":
-                        # Choose a random value from within the allowed values
-                        flag.value = round(random.uniform(flag.minimum_value, flag.maximum_value), 2)
-                        if flag.value == flag.default_value:
-                            continue
-                        current_flagstring += str(flag.name) + ":" + str(flag.value)
-                    elif flag.inputtype == "combobox":
-                        # Choose a random value from within the allowed values
-                        flag.value = random.choice(flag.choices)
-                        while flag.value == flag.default_value:
-                            # Except do not allow the default_value, because that represents the flag being off
-                            flag.value = random.choice(flag.choices)
-                        current_flagstring += str(flag.name) + ":" + str(flag.value)
-                    else:
-                        current_flagstring += str(flag.name)
-                    current_flagstring += " "
-                except Exception:
-                    print("Error setting and applying flag value for flag " + str(flag.name) + " on iteration " +
-                          str(index) + ".")
+                if flag.inputtype == 'boolean':
+                    current_flag_string = current_flag_string + ' ' + flag.name
+                else:
+                    current_flag_string = current_flag_string + ' ' + flag.name + get_random_flag_value(flag)
+
+            current_flag_string = apply_included_flags(current_flag_string)
+            current_mode = mode if mode else random.choice(ALL_MODES).name
+
             current_seed = str(VERSION) + "|" + \
-                           str(random.choice(ALL_MODES).name) + "|" + \
-                           str(current_flagstring) + "|" + \
+                           str(current_mode) + "|" + \
+                           str(current_flag_string) + "|" + \
                            str(int(time()))
-            print(f"Running generation {index} with seed {str(current_seed)}")
+            print(f'Running generation {index} with seed {str(current_seed)}')
             kwargs = {
-                "infile_rom_path": SOURCE_FILE,
-                "outfile_rom_path": OUTPUT_PATH,
-                "seed": current_seed,
-                "application": "tester",
-                "generate_output_rom": generate_output_rom
+                'infile_rom_path': SOURCE_FILE,
+                'outfile_rom_path': OUTPUT_PATH,
+                'seed': current_seed,
+                'application': 'tester',
+                'generate_output_rom': generate_output_rom
             }
             parent_connection, child_connection = Pipe()
             randomize_process = Process(
@@ -114,7 +167,7 @@ def test_random_generation(iterations: int, num_flags: int, generate_output_rom=
             randomize_process.start()
             while True:
                 if not randomize_process.is_alive():
-                    raise RuntimeError("Unexpected error: The randomize child process died.")
+                    raise RuntimeError('Unexpected error: The randomize child process died.')
                 if parent_connection.poll(timeout=5):
                     item = parent_connection.recv()
                 else:
@@ -129,7 +182,7 @@ def test_random_generation(iterations: int, num_flags: int, generate_output_rom=
                             break
                     except EOFError:
                         break
-            print("\n")
+            print('\n')
         except Exception as e:
             if halt_on_exception:
                 raise e
@@ -291,7 +344,39 @@ def test_esper_allocation():
     print('Average users by esper (Modified): ' + str(average_users_per_esper))
 
 
-if __name__ == "__main__":
-    # test_generation(iterations=1, generate_output_rom=False)
-    test_random_generation(iterations=100, num_flags=15, generate_output_rom=False, halt_on_exception=True)
+def test_hash():
+    from update import _ASSETS
+    print('Hash of custom directory ' +
+          _ASSETS['custom']['location'] +
+          ': ' +
+          str(get_directory_hash(directory=_ASSETS['custom']['location']).hexdigest()))
+
+
+def test_rng_distribution():
+    from matplotlib import pyplot
+    from options import ALL_FLAGS
+    from random import Random
+
+    random = Random()
+    flag = [flag for flag in ALL_FLAGS if flag.name == 'gpboost'][0]
+
+    results = []
+    for i in range(100000):
+        value = max(0, random.gauss(float(flag.default_value) + .1, .2))
+        results.append(value)
+
+    pyplot.hist(results, bins=200)
+    pyplot.show()
+
+
+if __name__ == '__main__':
+    test_rng_distribution()
+    # test_generation(iterations=2, generate_output_rom=False)
+    # test_random_generation(
+    #     iterations=10,
+    #     num_flags=10,
+    #     mode=None,
+    #     generate_output_rom=False,
+    #     halt_on_exception=True
+    # )
     # thorough_test()
