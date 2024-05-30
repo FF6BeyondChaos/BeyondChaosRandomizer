@@ -299,8 +299,8 @@ def manage_character_names(outfile_rom_buffer: BytesIO, change_to, male,
             f.close()
         else:
             malenames = sorted(set(sanitize_names([name.strip() for name in male_names.split("\n")])))
-        if not male_names:
-            f = open_mei_fallback(MALE_NAMES_TABLE)
+        if not female_names:
+            f = open_mei_fallback(FEMALE_NAMES_TABLE)
             femalenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
             f.close()
         else:
