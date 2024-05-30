@@ -46,7 +46,7 @@ from patches import (
     allergic_dog, banon_life3, evade_mblock, death_abuse, no_kutan_skip,
     show_coliseum_rewards, cycle_statuses, no_dance_stumbles, fewer_flashes,
     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break,
-    title_gfx, apply_namingway, improved_party_gear, patch_doom_gaze,
+    apply_namingway, improved_party_gear, patch_doom_gaze,
     nicer_poison, fix_xzone, imp_skimp, fix_flyaway, hidden_relic, y_equip_relics,
     fix_gogo_portrait, vanish_doom, stacking_immunities, mp_color_digits,
     can_always_access_esper_menu, alphabetized_lores, description_disruption,
@@ -70,6 +70,7 @@ from utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    AutoLearnRageSub, pipe_print, set_parent_pipe)
 from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
+from patch_title import title_gfx
 from remonsterate.remonsterate import remonsterate
 
 
