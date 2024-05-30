@@ -6287,16 +6287,30 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
         if Options_.is_flag_active('nicerpoison'):
             nicer_poison(outfile_rom_buffer)
+
         if Options_.is_flag_active('levelcap'):
 
             maxlevel = Options_.get_flag_value('levelcap')
+            leveltable = myself_locations['LEVEL_CAP']
+            max_level_string = bytes()
 
             if str(maxlevel).lower() == "random":
                 maxlevel = rng.randint(1, 99)
+                for character in characters:
+                    if character.id >= 14:
+                        continue
+                    character.level_cap = maxlevel
+                    max_level_string += bytes([maxlevel])
 
-            level_cap(outfile_rom_buffer, int(maxlevel))
+            if str(maxlevel).lower() == "chaos":
+                for character in characters:
+                    if character.id >= 14:
+                        continue
+                    maxlevel = rng.randint(1, 99)
+                    character.level_cap = maxlevel
+                    max_level_string += bytes([maxlevel])
 
-            log(str("\n MAX LEVEL: " + str(maxlevel)), section='characters')
+            level_cap(outfile_rom_buffer, max_level_string, leveltable)
 
         if Options_.is_flag_active('slowerbg'):
             slow_background_scrolling(outfile_rom_buffer)

@@ -9,7 +9,6 @@ from utils import Substitution, RANDOM_MULTIPLIER, random
 
 import math
 
-
 def allergic_dog(output_rom_buffer: BytesIO):
     # auto-float doesn't remove Interceptor
     allergic_dog_sub = Substitution()
@@ -917,22 +916,13 @@ def slow_background_scrolling(output_rom_buffer: BytesIO):
     sbs_sub.bytestring = bytes([0x69, 0x02, 0x00])
     sbs_sub.write(output_rom_buffer)
 
-def level_cap(output_rom_buffer: BytesIO, maxlevel):
+def level_cap(output_rom_buffer: BytesIO, max_level_string, leveltable):
 
     lc_sub = Substitution()
 
-    lc_sub.bytestring = bytes([maxlevel])
+    lc_sub.bytestring = max_level_string
 
-    lc_sub.set_location(0x26074)
-    lc_sub.write(output_rom_buffer)
-
-    lc_sub.set_location(0x360A7)
-    lc_sub.write(output_rom_buffer)
-
-    lc_sub.set_location(0x0A132)
-    lc_sub.write(output_rom_buffer)
-
-    lc_sub.set_location(0x0A136)
+    lc_sub.set_location(leveltable)
     lc_sub.write(output_rom_buffer)
 
 def shadow_stays(output_rom_buffer: BytesIO):
