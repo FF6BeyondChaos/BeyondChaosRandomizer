@@ -841,7 +841,7 @@ def nuke():
 
 
 def prepare_image(image: Image) -> Image:
-    allowed_colors = 0x10
+    allowed_colors = 15
     image_filename = image.filename
 
     # If the image had transparent rows or columns, crop them out for efficiency
@@ -889,7 +889,9 @@ def prepare_image(image: Image) -> Image:
     # If the image has too many colors, convert it into a form with reduced colors
     # if max(palette_indexes) > allowed_colors:
     palette_indexes = set(image.tobytes())
-    if max(palette_indexes) != 8 and max(palette_indexes) != 16:
+    # if max(palette_indexes) < 7:
+    #     print('Image ' + image_filename + ' has too few palette indices: ' + str(max(palette_indexes)) + '.')
+    if max(palette_indexes) < 8 or max(palette_indexes) > 15:
         if image.mode == "P":
             # Images already in P mode cannot be converted to P mode to shrink their allowed colors, so
             #   temporarily convert them back to RGB

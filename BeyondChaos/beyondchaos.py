@@ -656,10 +656,13 @@ class Window(QMainWindow):
                 elif flag['object'].inputtype == 'float2':
                     float_box = QDoubleSpinBox()
                     float_box.flag = flag['object']
-                    float_box.setMinimum(0)
+                    float_box.setMinimum(float(flag['object'].minimum_value))
+                    float_box.default = float(flag['object'].default_value)
+                    float_box.setMaximum(float(flag['object'].maximum_value))
                     float_box.setSingleStep(.1)
-                    float_box.default = 1.00
-                    float_box.setSuffix('x')
+                    float_box.setSpecialValueText('Random')
+                    if not flag['object'].name == 'randomboost':
+                        float_box.setSuffix('x')
                     float_box.setValue(float_box.default)
                     float_box.text = flag_name
                     float_box.setFixedWidth(control_fixed_width)
@@ -812,7 +815,10 @@ class Window(QMainWindow):
                                     child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
                                     self.flags.append(v)
                             except ValueError:
-                                pass
+                                if str(v).split(':')[1] == child.specialValueText().lower():
+                                    child.setValue(child.minimum())
+                                    child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                                    self.flags.append(v)
                     elif type(child) in [QComboBox] and str(v).startswith(child.text.lower()):
                         if ':' in v:
                             index_of_value = child.findText(str(v).split(':')[1], QtCore.Qt.MatchFixedString)
@@ -1023,7 +1029,7 @@ class Window(QMainWindow):
                 for c in children:
                     if not round(c.value(), 1) == c.default:
                         c.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
-                        if (c.text == 'cursepower' and c.value() == 0) or (c.text == 'levelcap' and c.value() == 0):
+                        if round(c.value(), 2) == c.minimum():
                             self.flags.append(c.text + ':random')
                         else:
                             self.flags.append(c.text + ':' + str(round(c.value(), 2)))

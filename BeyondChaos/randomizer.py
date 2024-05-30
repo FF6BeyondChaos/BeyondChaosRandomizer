@@ -3631,6 +3631,13 @@ def manage_colorize_esper_world():
 
 
 def manage_encounter_rate() -> None:
+    # There's a series of encounter incrementors at C0/C92F (for the overworld) and C0/C2BF (for dungeons).
+    #   These get added to a counter that has been running since the last encounter.
+    #   If the carry is clear after this addition, no encounter occurs.
+    #   Molulu sets the values to FFFF so that the carry gets added every step when the charm is on,
+    #   and sets the other values to 0100 so that it takes 255 'checks' before an encounter triggers otherwise.
+    #  The game generates a random number every step, and if that number is below the threat meter >> 8,
+    #   then it triggers an encounter.
     if Options_.is_flag_active('dearestmolulu'):
         overworld_rates = bytes([1, 0, 1, 0, 1, 0, 0, 0,
                                  0xC0, 0, 0x60, 0, 0x80, 1, 0, 0,
@@ -3700,6 +3707,9 @@ def manage_encounter_rate() -> None:
         rates = [item for sublist in rates for item in sublist]
         return rates
 
+    # 4x4 table of threat rates. One dimension is for up to four different encounter rates.
+    #   The other dimension is for the normal rate, charm bangle rate, moogle charm rate,
+    #   and charm bangle + moogle charm rate.
     base4 = [b_t[0] * b_t[1] for b_t in zip([0xC0] * 4, [1, 0.5, 2, 1])]
     bangle = 0.5
     moogle = 0.01
@@ -5433,7 +5443,21 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             if flag := Options_.is_flag_active(flag_name):
                 while True:
                     try:
-                        if flag.maximum_value < float(flag.value):
+                        if str(flag.value).lower() == 'random':
+                            # TODO: Make better weighting?
+                            # Get a random value for these seeds based on standard deviation.
+                            if flag.name == 'randomboost':
+                                # Randomboost has a wider range, usually between 1.5 and 2.5, but roughly 10%
+                                #   of the time a seed will roll untiered
+                                flag.value = max(0, random.gauss(float(flag.default_value) + 1, .85))
+                            else:
+                                # Boost flags generally roll between .5x and 1.6x, slightly favoring positive.
+                                flag.value = max(0, random.gauss(float(flag.default_value) + .1, .2))
+                            flag.value = round(random.uniform(flag.minimum_value, flag.maximum_value), 2)
+                            while flag.value == flag.default_value:
+                                flag.value = round(random.uniform(flag.minimum_value, flag.maximum_value), 2)
+                            break
+                        elif flag.maximum_value < float(flag.value):
                             error_message = ('The supplied value for ' +
                                              flag_name +
                                              ' was greater than the maximum '

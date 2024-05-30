@@ -19,11 +19,11 @@ class Flag:
     long_description: str = field(default="", compare=False)
     category: str = field(default="", compare=False)
     inputtype: str = field(default="", compare=False)
-    choices: [str] = field(default_factory=list, compare=False)
+    choices: [str] = field(default_factory=tuple, compare=False)
     default_index: int = field(default=0, compare=False)
     default_value: str = field(default="", compare=False)
-    minimum_value: int = field(default=0, compare=False)
-    maximum_value: int = field(default=255, compare=False)
+    minimum_value: float = field(default=0, compare=False)
+    maximum_value: float = field(default=255, compare=False)
 
     def remove_from_string(self, flag_string: str, mode: Mode):
         name = self.name
@@ -516,7 +516,7 @@ NORMAL_FLAGS = [
          category="battle",
          inputtype="float2",
          default_value="1.00",
-         minimum_value=0,
+         minimum_value=-0.10,
          maximum_value=50),
     Flag(name='gpboost',
          description="MULTIPLIED GP MODE",
@@ -524,7 +524,7 @@ NORMAL_FLAGS = [
          category="battle",
          inputtype="float2",
          default_value="1.00",
-         minimum_value=0,
+         minimum_value=-0.10,
          maximum_value=50),
     Flag(name='lessfanatical',
          description="EASY FANATICS TOWER MODE",
@@ -551,7 +551,7 @@ NORMAL_FLAGS = [
          category="battle",
          inputtype="float2",
          default_value="1.00",
-         minimum_value=0,
+         minimum_value=-0.10,
          maximum_value=50),
     Flag(name='nobreaks',
          description="NO ITEM BREAKS MODE",
@@ -637,12 +637,13 @@ NORMAL_FLAGS = [
          inputtype="boolean"),
     Flag(name='randomboost',
          description="RANDOM BOOST MODE",
-         long_description="Increases the strength of randomization for chests, steals, drops, skills, and Esper spells. (0 or 255=uniform distribution)",
+         long_description="Increases the strength of randomization for chests, steals, drops, skills, and "
+                          "Esper spells. (0 or 255=uniform distribution)",
          category="field",
-         inputtype="integer",
-         default_value="-1",
-         minimum_value=-1,
-         maximum_value=255),
+         inputtype="float2",
+         default_value="1.00",
+         minimum_value=-0.10,
+         maximum_value=10.00),
     Flag(name='worringtriad',
          description="START IN WOR",
          long_description="The player will start in the World of Ruin, with all of the World of Balance "
