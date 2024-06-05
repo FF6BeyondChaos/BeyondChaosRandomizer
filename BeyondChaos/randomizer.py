@@ -395,7 +395,7 @@ class AutoRecruitGauSub(Substitution):
 
         if Options_.is_flag_active('shuffle_commands') or Options_.is_flag_active('replace_commands'):
             REPLACE_ENEMIES.append(0x172)
-        super(AutoRecruitGauSub, self).write(outfile_rom_buffer)
+        super(AutoRecruitGauSub, self).write(outfile_rom_buffer, noverify=True)
 
 
 class FreeBlock:
@@ -913,7 +913,7 @@ def manage_commands(commands: Dict[str, CommandBlock]):
                         morph_char_sub = Substitution()
                         morph_char_sub.bytestring = bytes([0xC9, character.id])
                         morph_char_sub.set_location(0x25E32)
-                        morph_char_sub.write(outfile_rom_buffer)
+                        morph_char_sub.write(outfile_rom_buffer, noverify=True)
                         JUNCTION_MANAGER_PARAMETERS['morpher-index'] = character.id
             for index, command in enumerate(reversed(using)):
                 character.set_battle_command(index + 1, command=command)
@@ -1701,7 +1701,7 @@ def manage_umaro(commands: Dict[str, CommandBlock]):
     umaro_exchange_sub.set_location(0x21617)
     umaro_exchange_sub.write(outfile_rom_buffer)
     umaro_exchange_sub.set_location(0x20926)
-    umaro_exchange_sub.write(outfile_rom_buffer)
+    umaro_exchange_sub.write(outfile_rom_buffer, noverify=True)
     JUNCTION_MANAGER_PARAMETERS['berserker-index'] = umaro_risk.id
 
     spells = get_ranked_spells(infile_rom_buffer)
@@ -1767,7 +1767,7 @@ def manage_skips():
         for byte in event:
             event_skip_sub.bytestring.append(int(byte, 16))
         event_skip_sub.set_location(int(address, 16))
-        event_skip_sub.write(outfile_rom_buffer)
+        event_skip_sub.write(outfile_rom_buffer, noverify=True)
 
     def handle_normal():  # Replace events that should always be replaced
         write_to_address(split_line[0], split_line[1:])
@@ -4978,7 +4978,7 @@ def expand_rom():
         expand_sub = Substitution()
         expand_sub.set_location(outfile_rom_buffer.tell())
         expand_sub.bytestring = bytes([0x00] * (0x400000 - outfile_rom_buffer.tell()))
-        expand_sub.write(outfile_rom_buffer)
+        expand_sub.write(outfile_rom_buffer, noverify=True)
 
 
 def validate_rom_expansion():
@@ -4995,7 +4995,7 @@ def validate_rom_expansion():
             expand_sub = Substitution()
             expand_sub.set_location(romsize)
             expand_sub.bytestring = bytes([0x00] * (0x600000 - romsize))
-            expand_sub.write(outfile_rom_buffer)
+            expand_sub.write(outfile_rom_buffer, noverify=True)
 
         outfile_rom_buffer.seek(0)
         bank = outfile_rom_buffer.read(0x10000)
@@ -6339,7 +6339,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                 expand_sub = Substitution()
                 expand_sub.set_location(rom_size)
                 expand_sub.bytestring = bytes([0x00] * (0x700000 - rom_size))
-                expand_sub.write(outfile_rom_buffer)
+                expand_sub.write(outfile_rom_buffer, noverify=True)
 
             if Options_.is_flag_active('playsitself'):
                 jm.patch_blacklist.add('patch_junction_focus_umaro.txt')
@@ -6351,6 +6351,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         validate_rom_expansion()
         rewrite_checksum()
         verify_randomtools_patches(outfile_rom_buffer)
+        Substitution.verify_all_writes(outfile_rom_buffer)
 
         if not application == 'web' and kwargs.get('generate_output_rom', True):
             with open(outfile_rom_path, 'wb+') as rom_file:

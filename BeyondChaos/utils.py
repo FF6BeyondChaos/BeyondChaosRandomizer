@@ -122,6 +122,8 @@ def open_mei_fallback(filename, mode='r', encoding=None):
 class Substitution:
     location = None
     bytestring = None
+    every_single_write = []
+    noverify_writes = set()
 
     @property
     def size(self) -> int:
@@ -130,9 +132,30 @@ class Substitution:
     def set_location(self, location: int):
         self.location = location
 
-    def write(self, outfile_rom_buffer: BytesIO):
+    def write(self, outfile_rom_buffer: BytesIO, noverify: bool = False):
         outfile_rom_buffer.seek(self.location)
         outfile_rom_buffer.write(bytes(self.bytestring))
+        verification = (self.location, bytes(self.bytestring))
+        self.every_single_write.append(verification)
+        if noverify:
+            self.noverify_writes.add(verification)
+
+    @classmethod
+    def verify_all_writes(self, outfile_rom_buffer: BytesIO):
+        failed_patches = []
+        for address, data in sorted(self.every_single_write):
+            outfile_rom_buffer.seek(address)
+            verify = outfile_rom_buffer.read(len(data))
+            if verify != data:
+                if (address, data) in self.noverify_writes:
+                    print(f'WARNING: Patch {address:0>6x} failed '
+                          'verification, but is not required to pass.')
+                else:
+                    failed_patches.append(address)
+        if failed_patches:
+            failed_patches = ', '.join(f'{p:0>6x}' for p in failed_patches)
+            raise Exception('The following patches failed '
+                            f'verification: {failed_patches}')
 
 
 class AutoLearnRageSub(Substitution):
@@ -1020,7 +1043,7 @@ def md5_update_from_file(filename, hash_value):
 def get_directory_hash(directory):
     return md5_update_from_dir(directory, hashlib.md5())
 
-  
+
 def timer(func):
     @wraps(func)
     def wrapper(*args, **kwargs):

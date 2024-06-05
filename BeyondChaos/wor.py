@@ -1207,7 +1207,7 @@ def _setup_alternate_zone_eater(outfile_rom_buffer: BytesIO, include_gau):
     ptr_mid = (jump_location & 0xFF00) >> 8
     ptr_high = ((jump_location - 0xA0000) & 0xFF0000) >> 16
     gau_event.bytestring = bytes_1[:-3] + [ptr_low, ptr_mid, ptr_high] + bytes_2 + bytes_3
-    gau_event.write(outfile_rom_buffer)
+    gau_event.write(outfile_rom_buffer, noverify=True)
 
     global alt_zone_eater_recruit
     alt_zone_eater_recruit = WoRRecruitInfo(
