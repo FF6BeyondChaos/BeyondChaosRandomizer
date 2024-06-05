@@ -147,13 +147,18 @@ class Substitution:
             outfile_rom_buffer.seek(address)
             verify = outfile_rom_buffer.read(len(data))
             if verify != data:
+                for offset, (c1, c2) in enumerate(zip(verify, data)):
+                    if c1 != c2:
+                        break
+                offset += address
                 if (address, data) in self.noverify_writes:
                     print(f'WARNING: Patch {address:0>6x} failed '
-                          'verification, but is not required to pass.')
+                          f'verification at {offset:0>6x}, but is '
+                          f'being ignored.')
                 else:
-                    failed_patches.append(address)
+                    failed_patches.append(f'{address:0>6x} at {offset:0>6x}')
         if failed_patches:
-            failed_patches = ', '.join(f'{p:0>6x}' for p in failed_patches)
+            failed_patches = ', '.join(failed_patches)
             raise Exception('The following patches failed '
                             f'verification: {failed_patches}')
 
