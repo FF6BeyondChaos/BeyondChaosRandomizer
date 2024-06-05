@@ -4976,9 +4976,9 @@ def expand_rom():
     outfile_rom_buffer.seek(0, 2)
     if outfile_rom_buffer.tell() < 0x400000:
         expand_sub = Substitution()
-        expand_sub.set_location(outfile_rom_buffer.tell())
-        expand_sub.bytestring = bytes([0x00] * (0x400000 - outfile_rom_buffer.tell()))
-        expand_sub.write(outfile_rom_buffer, noverify=True)
+        expand_sub.set_location(0x3fffff)
+        expand_sub.bytestring = b'\x00'
+        expand_sub.write(outfile_rom_buffer)
 
 
 def validate_rom_expansion():
@@ -4993,9 +4993,9 @@ def validate_rom_expansion():
         # Standardize on 48mbit for ExHIROM, for now
         if romsize < 0x600000:
             expand_sub = Substitution()
-            expand_sub.set_location(romsize)
-            expand_sub.bytestring = bytes([0x00] * (0x600000 - romsize))
-            expand_sub.write(outfile_rom_buffer, noverify=True)
+            expand_sub.set_location(0x5fffff)
+            expand_sub.bytestring = b'\x00'
+            expand_sub.write(outfile_rom_buffer)
 
         outfile_rom_buffer.seek(0)
         bank = outfile_rom_buffer.read(0x10000)
@@ -6337,9 +6337,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             rom_size = outfile_rom_buffer.tell()
             if rom_size < 0x700000:
                 expand_sub = Substitution()
-                expand_sub.set_location(rom_size)
-                expand_sub.bytestring = bytes([0x00] * (0x700000 - rom_size))
-                expand_sub.write(outfile_rom_buffer, noverify=True)
+                expand_sub.set_location(0x6fffff)
+                expand_sub.bytestring = b'\x00'
+                expand_sub.write(outfile_rom_buffer)
 
             if Options_.is_flag_active('playsitself'):
                 jm.patch_blacklist.add('patch_junction_focus_umaro.txt')
