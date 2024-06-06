@@ -2527,12 +2527,13 @@ def manage_items(items: List[ItemBlock], changed_commands_mi: Set[int] = None) -
                                        0xE6, 0x99,
                                        0x60])
     auto_equip_sub.write(outfile_rom_buffer)
+
     return items
 
 
 def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
     characters = get_characters()
-    reset_equippable(items, characters=characters)
+    reset_equippable(items, characters=characters, equip_anything=Options_.is_flag_active('equipanything'))
     equippable_dict = {'weapon': lambda item: item.is_weapon,
                        'shield': lambda item: item.is_shield,
                        'helm': lambda item: item.is_helm,
@@ -5389,6 +5390,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         seed = seed % (10 ** 10)
         reseed()
 
+        rng = Random(seed)
+
         outlog = None
         if not application or application != 'web':
             if '.' in infile_rom_path:
@@ -5450,10 +5453,10 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                             if flag.name == 'randomboost':
                                 # Randomboost has a wider range, usually between 1.5 and 2.5, but roughly 10%
                                 #   of the time a seed will roll untiered
-                                flag.value = max(0, random.gauss(float(flag.default_value) + 1, .85))
+                                flag.value = max(0, rng.gauss(float(flag.default_value) + 1, .85))
                             else:
                                 # Boost flags generally roll between .5x and 1.6x, slightly favoring positive.
-                                flag.value = max(0, random.gauss(float(flag.default_value) + .1, .2))
+                                flag.value = max(0, rng.gauss(float(flag.default_value) + .1, .2))
                             flag.value = round(random.uniform(flag.minimum_value, flag.maximum_value), 2)
                             while flag.value == flag.default_value:
                                 flag.value = round(random.uniform(flag.minimum_value, flag.maximum_value), 2)
@@ -5537,8 +5540,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         pipe_print('\nNow beginning randomization.\n'
                    'The randomization is very thorough, so it may take some time.\n'
                    'Please be patient and wait for "randomization successful" to appear.')
-
-        rng = Random(seed)
 
         if Options_.is_flag_active('thescenarionottaken'):
             if Options_.is_flag_active('strangejourney'):
@@ -5636,14 +5637,25 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
                 weapon_anim_fix = Substitution()
                 weapon_anim_fix.set_location(0x19DB8)
-                weapon_anim_fix.bytestring = bytes([0x22, 0x80, 0x30, 0xF0])
+                weapon_anim_fix.bytestring = bytes([0x22, 0xB0, 0x3F, 0xF0])
                 weapon_anim_fix.write(outfile_rom_buffer)
 
-                weapon_anim_fix.set_location(0x303080)
+                weapon_anim_fix.set_location(0x303FB0)
                 weapon_anim_fix.bytestring = bytes(
-                    [0xE0, 0xE8, 0x02, 0xB0, 0x05, 0xBF, 0x00, 0xE4, 0xEC,
-                     0x6B, 0xDA, 0xC2, 0x20, 0x8A, 0xE9, 0xF0, 0x02, 0xAA,
-                     0x29, 0xFF, 0x00, 0xE2, 0x20, 0xBF, 0x00, 0x31, 0xF0, 0xFA, 0x6B])
+                    [0xE0, 0xE8, 0x02,          # CPX $02E8
+                    0xB0, 0x05,                 # BCS $05
+                    0xBF, 0x00, 0xE4, 0xEC,     # LDA $ECE400,X
+                    0x6B,                       # RTL
+                    0xDA,                       # PHX
+                    0xC2, 0x20,                 # REP #$20
+                    0x8A,                       # TXA
+                    0xE9, 0xF0, 0x02,           # SBC $02F0
+                    0xAA,                       # TAX
+                    0x29, 0xFF, 0x00,           # AND #$00FF
+                    0xE2, 0x20,                 # SEP #$20
+                    0xBF, 0x00, 0x31, 0xF0,     # LDA $F03100,X
+                    0xFA,                       # PLX
+                    0x6B])                      # RTL
                 weapon_anim_fix.write(outfile_rom_buffer)
 
                 log(secret_item, section='secret items')
@@ -6274,7 +6286,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             if not type(swdtech_speed) == bool:
                 change_swdtech_speed(outfile_rom_buffer, swdtech_speed)
         if Options_.is_flag_active('cursepower'):
-            change_cursed_shield_battles(outfile_rom_buffer, Options_.get_flag_value('cursepower'))
+            change_cursed_shield_battles(myself_locations['DECURSE_GOAL'], outfile_rom_buffer, Options_.get_flag_value('cursepower'))
 
         coral_log = manage_coral(outfile_rom_buffer, kwargs.get('web_custom_coral_names', None))
         log(coral_log, 'aesthetics')

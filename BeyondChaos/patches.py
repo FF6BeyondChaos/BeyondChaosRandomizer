@@ -970,7 +970,7 @@ def mp_refills(output_rom_buffer: BytesIO):
         mp_refill_sub.bytestring = bytes(byte_array)
         mp_refill_sub.write(output_rom_buffer)
 
-def change_cursed_shield_battles(output_rom_buffer: BytesIO, amount: int = None):
+def change_cursed_shield_battles(location: hex, output_rom_buffer: BytesIO, amount: int = None):
     if not amount or amount == "random":
         base_cursed_shield_battle_amount = 48
         standard_deviation_number = 16 * RANDOM_MULTIPLIER
@@ -998,6 +998,11 @@ def change_cursed_shield_battles(output_rom_buffer: BytesIO, amount: int = None)
         0x6B                           # return from long subroutine
     ])
     ccsb_sub.set_location(0x4A500)
+    ccsb_sub.write(output_rom_buffer)
+
+    #Show decurse value of cursed shield in menu
+    ccsb_sub.set_location(location)
+    ccsb_sub.bytestring = bytes([amount])
     ccsb_sub.write(output_rom_buffer)
 
 def improved_party_gear(output_rom_buffer: BytesIO, myself_name_address, myself_name_bank):
