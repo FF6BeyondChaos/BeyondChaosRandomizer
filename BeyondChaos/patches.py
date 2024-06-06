@@ -96,7 +96,7 @@ def banon_life3(output_rom_buffer: BytesIO):
         # 06FF
         0xEA,
     ]
-    banon_sub.write(output_rom_buffer)
+    banon_sub.write(output_rom_buffer, noverify=True)
 
 
 def evade_mblock(output_rom_buffer: BytesIO):
@@ -272,7 +272,7 @@ def mastered_espers(output_rom_buffer: BytesIO, dancingmaduin=False):
     #Hook into the Skills menu initiation to run a subroutine in freespace
     me_sub.set_location(0x31B61)
     me_sub.bytestring = bytes([0x20, 0xB0, 0xFE]) #Hook - calculate actor's spell starting RAM offset; # JSL $EEB0A6, Set up Yellow font and Calculate actor's spell offset, 0xD2 bytes after start of code block
-    me_sub.write(output_rom_buffer)
+    me_sub.write(output_rom_buffer, noverify=True)
 
     me_sub.set_location(0x3FEB0)
     if dancingmaduin:

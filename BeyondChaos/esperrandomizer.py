@@ -134,7 +134,7 @@ def allocate_espers(ancient_cave, espers, characters, user_choice,
     esper_allocator_sub = Substitution()
     esper_allocator_sub.set_location(0x31B61)
     esper_allocator_sub.bytestring = [0x20, 0x00, 0xF8]
-    esper_allocator_sub.write(outfile_rom_buffer)
+    esper_allocator_sub.write(outfile_rom_buffer, noverify=True)
 
     esper_allocator_sub.set_location(0x35524)
     esper_allocator_sub.bytestring = [0x20, 0x07, 0xF8]
