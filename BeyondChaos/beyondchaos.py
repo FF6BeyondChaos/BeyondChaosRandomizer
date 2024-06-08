@@ -202,10 +202,9 @@ class BingoPrompts(QDialog):
 
 
 def update_bc(suppress_prompt=False, force_download=False):
-    try:
+    if update.internet_connectivity_available():
         # Tests internet connectivity. Throws a ConnectionError if offline.
         # We want to test connectivity here before firing up BeyondChaosUpdater.
-        requests.head(url='http://www.google.com')
         run_updater = False
         if not suppress_prompt:
             update_prompt = QMessageBox()
@@ -228,14 +227,24 @@ def update_bc(suppress_prompt=False, force_download=False):
             os.system('cls' if os.name == 'nt' else 'clear')
             update.run_updates(force_download=force_download, calling_program=App)
 
-    except requests.exceptions.ConnectionError:
+    else:
         update_bc_failure_message = QMessageBox()
-        update_bc_failure_message.setIcon(QMessageBox.Warning)
         update_bc_failure_message.setWindowTitle('No Internet Connection')
-        update_bc_failure_message.setText('You are currently offline. '
-                                          'Please connect to the internet to perform updates to Beyond Chaos.')
         update_bc_failure_message.setStandardButtons(QMessageBox.Close)
-        update_bc_failure_message.exec()
+        if force_download:
+            update_bc_failure_message.setIcon(QMessageBox.Critical)
+            update_bc_failure_message.setText('You are currently offline. Please connect to the internet and then run '
+                                              'the program again to download the required Beyond Chaos '
+                                              'randomization files.<br><br>'
+                                              'Press close to exit the program.')
+            response = update_bc_failure_message.exec()
+            if response == QMessageBox.Close:
+                sys.exit()
+        else:
+            update_bc_failure_message.setIcon(QMessageBox.Warning)
+            update_bc_failure_message.setText('You are currently offline. '
+                                              'Please connect to the internet to perform updates to Beyond Chaos.')
+            update_bc_failure_message.exec()
 
 
 def set_palette(style=None):
@@ -1458,7 +1467,7 @@ if __name__ == '__main__':
                 if button_clicked == QMessageBox.Close:
                     sys.exit()
                 elif button_clicked == QMessageBox.Ok:
-                    update_bc(suppress_prompt=True, force_download=True, calling_program=App)
+                    update_bc(suppress_prompt=True, force_download=True)
                     missing_required_files = update.validate_required_files()
 
             available_updates = update.list_available_updates(refresh=True)

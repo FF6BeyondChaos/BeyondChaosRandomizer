@@ -93,6 +93,14 @@ _ASSETS = {
 }
 
 
+def internet_connectivity_available():
+    try:
+        requests.head(url='http://www.google.com')
+        return True
+    except Exception:
+        return False
+
+
 def get_remaining_api_calls():
     return send_get_request(url='https://api.github.com/rate_limit')['resources']['core']['remaining']
 
@@ -703,8 +711,11 @@ def list_available_updates(refresh=False):
         # Returned cached updates
         return available_updates
 
-    get_web_token()
     available_updates = []
+    if not internet_connectivity_available():
+        return available_updates
+
+    get_web_token()
     for asset in _ASSETS:
         # Don't look for custom here. Custom is only updated if required files are missing.
         if asset == 'custom':
@@ -731,11 +742,10 @@ if __name__ == '__main__':
     for arg in args:
         if isinstance(arg, str) and arg.startswith('-pid '):
             parent_process_id = arg[len('-pid '):]
-    try:
-        # Test internet connectivity by using the simplest possible request to a reliable source
-        requests.head(url='http://www.google.com')
+
+    if internet_connectivity_available():
         run_updates()
-    except requests.exceptions.ConnectionError:
+    else:
         print('ERROR: No internet connection is available. '
               'Please connect to the internet and try running the updater again.')
         input('Press any key to exit...')
