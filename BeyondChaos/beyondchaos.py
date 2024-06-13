@@ -42,14 +42,6 @@ if sys.version_info[0] < 3:
                     'Report this to https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/issues')
 
 
-# Extended QButton widget to hold flag value - NOT USED PRESENTLY
-class FlagButton(QPushButton):
-    def __init__(self, text, value):
-        super(FlagButton, self).__init__()
-        self.setText(text)
-        self.value = value
-
-
 class QDialogScroll(QDialog):
     def __init__(self, title: str = '', header: str = '', scroll_contents: QWidget = None,
                  left_button: str = '', right_button: str = '', icon=None):
@@ -202,10 +194,9 @@ class BingoPrompts(QDialog):
 
 
 def update_bc(suppress_prompt=False, force_download=False):
-    try:
+    if update.internet_connectivity_available():
         # Tests internet connectivity. Throws a ConnectionError if offline.
         # We want to test connectivity here before firing up BeyondChaosUpdater.
-        requests.head(url='http://www.google.com')
         run_updater = False
         if not suppress_prompt:
             update_prompt = QMessageBox()
@@ -228,14 +219,24 @@ def update_bc(suppress_prompt=False, force_download=False):
             os.system('cls' if os.name == 'nt' else 'clear')
             update.run_updates(force_download=force_download, calling_program=App)
 
-    except requests.exceptions.ConnectionError:
+    else:
         update_bc_failure_message = QMessageBox()
-        update_bc_failure_message.setIcon(QMessageBox.Warning)
         update_bc_failure_message.setWindowTitle('No Internet Connection')
-        update_bc_failure_message.setText('You are currently offline. '
-                                          'Please connect to the internet to perform updates to Beyond Chaos.')
         update_bc_failure_message.setStandardButtons(QMessageBox.Close)
-        update_bc_failure_message.exec()
+        if force_download:
+            update_bc_failure_message.setIcon(QMessageBox.Critical)
+            update_bc_failure_message.setText('You are currently offline. Please connect to the internet and then run '
+                                              'the program again to download the required Beyond Chaos '
+                                              'randomization files.<br><br>'
+                                              'Press close to exit the program.')
+            response = update_bc_failure_message.exec()
+            if response == QMessageBox.Close:
+                sys.exit()
+        else:
+            update_bc_failure_message.setIcon(QMessageBox.Warning)
+            update_bc_failure_message.setText('You are currently offline. '
+                                              'Please connect to the internet to perform updates to Beyond Chaos.')
+            update_bc_failure_message.exec()
 
 
 def set_palette(style=None):
@@ -630,10 +631,10 @@ class Window(QMainWindow):
             flag_count = 0
             current_row = 0
             for flag_name, flag in d.items():
-                if flag['object'].inputtype == 'boolean':
+                if flag.inputtype == 'boolean':
                     # cbox = FlagCheckBox('', flag_name)
                     cbox = QPushButton('No')
-                    cbox.flag = flag['object']
+                    cbox.flag = flag
                     if (flag_name == 'remonsterate' and not len(check_remonsterate()) == 0) or \
                             (flag_name == 'makeover' and not len(check_player_sprites()) == 0):
                         cbox.setEnabled(False)
@@ -644,24 +645,22 @@ class Window(QMainWindow):
                     cbox.value = flag_name
 
                     flag_label = QLabel(f'{flag_name}')
-                    flag_description = QLabel(f'{flag["object"].long_description}')
+                    flag_description = QLabel(f'{flag.long_description}')
 
                     tab_layout.addWidget(cbox, current_row, 1)
                     tab_layout.addWidget(flag_label, current_row, 2)
                     tab_layout.addWidget(flag_description, current_row, 4)
-                    cbox.clicked.connect(lambda checked:
-                                         self.flag_button_clicked()
-                                         )
+                    cbox.clicked.connect(lambda checked:self.flag_button_clicked())
                     flag_count += 1
-                elif flag['object'].inputtype == 'float2':
+                elif flag.inputtype == 'float2':
                     float_box = QDoubleSpinBox()
-                    float_box.flag = flag['object']
-                    float_box.setMinimum(float(flag['object'].minimum_value))
-                    float_box.default = float(flag['object'].default_value)
-                    float_box.setMaximum(float(flag['object'].maximum_value))
+                    float_box.flag = flag
+                    float_box.setMinimum(float(flag.minimum_value))
+                    float_box.default = float(flag.default_value)
+                    float_box.setMaximum(float(flag.maximum_value))
                     float_box.setSingleStep(.1)
                     float_box.setSpecialValueText('Random')
-                    if not flag['object'].name == 'randomboost':
+                    if not flag.name == 'randomboost':
                         float_box.setSuffix('x')
                     float_box.setValue(float_box.default)
                     float_box.text = flag_name
@@ -669,19 +668,19 @@ class Window(QMainWindow):
                     float_box.setFixedHeight(control_fixed_height)
 
                     flag_label = QLabel(f'{flag_name}')
-                    flag_description = QLabel(f'{flag["object"].long_description}')
+                    flag_description = QLabel(f'{flag.long_description}')
 
                     tab_layout.addWidget(float_box, current_row, 1)
                     tab_layout.addWidget(flag_label, current_row, 2)
                     tab_layout.addWidget(flag_description, current_row, 4)
                     float_box.valueChanged.connect(lambda: self.flag_button_clicked())
                     flag_count += 1
-                elif flag['object'].inputtype == 'integer':
+                elif flag.inputtype == 'integer':
                     integer_box = QSpinBox()
-                    integer_box.flag = flag['object']
-                    integer_box.default = int(flag['object'].default_value)
-                    integer_box.setMinimum(int(flag['object'].minimum_value))
-                    integer_box.setMaximum(int(flag['object'].maximum_value))
+                    integer_box.flag = flag
+                    integer_box.default = int(flag.default_value)
+                    integer_box.setMinimum(int(flag.minimum_value))
+                    integer_box.setMaximum(int(flag.maximum_value))
                     integer_box.setFixedWidth(control_fixed_width)
                     integer_box.setFixedHeight(control_fixed_height)
                     if flag_name == 'cursepower' or flag_name == 'levelcap':
@@ -692,28 +691,28 @@ class Window(QMainWindow):
                     integer_box.text = flag_name
 
                     flag_label = QLabel(f'{flag_name}')
-                    flag_description = QLabel(f'{flag["object"].long_description}')
+                    flag_description = QLabel(f'{flag.long_description}')
 
                     tab_layout.addWidget(integer_box, current_row, 1)
                     tab_layout.addWidget(flag_label, current_row, 2)
                     tab_layout.addWidget(flag_description, current_row, 4)
                     integer_box.valueChanged.connect(lambda: self.flag_button_clicked())
                     flag_count += 1
-                elif flag['object'].inputtype == 'combobox':
+                elif flag.inputtype == 'combobox':
                     combo_box = QComboBox()
-                    combo_box.flag = flag['object']
-                    combo_box.addItems(flag['object'].choices)
+                    combo_box.flag = flag
+                    combo_box.addItems(flag.choices)
                     combo_box.text = flag_name
                     combo_box.setFixedWidth(control_fixed_width)
                     combo_box.setFixedHeight(control_fixed_height)
-                    combo_box.setCurrentIndex(flag['object'].default_index)
+                    combo_box.setCurrentIndex(flag.default_index)
                     if self.makeover_groups and flag_name in self.makeover_groups:
                         flag_label = QLabel(f'{flag_name} (' + str(self.makeover_groups[flag_name]) +
                                             ')')
-                        flag_description = QLabel(f'{flag["object"].long_description}')
+                        flag_description = QLabel(f'{flag.long_description}')
                     else:
                         flag_label = QLabel(f'{flag_name}')
-                        flag_description = QLabel(f'{flag["object"].long_description}')
+                        flag_description = QLabel(f'{flag.long_description}')
                     tab_layout.addWidget(combo_box, current_row, 1)
                     tab_layout.addWidget(flag_label, current_row, 2)
                     tab_layout.addWidget(flag_description, current_row, 4)
@@ -858,10 +857,7 @@ class Window(QMainWindow):
                 print(f'Flag {flag.name} does not have a valid category.')
                 continue
 
-            d[flag.name] = {
-                'checked': False,
-                'object': flag
-            }
+            d[flag.name] = flag
 
     # opens input dialog to get a name to assign a desired seed flag set, then
     # saves flags and selected mode to the cfg file
@@ -1020,11 +1016,9 @@ class Window(QMainWindow):
                 for c in children:
                     if c.isChecked():
                         c.setText('Yes')
-                        d[c.value]['checked'] = True
                         self.flags.append(c.value)
                     else:
                         c.setText('No')
-                        d[c.value]['checked'] = False
                 children = t.findChildren(QSpinBox) + t.findChildren(QDoubleSpinBox)
                 for c in children:
                     if not round(c.value(), 1) == c.default:
@@ -1458,7 +1452,7 @@ if __name__ == '__main__':
                 if button_clicked == QMessageBox.Close:
                     sys.exit()
                 elif button_clicked == QMessageBox.Ok:
-                    update_bc(suppress_prompt=True, force_download=True, calling_program=App)
+                    update_bc(suppress_prompt=True, force_download=True)
                     missing_required_files = update.validate_required_files()
 
             available_updates = update.list_available_updates(refresh=True)
