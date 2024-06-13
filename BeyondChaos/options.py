@@ -644,6 +644,12 @@ NORMAL_FLAGS = [
          default_value="1.00",
          minimum_value=-0.10,
          maximum_value=10.00),
+    Flag(name='thescenarionottaken',
+         description='DIVERGENT PATHS MODE',
+         long_description="Changes the way the 3 scenarios are split up, to resemble PowerPanda's "
+                          "'Divergent Paths' mod.",
+         category="field",
+         inputtype="boolean"),
     Flag(name='worringtriad',
          description="START IN WOR",
          long_description="The player will start in the World of Ruin, with all of the World of Balance "
@@ -774,12 +780,6 @@ NORMAL_FLAGS = [
          description="BIZARRE ADVENTURE",
          long_description="A prototype entrance randomizer, similar to the ancientcave mode. "
                           "Includes all maps and event tiles, and is usually extremely hard to beat by itself.",
-         category="experimental",
-         inputtype="boolean"),
-    Flag(name='thescenarionottaken',
-         description='DIVERGENT PATHS MODE',
-         long_description="Changes the way the 3 scenarios are split up, to resemble PowerPanda's "
-                          "'Divergent Paths' mod.",
          category="experimental",
          inputtype="boolean"),
     Flag(name='espercutegf',
