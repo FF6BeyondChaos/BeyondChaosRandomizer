@@ -6312,15 +6312,20 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                     if character.id >= 14:
                         continue
                     character.level_cap = maxlevel
-                    max_level_string += bytes([maxlevel])
-
-            if str(maxlevel).lower() == "chaos":
+                    max_level_string += bytes([int(maxlevel)])
+            elif str(maxlevel).lower() == "chaos":
                 for character in characters:
                     if character.id >= 14:
                         continue
                     maxlevel = rng.randint(1, 99)
                     character.level_cap = maxlevel
-                    max_level_string += bytes([maxlevel])
+                    max_level_string += bytes([int(maxlevel)])
+            else: #use whatever numeric value was given
+                for character in characters:
+                    if character.id >= 14:
+                        continue
+                    character.level_cap = maxlevel
+                    max_level_string += bytes([int(maxlevel)])
 
             level_cap(outfile_rom_buffer, max_level_string, leveltable)
 
