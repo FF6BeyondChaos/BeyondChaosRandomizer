@@ -18,7 +18,7 @@ try:
         QTabWidget, QInputDialog, QScrollArea, QMessageBox,
         QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox,
         QDialog, QDialogButtonBox, QMenu, QMainWindow, QDesktopWidget,
-        QLayout, QFrame, QStyle, QTextEdit, QSizePolicy)
+        QLayout, QFrame, QStyle, QTextEdit, QSizePolicy, QSpacerItem)
     from PIL import Image, ImageOps
 except ImportError as e:
     print('ERROR: ' + str(e))
@@ -34,12 +34,16 @@ from multiprocessing import Process, Pipe
 from config import (read_flags, write_flags, set_config_value, check_ini, check_player_sprites,
                     check_remonsterate, VERSION, BETA, MD5HASHNORMAL, MD5HASHTEXTLESS,
                     MD5HASHTEXTLESS2, SUPPORTED_PRESETS, config)
-from options import (NORMAL_FLAGS, MAKEOVER_MODIFIER_FLAGS, get_makeover_groups)
+from options import (NORMAL_FLAGS, MAKEOVER_MODIFIER_FLAGS, get_makeover_groups, Options_)
 from randomizer import randomize
 
 if sys.version_info[0] < 3:
     raise Exception('Python 3 or a more recent version is required. '
                     'Report this to https://github.com/FF6BeyondChaos/BeyondChaosRandomizer/issues')
+
+control_fixed_width = 70
+control_fixed_height = 20
+spacer_fixed_height = 5
 
 
 class QDialogScroll(QDialog):
@@ -280,6 +284,78 @@ def toggle_palette():
         set_palette('Light')
 
 
+def handle_conflicts_and_requirements(conflicts: dict, requirements: dict):
+    # print("Handling conflicts")
+    for flag in NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS:
+        # print("Evaluating flag " + flag.name)
+        # print(str(conflicts.keys()))
+        error_text = ''
+        if flag.name in conflicts.keys():
+            if not error_text:
+                error_text = ('<div style="color: red;">Flag disabled because:<ul style="margin: 0;"><li>' +
+                              'It conflicts with the following '
+                              + 'active flags: "' + '" and "'.join(conflicts[flag.name]) + '"</li>')
+        if flag.name in requirements.keys():
+            if not error_text:
+                error_text = ('<div style="color: red;">Flag disabled because:<ul style="margin: 0;"><li>     ' +
+                              'Required flags are not active: "' +
+                              '" and "'.join(requirements[flag.name]) + '"</li>')
+            else:
+                error_text += ('<li>Required flags are not active: "'
+                               + '" and "'.join(requirements[flag.name]) + '"</li>')
+
+        if error_text:
+            # Set controls to default value (turn off flag)
+            flag_control = flag.controls[0]
+            flag_control.setStyleSheet('background-color: white; border: none;')
+            if flag.input_type in ['float2', 'integer']:
+                flag_control.setValue(flag_control.default)
+            elif flag.input_type == 'combobox':
+                flag_control.setCurrentIndex(flag.default_index)
+            else:
+                flag_control.setText('No')
+                flag_control.setChecked(False)
+            flag_control.setDisabled(True)
+            flag.controls[2].setText(error_text + '</ul></div>' + flag.long_description)
+        else:
+            # Enable control
+            # print("Enabling flag " + flag.name + " with no conflicts.")
+            flag.controls[0].setDisabled(False)
+            # print("Enabled")
+            # print("Changing description.")
+            flag.controls[2].setText(flag.long_description)
+            # print("Changed.")
+
+
+def handle_children(flag, parent_value):
+    for flag_name, required_parent_value in flag.children.items():
+        if parent_value == required_parent_value:
+            flag_object = Options_.get_flag(flag_name)
+            for control in flag_object.controls:
+                # Make all controls visible
+                control.setVisible(True)
+
+            for spacer in flag_object.margins:
+                spacer.changeSize(0, spacer_fixed_height)
+        else:
+            # Set controls to default value (turn off flag)
+            flag_object = Options_.get_flag(flag_name)
+            flag_control = flag_object.controls[0]
+            if flag_object.input_type in ['float2', 'integer']:
+                flag_control.setValue(flag_control.default)
+            elif flag_object.input_type == 'combobox':
+                flag_control.setCurrentIndex(flag_object.default_index)
+            else:
+                flag_control.setChecked(False)
+
+            # Make all controls invisible
+            for control in flag_object.controls:
+                control.setVisible(False)
+
+            for spacer in flag_object.margins:
+                spacer.changeSize(0, 0)
+
+
 class Window(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -324,6 +400,8 @@ class Window(QMainWindow):
         self.makeover_groups = get_makeover_groups()
         # keep a list of all checkboxes
         self.check_boxes = []
+        self.conflicts = {}
+        self.requirements = {}
 
         # array of supported game modes
         self.supported_game_modes = [
@@ -617,8 +695,7 @@ class Window(QMainWindow):
         middle_right_group_box = QGroupBox('Flag Selection')
         layout_tab_v_box = QVBoxLayout()
         tabs = QTabWidget()
-        control_fixed_width = 70
-        control_fixed_height = 20
+        tabs.setElideMode(True)  # Tabs shrink in size to fit all tabs on screen
 
         # loop to add tab objects to 'tabs' TabWidget
         for t, d, names in zip(self.tablist,
@@ -627,105 +704,130 @@ class Window(QMainWindow):
             tab_obj = QScrollArea()
             tabs.addTab(tab_obj, names)
             tab_layout = QGridLayout()
-            tab_layout.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
             flag_count = 0
             current_row = 0
+            tab_layout.setColumnStretch(4, 1)  # Long description should use as much space as possible
+            tab_layout.setVerticalSpacing(0)
+
             for flag_name, flag in d.items():
-                if flag.inputtype == 'boolean':
-                    # cbox = FlagCheckBox('', flag_name)
-                    cbox = QPushButton('No')
-                    cbox.flag = flag
-                    if (flag_name == 'remonsterate' and not len(check_remonsterate()) == 0) or \
-                            (flag_name == 'makeover' and not len(check_player_sprites()) == 0):
-                        cbox.setEnabled(False)
-                    self.check_boxes.append(cbox)
-                    cbox.setFixedWidth(control_fixed_width)
-                    cbox.setFixedHeight(control_fixed_height)
-                    cbox.setCheckable(True)
-                    cbox.value = flag_name
+                margin_top = QSpacerItem(0, spacer_fixed_height)
+                tab_layout.addItem(margin_top, current_row, 0)
+                current_row += 1
 
+                if flag.input_type == 'float2':
+                    flag_control = QDoubleSpinBox()
+                    flag_control.setMinimum(float(flag.minimum_value))
+                    flag_control.default = float(flag.default_value)
+                    flag_control.setMaximum(float(flag.maximum_value))
+                    flag_control.setSingleStep(.1)
+                    flag_control.setSpecialValueText('Random')
+                    flag_control.setValue(flag_control.default)
+                    flag_control.text = flag_name
+                    flag_control.setFixedWidth(control_fixed_width)
+                    flag_control.setMinimumHeight(0)
+                    flag_control.setFixedHeight(control_fixed_height)
                     flag_label = QLabel(f'{flag_name}')
-                    flag_description = QLabel(f'{flag.long_description}')
 
-                    tab_layout.addWidget(cbox, current_row, 1)
-                    tab_layout.addWidget(flag_label, current_row, 2)
-                    tab_layout.addWidget(flag_description, current_row, 4)
-                    cbox.clicked.connect(lambda checked:self.flag_button_clicked())
-                    flag_count += 1
-                elif flag.inputtype == 'float2':
-                    float_box = QDoubleSpinBox()
-                    float_box.flag = flag
-                    float_box.setMinimum(float(flag.minimum_value))
-                    float_box.default = float(flag.default_value)
-                    float_box.setMaximum(float(flag.maximum_value))
-                    float_box.setSingleStep(.1)
-                    float_box.setSpecialValueText('Random')
                     if not flag.name == 'randomboost':
-                        float_box.setSuffix('x')
-                    float_box.setValue(float_box.default)
-                    float_box.text = flag_name
-                    float_box.setFixedWidth(control_fixed_width)
-                    float_box.setFixedHeight(control_fixed_height)
+                        flag_control.setSuffix('x')
 
-                    flag_label = QLabel(f'{flag_name}')
-                    flag_description = QLabel(f'{flag.long_description}')
-
-                    tab_layout.addWidget(float_box, current_row, 1)
-                    tab_layout.addWidget(flag_label, current_row, 2)
-                    tab_layout.addWidget(flag_description, current_row, 4)
-                    float_box.valueChanged.connect(lambda: self.flag_button_clicked())
+                    flag_control.valueChanged.connect(lambda: self.flag_button_clicked())
                     flag_count += 1
-                elif flag.inputtype == 'integer':
-                    integer_box = QSpinBox()
-                    integer_box.flag = flag
-                    integer_box.default = int(flag.default_value)
-                    integer_box.setMinimum(int(flag.minimum_value))
-                    integer_box.setMaximum(int(flag.maximum_value))
-                    integer_box.setFixedWidth(control_fixed_width)
-                    integer_box.setFixedHeight(control_fixed_height)
+                elif flag.input_type == 'integer':
+                    flag_control = QSpinBox()
+                    flag_control.default = int(flag.default_value)
+                    flag_control.setMinimum(int(flag.minimum_value))
+                    flag_control.setMaximum(int(flag.maximum_value))
+                    flag_control.setFixedWidth(control_fixed_width)
+                    flag_control.setMinimumHeight(0)
+                    flag_control.setFixedHeight(control_fixed_height)
+                    flag_control.setValue(flag_control.default)
+                    flag_control.text = flag_name
+                    flag_label = QLabel(f'{flag_name}')
+
                     if flag_name == 'cursepower' or flag_name == 'levelcap':
-                        integer_box.setSpecialValueText('Random')
+                        flag_control.setSpecialValueText('Random')
                     else:
-                        integer_box.setSpecialValueText('Off')
-                    integer_box.setValue(integer_box.default)
-                    integer_box.text = flag_name
+                        flag_control.setSpecialValueText('Off')
 
-                    flag_label = QLabel(f'{flag_name}')
-                    flag_description = QLabel(f'{flag.long_description}')
-
-                    tab_layout.addWidget(integer_box, current_row, 1)
-                    tab_layout.addWidget(flag_label, current_row, 2)
-                    tab_layout.addWidget(flag_description, current_row, 4)
-                    integer_box.valueChanged.connect(lambda: self.flag_button_clicked())
+                    flag_control.valueChanged.connect(lambda: self.flag_button_clicked())
                     flag_count += 1
-                elif flag.inputtype == 'combobox':
-                    combo_box = QComboBox()
-                    combo_box.flag = flag
-                    combo_box.addItems(flag.choices)
-                    combo_box.text = flag_name
-                    combo_box.setFixedWidth(control_fixed_width)
-                    combo_box.setFixedHeight(control_fixed_height)
-                    combo_box.setCurrentIndex(flag.default_index)
+                elif flag.input_type == 'combobox':
+                    flag_control = QComboBox()
+                    flag_control.addItems(flag.choices)
+                    flag_control.text = flag_name
+                    flag_control.setFixedWidth(control_fixed_width)
+                    flag_control.setMinimumHeight(0)
+                    flag_control.setFixedHeight(control_fixed_height)
+                    flag_control.setCurrentIndex(flag.default_index)
+
                     if self.makeover_groups and flag_name in self.makeover_groups:
                         flag_label = QLabel(f'{flag_name} (' + str(self.makeover_groups[flag_name]) +
                                             ')')
-                        flag_description = QLabel(f'{flag.long_description}')
                     else:
                         flag_label = QLabel(f'{flag_name}')
-                        flag_description = QLabel(f'{flag.long_description}')
-                    tab_layout.addWidget(combo_box, current_row, 1)
-                    tab_layout.addWidget(flag_label, current_row, 2)
-                    tab_layout.addWidget(flag_description, current_row, 4)
-                    combo_box.activated[str].connect(lambda: self.flag_button_clicked())
+
+                    flag_control.activated[str].connect(lambda: self.flag_button_clicked())
                     flag_count += 1
+                else:
+                    # Assume boolean
+                    flag_control = QPushButton('No')
+                    self.check_boxes.append(flag_control)
+                    flag_control.setFixedWidth(control_fixed_width)
+                    flag_control.setMinimumHeight(0)
+                    flag_control.setFixedHeight(control_fixed_height)
+                    flag_control.setCheckable(True)
+                    flag_control.value = flag_name
+                    flag_label = QLabel(f'{flag_name}')
+
+                    if (flag_name == 'remonsterate' and not len(check_remonsterate()) == 0) or \
+                            (flag_name == 'makeover' and not len(check_player_sprites()) == 0):
+                        flag_control.setEnabled(False)
+
+                    flag_control.clicked.connect(lambda checked: self.flag_button_clicked())
+                    flag_count += 1
+
+                flag_description = QLabel(f'{flag.long_description}')
+                flag_description.setWordWrap(True)
+                flag_control.flag = flag
+                flag.controls = [flag_control, flag_label, flag_description]
+                # flag_control.setStyleSheet('background-color: red')
+                # flag_label.setStyleSheet('background-color: blue')
+                # flag_description.setStyleSheet('background-color: green')
+
+                tab_layout.addWidget(flag_control, current_row, 1)
+                tab_layout.addWidget(flag_label, current_row, 2)
+                tab_layout.addWidget(flag_description, current_row, 4)
                 current_row += 1
+
+                margin_bottom = QSpacerItem(0, spacer_fixed_height)
+                tab_layout.addItem(margin_bottom, current_row, 0)
+                current_row += 1
+
+                flag.margins = [margin_top, margin_bottom]
+
+                h_spacer = QFrame()
+                h_spacer.setFrameShape(QFrame.HLine)
+                h_spacer.setFrameShadow(QFrame.Sunken)
+                if not flag_count == len(d):
+                    h_spacer.setFixedHeight(2)
+                    h_spacer.setStyleSheet('margin: 0 2px 0 2px;')
+                    tab_layout.addWidget(h_spacer, current_row, 0, 0, 6)
+                    flag.controls.append(h_spacer)
+                    current_row += 1
+                else:
+                    # Fake row set to stretch as much as possible. Keeps other rows from stretching.
+                    h_spacer.setStyleSheet('display:none;')
+                    tab_layout.addWidget(h_spacer, current_row, 0, 0, 6)
+                    tab_layout.setRowStretch(current_row, 1)
+                    current_row += 1
 
             v_spacer = QFrame()
             v_spacer.setFrameShape(QFrame.VLine)
             v_spacer.setFrameShadow(QFrame.Sunken)
             v_spacer.setFixedWidth(5)
-            v_spacer.setStyleSheet('margin: 5px 0 5px 0;')
-            tab_layout.addWidget(v_spacer, 0, 3, flag_count, 1)
+            v_spacer.setStyleSheet('margin: 5px 0 0 0;')
+            tab_layout.addWidget(v_spacer, 0, 3, flag_count * 4 - 1, 1)
 
             t.setLayout(tab_layout)
             tab_obj.setWidgetResizable(True)
@@ -778,52 +880,173 @@ class Window(QMainWindow):
             return
         self.flags_changing = True
         self.clear_controls()
-        values = text.split()
+        values = text.split(' ')
         self.flags.clear()
         self.flag_string.clear()
+        self.conflicts = {}
+        self.requirements = {}
         children = []
         for t in self.tablist:
             children.extend(t.children())
+        children = [c for c in children if isinstance(c, QPushButton) or isinstance(c, QSpinBox)
+                    or isinstance(c, QDoubleSpinBox) or isinstance(c, QComboBox)]
         for child in children:
-            if type(child) in [QSpinBox, QDoubleSpinBox, QComboBox]:
-                child.setStyleSheet('background-color: white; border: none;')
+            child.setStyleSheet('background-color: white; border: none;')
             if child.isEnabled():
-                for v in values:
-                    v = str(v).lower()
-                    if type(child) == QPushButton and v == child.value:
-                        child.setChecked(True)
-                        child.setText('Yes')
-                        self.flags.append(v)
-                    elif type(child) in [QSpinBox] and str(v).startswith(child.text.lower()):
-                        if ':' in v:
+                if isinstance(child, QPushButton):
+                    for v in values:
+                        if str(v).lower() == child.value:
+                            child.setChecked(True)
+                            child.setText('Yes')
+                            child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                            self.flags.append(child.value)
+
+                            for flag_name in child.flag.conflicts:
+                                try:
+                                    self.conflicts[flag_name].append(child.flag.name)
+                                except KeyError:
+                                    self.conflicts[flag_name] = [child.flag.name]
+                    handle_children(child.flag, child.isChecked())
+                elif isinstance(child, QSpinBox):
+                    for v in values:
+                        if ':' in v and child.text.lower() == str(v).split(':')[0]:
                             try:
                                 child.setValue(int(str(v).split(':')[1]))
-                                child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
-                                self.flags.append(v)
                             except ValueError:
                                 if str(v).split(':')[1] == child.specialValueText().lower():
                                     child.setValue(child.minimum())
-                                    child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
-                                    self.flags.append(v)
-                    elif type(child) in [QDoubleSpinBox] and str(v).startswith(child.text.lower()):
-                        if ':' in v:
+
+                            child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                            self.flags.append(v)
+
+                            for flag_name in child.flag.conflicts:
+                                try:
+                                    self.conflicts[flag_name].append(child.flag.name)
+                                except KeyError:
+                                    self.conflicts[flag_name] = [child.flag.name]
+                    handle_children(child.flag, round(child.value(), 2))
+                elif isinstance(child, QDoubleSpinBox):
+                    for v in values:
+                        if ':' in v and child.text.lower() == str(v).split(':')[0]:
+                            print(str(str(v).split(':')[0]))
                             try:
                                 value = float(str(v).split(':')[1])
                                 if value >= 0:
                                     child.setValue(value)
-                                    child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
-                                    self.flags.append(v)
                             except ValueError:
                                 if str(v).split(':')[1] == child.specialValueText().lower():
                                     child.setValue(child.minimum())
-                                    child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
-                                    self.flags.append(v)
-                    elif type(child) in [QComboBox] and str(v).startswith(child.text.lower()):
-                        if ':' in v:
+                            child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                            print("Adding " + str(child.text.lower()))
+                            self.flags.append(v)
+
+                            for flag_name in child.flag.conflicts:
+                                try:
+                                    self.conflicts[flag_name].append(child.flag.name)
+                                except KeyError:
+                                    self.conflicts[flag_name] = [child.flag.name]
+                    handle_children(child.flag, round(child.value(), 2))
+                elif isinstance(child, QComboBox):
+                    for v in values:
+                        if ':' in v and child.text.lower() == str(v).split(':')[0]:
                             index_of_value = child.findText(str(v).split(':')[1], QtCore.Qt.MatchFixedString)
                             child.setCurrentIndex(index_of_value)
                             child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
                             self.flags.append(v)
+
+                            for flag_name in child.flag.conflicts:
+                                try:
+                                    self.conflicts[flag_name].append(child.flag.name)
+                                except KeyError:
+                                    self.conflicts[flag_name] = [child.flag.name]
+                    handle_children(child.flag, child.currentText())
+        for child in children:
+            for required_flag, required_value in child.flag.requirements.items():
+                flag_control = Options_.get_flag(required_flag).controls[0]
+                if isinstance(flag_control, QPushButton):
+                    flag_value = flag_control.isChecked()
+                elif isinstance(flag_control, QSpinBox) or isinstance(flag_control, QDoubleSpinBox):
+                    flag_value = round(flag_control.value(), 2)
+                elif isinstance(flag_control, QComboBox):
+                    flag_value = flag_control.currentText()
+                if not flag_value == required_value:
+                    try:
+                        self.requirements[child.flag.name].append(required_flag)
+                    except KeyError:
+                        self.requirements[child.flag.name] = [required_flag]
+        print(str(self.requirements))
+                # for v in values:
+                #     v = str(v).lower()
+                #     if isinstance(child, QPushButton):
+                #         if v == child.value:
+                #             child.setChecked(True)
+                #             child.setText('Yes')
+                #             child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                #             self.flags.append(v)
+                #
+                #             for flag_name in child.flag.conflicts:
+                #                 try:
+                #                     self.conflicts[flag_name].append(child.flag.name)
+                #                 except KeyError:
+                #                     self.conflicts[flag_name] = [child.flag.name]
+                #     elif isinstance(child, QSpinBox):
+                #         child.setStyleSheet('background-color: white; border: none;')
+                #         if str(v).startswith(child.text.lower()):
+                #             if ':' in v:
+                #                 try:
+                #                     child.setValue(int(str(v).split(':')[1]))
+                #                 except ValueError:
+                #                     if str(v).split(':')[1] == child.specialValueText().lower():
+                #                         child.setValue(child.minimum())
+                #
+                #                 child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                #                 self.flags.append(v)
+                #                 # activate_children(child)
+                #                 for flag_name in child.flag.conflicts:
+                #                     try:
+                #                         self.conflicts[flag_name].append(child.flag.name)
+                #                     except KeyError:
+                #                         self.conflicts[flag_name] = [child.flag.name]
+                #         handle_children(child.flag, round(child.value(), 2))
+                #     elif isinstance(child, QDoubleSpinBox):
+                #         child.setStyleSheet('background-color: white; border: none;')
+                #         if str(v).startswith(child.text.lower()):
+                #             if ':' in v:
+                #                 try:
+                #                     value = float(str(v).split(':')[1])
+                #                     if value >= 0:
+                #                         child.setValue(value)
+                #                 except ValueError:
+                #                     if str(v).split(':')[1] == child.specialValueText().lower():
+                #                         child.setValue(child.minimum())
+                #                 child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                #                 self.flags.append(v)
+                #                 # activate_children(child)
+                #
+                #                 for flag_name in child.flag.conflicts:
+                #                     try:
+                #                         self.conflicts[flag_name].append(child.flag.name)
+                #                     except KeyError:
+                #                         self.conflicts[flag_name] = [child.flag.name]
+                #         handle_children(child.flag, round(child.value(), 2))
+                #     elif isinstance(child, QComboBox):
+                #         child.setStyleSheet('background-color: white; border: none;')
+                #         if str(v).startswith(child.text.lower()):
+                #             if ':' in v:
+                #                 index_of_value = child.findText(str(v).split(':')[1], QtCore.Qt.MatchFixedString)
+                #                 child.setCurrentIndex(index_of_value)
+                #                 child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                #                 self.flags.append(v)
+                #                 # activate_children(child)
+                #
+                #                 for flag_name in child.flag.conflicts:
+                #                     try:
+                #                         self.conflicts[flag_name].append(child.flag.name)
+                #                     except KeyError:
+                #                         self.conflicts[flag_name] = [child.flag.name]
+                #         handle_children(child.flag, child.currentText())
+
+        handle_conflicts_and_requirements(self.conflicts, self.requirements)
         self.update_flag_string()
         self.flags_changing = False
 
@@ -990,6 +1213,7 @@ class Window(QMainWindow):
         self.clear_controls()
         self.flag_string.clear()
         self.flags.clear()
+        handle_conflicts_and_requirements({}, {})
         self.update_game_description()
 
     def clear_controls(self):
@@ -1011,32 +1235,75 @@ class Window(QMainWindow):
         #  add duplicate entries to the flag string
         if not self.flags_changing:
             self.flags.clear()
+            self.conflicts = {}
+            self.requirements = {}
+            all_children = []
             for t, d in zip(self.tablist, self.dictionaries):
                 children = t.findChildren(QPushButton)
                 for c in children:
+                    all_children.append(c)
                     if c.isChecked():
+                        c.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
                         c.setText('Yes')
                         self.flags.append(c.value)
+                        for flag_name in c.flag.conflicts:
+                            try:
+                                self.conflicts[flag_name].append(c.flag.name)
+                            except KeyError:
+                                self.conflicts[flag_name] = [c.flag.name]
                     else:
+                        c.setStyleSheet('background-color: white; border: none;')
                         c.setText('No')
+                    handle_children(c.flag, c.isChecked())
                 children = t.findChildren(QSpinBox) + t.findChildren(QDoubleSpinBox)
                 for c in children:
+                    all_children.append(c)
                     if not round(c.value(), 1) == c.default:
                         c.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
                         if round(c.value(), 2) == c.minimum():
                             self.flags.append(c.text + ':random')
                         else:
                             self.flags.append(c.text + ':' + str(round(c.value(), 2)))
+                        for flag_name in c.flag.conflicts:
+                            try:
+                                self.conflicts[flag_name].append(c.flag.name)
+                            except KeyError:
+                                self.conflicts[flag_name] = [c.flag.name]
                     else:
                         c.setStyleSheet('background-color: white; border: none;')
+                    handle_children(c.flag, round(c.value(), 2))
                 children = t.findChildren(QComboBox)
                 for c in children:
+                    all_children.append(c)
                     if c.currentIndex() != c.flag.default_index:
                         c.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
                         self.flags.append(c.text.lower() + ':' + c.currentText().lower())
+
+                        for flag_name in c.flag.conflicts:
+                            try:
+                                self.conflicts[flag_name].append(c.flag.name)
+                            except KeyError:
+                                self.conflicts[flag_name] = [c.flag.name]
                     else:
                         c.setStyleSheet('background-color: white; border: none;')
+                    handle_children(c.flag, c.currentText())
+            for child in all_children:
+                for required_flag, required_value in child.flag.requirements.items():
+                    flag_control = Options_.get_flag(required_flag).controls[0]
+                    if isinstance(flag_control, QPushButton):
+                        flag_value = flag_control.isChecked()
+                    elif isinstance(flag_control, QSpinBox) or isinstance(flag_control, QDoubleSpinBox):
+                        flag_value = round(flag_control.value(), 2)
+                    elif isinstance(flag_control, QComboBox):
+                        flag_value = flag_control.currentText()
+                    if not flag_value == required_value:
+                        try:
+                            self.requirements[child.flag.name].append(required_flag)
+                        except KeyError:
+                            self.requirements[child.flag.name] = [required_flag]
+            print(str(self.requirements))
 
+            handle_conflicts_and_requirements(self.conflicts, self.requirements)
             self.update_flag_string()
 
     # Opens file dialog to select rom file and assigns it to value in

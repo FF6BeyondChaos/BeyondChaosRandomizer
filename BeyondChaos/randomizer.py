@@ -5479,7 +5479,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                                              '.')
                         else:
                             flag.value = float(flag.value)
-                            if flag.inputtype == 'integer':
+                            if flag.input_type == 'integer':
                                 flag.value = int(flag.value)
                             break
                     except ValueError:
@@ -6320,7 +6320,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                     maxlevel = rng.randint(1, 99)
                     character.level_cap = maxlevel
                     max_level_string += bytes([int(maxlevel)])
-            else: #use whatever numeric value was given
+            else:  # use whatever numeric value was given
                 for character in characters:
                     if character.id >= 14:
                         continue
