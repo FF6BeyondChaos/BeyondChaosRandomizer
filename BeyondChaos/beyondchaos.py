@@ -928,7 +928,6 @@ class Window(QMainWindow):
                 elif isinstance(child, QDoubleSpinBox):
                     for v in values:
                         if ':' in v and child.text.lower() == str(v).split(':')[0]:
-                            print(str(str(v).split(':')[0]))
                             try:
                                 value = float(str(v).split(':')[1])
                                 if value >= 0:
@@ -937,7 +936,6 @@ class Window(QMainWindow):
                                 if str(v).split(':')[1] == child.specialValueText().lower():
                                     child.setValue(child.minimum())
                             child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
-                            print("Adding " + str(child.text.lower()))
                             self.flags.append(v)
 
                             for flag_name in child.flag.conflicts:
@@ -974,7 +972,6 @@ class Window(QMainWindow):
                         self.requirements[child.flag.name].append(required_flag)
                     except KeyError:
                         self.requirements[child.flag.name] = [required_flag]
-        print(str(self.requirements))
                 # for v in values:
                 #     v = str(v).lower()
                 #     if isinstance(child, QPushButton):
