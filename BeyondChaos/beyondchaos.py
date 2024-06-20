@@ -1298,7 +1298,6 @@ class Window(QMainWindow):
                             self.requirements[child.flag.name].append(required_flag)
                         except KeyError:
                             self.requirements[child.flag.name] = [required_flag]
-            print(str(self.requirements))
 
             handle_conflicts_and_requirements(self.conflicts, self.requirements)
             self.update_flag_string()
