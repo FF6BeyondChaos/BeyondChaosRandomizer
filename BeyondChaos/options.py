@@ -629,6 +629,7 @@ NORMAL_FLAGS = [
          category="aesthetic",
          input_type="boolean",
          conflicts=["johnnydmad"],
+         requirements={},
          children={}
          ),
     Flag(name='johnnydmad',
@@ -637,6 +638,7 @@ NORMAL_FLAGS = [
          category="aesthetic",
          input_type="boolean",
          conflicts=["johnnyachaotic"],
+         requirements={},
          children={}
          ),
     Flag(name='notawaiter',
@@ -808,6 +810,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=["unbreakable"],
+         requirements={},
          children={}
          ),
     Flag(name='norng',
@@ -970,6 +973,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=["nocombos"],
+         requirements={},
          children={}
          ),
     Flag(name='canttouchthis',
@@ -1072,6 +1076,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=["allcombos"],
+         requirements={},
          children={}
          ),
     Flag(name='penultima',
@@ -1117,6 +1122,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=["kupokupo", "bravenudeworld", "quikdraw"],
+         requirements={},
          children={}
          ),
 
@@ -1159,6 +1165,7 @@ NORMAL_FLAGS = [
          category="experimental",
          input_type="boolean",
          conflicts=["thescenarionottaken"],
+         requirements={},
          children={}
          ),
     Flag(name='thescenarionottaken',
@@ -1168,6 +1175,7 @@ NORMAL_FLAGS = [
          category="experimental",
          input_type="boolean",
          conflicts=["strangejourney"],
+         requirements={},
          children={}
          ),
     Flag(name='espercutegf',

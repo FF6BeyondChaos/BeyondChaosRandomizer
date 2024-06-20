@@ -5165,6 +5165,12 @@ def junction_everything(jm: JunctionManager,
         JUNCTION_MANAGER_PARAMETERS['monster-equip-drop-enabled'] = 1
 
     if Options_.is_flag_active('jejentojori'):
+        #Ensure merchants die to mp in case of Astral being innate on Locke
+        for monster in monsters:
+            if 'merchant' in monster.name.lower():
+                monster.misc1 |= 0x01
+                monster.write_stats(outfile_rom_buffer)
+
         for character in get_characters():
             if character.id >= 0x10:
                 continue
@@ -5450,16 +5456,18 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                         if str(flag.value).lower() == 'random':
                             # TODO: Make better weighting?
                             # Get a random value for these seeds based on standard deviation.
+                            flag.value = 0
                             if flag.name == 'randomboost':
-                                # Randomboost has a wider range, usually between 1.5 and 2.5, but roughly 10%
-                                #   of the time a seed will roll untiered
-                                flag.value = max(0, rng.gauss(float(flag.default_value) + 1, .85))
+                                # Randomboost has a wider range, usually between 1.5 and 4.5,
+                                while (flag.value < 0.25):
+                                    flag.value = rng.gauss(float(flag.default_value) + 1, .70)
                             else:
                                 # Boost flags generally roll between .5x and 1.6x, slightly favoring positive.
-                                flag.value = max(0, rng.gauss(float(flag.default_value) + .1, .2))
-                            flag.value = round(random.uniform(flag.minimum_value, flag.maximum_value), 2)
-                            while flag.value == flag.default_value:
-                                flag.value = round(random.uniform(flag.minimum_value, flag.maximum_value), 2)
+                                while (flag.value < 0.25):
+                                    flag.value = rng.gauss(float(flag.default_value) + .1, .25)
+                            flag.value = round(flag.value, 2)
+                            #while flag.value == flag.default_value:
+                            #    flag.value = round(random.uniform(flag.minimum_value, flag.maximum_value), 2)
                             break
                         elif flag.maximum_value < float(flag.value):
                             error_message = ('The supplied value for ' +
