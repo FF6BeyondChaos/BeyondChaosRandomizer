@@ -5165,6 +5165,12 @@ def junction_everything(jm: JunctionManager,
         JUNCTION_MANAGER_PARAMETERS['monster-equip-drop-enabled'] = 1
 
     if Options_.is_flag_active('jejentojori'):
+        #Ensure merchants die to mp in case of Astral being innate on Locke
+        for monster in monsters:
+            if 'merchant' in monster.name.lower():
+                monster.misc1 |= 0x01
+                monster.write_stats(outfile_rom_buffer)
+
         for character in get_characters():
             if character.id >= 0x10:
                 continue
