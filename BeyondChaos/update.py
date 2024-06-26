@@ -153,7 +153,12 @@ IUDMfyYGvvrC9Ajz+gQkT5Lp6flc1aPL5pqtiT/eBi3Tu8xMCH8d
         },
         url='https://api.github.com/app/installations/35180196/access_tokens')
 
-    access_token = response.json()['token']
+    try:
+        access_token = response.json()['token']
+    except KeyError:
+        raise KeyError('There was an error getting a token from GitHub to check for updates. '
+                       'Details of GitHubs response: ' + str(response.json()))
+
     request_headers = {
         'Accept': 'application/vnd.github+json',
         'Authorization': 'Bearer ' + access_token,
@@ -173,7 +178,14 @@ def send_get_request(url: str, stream=False):
     if not resp.ok:
         # Try refreshing the web token
         request_headers = {}
-        get_web_token()
+        try:
+            get_web_token()
+        except KeyError as ex:
+            # This should never happen, since prior calls to get_web_token are required to even get to the
+            #   section of code where send_get_request is called
+            print(str(ex))
+            raise ex
+
         resp = requests.get(
             url,
             headers=request_headers,
@@ -451,7 +463,11 @@ def run_updates(force_download=False, calling_program=None):
     caller = calling_program
     running_os = platform.system()
 
-    get_web_token()
+    try:
+        get_web_token()
+    except KeyError as ex:
+        print(str(ex))
+        return
 
     # Reorder the assets so updater is first, in case somebody reorders _ASSETS
     #   It's better to update the updater first in case it affects the rest of the process.
@@ -715,7 +731,12 @@ def list_available_updates(refresh=False):
     if not internet_connectivity_available():
         return available_updates
 
-    get_web_token()
+    try:
+        get_web_token()
+    except KeyError as ex:
+        print(str(ex))
+        return []
+
     for asset in _ASSETS:
         # Don't look for custom here. Custom is only updated if required files are missing.
         if asset == 'custom':
