@@ -24,15 +24,52 @@ class Flag:
     default_value: str = field(default="", compare=False)
     minimum_value: float = field(default=0, compare=False)
     maximum_value: float = field(default=255, compare=False)
+
     # Conflicts is a list of other Flag names that conflict with this Flag. If any conflicting Flags are active,
     #   this Flag will be disabled (and deactivated).
     conflicts: ['str'] = field(default_factory=list, compare=False)
-    # Requirements is a dictionary of flag_name:flag_value. This Flag is disabled if each Flag in the dictionary
-    #   is not set to the indicated value.
-    requirements: {} = field(default_factory=dict, compare=False)
+
+    # Requirements is a list of dictionaries. Each dictionary should be flag_name:flag_value pairs. Inside each
+    #   dictionary, flags are processed as 'is flag 1 set to value 1 AND flag 2 set to value 2 AND ...'. Each separate
+    #   dict is processed as 'is dict 1 requirements fulfilled OR dict 2 requirements fulfilled OR...'.
+    requirements: [] = field(default_factory=list, compare=False)
+
     # Children is a dictionary of child_flag_name:parent_flag_value. The child Flags are hidden if the parent
     #   Flag (this Flag) is not set to the indicated value.
     children: {} = field(default_factory=dict, compare=False)
+
+    def get_requirement_string(self) -> str:
+        """
+        Takes a set of requirements and returns a string describing those requirements.
+
+        Parameters:
+            requirements: list from Flag.requirements
+
+        Returns:
+            string
+        """
+        result = ''
+        for requirement in self.requirements:
+            if len(requirement) > 1:
+                result += '('
+            for required_flag_name, required_value in requirement.items():
+                required_flag = Options_.get_flag(required_flag_name)  # .controls[0]
+                if required_flag.input_type == 'boolean':
+                    if required_value:
+                        result += 'Flag "' + required_flag.name + '" must be active'
+                    else:
+                        result += 'Flag "' + required_flag.name + '" must be inactive'
+                elif required_flag.input_type in ['integer', 'float2']:
+                    result += 'Flag "' + required_flag.name + '" must be set to "' + str(required_value) + '"'
+                elif required_flag.input_type == 'choice':
+                    result += 'Flag "' + required_flag.name + ' must be set to ' + str(required_value) + '"'
+                result += ' AND '
+            result = result.strip(' AND ').strip('"').strip()
+            if len(requirement) > 1:
+                result += ')'
+            result += ' OR '
+        result = result.strip(' OR ')
+        return result
 
     def remove_from_string(self, flag_string: str, mode: Mode):
         name = self.name
@@ -236,7 +273,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='c',
@@ -245,7 +282,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='d',
@@ -254,7 +291,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='e',
@@ -263,7 +300,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='f',
@@ -272,7 +309,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='g',
@@ -281,7 +318,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='h',
@@ -290,7 +327,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='i',
@@ -299,7 +336,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='j',
@@ -308,7 +345,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='k',
@@ -317,7 +354,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='l',
@@ -326,7 +363,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='m',
@@ -335,7 +372,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='n',
@@ -344,7 +381,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='o',
@@ -353,7 +390,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='p',
@@ -362,7 +399,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='q',
@@ -371,7 +408,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='r',
@@ -380,7 +417,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='s',
@@ -389,7 +426,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='t',
@@ -398,7 +435,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='u',
@@ -407,7 +444,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='w',
@@ -416,7 +453,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='y',
@@ -425,7 +462,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='z',
@@ -434,7 +471,7 @@ NORMAL_FLAGS = [
          category="core",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
 
@@ -445,7 +482,7 @@ NORMAL_FLAGS = [
          category="sprite",
          input_type="boolean",
          conflicts=["kupokupo"],
-         requirements={"s": True},
+         requirements=[{"s": True}],
          children={}
          ),
     Flag(name='kupokupo',
@@ -455,7 +492,7 @@ NORMAL_FLAGS = [
          category="sprite",
          input_type="boolean",
          conflicts=["bravenudeworld"],
-         requirements={"s": True},
+         requirements=[{"s": True}],
          children={}
          ),
     Flag(name='makeover',
@@ -464,7 +501,7 @@ NORMAL_FLAGS = [
          category="sprite",
          input_type="boolean",
          conflicts=[],
-         requirements={"s": True},
+         requirements=[{"s": True}],
          children={}
          ),
     Flag(name='partyparty',
@@ -474,7 +511,7 @@ NORMAL_FLAGS = [
          category="sprite",
          input_type="boolean",
          conflicts=[],
-         requirements={"s": True},
+         requirements=[{"s": True}],
          children={}
          ),
     Flag(name='quikdraw',
@@ -483,7 +520,7 @@ NORMAL_FLAGS = [
          category="sprite",
          input_type="boolean",
          conflicts=["bravenudeworld", "kupokupo", "suplexwrecks"],
-         requirements={"s": True},
+         requirements=[{"s": True}],
          children={}
          ),
 
@@ -494,7 +531,7 @@ NORMAL_FLAGS = [
          category="quality_of_life",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='informativemiss',
@@ -503,7 +540,7 @@ NORMAL_FLAGS = [
          category="quality_of_life",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='magicnumbers',
@@ -513,7 +550,7 @@ NORMAL_FLAGS = [
          category="quality_of_life",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='mpparty',
@@ -522,7 +559,7 @@ NORMAL_FLAGS = [
          category="quality_of_life",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='nicerpoison',
@@ -531,7 +568,7 @@ NORMAL_FLAGS = [
          category="quality_of_life",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='questionablecontent',
@@ -541,7 +578,7 @@ NORMAL_FLAGS = [
          category="quality_of_life",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='regionofdoom',
@@ -550,7 +587,7 @@ NORMAL_FLAGS = [
          category="quality_of_life",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='relicmyhat',
@@ -559,7 +596,7 @@ NORMAL_FLAGS = [
          category="quality_of_life",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='removeflashing',
@@ -572,7 +609,7 @@ NORMAL_FLAGS = [
          default_value="Vanilla",
          default_index=0,
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='slowerbg',
@@ -581,7 +618,7 @@ NORMAL_FLAGS = [
          category="quality_of_life",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='tastetherainbow',
@@ -590,7 +627,7 @@ NORMAL_FLAGS = [
          category="quality_of_life",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
 
@@ -601,7 +638,7 @@ NORMAL_FLAGS = [
          category="aesthetic",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='bingoboingo',
@@ -611,7 +648,7 @@ NORMAL_FLAGS = [
          category="aesthetic",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='capslockoff',
@@ -620,7 +657,7 @@ NORMAL_FLAGS = [
          category="aesthetic",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='johnnyachaotic',
@@ -629,7 +666,7 @@ NORMAL_FLAGS = [
          category="aesthetic",
          input_type="boolean",
          conflicts=["johnnydmad"],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='johnnydmad',
@@ -638,7 +675,7 @@ NORMAL_FLAGS = [
          category="aesthetic",
          input_type="boolean",
          conflicts=["johnnyachaotic"],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='notawaiter',
@@ -648,7 +685,7 @@ NORMAL_FLAGS = [
          category="aesthetic",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='remonsterate',
@@ -658,7 +695,7 @@ NORMAL_FLAGS = [
          category="aesthetic",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
 
@@ -670,7 +707,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='cursepower',
@@ -682,7 +719,7 @@ NORMAL_FLAGS = [
          minimum_value=0,
          maximum_value=255,
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='dancelessons',
@@ -691,7 +728,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='dancingmaduin',
@@ -705,7 +742,7 @@ NORMAL_FLAGS = [
          default_value="Off",
          default_index=0,
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='darkworld',
@@ -715,7 +752,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='easymodo',
@@ -724,7 +761,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='electricboogaloo',
@@ -734,7 +771,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='expboost',
@@ -746,7 +783,7 @@ NORMAL_FLAGS = [
          minimum_value=-0.10,
          maximum_value=50,
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='gpboost',
@@ -758,7 +795,7 @@ NORMAL_FLAGS = [
          minimum_value=-0.10,
          maximum_value=50,
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='lessfanatical',
@@ -767,7 +804,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='madworld',
@@ -777,7 +814,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='masseffect',
@@ -789,7 +826,7 @@ NORMAL_FLAGS = [
          default_value="Off",
          default_index=0,
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='mpboost',
@@ -801,7 +838,7 @@ NORMAL_FLAGS = [
          minimum_value=-0.10,
          maximum_value=50,
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='nobreaks',
@@ -810,7 +847,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=["unbreakable"],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='norng',
@@ -819,7 +856,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='playsitself',
@@ -829,7 +866,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='randombosses',
@@ -839,7 +876,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='rushforpower',
@@ -849,7 +886,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='swdtechspeed',
@@ -861,7 +898,7 @@ NORMAL_FLAGS = [
          default_value="Vanilla",
          default_index=3,
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='unbreakable',
@@ -870,7 +907,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
 
@@ -882,7 +919,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='cursedencounters',
@@ -891,7 +928,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='dearestmolulu',
@@ -901,7 +938,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='fightclub',
@@ -911,7 +948,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='mimetime',
@@ -921,7 +958,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='morefanatical',
@@ -930,7 +967,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='nomiabs',
@@ -939,7 +976,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='randomboost',
@@ -952,7 +989,7 @@ NORMAL_FLAGS = [
          minimum_value=-0.10,
          maximum_value=10.00,
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='worringtriad',
@@ -962,7 +999,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
 
@@ -973,7 +1010,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=["nocombos"],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='canttouchthis',
@@ -983,7 +1020,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='desperation',
@@ -993,7 +1030,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='endless9',
@@ -1002,7 +1039,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='levelcap',
@@ -1025,7 +1062,7 @@ NORMAL_FLAGS = [
          default_value="99",
          default_index=100,
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='mementomori',
@@ -1037,7 +1074,7 @@ NORMAL_FLAGS = [
          default_value="0",
          default_index=1,
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='metronome',
@@ -1048,7 +1085,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='naturalmagic',
@@ -1058,7 +1095,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='naturalstats',
@@ -1067,7 +1104,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='nocombos',
@@ -1076,7 +1113,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=["allcombos"],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='penultima',
@@ -1085,7 +1122,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='replaceeverything',
@@ -1094,7 +1131,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='shadowstays',
@@ -1103,7 +1140,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='supernatural',
@@ -1112,7 +1149,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='suplexwrecks',
@@ -1122,7 +1159,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=["kupokupo", "bravenudeworld", "quikdraw"],
-         requirements={},
+         requirements=[],
          children={}
          ),
 
@@ -1134,7 +1171,7 @@ NORMAL_FLAGS = [
          category="gamebreaking",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='equipanything',
@@ -1144,7 +1181,7 @@ NORMAL_FLAGS = [
          category="gamebreaking",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='sketch',
@@ -1153,7 +1190,7 @@ NORMAL_FLAGS = [
          category="gamebreaking",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
 
@@ -1165,7 +1202,7 @@ NORMAL_FLAGS = [
          category="experimental",
          input_type="boolean",
          conflicts=["thescenarionottaken"],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='thescenarionottaken',
@@ -1175,7 +1212,7 @@ NORMAL_FLAGS = [
          category="experimental",
          input_type="boolean",
          conflicts=["strangejourney"],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='espercutegf',
@@ -1185,7 +1222,7 @@ NORMAL_FLAGS = [
          category='experimental',
          input_type='boolean',
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='espffect',
@@ -1195,7 +1232,7 @@ NORMAL_FLAGS = [
          category='experimental',
          input_type='boolean',
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='effectmas',
@@ -1206,7 +1243,7 @@ NORMAL_FLAGS = [
          category='experimental',
          input_type='boolean',
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='effectory',
@@ -1216,7 +1253,7 @@ NORMAL_FLAGS = [
          category='experimental',
          input_type='boolean',
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='effectster',
@@ -1227,7 +1264,7 @@ NORMAL_FLAGS = [
          category='experimental',
          input_type='boolean',
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='treaffect',
@@ -1237,7 +1274,7 @@ NORMAL_FLAGS = [
          category='experimental',
          input_type='boolean',
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='jejentojori',
@@ -1247,7 +1284,7 @@ NORMAL_FLAGS = [
          category='experimental',
          input_type='boolean',
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
 
@@ -1264,7 +1301,7 @@ MAKEOVER_MODIFIER_FLAGS = [
          category="sprite",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='frenchvanilla',
@@ -1274,7 +1311,7 @@ MAKEOVER_MODIFIER_FLAGS = [
          category="sprite",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='cloneparty',
@@ -1284,7 +1321,7 @@ MAKEOVER_MODIFIER_FLAGS = [
          category="sprite",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          )
 ]
@@ -1319,7 +1356,7 @@ def get_makeover_groups():
                       category="spriteCategories",
                       input_type="boolean",
                       conflicts=[],
-                      requirements={},
+                      requirements=[],
                       children={}
                       )
             MAKEOVER_MODIFIER_FLAGS.extend([
@@ -1332,7 +1369,7 @@ def get_makeover_groups():
                      default_value="Normal",
                      default_index=0,
                      conflicts=[],
-                     requirements={},
+                     requirements=[],
                      children={}
                      )])
             RESTRICTED_VANILLA_SPRITE_FLAGS.append(no)
@@ -1352,7 +1389,7 @@ CAVE_FLAGS = [
          category="cave",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='speedcave',
@@ -1361,7 +1398,7 @@ CAVE_FLAGS = [
          category="cave",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='racecave',
@@ -1370,7 +1407,7 @@ CAVE_FLAGS = [
          category="cave",
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
 ]
@@ -1382,7 +1419,7 @@ SPECIAL_FLAGS = [
          category='holiday',
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          ),
     Flag(name='halloween',
@@ -1391,7 +1428,7 @@ SPECIAL_FLAGS = [
          category='holiday',
          input_type="boolean",
          conflicts=[],
-         requirements={},
+         requirements=[],
          children={}
          )
 ]
