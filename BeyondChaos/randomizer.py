@@ -801,21 +801,21 @@ def manage_commands(commands: Dict[str, CommandBlock]):
     rage_blank_sub.set_location(0x47AA0)
     rage_blank_sub.write(outfile_rom_buffer)
 
-    # Let x-magic user use magic menu.
-    enable_xmagic_menu_sub = Substitution()
-    enable_xmagic_menu_sub.bytestring = bytes([0xDF, 0x78, 0x4D, 0xC3,  # CMP $C34D78,X
-                                               0xF0, 0x07,  # BEQ
-                                               0xE0, 0x01, 0x00,  # CPX #$0001
-                                               0xD0, 0x02,  # BNE
-                                               0xC9, 0x17,  # CMP #$17
-                                               0x6b  # RTL
-                                               ])
-    enable_xmagic_menu_sub.set_location(0x3F091)
-    enable_xmagic_menu_sub.write(outfile_rom_buffer)
+    # Let x-magic user use magic menu. Commented out as it's duplicated in Myself's patches
+    #enable_xmagic_menu_sub = Substitution()
+    #enable_xmagic_menu_sub.bytestring = bytes([0xDF, 0x78, 0x4D, 0xC3,  # CMP $C34D78,X
+    #                                           0xF0, 0x07,  # BEQ
+    #                                           0xE0, 0x01, 0x00,  # CPX #$0001
+    #                                           0xD0, 0x02,  # BNE
+    #                                           0xC9, 0x17,  # CMP #$17
+    #                                           0x6b  # RTL
+    #                                           ])
+    #enable_xmagic_menu_sub.set_location(0x3F091)
+    #enable_xmagic_menu_sub.write(outfile_rom_buffer)
 
-    enable_xmagic_menu_sub.bytestring = bytes([0x22, 0x91, 0xF0, 0xC3])
-    enable_xmagic_menu_sub.set_location(0x34d56)
-    enable_xmagic_menu_sub.write(outfile_rom_buffer)
+    #enable_xmagic_menu_sub.bytestring = bytes([0x22, 0x91, 0xF0, 0xC3])
+    #enable_xmagic_menu_sub.set_location(0x34d56)
+    #enable_xmagic_menu_sub.write(outfile_rom_buffer)
 
     # Prevent Runic, SwdTech, and Capture from being disabled/altered
     protect_battle_commands_sub = Substitution()

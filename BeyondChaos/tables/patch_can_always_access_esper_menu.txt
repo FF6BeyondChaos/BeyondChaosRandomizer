@@ -16,8 +16,8 @@
 $gogo-check
 :       C9 0E 90 04
 
-$main-call
-:       22 $main
+#$main-call             #commented out as it's duplicated in Myself's patches
+#:       22 $main
 
 #$check-learn-rate-call
 #:       22 $check-learn-rate
