@@ -923,17 +923,20 @@ class Window(QMainWindow):
         result = True
 
         for required_flag, required_value in requirements[current_index].items():
-            flag_control = Options_.get_flag(required_flag).controls[0]
-            flag_value = None
-            if isinstance(flag_control, QPushButton):
-                flag_value = flag_control.isChecked()
-            elif isinstance(flag_control, QSpinBox) or isinstance(flag_control, QDoubleSpinBox):
-                flag_value = round(flag_control.value(), 2)
-            elif isinstance(flag_control, QComboBox):
-                flag_value = flag_control.currentText()
-            if not flag_value == required_value:
-                result = False
-                break
+            try:
+                flag_control = Options_.get_flag(required_flag).controls[0]
+                flag_value = None
+                if isinstance(flag_control, QPushButton):
+                    flag_value = flag_control.isChecked()
+                elif isinstance(flag_control, QSpinBox) or isinstance(flag_control, QDoubleSpinBox):
+                    flag_value = round(flag_control.value(), 2)
+                elif isinstance(flag_control, QComboBox):
+                    flag_value = flag_control.currentText()
+                if not flag_value == required_value:
+                    result = False
+                    break
+            except AttributeError:
+                continue
 
         result = result or self.get_missing_requirements(flag, current_index + 1)
 
