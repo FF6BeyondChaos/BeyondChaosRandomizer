@@ -993,6 +993,16 @@ NORMAL_FLAGS = [
          requirements=[],
          children={}
          ),
+    Flag(name='thescenarionottaken',
+         description='DIVERGENT PATHS MODE',
+         long_description="Changes the way the 3 scenarios are split up, to resemble PowerPanda's "
+                          "'Divergent Paths' mod.",
+         category="field",
+         input_type="boolean",
+         conflicts=["strangejourney", "worringtriad"],
+         requirements=[],
+         children={}
+         ),
     Flag(name='worringtriad',
          description="START IN WOR",
          long_description="The player will start in the World of Ruin, with all of the World of Balance "
@@ -1203,16 +1213,6 @@ NORMAL_FLAGS = [
          category="experimental",
          input_type="boolean",
          conflicts=["thescenarionottaken", 'j'],
-         requirements=[],
-         children={}
-         ),
-    Flag(name='thescenarionottaken',
-         description='DIVERGENT PATHS MODE',
-         long_description="Changes the way the 3 scenarios are split up, to resemble PowerPanda's "
-                          "'Divergent Paths' mod.",
-         category="experimental",
-         input_type="boolean",
-         conflicts=["strangejourney", "worringtriad"],
          requirements=[],
          children={}
          ),
