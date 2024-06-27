@@ -344,7 +344,7 @@ NORMAL_FLAGS = [
          long_description='Randomize the phantom forest.',
          category="core",
          input_type="boolean",
-         conflicts=[],
+         conflicts=["strangejourney"],
          requirements=[],
          children={}
          ),
@@ -502,7 +502,7 @@ NORMAL_FLAGS = [
          input_type="boolean",
          conflicts=[],
          requirements=[{"s": True}],
-         children={}
+         children={'novanilla':True, 'frenchvanilla':True, 'cloneparty':True}
          ),
     Flag(name='partyparty',
          description="CRAZY PARTY MODE",
@@ -578,7 +578,7 @@ NORMAL_FLAGS = [
          category="quality_of_life",
          input_type="boolean",
          conflicts=[],
-         requirements=[],
+         requirements=[{'i':True}],
          children={}
          ),
     Flag(name='regionofdoom',
@@ -657,7 +657,8 @@ NORMAL_FLAGS = [
          category="aesthetic",
          input_type="boolean",
          conflicts=[],
-         requirements=[],
+         requirements=[{'partyparty':True}, {'bravenudeworld':True}, {'suplexwrecks':True}, {'novanilla':True},
+                       {'christmas':True}, {'halloween':True}, {'kupokupo':True}, {'quikdraw':True}, {'makeover':True}, {'cloneparty':True}, {'frenchvanilla':True}],
          children={}
          ),
     Flag(name='johnnyachaotic',
@@ -684,7 +685,7 @@ NORMAL_FLAGS = [
                           "Optional cutscenes are not removed.",
          category="aesthetic",
          input_type="boolean",
-         conflicts=[],
+         conflicts=["ancientcave"],
          requirements=[],
          children={}
          ),
@@ -706,8 +707,8 @@ NORMAL_FLAGS = [
                           "Item commands. Enemies will use items drastically more often than usual.",
          category="battle",
          input_type="boolean",
-         conflicts=[],
-         requirements=[],
+         conflicts=['suplexwrecks'],
+         requirements=[{'o':True}],
          children={}
          ),
     Flag(name='cursepower',
@@ -742,7 +743,7 @@ NORMAL_FLAGS = [
          default_value="Off",
          default_index=0,
          conflicts=[],
-         requirements=[],
+         requirements=[{'e':True}],
          children={}
          ),
     Flag(name='darkworld',
@@ -751,8 +752,8 @@ NORMAL_FLAGS = [
                           "Mostly meant to be used in conjunction with the madworld flag.",
          category="battle",
          input_type="boolean",
-         conflicts=[],
-         requirements=[],
+         conflicts=["ancientcave"],
+         requirements=[{'m':True}],
          children={}
          ),
     Flag(name='easymodo',
@@ -771,7 +772,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements=[],
+         requirements=[{'i':True}],
          children={}
          ),
     Flag(name='expboost',
@@ -803,8 +804,8 @@ NORMAL_FLAGS = [
          long_description="Disables forced magic command in Fanatic's Tower.",
          category="battle",
          input_type="boolean",
-         conflicts=[],
-         requirements=[],
+         conflicts=["suplexwrecks"],
+         requirements=[{'o':True}],
          children={}
          ),
     Flag(name='madworld',
@@ -826,7 +827,7 @@ NORMAL_FLAGS = [
          default_value="Off",
          default_index=0,
          conflicts=[],
-         requirements=[],
+         requirements=[{'i':True}],
          children={}
          ),
     Flag(name='mpboost',
@@ -847,7 +848,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=["unbreakable"],
-         requirements=[],
+         requirements=[{'i':True}],
          children={}
          ),
     Flag(name='norng',
@@ -856,7 +857,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements=[],
+         requirements=[{'b':True}],
          children={}
          ),
     Flag(name='playsitself',
@@ -876,7 +877,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements=[],
+         requirements=[{'m':True}],
          children={}
          ),
     Flag(name='rushforpower',
@@ -886,7 +887,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements=[],
+         requirements=[{'m':True}, {'o':True}, {'w':True}],
          children={}
          ),
     Flag(name='swdtechspeed',
@@ -907,7 +908,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements=[],
+         requirements=[{'i':True}],
          children={}
          ),
 
@@ -918,8 +919,8 @@ NORMAL_FLAGS = [
                           "some sanity checks, allowing them to be much more difficult and volatile",
          category="field",
          input_type="boolean",
-         conflicts=[],
-         requirements=[],
+         conflicts=["ancientcave"],
+         requirements=[{'t':True}],
          children={}
          ),
     Flag(name='cursedencounters',
@@ -928,7 +929,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=[],
-         requirements=[],
+         requirements=[{'f':True}],
          children={}
          ),
     Flag(name='dearestmolulu',
@@ -937,7 +938,7 @@ NORMAL_FLAGS = [
                           "EXP flag recommended",
          category="field",
          input_type="boolean",
-         conflicts=[],
+         conflicts=["ancientcave"],
          requirements=[],
          children={}
          ),
@@ -958,7 +959,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=[],
-         requirements=[],
+         requirements=[{'o':True}, {'t':True}, {'w':True}],
          children={}
          ),
     Flag(name='morefanatical',
@@ -966,8 +967,8 @@ NORMAL_FLAGS = [
          long_description="Fanatic's Tower is even more confusing than usual.",
          category="field",
          input_type="boolean",
-         conflicts=[],
-         requirements=[],
+         conflicts=["ancientcave"],
+         requirements=[{'d':True}],
          children={}
          ),
     Flag(name='nomiabs',
@@ -975,8 +976,8 @@ NORMAL_FLAGS = [
          long_description="Chests will never have monster encounters in them.",
          category="field",
          input_type="boolean",
-         conflicts=[],
-         requirements=[],
+         conflicts=["ancientcave"],
+         requirements=[{'t':True}],
          children={}
          ),
     Flag(name='randomboost',
@@ -998,7 +999,7 @@ NORMAL_FLAGS = [
                           "treasure chests, along with a guaranteed set of items, and more Lores.",
          category="field",
          input_type="boolean",
-         conflicts=[],
+         conflicts=["thescenarionottaken", "ancientcave"],
          requirements=[],
          children={}
          ),
@@ -1009,8 +1010,8 @@ NORMAL_FLAGS = [
          long_description="All skills that get replaced with something are replaced with combo skills.",
          category="characters",
          input_type="boolean",
-         conflicts=["nocombos"],
-         requirements=[],
+         conflicts=["nocombos", "suplexwrecks"],
+         requirements=[{'w':True}],
          children={}
          ),
     Flag(name='canttouchthis',
@@ -1029,8 +1030,8 @@ NORMAL_FLAGS = [
                           "of having desperation attacks as commands.",
          category="characters",
          input_type="boolean",
-         conflicts=[],
-         requirements=[],
+         conflicts=['suplexwrecks'],
+         requirements=[{'w':True}],
          children={}
          ),
     Flag(name='endless9',
@@ -1038,8 +1039,8 @@ NORMAL_FLAGS = [
          long_description="All R-[skills] are automatically changed to 9x[skills]. W-[skills] will become 8x[skills].",
          category="characters",
          input_type="boolean",
-         conflicts=[],
-         requirements=[],
+         conflicts=['suplexwrecks'],
+         requirements=[{'w':True}],
          children={}
          ),
     Flag(name='levelcap',
@@ -1084,8 +1085,8 @@ NORMAL_FLAGS = [
                           "who only has R-Chaos.",
          category="characters",
          input_type="boolean",
-         conflicts=[],
-         requirements=[],
+         conflicts=['suplexwrecks'],
+         requirements=[{'o':True}],
          children={}
          ),
     Flag(name='naturalmagic',
@@ -1112,8 +1113,8 @@ NORMAL_FLAGS = [
          long_description="There will be no combo(dual) skills.",
          category="characters",
          input_type="boolean",
-         conflicts=["allcombos"],
-         requirements=[],
+         conflicts=["allcombos", "suplexwrecks"],
+         requirements=[{'w':True}],
          children={}
          ),
     Flag(name='penultima',
@@ -1121,8 +1122,8 @@ NORMAL_FLAGS = [
          long_description="Ultima cannot be learned by any means.",
          category="characters",
          input_type="boolean",
-         conflicts=[],
-         requirements=[],
+         conflicts=["suplexwrecks"],
+         requirements=[{'w':True}],
          children={}
          ),
     Flag(name='replaceeverything',
@@ -1130,8 +1131,8 @@ NORMAL_FLAGS = [
          long_description="All vanilla skills that can be replaced, are replaced.",
          category="characters",
          input_type="boolean",
-         conflicts=[],
-         requirements=[],
+         conflicts=["suplexwrecks"],
+         requirements=[{'w':True}],
          children={}
          ),
     Flag(name='shadowstays',
@@ -1149,7 +1150,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=[],
-         requirements=[],
+         requirements=[{'o':True}],
          children={}
          ),
     Flag(name='suplexwrecks',
@@ -1201,7 +1202,7 @@ NORMAL_FLAGS = [
                           "Includes all maps and event tiles, and is usually extremely hard to beat by itself.",
          category="experimental",
          input_type="boolean",
-         conflicts=["thescenarionottaken"],
+         conflicts=["thescenarionottaken", 'j'],
          requirements=[],
          children={}
          ),
@@ -1211,7 +1212,7 @@ NORMAL_FLAGS = [
                           "'Divergent Paths' mod.",
          category="experimental",
          input_type="boolean",
-         conflicts=["strangejourney"],
+         conflicts=["strangejourney", "worringtriad"],
          requirements=[],
          children={}
          ),
@@ -1284,11 +1285,9 @@ NORMAL_FLAGS = [
          category='experimental',
          input_type='boolean',
          conflicts=[],
-         requirements=[],
+         requirements=[{"mementomori":True}],
          children={}
          ),
-
-    # beta codes
 
 ]
 
@@ -1296,32 +1295,32 @@ NORMAL_FLAGS = [
 MAKEOVER_MODIFIER_FLAGS = [
     Flag(name='novanilla',
          description="COMPLETE MAKEOVER MODE",
-         long_description="Same as 'makeover' except sprites from the vanilla game are guaranteed "
+         long_description="Use with 'makeover' to have sprites from the vanilla game to be guaranteed "
                           "not to appear.",
          category="sprite",
          input_type="boolean",
-         conflicts=[],
-         requirements=[],
+         conflicts=['frenchvanilla'],
+         requirements=[{'makeover':True}],
          children={}
          ),
     Flag(name='frenchvanilla',
          description="EQUAL RIGHTS MAKEOVER MODE",
-         long_description="Same as 'makeover' except sprites from the vanilla game are selected "
+         long_description="Use with 'makeover' to have sprites from the vanilla game be selected "
                           "with equal weight to new sprites.",
          category="sprite",
          input_type="boolean",
-         conflicts=[],
-         requirements=[],
+         conflicts=['novanilla'],
+         requirements=[{'makeover':True}],
          children={}
          ),
     Flag(name='cloneparty',
          description="CLONE COSPLAY MAKEOVER MODE",
-         long_description="Same as 'makeover' except instead of avoiding choosing different "
-                          "versions of the same character, it actively tries to do so.",
+         long_description="Use with 'makeover' to have the randomizer actively try to choose sprite"
+                          "versions of the same character.",
          category="sprite",
          input_type="boolean",
          conflicts=[],
-         requirements=[],
+         requirements=[{'makeover':True}],
          children={}
          )
 ]
@@ -1356,7 +1355,7 @@ def get_makeover_groups():
                       category="spriteCategories",
                       input_type="boolean",
                       conflicts=[],
-                      requirements=[],
+                      requirements=[{'makeover':True}],
                       children={}
                       )
             MAKEOVER_MODIFIER_FLAGS.extend([

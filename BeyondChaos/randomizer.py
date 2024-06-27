@@ -5724,8 +5724,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         if Options_.is_flag_active('random_palettes_and_names') or \
                 Options_.is_flag_active('swap_sprites') or \
                 Options_.is_any_flag_active(
-                    ['partyparty', 'bravenudeworld', 'suplexwrecks',
-                     'christmas', 'halloween', 'kupokupo', 'quikdraw', 'makeover']):
+                    ['partyparty', 'bravenudeworld', 'suplexwrecks', 'novanilla',
+                     'christmas', 'halloween', 'kupokupo', 'quikdraw', 'makeover', 'cloneparty', 'frenchvanilla']):
             sprite_log = manage_character_appearance(
                 outfile_rom_buffer,
                 preserve_graphics=preserve_graphics,
