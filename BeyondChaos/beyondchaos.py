@@ -34,7 +34,7 @@ from multiprocessing import Process, Pipe
 from config import (read_flags, write_flags, set_config_value, check_ini, check_player_sprites,
                     check_remonsterate, VERSION, BETA, MD5HASHNORMAL, MD5HASHTEXTLESS,
                     MD5HASHTEXTLESS2, SUPPORTED_PRESETS, config)
-from options import (NORMAL_FLAGS, MAKEOVER_MODIFIER_FLAGS, get_makeover_groups, Options_)
+from options import (NORMAL_FLAGS, MAKEOVER_MODIFIER_FLAGS, get_makeover_groups, Options_, Flag)
 from randomizer import randomize
 
 if sys.version_info[0] < 3:
@@ -285,24 +285,35 @@ def toggle_palette():
 
 
 def handle_conflicts_and_requirements(conflicts: dict, requirements: dict):
-    # print("Handling conflicts")
+    """
+    Whenever a flag is activated, its list of conflicting flags is included to Window.conflicts.
+    Whenever a flag is missing a requirement, it is included in Window.requirements.
+
+    For every available flag, if that flag either conflicts with an active flag or is missing required flags to
+        enable it, the flag needs to be both deactivated and its controls disabled to prevent activation.
+
+    If the flag is not in either dictionary, the controls are enabled and the flag can be activated.
+
+    Parameters:
+        conflicts: A dictionary of all existing conflicts for all active flags.
+        requirements: A dictionary of all flags currently missing their requirements.
+
+    Returns:
+        None
+    """
     for flag in NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS:
-        # print("Evaluating flag " + flag.name)
-        # print(str(conflicts.keys()))
         error_text = ''
-        if flag.name in conflicts.keys():
+        if conflicts and flag.name in conflicts.keys():
             if not error_text:
                 error_text = ('<div style="color: red;">Flag disabled because:<ul style="margin: 0;"><li>' +
                               'It conflicts with the following '
                               + 'active flags: "' + '" and "'.join(conflicts[flag.name]) + '"</li>')
-        if flag.name in requirements.keys():
+        if requirements and flag.name in requirements.keys() and requirements[flag.name]:
             if not error_text:
                 error_text = ('<div style="color: red;">Flag disabled because:<ul style="margin: 0;"><li>     ' +
-                              'Required flags are not active: "' +
-                              '" and "'.join(requirements[flag.name]) + '"</li>')
+                              requirements[flag.name] + '</li>')
             else:
-                error_text += ('<li>Required flags are not active: "'
-                               + '" and "'.join(requirements[flag.name]) + '"</li>')
+                error_text += '<li>' + requirements[flag.name] + '</li>'
 
         if error_text:
             # Set controls to default value (turn off flag)
@@ -319,15 +330,24 @@ def handle_conflicts_and_requirements(conflicts: dict, requirements: dict):
             flag.controls[2].setText(error_text + '</ul></div>' + flag.long_description)
         else:
             # Enable control
-            # print("Enabling flag " + flag.name + " with no conflicts.")
             flag.controls[0].setDisabled(False)
-            # print("Enabled")
-            # print("Changing description.")
             flag.controls[2].setText(flag.long_description)
-            # print("Changed.")
 
 
 def handle_children(flag, parent_value):
+    """
+    For a parent flag with a specified value, check to see if the flag has any children. The children are contained in
+        a dict object containing the child's name and the value the parent should be set to for the child to be
+        visible.
+
+    For each child where the parent is the correct value to make it visible, make the child visible.
+
+    For each child where the parent is NOT the correct value to make it visible, turn the flag off by
+        setting it to its default value in addition to making the child invisible.
+
+    Returns:
+        None
+    """
     for flag_name, required_parent_value in flag.children.items():
         if parent_value == required_parent_value:
             flag_object = Options_.get_flag(flag_name)
@@ -875,6 +895,54 @@ class Window(QMainWindow):
     # ------------ NO MORE LAYOUT DESIGN PAST THIS POINT-------------
     # ---------------------------------------------------------------
 
+    def get_missing_requirements(self, flag: Flag, current_index: int = 0) -> str | bool:
+        """
+        Takes a flag and analyzes it's requirements to see if the requirements are met.
+
+        For the original method call (as indicated by current_index == 0, the method returns a string
+            representing the error message to be displayed on the GUI. Or an empty string, if all requirements
+            are met.
+
+        This method also calls itself recursively for each item in the Flag's requirements. These recursive
+            calls return True or False depending on whether or not the requirements were met for that part of
+            the requirements.
+        Returns:
+            str
+            bool
+
+        TODO: Change this into a Flag class method utilizing flag.value instead of the value of a PyQt5 control
+        """
+        requirements = flag.requirements
+
+        if not requirements:
+            return ''
+
+        if len(requirements) <= current_index:
+            return False
+
+        result = True
+
+        for required_flag, required_value in requirements[current_index].items():
+            flag_control = Options_.get_flag(required_flag).controls[0]
+            flag_value = None
+            if isinstance(flag_control, QPushButton):
+                flag_value = flag_control.isChecked()
+            elif isinstance(flag_control, QSpinBox) or isinstance(flag_control, QDoubleSpinBox):
+                flag_value = round(flag_control.value(), 2)
+            elif isinstance(flag_control, QComboBox):
+                flag_value = flag_control.currentText()
+            if not flag_value == required_value:
+                result = False
+                break
+
+        result = result or self.get_missing_requirements(flag, current_index + 1)
+
+        if current_index > 0:
+            return result
+        if current_index == 0 and not result:
+            return flag.get_requirement_string()
+        return ''
+
     def text_changed(self, text):
         if self.flags_changing:
             return
@@ -959,89 +1027,7 @@ class Window(QMainWindow):
                                     self.conflicts[flag_name] = [child.flag.name]
                     handle_children(child.flag, child.currentText())
         for child in children:
-            for required_flag, required_value in child.flag.requirements.items():
-                flag_control = Options_.get_flag(required_flag).controls[0]
-                if isinstance(flag_control, QPushButton):
-                    flag_value = flag_control.isChecked()
-                elif isinstance(flag_control, QSpinBox) or isinstance(flag_control, QDoubleSpinBox):
-                    flag_value = round(flag_control.value(), 2)
-                elif isinstance(flag_control, QComboBox):
-                    flag_value = flag_control.currentText()
-                if not flag_value == required_value:
-                    try:
-                        self.requirements[child.flag.name].append(required_flag)
-                    except KeyError:
-                        self.requirements[child.flag.name] = [required_flag]
-                # for v in values:
-                #     v = str(v).lower()
-                #     if isinstance(child, QPushButton):
-                #         if v == child.value:
-                #             child.setChecked(True)
-                #             child.setText('Yes')
-                #             child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
-                #             self.flags.append(v)
-                #
-                #             for flag_name in child.flag.conflicts:
-                #                 try:
-                #                     self.conflicts[flag_name].append(child.flag.name)
-                #                 except KeyError:
-                #                     self.conflicts[flag_name] = [child.flag.name]
-                #     elif isinstance(child, QSpinBox):
-                #         child.setStyleSheet('background-color: white; border: none;')
-                #         if str(v).startswith(child.text.lower()):
-                #             if ':' in v:
-                #                 try:
-                #                     child.setValue(int(str(v).split(':')[1]))
-                #                 except ValueError:
-                #                     if str(v).split(':')[1] == child.specialValueText().lower():
-                #                         child.setValue(child.minimum())
-                #
-                #                 child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
-                #                 self.flags.append(v)
-                #                 # activate_children(child)
-                #                 for flag_name in child.flag.conflicts:
-                #                     try:
-                #                         self.conflicts[flag_name].append(child.flag.name)
-                #                     except KeyError:
-                #                         self.conflicts[flag_name] = [child.flag.name]
-                #         handle_children(child.flag, round(child.value(), 2))
-                #     elif isinstance(child, QDoubleSpinBox):
-                #         child.setStyleSheet('background-color: white; border: none;')
-                #         if str(v).startswith(child.text.lower()):
-                #             if ':' in v:
-                #                 try:
-                #                     value = float(str(v).split(':')[1])
-                #                     if value >= 0:
-                #                         child.setValue(value)
-                #                 except ValueError:
-                #                     if str(v).split(':')[1] == child.specialValueText().lower():
-                #                         child.setValue(child.minimum())
-                #                 child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
-                #                 self.flags.append(v)
-                #                 # activate_children(child)
-                #
-                #                 for flag_name in child.flag.conflicts:
-                #                     try:
-                #                         self.conflicts[flag_name].append(child.flag.name)
-                #                     except KeyError:
-                #                         self.conflicts[flag_name] = [child.flag.name]
-                #         handle_children(child.flag, round(child.value(), 2))
-                #     elif isinstance(child, QComboBox):
-                #         child.setStyleSheet('background-color: white; border: none;')
-                #         if str(v).startswith(child.text.lower()):
-                #             if ':' in v:
-                #                 index_of_value = child.findText(str(v).split(':')[1], QtCore.Qt.MatchFixedString)
-                #                 child.setCurrentIndex(index_of_value)
-                #                 child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
-                #                 self.flags.append(v)
-                #                 # activate_children(child)
-                #
-                #                 for flag_name in child.flag.conflicts:
-                #                     try:
-                #                         self.conflicts[flag_name].append(child.flag.name)
-                #                     except KeyError:
-                #                         self.conflicts[flag_name] = [child.flag.name]
-                #         handle_children(child.flag, child.currentText())
+            self.requirements[child.flag.name] = self.get_missing_requirements(child.flag)
 
         handle_conflicts_and_requirements(self.conflicts, self.requirements)
         self.update_flag_string()
@@ -1285,19 +1271,7 @@ class Window(QMainWindow):
                         c.setStyleSheet('background-color: white; border: none;')
                     handle_children(c.flag, c.currentText())
             for child in all_children:
-                for required_flag, required_value in child.flag.requirements.items():
-                    flag_control = Options_.get_flag(required_flag).controls[0]
-                    if isinstance(flag_control, QPushButton):
-                        flag_value = flag_control.isChecked()
-                    elif isinstance(flag_control, QSpinBox) or isinstance(flag_control, QDoubleSpinBox):
-                        flag_value = round(flag_control.value(), 2)
-                    elif isinstance(flag_control, QComboBox):
-                        flag_value = flag_control.currentText()
-                    if not flag_value == required_value:
-                        try:
-                            self.requirements[child.flag.name].append(required_flag)
-                        except KeyError:
-                            self.requirements[child.flag.name] = [required_flag]
+                self.requirements[child.flag.name] = self.get_missing_requirements(child.flag)
 
             handle_conflicts_and_requirements(self.conflicts, self.requirements)
             self.update_flag_string()
