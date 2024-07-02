@@ -13,12 +13,11 @@ try:
     from PyQt5 import QtGui, QtCore
     from PyQt5.QtGui import QCursor, QPalette, QColor, QColorConstants
     from PyQt5.QtWidgets import (
-        QPushButton, QCheckBox, QWidget, QVBoxLayout, QLabel, QGroupBox,
-        QHBoxLayout, QLineEdit, QComboBox, QFileDialog, QApplication,
-        QTabWidget, QInputDialog, QScrollArea, QMessageBox,
-        QGraphicsDropShadowEffect, QGridLayout, QSpinBox, QDoubleSpinBox,
-        QDialog, QDialogButtonBox, QMenu, QMainWindow, QDesktopWidget,
-        QLayout, QFrame, QStyle, QTextEdit, QSizePolicy, QSpacerItem)
+        QApplication, QCheckBox, QComboBox, QDesktopWidget, QDialog, QDialogButtonBox, QDoubleSpinBox,
+        QFileDialog, QFrame, QGraphicsDropShadowEffect, QGridLayout, QGroupBox, QHBoxLayout,
+        QInputDialog, QLabel, QLayout, QLineEdit, QMainWindow, QMenu, QMessageBox, QPushButton,
+        QScrollArea, QSpinBox, QSizePolicy, QSpacerItem, QStyle, QTabWidget, QTextEdit, QVBoxLayout,
+        QWidget)
     from PIL import Image, ImageOps
 except ImportError as e:
     print('ERROR: ' + str(e))
@@ -44,6 +43,13 @@ if sys.version_info[0] < 3:
 control_fixed_width = 70
 control_fixed_height = 20
 spacer_fixed_height = 5
+current_theme = config.get('Settings', 'gui_theme', fallback='Light')
+inactive_flag_light_theme_stylesheet = 'background-color: white; border: none; color: black;'
+active_flag_light_theme_stylesheet = 'background-color: #CCE4F7; border: 1px solid darkblue; color: black;'
+disabled_flag_light_theme_stylesheet = 'background-color: #fedada; border: none; color: black;'
+inactive_flag_other_theme_stylesheet = 'background-color: #232629; border: none; color: white;'
+active_flag_other_theme_stylesheet = 'background-color: #010030; border: 1px solid #A1A0D0; color: white;'
+disabled_flag_other_theme_stylesheet = 'background-color: #390000; border: none; color: white;'
 
 
 class QDialogScroll(QDialog):
@@ -133,6 +139,7 @@ class BingoPrompts(QDialog):
         self.grid_size = 5
         grid_size_label = QLabel('What size grid? (2-7)')
         self.grid_size_box = QSpinBox()
+        self.grid_size_box.setProperty('class', 'dark_background')
         self.grid_size_box.setRange(2, 7)
         self.grid_size_box.setValue(self.grid_size)
         self.grid_size_box.valueChanged.connect(self._set_grid_size)
@@ -152,6 +159,7 @@ class BingoPrompts(QDialog):
         self.num_cards = 1
         num_cards_label = QLabel('Generate how many cards?')
         self.num_cards_box = QSpinBox()
+        self.num_cards_box.setProperty('class', 'dark_background')
         self.num_cards_box.setValue(self.num_cards)
         self.num_cards_box.valueChanged.connect(self._set_num_cards)
         layout.addWidget(num_cards_label)
@@ -243,47 +251,6 @@ def update_bc(suppress_prompt=False, force_download=False):
             update_bc_failure_message.exec()
 
 
-def set_palette(style=None):
-    if not style:
-        style = config.get('Settings', 'gui_theme', fallback='Light')
-
-    if style == 'Light':
-        light_palette = QPalette()
-        QApplication.setPalette(light_palette)
-    elif style == 'Dark':
-        dark_palette = QPalette()
-        dark_palette.setColor(QPalette.Window, QColor(53, 53, 53))
-        dark_palette.setColor(QPalette.WindowText, QColorConstants.White)
-        dark_palette.setColor(QPalette.Base, QColor(35, 35, 35))
-        dark_palette.setColor(QPalette.AlternateBase, QColor(53, 53, 53))
-        dark_palette.setColor(QPalette.ToolTipBase, QColor(25, 25, 25))
-        dark_palette.setColor(QPalette.ToolTipText, QColorConstants.White)
-        dark_palette.setColor(QPalette.Text, QColorConstants.White)
-        dark_palette.setColor(QPalette.Button, QColor(53, 53, 53))
-        dark_palette.setColor(QPalette.ButtonText, QColorConstants.White)
-        dark_palette.setColor(QPalette.BrightText, QColorConstants.Red)
-        dark_palette.setColor(QPalette.Link, QColor(42, 130, 218))
-        dark_palette.setColor(QPalette.Highlight, QColor(42, 130, 218))
-        dark_palette.setColor(QPalette.HighlightedText, QColor(35, 35, 35))
-        dark_palette.setColor(QPalette.Active, QPalette.Button, QColor(53, 53, 53))
-        dark_palette.setColor(QPalette.Disabled, QPalette.ButtonText, QColorConstants.DarkGray)
-        dark_palette.setColor(QPalette.Disabled, QPalette.WindowText, QColorConstants.DarkGray)
-        dark_palette.setColor(QPalette.Disabled, QPalette.Text, QColorConstants.DarkGray)
-        dark_palette.setColor(QPalette.Disabled, QPalette.Light, QColor(53, 53, 53))
-        QApplication.setPalette(dark_palette)
-    else:
-        raise ValueError('Set Palette function received an unrecognized style: "' + str(style) + '".')
-
-    set_config_value('Settings', 'gui_theme', style)
-
-
-def toggle_palette():
-    if config.get('Settings', 'gui_theme', fallback='Light') == 'Light':
-        set_palette('Dark')
-    else:
-        set_palette('Light')
-
-
 def handle_conflicts_and_requirements(conflicts: dict, requirements: dict):
     """
     Whenever a flag is activated, its list of conflicting flags is included to Window.conflicts.
@@ -318,7 +285,7 @@ def handle_conflicts_and_requirements(conflicts: dict, requirements: dict):
         if error_text:
             # Set controls to default value (turn off flag)
             flag_control = flag.controls[0]
-            flag_control.setStyleSheet('background-color: white; border: none;')
+
             if flag.input_type in ['float2', 'integer']:
                 flag_control.setValue(flag_control.default)
             elif flag.input_type == 'combobox':
@@ -328,10 +295,20 @@ def handle_conflicts_and_requirements(conflicts: dict, requirements: dict):
                 flag_control.setChecked(False)
             flag_control.setDisabled(True)
             flag.controls[2].setText(error_text + '</ul></div>' + flag.long_description)
+
+            if current_theme == 'Light':
+                flag_control.setStyleSheet(disabled_flag_light_theme_stylesheet)
+            else:
+                flag_control.setStyleSheet(disabled_flag_other_theme_stylesheet)
         else:
-            # Enable control
-            flag.controls[0].setDisabled(False)
-            flag.controls[2].setText(flag.long_description)
+            # Enable control if necessary
+            if not flag.controls[0].isEnabled():
+                flag.controls[0].setDisabled(False)
+                if current_theme == 'Light':
+                    flag.controls[0].setStyleSheet(inactive_flag_light_theme_stylesheet)
+                else:
+                    flag.controls[0].setStyleSheet(inactive_flag_other_theme_stylesheet)
+                flag.controls[2].setText(flag.long_description)
 
 
 def handle_children(flag, parent_value):
@@ -478,7 +455,6 @@ class Window(QMainWindow):
         self.rom_input.setText(self.rom_text)
         self.rom_output.setText(self.rom_output_directory)
         self.update_flag_string()
-        # self.updateFlagCheckboxes()
         self.flag_button_clicked()
         self.update_preset_dropdown()
         self.clear_ui()
@@ -489,6 +465,7 @@ class Window(QMainWindow):
                      'mpparty nicerpoison questionablecontent regionofdoom tastetherainbow makeover partyparty '
                      'alasdraco capslockoff johnnydmad dancelessons lessfanatical swdtechspeed:faster shadowstays'
         ))
+        self.set_palette()
 
     def init_window(self):
         self.setWindowTitle(self.title)
@@ -515,6 +492,7 @@ class Window(QMainWindow):
         self.menuBar().addMenu(file_menu)
 
         menu_separator = self.menuBar().addMenu('|')
+        menu_separator.setProperty('class', 'menu_separator')
         menu_separator.setEnabled(False)
 
         if not BETA and update.list_available_updates(refresh=False):
@@ -522,10 +500,11 @@ class Window(QMainWindow):
         else:
             self.menuBar().addAction('Check for Updates', update_bc)
 
-        # menu_separator2 = self.menuBar().addMenu('|')
-        # menu_separator2.setEnabled(False)
+        menu_separator2 = self.menuBar().addMenu('|')
+        menu_separator2.setProperty('class', 'menu_separator')
+        menu_separator2.setEnabled(False)
 
-        # self.menuBar().addAction('Toggle Dark Mode', toggle_palette)
+        self.menuBar().addAction('Toggle Dark Mode', self.toggle_palette)
 
         # Primary Vertical Box Layout
         vbox = QVBoxLayout()
@@ -565,20 +544,14 @@ class Window(QMainWindow):
         grid_layout.addWidget(self.rom_input, 1, 2, 1, 3)
 
         self.label_rom_error = QLabel()
-        self.label_rom_error.setStyleSheet('color: darkred;')
+        self.label_rom_error.setProperty('class', 'error')
         self.label_rom_error.setHidden(True)
         grid_layout.addWidget(self.label_rom_error, 2, 2, 1, 3)
 
         btn_rom_input = QPushButton('Browse')
         btn_rom_input.setMaximumWidth(self.width)
         btn_rom_input.setMaximumHeight(self.height)
-        btn_rom_input.setStyleSheet(
-            'font:bold;'
-            'font-size:18px;'
-            'height:24px;'
-            'background-color: #5A8DBE;'
-            'color:#E4E4E4;'
-        )
+        btn_rom_input.setProperty('class', 'rom_file_picker')
         btn_rom_input.clicked.connect(lambda: self.open_file_chooser())
         btn_rom_input.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
         btn_rom_input_style = QGraphicsDropShadowEffect()
@@ -599,13 +572,7 @@ class Window(QMainWindow):
         btn_rom_output = QPushButton('Browse')
         btn_rom_output.setMaximumWidth(self.width)
         btn_rom_output.setMaximumHeight(self.height)
-        btn_rom_output.setStyleSheet(
-            'font:bold;'
-            'font-size:18px;'
-            'height:24px;'
-            'background-color:#5A8DBE;'
-            'color:#E4E4E4;'
-        )
+        btn_rom_output.setProperty('class', 'rom_output_picker')
         btn_rom_output.clicked.connect(lambda: self.open_directory_chooser())
         btn_rom_output.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
         btn_rom_output_style = QGraphicsDropShadowEffect()
@@ -630,23 +597,18 @@ class Window(QMainWindow):
         grid_layout.addWidget(lbl_seed_count, 4, 3)
 
         self.seed_count = QSpinBox()
+        self.seed_count.setProperty('class', 'batch_count')
         self.seed_count.setValue(1)
         self.seed_count.setMinimum(1)
         self.seed_count.setMaximum(99)
-        self.seed_count.setFixedWidth(40)
+        self.seed_count.setFixedWidth(50)
         grid_layout.addWidget(self.seed_count, 4, 4)
 
         btn_generate = QPushButton('Generate')
         btn_generate.setMinimumWidth(125)
         btn_generate.setMaximumWidth(self.width)
         btn_generate.setMaximumHeight(self.height)
-        btn_generate.setStyleSheet(
-            'font:bold;'
-            'font-size:18px;'
-            'height:24px;'
-            'background-color:#5A8DBE;'
-            'color:#E4E4E4;'
-        )
+        btn_generate.setProperty('class', 'generate_button')
         btn_generate.clicked.connect(lambda: self.generate_seed())
         btn_generate.setCursor(QCursor(QtCore.Qt.PointingHandCursor))
         btn_generate_style = QGraphicsDropShadowEffect()
@@ -665,7 +627,7 @@ class Window(QMainWindow):
 
         # ---- Game Mode Drop Down ---- #
         label_game_mode = QLabel('Game Mode:')
-        label_game_mode.setStyleSheet('padding-left: 22px;')
+        label_game_mode.setProperty('class', 'game_mode_label')
         layout_mode_and_preset.addWidget(label_game_mode, 1, 1)
         for item in self.game_modes.items():
             self.mode_box.addItem(item[0])
@@ -676,7 +638,7 @@ class Window(QMainWindow):
 
         # ---- Preset Flags Drop Down ---- #
         label_preset_mode = QLabel('Preset Flags:')
-        label_preset_mode.setStyleSheet('padding-left: 22px;')
+        label_preset_mode.setProperty('class', 'preset_label')
         layout_mode_and_preset.addWidget(label_preset_mode, 1, 3)
         self.preset_box.addItem('Select a flag set')
         self.load_saved_flags()
@@ -689,19 +651,9 @@ class Window(QMainWindow):
         layout_mode_and_preset.addWidget(self.preset_box, 1, 4)
 
         label_flag_description = QLabel('Preset Description:')
-        label_flag_description.setStyleSheet(
-            'font-size:14px;'
-            'height:24px;'
-            'color:#253340;'
-            'padding-left: 22px;'
-        )
+        label_flag_description.setProperty('class', 'preset_description')
         layout_mode_and_preset.addWidget(label_flag_description, 1, 5)
-
-        self.flag_description.setStyleSheet(
-            'font-size:14px;'
-            'height:24px;'
-            'color:#253340;'
-        )
+        self.flag_description.setProperty('class', 'current_preset')
         layout_mode_and_preset.addWidget(self.flag_description, 1, 6)
 
         layout_mode_and_preset.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
@@ -792,6 +744,7 @@ class Window(QMainWindow):
                 else:
                     # Assume boolean
                     flag_control = QPushButton('No')
+                    flag_control.setProperty('class', 'flag_control')
                     self.check_boxes.append(flag_control)
                     flag_control.setFixedWidth(control_fixed_width)
                     flag_control.setMinimumHeight(0)
@@ -811,9 +764,6 @@ class Window(QMainWindow):
                 flag_description.setWordWrap(True)
                 flag_control.flag = flag
                 flag.controls = [flag_control, flag_label, flag_description]
-                # flag_control.setStyleSheet('background-color: red')
-                # flag_label.setStyleSheet('background-color: blue')
-                # flag_description.setStyleSheet('background-color: green')
 
                 tab_layout.addWidget(flag_control, current_row, 1)
                 tab_layout.addWidget(flag_label, current_row, 2)
@@ -831,13 +781,13 @@ class Window(QMainWindow):
                 h_spacer.setFrameShadow(QFrame.Sunken)
                 if not flag_count == len(d):
                     h_spacer.setFixedHeight(2)
-                    h_spacer.setStyleSheet('margin: 0 2px 0 2px;')
+                    h_spacer.setProperty('class', 'flag_h_spacer')
                     tab_layout.addWidget(h_spacer, current_row, 0, 0, 6)
                     flag.controls.append(h_spacer)
                     current_row += 1
                 else:
                     # Fake row set to stretch as much as possible. Keeps other rows from stretching.
-                    h_spacer.setStyleSheet('display:none;')
+                    h_spacer.setProperty('class', 'flag_h_spacer_final')
                     tab_layout.addWidget(h_spacer, current_row, 0, 0, 6)
                     tab_layout.setRowStretch(current_row, 1)
                     current_row += 1
@@ -846,7 +796,7 @@ class Window(QMainWindow):
             v_spacer.setFrameShape(QFrame.VLine)
             v_spacer.setFrameShadow(QFrame.Sunken)
             v_spacer.setFixedWidth(5)
-            v_spacer.setStyleSheet('margin: 5px 0 0 0;')
+            v_spacer.setProperty('class', 'flag_v_spacer')
             tab_layout.addWidget(v_spacer, 0, 3, flag_count * 4 - 1, 1)
 
             t.setLayout(tab_layout)
@@ -875,7 +825,7 @@ class Window(QMainWindow):
         flag_text_h_box = QHBoxLayout()
         flag_text_h_box.addWidget(widget_v)
         btn_clear_ui = QPushButton('Reset')
-        btn_clear_ui.setStyleSheet('font-size:12px; height:60px')
+        btn_clear_ui.setProperty('class', 'clear_ui')
         btn_clear_ui.clicked.connect(lambda: self.clear_ui())
         flag_text_h_box.addWidget(btn_clear_ui)
         widget_flag_text.setLayout(flag_text_h_box)
@@ -894,6 +844,36 @@ class Window(QMainWindow):
     # ---------------------------------------------------------------
     # ------------ NO MORE LAYOUT DESIGN PAST THIS POINT-------------
     # ---------------------------------------------------------------
+
+    def toggle_palette(self):
+        if config.get('Settings', 'gui_theme', fallback='Light') == 'Light':
+            self.set_palette('Dark')
+        else:
+            self.set_palette('Light')
+
+    def set_palette(self, style=None):
+        if not style:
+            style = config.get('Settings', 'gui_theme', fallback='Light')
+
+        if style == 'Light':
+            if not os.path.exists('custom/gui_themes/lightmode.css'):
+                print('Error: No lightmode.css file found. App style cannot be changed.')
+                return
+            with open('custom/gui_themes/lightmode.css', 'r') as f:
+                App.setStyleSheet(f.read())
+        elif style == 'Dark':
+            if not os.path.exists('custom/gui_themes/darkmode.css'):
+                print('Error: No lightmode.css file found. App style cannot be changed.')
+                return
+            with open('custom/gui_themes/darkmode.css', 'r') as f:
+                App.setStyleSheet(f.read())
+
+        global current_theme
+        current_theme = style
+        set_config_value('Settings', 'gui_theme', style)
+
+        # This call forces the flag controls to update their styling
+        self.flag_button_clicked()
 
     def get_missing_requirements(self, flag: Flag, current_index: int = 0) -> str | bool:
         """
@@ -949,6 +929,7 @@ class Window(QMainWindow):
     def text_changed(self, text):
         if self.flags_changing:
             return
+        global current_theme
         self.flags_changing = True
         self.clear_controls()
         values = text.split(' ')
@@ -962,14 +943,20 @@ class Window(QMainWindow):
         children = [c for c in children if isinstance(c, QPushButton) or isinstance(c, QSpinBox)
                     or isinstance(c, QDoubleSpinBox) or isinstance(c, QComboBox)]
         for child in children:
-            child.setStyleSheet('background-color: white; border: none;')
+            if current_theme == 'Light':
+                child.setStyleSheet(inactive_flag_light_theme_stylesheet)
+            else:
+                child.setStyleSheet(inactive_flag_other_theme_stylesheet)
             if child.isEnabled():
                 if isinstance(child, QPushButton):
                     for v in values:
                         if str(v).lower() == child.value:
                             child.setChecked(True)
                             child.setText('Yes')
-                            child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                            if current_theme == 'Light':
+                                child.setStyleSheet(active_flag_light_theme_stylesheet)
+                            else:
+                                child.setStyleSheet(active_flag_other_theme_stylesheet)
                             self.flags.append(child.value)
 
                             for flag_name in child.flag.conflicts:
@@ -986,8 +973,10 @@ class Window(QMainWindow):
                             except ValueError:
                                 if str(v).split(':')[1] == child.specialValueText().lower():
                                     child.setValue(child.minimum())
-
-                            child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                            if current_theme == 'Light':
+                                child.setStyleSheet(active_flag_light_theme_stylesheet)
+                            else:
+                                child.setStyleSheet(active_flag_other_theme_stylesheet)
                             self.flags.append(v)
 
                             for flag_name in child.flag.conflicts:
@@ -1006,7 +995,10 @@ class Window(QMainWindow):
                             except ValueError:
                                 if str(v).split(':')[1] == child.specialValueText().lower():
                                     child.setValue(child.minimum())
-                            child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                            if current_theme == 'Light':
+                                child.setStyleSheet(active_flag_light_theme_stylesheet)
+                            else:
+                                child.setStyleSheet(active_flag_other_theme_stylesheet)
                             self.flags.append(v)
 
                             for flag_name in child.flag.conflicts:
@@ -1020,7 +1012,10 @@ class Window(QMainWindow):
                         if ':' in v and child.text.lower() == str(v).split(':')[0]:
                             index_of_value = child.findText(str(v).split(':')[1], QtCore.Qt.MatchFixedString)
                             child.setCurrentIndex(index_of_value)
-                            child.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                            if current_theme == 'Light':
+                                child.setStyleSheet(active_flag_light_theme_stylesheet)
+                            else:
+                                child.setStyleSheet(active_flag_other_theme_stylesheet)
                             self.flags.append(v)
 
                             for flag_name in child.flag.conflicts:
@@ -1220,6 +1215,7 @@ class Window(QMainWindow):
         #  the controls to change and call this method. But we do not want to do anything then, otherwise it can
         #  add duplicate entries to the flag string
         if not self.flags_changing:
+            global current_theme
             self.flags.clear()
             self.conflicts = {}
             self.requirements = {}
@@ -1229,7 +1225,10 @@ class Window(QMainWindow):
                 for c in children:
                     all_children.append(c)
                     if c.isChecked():
-                        c.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                        if current_theme == 'Light':
+                            c.setStyleSheet(active_flag_light_theme_stylesheet)
+                        else:
+                            c.setStyleSheet(active_flag_other_theme_stylesheet)
                         c.setText('Yes')
                         self.flags.append(c.value)
                         for flag_name in c.flag.conflicts:
@@ -1238,14 +1237,20 @@ class Window(QMainWindow):
                             except KeyError:
                                 self.conflicts[flag_name] = [c.flag.name]
                     else:
-                        c.setStyleSheet('background-color: white; border: none;')
+                        if current_theme == 'Light':
+                            c.setStyleSheet(inactive_flag_light_theme_stylesheet)
+                        else:
+                            c.setStyleSheet(inactive_flag_other_theme_stylesheet)
                         c.setText('No')
                     handle_children(c.flag, c.isChecked())
                 children = t.findChildren(QSpinBox) + t.findChildren(QDoubleSpinBox)
                 for c in children:
                     all_children.append(c)
                     if not round(c.value(), 1) == c.default:
-                        c.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                        if current_theme == 'Light':
+                            c.setStyleSheet(active_flag_light_theme_stylesheet)
+                        else:
+                            c.setStyleSheet(active_flag_other_theme_stylesheet)
                         if round(c.value(), 2) == c.minimum():
                             self.flags.append(c.text + ':random')
                         else:
@@ -1256,13 +1261,19 @@ class Window(QMainWindow):
                             except KeyError:
                                 self.conflicts[flag_name] = [c.flag.name]
                     else:
-                        c.setStyleSheet('background-color: white; border: none;')
+                        if current_theme == 'Light':
+                            c.setStyleSheet(inactive_flag_light_theme_stylesheet)
+                        else:
+                            c.setStyleSheet(inactive_flag_other_theme_stylesheet)
                     handle_children(c.flag, round(c.value(), 2))
                 children = t.findChildren(QComboBox)
                 for c in children:
                     all_children.append(c)
                     if c.currentIndex() != c.flag.default_index:
-                        c.setStyleSheet('background-color: #CCE4F7; border: 1px solid darkblue;')
+                        if current_theme == 'Light':
+                            c.setStyleSheet(active_flag_light_theme_stylesheet)
+                        else:
+                            c.setStyleSheet(active_flag_other_theme_stylesheet)
                         self.flags.append(c.text.lower() + ':' + c.currentText().lower())
 
                         for flag_name in c.flag.conflicts:
@@ -1271,7 +1282,10 @@ class Window(QMainWindow):
                             except KeyError:
                                 self.conflicts[flag_name] = [c.flag.name]
                     else:
-                        c.setStyleSheet('background-color: white; border: none;')
+                        if current_theme == 'Light':
+                            c.setStyleSheet(inactive_flag_light_theme_stylesheet)
+                        else:
+                            c.setStyleSheet(inactive_flag_other_theme_stylesheet)
                     handle_children(c.flag, c.currentText())
             for child in all_children:
                 self.requirements[child.flag.name] = self.get_missing_requirements(child.flag)
@@ -1455,7 +1469,7 @@ class Window(QMainWindow):
                     'Flags:')
             )
             flag_message = QLabel(f'{flag_msg}')
-            flag_message.setStyleSheet('margin-left: 2px;')
+            flag_message.setProperty('class', 'flag_message')
             continue_confirmed = QDialogScroll(
                 title='Confirm Seed Generation?',
                 header=message,
@@ -1536,7 +1550,7 @@ class Window(QMainWindow):
                         gen_traceback = QTextEdit(
                             '<br>'.join(traceback.format_exc().splitlines())
                         )
-                        gen_traceback.setStyleSheet('background-color: rgba(0,0,0,0); border: none;')
+                        gen_traceback.setProperty('class', 'traceback')
                         gen_traceback.setReadOnly(True)
                         QDialogScroll(
                             title=f'Exception: {str(type(gen_exception).__name__)}',
@@ -1640,8 +1654,7 @@ if __name__ == '__main__':
         if os.path.isfile(os.path.join(os.getcwd(), 'beyondchaos_console.old.exe')):
             os.remove(os.path.join(os.getcwd(), 'beyondchaos_console.old.exe'))
         update_bc(suppress_prompt=True)
-    # QApplication.setStyle('fusion')
-    # set_palette()
+    QApplication.setStyle('fusion')
     os.environ['QT_AUTO_SCREEN_SCALE_FACTOR'] = '1'
     try:
         if not BETA:
