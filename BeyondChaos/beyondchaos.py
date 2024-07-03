@@ -44,16 +44,22 @@ control_fixed_width = 70
 control_fixed_height = 20
 spacer_fixed_height = 5
 current_theme = config.get('Settings', 'gui_theme', fallback='Light')
+
+# Light mode themes, for items that cannot be styled with the css file due to PyQt limitations
 inactive_flag_light_theme_stylesheet = 'background-color: white; border: none; color: black;'
 active_flag_light_theme_stylesheet = 'background-color: #CCE4F7; border: 1px solid darkblue; color: black;'
 disabled_flag_light_theme_stylesheet = 'background-color: #fedada; border: none; color: black;'
+hyperlink_light_theme_stylesheet = 'color: #0d7eb9;'
+
+# Other mode themes, for items that cannot be styled with the css file due to PyQt limitations
 inactive_flag_other_theme_stylesheet = 'background-color: #232629; border: none; color: white;'
 active_flag_other_theme_stylesheet = 'background-color: #010030; border: 1px solid #A1A0D0; color: white;'
 disabled_flag_other_theme_stylesheet = 'background-color: #390000; border: none; color: white;'
+hyperlink_other_theme_stylesheet = 'color: #5dcef9;'
 
 
 class QDialogScroll(QDialog):
-    def __init__(self, title: str = '', header: str = '', scroll_contents: QWidget = None,
+    def __init__(self, scroll_contents: QWidget, title: str = '', header: str = '',
                  left_button: str = '', right_button: str = '', icon=None):
         super().__init__()
         self.setWindowFlags(self.windowFlags() ^ QtCore.Qt.WindowContextHelpButtonHint)
@@ -72,15 +78,14 @@ class QDialogScroll(QDialog):
         header_text = QLabel(header)
         header_text.setOpenExternalLinks(True)
 
-        flag_list_label = scroll_contents
-        flag_list_scroll = QScrollArea(self)
-        flag_list_scroll.setMinimumWidth(self.minimumWidth() - 100)
-        flag_list_scroll.setEnabled(True)
-        flag_list_scroll.setWidgetResizable(True)
-        flag_list_scroll.setWidget(flag_list_label)
+        scroll_area = QScrollArea(self)
+        scroll_area.setMinimumWidth(self.minimumWidth() - 100)
+        scroll_area.setEnabled(True)
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setWidget(scroll_contents)
 
         grid_layout.addWidget(header_text, 1, 0, 1, 9)
-        grid_layout.addWidget(flag_list_scroll, 2, 0, 1, 9)
+        grid_layout.addWidget(scroll_area, 2, 0, 1, 9)
 
         self.left_pushbutton = None
         self.right_pushbutton = None
@@ -1552,6 +1557,10 @@ class Window(QMainWindow):
                         )
                         gen_traceback.setProperty('class', 'traceback')
                         gen_traceback.setReadOnly(True)
+                        if current_theme == 'Light':
+                            hyperlink_style = hyperlink_light_theme_stylesheet
+                        else:
+                            hyperlink_style = hyperlink_other_theme_stylesheet
                         QDialogScroll(
                             title=f'Exception: {str(type(gen_exception).__name__)}',
                             header=f'A {str(type(gen_exception).__name__)} ' +
@@ -1560,7 +1569,8 @@ class Window(QMainWindow):
                                    '<br>' +
                                    '<br>' +
                                    'Please submit the following traceback over at the '
-                                   '<a href="https://discord.gg/ZCHZp7qxws">Beyond Chaos Barracks discord</a> '
+                                   f'<a style="{hyperlink_style}" ' +
+                                   'href="https://discord.gg/ZCHZp7qxws">Beyond Chaos Barracks discord</a> '
                                    'bugs channel:' +
                                    '<br>',
                             scroll_contents=gen_traceback,

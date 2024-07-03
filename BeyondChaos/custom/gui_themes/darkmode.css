@@ -210,29 +210,29 @@ QPushButton:hover
     color: #eff0f1;
 }
 QPushButton[class="clear_ui"]{
-    font-size:12px; 
-    height:60px
-}
-QPushButton[class="generate_button"]{
-    font:bold;
-    font-size:18px;
-    height:24px;
-    background-color:#010030;
-    color:#E4E4E4;
+    font-size: 12px;
+    height: 60px
 }
 QPushButton[class="rom_file_picker"]{
-    font:bold;
+    font: bold;
     font-size:18px;
     height:24px;
     background-color: #010030;
     color:#E4E4E4;
 }
 QPushButton[class="rom_output_picker"]{
-    font:bold;
-    font-size:18px;
-    height:24px;
+    font: bold;
+    font-size: 18px;
+    height: 24px;
     background-color: #010030;
-    color:#E4E4E4;
+    color: #E4E4E4;
+}
+QPushButton[class="generate_button"]{
+    font: bold;
+    font-size: 18px;
+    height: 24px;
+    background-color: #010030;
+    color: #E4E4E4;
 }
 /*
 						Combo Boxes
