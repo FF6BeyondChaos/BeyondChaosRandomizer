@@ -5751,21 +5751,23 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         # esper allocation table for other modules that rely on it
         # (i.e. junction effects)
         initialize_esper_allocation_table()
+
+        if Options_.is_flag_active('dancingmaduin'):
+            esper_allocations_address = allocate_espers(
+                Options_.is_flag_active('ancientcave'),
+                get_espers(infile_rom_buffer),
+                get_characters(),
+                Options_.get_flag_value('dancingmaduin'),
+                outfile_rom_buffer,
+                esper_replacements
+            )
+            nerf_paladin_shield()
+            verify = JUNCTION_MANAGER_PARAMETERS['esper-allocations-address']
+            assert esper_allocations_address == verify
+
         if Options_.is_flag_active('random_espers'):
-            dancingmaduin = Options_.is_flag_active('dancingmaduin')
-            if dancingmaduin:
-                esper_allocations_address = allocate_espers(
-                    Options_.is_flag_active('ancientcave'),
-                    get_espers(infile_rom_buffer),
-                    get_characters(),
-                    dancingmaduin.value,
-                    outfile_rom_buffer,
-                    esper_replacements
-                )
-                nerf_paladin_shield()
-                verify = JUNCTION_MANAGER_PARAMETERS['esper-allocations-address']
-                assert esper_allocations_address == verify
             manage_espers(esperrage_spaces, esper_replacements)
+
         reseed()
         myself_locations = myself_patches(outfile_rom_buffer)
         myself_name_bank = [(myself_locations['NAME_TABLE'] >> 16) + 0xC0]

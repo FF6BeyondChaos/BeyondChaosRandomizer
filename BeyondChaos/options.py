@@ -743,7 +743,7 @@ NORMAL_FLAGS = [
          default_value="Off",
          default_index=0,
          conflicts=[],
-         requirements=[{'e':True}],
+         requirements=[],
          children={}
          ),
     Flag(name='darkworld',
