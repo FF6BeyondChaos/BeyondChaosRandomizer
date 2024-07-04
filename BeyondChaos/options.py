@@ -1160,7 +1160,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=[],
-         requirements=[{'o':True}],
+         requirements=[],
          children={}
          ),
     Flag(name='suplexwrecks',
