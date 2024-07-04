@@ -846,11 +846,6 @@ def manage_commands(commands: Dict[str, CommandBlock]):
     fanatics_fix_sub.set_location(0x2537E)
     fanatics_fix_sub.write(outfile_rom_buffer)
 
-    if Options_.is_flag_active('lessfanatical'):  # remove the magic only tile when entering fanatic's tower
-        fanatics_fix_sub.bytestring = bytes([0x80])
-        fanatics_fix_sub.set_location(0x025352)
-        fanatics_fix_sub.write(outfile_rom_buffer)
-
     invalid_commands = ['fight', 'item', 'magic', 'xmagic',
                         'def', 'row', 'summon', 'revert']
     if random.randint(1, 5) != 5:
@@ -2534,6 +2529,7 @@ def manage_items(items: List[ItemBlock], changed_commands_mi: Set[int] = None) -
 def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
     characters = get_characters()
     reset_equippable(items, characters=characters, equip_anything=Options_.is_flag_active('equipanything'))
+
     equippable_dict = {'weapon': lambda item: item.is_weapon,
                        'shield': lambda item: item.is_shield,
                        'helm': lambda item: item.is_helm,
@@ -5589,6 +5585,12 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             if Options_.is_flag_active('sketch'):
                 NEVER_REPLACE += ['sketch']
             _, freespaces = manage_commands_new(commands)
+
+        if Options_.is_flag_active('lessfanatical'):  # remove the magic only tile when entering fanatic's tower
+            fanatics_fix_sub = Substitution()
+            fanatics_fix_sub.bytestring = bytes([0x80])
+            fanatics_fix_sub.set_location(0x025352)
+            fanatics_fix_sub.write(outfile_rom_buffer)
 
         reseed()
 

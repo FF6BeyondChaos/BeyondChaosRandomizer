@@ -805,7 +805,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=["suplexwrecks"],
-         requirements=[{'o':True}],
+         requirements=[],
          children={}
          ),
     Flag(name='madworld',
