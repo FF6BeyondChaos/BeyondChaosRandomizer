@@ -33,7 +33,8 @@ from multiprocessing import Process, Pipe
 from config import (read_flags, write_flags, set_config_value, check_ini, check_player_sprites,
                     check_remonsterate, VERSION, BETA, MD5HASHNORMAL, MD5HASHTEXTLESS,
                     MD5HASHTEXTLESS2, SUPPORTED_PRESETS, config)
-from options import (NORMAL_FLAGS, MAKEOVER_MODIFIER_FLAGS, get_makeover_groups, Options_, Flag)
+from options import (ALL_MODES, NORMAL_FLAGS, MAKEOVER_MODIFIER_FLAGS, Flag, Options_, activate_from_string,
+                     get_makeover_groups, get_mode)
 from randomizer import randomize
 
 if sys.version_info[0] < 3:
@@ -50,12 +51,14 @@ inactive_flag_light_theme_stylesheet = 'background-color: white; border: none; c
 active_flag_light_theme_stylesheet = 'background-color: #CCE4F7; border: 1px solid darkblue; color: black;'
 disabled_flag_light_theme_stylesheet = 'background-color: #fedada; border: none; color: black;'
 hyperlink_light_theme_stylesheet = 'color: #0d7eb9;'
+disabled_flag_text_light_theme_stylesheet = 'color: #c30010;'
 
 # Other mode themes, for items that cannot be styled with the css file due to PyQt limitations
 inactive_flag_other_theme_stylesheet = 'background-color: #232629; border: none; color: white;'
 active_flag_other_theme_stylesheet = 'background-color: #010030; border: 1px solid #A1A0D0; color: white;'
 disabled_flag_other_theme_stylesheet = 'background-color: #390000; border: none; color: white;'
 hyperlink_other_theme_stylesheet = 'color: #5dcef9;'
+disabled_flag_text_other_theme_stylesheet = 'color: #ee6b6e;'
 
 
 class QDialogScroll(QDialog):
@@ -256,50 +259,68 @@ def update_bc(suppress_prompt=False, force_download=False):
             update_bc_failure_message.exec()
 
 
-def handle_conflicts_and_requirements(conflicts: dict, requirements: dict):
+def handle_conflicts_and_requirements():
     """
-    Whenever a flag is activated, its list of conflicting flags is included to Window.conflicts.
-    Whenever a flag is missing a requirement, it is included in Window.requirements.
+    Many flags have conflicts and requirements. Conflicts are two or more flags that cannot be activated together.
+    Requirements are flags that must be active, sometimes at a specific value, for a flag to become enabled.
 
-    For every available flag, if that flag either conflicts with an active flag or is missing required flags to
-        enable it, the flag needs to be both deactivated and its controls disabled to prevent activation.
+    Whenever any flag value is changed, we need to run through every flag to see if any other flags need to be
+        disabled or enabled.
 
-    If the flag is not in either dictionary, the controls are enabled and the flag can be activated.
+    Flags can be disabled because a requirement is no longer met or because a flag was activated that conflicts
+        with it.
 
-    Parameters:
-        conflicts: A dictionary of all existing conflicts for all active flags.
-        requirements: A dictionary of all flags currently missing their requirements.
+    Flags can be enabled because requirements are met or a flag that conflicts with it was deactivated.
 
     Returns:
         None
     """
+    if current_theme == 'Light':
+        error_style = disabled_flag_text_light_theme_stylesheet
+    else:
+        error_style = disabled_flag_text_other_theme_stylesheet
     for flag in NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS:
-        error_text = ''
-        if conflicts and flag.name in conflicts.keys():
-            if not error_text:
-                error_text = ('<div style="color: red;">Flag disabled because:<ul style="margin: 0;"><li>' +
-                              'It conflicts with the following '
-                              + 'active flags: "' + '" and "'.join(conflicts[flag.name]) + '"</li>')
-        if requirements and flag.name in requirements.keys() and requirements[flag.name]:
-            if not error_text:
-                error_text = ('<div style="color: red;">Flag disabled because:<ul style="margin: 0;"><li>     ' +
-                              requirements[flag.name] + '</li>')
-            else:
-                error_text += '<li>' + requirements[flag.name] + '</li>'
+        disabled_text = ''
+        if flag.conflicts:
+            conflicting_flags = []
+            for conflicting_flag in flag.conflicts:
+                if not Options_.get_flag(conflicting_flag).value == '':
+                    conflicting_flags.append(conflicting_flag)
+            if conflicting_flags:
+                disabled_text = ('<div style="' +
+                                 error_style +
+                                 '">Flag disabled because:<ul style="margin: 0;"><li>' +
+                                 'It conflicts with the following '
+                                 + 'active flags: "' + '" and "'.join(conflicting_flags) + '"</li>')
 
-        if error_text:
-            # Set controls to default value (turn off flag)
-            flag_control = flag.controls[0]
+        if flag.requirements:
+            requirements_met = get_missing_requirements(flag)
+
+            if not requirements_met:
+                if not disabled_text:
+                    disabled_text = ('<div style="' +
+                                     error_style +
+                                     '">Flag disabled because:<ul style="margin: 0;"><li>' +
+                                     flag.get_requirement_string() + '</li>')
+                else:
+                    disabled_text += '<li>' + flag.get_requirement_string() + '</li>'
+
+        if disabled_text:
+            flag.value = ''
+            flag_control = flag.controls['input']
 
             if flag.input_type in ['float2', 'integer']:
+                # Block signals to prevent setValue from causing flag_button_clicked from being called
+                flag_control.blockSignals(True)
                 flag_control.setValue(flag_control.default)
+                flag_control.blockSignals(False)
             elif flag.input_type == 'combobox':
-                flag_control.setCurrentIndex(flag.default_index)
+                flag_control.setCurrentIndex(max(0, flag.default_index))
             else:
                 flag_control.setText('No')
                 flag_control.setChecked(False)
             flag_control.setDisabled(True)
-            flag.controls[2].setText(error_text + '</ul></div>' + flag.long_description)
+            flag.controls['description'].setText(disabled_text + '</ul></div>' + flag.long_description)
 
             if current_theme == 'Light':
                 flag_control.setStyleSheet(disabled_flag_light_theme_stylesheet)
@@ -307,191 +328,102 @@ def handle_conflicts_and_requirements(conflicts: dict, requirements: dict):
                 flag_control.setStyleSheet(disabled_flag_other_theme_stylesheet)
         else:
             # Enable control if necessary
-            if not flag.controls[0].isEnabled():
-                flag.controls[0].setDisabled(False)
+            if not flag.controls['input'].isEnabled():
+                flag.controls['input'].setDisabled(False)
                 if current_theme == 'Light':
-                    flag.controls[0].setStyleSheet(inactive_flag_light_theme_stylesheet)
+                    flag.controls['input'].setStyleSheet(inactive_flag_light_theme_stylesheet)
                 else:
-                    flag.controls[0].setStyleSheet(inactive_flag_other_theme_stylesheet)
-                flag.controls[2].setText(flag.long_description)
+                    flag.controls['input'].setStyleSheet(inactive_flag_other_theme_stylesheet)
+                flag.controls['description'].setText(flag.long_description)
 
 
-def handle_children(flag, parent_value):
+def get_missing_requirements(flag: Flag, current_index: int = 0) -> str | bool:
     """
-    For a parent flag with a specified value, check to see if the flag has any children. The children are contained in
-        a dict object containing the child's name and the value the parent should be set to for the child to be
-        visible.
+    Takes a flag and analyzes it's requirements to see if the requirements are met.
 
-    For each child where the parent is the correct value to make it visible, make the child visible.
+    For the original method call (as indicated by current_index == 0, the method returns a boolean
+        indicating whether or not all requirements are met.
 
-    For each child where the parent is NOT the correct value to make it visible, turn the flag off by
-        setting it to its default value in addition to making the child invisible.
-
+    This method also calls itself recursively for each item in the Flag's requirements. These recursive
+        calls return True or False depending on whether or not the requirements were met for that part of
+        the requirements.
     Returns:
-        None
+        str
+        bool
     """
-    for flag_name, required_parent_value in flag.children.items():
-        if parent_value == required_parent_value:
-            flag_object = Options_.get_flag(flag_name)
-            for control in flag_object.controls:
-                # Make all controls visible
-                control.setVisible(True)
+    requirements = flag.requirements
 
-            for spacer in flag_object.margins:
-                spacer.changeSize(0, spacer_fixed_height)
-        else:
-            # Set controls to default value (turn off flag)
-            flag_object = Options_.get_flag(flag_name)
-            flag_control = flag_object.controls[0]
-            if flag_object.input_type in ['float2', 'integer']:
-                flag_control.setValue(flag_control.default)
-            elif flag_object.input_type == 'combobox':
-                flag_control.setCurrentIndex(flag_object.default_index)
-            else:
-                flag_control.setChecked(False)
+    if not requirements:
+        return True
 
-            # Make all controls invisible
-            for control in flag_object.controls:
-                control.setVisible(False)
+    if len(requirements) <= current_index:
+        return False
 
-            for spacer in flag_object.margins:
-                spacer.changeSize(0, 0)
+    result = True
+    for required_flag, required_value in requirements[current_index].items():
+        required_flag_object = Options_.get_flag(required_flag)
+        if str(required_value) == '*' and not required_flag_object.value == '':
+            continue
+        if str(required_flag_object.value) == str(required_value):
+            continue
+        result = False
+        break
+
+    return result or get_missing_requirements(flag, current_index + 1)
 
 
 class Window(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        # window geometry data
-        self.title = 'Beyond Chaos Randomizer ' + VERSION
+        # region geometry_data
+        self.setWindowTitle('Beyond Chaos Randomizer ' + VERSION)
         screen_size = QDesktopWidget().screenGeometry(-1)
         self.width = int(min(screen_size.width() / 2, 1000))
         self.height = int(screen_size.height() * .8)
         self.left = int(screen_size.width() / 2 - self.width / 2)
         self.top = int(screen_size.height() / 2 - self.height / 2)
+        self.setGeometry(self.left, self.top, self.width, self.height)
+        # endregion geometry_data
 
         # values to be sent to Randomizer
-        self.romText = ''
-        self.romOutputDirectory = ''
         self.version = 'CE-6.0.2'
         self.mode = 'normal'
-        self.seed = ''
-        self.flags = []
         self.bingo_type = []
         self.bingo_size = 5
         self.bingo_diff = ''
         self.bingo_cards = 1
 
         # dictionaries to hold flag data
-        self.aesthetic = {}
-        self.sprite = {}
-        self.sprite_categories = {}
-        self.experimental = {}
-        self.gamebreaking = {}
-        self.field = {}
-        self.characters = {}
-        self.flag = {}
-        self.battle = {}
-        self.beta = {}
-        self.quality_of_life = {}
-        self.dictionaries = [
-            self.flag, self.quality_of_life, self.sprite, self.sprite_categories, self.aesthetic, self.battle,
-            self.field, self.characters, self.experimental, self.gamebreaking,
-            self.beta
-        ]
-        self.makeover_groups = get_makeover_groups()
+
         # keep a list of all checkboxes
-        self.check_boxes = []
         self.conflicts = {}
         self.requirements = {}
-
-        # array of supported game modes
-        self.supported_game_modes = [
-            'normal', 'katn', 'ancientcave', 'speedcave', 'racecave',
-            'dragonhunt'
-        ]
-        # dictionary of game modes for drop down
-        self.game_modes = {}
 
         # dictionary of game presets from drop down
         self.game_presets = SUPPORTED_PRESETS
 
-        # tabs names for the tabs in flags box
-        self.tab_names = [
-            'Core', 'Quality of Life', 'Sprites', 'SpriteCategories', 'Aesthetic', 'Battle',
-            'Field', 'Characters', 'Experimental', 'Gamebreaking', 'Beta'
-        ]
-
-        # ui elements
-        self.flag_string = QLineEdit()
-        self.mode_box = QComboBox()
-        self.preset_box = QComboBox()
-        self.mode_description = QLabel('Pick a Game Mode!')
-        self.flag_description = QLabel('Pick a Flag Set!')
-
         # tabs: Flags, Sprites, Battle, etc...
         self.central_widget = QWidget()
-        self.tab1 = QWidget()
-        self.tab2 = QWidget()
-        self.tab3 = QWidget()
-        self.tab4 = QWidget()
-        self.tab5 = QWidget()
-        self.tab6 = QWidget()
-        self.tab7 = QWidget()
-        self.tab8 = QWidget()
-        self.tab9 = QWidget()
-        self.tab10 = QWidget()
+        self.tablist = []
 
-        self.tablist = [
-            self.tab1, self.tab2, self.tab3, self.tab4, self.tab5, self.tab6,
-            self.tab7, self.tab8, self.tab9, self.tab10
-        ]
-
-        # global busy notifications
-        self.flags_changing = False
-
-        # Begin building program/window
-        # pull data from files
-        self.init_flags()
-
-        # create window using geometry data
-        self.init_window()
-
-        self.rom_input.setText(self.rom_text)
-        self.rom_output.setText(self.rom_output_directory)
-        self.update_flag_string()
-        self.flag_button_clicked()
-        self.update_preset_dropdown()
-        self.clear_ui()
-        self.flag_string.setText(config.get(
+        # Load previous flag string
+        activate_from_string(flag_string=config.get(
             'Settings',
             'default_flagstring',
-            fallback='b c d e f g h i m n o p q r s t w y z alphalores improvedpartygear informativemiss magicnumbers '
-                     'mpparty nicerpoison questionablecontent regionofdoom tastetherainbow makeover partyparty '
-                     'alasdraco capslockoff johnnydmad dancelessons lessfanatical swdtechspeed:faster shadowstays'
-        ))
-        self.set_palette()
+            fallback='b c d e f g h i m n o p q r s t w y z '
+                     'alphalores improvedpartygear '
+                     'informativemiss magicnumbers mpparty '
+                     'nicerpoison questionablecontent '
+                     'regionofdoom tastetherainbow makeover '
+                     'partyparty alasdraco capslockoff '
+                     'johnnydmad dancelessons lessfanatical '
+                     'swdtechspeed:faster shadowstays'
+            ),
+            append=False
+        )
 
-    def init_window(self):
-        self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
-
-        # build the UI
-        self.create_layout()
-
-        previous_rom_path = config.get('Settings', 'input_path', fallback='')
-        previous_output_directory = config.get('Settings', 'output_path', fallback='')
-
-        self.rom_text = previous_rom_path
-        self.rom_output_directory = previous_output_directory
-
-        # show program onscreen
-        self.show()  # maximize the randomizer
-
-        # index = self.presetBox.currentIndex()
-
-    def create_layout(self):
-        # Menubar
+        # region MenuBar
         file_menu = QMenu('File', self)
         file_menu.addAction('Quit', App.quit)
         self.menuBar().addMenu(file_menu)
@@ -510,29 +442,22 @@ class Window(QMainWindow):
         menu_separator2.setEnabled(False)
 
         self.menuBar().addAction('Toggle Dark Mode', self.toggle_palette)
+        # endregion MenuBar
 
-        # Primary Vertical Box Layout
-        vbox = QVBoxLayout()
+        vbox = QVBoxLayout()  # Main content container
 
+        # region Layout
+
+        # region Row 1: Title
         title_label = QLabel('Beyond Chaos Randomizer')
         font = QtGui.QFont('Arial', 24, QtGui.QFont.Black)
         title_label.setFont(font)
         title_label.setAlignment(QtCore.Qt.AlignCenter)
         title_label.setMargin(10)
         vbox.addWidget(title_label)
+        # endregion Row 1: Title
 
-        # rom input and output, seed input, generate button
-        vbox.addWidget(self.group_box_one_layout())
-        # game mode, preset flag selections and description
-        vbox.addWidget(self.group_box_two_layout())
-        # flags box
-        vbox.addWidget(self.flag_box_layout())
-
-        self.central_widget.setLayout(vbox)
-        self.setCentralWidget(self.central_widget)
-
-    # Top groupbox consisting of ROM selection, and Seed number input
-    def group_box_one_layout(self):
+        # region Row 2: Input and Output
         group_layout = QGroupBox('Input and Output')
 
         grid_layout = QGridLayout()
@@ -544,6 +469,7 @@ class Window(QMainWindow):
         grid_layout.addWidget(label_rom_input, 1, 1)
 
         self.rom_input = QLineEdit()
+        self.rom_input.setText(config.get('Settings', 'input_path', fallback=''))
         self.rom_input.setPlaceholderText('Required')
         self.rom_input.setReadOnly(True)
         grid_layout.addWidget(self.rom_input, 1, 2, 1, 3)
@@ -571,6 +497,7 @@ class Window(QMainWindow):
         grid_layout.addWidget(lbl_rom_output, 3, 1)
 
         self.rom_output = QLineEdit()
+        self.rom_output.setText(config.get('Settings', 'output_path', fallback=''))
         self.rom_input.textChanged[str].connect(self.validate_input_rom)
         grid_layout.addWidget(self.rom_output, 3, 2, 1, 3)
 
@@ -623,10 +550,10 @@ class Window(QMainWindow):
         grid_layout.addWidget(btn_generate, 4, 5)
 
         group_layout.setLayout(grid_layout)
-        return group_layout
+        vbox.addWidget(group_layout)
+        # endregion Row 2: Input and Output
 
-    def group_box_two_layout(self):
-        self.compile_modes()
+        # region Row 3: Modes and Presets
         group_mode_and_preset = QGroupBox()
         layout_mode_and_preset = QGridLayout()
 
@@ -634,17 +561,16 @@ class Window(QMainWindow):
         label_game_mode = QLabel('Game Mode:')
         label_game_mode.setProperty('class', 'game_mode_label')
         layout_mode_and_preset.addWidget(label_game_mode, 1, 1)
-        for item in self.game_modes.items():
-            self.mode_box.addItem(item[0])
-        self.mode_box.currentTextChanged.connect(
-            lambda: self.update_game_description()
-        )
+        self.mode_box = QComboBox()
+        for mode in ALL_MODES:
+            self.mode_box.addItem(mode.display_name)
         layout_mode_and_preset.addWidget(self.mode_box, 1, 2)
 
         # ---- Preset Flags Drop Down ---- #
         label_preset_mode = QLabel('Preset Flags:')
         label_preset_mode.setProperty('class', 'preset_label')
         layout_mode_and_preset.addWidget(label_preset_mode, 1, 3)
+        self.preset_box = QComboBox()
         self.preset_box.addItem('Select a flag set')
         self.load_saved_flags()
         for key in self.game_presets.keys():
@@ -658,15 +584,17 @@ class Window(QMainWindow):
         label_flag_description = QLabel('Preset Description:')
         label_flag_description.setProperty('class', 'preset_description')
         layout_mode_and_preset.addWidget(label_flag_description, 1, 5)
+        self.flag_description = QLabel('Pick a Flag Set!')
         self.flag_description.setProperty('class', 'current_preset')
         layout_mode_and_preset.addWidget(self.flag_description, 1, 6)
 
         layout_mode_and_preset.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
         group_mode_and_preset.setLayout(layout_mode_and_preset)
         group_mode_and_preset.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeft)
-        return group_mode_and_preset
+        vbox.addWidget(group_mode_and_preset)
+        # endregion Row 3: Modes and Presets
 
-    def flag_box_layout(self):
+        # region Row 4: Flags and Flagstring
         group_box_two = QGroupBox()
         middle_h_box = QHBoxLayout()
         middle_right_group_box = QGroupBox('Flag Selection')
@@ -674,141 +602,169 @@ class Window(QMainWindow):
         tabs = QTabWidget()
         tabs.setElideMode(True)  # Tabs shrink in size to fit all tabs on screen
 
-        # loop to add tab objects to 'tabs' TabWidget
-        for t, d, names in zip(self.tablist,
-                               self.dictionaries,
-                               self.tab_names):
-            tab_obj = QScrollArea()
-            tabs.addTab(tab_obj, names)
-            tab_layout = QGridLayout()
-            flag_count = 0
-            current_row = 0
-            tab_layout.setColumnStretch(4, 1)  # Long description should use as much space as possible
-            tab_layout.setVerticalSpacing(0)
+        tab_contents = {}
+        get_makeover_groups()
 
-            for flag_name, flag in d.items():
-                margin_top = QSpacerItem(0, spacer_fixed_height)
-                tab_layout.addItem(margin_top, current_row, 0)
-                current_row += 1
+        for flag in NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS:
+            category = flag.category.replace('_', ' ').title()
+            try:
+                tab_contents[category].append(flag)
+            except KeyError:
+                tab_contents[category] = [flag]
+                # Force Sprite Categories to be after Sprites
+                if category == 'Sprites':
+                    tab_contents['Sprite Categories'] = []
 
-                if flag.input_type == 'float2':
-                    flag_control = QDoubleSpinBox()
-                    flag_control.setMinimum(float(flag.minimum_value))
-                    flag_control.default = float(flag.default_value)
-                    flag_control.setMaximum(float(flag.maximum_value))
-                    flag_control.setSingleStep(.1)
-                    flag_control.setSpecialValueText('Random')
-                    flag_control.setValue(flag_control.default)
-                    flag_control.text = flag_name
-                    flag_control.setFixedWidth(control_fixed_width)
-                    flag_control.setMinimumHeight(0)
-                    flag_control.setFixedHeight(control_fixed_height)
-                    flag_label = QLabel(f'{flag_name}')
+        # Remove empty tabs, just in case
+        empty_tabs = []
+        for tab, flags in tab_contents.items():
+            if not flags:
+                empty_tabs.append(tab)
+        for tab in empty_tabs:
+            print(str(tab))
+            tab_contents.pop(tab)
 
-                    if not flag.name == 'randomboost':
-                        flag_control.setSuffix('x')
+        for index, (tab_name, tab_flags) in enumerate(tab_contents.items()):
+            if len(tab_flags) > 0:
+                tab_layout = QGridLayout()
+                flag_count = 0
+                current_row = 0
+                tab_layout.setColumnStretch(4, 1)  # Long description should use as much space as possible
+                tab_layout.setVerticalSpacing(0)
 
-                    flag_control.valueChanged.connect(lambda: self.flag_button_clicked())
-                    flag_count += 1
-                elif flag.input_type == 'integer':
-                    flag_control = QSpinBox()
-                    flag_control.default = int(flag.default_value)
-                    flag_control.setMinimum(int(flag.minimum_value))
-                    flag_control.setMaximum(int(flag.maximum_value))
-                    flag_control.setFixedWidth(control_fixed_width)
-                    flag_control.setMinimumHeight(0)
-                    flag_control.setFixedHeight(control_fixed_height)
-                    flag_control.setValue(flag_control.default)
-                    flag_control.text = flag_name
-                    flag_label = QLabel(f'{flag_name}')
-
-                    if flag_name == 'cursepower' or flag_name == 'levelcap':
-                        flag_control.setSpecialValueText('Random')
-                    else:
-                        flag_control.setSpecialValueText('Off')
-
-                    flag_control.valueChanged.connect(lambda: self.flag_button_clicked())
-                    flag_count += 1
-                elif flag.input_type == 'combobox':
-                    flag_control = QComboBox()
-                    flag_control.addItems(flag.choices)
-                    flag_control.text = flag_name
-                    flag_control.setFixedWidth(control_fixed_width)
-                    flag_control.setMinimumHeight(0)
-                    flag_control.setFixedHeight(control_fixed_height)
-                    flag_control.setCurrentIndex(flag.default_index)
-
-                    if self.makeover_groups and flag_name in self.makeover_groups:
-                        flag_label = QLabel(f'{flag_name} (' + str(self.makeover_groups[flag_name]) +
-                                            ')')
-                    else:
-                        flag_label = QLabel(f'{flag_name}')
-
-                    flag_control.activated[str].connect(lambda: self.flag_button_clicked())
-                    flag_count += 1
-                else:
-                    # Assume boolean
-                    flag_control = QPushButton('No')
-                    flag_control.setProperty('class', 'flag_control')
-                    self.check_boxes.append(flag_control)
-                    flag_control.setFixedWidth(control_fixed_width)
-                    flag_control.setMinimumHeight(0)
-                    flag_control.setFixedHeight(control_fixed_height)
-                    flag_control.setCheckable(True)
-                    flag_control.value = flag_name
-                    flag_label = QLabel(f'{flag_name}')
-
-                    if (flag_name == 'remonsterate' and not len(check_remonsterate()) == 0) or \
-                            (flag_name == 'makeover' and not len(check_player_sprites()) == 0):
-                        flag_control.setEnabled(False)
-
-                    flag_control.clicked.connect(lambda checked: self.flag_button_clicked())
-                    flag_count += 1
-
-                flag_description = QLabel(f'{flag.long_description}')
-                flag_description.setWordWrap(True)
-                flag_control.flag = flag
-                flag.controls = [flag_control, flag_label, flag_description]
-
-                tab_layout.addWidget(flag_control, current_row, 1)
-                tab_layout.addWidget(flag_label, current_row, 2)
-                tab_layout.addWidget(flag_description, current_row, 4)
-                current_row += 1
-
-                margin_bottom = QSpacerItem(0, spacer_fixed_height)
-                tab_layout.addItem(margin_bottom, current_row, 0)
-                current_row += 1
-
-                flag.margins = [margin_top, margin_bottom]
-
-                h_spacer = QFrame()
-                h_spacer.setFrameShape(QFrame.HLine)
-                h_spacer.setFrameShadow(QFrame.Sunken)
-                if not flag_count == len(d):
-                    h_spacer.setFixedHeight(2)
-                    h_spacer.setProperty('class', 'flag_h_spacer')
-                    tab_layout.addWidget(h_spacer, current_row, 0, 0, 6)
-                    flag.controls.append(h_spacer)
-                    current_row += 1
-                else:
-                    # Fake row set to stretch as much as possible. Keeps other rows from stretching.
-                    h_spacer.setProperty('class', 'flag_h_spacer_final')
-                    tab_layout.addWidget(h_spacer, current_row, 0, 0, 6)
-                    tab_layout.setRowStretch(current_row, 1)
+                for flag in tab_flags:
+                    # Add spacing above the flag
+                    margin_top = QSpacerItem(0, spacer_fixed_height)
+                    tab_layout.addItem(margin_top, current_row, 0)
                     current_row += 1
 
-            v_spacer = QFrame()
-            v_spacer.setFrameShape(QFrame.VLine)
-            v_spacer.setFrameShadow(QFrame.Sunken)
-            v_spacer.setFixedWidth(5)
-            v_spacer.setProperty('class', 'flag_v_spacer')
-            tab_layout.addWidget(v_spacer, 0, 3, flag_count * 4 - 1, 1)
+                    if flag.input_type == 'float2':
+                        flag_control = QDoubleSpinBox()
+                        flag_control.setMinimum(float(flag.minimum_value))
+                        flag_control.default = float(flag.default_value)
+                        flag_control.setMaximum(float(flag.maximum_value))
+                        flag_control.setSingleStep(.1)
+                        flag_control.setValue(flag_control.default)
+                        flag_control.text = flag.name
+                        flag_control.setFixedWidth(control_fixed_width)
+                        flag_control.setMinimumHeight(0)
+                        flag_control.setFixedHeight(control_fixed_height)
+                        flag_label = QLabel(f'{flag.name}')
 
-            t.setLayout(tab_layout)
-            tab_obj.setWidgetResizable(True)
-            tab_obj.setWidget(t)
+                        if flag.special_value_text:
+                            flag_control.setSpecialValueText(flag.special_value_text)
+
+                        if not flag.name == 'randomboost':
+                            flag_control.setSuffix('x')
+
+                        flag_control.valueChanged.connect(lambda: self.flag_button_clicked())
+                        flag_count += 1
+                    elif flag.input_type == 'integer':
+                        flag_control = QSpinBox()
+                        flag_control.default = int(flag.default_value)
+                        flag_control.setMinimum(int(flag.minimum_value))
+                        flag_control.setMaximum(int(flag.maximum_value))
+                        flag_control.setFixedWidth(control_fixed_width)
+                        flag_control.setMinimumHeight(0)
+                        flag_control.setFixedHeight(control_fixed_height)
+                        flag_control.setValue(flag_control.default)
+                        flag_control.text = flag.name
+                        flag_label = QLabel(f'{flag.name}')
+
+                        if flag.special_value_text:
+                            flag_control.setSpecialValueText(flag.special_value_text)
+
+                        flag_control.valueChanged.connect(lambda: self.flag_button_clicked())
+                        flag_count += 1
+                    elif flag.input_type == 'combobox':
+                        flag_control = QComboBox()
+                        flag_control.addItems(flag.choices)
+                        flag_control.text = flag.name
+                        flag_control.setFixedWidth(control_fixed_width)
+                        flag_control.setMinimumHeight(0)
+                        flag_control.setFixedHeight(control_fixed_height)
+                        flag_control.setCurrentIndex(max(0, flag.default_index))
+
+                        if MAKEOVER_MODIFIER_FLAGS and flag.name in MAKEOVER_MODIFIER_FLAGS:
+                            flag_label = QLabel(f'{flag.name} (' + str(MAKEOVER_MODIFIER_FLAGS[flag.name]) +
+                                                ')')
+                        else:
+                            flag_label = QLabel(f'{flag.name}')
+
+                        flag_control.activated[str].connect(lambda: self.flag_button_clicked())
+                        flag_count += 1
+                    else:
+                        # Assume boolean
+                        flag_control = QPushButton('No')
+                        flag_control.setProperty('class', 'flag_control')
+                        flag_control.setFixedWidth(control_fixed_width)
+                        flag_control.setMinimumHeight(0)
+                        flag_control.setFixedHeight(control_fixed_height)
+                        flag_control.setCheckable(True)
+                        flag_control.value = flag.name
+                        flag_label = QLabel(f'{flag.name}')
+
+                        if (flag.name == 'remonsterate' and not len(check_remonsterate()) == 0) or \
+                                (flag.name == 'makeover' and not len(check_player_sprites()) == 0):
+                            flag_control.setEnabled(False)
+
+                        flag_control.clicked.connect(lambda checked: self.flag_button_clicked())
+                        flag_count += 1
+
+                    flag_description = QLabel(f'{flag.long_description}')
+                    flag_description.setWordWrap(True)
+
+                    # Connect the flag and controls to each other, allowing for easier actions later
+                    flag_control.flag = flag
+                    flag.controls = {'input': flag_control, 'label': flag_label, 'description': flag_description}
+
+                    # Add the flag information to the tab
+                    tab_layout.addWidget(flag_control, current_row, 1)
+                    tab_layout.addWidget(flag_label, current_row, 2)
+                    tab_layout.addWidget(flag_description, current_row, 4)
+                    current_row += 1
+
+                    # Add spacing below the flag
+                    margin_bottom = QSpacerItem(0, spacer_fixed_height)
+                    tab_layout.addItem(margin_bottom, current_row, 0)
+                    current_row += 1
+
+                    # Add the margins to the flag object so they can be referenced later for changing
+                    flag.margins = [margin_top, margin_bottom]
+
+                    h_spacer = QFrame()
+                    h_spacer.setFrameShape(QFrame.HLine)
+                    h_spacer.setFrameShadow(QFrame.Sunken)
+                    if not flag_count == len(tab_flags):
+                        h_spacer.setFixedHeight(2)
+                        h_spacer.setProperty('class', 'flag_h_spacer')
+                        tab_layout.addWidget(h_spacer, current_row, 0, 0, 6)
+                        current_row += 1
+                    else:
+                        # Fake row set to stretch as much as possible. Keeps other rows from stretching.
+                        h_spacer.setProperty('class', 'flag_h_spacer_final')
+                        tab_layout.addWidget(h_spacer, current_row, 0, 0, 6)
+                        tab_layout.setRowStretch(current_row, 1)
+                        current_row += 1
+
+                    v_spacer = QFrame()
+                    v_spacer.setFrameShape(QFrame.VLine)
+                    v_spacer.setFrameShadow(QFrame.Sunken)
+                    v_spacer.setFixedWidth(5)
+                    v_spacer.setProperty('class', 'flag_v_spacer')
+                    tab_layout.addWidget(v_spacer, 0, 3, flag_count * 4 - 1, 1)
+
+                tab = QWidget()
+                tab.setLayout(tab_layout)
+                self.tablist.append(tab)
+
+                tab_obj = QScrollArea()
+                tabs.addTab(tab_obj, tab_name)
+                tab_obj.setWidgetResizable(True)
+                tab_obj.setWidget(tab)
 
         layout_tab_v_box.addWidget(tabs)
+        self.update_control()
 
         # This is the line in the layout that displays the string
         # of selected flags and the button to save those flags
@@ -817,7 +773,8 @@ class Window(QMainWindow):
         widget_v.setLayout(widget_v_box_layout)
 
         widget_v_box_layout.addWidget(QLabel('Text-string of selected flags:'))
-        self.flag_string.textChanged.connect(self.text_changed)
+        self.flag_string = QLineEdit()
+        self.flag_string.setText(Options_.get_flag_string())
         widget_v_box_layout.addWidget(self.flag_string)
 
         btn_save = QPushButton('Save flags selection')
@@ -843,20 +800,27 @@ class Window(QMainWindow):
         # layout
         middle_h_box.addWidget(middle_right_group_box)
         group_box_two.setLayout(middle_h_box)
+        vbox.addWidget(group_box_two)
+        # endregion Row 4: Flags and Flagstring
 
-        return group_box_two
+        # endregion Layout
+
+        self.central_widget.setLayout(vbox)
+        self.setCentralWidget(self.central_widget)
+        self.set_palette()
+        self.show()
 
     # ---------------------------------------------------------------
     # ------------ NO MORE LAYOUT DESIGN PAST THIS POINT-------------
     # ---------------------------------------------------------------
-
     def toggle_palette(self):
         if config.get('Settings', 'gui_theme', fallback='Light') == 'Light':
             self.set_palette('Dark')
         else:
             self.set_palette('Light')
 
-    def set_palette(self, style=None):
+    @staticmethod
+    def set_palette(style=None):
         if not style:
             style = config.get('Settings', 'gui_theme', fallback='Light')
 
@@ -866,6 +830,19 @@ class Window(QMainWindow):
                 return
             with open('custom/gui_themes/lightmode.css', 'r') as f:
                 App.setStyleSheet(f.read())
+
+            # Refresh the styles of all controls
+            for flag in NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS:
+                if flag.controls:
+                    flag_control = flag.controls['input']
+                    if not flag_control.isEnabled():
+                        flag_control.setStyleSheet(disabled_flag_light_theme_stylesheet)
+                    else:
+                        if not flag.value == '' or flag.always_on:
+                            flag.controls['input'].setStyleSheet(active_flag_light_theme_stylesheet)
+                        else:
+                            flag.controls['input'].setStyleSheet(inactive_flag_light_theme_stylesheet)
+
         elif style == 'Dark':
             if not os.path.exists('custom/gui_themes/darkmode.css'):
                 print('Error: No lightmode.css file found. App style cannot be changed.')
@@ -873,12 +850,22 @@ class Window(QMainWindow):
             with open('custom/gui_themes/darkmode.css', 'r') as f:
                 App.setStyleSheet(f.read())
 
+            # Refresh the styles of all controls
+            for flag in NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS:
+                if flag.controls:
+                    flag_control = flag.controls['input']
+                    if not flag_control.isEnabled():
+                        flag_control.setStyleSheet(disabled_flag_other_theme_stylesheet)
+                    else:
+                        if not flag.value == '' or flag.always_on:
+                            flag.controls['input'].setStyleSheet(active_flag_other_theme_stylesheet)
+                        else:
+                            flag.controls['input'].setStyleSheet(inactive_flag_other_theme_stylesheet)
+
         global current_theme
         current_theme = style
         set_config_value('Settings', 'gui_theme', style)
-
-        # This call forces the flag controls to update their styling
-        self.flag_button_clicked()
+        handle_conflicts_and_requirements()
 
     def get_missing_requirements(self, flag: Flag, current_index: int = 0) -> str | bool:
         """
@@ -931,143 +918,6 @@ class Window(QMainWindow):
             return flag.get_requirement_string()
         return ''
 
-    def text_changed(self, text):
-        if self.flags_changing:
-            return
-        global current_theme
-        self.flags_changing = True
-        self.clear_controls()
-        values = text.split(' ')
-        self.flags.clear()
-        self.flag_string.clear()
-        self.conflicts = {}
-        self.requirements = {}
-        children = []
-        for t in self.tablist:
-            children.extend(t.children())
-        children = [c for c in children if isinstance(c, QPushButton) or isinstance(c, QSpinBox)
-                    or isinstance(c, QDoubleSpinBox) or isinstance(c, QComboBox)]
-        for child in children:
-            if current_theme == 'Light':
-                child.setStyleSheet(inactive_flag_light_theme_stylesheet)
-            else:
-                child.setStyleSheet(inactive_flag_other_theme_stylesheet)
-            if child.isEnabled():
-                if isinstance(child, QPushButton):
-                    for v in values:
-                        if str(v).lower() == child.value:
-                            child.setChecked(True)
-                            child.setText('Yes')
-                            if current_theme == 'Light':
-                                child.setStyleSheet(active_flag_light_theme_stylesheet)
-                            else:
-                                child.setStyleSheet(active_flag_other_theme_stylesheet)
-                            self.flags.append(child.value)
-
-                            for flag_name in child.flag.conflicts:
-                                try:
-                                    self.conflicts[flag_name].append(child.flag.name)
-                                except KeyError:
-                                    self.conflicts[flag_name] = [child.flag.name]
-                    handle_children(child.flag, child.isChecked())
-                elif isinstance(child, QSpinBox):
-                    for v in values:
-                        if ':' in v and child.text.lower() == str(v).split(':')[0]:
-                            try:
-                                child.setValue(int(str(v).split(':')[1]))
-                            except ValueError:
-                                if str(v).split(':')[1] == child.specialValueText().lower():
-                                    child.setValue(child.minimum())
-                            if current_theme == 'Light':
-                                child.setStyleSheet(active_flag_light_theme_stylesheet)
-                            else:
-                                child.setStyleSheet(active_flag_other_theme_stylesheet)
-                            self.flags.append(v)
-
-                            for flag_name in child.flag.conflicts:
-                                try:
-                                    self.conflicts[flag_name].append(child.flag.name)
-                                except KeyError:
-                                    self.conflicts[flag_name] = [child.flag.name]
-                    handle_children(child.flag, round(child.value(), 2))
-                elif isinstance(child, QDoubleSpinBox):
-                    for v in values:
-                        if ':' in v and child.text.lower() == str(v).split(':')[0]:
-                            try:
-                                value = float(str(v).split(':')[1])
-                                if value >= 0:
-                                    child.setValue(value)
-                            except ValueError:
-                                if str(v).split(':')[1] == child.specialValueText().lower():
-                                    child.setValue(child.minimum())
-                            if current_theme == 'Light':
-                                child.setStyleSheet(active_flag_light_theme_stylesheet)
-                            else:
-                                child.setStyleSheet(active_flag_other_theme_stylesheet)
-                            self.flags.append(v)
-
-                            for flag_name in child.flag.conflicts:
-                                try:
-                                    self.conflicts[flag_name].append(child.flag.name)
-                                except KeyError:
-                                    self.conflicts[flag_name] = [child.flag.name]
-                    handle_children(child.flag, round(child.value(), 2))
-                elif isinstance(child, QComboBox):
-                    for v in values:
-                        if ':' in v and child.text.lower() == str(v).split(':')[0]:
-                            index_of_value = child.findText(str(v).split(':')[1], QtCore.Qt.MatchFixedString)
-                            child.setCurrentIndex(index_of_value)
-                            if current_theme == 'Light':
-                                child.setStyleSheet(active_flag_light_theme_stylesheet)
-                            else:
-                                child.setStyleSheet(active_flag_other_theme_stylesheet)
-                            self.flags.append(v)
-
-                            for flag_name in child.flag.conflicts:
-                                try:
-                                    self.conflicts[flag_name].append(child.flag.name)
-                                except KeyError:
-                                    self.conflicts[flag_name] = [child.flag.name]
-                    handle_children(child.flag, child.currentText())
-        for child in children:
-            self.requirements[child.flag.name] = self.get_missing_requirements(child.flag)
-
-        handle_conflicts_and_requirements(self.conflicts, self.requirements)
-        self.update_flag_string()
-        self.flags_changing = False
-
-    # (At startup) Opens reads code flags/descriptions and
-    #   puts data into separate dictionaries
-    def init_flags(self):
-        for flag in sorted(NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS, key=lambda x: x.name):
-            if flag.category == 'core':
-                d = self.flag
-            elif flag.category == 'quality_of_life':
-                d = self.quality_of_life
-            elif flag.category == 'aesthetic':
-                d = self.aesthetic
-            elif flag.category == 'sprite':
-                d = self.sprite
-            elif flag.category == 'spriteCategories':
-                d = self.sprite_categories
-            elif flag.category == 'experimental':
-                d = self.experimental
-            elif flag.category == 'gamebreaking':
-                d = self.gamebreaking
-            elif flag.category == 'field':
-                d = self.field
-            elif flag.category == 'characters':
-                d = self.characters
-            elif flag.category == 'beta':
-                d = self.beta
-            elif flag.category == 'battle':
-                d = self.battle
-            else:
-                print(f'Flag {flag.name} does not have a valid category.')
-                continue
-
-            d[flag.name] = flag
-
     # opens input dialog to get a name to assign a desired seed flag set, then
     # saves flags and selected mode to the cfg file
     def save_flags(self):
@@ -1080,11 +930,11 @@ class Window(QMainWindow):
         )
         if ok_pressed and text != '':
             self.game_presets[text] = (
-                    self.flag_string.text() + '|' + self.mode
+                    self.flag_string.text().strip() + '|' + self.mode_box.currentText()
             )
             write_flags(
                 text,
-                (self.flag_string.text() + '|' + self.mode)
+                (self.flag_string.text().strip() + '|' + self.mode_box.currentText())
             )
             index = self.preset_box.findText(text)
             if index == -1:
@@ -1102,201 +952,208 @@ class Window(QMainWindow):
             for text, flags in flag_set.items():
                 self.game_presets[text] = flags
 
-    def update_game_description(self):
-        self.mode_description.clear()
-        modes = {0: ('Normal', 'normal'),
-                 1: ('Race - Kefka @ Narshe', 'katn'),
-                 2: ('Ancient Cave', 'ancientcave'),
-                 3: ('Speed Cave', 'speedcave'),
-                 4: ('Race - Randomized Cave', 'racecave'),
-                 5: ('Race - Dragon Hunt', 'dragonhunt'),
-                 }
-        index = self.mode_box.currentIndex()
-        self.mode_description.setText(modes.get(index, 'Pick a Game Mode!')[0])
-        self.mode = \
-            [x[1] for x in modes.values() if x[1] == modes.get(index)[1]][0]
-
     def update_preset_dropdown(self):
-
-        modes = {0: ('Normal', 'normal'),
-                 1: ('Race - Kefka @ Narshe', 'katn'),
-                 2: ('Ancient Cave', 'ancientcave'),
-                 3: ('Speed Cave', 'speedcave'),
-                 4: ('Race - Randomized Cave', 'racecave'),
-                 5: ('Race - Dragon Hunt', 'dragonhunt')}
         text = self.preset_box.currentText()
         index = self.preset_box.findText(text)
         flags = self.game_presets.get(text)
         if index == 0:
             self.clear_ui()
-            self.flag_description.clear()
+            flags = ''
             self.flag_description.setText('Pick a flag set!')
         elif index == 1:
             self.flag_description.setText('Flags designed for a new player')
-            self.flag_string.setText(flags)
-            self.mode = 'normal'
             self.mode_box.setCurrentIndex(0)
         elif index == 2:
             self.flag_description.setText(
                 'Flags designed for an intermediate player'
             )
-            self.flag_string.setText(flags)
-            self.mode = 'normal'
             self.mode_box.setCurrentIndex(0)
         elif index == 3:
             self.flag_description.setText(
                 'Flags designed for an advanced player'
             )
-            self.flag_string.setText(flags)
-            self.mode = 'normal'
             self.mode_box.setCurrentIndex(0)
         elif index == 4:
             self.flag_description.setText(
                 'Flags designed for a chaotic player'
             )
-            self.flag_string.setText(flags)
-            self.mode = 'normal'
             self.mode_box.setCurrentIndex(0)
         elif index == 5:
             self.flag_description.setText(
                 'Flags designed for KaN easy difficulty races'
             )
-            self.flag_string.setText(flags)
-            self.mode = 'katn'
             self.mode_box.setCurrentIndex(1)
         elif index == 6:
             self.flag_description.setText(
                 'Flags designed for KaN medium difficulty races'
             )
-            self.flag_string.setText(flags)
-            self.mode = 'katn'
             self.mode_box.setCurrentIndex(1)
         elif index == 7:
             self.flag_description.setText(
                 'Flags designed for KaN insane difficulty races'
             )
-            self.flag_string.setText(flags)
-            self.mode = 'katn'
             self.mode_box.setCurrentIndex(1)
         else:
-            custom_flags = flags.split('|')[0]
             mode = flags.split('|')[1]
+            flags = flags.split('|')[0]
             self.flag_description.setText('Custom saved flags')
-            self.flag_string.setText(custom_flags)
-            self.mode = mode
-            self.mode_box.setCurrentIndex(
-                [k for k, v in modes.items() if v[1] == mode][0]
-            )
+            mode_object = get_mode(mode)
+            if mode_object:
+                self.mode_box.setCurrentIndex(
+                    self.mode_box.findText(mode_object.display_name)
+                )
+            else:
+                self.mode_box.setCurrentIndex(0)
+        activate_from_string(flag_string=flags, append=False)
+        self.flag_string.setText(flags)
+        self.update_control()
 
     def clear_ui(self):
-        self.seed = ''
-        self.flags.clear()
-        self.seed_input.setText(self.seed)
-
+        self.seed_input.setText('')
         self.mode_box.setCurrentIndex(0)
         self.preset_box.setCurrentIndex(0)
-        self.init_flags()
-        self.clear_controls()
-        self.flag_string.clear()
-        self.flags.clear()
-        handle_conflicts_and_requirements({}, {})
-        self.update_game_description()
+        activate_from_string(flag_string='', append=False)
+        self.flag_string.setText(Options_.get_flag_string())
+        self.update_control()
 
-    def clear_controls(self):
-        for tab in self.tablist:
-            for child in tab.children():
-                if type(child) == QPushButton:
-                    child.setChecked(False)
-                    child.setText('No')
-                elif type(child) == QSpinBox or type(child) == QDoubleSpinBox:
-                    child.setValue(child.default)
-                elif type(child) == QComboBox:
-                    child.setCurrentIndex(child.flag.default_index)
+    def handle_children(self, flag):
+        """
+        For a parent flag with a specified value, check to see if the flag has any children. The children are
+            contained in a dict object containing the child's name and the value the parent should be set to
+            for the child to be visible.
 
-    # When flag UI button is checked, update corresponding
-    # dictionary values
+        For each child where the parent is the correct value to make it visible, make the child visible.
+
+        For each child where the parent is NOT the correct value to make it visible, turn the flag off by
+            setting it to its default value in addition to making the child invisible.
+
+        Returns:
+            None
+        """
+        for flag_name, required_parent_value in flag.children.items():
+            flag_object = Options_.get_flag(flag_name)
+            if flag.value == str(required_parent_value):
+                if not flag_object.value:
+                    flag_object.value = flag_object.default_value.lower()
+
+                # Change spacers before revealing the flag, otherwise they will not display properly
+                for spacer in flag_object.margins:
+                    spacer.changeSize(0, spacer_fixed_height)
+
+                for control in flag_object.controls.values():
+                    # Make all controls visible
+                    control.setVisible(True)
+
+            else:
+                # Set controls to default value (turn off flag)
+                flag_object.value = ''
+
+                for spacer in flag_object.margins:
+                    spacer.changeSize(0, 0)
+
+                # Make all controls invisible
+                for control in flag_object.controls.values():
+                    control.setVisible(False)
+
+            self.update_control([flag_object.controls['input']])
+
+    def update_control(self, controls: [QWidget] = None):
+        if not controls:
+            controls = []
+            for tab in self.tablist:
+                controls.extend([c for c in tab.children() if
+                                 type(c) in (QPushButton, QSpinBox, QDoubleSpinBox, QComboBox)])
+
+        for control in controls:
+            if isinstance(control, QPushButton):
+                if not control.flag.value == '':
+                    control.setText('Yes')
+                else:
+                    control.setText('No')
+
+            elif isinstance(control, QSpinBox):
+                # Block signals to prevent setValue from causing flag_value_changed from being called
+                control.blockSignals(True)
+                if not control.flag.value == '':
+                    control.setValue(int(control.flag.value))
+                else:
+                    control.setValue(int(control.flag.default_value))
+                control.blockSignals(False)
+            elif isinstance(control, QDoubleSpinBox):
+                # Block signals to prevent setValue from causing flag_value_changed from being called
+                control.blockSignals(True)
+                if not control.flag.value == '':
+                    control.setValue(float(control.flag.value))
+                else:
+                    control.setValue(float(control.flag.default_value))
+                control.blockSignals(False)
+            elif isinstance(control, QComboBox):
+                if not control.flag.value == '':
+                    control.setCurrentIndex([choice.lower() for choice
+                                             in control.flag.choices].index(control.flag.value))
+                else:
+                    control.setCurrentIndex(control.flag.default_index)
+
+            if not control.flag.value == '' or control.flag.always_on:
+                if current_theme == 'Light':
+                    control.setStyleSheet(active_flag_light_theme_stylesheet)
+                else:
+                    control.setStyleSheet(active_flag_other_theme_stylesheet)
+            else:
+                if current_theme == 'Light':
+                    control.setStyleSheet(inactive_flag_light_theme_stylesheet)
+                else:
+                    control.setStyleSheet(inactive_flag_other_theme_stylesheet)
+
+            self.handle_children(control.flag)
+        handle_conflicts_and_requirements()
+
     def flag_button_clicked(self):
-        # Check self.flagsChanging first. If that is set, a new flag preset has been selected, which is causing
-        #  the controls to change and call this method. But we do not want to do anything then, otherwise it can
-        #  add duplicate entries to the flag string
-        if not self.flags_changing:
-            global current_theme
-            self.flags.clear()
-            self.conflicts = {}
-            self.requirements = {}
-            all_children = []
-            for t, d in zip(self.tablist, self.dictionaries):
-                children = t.findChildren(QPushButton)
-                for c in children:
-                    all_children.append(c)
-                    if c.isChecked():
-                        if current_theme == 'Light':
-                            c.setStyleSheet(active_flag_light_theme_stylesheet)
-                        else:
-                            c.setStyleSheet(active_flag_other_theme_stylesheet)
-                        c.setText('Yes')
-                        self.flags.append(c.value)
-                        for flag_name in c.flag.conflicts:
-                            try:
-                                self.conflicts[flag_name].append(c.flag.name)
-                            except KeyError:
-                                self.conflicts[flag_name] = [c.flag.name]
-                    else:
-                        if current_theme == 'Light':
-                            c.setStyleSheet(inactive_flag_light_theme_stylesheet)
-                        else:
-                            c.setStyleSheet(inactive_flag_other_theme_stylesheet)
-                        c.setText('No')
-                    handle_children(c.flag, c.isChecked())
-                children = t.findChildren(QSpinBox) + t.findChildren(QDoubleSpinBox)
-                for c in children:
-                    all_children.append(c)
-                    if not round(c.value(), 1) == c.default:
-                        if current_theme == 'Light':
-                            c.setStyleSheet(active_flag_light_theme_stylesheet)
-                        else:
-                            c.setStyleSheet(active_flag_other_theme_stylesheet)
-                        if round(c.value(), 2) == c.minimum():
-                            self.flags.append(c.text + ':random')
-                        else:
-                            self.flags.append(c.text + ':' + str(round(c.value(), 2)))
-                        for flag_name in c.flag.conflicts:
-                            try:
-                                self.conflicts[flag_name].append(c.flag.name)
-                            except KeyError:
-                                self.conflicts[flag_name] = [c.flag.name]
-                    else:
-                        if current_theme == 'Light':
-                            c.setStyleSheet(inactive_flag_light_theme_stylesheet)
-                        else:
-                            c.setStyleSheet(inactive_flag_other_theme_stylesheet)
-                    handle_children(c.flag, round(c.value(), 2))
-                children = t.findChildren(QComboBox)
-                for c in children:
-                    all_children.append(c)
-                    if c.currentIndex() != c.flag.default_index:
-                        if current_theme == 'Light':
-                            c.setStyleSheet(active_flag_light_theme_stylesheet)
-                        else:
-                            c.setStyleSheet(active_flag_other_theme_stylesheet)
-                        self.flags.append(c.text.lower() + ':' + c.currentText().lower())
+        calling_control = self.sender()
 
-                        for flag_name in c.flag.conflicts:
-                            try:
-                                self.conflicts[flag_name].append(c.flag.name)
-                            except KeyError:
-                                self.conflicts[flag_name] = [c.flag.name]
-                    else:
-                        if current_theme == 'Light':
-                            c.setStyleSheet(inactive_flag_light_theme_stylesheet)
-                        else:
-                            c.setStyleSheet(inactive_flag_other_theme_stylesheet)
-                    handle_children(c.flag, c.currentText())
-            for child in all_children:
-                self.requirements[child.flag.name] = self.get_missing_requirements(child.flag)
+        if isinstance(calling_control, QPushButton):
+            if not calling_control.flag.value == '':
+                calling_control.setText('No')
+                calling_control.flag.value = ''
+            else:
+                calling_control.setText('Yes')
+                calling_control.flag.value = 'True'
 
-            handle_conflicts_and_requirements(self.conflicts, self.requirements)
-            self.update_flag_string()
+        elif isinstance(calling_control, QSpinBox) or isinstance(calling_control, QDoubleSpinBox):
+            # Get value. Round to two decimal places. Remove trailing zeroes.
+            value = '%g' % round(calling_control.value(), 2)
+            if not value == calling_control.flag.default_value or calling_control.flag.always_on:
+                calling_control.flag.value = value
+            else:
+                calling_control.flag.value = ''
+
+            # Special handling to ensure levelcap min <= levelcap max
+            if calling_control.flag.name == 'cap_min':
+                Options_.get_flag('cap_max').controls['input'].setMinimum(int(value))
+            if calling_control.flag.name == 'cap_max':
+                Options_.get_flag('cap_min').controls['input'].setMaximum(int(value))
+
+        elif isinstance(calling_control, QComboBox):
+            value = calling_control.currentText()
+            if not value == calling_control.flag.default_value or calling_control.flag.always_on:
+                calling_control.flag.value = value.lower()
+            else:
+                calling_control.flag.value = ''
+
+        if calling_control.flag.value != '' or calling_control.flag.always_on:
+            if current_theme == 'Light':
+                calling_control.setStyleSheet(active_flag_light_theme_stylesheet)
+            else:
+                calling_control.setStyleSheet(active_flag_other_theme_stylesheet)
+        else:
+            if current_theme == 'Light':
+                calling_control.setStyleSheet(inactive_flag_light_theme_stylesheet)
+            else:
+                calling_control.setStyleSheet(inactive_flag_other_theme_stylesheet)
+
+        self.handle_children(calling_control.flag)
+        handle_conflicts_and_requirements()
+        self.flag_string.setText(Options_.get_flag_string())
 
     # Opens file dialog to select rom file and assigns it to value in
     # parent/Window class
@@ -1317,41 +1174,11 @@ class Window(QMainWindow):
         # display file location in text input field
         self.rom_output.setText(str(file_path))
 
-    def compile_modes(self):
-        for mode in self.supported_game_modes:
-            if mode == 'normal':
-                self.game_modes['Normal'] = (
-                    'Play through the normal story with randomized gameplay.'
-                )
-            elif mode == 'katn':
-                self.game_modes['Race - Kefka @ Narshe'] = (
-                    'Race through the story and defeat Kefka at Narshe'
-                )
-            elif mode == 'ancientcave':
-                self.game_modes['Ancient Cave'] = (
-                    'Play though a long randomized dungeon.'
-                )
-            elif mode == 'speedcave':
-                self.game_modes['Speed Cave'] = (
-                    'Play through a medium randomized dungeon.'
-                )
-            elif mode == 'racecave':
-                self.game_modes['Race - Randomized Cave'] = (
-                    'Race through a short randomized dungeon.'
-                )
-            elif mode == 'dragonhunt':
-                self.game_modes['Race - Dragon Hunt'] = (
-                    'Race to kill all 8 dragons.'
-                )
-
     # Get seed generation parameters from UI to prepare for
     # seed generation. This will show a confirmation dialog,
     # and call the local Randomizer.py file and pass arguments
     # to it
     def generate_seed(self):
-
-        self.rom_text = self.rom_input.text()
-
         # Check to see if the supplied output directory exists.
         if os.path.isdir(self.rom_output.text()):
             # It does, use that directory.
@@ -1369,23 +1196,23 @@ class Window(QMainWindow):
             )
             return
 
-        if self.rom_text == '':
+        if self.rom_input.text() == '':
             QMessageBox.about(
                 self,
                 'Error',
                 'You need to select a FFVI rom!'
             )
         else:
-            if not os.path.exists(self.rom_text):
+            if not os.path.exists(self.rom_input.text()):
                 self.rom_input.setText('')
                 QMessageBox.about(
                     self,
                     'Error',
-                    f'No ROM was found at the path {str(self.rom_text)}. Please choose a different ROM file.'
+                    f'No ROM was found at the path {str(self.rom_input.text())}. Please choose a different ROM file.'
                 )
                 return
             try:
-                f = open(self.rom_text, 'rb')
+                f = open(self.rom_input.text(), 'rb')
                 data = f.read()
                 f.close()
                 md5_hash = hashlib.md5(data).hexdigest()
@@ -1404,29 +1231,20 @@ class Window(QMainWindow):
                 QMessageBox.about(self, 'Error', str(io_exception))
                 return
 
-            self.seed = self.seed_input.text()
+            display_seed = self.seed_input.text()
 
-            display_seed = self.seed
+            flags = Options_.get_flag_string()
 
-            flag_msg = ''
+            flag_scroll_contents = ''
+            for flag in flags.split(' '):
+                if len(flag) == 1:
+                    flag_scroll_contents += flag + ' '
+                else:
+                    flag_scroll_contents += '\n' + flag
 
-            if self.seed == '':
+            if self.seed_input.text() == '':
                 display_seed = '(none)'
-
-            flag_mode = ''
-            for flag in self.flags:
-                flag_mode += ' ' + flag
-
-                flag_msg = ''
-            flag_mode = flag_mode.strip()
-            for flag in self.flags:
-                if flag_msg:
-                    if len(flag) == 1:
-                        flag_msg += ' '
-                    else:
-                        flag_msg += '\n'
-                flag_msg += flag
-            if flag_msg == '':
+            if flags == '':
                 QMessageBox.about(
                     self,
                     'Error',
@@ -1434,7 +1252,7 @@ class Window(QMainWindow):
                 )
                 return
 
-            if 'bingoboingo' in self.flags:
+            if 'bingoboingo' in flags:
                 bingo = BingoPrompts()
                 bingo.setModal(True)
                 bingo.exec()
@@ -1466,14 +1284,14 @@ class Window(QMainWindow):
                 '{6: <10} {7}\n'
                 '{8: <10} {9}\n'
                 '{10: <10}'.format(
-                    'Rom:', self.rom_text,
+                    'Rom:', self.rom_input.text(),
                     'Output:', self.rom_output_directory,
                     'Seed:', display_seed,
                     'Batch:', self.seed_count.text(),
                     'Mode:', self.mode,
                     'Flags:')
             )
-            flag_message = QLabel(f'{flag_msg}')
+            flag_message = QLabel(flag_scroll_contents)
             flag_message.setProperty('class', 'flag_message')
             continue_confirmed = QDialogScroll(
                 title='Confirm Seed Generation?',
@@ -1485,13 +1303,13 @@ class Window(QMainWindow):
             ).exec()
             if continue_confirmed:
                 self.clear_console()
-                self.seed = self.seed or int(time.time())
+                seed = self.seed_input.text() or int(time.time())
                 seeds_to_generate = int(self.seed_count.text())
                 result_files = []
                 for currentSeed in range(seeds_to_generate):
                     print('Rolling seed ' + str(currentSeed + 1) + ' of ' + str(seeds_to_generate) + '.')
                     # User selects confirm/accept/yes option
-                    bundle = f'{self.version}|{self.mode}|{flag_mode}|{self.seed}'
+                    bundle = f'{self.version}|{self.mode}|{flags}|{seed}'
                     # remove spam if the Randomizer asks for input
                     # TODO: guify that stuff
                     # Hash check can be moved out to when you pick
@@ -1505,7 +1323,7 @@ class Window(QMainWindow):
                     # TODO: put this in a new thread
                     try:
                         kwargs = {
-                            'infile_rom_path': self.rom_text,
+                            'infile_rom_path': self.rom_input.text(),
                             'outfile_rom_path': self.rom_output_directory,
                             'seed': bundle,
                             'bingo_type': self.bingo_type,
@@ -1540,16 +1358,16 @@ class Window(QMainWindow):
                                     break
 
                         # generate the output file name since we're using subprocess now instead of a direct call
-                        if '.' in self.rom_text:
-                            temp_name = os.path.basename(self.rom_text).rsplit('.', 1)
+                        if '.' in self.rom_input.text():
+                            temp_name = os.path.basename(self.rom_input.text()).rsplit('.', 1)
                         else:
-                            temp_name = [os.path.basename(self.rom_text), 'smc']
+                            temp_name = [os.path.basename(self.rom_input.text()), 'smc']
                         seed = bundle.split('|')[-1]
                         result_file = os.path.join(self.rom_output_directory,
                                                    '.'.join([os.path.basename(temp_name[0]),
                                                              str(seed), temp_name[1]]))
-                        if self.seed:
-                            self.seed = str(int(self.seed) + 1)
+                        if seed:
+                            seed = str(int(seed) + 1)
                     except Exception as gen_exception:
                         traceback.print_exc()
                         gen_traceback = QTextEdit(
@@ -1610,19 +1428,6 @@ class Window(QMainWindow):
 
                     finally:
                         currentSeed += 1
-
-    # Read each dictionary and update text field
-    # showing flag codes based upon
-    # flags denoted as 'True'
-    def update_flag_string(self):
-        self.flags_changing = True
-        self.flag_string.clear()
-        temp = ''
-        for x in range(0, len(self.flags)):
-            flag = self.flags[x]
-            temp += flag + ' '
-        self.flag_string.setText(temp)
-        self.flags_changing = False
 
     def validate_input_rom(self, value):
         try:

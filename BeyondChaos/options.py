@@ -7,6 +7,7 @@ from utils import pipe_print
 @dataclass(frozen=True)
 class Mode:
     name: str
+    display_name: str
     description: str
     forced_flags: List[str] = field(default_factory=list)
     prohibited_flags: Set[str] = field(default_factory=set)
@@ -17,6 +18,7 @@ class Flag:
     name: str = field(default="")
     description: str = field(default="", compare=False)
     long_description: str = field(default="", compare=False)
+    value: str = field(default='', compare=False)
     category: str = field(default="", compare=False)
     input_type: str = field(default="", compare=False)
     choices: [str] = field(default_factory=tuple, compare=False)
@@ -24,6 +26,11 @@ class Flag:
     default_value: str = field(default="", compare=False)
     minimum_value: float = field(default=0, compare=False)
     maximum_value: float = field(default=255, compare=False)
+    special_value_text: str = field(default=None, compare=False)
+    always_on: bool = field(default=False, compare=False)
+
+    # List for gui controls associated with the Flag.
+    controls: {} = field(default_factory=dict, compare=False)
 
     # Conflicts is a list of other Flag names that conflict with this Flag. If any conflicting Flags are active,
     #   this Flag will be disabled (and deactivated).
@@ -32,6 +39,7 @@ class Flag:
     # Requirements is a list of dictionaries. Each dictionary should be flag_name:flag_value pairs. Inside each
     #   dictionary, flags are processed as 'is flag 1 set to value 1 AND flag 2 set to value 2 AND ...'. Each separate
     #   dict is processed as 'is dict 1 requirements fulfilled OR dict 2 requirements fulfilled OR...'.
+    #   The flag_value can be set to '*' to let a non-boolean flag accept any active value
     requirements: [] = field(default_factory=list, compare=False)
 
     # Children is a dictionary of child_flag_name:parent_flag_value. The child Flags are hidden if the parent
@@ -40,36 +48,85 @@ class Flag:
 
     def get_requirement_string(self) -> str:
         """
-        Takes a set of requirements and returns a string describing those requirements.
-
-        Parameters:
-            requirements: list from Flag.requirements
+        Returns a string describing a Flag's requirements.
 
         Returns:
             string
         """
         result = ''
-        for requirement in self.requirements:
+        single_ors = []
+        for index, requirement in enumerate(self.requirements):
             if len(requirement) > 1:
                 result += '('
             for required_flag_name, required_value in requirement.items():
-                required_flag = Options_.get_flag(required_flag_name)  # .controls[0]
+                required_flag = Options_.get_flag(required_flag_name)
                 if required_flag.input_type == 'boolean':
                     if required_value:
-                        result += 'Flag "' + required_flag.name + '" must be active'
+                        # Add requirement to single_ors if this is the only requirement UNLESS single_ors is empty
+                        #   and this is the last requirement
+                        if (len(requirement) == 1 and not
+                                (len(single_ors) == 0 and index + 1 >= len(self.requirements))):
+                            single_ors.append(required_flag.name)
+                        else:
+                            result += 'Flag "' + required_flag.name + '" must be active'
                     else:
                         result += 'Flag "' + required_flag.name + '" must be inactive'
                 elif required_flag.input_type in ['integer', 'float2']:
-                    result += 'Flag "' + required_flag.name + '" must be set to "' + str(required_value) + '"'
-                elif required_flag.input_type == 'choice':
-                    result += 'Flag "' + required_flag.name + ' must be set to ' + str(required_value) + '"'
+                    if required_value == '*':
+                        # Add requirement to single_ors if this is the only requirement UNLESS single_ors is empty
+                        #   and this is the last requirement
+                        if (len(requirement) == 1 and not
+                                (len(single_ors) == 0 and index + 1 >= len(self.requirements))):
+                            single_ors.append(required_flag.name)
+                        else:
+                            result += 'Flag "' + required_flag.name + '" must be active'
+                    else:
+                        result += 'Flag "' + required_flag.name + '" must be set to "' + str(required_value) + '"'
+                elif required_flag.input_type == 'combobox':
+                    if required_value == '*':
+                        # Add requirement to single_ors if this is the only requirement UNLESS single_ors is empty
+                        #   and this is the last requirement
+                        if (len(requirement) == 1 and not
+                                (len(single_ors) == 0 and index + 1 >= len(self.requirements))):
+                            single_ors.append(required_flag.name)
+                        else:
+                            result += 'Flag "' + required_flag.name + '" must be active'
+                    else:
+                        result += 'Flag "' + required_flag.name + ' must be set to ' + str(required_value) + '"'
                 result += ' AND '
             result = result.strip(' AND ').strip('"').strip()
             if len(requirement) > 1:
-                result += ')'
-            result += ' OR '
-        result = result.strip(' OR ')
+                result += ') '
+            if not len(requirement) == 1 and not index + 1 >= len(self.requirements):
+                result += ' OR '
+
+        # We use single_ors to build a list of individual flags that must be active to meet requirements.
+        #   In other words, instead of doing 'Flag1 must be active OR flag2 must be active OR flag3 must be...'
+        #   We collapse them into 'One of the following flags must be active: Flag1, Flag2, Flag3, ...'
+        #   Doing this saves space for flags such as capslockoff that have a large number of requirements.
+        if single_ors:
+            temp = 'One of the following flags must be active: '
+            for single_or in single_ors:
+                temp += single_or + ', '
+            temp = temp[:-2]
+            if result:
+                result = temp + ' OR ' + result
+            else:
+                result = temp
+        result = result.strip()
         return result
+
+    def has_requirement(self, flag_name, requirement_list=None):
+        if not requirement_list:
+            requirement_list = self.requirements
+        for requirement in requirement_list:
+            if isinstance(requirement, list):
+                if self.has_requirement(flag_name=flag_name, requirement_list=requirement):
+                    return True
+            elif isinstance(requirement, dict):
+                if flag_name in requirement.keys():
+                    return True
+        return False
 
     def remove_from_string(self, flag_string: str, mode: Mode):
         name = self.name
@@ -123,15 +180,180 @@ class Flag:
         return False, False, flag_string
 
 
+# def set_mode(mode_name: str) -> None:
+#     mode = get_mode(mode_name)
+#     if not mode:
+#         pipe_print('ERROR: Attempted to activate a Mode that does not exist.')
+#     else:
+#         global active_mode
+#         active_mode = mode
+
+
+def get_mode(mode_name: str) -> Mode:
+    for mode in ALL_MODES:
+        if mode_name in (mode.name, mode.display_name):
+            return mode
+
+
+# def get_active_mode() -> (Mode | None):
+#     global active_mode
+#     if active_mode:
+#         return active_mode
+
+
+def get_flag_string():
+    flag_string = ''
+    for flag in ALL_FLAGS:
+        if flag.value:
+            if str(flag.value).lower() == 'true':
+                flag_string += flag.name + ' '
+            else:
+                flag_string += flag.name + ':' + str(flag.value) + ' '
+    return flag_string.strip()
+
+
+def activate_from_string(flag_string, append=False):
+    flags = {}
+    for flag in flag_string.split(' '):
+        if ':' in flag:
+            flags[flag.split(':')[0]] = flag.split(':')[1]
+        else:
+            flags[flag] = 'True'
+
+    for flag_name in Options_.mode.prohibited_flags:
+        flag = Options_.get_flag(flag_name)
+        if flag and flag.name in flags.keys():
+            # The flag is prohibited. Notify the user and do not activate it.
+            pipe_print("The flag '" + flag_name + "' has been deactivated. It is incompatible with " +
+                       Options_.mode.name + ".")
+            flags.pop(flag_name)
+
+    if 'remonsterate' in flags.keys() and 'sketch' in flags.keys():
+        pipe_print("The Flag 'sketch' has been deactivated. It is incompatible with remonsterate.")
+        flags.pop('sketch')
+
+    for flag in NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS:
+        try:
+            flag.value = flags[flag.name]
+        except KeyError:
+            if not append:
+                flag.value = ''
+
+    return get_flag_string()
+
+
+# def get_flag(flag_attribute: str) -> Flag:
+#     for flag in ALL_FLAGS:
+#         if flag.name.lower() == flag_attribute.lower() or flag.description.lower() == flag_attribute.lower():
+#             return flag
+
+
+# def is_flag_active(flag_attribute: str):
+#     flag = get_flag(flag_attribute)
+#     if not flag:
+#         pipe_print('ERROR: Attempted to check state of a Flag that does not exist: ' + str(flag_attribute))
+#     elif not flag.value == '':
+#         return True
+#     return False
+
+
+# def is_any_flag_active(flag_names: List[str]):
+#     for flag_name in flag_names:
+#         if is_flag_active(flag_name):
+#             return True
+#     return False
+
+
+# def get_flag_value(flag_name: str):
+#     flag = get_flag(flag_name)
+#     if not flag:
+#         pipe_print('ERROR: Attempted to check value of a Flag that does not exist: ' + str(flag_name))
+#         raise RuntimeError()
+#     else:
+#         return flag.value
+
+
+# def activate_flag(flag_name: str, flag_value=True):
+#     flag = get_flag(flag_name)
+#     if not flag:
+#         pipe_print('ERROR: Attempted to set the value of a Flag that does not exist: ' + str(flag_name))
+#         return
+#
+#     if flag.input_type == 'boolean':
+#         try:
+#             flag.value = bool(flag_value)
+#         except ValueError:
+#             pipe_print('ERROR: Attempted to set the value of a True/False Flag with an invalid value.')
+#             return
+#     elif flag.input_type == 'integer':
+#         try:
+#             flag.value = int(flag_value)
+#         except ValueError:
+#             pipe_print('ERROR: Attempted to set the value of an integer Flag with non-numeric value.')
+#             return
+#     elif flag.input_type == 'float2':
+#         try:
+#             flag.value = float(flag_value)
+#         except ValueError:
+#             pipe_print('ERROR: Attempted to set the value of a numeric Flag with non-numeric value.')
+#             return
+#     elif flag.input_type == 'combobox':
+#         if str(flag_value).lower() in [choice.lower() for choice in flag.choices]:
+#             flag.value = str(flag_value).lower()
+#         else:
+#             pipe_print('ERROR: Attempted to set the value of a Flag with an invalid value. Valid values are ' +
+#                        str(flag.choices) + '.')
+#             return
+
+
+# def deactivate_flag(flag_name: str):
+#     flag = get_flag(flag_name)
+#     if not flag:
+#         pipe_print('ERROR: Attempted to deactivate a Flag that does not exist.')
+#     else:
+#         flag.value = ''
+
+def read_options_from_string(flag_string: str, mode: Union[Mode, str]):
+    flags = {}
+
+    if flag_string.startswith('-'):
+        pipe_print("NOTE: Using all flags EXCEPT the specified flags.")
+
+    if isinstance(mode, str):
+        mode = [m for m in ALL_MODES if m.name == mode][0]
+
+    # Ensures the makeover groups are included in MAKEOVER_MODIFIER_FLAGS
+    get_makeover_groups()
+    for flag in NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS:
+        if len(flag_string) == 0:
+            break
+        found, value, flag_string = flag.remove_from_string(flag_string, mode)
+        if found:
+            flag.value = value
+            flags[flag.name] = flag
+    return flags
+
+
 @dataclass
 class Options:
     mode: Mode
     active_flags: [Flag] = field(default_factory=list)
 
     @staticmethod
+    def get_flag_string():
+        flag_string = ''
+        for flag in ALL_FLAGS:
+            if flag.value:
+                if str(flag.value).lower() == 'true':
+                    flag_string += flag.name + ' '
+                else:
+                    flag_string += flag.name + ':' + str(flag.value) + ' '
+        return flag_string.strip()
+
+    @staticmethod
     def get_flag(flag_name: str) -> Flag:
         for flag in ALL_FLAGS:
-            if flag.name == flag_name:
+            if flag.name.lower() == flag_name.lower() or flag.description.lower() == flag_name.lower():
                 return flag
 
     def is_flag_active(self, flag_attribute: str):
@@ -201,27 +423,6 @@ class Options:
         return s
 
 
-def read_options_from_string(flag_string: str, mode: Union[Mode, str]):
-    flags = {}
-
-    if flag_string.startswith('-'):
-        pipe_print("NOTE: Using all flags EXCEPT the specified flags.")
-
-    if isinstance(mode, str):
-        mode = [m for m in ALL_MODES if m.name == mode][0]
-
-    # Ensures the makeover groups are included in MAKEOVER_MODIFIER_FLAGS
-    get_makeover_groups()
-    for flag in NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS:
-        if len(flag_string) == 0:
-            break
-        found, value, flag_string = flag.remove_from_string(flag_string, mode)
-        if found:
-            flag.value = value
-            flags[flag.name] = flag
-    return flags
-
-
 ANCIENT_CAVE_PROHIBITED_FLAGS = {
     "d",
     "k",
@@ -241,28 +442,47 @@ ANCIENT_CAVE_PROHIBITED_FLAGS = {
 }
 
 ALL_MODES = [
-    Mode(name="normal", description="Play through the normal story."),
-    Mode(name="ancientcave",
-         description="Play through a long randomized dungeon.",
-         forced_flags=["ancientcave"],
-         prohibited_flags=ANCIENT_CAVE_PROHIBITED_FLAGS),
-    Mode(name="speedcave",
-         description="Play through a medium-sized randomized dungeon.",
-         forced_flags=["speedcave", "ancientcave"],
-         prohibited_flags=ANCIENT_CAVE_PROHIBITED_FLAGS),
-    Mode(name="racecave",
-         description="Play through a short randomized dungeon.",
-         forced_flags=["racecave", "speedcave", "ancientcave"],
-         prohibited_flags=ANCIENT_CAVE_PROHIBITED_FLAGS),
-    Mode(name="katn",
-         description="Play the normal story up to Kefka at Narshe. Intended for racing.",
-         prohibited_flags={"d", "k", "r", "airship", "alasdraco", "worringtriad", "mimetime"}),
+    Mode(
+        name="normal",
+        display_name='Normal',
+        description="Play through the normal story."
+    ),
+    Mode(
+        name="katn",
+        display_name='Race - Kefka @ Narshe',
+        description="Play the normal story up to Kefka at Narshe. Intended for racing.",
+        prohibited_flags={"d", "k", "r", "airship", "alasdraco", "worringtriad", "mimetime"}
+    ),
+    Mode(
+        name="ancientcave",
+        display_name='Ancient Cave',
+        description="Play through a long randomized dungeon.",
+        forced_flags=["ancientcave"],
+        prohibited_flags=ANCIENT_CAVE_PROHIBITED_FLAGS
+    ),
+    Mode(
+        name="speedcave",
+        display_name='Speed Cave',
+        description="Play through a medium-sized randomized dungeon.",
+        forced_flags=["speedcave", "ancientcave"],
+        prohibited_flags=ANCIENT_CAVE_PROHIBITED_FLAGS
+    ),
+    Mode(
+        name="racecave",
+        display_name='Race - Randomized Cave',
+        description="Play through a short randomized dungeon.",
+        forced_flags=["racecave", "speedcave", "ancientcave"],
+        prohibited_flags=ANCIENT_CAVE_PROHIBITED_FLAGS
+    ),
     # Static number of encounters on Lete River, No charm drops, Start with random Espers,
     # Curated enemy specials, Banned Baba Breath & Seize
-    Mode(name="dragonhunt",
-         description="Kill all 8 dragons in the World of Ruin. Intended for racing.",
-         forced_flags=["worringtriad"],
-         prohibited_flags={"j", "airship", "alasdraco", "thescenarionottaken"}),
+    Mode(
+        name="dragonhunt",
+        display_name='Race - Dragon Hunt',
+        description="Kill all 8 dragons in the World of Ruin. Intended for racing.",
+        forced_flags=["worringtriad"],
+        prohibited_flags={"j", "airship", "alasdraco", "thescenarionottaken"}
+    ),
 ]
 
 NORMAL_FLAGS = [
@@ -479,7 +699,7 @@ NORMAL_FLAGS = [
     Flag(name='bravenudeworld',
          description="TINA PARTY MODE",
          long_description="All characters use the Esper Terra sprite.",
-         category="sprite",
+         category="sprites",
          input_type="boolean",
          conflicts=["kupokupo"],
          requirements=[{"s": True}],
@@ -489,7 +709,7 @@ NORMAL_FLAGS = [
          description="MOOGLE MODE",
          long_description="All party members are moogles except Mog. With partyparty, "
                           "all characters are moogles, except Mog, Esper Terra, and Imps.",
-         category="sprite",
+         category="sprites",
          input_type="boolean",
          conflicts=["bravenudeworld"],
          requirements=[{"s": True}],
@@ -498,17 +718,47 @@ NORMAL_FLAGS = [
     Flag(name='makeover',
          description="SPRITE REPLACEMENT MODE",
          long_description="Some sprites are replaced with new ones (like Cecil or Zero Suit Samus).",
-         category="sprite",
+         category="sprites",
          input_type="boolean",
          conflicts=[],
          requirements=[{"s": True}],
-         children={'novanilla':True, 'frenchvanilla':True, 'cloneparty':True}
+         children={'novanilla': True, 'frenchvanilla': True, 'cloneparty': True}
+         ),
+    Flag(name='novanilla',
+         description="COMPLETE MAKEOVER MODE",
+         long_description="Use with 'makeover' to have sprites from the vanilla game to be guaranteed "
+                          "not to appear.",
+         category="sprites",
+         input_type="boolean",
+         conflicts=['frenchvanilla'],
+         requirements=[{'makeover': True}],
+         children={}
+         ),
+    Flag(name='frenchvanilla',
+         description="EQUAL RIGHTS MAKEOVER MODE",
+         long_description="Use with 'makeover' to have sprites from the vanilla game be selected "
+                          "with equal weight to new sprites.",
+         category="sprites",
+         input_type="boolean",
+         conflicts=['novanilla'],
+         requirements=[{'makeover': True}],
+         children={}
+         ),
+    Flag(name='cloneparty',
+         description="CLONE COSPLAY MAKEOVER MODE",
+         long_description="Use with 'makeover' to have the randomizer actively try to choose sprite"
+                          "versions of the same character.",
+         category="sprites",
+         input_type="boolean",
+         conflicts=[],
+         requirements=[{'makeover': True}],
+         children={}
          ),
     Flag(name='partyparty',
          description="CRAZY PARTY MODE",
          long_description="Kefka, Trooper, Banon, Leo, Ghost, Merchant, Esper Terra, "
                           "and Soldier are included in the pool of sprite randomization",
-         category="sprite",
+         category="sprites",
          input_type="boolean",
          conflicts=[],
          requirements=[{"s": True}],
@@ -517,7 +767,7 @@ NORMAL_FLAGS = [
     Flag(name='quikdraw',
          description="QUIKDRAW MODE",
          long_description="All characters look like imperial soldiers, and none of them have Gau's Rage skill.",
-         category="sprite",
+         category="sprites",
          input_type="boolean",
          conflicts=["bravenudeworld", "kupokupo", "suplexwrecks"],
          requirements=[{"s": True}],
@@ -578,7 +828,7 @@ NORMAL_FLAGS = [
          category="quality_of_life",
          input_type="boolean",
          conflicts=[],
-         requirements=[{'i':True}],
+         requirements=[{'i': True}],
          children={}
          ),
     Flag(name='regionofdoom',
@@ -657,8 +907,9 @@ NORMAL_FLAGS = [
          category="aesthetic",
          input_type="boolean",
          conflicts=[],
-         requirements=[{'partyparty':True}, {'bravenudeworld':True}, {'suplexwrecks':True}, {'novanilla':True},
-                       {'christmas':True}, {'halloween':True}, {'kupokupo':True}, {'quikdraw':True}, {'makeover':True}, {'cloneparty':True}, {'frenchvanilla':True}],
+         requirements=[{'partyparty': True}, {'bravenudeworld': True}, {'suplexwrecks': True}, {'novanilla': True},
+                       {'christmas': True}, {'halloween': True}, {'kupokupo': True}, {'quikdraw': True},
+                       {'makeover': True}, {'cloneparty': True}, {'frenchvanilla': True}],
          children={}
          ),
     Flag(name='johnnyachaotic',
@@ -708,7 +959,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=['suplexwrecks'],
-         requirements=[{'o':True}],
+         requirements=[{'o': True}],
          children={}
          ),
     Flag(name='cursepower',
@@ -719,6 +970,7 @@ NORMAL_FLAGS = [
          default_value="255",
          minimum_value=0,
          maximum_value=255,
+         special_value_text='Random',
          conflicts=[],
          requirements=[],
          children={}
@@ -743,7 +995,7 @@ NORMAL_FLAGS = [
          default_value="Off",
          default_index=0,
          conflicts=[],
-         requirements=[],
+         requirements=[{'e': True}],
          children={}
          ),
     Flag(name='darkworld',
@@ -753,7 +1005,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=["ancientcave"],
-         requirements=[{'m':True}],
+         requirements=[{'m': True}],
          children={}
          ),
     Flag(name='easymodo',
@@ -772,7 +1024,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements=[{'i':True}],
+         requirements=[{'i': True}],
          children={}
          ),
     Flag(name='expboost',
@@ -783,6 +1035,7 @@ NORMAL_FLAGS = [
          default_value="1.00",
          minimum_value=-0.10,
          maximum_value=50,
+         special_value_text='Random',
          conflicts=[],
          requirements=[],
          children={}
@@ -795,6 +1048,7 @@ NORMAL_FLAGS = [
          default_value="1.00",
          minimum_value=-0.10,
          maximum_value=50,
+         special_value_text='Random',
          conflicts=[],
          requirements=[],
          children={}
@@ -805,7 +1059,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=["suplexwrecks"],
-         requirements=[],
+         requirements=[{'o': True}],
          children={}
          ),
     Flag(name='madworld',
@@ -827,7 +1081,7 @@ NORMAL_FLAGS = [
          default_value="Off",
          default_index=0,
          conflicts=[],
-         requirements=[{'i':True}],
+         requirements=[{'i': True}],
          children={}
          ),
     Flag(name='mpboost',
@@ -838,6 +1092,7 @@ NORMAL_FLAGS = [
          default_value="1.00",
          minimum_value=-0.10,
          maximum_value=50,
+         special_value_text='Random',
          conflicts=[],
          requirements=[],
          children={}
@@ -848,7 +1103,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=["unbreakable"],
-         requirements=[{'i':True}],
+         requirements=[{'i': True}],
          children={}
          ),
     Flag(name='norng',
@@ -857,7 +1112,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements=[{'b':True}],
+         requirements=[{'b': True}],
          children={}
          ),
     Flag(name='playsitself',
@@ -877,7 +1132,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements=[{'m':True}],
+         requirements=[{'m': True}],
          children={}
          ),
     Flag(name='rushforpower',
@@ -887,7 +1142,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements=[{'m':True}, {'o':True}, {'w':True}],
+         requirements=[{'m': True}, {'o': True}, {'w': True}],
          children={}
          ),
     Flag(name='swdtechspeed',
@@ -908,7 +1163,7 @@ NORMAL_FLAGS = [
          category="battle",
          input_type="boolean",
          conflicts=[],
-         requirements=[{'i':True}],
+         requirements=[{'i': True}],
          children={}
          ),
 
@@ -920,7 +1175,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=["ancientcave"],
-         requirements=[{'t':True}],
+         requirements=[{'t': True}],
          children={}
          ),
     Flag(name='cursedencounters',
@@ -929,7 +1184,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=[],
-         requirements=[{'f':True}],
+         requirements=[{'f': True}],
          children={}
          ),
     Flag(name='dearestmolulu',
@@ -959,7 +1214,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=[],
-         requirements=[{'o':True}, {'t':True}, {'w':True}],
+         requirements=[{'o': True}, {'t': True}, {'w': True}],
          children={}
          ),
     Flag(name='morefanatical',
@@ -968,7 +1223,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=["ancientcave"],
-         requirements=[{'d':True}],
+         requirements=[{'d': True}],
          children={}
          ),
     Flag(name='nomiabs',
@@ -977,7 +1232,7 @@ NORMAL_FLAGS = [
          category="field",
          input_type="boolean",
          conflicts=["ancientcave"],
-         requirements=[{'t':True}],
+         requirements=[{'t': True}],
          children={}
          ),
     Flag(name='randomboost',
@@ -989,6 +1244,7 @@ NORMAL_FLAGS = [
          default_value="1.00",
          minimum_value=-0.10,
          maximum_value=10.00,
+         special_value_text='Random',
          conflicts=[],
          requirements=[],
          children={}
@@ -1021,7 +1277,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=["nocombos", "suplexwrecks"],
-         requirements=[{'w':True}],
+         requirements=[{'w': True}],
          children={}
          ),
     Flag(name='canttouchthis',
@@ -1041,7 +1297,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=['suplexwrecks'],
-         requirements=[{'w':True}],
+         requirements=[{'w': True}],
          children={}
          ),
     Flag(name='endless9',
@@ -1050,28 +1306,55 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=['suplexwrecks'],
-         requirements=[{'w':True}],
+         requirements=[{'w': True}],
          children={}
          ),
     Flag(name='levelcap',
          description="LEVEL CAPPED MODE",
-         long_description="The max level a character can reach is changed to the specified value. Random is a "
-                          "global random level cap, Chaos is individual random level caps",
+         long_description="Set a maximum level for your characters. Toggle on to reveal additional options.",
+         category="characters",
+         input_type="boolean",
+         conflicts=[],
+         requirements=[],
+         children={'cap_type': True, 'cap_min': True, 'cap_max': True}
+         ),
+    Flag(name='cap_type',
+         description="",
+         long_description="How should the level cap behave? "
+                          "Random: Roll one level cap, apply it to all characters. "
+                          "Chaos: Roll a different level cap for each character.",
          category="characters",
          input_type="combobox",
-         choices=("Random", "Chaos", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
-                  "11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
-                  "21", "22", "23", "24", "25", "26", "27", "28", "29", "30",
-                  "31", "32", "33", "34", "35", "36", "37", "38", "39", "40",
-                  "41", "42", "43", "44", "45", "46", "47", "48", "49", "50",
-                  "51", "52", "53", "54", "55", "56", "57", "58", "59", "60",
-                  "61", "62", "63", "64", "65", "66", "67", "68", "69", "70",
-                  "71", "72", "73", "74", "75", "76", "77", "78", "79", "80",
-                  "81", "82", "83", "84", "85", "86", "87", "88", "89", "90",
-                  "91", "92", "93", "94", "95", "96", "97", "98", "99",),
-
-         default_value="99",
-         default_index=100,
+         always_on=True,
+         choices=("Random", "Chaos"),
+         default_value="Random",
+         default_index=-1,
+         conflicts=[],
+         requirements=[],
+         children={}
+         ),
+    Flag(name='cap_min',
+         description="",
+         long_description="The minimum value that characters can roll as their capped level.",
+         category="characters",
+         input_type="integer",
+         always_on=True,
+         default_value='1',
+         minimum_value=1,
+         maximum_value=98,
+         conflicts=[],
+         requirements=[],
+         children={}
+         ),
+    Flag(name='cap_max',
+         description="",
+         long_description="The maximum value that characters can roll as their capped level.",
+         category="characters",
+         input_type="integer",
+         always_on=True,
+         default_value='99',
+         minimum_value=2,
+         maximum_value=99,
          conflicts=[],
          requirements=[],
          children={}
@@ -1096,7 +1379,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=['suplexwrecks'],
-         requirements=[{'o':True}],
+         requirements=[{'o': True}],
          children={}
          ),
     Flag(name='naturalmagic',
@@ -1124,7 +1407,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=["allcombos", "suplexwrecks"],
-         requirements=[{'w':True}],
+         requirements=[{'w': True}],
          children={}
          ),
     Flag(name='penultima',
@@ -1133,7 +1416,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=["suplexwrecks"],
-         requirements=[{'w':True}],
+         requirements=[{'w': True}],
          children={}
          ),
     Flag(name='replaceeverything',
@@ -1142,7 +1425,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=["suplexwrecks"],
-         requirements=[{'w':True}],
+         requirements=[{'w': True}],
          children={}
          ),
     Flag(name='shadowstays',
@@ -1160,7 +1443,7 @@ NORMAL_FLAGS = [
          category="characters",
          input_type="boolean",
          conflicts=[],
-         requirements=[],
+         requirements=[{'o': True}],
          children={}
          ),
     Flag(name='suplexwrecks',
@@ -1285,45 +1568,16 @@ NORMAL_FLAGS = [
          category='experimental',
          input_type='boolean',
          conflicts=[],
-         requirements=[{"mementomori":True}],
+         requirements=[{"mementomori": '*'}],
          children={}
          ),
 
 ]
 
 # these are all sprite related codes
-MAKEOVER_MODIFIER_FLAGS = [
-    Flag(name='novanilla',
-         description="COMPLETE MAKEOVER MODE",
-         long_description="Use with 'makeover' to have sprites from the vanilla game to be guaranteed "
-                          "not to appear.",
-         category="sprite",
-         input_type="boolean",
-         conflicts=['frenchvanilla'],
-         requirements=[{'makeover':True}],
-         children={}
-         ),
-    Flag(name='frenchvanilla',
-         description="EQUAL RIGHTS MAKEOVER MODE",
-         long_description="Use with 'makeover' to have sprites from the vanilla game be selected "
-                          "with equal weight to new sprites.",
-         category="sprite",
-         input_type="boolean",
-         conflicts=['novanilla'],
-         requirements=[{'makeover':True}],
-         children={}
-         ),
-    Flag(name='cloneparty',
-         description="CLONE COSPLAY MAKEOVER MODE",
-         long_description="Use with 'makeover' to have the randomizer actively try to choose sprite"
-                          "versions of the same character.",
-         category="sprite",
-         input_type="boolean",
-         conflicts=[],
-         requirements=[{'makeover':True}],
-         children={}
-         )
-]
+MAKEOVER_MODIFIER_FLAGS = []
+
+# TODO: Figure out if this is even used.
 RESTRICTED_VANILLA_SPRITE_FLAGS = []
 
 # this is used for the makeover variation codes for sprites
@@ -1352,23 +1606,23 @@ def get_makeover_groups():
             no = Flag(name='no' + mg,
                       description="NO {mg.upper()} ALLOWED MODE",
                       long_description="Do not select {mg} sprites.",
-                      category="spriteCategories",
+                      category="sprite categories",
                       input_type="boolean",
                       conflicts=[],
-                      requirements=[{'makeover':True}],
+                      requirements=[{'makeover': True}],
                       children={}
                       )
             MAKEOVER_MODIFIER_FLAGS.extend([
                 Flag(name=mg,
                      description="CUSTOM {mg.upper()} FREQUENCY MODE",
                      long_description="Adjust probability of selecting " + mg + " sprites.",
-                     category="spriteCategories",
+                     category="sprite categories",
                      input_type="combobox",
                      choices=("Normal", "No", "Hate", "Like", "Only"),
                      default_value="Normal",
                      default_index=0,
                      conflicts=[],
-                     requirements=[],
+                     requirements=[{'makeover': True}],
                      children={}
                      )])
             RESTRICTED_VANILLA_SPRITE_FLAGS.append(no)
