@@ -6313,31 +6313,35 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             nicer_poison(outfile_rom_buffer)
 
         if Options_.is_flag_active('levelcap'):
+            behavior = Options_.get_flag_value('cap_type') or 'Random'
 
-            maxlevel = Options_.get_flag_value('levelcap')
+            try:
+                min_level = int(Options_.get_flag_value('cap_min'))
+            except (ValueError, TypeError):
+                min_level = 1
+
+            try:
+                max_level = int(Options_.get_flag_value('cap_max'))
+            except (ValueError, TypeError):
+                max_level = 99
+
             leveltable = myself_locations['LEVEL_CAP']
             max_level_string = bytes()
 
-            if str(maxlevel).lower() == "random":
-                maxlevel = rng.randint(1, 99)
+            if str(behavior).lower() == "random":
+                cap = rng.randint(min_level, max_level)
                 for character in characters:
                     if character.id >= 14:
                         continue
-                    character.level_cap = maxlevel
-                    max_level_string += bytes([int(maxlevel)])
-            elif str(maxlevel).lower() == "chaos":
+                    character.level_cap = cap
+                    max_level_string += bytes([int(cap)])
+            elif str(behavior).lower() == "chaos":
                 for character in characters:
                     if character.id >= 14:
                         continue
-                    maxlevel = rng.randint(1, 99)
-                    character.level_cap = maxlevel
-                    max_level_string += bytes([int(maxlevel)])
-            else:  # use whatever numeric value was given
-                for character in characters:
-                    if character.id >= 14:
-                        continue
-                    character.level_cap = maxlevel
-                    max_level_string += bytes([int(maxlevel)])
+                    cap = rng.randint(min_level, max_level)
+                    character.level_cap = cap
+                    max_level_string += bytes([int(cap)])
 
             level_cap(outfile_rom_buffer, max_level_string, leveltable)
 
