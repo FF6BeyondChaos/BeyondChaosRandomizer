@@ -409,10 +409,11 @@ class Options:
                 continue
 
             if len(flag.name) > 1:
-                if not flag.category == 'spriteCategories':
-                    s += f"SECRET CODE: {flag.description} ACTIVATED\n"
-                else:
-                    s += f"SECRET CODE: {str(flag.value).upper()} {str(flag.name).upper()} MODE ACTIVATED\n"
+                if flag.description:
+                    if not flag.category == 'spriteCategories':
+                        s += f"SECRET CODE: {flag.description} ACTIVATED\n"
+                    else:
+                        s += f"SECRET CODE: {str(flag.value).upper()} {str(flag.name).upper()} MODE ACTIVATED\n"
             self.activate_flag(flag.name, flag.value)
 
         for flag in [f for f in self.mode.forced_flags if not self.is_flag_active(f)]:
@@ -1604,7 +1605,7 @@ def get_makeover_groups():
         # this is used for the makeover variation codes for sprites
         for mg in makeover_groups:
             no = Flag(name='no' + mg,
-                      description="NO {mg.upper()} ALLOWED MODE",
+                      description=f"NO {mg.upper()} ALLOWED MODE",
                       long_description="Do not select {mg} sprites.",
                       category="sprite categories",
                       input_type="boolean",
@@ -1614,7 +1615,7 @@ def get_makeover_groups():
                       )
             MAKEOVER_MODIFIER_FLAGS.extend([
                 Flag(name=mg,
-                     description="CUSTOM {mg.upper()} FREQUENCY MODE",
+                     description=f"CUSTOM {mg.upper()} FREQUENCY MODE",
                      long_description="Adjust probability of selecting " + mg + " sprites.",
                      category="sprite categories",
                      input_type="combobox",
