@@ -4225,7 +4225,7 @@ def manage_auction_house():
         auction_sub.bytestring = bytes([0x6d, item.itemid, 0x45, 0x45, 0x45])
         auction_sub.write(outfile_rom_buffer)
 
-        addr = 0x303F00 + index * 6
+        addr = 0x304A00 + index * 6 #Needs 0x600 bytes
         auction_sub.set_location(addr)
         auction_sub.bytestring = bytes([0x66, auction_item[3] & 0xff, (auction_item[3] & 0xff00) >> 8, item.itemid,
                                         # Show text auction_item[3] with item item.itemid
@@ -4847,7 +4847,7 @@ def fix_flash_and_bioblaster():
         [0x00, 0x20, 0xD1, 0x01, 0xC9, 0x00, 0x85, 0xB0, 0xFF, 0xBA, 0xC0, 0x89, 0x10, 0xBB, 0xC2, 0x00, 0x8A, 0x89,
          0x20,
          0xB5, 0xF1, 0xBB, 0xD2, 0x00, 0x8A, 0xD1, 0x00, 0x81, 0x00, 0x00, 0xFF])
-    fix_flash_sub.write(outfile_rom_buffer)
+    fix_flash_sub.write(outfile_rom_buffer, noverify=True) #Noverify necessary to work with no flashing code - they overwrite and is required
 
     fix_flash_sub.set_location(0x108696)  # Make Flash have Schiller animation when used outside of Tools
     fix_flash_sub.bytestring = ([0x24, 0x81, 0xFF, 0xFF, 0xFF, 0xFF, 0x51, 0x00, 0x00, 0x9F, 0x10, 0x76, 0x81, 0x10])
@@ -5975,7 +5975,12 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         if Options_.is_flag_active('shadowstays'):
             shadow_stays(outfile_rom_buffer)
 
-        wor_free_char = 0xB  # gau
+        if Options_.is_flag_active('shuffle_commands') or \
+                Options_.is_flag_active('replace_commands') or \
+                Options_.is_flag_active('random_treasure'):
+            wor_free_char = 0xB  # gau
+        else:
+            wor_free_char = None
         alternate_gogo = Options_.is_flag_active('mimetime')
         if (Options_.is_flag_active('shuffle_wor') or alternate_gogo) and not Options_.is_flag_active('ancientcave'):
             include_gau = Options_.is_flag_active('shuffle_commands') or \

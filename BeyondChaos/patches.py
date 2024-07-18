@@ -1588,7 +1588,7 @@ def fewer_flashes(output_rom_buffer: BytesIO, flag_value):
         #
         anti_seizure_sub.set_location(0x10380B)
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, noverify=True) #Noverify necessary to work with no flashing code - they overwrite and is required
 
         # This commented out code is for vanilla Schiller, which BC is no longer using
         # anti_seizure_sub.set_location(0x10381A)  # D0381A

@@ -484,7 +484,9 @@ def zone_eater_recruit(outfile_rom_buffer: BytesIO, char_id):
     zone_eater_recruit_sub = Substitution()
     zone_eater_recruit_sub.set_location(0xB81CF)
     zone_eater_recruit_sub.bytestring = bytes(prefix + [0x3D, char_id, 0xC0, 0x27, 0x01, 0x00, 0x82, 0x01])
-    zone_eater_recruit_sub.write(outfile_rom_buffer)
+    zone_eater_recruit_sub.write(outfile_rom_buffer, noverify=True) #noverify is correct as this handles naming Mog
+                                                                    # whether you have met him or not by WoR first meeting
+
 
 
 def collapsing_house_recruit(unused_fout, unused_char_id):
@@ -504,8 +506,11 @@ def manage_wor_recruitment(outfile_rom_buffer: BytesIO, shuffle_wor, random_trea
     if shuffle_wor:
         wor_free_char, collapsing_house_char = _shuffle_recruit_locations(outfile_rom_buffer, random_treasure,
                                                                           include_gau, alternate_gogo)
-    else:
+    elif include_gau:
         wor_free_char = 0x0B
+        collapsing_house_char = 0x05
+    else:
+        wor_free_char = None
         collapsing_house_char = 0x05
 
     if alternate_gogo:
