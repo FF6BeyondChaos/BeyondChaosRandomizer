@@ -9,6 +9,10 @@ class Mode:
     name: str
     display_name: str
     description: str
+
+    # TODO: Change forced_flags and prohibited flags to be in line with Flag.requirements and Flag.conflicts
+    #   At minimum, forced_flags needs to take name:value pairs. This requires an adjustment of existing code.
+    #   Not a high priority as long as forced_flags contains only boolean flags.
     forced_flags: List[str] = field(default_factory=list)
     prohibited_flags: Set[str] = field(default_factory=set)
 
@@ -439,7 +443,9 @@ ANCIENT_CAVE_PROHIBITED_FLAGS = {
     "strangejourney",
     "worringtriad",
     "thescenarionottaken",
-
+    'regionofdoom'
+    'morefanatical',
+    'lessfanatical'
 }
 
 ALL_MODES = [
@@ -452,7 +458,8 @@ ALL_MODES = [
         name="katn",
         display_name='Race - Kefka @ Narshe',
         description="Play the normal story up to Kefka at Narshe. Intended for racing.",
-        prohibited_flags={"d", "k", "r", "airship", "alasdraco", "worringtriad", "mimetime"}
+        prohibited_flags={"d", "k", "r", "airship", "alasdraco", "worringtriad", "mimetime", 'morefanatical',
+                          'lessfanatical', 'regionofdoom', 'fightclub'}
     ),
     Mode(
         name="ancientcave",
@@ -482,7 +489,7 @@ ALL_MODES = [
         display_name='Race - Dragon Hunt',
         description="Kill all 8 dragons in the World of Ruin. Intended for racing.",
         forced_flags=["worringtriad"],
-        prohibited_flags={"j", "airship", "alasdraco", "thescenarionottaken"}
+        prohibited_flags={"j", "airship", "alasdraco", "thescenarionottaken", 'rushforpower', 'shadowstays'}
     ),
 ]
 
