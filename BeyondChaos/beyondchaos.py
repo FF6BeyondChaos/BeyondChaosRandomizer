@@ -1169,10 +1169,11 @@ class Window(QMainWindow):
                 calling_control.setText('Yes')
                 calling_control.flag.value = 'True'
 
-        elif isinstance(calling_control, QSpinBox) or isinstance(calling_control, QDoubleSpinBox):
-            # Get value. Round to two decimal places. Remove trailing zeroes.
-            value = '%g' % round(calling_control.value(), 2)
-            if not value == calling_control.flag.default_value or calling_control.flag.always_on:
+        elif isinstance(calling_control, QSpinBox):
+            value = int(calling_control.value())
+            if value == int(calling_control.flag.minimum_value) and calling_control.flag.special_value_text:
+                calling_control.flag.value = calling_control.flag.special_value_text.lower()
+            elif (not value == int(calling_control.flag.default_value)) or calling_control.flag.always_on:
                 calling_control.flag.value = value
             else:
                 calling_control.flag.value = ''
@@ -1182,6 +1183,19 @@ class Window(QMainWindow):
                 Options_.get_flag('cap_max').controls['input'].setMinimum(int(value))
             if calling_control.flag.name == 'cap_max':
                 Options_.get_flag('cap_min').controls['input'].setMaximum(int(value))
+
+        elif isinstance(calling_control, QDoubleSpinBox):
+            # Get value. Round to two decimal places.
+            value = round(calling_control.value(), 2)
+            if (value == float(calling_control.flag.minimum_value) and
+                    calling_control.flag.special_value_text):
+                calling_control.flag.value = calling_control.flag.special_value_text.lower()
+            elif (not value == float(calling_control.flag.default_value) or
+                  calling_control.flag.always_on):
+                # When adding value, remove trailing zeroes and trailing periods left after removing trailing zeroes
+                calling_control.flag.value = str(value).rstrip('0').rstrip('.')
+            else:
+                calling_control.flag.value = ''
 
         elif isinstance(calling_control, QComboBox):
             value = calling_control.currentText()
