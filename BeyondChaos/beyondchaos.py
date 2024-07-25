@@ -279,34 +279,74 @@ def handle_conflicts_and_requirements():
         error_style = disabled_flag_text_light_theme_stylesheet
     else:
         error_style = disabled_flag_text_other_theme_stylesheet
+
+    mode_requirements = []
+    mode_conflicts = []
+    if Options_.mode:
+        mode_requirements = Options_.mode.forced_flags
+        mode_conflicts = Options_.mode.prohibited_flags
+
     for flag in NORMAL_FLAGS + MAKEOVER_MODIFIER_FLAGS:
         disabled_text = ''
-        if flag.conflicts:
-            conflicting_flags = []
-            for conflicting_flag in flag.conflicts:
-                if not Options_.get_flag(conflicting_flag).value == '':
-                    conflicting_flags.append(conflicting_flag)
-            if conflicting_flags:
+        disabled_value_override = ''
+
+        if flag.name in mode_requirements:
+            # If the mode forced_flags is ever changed to support non-boolean flags, this disabled_value_override
+            #   will need to be updated to work with any flag value.
+            disabled_value_override = True
+            if not disabled_text:
                 disabled_text = ('<div style="' +
                                  error_style +
                                  '">Flag disabled because:<ul style="margin: 0;"><li>' +
-                                 'It conflicts with the following '
-                                 + 'active flags: "' + '" and "'.join(conflicting_flags) + '"</li>')
+                                 'The flag is required to be used with the selected game mode.</li>')
+            else:
+                disabled_text += '<li>The flag is required to be used with the selected game mode.</li>'
+            pass
 
-        if flag.requirements:
-            requirements_met = get_missing_requirements(flag)
+        # An if/else is used here so that, if a flag conflicts with the currently selected game mode, only that
+        #   conflict will be displayed as a reason the flag is disabled. Listing all of the other normal
+        #   conflicts and requirements would only serve to clutter the UI.
+        elif flag.name in mode_conflicts:
+            if not disabled_text:
+                disabled_text = ('<div style="' +
+                                 error_style +
+                                 '">Flag disabled because:<ul style="margin: 0;"><li>' +
+                                 'The flag cannot be used with the selected game mode.</li>')
+            else:
+                disabled_text += '<li>The flag cannot be used with the selected game mode.</li>'
 
-            if not requirements_met:
-                if not disabled_text:
-                    disabled_text = ('<div style="' +
-                                     error_style +
-                                     '">Flag disabled because:<ul style="margin: 0;"><li>' +
-                                     flag.get_requirement_string() + '</li>')
-                else:
-                    disabled_text += '<li>' + flag.get_requirement_string() + '</li>'
+        else:
+            if flag.conflicts:
+                conflicting_flags = []
+                for conflicting_flag in flag.conflicts:
+                    if not Options_.get_flag(conflicting_flag).value == '':
+                        conflicting_flags.append(conflicting_flag)
+                if conflicting_flags:
+                    if not disabled_text:
+                        disabled_text = ('<div style="' +
+                                         error_style +
+                                         '">Flag disabled because:<ul style="margin: 0;"><li>' +
+                                         'It conflicts with the following '
+                                         + 'active flags: "' + '" and "'.join(conflicting_flags) + '"</li>')
+                    else:
+                        disabled_text += ('<li>' +
+                                          'It conflicts with the following '
+                                          + 'active flags: "' + '" and "'.join(conflicting_flags) + '"</li>')
+
+            if flag.requirements:
+                requirements_met = get_missing_requirements(flag)
+
+                if not requirements_met:
+                    if not disabled_text:
+                        disabled_text = ('<div style="' +
+                                         error_style +
+                                         '">Flag disabled because:<ul style="margin: 0;"><li>' +
+                                         flag.get_requirement_string() + '</li>')
+                    else:
+                        disabled_text += '<li>' + flag.get_requirement_string() + '</li>'
 
         if disabled_text:
-            flag.value = ''
+            flag.value = disabled_value_override
             flag_control = flag.controls['input']
 
             if flag.input_type in ['float2', 'integer']:
@@ -317,8 +357,11 @@ def handle_conflicts_and_requirements():
             elif flag.input_type == 'combobox':
                 flag_control.setCurrentIndex(max(0, flag.default_index))
             else:
-                flag_control.setText('No')
-                flag_control.setChecked(False)
+                if disabled_value_override:
+                    flag_control.setText('Yes')
+                else:
+                    flag_control.setText('No')
+                flag_control.setChecked(not disabled_value_override == '')
             flag_control.setDisabled(True)
             flag.controls['description'].setText(disabled_text + '</ul></div>' + flag.long_description)
 
@@ -565,6 +608,9 @@ class Window(QMainWindow):
         for mode in ALL_MODES:
             self.mode_box.addItem(mode.display_name)
         layout_mode_and_preset.addWidget(self.mode_box, 1, 2)
+        self.mode_box.currentTextChanged.connect(
+            lambda: self.game_mode_changed()
+        )
 
         # ---- Preset Flags Drop Down ---- #
         label_preset_mode = QLabel('Preset Flags:')
@@ -951,6 +997,11 @@ class Window(QMainWindow):
         if flag_set is not None:
             for text, flags in flag_set.items():
                 self.game_presets[text] = flags
+
+    def game_mode_changed(self):
+        Options_.mode = get_mode(self.sender().currentText())
+        handle_conflicts_and_requirements()
+        self.flag_string.setText(Options_.get_flag_string())
 
     def update_preset_dropdown(self):
         text = self.preset_box.currentText()

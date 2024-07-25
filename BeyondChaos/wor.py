@@ -484,9 +484,8 @@ def zone_eater_recruit(outfile_rom_buffer: BytesIO, char_id):
     zone_eater_recruit_sub = Substitution()
     zone_eater_recruit_sub.set_location(0xB81CF)
     zone_eater_recruit_sub.bytestring = bytes(prefix + [0x3D, char_id, 0xC0, 0x27, 0x01, 0x00, 0x82, 0x01])
-    zone_eater_recruit_sub.write(outfile_rom_buffer, noverify=True) #noverify is correct as this handles naming Mog
-                                                                    # whether you have met him or not by WoR first meeting
-
+    # noverify is correct as this handles naming Mog whether you have met him or not by WoR first meeting
+    zone_eater_recruit_sub.write(outfile_rom_buffer, noverify=True)
 
 
 def collapsing_house_recruit(unused_fout, unused_char_id):
