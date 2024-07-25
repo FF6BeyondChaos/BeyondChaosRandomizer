@@ -134,29 +134,29 @@ def allocate_espers(ancient_cave, espers, characters, user_choice,
     esper_allocator_sub = Substitution()
     esper_allocator_sub.set_location(0x31B61)
     esper_allocator_sub.bytestring = [0x20, 0x00, 0xF8]
-    esper_allocator_sub.write(outfile_rom_buffer, noverify=True)
+    esper_allocator_sub.write(outfile_rom_buffer, noverify=True, patch_name='esper_allocator')
 
     esper_allocator_sub.set_location(0x35524)
     esper_allocator_sub.bytestring = [0x20, 0x07, 0xF8]
-    esper_allocator_sub.write(outfile_rom_buffer)
+    esper_allocator_sub.write(outfile_rom_buffer, patch_name='esper_allocator')
 
     esper_allocator_sub.set_location(0x358E1)
-    esper_allocator_sub.write(outfile_rom_buffer)
+    esper_allocator_sub.write(outfile_rom_buffer, patch_name='esper_allocator')
 
     esper_allocator_sub.set_location(0x359B1)
-    esper_allocator_sub.write(outfile_rom_buffer)
+    esper_allocator_sub.write(outfile_rom_buffer, patch_name='esper_allocator')
 
     esper_allocator_sub.set_location(0x35593)
     esper_allocator_sub.bytestring = [0xA9, 0x2C]
-    esper_allocator_sub.write(outfile_rom_buffer)
+    esper_allocator_sub.write(outfile_rom_buffer, patch_name='esper_allocator')
 
     esper_allocator_sub.set_location(0x355B2)
     esper_allocator_sub.bytestring = [0x20, 0x2E, 0xF8]
-    esper_allocator_sub.write(outfile_rom_buffer)
+    esper_allocator_sub.write(outfile_rom_buffer, patch_name='esper_allocator')
 
     esper_allocator_sub.set_location(0x358E8)
     esper_allocator_sub.bytestring = [0xC9, 0x20, 0xF0, 0x16]
-    esper_allocator_sub.write(outfile_rom_buffer)
+    esper_allocator_sub.write(outfile_rom_buffer, patch_name='esper_allocator')
 
     esper_allocator_sub.set_location(0x3F800)
 
@@ -170,7 +170,7 @@ def allocate_espers(ancient_cave, espers, characters, user_choice,
                                          0x80, 0xF4, 0x60, 0x9C, 0x80, 0x21, 0x4C, 0xD9, 0x7F, 0x82, 0x9A, 0xA7, 0xC3,
                                          0xAD, 0xFF, 0x9E, 0xAA, 0xAE, 0xA2, 0xA9, 0xBE, 0x00] + [
                                          i for sublist in map(int2bytes, char_mask_for_esper) for i in sublist]
-    esper_allocator_sub.write(outfile_rom_buffer)
+    esper_allocator_sub.write(outfile_rom_buffer, patch_name='esper_allocator')
 
     table_address = esper_allocator_sub.bytestring[29:29+3]
     table_address = ((table_address[2] << 16) |

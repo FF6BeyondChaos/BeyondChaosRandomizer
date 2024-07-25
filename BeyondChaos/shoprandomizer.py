@@ -1,5 +1,5 @@
 from io import BytesIO
-from utils import SHOP_TABLE, utilrandom as random
+from utils import SHOP_TABLE, utilrandom as random, Substitution
 from itemrandomizer import get_ranked_items, get_item
 
 # Despite documentation, these are the only pricings available.
@@ -177,8 +177,10 @@ class ShopBlock:
 
 
 def buy_owned_breakable_tools(outfile_rom_buffer: BytesIO):
-    outfile_rom_buffer.seek(0x3b7f4)
-    outfile_rom_buffer.write(b'\x27')
+    bobt_sub = Substitution()
+    bobt_sub.set_location(0x3b7f4)
+    bobt_sub.bytestring = b'\x27'
+    bobt_sub.write(outfile_rom_buffer, patch_name='buy_owned_breakable_tools')
 
 
 all_shops = None

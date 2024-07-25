@@ -9,6 +9,7 @@ from utils import Substitution, RANDOM_MULTIPLIER, random
 
 import math
 
+
 def allergic_dog(output_rom_buffer: BytesIO):
     # auto-float doesn't remove Interceptor
     allergic_dog_sub = Substitution()
@@ -32,7 +33,7 @@ def allergic_dog(output_rom_buffer: BytesIO):
         0x99, 0x15, 0x00,  # STA $0015,Y		; Set actor status
         0x60               # RTS
     ])
-    allergic_dog_sub.write(output_rom_buffer)
+    allergic_dog_sub.write(output_rom_buffer, patch_name='allergic_dog')
 
 
 # Moves check for dead banon after Life 3 so he doesn't revive and then game over.
@@ -96,7 +97,7 @@ def banon_life3(output_rom_buffer: BytesIO):
         # 06FF
         0xEA,
     ]
-    banon_sub.write(output_rom_buffer, noverify=True)
+    banon_sub.write(output_rom_buffer, noverify=True, patch_name='banon_life3')
 
 
 def evade_mblock(output_rom_buffer: BytesIO):
@@ -107,20 +108,20 @@ def evade_mblock(output_rom_buffer: BytesIO):
         0x80, 0x43, 0xB9, 0x54, 0x3B, 0x48, 0xEA
     ])
     evade_mblock_sub.set_location(0x2232C)
-    evade_mblock_sub.write(output_rom_buffer)
+    evade_mblock_sub.write(output_rom_buffer, patch_name='evade_mblock_fix')
 
 
 def fix_xzone(output_rom_buffer: BytesIO):
     fix_xzone_sub = Substitution()
     fix_xzone_sub.set_location(0x1064B7)  # force draw monsters struck by Life animation (includes reraise)
     fix_xzone_sub.bytestring = bytes([0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F, 0xF1, 0x81, 0xFF])
-    fix_xzone_sub.write(output_rom_buffer)
+    fix_xzone_sub.write(output_rom_buffer, patch_name='fix_xzone')
 
     fix_xzone_sub = Substitution()
     fix_xzone_sub.set_location(0x0235A3)                       # Hook point in Runic function
     fix_xzone_sub.bytestring = bytes([0x22, 0xD5, 0xB9, 0xC4,  # JSL $C4B9D5, go to subroutine
                                       0xEA])                   # NOP
-    fix_xzone_sub.write(output_rom_buffer)
+    fix_xzone_sub.write(output_rom_buffer, patch_name='fix_xzone')
 
     fix_xzone_sub = Substitution()
     fix_xzone_sub.set_location(0x04B9D5)  # Subroutine hooked from Runic function, sets bit #$04 of $11A7 when a Runic catch has occurred
@@ -129,13 +130,13 @@ def fix_xzone(output_rom_buffer: BytesIO):
                                       0xA9, 0x03,        # LDA #$03
                                       0x1C, 0xA7, 0x11,  # TRB $11A7, displaced code, turn off text if hits and miss if status isn't set]
                                       0x6B])             # RTL
-    fix_xzone_sub.write(output_rom_buffer)
+    fix_xzone_sub.write(output_rom_buffer, patch_name='fix_xzone')
 
     fix_xzone_sub = Substitution()
     fix_xzone_sub.set_location(0x01E2EE)  # Hook point in Show/Hide Character/Monster animation command, monster branch
     fix_xzone_sub.bytestring = bytes([0x22, 0xE0, 0xB9, 0xC4,   # JSL $C4B9E0, go to subroutine
                                       0xEA, 0xEA, 0xEA, 0xEA])  # NOP x4
-    fix_xzone_sub.write(output_rom_buffer)
+    fix_xzone_sub.write(output_rom_buffer, patch_name='fix_xzone')
 
     fix_xzone_sub = Substitution()
     fix_xzone_sub.set_location(0x04B9E0)  # Subroutine hooked from Show/Hide Character/Monster animation command, bypasses hide if bit #$04 of $11A7 is set
@@ -146,13 +147,13 @@ def fix_xzone(output_rom_buffer: BytesIO):
                                       0x25, 0x10,        # AND $10
                                       0x8D, 0xAB, 0x61,  # STA $61AB
                                       0x6B])             # RTL
-    fix_xzone_sub.write(output_rom_buffer)
+    fix_xzone_sub.write(output_rom_buffer, patch_name='fix_xzone')
 
     fix_xzone_sub = Substitution()
     fix_xzone_sub.set_location(0x01E31C)  # Hook point in Show/Hide Character/Monster animation command, character branch
     fix_xzone_sub.bytestring = bytes([0x22, 0xF0, 0xB9, 0xC4,   # JSL $C4B9F0, go to subroutine
                                       0xEA, 0xEA, 0xEA, 0xEA])  # NOP #4
-    fix_xzone_sub.write(output_rom_buffer)
+    fix_xzone_sub.write(output_rom_buffer, patch_name='fix_xzone')
 
     fix_xzone_sub = Substitution()
     fix_xzone_sub.set_location(0x04B9F0)  # Subroutine hooked from Show/Hide Character/Monster animation command, bypasses hide if bit #$04 of $11A7 is set
@@ -163,7 +164,7 @@ def fix_xzone(output_rom_buffer: BytesIO):
                                       0x25, 0x10,        # AND $10
                                       0x8D, 0xAC, 0x61,  # STA $61AC
                                       0x6B])             # RTL
-    fix_xzone_sub.write(output_rom_buffer)
+    fix_xzone_sub.write(output_rom_buffer, patch_name='fix_xzone')
 
 
 def imp_skimp(output_rom_buffer: BytesIO):
@@ -171,7 +172,7 @@ def imp_skimp(output_rom_buffer: BytesIO):
 
     # imp_skimp_sub.set_location(0x011116)
     # imp_skimp_sub.bytestring = bytes([0x1A, 0xD7])
-    # imp_skimp_sub.write(output_rom_buffer)
+    # imp_skimp_sub.write(output_rom_buffer, patch_name='imp_skimp')
 
     imp_skimp_sub.set_location(0x012F7F)
     imp_skimp_sub.bytestring = bytes([0x4A, 0x6A, 0x6A, 0x6A, 0xAA, 0xBD, 0xCD, 0x61, 0xF0, 0x03, 0x4C, 0x1A, 0x30, 0x1A, 0x9D, 0xCE,
@@ -187,29 +188,29 @@ def imp_skimp(output_rom_buffer: BytesIO):
                                       0xC0, 0x25, 0x7B, 0xAA, 0xA8, 0x5E, 0xC2, 0x62, 0x90, 0x01, 0xC8, 0x1E, 0xC2, 0x62, 0xE8, 0xE0,
                                       0x06, 0x00, 0xD0, 0xF1, 0x98, 0xF0, 0x03, 0x4C, 0x7C, 0x25, 0x4C, 0x5D, 0x32, 0xBD, 0xEC, 0x3E,
                                       0x29, 0x20, 0x59, 0xC2, 0x62, 0x4A, 0xF0, 0x08, 0x0A, 0x59, 0xC2, 0x62, 0x1A, 0x99, 0xC2, 0x62])
-    imp_skimp_sub.write(output_rom_buffer)
+    imp_skimp_sub.write(output_rom_buffer, patch_name='imp_skimp')
 
     imp_skimp_sub.set_location(0x013247)
     imp_skimp_sub.bytestring = bytes([0x69, 0x37, 0xCF, 0xAA, 0xA0, 0xC4, 0x64, 0xA9, 0x07, 0x00, 0x8B, 0x54, 0x7E, 0xC2, 0xAB, 0x7B,
                                       0xE2, 0x20, 0xEE, 0xBB, 0x64, 0x60, 0xFA, 0xE0, 0xC0, 0x25, 0xF0, 0x01, 0xDA, 0x60, 0x1A, 0x0C,
                                       0xC2, 0x62, 0x60])
-    imp_skimp_sub.write(output_rom_buffer)
+    imp_skimp_sub.write(output_rom_buffer, patch_name='imp_skimp')
 
     imp_skimp_sub.set_location(0x0191D4)
     imp_skimp_sub.bytestring = bytes([0x20, 0x1B, 0xD7])
-    imp_skimp_sub.write(output_rom_buffer)
+    imp_skimp_sub.write(output_rom_buffer, patch_name='imp_skimp')
 
     imp_skimp_sub.set_location(0x019369)
     imp_skimp_sub.bytestring = bytes([0x20, 0x1B, 0xD7])
-    imp_skimp_sub.write(output_rom_buffer)
+    imp_skimp_sub.write(output_rom_buffer, patch_name='imp_skimp')
 
     imp_skimp_sub.set_location(0x0193C5)
     imp_skimp_sub.bytestring = bytes([0x20, 0x1B, 0xD7])
-    imp_skimp_sub.write(output_rom_buffer)
+    imp_skimp_sub.write(output_rom_buffer, patch_name='imp_skimp')
 
     imp_skimp_sub.set_location(0x01C8AB)
     imp_skimp_sub.bytestring = bytes([0x3F, 0xD7, 0x2F, 0xD7, 0x3C])
-    imp_skimp_sub.write(output_rom_buffer)
+    imp_skimp_sub.write(output_rom_buffer, patch_name='imp_skimp')
 
     imp_skimp_sub.set_location(0x01D6E8)
     imp_skimp_sub.bytestring = bytes([0x20, 0xF1, 0xD6, 0xCA, 0x20, 0xF1, 0xD6, 0xE8, 0x60, 0xBD, 0x39, 0x6A, 0xDA, 0x30, 0x17, 0x29,
@@ -219,211 +220,216 @@ def imp_skimp(output_rom_buffer: BytesIO):
                                       0x06, 0x00, 0xD0, 0xF5, 0x4C, 0x21, 0x30, 0x20, 0x5B, 0x18, 0xAE, 0xF6, 0x7A, 0x9D, 0xD8, 0x74,
                                       0x9E, 0xD9, 0x74, 0x60, 0x7B, 0x80, 0xF3, 0xC2, 0x20, 0xAE, 0xF6, 0x7A, 0xBD, 0x82, 0x6F, 0x9D,
                                       0x3A, 0x6A, 0xBD, 0x84, 0x6F, 0x9D, 0x3C, 0x6A, 0x80, 0x23])
-    imp_skimp_sub.write(output_rom_buffer)
+    imp_skimp_sub.write(output_rom_buffer, patch_name='imp_skimp')
 
     imp_skimp_sub.set_location(0x101F51)  # Green Cherry Animation
     imp_skimp_sub.bytestring = bytes([0xFA, 0x7A, 0x1F, 0xFF, 0xFF])
-    imp_skimp_sub.write(output_rom_buffer)
+    imp_skimp_sub.write(output_rom_buffer, patch_name='imp_skimp')
 
     imp_skimp_sub.set_location(0x101F6C)  # Remedy Animation
     imp_skimp_sub.bytestring = bytes([0x8C, 0x1F, 0xBF, 0x8C, 0x1F, 0xBF, 0x8C, 0x1F, 0xBF, 0x8C, 0x1F, 0x80, 0x13, 0xFF, 0x8B, 0x07,
                                       0x00, 0x8C, 0x80, 0x13, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
                                       0xE9, 0x1F, 0x00, 0x8B, 0x03, 0x80, 0x65, 0x00, 0x80, 0x65, 0x00, 0x8C, 0x89, 0x09, 0x83, 0xCF,
                                       0x80, 0x65, 0x03, 0x80, 0x65, 0x03, 0x8A, 0x89, 0x04, 0x83, 0x3F, 0x8A])
-    imp_skimp_sub.write(output_rom_buffer)
+    imp_skimp_sub.write(output_rom_buffer, patch_name='imp_skimp')
 
     imp_skimp_sub.set_location(0x103433)  # Rippler Animation
     imp_skimp_sub.bytestring = bytes([0xFA, 0x0D, 0x5F])
-    imp_skimp_sub.write(output_rom_buffer)
+    imp_skimp_sub.write(output_rom_buffer, patch_name='imp_skimp')
 
     imp_skimp_sub.set_location(0x105F02)  # Imp Animation
     imp_skimp_sub.bytestring = bytes([0x13, 0x89, 0x2C, 0xA6, 0x00, 0x00, 0xFF, 0xA7, 0x00, 0x8A, 0xFF, 0xAD, 0x03, 0x80, 0x13, 0xFF,
                                       0xD1, 0x00, 0x80, 0x13, 0xFF, 0xFF, 0xFF])
-    imp_skimp_sub.write(output_rom_buffer)
+    imp_skimp_sub.write(output_rom_buffer, patch_name='imp_skimp')
 
     imp_skimp_sub.set_location(0x10790C)  # Bio Blaster Animation
     imp_skimp_sub.bytestring = bytes([0xFA, 0x12, 0x5F])
-    imp_skimp_sub.write(output_rom_buffer)
+    imp_skimp_sub.write(output_rom_buffer, patch_name='imp_skimp')
 
 
 def death_abuse(output_rom_buffer: BytesIO):
     death_abuse_sub = Substitution()
     death_abuse_sub.bytestring = bytes([0x60])
     death_abuse_sub.set_location(0xC515)
-    death_abuse_sub.write(output_rom_buffer)
+    death_abuse_sub.write(output_rom_buffer, patch_name='death_abuse')
 
 
 def no_kutan_skip(output_rom_buffer: BytesIO):
     no_kutan_skip_sub = Substitution()
     no_kutan_skip_sub.set_location(0xAEBC2)
     no_kutan_skip_sub.bytestring = bytes([0x27, 0x01])
-    no_kutan_skip_sub.write(output_rom_buffer)
+    no_kutan_skip_sub.write(output_rom_buffer, patch_name='no_kutan_skip')
+
 
 def mastered_espers(output_rom_buffer: BytesIO, dancingmaduin=False):
-
     me_sub = Substitution()
 
-    #Turn empty small font icon $7F into a star
+    # Turn empty small font icon $7F into a star
     me_sub.set_location(0x487B0)
     me_sub.bytestring = bytes([0x18, 0x00, 0x3C, 0x18, 0xFF, 0x18, 0xFF, 0x7E, 0x7E,
                                0x3C, 0xFF, 0x7E, 0xFF, 0x66, 0xE7, 0x00])
-    me_sub.write(output_rom_buffer)
+    me_sub.write(output_rom_buffer, patch_name='mastered_espers')
 
-    #Hook into the Skills menu initiation to run a subroutine in freespace
+    # Hook into the Skills menu initiation to run a subroutine in freespace
     me_sub.set_location(0x31B61)
     me_sub.bytestring = bytes([0x20, 0xB0, 0xFE]) #Hook - calculate actor's spell starting RAM offset; # JSL $EEB0A6, Set up Yellow font and Calculate actor's spell offset, 0xD2 bytes after start of code block
-    me_sub.write(output_rom_buffer, noverify=True)
+    me_sub.write(output_rom_buffer, noverify=True, patch_name='mastered_espers')
 
     me_sub.set_location(0x3FEB0)
     if dancingmaduin:
          me_sub.bytestring = bytes([ 0x22, 0xA6, 0xB0, 0xEE, 0x20, 0x00, 0xF8, 0x60])
     else:
         me_sub.bytestring = bytes([0x22, 0xA6, 0xB0, 0xEE, 0x60])
-    me_sub.write(output_rom_buffer)
+    me_sub.write(output_rom_buffer, patch_name='mastered_espers')
 
-    #Hook into "Draw Esper name and MP cost" function to run a check from freespace and draw the star
+    # Hook into "Draw Esper name and MP cost" function to run a check from freespace and draw the star
     me_sub.set_location(0x35509)
-    me_sub.bytestring = bytes([0x22, 0xD4, 0xAF, 0xEE,					# JSL $EEAFD4, Draw Esper name and MP cost
-		                        0x20, 0x9F, 0x80,						# JSR $809F, Compute string map pointer
-		                        0xC2, 0x20,])							# REP #$20
-    me_sub.write(output_rom_buffer)
+    me_sub.bytestring = bytes([0x22, 0xD4, 0xAF, 0xEE,  # JSL $EEAFD4, Draw Esper name and MP cost
+                               0x20, 0x9F, 0x80,        # JSR $809F, Compute string map pointer
+                               0xC2, 0x20,])            # REP #$20
+    me_sub.write(output_rom_buffer, patch_name='mastered_espers')
 
     me_sub.set_location(0x3552E)
-    me_sub.bytestring = bytes([0x22, 0x04, 0xB0, 0xEE])  #Hook - check if current esper is mastered; # JSL $EEB004, Check if mastered, 0x30 bytes after start of code block
-    me_sub.write(output_rom_buffer)
+    # Hook - check if current esper is mastered; # JSL $EEB004, Check if mastered, 0x30 bytes after start of code block
+    me_sub.bytestring = bytes([0x22, 0x04, 0xB0, 0xEE])
+    me_sub.write(output_rom_buffer, patch_name='mastered_espers')
 
     me_sub.set_location(0x35548)
     me_sub.bytestring = bytes([0x22, 0x51, 0xB0, 0xEE,					# Draw Digits, 0x7D bytes after start of code block
-		                        0x20, 0xD9, 0x7F,						# JSR $7FD9, Draw string
-		                        0x22, 0x64, 0xB0, 0xEE,					# JSL $EEB064, Add Star, 0x90 bytes after start of code block
-		                        0x20, 0xD9, 0x7F,						# JSR $7FD9, Draw string
-		                        0x60])  								# RTS  #Hook - add star Icon
-    me_sub.write(output_rom_buffer)
+                               0x20, 0xD9, 0x7F,						# JSR $7FD9, Draw string
+                               0x22, 0x64, 0xB0, 0xEE,					# JSL $EEB064, Add Star, 0x90 bytes after start of code block
+                               0x20, 0xD9, 0x7F,						# JSR $7FD9, Draw string
+                               0x60])  								    # RTS  #Hook - add star Icon
+    me_sub.write(output_rom_buffer, patch_name='mastered_espers')
 
     me_sub.set_location(0x3555D)
-    me_sub.bytestring = bytes([0xA0, 0x0D, 0x00]) #Constant adjustment - Blank 13 tiles
-    me_sub.write(output_rom_buffer)
+    me_sub.bytestring = bytes([0xA0, 0x0D, 0x00]) # Constant adjustment - Blank 13 tiles
+    me_sub.write(output_rom_buffer, patch_name='mastered_espers')
 
-    #Freespace after "Improved Party Gear" Patch
+    # Freespace after "Improved Party Gear" Patch
     me_sub.set_location(0x2EAFD4)
-    me_sub.bytestring = bytes([0xC2, 0x20,							# REP #$20
-                                0x8A,								# TXA
-                                0x18,								# CLC
-                                0x69, 0x0C, 0x00,					# ADC $000C
-                                0x85, 0xF5,							# STA $F5, save icon position
-                                0xE2, 0x20,							# SEP #$20
-                                0xA5, 0xE6,							# LDA $E6
-                                0x1A,								# INC
-                                0x6B,								# RTL
+    me_sub.bytestring = bytes([
+        0xC2, 0x20,						# REP #$20
+        0x8A,							# TXA
+        0x18,							# CLC
+        0x69, 0x0C, 0x00,				# ADC $000C
+        0x85, 0xF5,						# STA $F5, save icon position
+        0xE2, 0x20,						# SEP #$20
+        0xA5, 0xE6,						# LDA $E6
+        0x1A,							# INC
+        0x6B,							# RTL
 
-                                0x7B,								# TDC, in this context puts 0 into A register
-                                0xA5, 0x28,							# LDA $28
-                                0xAA,								# TAX
-                                0xB5, 0x69,							# LDA $69,X
-                                0xEB,								# XBA
-                                0xA9, 0x36,							# LDA #$36
-                                0xC2, 0x20,							# REP #$20, puts A into 16-bit mode
-                                0x8F, 0x02, 0x42, 0x00,				# STA $004202, prepare for SNES hardware multiplication of A and B
-                                0xEA, 0xEA, 0xEA, 0xEA,				# NOP #4, wait for it to finish
-                                0xAF, 0x16, 0x42, 0x00,				# LDA $004216, get the result
-                                0x8D, 0x03, 0x02,					# STA $0203
-                                0xE2, 0x20,							# SEP #$20, back to A in 8-bit mode
-                                0x7B,								# TDC
-                                0xA5, 0x28,							# LDA $28
-                                0xAA,								# TAX
-                                0x6B,								# RTL, end of routine "Calculate Actor's spell starting RAM offset"
+        0x7B,							# TDC, in this context puts 0 into A register
+        0xA5, 0x28,						# LDA $28
+        0xAA,							# TAX
+        0xB5, 0x69,						# LDA $69,X
+        0xEB,							# XBA
+        0xA9, 0x36,						# LDA #$36
+        0xC2, 0x20,						# REP #$20, puts A into 16-bit mode
+        0x8F, 0x02, 0x42, 0x00,			# STA $004202, prepare for SNES hardware multiplication of A and B
+        0xEA, 0xEA, 0xEA, 0xEA,			# NOP #4, wait for it to finish
+        0xAF, 0x16, 0x42, 0x00,			# LDA $004216, get the result
+        0x8D, 0x03, 0x02,				# STA $0203
+        0xE2, 0x20,						# SEP #$20, back to A in 8-bit mode
+        0x7B,							# TDC
+        0xA5, 0x28,						# LDA $28
+        0xAA,							# TAX
+        0x6B,							# RTL, end of routine "Calculate Actor's spell starting RAM offset"
 
-                                0xDA,								# PHX
-                                0x5A,								# PHY
-                                0x7B,								# TDC
-                                0x85, 0xFB,							# STA $FB, clear the Mastered Esper byte
-                                0xBF, 0x89, 0x9D, 0x7E,				# LDA $7E9D89, load Esper ID
-                                0xC2, 0x20,							# REP #$20, puts A into 16-bit mode
-                                0x85, 0xFC,							# STA $FC
-                                0x0A,								# ASL
-                                0x85, 0xFE,							# STA $FE
-                                0x0A, 0x0A,							# ASL #2
-                                0x18,								# CLC
-                                0x65, 0xFE,							# ADC $FE
-                                0x18,								# CLC
-                                0x65, 0xFC,							# ADC $FC, now eleven times the Esper ID
-                                0xAA,								# TAX
-                                0x64, 0xFC,							# STZ $FC
-                                0xA0, 0x05, 0x00,					# LDY #$0005, Five spells max per Esper
-                                0xE2, 0x20,							# SEP #$20, back to 8-Bit A
-                                0x7B,								# TDC, Clear A.  [This is the start of the loop]
-                                0xBF, 0x01, 0x6E, 0xD8,				# LDA $D86E01,X, Esper Spell
-                                0xC9, 0xFF,							# CMP #$FF, is it empty?
-                                0xF0, 0x1B,							# BEQ $1B, branch if so
-                                0x85, 0xFC,							# STA $FC
-                                0xC2, 0x20,							# REP #$20, back to 16-Bit A
-                                0xAD, 0x03, 0x02,					# LDA $0203, current character spell offset
-                                0x18,								# CLC
-                                0x65, 0xFC,							# ADC $FC, Spell Offset + Spell ID
-                                0xDA,								# PHX, save Esper data index
-                                0xAA,								# TAX, set X as spell learnt percentage
-                                0xE2, 0x20,							# SEP #$20, back to 8-Bit A
-                                0xBD, 0x6E, 0x1A,					# LDA $1A6E,X, spell learnt percentage
-                                0xFA,								# PLX, restore Esper data index
-                                0xC9, 0xFF,							# CMP #$FF, is the spell learned?
-                                0xD0, 0x07,							# BNE $07, Branch if not, out of loop, to prevent marking the Esper as mastered
-                                0xE8, 0xE8,							# INX #2
-                                0x88,								# DEY
-                                0xD0, 0xDC,							# BNE $DC, go back to the start of the loop if we haven't checked five spells
-                                0xE6, 0xFB,							# INC $FB, mark Esper as mastered
-                                0x7A,								# PLY
-                                0xFA,								# PLX
-                                0xBF, 0x89, 0x9D, 0x7E,				# LDA $7E8D89,X, load Esper ID
-                                0x6B,								# RTL, end of routine "Check if current Esper is mastered"
+        0xDA,							# PHX
+        0x5A,							# PHY
+        0x7B,							# TDC
+        0x85, 0xFB,						# STA $FB, clear the Mastered Esper byte
+        0xBF, 0x89, 0x9D, 0x7E,			# LDA $7E9D89, load Esper ID
+        0xC2, 0x20,						# REP #$20, puts A into 16-bit mode
+        0x85, 0xFC,						# STA $FC
+        0x0A,							# ASL
+        0x85, 0xFE,						# STA $FE
+        0x0A, 0x0A,						# ASL #2
+        0x18,							# CLC
+        0x65, 0xFE,						# ADC $FE
+        0x18,							# CLC
+        0x65, 0xFC,						# ADC $FC, now eleven times the Esper ID
+        0xAA,							# TAX
+        0x64, 0xFC,						# STZ $FC
+        0xA0, 0x05, 0x00,				# LDY #$0005, Five spells max per Esper
+        0xE2, 0x20,						# SEP #$20, back to 8-Bit A
+        0x7B,							# TDC, Clear A.  [This is the start of the loop]
+        0xBF, 0x01, 0x6E, 0xD8,			# LDA $D86E01,X, Esper Spell
+        0xC9, 0xFF,						# CMP #$FF, is it empty?
+        0xF0, 0x1B,						# BEQ $1B, branch if so
+        0x85, 0xFC,						# STA $FC
+        0xC2, 0x20,						# REP #$20, back to 16-Bit A
+        0xAD, 0x03, 0x02,				# LDA $0203, current character spell offset
+        0x18,							# CLC
+        0x65, 0xFC,						# ADC $FC, Spell Offset + Spell ID
+        0xDA,							# PHX, save Esper data index
+        0xAA,							# TAX, set X as spell learnt percentage
+        0xE2, 0x20,						# SEP #$20, back to 8-Bit A
+        0xBD, 0x6E, 0x1A,				# LDA $1A6E,X, spell learnt percentage
+        0xFA,							# PLX, restore Esper data index
+        0xC9, 0xFF,						# CMP #$FF, is the spell learned?
+        0xD0, 0x07,						# BNE $07, Branch if not, out of loop, to prevent marking the Esper as mastered
+        0xE8, 0xE8,						# INX #2
+        0x88,							# DEY
+        0xD0, 0xDC,						# BNE $DC, go back to the start of the loop if we haven't checked five spells
+        0xE6, 0xFB,						# INC $FB, mark Esper as mastered
+        0x7A,							# PLY
+        0xFA,							# PLX
+        0xBF, 0x89, 0x9D, 0x7E,			# LDA $7E8D89,X, load Esper ID
+        0x6B,							# RTL, end of routine "Check if current Esper is mastered"
 
-                                0xA5, 0xF7,							# LDA $F7, hundreds digit
-                                0x8D, 0x80, 0x21,					# STA $2180, add to string
-                                0xA5, 0xF8,							# LDA $F8, tens digit
-                                0x8D, 0x80, 0x21,					# STA $2180, add to string
-                                0xA5, 0xF9,							# LDA $F9, ones digit
-                                0x8D, 0x80, 0x21,					# STA $2180, add to string
-                                0x9C, 0x80, 0x21,					# STZ $2180, end string
-                                0x6B,								# RTL, end of routine "Draw Digits"
+        0xA5, 0xF7,						# LDA $F7, hundreds digit
+        0x8D, 0x80, 0x21,				# STA $2180, add to string
+        0xA5, 0xF8,						# LDA $F8, tens digit
+        0x8D, 0x80, 0x21,				# STA $2180, add to string
+        0xA5, 0xF9,						# LDA $F9, ones digit
+        0x8D, 0x80, 0x21,				# STA $2180, add to string
+        0x9C, 0x80, 0x21,				# STZ $2180, end string
+        0x6B,							# RTL, end of routine "Draw Digits"
 
-                                0xA6, 0xF5,							# LDX $F5, Icon's X position
-                                0xA5, 0xE6,							# LDA $E6, BG1 write row
-                                0x1A,								# INC, go down one row
-                                0xEB,								# XBA
-                                0xA5, 0x00,							# LDA $00
-                                0xEB,								# XBA
-                                0xC2, 0x20,							# REP #$20, set 16-Bit A
-                                0x0A, 0x0A, 0x0A, 0x0A, 0x0A, 0x0A,	# ASL #6, times sixty-four
-                                0x85, 0xE7,							# STA $E7
-                                0x8A,								# TXA
-                                0x0A,								# ASL
-                                0x18,								# CLC
-                                0x65, 0xE7,							# ADC $E7
-                                0x69, 0x49, 0x38,					# ADC #$3849
-                                0x8F, 0x89, 0x9E, 0x7E,				# STA $7E9E89, set position
-                                0xE2, 0x20,							# SEP #$20, set 8-Bit A
-                                0xA5, 0x29,							# LDA $29, load font palette
-                                0xC9, 0x20,							# CMP #$20, check if it's the active character palette
-                                0xD0, 0x04,							# BNE $04, branch if it's grayed out
-                                0xA9, 0x34,							# LDA #$34, set palette to yellow (using Myria's code)
-                                0x85, 0x29,							# STA $29
-                                0xA2, 0x8B, 0x9E,					# LDX #$9E8B
-                                0x8E, 0x81, 0x21,					# STX $2181
-                                0xA5, 0xFB,							# LDA $FB, mastered Esper byte
-                                0xF0, 0x04,							# BEQ $04, branch if not mastered
-                                0xA9, 0x7F,							# LDA #$7F, Esper star icon
-                                0x80, 0x02,							# BRA $02
-                                0xA9, 0xFF,							# LDA #$FF, empty glyph
-                                0x8D, 0x80, 0x21,					# STA $2180, add to string
-                                0x9C, 0x80, 0x21,					# STZ $2180, end string
-                                0x6B,								# RTL, end of routine "Add Star"
+        0xA6, 0xF5,						# LDX $F5, Icon's X position
+        0xA5, 0xE6,						# LDA $E6, BG1 write row
+        0x1A,							# INC, go down one row
+        0xEB,							# XBA
+        0xA5, 0x00,						# LDA $00
+        0xEB,							# XBA
+        0xC2, 0x20,						# REP #$20, set 16-Bit A
+        0x0A, 0x0A, 0x0A, 0x0A,
+        0x0A, 0x0A,	                    # ASL #6, times sixty-four
+        0x85, 0xE7,						# STA $E7
+        0x8A,							# TXA
+        0x0A,							# ASL
+        0x18,							# CLC
+        0x65, 0xE7,						# ADC $E7
+        0x69, 0x49, 0x38,				# ADC #$3849
+        0x8F, 0x89, 0x9E, 0x7E,			# STA $7E9E89, set position
+        0xE2, 0x20,						# SEP #$20, set 8-Bit A
+        0xA5, 0x29,						# LDA $29, load font palette
+        0xC9, 0x20,						# CMP #$20, check if it's the active character palette
+        0xD0, 0x04,						# BNE $04, branch if it's grayed out
+        0xA9, 0x34,						# LDA #$34, set palette to yellow (using Myria's code)
+        0x85, 0x29,						# STA $29
+        0xA2, 0x8B, 0x9E,				# LDX #$9E8B
+        0x8E, 0x81, 0x21,				# STX $2181
+        0xA5, 0xFB,						# LDA $FB, mastered Esper byte
+        0xF0, 0x04,						# BEQ $04, branch if not mastered
+        0xA9, 0x7F,						# LDA #$7F, Esper star icon
+        0x80, 0x02,						# BRA $02
+        0xA9, 0xFF,						# LDA #$FF, empty glyph
+        0x8D, 0x80, 0x21,				# STA $2180, add to string
+        0x9C, 0x80, 0x21,				# STZ $2180, end string
+        0x6B,							# RTL, end of routine "Add Star"
 
-                                0x22, 0x01, 0xAF, 0xEE,				# JSL Myria's Yellow Font code
-                                0x22, 0xE3, 0xAF, 0xEE,				# JSL Calculate actor's spell offset, 0x0F bytes after start of code block
-                                0x6B])								# RTL
+        0x22, 0x01, 0xAF, 0xEE,			# JSL Myria's Yellow Font code
+        0x22, 0xE3, 0xAF, 0xEE,			# JSL Calculate actor's spell offset, 0x0F bytes after start of code block
+        0x6B]                            # RTL
+    )
 
-    me_sub.write(output_rom_buffer)
+    me_sub.write(output_rom_buffer, patch_name='mastered_espers')
 
-    ## Next free byte is 0x2EB0AF
+    # Next free byte is 0x2EB0AF
+
 
 def show_coliseum_rewards(output_rom_buffer: BytesIO):
     rewards_sub = Substitution()
@@ -431,7 +437,7 @@ def show_coliseum_rewards(output_rom_buffer: BytesIO):
     rewards_sub.bytestring = bytes([
         0x4C, 0x00, 0xF9
     ])
-    rewards_sub.write(output_rom_buffer)
+    rewards_sub.write(output_rom_buffer, patch_name='show_coliseum_rewards')
 
     rewards_sub.set_location(0x3F900)
     rewards_sub.bytestring = bytes([
@@ -451,28 +457,28 @@ def show_coliseum_rewards(output_rom_buffer: BytesIO):
         0x21, 0x60, 0xAD, 0x05, 0x02, 0xC9, 0xFF, 0xF0, 0x07, 0xAD, 0x05, 0x02, 0x20,
         0x68, 0xC0, 0x60, 0xA9, 0xFF, 0x20, 0x54, 0xF9, 0x60, 0xFF
         ])
-    rewards_sub.write(output_rom_buffer)
+    rewards_sub.write(output_rom_buffer, patch_name='show_coliseum_rewards')
 
 
 def sprint_shoes_break(output_rom_buffer: BytesIO):
 
-    #Also make Rename Card item slot usable in battle
+    # Also make Rename Card item slot usable in battle
 
     sprint_shoes_sub = Substitution()
     sprint_shoes_sub.set_location(0x2273D)
     sprint_shoes_sub.bytestring = bytes([0xE8])
-    sprint_shoes_sub.write(output_rom_buffer)
+    sprint_shoes_sub.write(output_rom_buffer, patch_name='sprint_shoes_break')
 
 
 def cycle_statuses(output_rom_buffer: BytesIO):
     cycles_sub = Substitution()
     cycles_sub.set_location(0x012E4F)  # C12E4F
     cycles_sub.bytestring = bytes([0x80, 0x2B])         # BRA $2E7C	    (+43)
-    cycles_sub.write(output_rom_buffer)
+    cycles_sub.write(output_rom_buffer, patch_name='cycle_statuses')
 
     cycles_sub.set_location(0x012E5C)  # C12E5C
     cycles_sub.bytestring = bytes([0x80, 0x1E])         # BRA $2E7C	    (+30)
-    cycles_sub.write(output_rom_buffer)
+    cycles_sub.write(output_rom_buffer, patch_name='cycle_statuses')
 
     cycles_sub.set_location(0x012E69)  # C12E69
     cycles_sub.bytestring = bytes([
@@ -515,7 +521,7 @@ def cycle_statuses(output_rom_buffer: BytesIO):
         0xEA, 0xEA, 0xEA, 0xEA,  # 2EAF/2EB0/2EB1/2EB2    NOP
         0xEA                     # 2EB3                   NOP
     ])
-    cycles_sub.write(output_rom_buffer)
+    cycles_sub.write(output_rom_buffer, patch_name='cycle_statuses')
 
     cycles_sub.set_location(0x012ECF)  # C12ECF
     cycles_sub.bytestring = bytes([
@@ -541,7 +547,7 @@ def cycle_statuses(output_rom_buffer: BytesIO):
         0x80, 0x01,              # 2EF3/2EF4              BRA $2EF7	        (+1)
         0xEA                     # 2EF5                   NOP
     ])
-    cycles_sub.write(output_rom_buffer)
+    cycles_sub.write(output_rom_buffer, patch_name='cycle_statuses')
 
     cycles_sub.set_location(0x02307D)  # C2307D
     cycles_sub.bytestring = bytes([
@@ -578,40 +584,42 @@ def cycle_statuses(output_rom_buffer: BytesIO):
         0xC2, 0x20,              # 30B8/30B9              REP #$20		    16-bit A
         0xAA                     # 30BA                   TAX			    Move to X
     ])
-    cycles_sub.write(output_rom_buffer)
+    cycles_sub.write(output_rom_buffer, patch_name='cycle_statuses')
 
 
 def no_dance_stumbles(output_rom_buffer: BytesIO):
     nds_sub = Substitution()
     nds_sub.set_location(0x0217A0)  # C217A0
     nds_sub.bytestring = bytes([0xEA, 0xEA])            # No Op x2
-    nds_sub.write(output_rom_buffer)
+    nds_sub.write(output_rom_buffer, patch_name='dancelessons')
 
 
 def apply_namingway(output_rom_buffer: BytesIO):
     an_sub = Substitution()
     an_sub.set_location(0xC09AB)
     an_sub.bytestring = bytes([0x4B, 0x4E, 0x00, 0xB6, 0xB5, 0x09, 0x02, 0xB3, 0x5E, 0x00, 0x98, 0x31, 0x96, 0xFE, 0xFD, 0xFD])
-    an_sub.write(output_rom_buffer)
+    an_sub.write(output_rom_buffer, patch_name='apply_namingway')
 
     an_sub = Substitution()
     an_sub.set_location(0xC64FA)
     an_sub.bytestring = bytes([0xC0, 0xA4, 0x80, 0x9D, 0x09, 0x02])
-    an_sub.write(output_rom_buffer)
+    an_sub.write(output_rom_buffer, patch_name='apply_namingway')
+
 
 def fix_flyaway(output_rom_buffer: BytesIO):
-    #Osteoclave's Flyaway Bug event fix
+    # Osteoclave's Flyaway Bug event fix
     ff_sub = Substitution()
     ff_sub.set_location(0xACBAD)
     ff_sub.bytestring = bytes([0xFD])
-    ff_sub.write(output_rom_buffer)
+    ff_sub.write(output_rom_buffer, patch_name='fix_flyaway')
+
 
 def item_return_buffer_fix(output_rom_buffer: BytesIO):
-
     irbf_sub = Substitution()
     irbf_sub.set_location(0x112D5)
     irbf_sub.bytestring = bytes([0xE0, 0x50, 0x00])
-    irbf_sub.write(output_rom_buffer)
+    irbf_sub.write(output_rom_buffer, patch_name='fix_item_return_buffer')
+
 
 def change_swdtech_speed(output_rom_buffer: BytesIO, speed: str = "Vanilla"):
     css_sub = Substitution()
@@ -621,23 +629,24 @@ def change_swdtech_speed(output_rom_buffer: BytesIO, speed: str = "Vanilla"):
         swdtech_speed = 0x04
         css_sub.set_location(0x017D84)
         css_sub.bytestring = bytes([0xAD, 0x82, 0x7B, 0x18, 0x69, swdtech_speed, 0x8D, 0x82, 0x7B, 0x80, 0x01, 0xEA])
-        css_sub.write(output_rom_buffer)
+        css_sub.write(output_rom_buffer, patch_name='swdtechspeed')
     elif speed.lower() == "faster":
         swdtech_speed = 0x02
         css_sub.set_location(0x017D84)
         css_sub.bytestring = bytes([0xAD, 0x82, 0x7B, 0x18, 0x69, swdtech_speed, 0x8D, 0x82, 0x7B, 0x80, 0x01, 0xEA])
-        css_sub.write(output_rom_buffer)
+        css_sub.write(output_rom_buffer, patch_name='swdtechspeed')
     elif speed.lower() == "fast":
         swdtech_speed = 0x00
         css_sub.set_location(0x017D87)
         css_sub.bytestring = bytes([swdtech_speed])
-        css_sub.write(output_rom_buffer)
+        css_sub.write(output_rom_buffer, patch_name='swdtechspeed')
 
 
 # ---------------------
 # Memento Mori  07/12/23
 #
-# Denies relics for unrecruited characters (Moogle Defense, Ghost Train), hiding what the relic will be on the real character
+# Denies relics for unrecruited characters (Moogle Defense, Ghost Train),
+#   hiding what the relic will be on the real character
 # Unfortunate side-effect: can't peek Mog's relic.
 # Enables spell learning from the relic
 # ---------------------
@@ -654,7 +663,7 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
         # 0x20ED4
         0x68,  # PLA			; Get the character ID back, necessary for stack preservation
         0x22, 0xCF, 0xB8, 0xC4,
-        # JSL $C4B8CF		; Hook: Load character stats, store status byte 1 for imp gear, and then put hidden relic in A
+        # JSL $C4B8CF	; Hook: Load character stats, store status byte 1 for imp gear, and then put hidden relic in A
         0x80, 0x08,  # BRA $08          ; Skip two long access hooks used by other Hidden Relic routine
         # 0x20EDB
         0x20, 0x81, 0x47, 0x6B,
@@ -667,7 +676,7 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
         # 0x20EE6
         # Vanilla
     ])
-    hidden_relic_sub.write(output_rom_buffer)
+    hidden_relic_sub.write(output_rom_buffer, patch_name='hidden_relic')
 
     if amount == "random":
         amount = random.randint(1, 14)
@@ -678,10 +687,11 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
     # All relics not on rare list or command changer
     relic_list = [0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xC0, 0xC1,
                   0xC2, 0xC3, 0xC4, 0xC7, 0xC9, 0xCC, 0xCD, 0xD0, 0xD2, 0xD4, 0xD5, 0xD9, 0xE1, 0xE2, 0xE3, 0xE5, 0xE6]
-    # Offering, Merit Award, Economizer, Marvel Shoes, Safety Bit, Memento Ring, Ribbon, Moogle Charm, Charm Bangle, Blizzard Orb, Rage Ring, Genji Glove, Exp. Egg, Relic Ring, Pod Bracelet, Muscle Belt
+    # Offering, Merit Award, Economizer, Marvel Shoes, Safety Bit, Memento Ring, Ribbon, Moogle Charm,
+    #   Charm Bangle, Blizzard Orb, Rage Ring, Genji Glove, Exp. Egg, Relic Ring, Pod Bracelet, Muscle Belt
     rare_relic_list = [0xD3, 0xDA, 0xCE, 0xE0, 0xDC, 0xDB, 0xCA, 0xDE, 0xDF, 0xC5, 0xC6, 0xD1, 0xE4, 0xDD, 0xC8, 0xCB]
 
-    #If dearestmolulu is on, don't allow an item with Moogle Charm effect to be innate
+    # If dearestmolulu is on, don't allow an item with Moogle Charm effect to be innate
     if feature_exclusion_list:
         from itemrandomizer import get_items, STATPROTECT
         for relic in [item for item in get_items() if item.is_relic]:
@@ -714,7 +724,7 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
         0xA0, 0x05, 0x00,  # LDY #$0005		; Displaced Y index for later equipment read loop
         0x68,  # PLA			; Fetch back the character ID from the stack
     ])
-    hidden_relic_sub.write(output_rom_buffer)
+    hidden_relic_sub.write(output_rom_buffer, patch_name='hidden_relic')
 
     while iteration < 14:
 
@@ -751,24 +761,23 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
             0xA9, char_selection.relic_selection,  # LDA
             0x6B,  # RTL       ; JSR to $0F9A, then resume vanilla code
         ])
-        hidden_relic_sub.write(output_rom_buffer)
+        hidden_relic_sub.write(output_rom_buffer, patch_name='hidden_relic')
 
         iteration += 1
-
 
     hidden_relic_sub.set_location(0x4B9D2)
     hidden_relic_sub.bytestring = bytes([
         0xA9, 0xFF,  # LDA Empty
         0x6B,  # RTL	         ; JSR to $0F9A, then resume vanilla code
     ])
-    hidden_relic_sub.write(output_rom_buffer)
+    hidden_relic_sub.write(output_rom_buffer, patch_name='hidden_relic')
 
     # Status Screen Display
     hidden_relic_sub.set_location(0x35FC2)
     hidden_relic_sub.bytestring = bytes([
         0x22, 0xA5, 0xFF, 0xC3,  # JSL $C3FFA5  ; Hook: Display hidden relic before reading character stats
     ])
-    hidden_relic_sub.write(output_rom_buffer)
+    hidden_relic_sub.write(output_rom_buffer, patch_name='hidden_relic')
 
     hidden_relic_sub.set_location(0x3FFA5)
     hidden_relic_sub.bytestring = bytes([
@@ -820,14 +829,14 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
         0x9C, 0x80, 0x21,  # STZ $2180		; Mark that the string has ended
         0x4C, 0xD9, 0x7F,  # JMP $7FD9		; Draw the string
     ])
-    hidden_relic_sub.write(output_rom_buffer)
+    hidden_relic_sub.write(output_rom_buffer, patch_name='hidden_relic')
 
     # Spell Learning from Hidden Relic
     hidden_relic_sub.set_location(0x26025)
     hidden_relic_sub.bytestring = bytes([
         0x5C, 0x9B, 0xB8, 0xC4,  # JML $C4B89B	    ; Hook: Relocate loop check to freespace
     ])
-    hidden_relic_sub.write(output_rom_buffer)
+    hidden_relic_sub.write(output_rom_buffer, patch_name='hidden_relic')
 
     hidden_relic_sub.set_location(0x4B89B)
     hidden_relic_sub.bytestring = bytes([
@@ -836,7 +845,8 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
         0x5C, 0xF3, 0x5F, 0xC2,  # JML $C25FF3	    ; Otherwise loop to next slot's uncurse and learn routine
         0xC2, 0x20,  # REP #$20         ; Set 16-bit A
         0xA3, 0x05,
-        # LDA $05,S        ; Get Y back from C2/5E66. This is a stack relative load! If the routine gets nested deeper, this has to change!
+        # LDA $05,S  ; Get Y back from C2/5E66.
+        #   This is a stack relative load! If the routine gets nested deeper, this has to change!
         0xA8,  # TAY              ; Move it from A to Y
         0xE2, 0x20,  # SEP #$20         ; Set 8-bit A
         0xB9, 0xD8, 0x3E,  # LDA $3ED8,Y      ; Get which character this is
@@ -855,66 +865,72 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
         0xFA,  # PLX				; Restore X, displaced by the hook
         0x5C, 0x29, 0x60, 0xC2,  # JML $C26029      ; Exit to vanilla code (goes to RTS)
     ])
-    hidden_relic_sub.write(output_rom_buffer)
+    hidden_relic_sub.write(output_rom_buffer, patch_name='hidden_relic')
 
     hidden_relic_sub.set_location(0x4B85D)
-    hidden_relic_sub.bytestring = bytes([0xB9, 0xD8, 0x3E,   # LDA $3ED8,Y    (Which character it is)
+    hidden_relic_sub.bytestring = bytes([
+        0xB9, 0xD8, 0x3E,   # LDA $3ED8,Y    (Which character it is)
         0x22, 0xE4, 0xB8, 0xC4,   # JSL $C4B8E4    (Get this character's hidden relic)
         0xC9, 0xC6,   # CMP #$C6     (Is it Rage Ring?)
         0xF0, 0x0C,   # BEQ yesRage
         0xA9, 0xC6,   # LDA #$C6
         0xD9, 0xD0, 0x3C,   # CMP $3CD0,Y    (Is Relic 1 a Rage Ring?)
         0xF0, 0x05,   # BEQ yesRage
-        0xD9, 0xD1, 0x3C,   #CMP $3CD1,Y    (Is Relic 2 a Rage Ring?)
+        0xD9, 0xD1, 0x3C,   # CMP $3CD1,Y    (Is Relic 2 a Rage Ring?)
         0xD0, 0x04,   # BNE noRage
         # yesRage:
         0x5C, 0x49, 0x16, 0xC2,   # JML $C21649
         # noRage:
         0x5C, 0x56, 0x16, 0xC2,   # JML $C21656
     ])
-    hidden_relic_sub.write(output_rom_buffer)
+    hidden_relic_sub.write(output_rom_buffer, patch_name='hidden_relic')
 
     hidden_relic_sub.set_location(0x4B87C)
-    hidden_relic_sub.bytestring = bytes([0xB9, 0xD8, 0x3E,   # LDA $3ED8,Y    (Which character it is)
+    hidden_relic_sub.bytestring = bytes([
+        0xB9, 0xD8, 0x3E,   # LDA $3ED8,Y    (Which character it is)
         0x22, 0xE4, 0xB8, 0xC4,   # JSL $C4B8E4    (Get this character's hidden relic)
         0xC9, 0xC5,   # CMP #$C5     (Is it Blizzard Orb?)
         0xF0, 0x0C,   # BEQ yesOrb
         0xA9, 0xC5,   # LDA #$C5
         0xD9, 0xD0, 0x3C,   # CMP $3CD0,Y    (Is Relic 1 a Blizzard Orb?)
         0xF0, 0x05,   # BEQ yesOrb
-        0xD9, 0xD1, 0x3C,   #CMP $3CD1,Y    (Is Relic 2 a Blizzard Orb?)
+        0xD9, 0xD1, 0x3C,   # CMP $3CD1,Y    (Is Relic 2 a Blizzard Orb?)
         0xD0, 0x04,   # BNE noOrb
         # yesOrb:
         0x5C, 0x62, 0x16, 0xC2,   # JML $C21662
         # noOrb:
         0x5C, 0x66, 0x16, 0xC2,   # JML $C21666
     ])
-    hidden_relic_sub.write(output_rom_buffer)
+    hidden_relic_sub.write(output_rom_buffer, patch_name='hidden_relic')
 
     hidden_relic_sub.set_location(0x2163D)
-    hidden_relic_sub.bytestring = bytes([0x5C, 0x5D, 0xB8, 0xC4,   # JML $C4B85D
+    hidden_relic_sub.bytestring = bytes([
+        0x5C, 0x5D, 0xB8, 0xC4,   # JML $C4B85D
         0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,   # NOP #8
     ])
-    hidden_relic_sub.write(output_rom_buffer)
+    hidden_relic_sub.write(output_rom_buffer, patch_name='hidden_relic')
 
     hidden_relic_sub.set_location(0x21656)
-    hidden_relic_sub.bytestring = bytes([0x5C, 0x7C, 0xB8, 0xC4,   # JML $C4B87C
+    hidden_relic_sub.bytestring = bytes([
+        0x5C, 0x7C, 0xB8, 0xC4,   # JML $C4B87C
         0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA,   # NOP #8
     ])
-    hidden_relic_sub.write(output_rom_buffer)
+    hidden_relic_sub.write(output_rom_buffer, patch_name='hidden_relic')
+
 
 def slow_background_scrolling(output_rom_buffer: BytesIO):
     sbs_sub = Substitution()
 
-    #slow scrolling for Clouds
+    # slow scrolling for Clouds
     sbs_sub.set_location(0x2B1B1)
     sbs_sub.bytestring = bytes([0x69, 0x01, 0x00])
-    sbs_sub.write(output_rom_buffer)
+    sbs_sub.write(output_rom_buffer, patch_name='slow_background_scroll')
 
-    #slow scrolling for Waterfall
+    # slow scrolling for Waterfall
     sbs_sub.set_location(0x2B1F7)
     sbs_sub.bytestring = bytes([0x69, 0x02, 0x00])
-    sbs_sub.write(output_rom_buffer)
+    sbs_sub.write(output_rom_buffer, patch_name='slow_background_scroll')
+
 
 def level_cap(output_rom_buffer: BytesIO, max_level_string, leveltable):
 
@@ -923,17 +939,19 @@ def level_cap(output_rom_buffer: BytesIO, max_level_string, leveltable):
     lc_sub.bytestring = max_level_string
 
     lc_sub.set_location(leveltable)
-    lc_sub.write(output_rom_buffer)
+    lc_sub.write(output_rom_buffer, patch_name='level_cap')
+
 
 def shadow_stays(output_rom_buffer: BytesIO):
     # Shadow will never leave after combat
     shadow_stays_sub = Substitution()
     shadow_stays_sub.set_location(0x24885)
-    shadow_stays_sub.bytestring = bytes([0x80, 0x05]) # BRA $05 ; Always branch, regardless of the state of the Shadow Stays bit
-    shadow_stays_sub.write(output_rom_buffer)
+    # BRA $05 ; Always branch, regardless of the state of the Shadow Stays bit
+    shadow_stays_sub.bytestring = bytes([0x80, 0x05])
+    shadow_stays_sub.write(output_rom_buffer, patch_name='shadow_stays')
+
 
 def mp_refills(output_rom_buffer: BytesIO):
-
     mp_refill_sub = Substitution()
     mp_refill_sub.set_location(0x2EAF64)
     mp_refill_sub.bytestring = bytes([0x88, 0x00, 0x08, 0x40, 0x8C, 0x00, 0x7F, 0xFE, 0x88, 0x01, 0x08,
@@ -947,7 +965,7 @@ def mp_refills(output_rom_buffer: BytesIO):
                                       0x88, 0x0B, 0x08, 0x40, 0x8C, 0x0B, 0x7F, 0xFE, 0x88, 0x0C, 0x08,
                                       0x40, 0x8C, 0x0C, 0x7F, 0xFE, 0x88, 0x0D, 0x08, 0x40, 0x8C, 0x0D,
                                       0x7F, 0xFE])
-    mp_refill_sub.write(output_rom_buffer)
+    mp_refill_sub.write(output_rom_buffer, patch_name='mp_refills')
 
     mp_refill_patches = {
         0xACBD8: [0xB2, 0x64, 0xAF, 0x24],  # Terra
@@ -963,12 +981,13 @@ def mp_refills(output_rom_buffer: BytesIO):
         0xACC6E: [0xB2, 0xBC, 0xAF, 0x24],  # Gau
         0xACC7D: [0xB2, 0xC4, 0xAF, 0x24],  # Gogo
         0xACC8C: [0xB2, 0xCC, 0xAF, 0x24],  # Umaro
-        0xACC9B: [0xB2, 0xB4, 0xAF, 0x24]  # Mog
+        0xACC9B: [0xB2, 0xB4, 0xAF, 0x24]   # Mog
     }
     for location, byte_array in mp_refill_patches.items():
         mp_refill_sub.set_location(location)
         mp_refill_sub.bytestring = bytes(byte_array)
-        mp_refill_sub.write(output_rom_buffer)
+        mp_refill_sub.write(output_rom_buffer, patch_name='mp_refills')
+
 
 def change_cursed_shield_battles(location: hex, output_rom_buffer: BytesIO, amount: int = None):
     if not amount or amount == "random":
@@ -989,7 +1008,7 @@ def change_cursed_shield_battles(location: hex, output_rom_buffer: BytesIO, amou
         0x22, 0x00, 0xA5, 0xC4,          # Long subroutine to freespace at 0x04A500
     ])
     ccsb_sub.set_location(0x26001)
-    ccsb_sub.write(output_rom_buffer)
+    ccsb_sub.write(output_rom_buffer, patch_name='cursepower')
 
     ccsb_sub.bytestring = bytes([
         0x9C, 0xC0, 0x3E,              # set curse counter to 0
@@ -998,12 +1017,13 @@ def change_cursed_shield_battles(location: hex, output_rom_buffer: BytesIO, amou
         0x6B                           # return from long subroutine
     ])
     ccsb_sub.set_location(0x4A500)
-    ccsb_sub.write(output_rom_buffer)
+    ccsb_sub.write(output_rom_buffer, patch_name='cursepower')
 
-    #Show decurse value of cursed shield in menu
+    # Show decurse value of cursed shield in menu
     ccsb_sub.set_location(location)
     ccsb_sub.bytestring = bytes([amount])
-    ccsb_sub.write(output_rom_buffer)
+    ccsb_sub.write(output_rom_buffer, patch_name='cursepower')
+
 
 def improved_party_gear(output_rom_buffer: BytesIO, myself_name_address, myself_name_bank):
     # On the party gear display screen, display the original character slot name
@@ -1024,7 +1044,7 @@ def improved_party_gear(output_rom_buffer: BytesIO, myself_name_address, myself_
         # Initialize extra palette color.  The original game doesn't use this
         # palette for anything in the menu system, so make it yellow.
         0x22, 0x01, 0xAF, 0xEE,     # JSL yellow_palette
-                                # member_loop:
+        # member_loop:
         # Clear high part of A.
         0xA9, 0x00,                 # LDA.B #0
         0xEB,                       # XBA
@@ -1067,10 +1087,10 @@ def improved_party_gear(output_rom_buffer: BytesIO, myself_name_address, myself_
         # Set up parameters for fixed-size table.
         0xA9, 0x08, 0x00,           # LDA.W #8
         0x85, 0xEB,                 # STA.B $EB
-        0xA9] + myself_name_address + [ # LDA.W #myself_name_address & $FFFF
+        0xA9] + myself_name_address + [  # LDA.W #myself_name_address & $FFFF
         0x85, 0xEF,                 # STA.B $EF
         0xE2, 0x20,                 # SEP #$20
-        0xA9] + myself_name_bank + [# LDA.B #myself_name_bank
+        0xA9] + myself_name_bank + [  # LDA.B #myself_name_bank
         0x85, 0xF1,                 # STA.B $F1
         # Get back the character ID.
         0x68,                       # PLA
@@ -1084,7 +1104,7 @@ def improved_party_gear(output_rom_buffer: BytesIO, myself_name_address, myself_
         # Draw write buffer to tilemap.
         0x20, 0xD9, 0x7F,           # JSR.W $C37FD9
         0x7A,                       # PLY
-                                # special_character:
+                                    # special_character:
         # Use special yellow palette.
         0xA9, 0x34,                 # LDA.B #$34
         0x85, 0x29,                 # STA.B $29
@@ -1109,7 +1129,7 @@ def improved_party_gear(output_rom_buffer: BytesIO, myself_name_address, myself_
         0x69, 0x04,                 # ADC.B #$04
         0x20, 0x8A, 0x8F,           # JSR.W $C38F8A
         # Next party member.
-                                # nobody:
+                                    # nobody:
         0xA5, 0x28,                 # LDA.B $28
         0x1A,                       # INC
         0x85, 0x28,                 # STA.B $28
@@ -1120,14 +1140,14 @@ def improved_party_gear(output_rom_buffer: BytesIO, myself_name_address, myself_
         0x20, 0x36, 0x0E,           # JSR.W $C30E36
         0x20, 0x3C, 0x6A,           # JSR.W $C36A3C
         0x4C, 0x6E, 0x0E])          # JMP.W $C30E6E
-    ipg_sub.write(output_rom_buffer)
+    ipg_sub.write(output_rom_buffer, patch_name='improved_party_gear')
 
     # The subroutine writes the yellow color palette on top of an
     # existing palette that wasn't being used in the menu.
     # It's here because it didn't fit in the above code cave.
     ipg_sub.set_location(0x2EAF01)
     ipg_sub.bytestring = bytes([
-                                # yellow_palette:
+        # yellow_palette:
         0xC2, 0x20,                 # REP $20
         0xA9, 0x00, 0x00,           # LDA.W #$0000
         0x8F, 0xE9, 0x30, 0x7E,     # STA.L $7E3049 + (((5 * 16) + 0) * 2)
@@ -1138,85 +1158,112 @@ def improved_party_gear(output_rom_buffer: BytesIO, myself_name_address, myself_
         0x8F, 0xEF, 0x30, 0x7E,     # STA.L $7E3049 + (((5 * 16) + 3) * 2)
         0xE2, 0x20,                 # SEP #$20
         0x6B])                      # RTL
-    ipg_sub.write(output_rom_buffer)
+    ipg_sub.write(output_rom_buffer, patch_name='improved_party_gear')
+
 
 def y_equip_relics(output_rom_buffer: BytesIO):
     y_equip_relics_sub = Substitution()
     y_equip_relics_sub.set_location(0x30247)
     y_equip_relics_sub.bytestring = bytes([0x1e, 0x96])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x30287)
     y_equip_relics_sub.bytestring = bytes([0xcd, 0x98])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x31be9)
     y_equip_relics_sub.bytestring = bytes([0x5b, 0x96])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x31bf7)
     y_equip_relics_sub.bytestring = bytes([0x60, 0x96])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x3960d)
     y_equip_relics_sub.bytestring = bytes([0x65, 0x96])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x39615)
-    y_equip_relics_sub.bytestring = bytes([0x0c, 0x96, 0xe6, 0x3a, 0xa9, 0x2c, 0x85, 0x29, 0x60, 0x20, 0x0c, 0x96, 0x20, 0x4e, 0x90, 0x20, 0x56, 0x8e, 0xa5, 0x08, 0x10, 0x0b, 0x20, 0xb2, 0x0e, 0x7b, 0xa5, 0x4b, 0x0a, 0xaa, 0x7c, 0x6c, 0x96, 0xa5, 0x09, 0x10, 0x0d, 0x20, 0xa9, 0x0e, 0x20, 0x10, 0x91, 0xa9, 0x04, 0x85, 0x27, 0x64, 0x26, 0x60, 0x0a, 0x10, 0x0a, 0x20, 0xb2, 0x0e, 0xa9, 0x58, 0x85, 0x26, 0xe6, 0x25, 0x60, 0xa9, 0x35, 0x85, 0xe0, 0x4c, 0x22, 0x20, 0xa0, 0x09, 0xa3, 0x80, 0x08, 0xa0, 0x11, 0xa3, 0x80, 0x03, 0xa0, 0xea, 0xa2, 0x4c, 0xf9, 0x02, 0x60])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.bytestring = bytes([
+        0x0c, 0x96, 0xe6, 0x3a, 0xa9, 0x2c, 0x85, 0x29, 0x60, 0x20, 0x0c, 0x96, 0x20,
+        0x4e, 0x90, 0x20, 0x56, 0x8e, 0xa5, 0x08, 0x10, 0x0b, 0x20, 0xb2, 0x0e, 0x7b,
+        0xa5, 0x4b, 0x0a, 0xaa, 0x7c, 0x6c, 0x96, 0xa5, 0x09, 0x10, 0x0d, 0x20, 0xa9,
+        0x0e, 0x20, 0x10, 0x91, 0xa9, 0x04, 0x85, 0x27, 0x64, 0x26, 0x60, 0x0a, 0x10,
+        0x0a, 0x20, 0xb2, 0x0e, 0xa9, 0x58, 0x85, 0x26, 0xe6, 0x25, 0x60, 0xa9, 0x35,
+        0x85, 0xe0, 0x4c, 0x22, 0x20, 0xa0, 0x09, 0xa3, 0x80, 0x08, 0xa0, 0x11, 0xa3,
+        0x80, 0x03, 0xa0, 0xea, 0xa2, 0x4c, 0xf9, 0x02, 0x60
+    ])
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x39672)
     y_equip_relics_sub.bytestring = bytes([0x9a])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
     y_equip_relics_sub.set_location(0x39678)
     y_equip_relics_sub.bytestring = bytes([0x5b])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
     y_equip_relics_sub.set_location(0x39692)
-    y_equip_relics_sub.bytestring = bytes([0x60, 0x96, 0x20, 0x7a, 0x96, 0xe6, 0x26, 0x60, 0x20, 0xa8, 0x96, 0x80, 0xe9, 0xa9, 0x35, 0x85, 0x26, 0x64, 0x27, 0xc6, 0x25])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.bytestring = bytes([
+        0x60, 0x96, 0x20, 0x7a, 0x96, 0xe6, 0x26, 0x60, 0x20, 0xa8,
+        0x96, 0x80, 0xe9, 0xa9, 0x35, 0x85, 0x26, 0x64, 0x27, 0xc6, 0x25
+    ])
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x3988c)
-    y_equip_relics_sub.bytestring = bytes([0x10, 0x21, 0x20, 0xb2, 0x0e, 0xa5, 0x4e, 0x85, 0x5f, 0xa2, 0x57, 0x55, 0x86, 0x26, 0x20, 0x59, 0x9b, 0x20, 0x50, 0xa1, 0x20, 0xeb, 0x9a, 0x20, 0x33, 0x92, 0x20, 0x15, 0x6a, 0x20, 0x68, 0x13, 0x4c, 0xac, 0x9c, 0xa5, 0x09, 0x10, 0x0d, 0x20, 0xa9, 0x0e, 0xa9, 0x36, 0x85, 0x26, 0x20, 0x50, 0x8e, 0x4c, 0x59, 0x8e, 0x0a, 0x10, 0x03, 0x4C, 0x4A, 0x96, 0xA5, 0x26, 0x69, 0x29, 0x4C, 0x56, 0x96, 0x20, 0x72, 0x8E, 0xA5, 0x08, 0x10, 0xDB, 0x20, 0xB2, 0x0E, 0x20, 0xF2, 0x93, 0xC2, 0x21, 0x98, 0xE2, 0x20, 0x65, 0x4B, 0xA8, 0xB9, 0x1F, 0x00, 0x20, 0x5E, 0x9D, 0xA9, 0xFF, 0x99, 0x1F, 0x00, 0x20, 0x1B, 0x91, 0x80, 0xBD, 0xA5, 0x09, 0x0A, 0x10, 0x14, 0x20, 0xB2, 0x0E, 0x20, 0x5F, 0x1E, 0xB0, 0x0A, 0x20, 0xEB, 0x9E, 0xA5, 0x99, 0xD0, 0x03, 0x20, 0x9F, 0x96, 0x64, 0x08, 0x4C, 0xE6, 0x9E, 0xEA])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.bytestring = bytes([
+        0x10, 0x21, 0x20, 0xb2, 0x0e, 0xa5, 0x4e, 0x85, 0x5f, 0xa2, 0x57,
+        0x55, 0x86, 0x26, 0x20, 0x59, 0x9b, 0x20, 0x50, 0xa1, 0x20, 0xeb,
+        0x9a, 0x20, 0x33, 0x92, 0x20, 0x15, 0x6a, 0x20, 0x68, 0x13, 0x4c,
+        0xac, 0x9c, 0xa5, 0x09, 0x10, 0x0d, 0x20, 0xa9, 0x0e, 0xa9, 0x36,
+        0x85, 0x26, 0x20, 0x50, 0x8e, 0x4c, 0x59, 0x8e, 0x0a, 0x10, 0x03,
+        0x4C, 0x4A, 0x96, 0xA5, 0x26, 0x69, 0x29, 0x4C, 0x56, 0x96, 0x20,
+        0x72, 0x8E, 0xA5, 0x08, 0x10, 0xDB, 0x20, 0xB2, 0x0E, 0x20, 0xF2,
+        0x93, 0xC2, 0x21, 0x98, 0xE2, 0x20, 0x65, 0x4B, 0xA8, 0xB9, 0x1F,
+        0x00, 0x20, 0x5E, 0x9D, 0xA9, 0xFF, 0x99, 0x1F, 0x00, 0x20, 0x1B,
+        0x91, 0x80, 0xBD, 0xA5, 0x09, 0x0A, 0x10, 0x14, 0x20, 0xB2, 0x0E,
+        0x20, 0x5F, 0x1E, 0xB0, 0x0A, 0x20, 0xEB, 0x9E, 0xA5, 0x99, 0xD0,
+        0x03, 0x20, 0x9F, 0x96, 0x64, 0x08, 0x4C, 0xE6, 0x9E, 0xEA
+    ])
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x39e81)
     y_equip_relics_sub.bytestring = bytes([0x5b])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x39e8f)
     y_equip_relics_sub.bytestring = bytes([0x60])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x39edd)
     y_equip_relics_sub.bytestring = bytes([0xf2, 0x98])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x39f1d)
     y_equip_relics_sub.bytestring = bytes([0x65])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x39fdf)
     y_equip_relics_sub.bytestring = bytes([0x5b])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x39ff0)
     y_equip_relics_sub.bytestring = bytes([0x60])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x3a048)
     y_equip_relics_sub.bytestring = bytes([0xf2, 0x98])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
     y_equip_relics_sub.set_location(0x3a147)
     y_equip_relics_sub.bytestring = bytes([0xf2, 0x98])
-    y_equip_relics_sub.write(output_rom_buffer)
+    y_equip_relics_sub.write(output_rom_buffer, patch_name='y_equip_relics')
 
 
 def fix_gogo_portrait(output_rom_buffer: BytesIO):
     """Hides the portion of Gogo's portrait that shows incorrectly on his status menu."""
-    output_rom_buffer.seek(0x35f51)
-    output_rom_buffer.write(bytes([0x0a, 0x62]))
+    gogo_portrait_fix = Substitution()
+    gogo_portrait_fix.set_location(0x35f51)
+    gogo_portrait_fix.bytestring = bytes([0x0a, 0x62])
+    gogo_portrait_fix.write(output_rom_buffer, patch_name='fix_gogo_portrait')
 
 
 def patch_doom_gaze(output_rom_buffer: BytesIO):
@@ -1224,12 +1271,12 @@ def patch_doom_gaze(output_rom_buffer: BytesIO):
     sub = Substitution()
     sub.set_location(0xA009D)
     sub.bytestring = bytes([0xb2, 0x1f, 0xaf, 0x24])
-    sub.write(output_rom_buffer)
+    sub.write(output_rom_buffer, patch_name='regionofdoom')
 
     # Handles String selection
     sub.set_location(0xAF56E)
     sub.bytestring = bytes([0xb2, 0x26, 0xaf, 0x24, 0xfe, 0xfd, 0xfd, 0xfd, 0xfd, 0xfd])
-    sub.write(output_rom_buffer)
+    sub.write(output_rom_buffer, patch_name='regionofdoom')
 
     # Doom Gaze airship search option helper
     sub.set_location(0x2EAF1F)
@@ -1241,7 +1288,7 @@ def patch_doom_gaze(output_rom_buffer: BytesIO):
                             0x5A, 0x08, 0x5C, 0x6B, 0x11, 0x20, 0x11, 0x08, 0xC0,
                             0x4D, 0x5D, 0x29, 0xF0, 0x4C, 0xB2, 0xA9, 0x5E, 0x00,
                             0xB7, 0x48, 0x83, 0x04, 0x00, 0x96, 0xC0, 0x27, 0x01, 0x9D, 0x00, 0x00])
-    sub.write(output_rom_buffer)
+    sub.write(output_rom_buffer, patch_name='regionofdoom')
 
 
 def nicer_poison(output_rom_buffer: BytesIO):
@@ -1251,12 +1298,12 @@ def nicer_poison(output_rom_buffer: BytesIO):
     nicer_poison_sub.bytestring = bytes([0x0F, 0x0F, 0x0F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,
                                          0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F,
                                          0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x0F, 0x0F, 0x0F])
-    nicer_poison_sub.write(output_rom_buffer)
+    nicer_poison_sub.write(output_rom_buffer, patch_name='nicer_poison')
 
     # remove poison pixelation on the overworld
     nicer_poison_sub.set_location(0x2E1864)
     nicer_poison_sub.bytestring = bytes([0xA9, 0x00])
-    nicer_poison_sub.write(output_rom_buffer)
+    nicer_poison_sub.write(output_rom_buffer, patch_name='nicer_poison')
 
 
 def fewer_flashes(output_rom_buffer: BytesIO, flag_value):
@@ -1269,492 +1316,493 @@ def fewer_flashes(output_rom_buffer: BytesIO, flag_value):
         #
         anti_seizure_sub.set_location(0x10023B)  # D0023B
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x100241)  # D00241
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x100249)  # D00249
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10024F)  # D0024F
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Boss Death Flashing
         #
         anti_seizure_sub.set_location(0x100477)  # D00477
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10047D)  # D0047D
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x100485)  # D00485
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x100498)  # D00498
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Magicite Transformation Flash
         #
         anti_seizure_sub.set_location(0x100F31)  # D00F31
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x100F40)  # D00F40
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Ice 3 Flash
         #
         anti_seizure_sub.set_location(0x101979)  # D01979
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10197C)  # D0197C
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10197F)  # D0197F
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x101982)  # D01982
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x101985)  # D01985
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x101988)  # D01988
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10198B)  # D0198B
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10198E)  # D0198E
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x101991)  # D01991
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Fire 3 Flash
         #
         anti_seizure_sub.set_location(0x1019FB)  # D019FB
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x101A1D)  # D01A1D
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Phantasm Flash
         #
         anti_seizure_sub.set_location(0x101E08)  # D01E08
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x101E0E)  # D01E0E
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x101E20)  # D01E20
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x101E28)  # D01E28
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Tiger Break Flash
         #
         anti_seizure_sub.set_location(0x10240E)  # D0240E
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x102412)  # D02412
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x102416)  # D02416
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Diffuser Flash
         #
         anti_seizure_sub.set_location(0x103AEB)  # D03AEB
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x103AEE)  # D03AEE
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x103AF1)  # D03AF1
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x103AF4)  # D03AF4
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x103AF7)  # D03AF7
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x103AFA)  # D03AFA
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x103AFD)  # D03AFD
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x103B00)  # D03B00
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x103B03)  # D03B00
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Cat Rain Flash
         #
         anti_seizure_sub.set_location(0x102678)  # D02678
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10267C)  # D0267C
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Unknown Script 1's Flash
         #
         anti_seizure_sub.set_location(0x1026EF)  # D026EF
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1026FB)  # D026FB
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Mirager Flash
         #
         anti_seizure_sub.set_location(0x102792)  # D02792
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x102796)  # D02796
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Sabre Soul Flash
         #
         anti_seizure_sub.set_location(0x1027D4)  # D027D4
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1027DB)  # D027DB
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Back Blade Flash
         #
         anti_seizure_sub.set_location(0x1028D4)  # D028D4
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1028E0)  # D028E0
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Royal Shock Flash
         #
         anti_seizure_sub.set_location(0x102968)  # D02968
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10296C)  # D0296C
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x102974)  # D02974
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Unknown Script 2's Flash
         #
         anti_seizure_sub.set_location(0x102AAE)  # D02AAE
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x102AB2)  # D02AB2
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Absolute Zero Flash
         #
         anti_seizure_sub.set_location(0x102BFF)  # D02BFF
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x102C03)  # D02C03
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Unknown Script 3's Flash
         #
         anti_seizure_sub.set_location(0x1030CB)  # D030CB
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1030CF)  # D030CF
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Reverse Polarity Flash
         #
         anti_seizure_sub.set_location(0x10328C)  # D0328C
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x103293)  # D03293
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Rippler Flash
         #
         anti_seizure_sub.set_location(0x1033C7)  # D033C7
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1033CB)  # D033CB
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Step Mine Flash
         #
         anti_seizure_sub.set_location(0x1034DA)  # D034DA
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1034E1)  # D034E1
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Unknown Script 4's Flash
         #
         anti_seizure_sub.set_location(0x1035E7)  # D035E7
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1035F7)  # D035F7
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Schiller Flash
         #
         anti_seizure_sub.set_location(0x10380B)
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer, noverify=True) #Noverify necessary to work with no flashing code - they overwrite and is required
+        # Noverify necessary to work with no flashing code - they overwrite and is required
+        anti_seizure_sub.write(output_rom_buffer, noverify=True, patch_name='fewer_flashes') 
 
         # This commented out code is for vanilla Schiller, which BC is no longer using
         # anti_seizure_sub.set_location(0x10381A)  # D0381A
         # anti_seizure_sub.bytestring = bytes([0xE0])
-        # anti_seizure_sub.write(output_rom_buffer)
+        # anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         # anti_seizure_sub.set_location(0x10381E)  # D0381E
         # anti_seizure_sub.bytestring = bytes([0xF0])
-        # anti_seizure_sub.write(output_rom_buffer)
+        # anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Wall Change Flash
         #
         anti_seizure_sub.set_location(0x10399F)  # D0399F
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1039A4)  # D039A4
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1039AA)  # D039AA
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1039B0)  # D039B0
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1039B6)  # D039B6
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1039BC)  # D039BC
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1039C2)  # D039C2
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1039C8)  # D039C8
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1039CE)  # D039CE
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1039D5)  # D039D5
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Ultima Flash
         #
         anti_seizure_sub.set_location(0x1056EE)  # D056EE
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1056F6)  # D056F6
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Bolt 3/Giga Volt Flash
         #
         anti_seizure_sub.set_location(0x10588F)  # D0588F
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x105894)  # D05894
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x105897)  # D05897
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10589A)  # D0589A
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10589D)  # D0589D
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1058A2)  # D058A2
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1058A7)  # D058A7
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1058AC)  # D058AC
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1058B1)  # D058B1
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing X-Zone Flash
         #
         anti_seizure_sub.set_location(0x105A5E)  # D05A5E
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x105A6B)  # D05A6B
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x105A7A)  # D05A7A
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Dispel Flash
         #
         anti_seizure_sub.set_location(0x105DC3)  # D05DC3
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x105DCA)  # D05DCA
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x105DD3)  # D05DD3
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x105DDC)  # D05DDC
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x105DE5)  # D05DE5
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x105DEE)  # D05DEE
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Pep Up/Break Flash
         #
         anti_seizure_sub.set_location(0x1060EB)  # D060EB
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1060EF)  # D060EF
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Shock Flash
         #
         anti_seizure_sub.set_location(0x1068BF)  # D068BF
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1068D1)  # D068D1
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Quadra Slam/Slice Flash
@@ -1762,132 +1810,132 @@ def fewer_flashes(output_rom_buffer: BytesIO, flag_value):
         # White Flash
         anti_seizure_sub.set_location(0x1073DD)  # D073DD
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1073EF)  # D073EF
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1073F4)  # D073F4
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         # Green Flash
         anti_seizure_sub.set_location(0x107403)  # D07403
         anti_seizure_sub.bytestring = bytes([0x40])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x107425)  # D07425
         anti_seizure_sub.bytestring = bytes([0x50])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10742A)  # D0742A
         anti_seizure_sub.bytestring = bytes([0x50])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         # Blue Flash
         anti_seizure_sub.set_location(0x107437)  # D07437
         anti_seizure_sub.bytestring = bytes([0x20])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x107459)  # D07459
         anti_seizure_sub.bytestring = bytes([0x30])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10745E)  # D0745E
         anti_seizure_sub.bytestring = bytes([0x30])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         # Red Flash
         anti_seizure_sub.set_location(0x107491)  # D07491
         anti_seizure_sub.bytestring = bytes([0x80])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1074B3)  # D074B3
         anti_seizure_sub.bytestring = bytes([0x90])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1074B8)  # D074B8
         anti_seizure_sub.bytestring = bytes([0x90])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Slash Flash
         #
         anti_seizure_sub.set_location(0x1074F5)  # D074F5
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1074FE)  # D074FE
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x107508)  # D07508
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Flash Flash
         #
         anti_seizure_sub.set_location(0x107851)  # D07851
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10785D)  # D0785D
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Removing Goner Flash
         #
         anti_seizure_sub.set_location(0x1000D8)  # D000D8
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1000DA)  # D000DA
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1000DC)  # D000DC
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1000DE)  # D000DE
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1000E0)  # D000E0
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1000E6)  # D000E6
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1000E8)  # D000E8
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x100173)  # D00173
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x100176)  # D00176
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x100179)  # D00179
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         # BG3 horizontal lines fade to black
         anti_seizure_sub.set_location(0x1001BD)  # D001BD
         anti_seizure_sub.bytestring = bytes([0xCF])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x1001BF)  # D001BF
         anti_seizure_sub.bytestring = bytes([0xB4])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         # ------------- Battle Event Scripts -------------
         #
@@ -1895,78 +1943,78 @@ def fewer_flashes(output_rom_buffer: BytesIO, flag_value):
         #
         anti_seizure_sub.set_location(0x10B887)  # D0B887
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10B88D)  # D0B88D
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10B894)  # D0B894
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10B89A)  # D0B89A
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10B8A1)  # D0B8A1
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10B8A7)  # D0B8A7
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10B8AE)  # D0B8AE
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10B8B4)  # D0B8B4
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10BCF5)  # D0BCF5
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10BCF9)  # D0BCF9
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Battle Event Script $19
         #
         anti_seizure_sub.set_location(0x10C7A4)  # D0C7A4
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10C7AA)  # D0C7AA
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10C7B1)  # D0C7B1
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10C7B7)  # D0C7B7
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10C7BE)  # D0C7BE
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10C7C4)  # D0C7C4
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10C7CB)  # D0C7CB
         anti_seizure_sub.bytestring = bytes([0xE0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         anti_seizure_sub.set_location(0x10C7D1)  # D0C7D1
         anti_seizure_sub.bytestring = bytes([0xF0])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
         #
         # Thamasa Attack - Kefka Kills Espers
@@ -1974,7 +2022,7 @@ def fewer_flashes(output_rom_buffer: BytesIO, flag_value):
 
         anti_seizure_sub.set_location(0xC03CA)
         anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
-        anti_seizure_sub.write(output_rom_buffer)
+        anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     #
     # Removing Bum Rush Flashes
@@ -1982,37 +2030,37 @@ def fewer_flashes(output_rom_buffer: BytesIO, flag_value):
     # Flash 1
     anti_seizure_sub.set_location(0x106C7F)  # D06C7F
     anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0x106C88)  # D06C88
     anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     # Flash 2
     anti_seizure_sub.set_location(0x106C96)  # D06C96
     anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0x106C9F)  # D06C9F
     anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     # Other Bum Rush Background Sets - possibly unnecessary
     anti_seizure_sub.set_location(0x106C3F)  # D06C3F
     anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0x106C48)  # D06C48
     anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0x106C54)  # D06C54
     anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0x106C88)  # D06C87
     anti_seizure_sub.bytestring = bytes([0xE0])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     #
     # Duncan Bum Rush Cut Scene Flashes
@@ -2020,47 +2068,47 @@ def fewer_flashes(output_rom_buffer: BytesIO, flag_value):
 
     anti_seizure_sub.set_location(0xC0469)
     anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0xC0D12)
     anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0xC0D5F)
     anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0xC0D7F)
     anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0xC0D9F)
     anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0xC0DF0)
     anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0xC0E09)
     anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0xC0E22)
     anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0xC0E3B)
     anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0xC0E65)
     anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     anti_seizure_sub.set_location(0xC0E74)
     anti_seizure_sub.bytestring = bytes([0xFD, 0xFD])
-    anti_seizure_sub.write(output_rom_buffer)
+    anti_seizure_sub.write(output_rom_buffer, patch_name='fewer_flashes')
 
     # ------------- Event Scripts -------------
     # CA/00D6 - White Flash
