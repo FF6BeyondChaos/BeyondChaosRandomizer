@@ -783,12 +783,12 @@ class Window(QMainWindow):
                     if not flag_count == len(tab_flags):
                         h_spacer.setFixedHeight(2)
                         h_spacer.setProperty('class', 'flag_h_spacer')
-                        tab_layout.addWidget(h_spacer, current_row, 0, 0, 6)
+                        tab_layout.addWidget(h_spacer, current_row, 0, 1, 6)
                         current_row += 1
                     else:
                         # Fake row set to stretch as much as possible. Keeps other rows from stretching.
                         h_spacer.setProperty('class', 'flag_h_spacer_final')
-                        tab_layout.addWidget(h_spacer, current_row, 0, 0, 6)
+                        tab_layout.addWidget(h_spacer, current_row, 0, 1, 6)
                         tab_layout.setRowStretch(current_row, 1)
                         current_row += 1
 
