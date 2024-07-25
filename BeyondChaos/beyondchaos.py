@@ -431,7 +431,6 @@ class Window(QMainWindow):
 
         # values to be sent to Randomizer
         self.version = 'CE-6.0.2'
-        self.mode = 'normal'
         self.bingo_type = []
         self.bingo_size = 5
         self.bingo_diff = ''
@@ -1285,6 +1284,7 @@ class Window(QMainWindow):
             display_seed = self.seed_input.text()
 
             flags = Options_.get_flag_string()
+            current_mode = get_mode(self.mode_box.currentText()).name
 
             flag_scroll_contents = ''
             for flag in flags.split(' '):
@@ -1339,7 +1339,7 @@ class Window(QMainWindow):
                     'Output:', self.rom_output_directory,
                     'Seed:', display_seed,
                     'Batch:', self.seed_count.text(),
-                    'Mode:', self.mode,
+                    'Mode:', current_mode,
                     'Flags:')
             )
             flag_message = QLabel(flag_scroll_contents)
@@ -1360,7 +1360,7 @@ class Window(QMainWindow):
                 for currentSeed in range(seeds_to_generate):
                     print('Rolling seed ' + str(currentSeed + 1) + ' of ' + str(seeds_to_generate) + '.')
                     # User selects confirm/accept/yes option
-                    bundle = f'{self.version}|{self.mode}|{flags}|{seed}'
+                    bundle = f'{self.version}|{current_mode}|{flags}|{seed}'
                     # remove spam if the Randomizer asks for input
                     # TODO: guify that stuff
                     # Hash check can be moved out to when you pick
