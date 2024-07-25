@@ -73,10 +73,6 @@ QFrame[class="flag_h_spacer"]
 {
     margin: 0 2px 0 2px;
 }
-QFrame[class="flag_h_spacer_final"]
-{
-    display:none;
-}
 /*
 						Menu Bar
 */
