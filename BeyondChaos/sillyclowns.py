@@ -48,7 +48,7 @@ def randomize_poem(fout):
     wait_sub = Substitution()
     wait_sub.set_location(0xC401D)
     wait_sub.bytestring = bytes([0xB5, wait])
-    wait_sub.write(fout)
+    wait_sub.write(fout, patch_name='randomize_poem')
 
 def randomize_passwords(custom_web_passwords=None):
     passwords = [[], [], []]

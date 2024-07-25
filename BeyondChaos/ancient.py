@@ -58,12 +58,12 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
         enable_morph_sub = Substitution()
         enable_morph_sub.bytestring = bytes([0xEA] * 2)
         enable_morph_sub.set_location(0x25410)
-        enable_morph_sub.write(outfile_rom_buffer)
+        enable_morph_sub.write(outfile_rom_buffer, patch_name='enable_morph')
 
         enable_mpoint_sub = Substitution()
         enable_mpoint_sub.bytestring = bytes([0xEA] * 2)
         enable_mpoint_sub.set_location(0x25E38)
-        enable_mpoint_sub.write(outfile_rom_buffer)
+        enable_mpoint_sub.write(outfile_rom_buffer, patch_name='enable_mpoint')
 
         change_battle_commands += list(range(18, 28))
 
@@ -99,16 +99,16 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
     blank_sub.set_location(0x2D76C1)
     blank_sub.bytestring = bytearray([0xFF] * (0x2D76F5 - blank_sub.location))
     blank_sub.bytestring[blank_sub.size//2] = 0
-    blank_sub.write(outfile_rom_buffer)
+    blank_sub.write(outfile_rom_buffer, patch_name='blank_items')
 
     goddess_save_sub = Substitution()
     goddess_save_sub.bytestring = bytes([0xFD, 0xFD])
     goddess_save_sub.set_location(0xC170A)
-    goddess_save_sub.write(outfile_rom_buffer)
+    goddess_save_sub.write(outfile_rom_buffer, patch_name='goddess_save')
     goddess_save_sub.set_location(0xC1743)
-    goddess_save_sub.write(outfile_rom_buffer)
+    goddess_save_sub.write(outfile_rom_buffer, patch_name='goddess_save')
     goddess_save_sub.set_location(0xC1866)
-    goddess_save_sub.write(outfile_rom_buffer)
+    goddess_save_sub.write(outfile_rom_buffer, patch_name='goddess_save')
 
     # decrease exp needed for level up
     if Options_.is_flag_active('racecave'):
@@ -214,7 +214,7 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
         shadow_leaving_sub.bytestring.append(0xEA)
     shadow_leaving_sub.bytestring += bytearray([0xA9, 0xFE,
                                                 0x20, 0x92, 0x07])
-    shadow_leaving_sub.write(outfile_rom_buffer)
+    shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
     shadow_leaving_sub.set_location(0x24861)
     shadow_leaving_sub.bytestring = bytearray([
         0xAE, runaway, 0x30,
@@ -235,7 +235,7 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
         0xD0, 0x05,
         0x2C, 0xDE + (runaway//8), 0x1E,
         ])
-    shadow_leaving_sub.write(outfile_rom_buffer)
+    shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
     shadow_leaving_sub.set_location(0x10A851)
     shadow_leaving_sub.bytestring = bytearray([
         0x0E, 0x03, runaway, 0x6A, 0xA8, 0x0F,
@@ -246,12 +246,12 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
         0x0E, 0x03, runaway, 0x92, 0xA8, 0x0F,
         0x10, 0xFF,
         ])
-    shadow_leaving_sub.write(outfile_rom_buffer)
+    shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
     shadow_leaving_sub.bytestring = bytearray([runaway])
     shadow_leaving_sub.set_location(0x10FC2F)
-    shadow_leaving_sub.write(outfile_rom_buffer)
+    shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
     shadow_leaving_sub.set_location(0x10FC5D)
-    shadow_leaving_sub.write(outfile_rom_buffer)
+    shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
 
     esperevents = [
         "Ramuh", "Ifrit", "Shiva", "Siren", "Terrato", "Shoat", "Maduin",
@@ -288,25 +288,25 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
                                      ])
     startsub.bytestring.append(0xFE)
     startsub.set_location(0xADD1E)
-    startsub.write(outfile_rom_buffer)
+    startsub.write(outfile_rom_buffer, patch_name='ancient_start_location')
 
     startsub0 = Substitution()
     startsub0.bytestring = bytearray([0xB2, 0x1E, 0xDD, 0x00, 0xFE])
     startsub0.set_location(0xC9A4F)
-    startsub0.write(outfile_rom_buffer)
+    startsub0.write(outfile_rom_buffer, patch_name='ancient_start_location')
 
     set_airship_sub = Substitution()
     set_airship_sub.bytestring = bytearray([0xB2, 0xD6, 0x02, 0x00,
                                             0xFE])
     set_airship_sub.set_location(0xAF53A)  # need first branch for button press
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='ancient_start_location')
 
     tower_msg_sub = Substitution()
     tower_msg_sub.bytestring = bytearray([0xD6, 0xE6, 0xD6, 0xE7])  # reset temp chars
     while len(tower_msg_sub.bytestring) < 12:
         tower_msg_sub.bytestring.append(0xFD)
     tower_msg_sub.set_location(0xA03A7)
-    tower_msg_sub.write(outfile_rom_buffer)
+    tower_msg_sub.write(outfile_rom_buffer, patch_name='ancient_tower_message')
 
     from locationrandomizer import NPCBlock, EventBlock
     falcon = get_location(0xb)
@@ -351,7 +351,7 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
             continue
         pilot_sub.bytestring += bytearray([0x3F, i, 0x00])
     pilot_sub.set_location(0xC2110)
-    pilot_sub.write(outfile_rom_buffer)
+    pilot_sub.write(outfile_rom_buffer, patch_name='ancient_pilot_sub')
 
     if Options_.is_flag_active("racecave"):
         randomize_tower(ancient=True, nummaps=50)
@@ -366,12 +366,12 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
     fix_cave_sub = Substitution()
     fix_cave_sub.set_location(0x11FC73)  # Owzer's Mansion change to no event
     fix_cave_sub.bytestring = bytes([0xB3, 0x5E, 0x00])
-    fix_cave_sub.write(outfile_rom_buffer)
+    fix_cave_sub.write(outfile_rom_buffer, patch_name='ancient_fix_cave')
 
     fix_cave_sub = Substitution()
     fix_cave_sub.set_location(0x11FB89)  # Gau's Father change to no event
     fix_cave_sub.bytestring = bytes([0xB3, 0x5E, 0x00])
-    fix_cave_sub.write(outfile_rom_buffer)
+    fix_cave_sub.write(outfile_rom_buffer, patch_name='ancient_fix_cave')
 
     unused_enemies = [u for u in get_monsters() if u.id in REPLACE_ENEMIES]
 
@@ -462,15 +462,15 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
         # could freeze the game d+pad and A on same frame tho
         leader_sub.set_location(0x324b7)
         leader_sub.bytestring = bytes([0xEA, 0xEA, 0xEA])
-        leader_sub.write(outfile_rom_buffer)
+        leader_sub.write(outfile_rom_buffer, patch_name='ancient_leader')
         leader_sub.set_location(0x32473)
         leader_sub.bytestring = bytes([0xEA, 0xEA])
-        leader_sub.write(outfile_rom_buffer)
+        leader_sub.write(outfile_rom_buffer, patch_name='ancient_leader')
 
         leader_sub.set_location(0xa02da)
         leader_sub.bytestring = bytes([
             0xB2, subptr & 0xFF, (subptr >> 8) & 0xFF, subptr >> 16])
-        leader_sub.write(outfile_rom_buffer)
+        leader_sub.write(outfile_rom_buffer, patch_name='ancient_leader')
         leader_sub.set_location(pointer)
         leader_sub.bytestring = bytearray([])
         locked = 0
@@ -495,7 +495,7 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
             mem_addr = ((0x1b+byte) << 3) | bit
             leader_sub.bytestring += bytearray([0xD6, mem_addr])
         leader_sub.bytestring += bytearray([0x96, 0xFE])
-        leader_sub.write(outfile_rom_buffer)
+        leader_sub.write(outfile_rom_buffer, patch_name='ancient_leader')
         pswitch_ptr = pointer - 0xa0000
         pointer += len(leader_sub.bytestring)
 
@@ -608,7 +608,7 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
         sub = Substitution()
         sub.set_location(ptr)
         sub.bytestring = bytes(bytestring)
-        sub.write(outfile_rom_buffer)
+        sub.write(outfile_rom_buffer, patch_name='ancient_make_challenge_event')
         return ptr + len(enemy_template)
 
     shops = get_shops(infile_rom_buffer)
@@ -669,7 +669,7 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
     num_in_party_sub = Substitution()
     num_in_party_sub.set_location(0xAC654)
     num_in_party_sub.bytestring = [0xB2, c0, b0, a0]
-    num_in_party_sub.write(outfile_rom_buffer)
+    num_in_party_sub.write(outfile_rom_buffer, patch_name='ancient_starting_party_size')
     num_in_party_sub.set_location(pointer)
     num_in_party_sub.bytestring = bytes([
         0xC0, 0xAE, 0x01, c1, b1, a1,
@@ -680,7 +680,7 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
         0xD3, 0xA2,
         0xFE
     ])
-    num_in_party_sub.write(outfile_rom_buffer)
+    num_in_party_sub.write(outfile_rom_buffer, patch_name='ancient_starting_party_size')
     pointer += len(num_in_party_sub.bytestring)
     ally_addrs = {}
     for chosen in set(optional_chars):
@@ -711,7 +711,7 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
                 uptr = (pointer - 1) - 0xa0000
                 a, b, c = (uptr >> 16, (uptr >> 8) & 0xFF, uptr & 0xFF)
                 allysub.bytestring[7:10] = [c, b, a]
-                allysub.write(outfile_rom_buffer)
+                allysub.write(outfile_rom_buffer, patch_name='ancient_starting_party_members')
                 event_addr = (allysub.location - 0xa0000) & 0x3FFFF
                 ally_addrs[chosen.id, party_id, npc_id] = event_addr
 
@@ -747,7 +747,7 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
         sub.bytestring[15:17] = price
         assert None not in sub.bytestring
         sub.bytestring = bytes(sub.bytestring)
-        sub.write(outfile_rom_buffer)
+        sub.write(outfile_rom_buffer, patch_name='ancient_make_paysub')
         return sub
 
     rest_shops = []
@@ -832,7 +832,7 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
             shopsub = Substitution()
             shopsub.set_location(pointer)
             shopsub.bytestring = bytes([0x9B, shop.shopid, 0xFE])
-            shopsub.write(outfile_rom_buffer)
+            shopsub.write(outfile_rom_buffer, patch_name='ancient_shopsub')
             pointer += len(shopsub.bytestring)
             event_addr = (shopsub.location - 0xa0000) & 0x3FFFF
         else:
@@ -840,7 +840,7 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
             colsub = Substitution()
             colsub.set_location(0xb78ea)
             colsub.bytestring = bytes([0x59, 0x04, 0x5C, 0xFE])
-            colsub.write(outfile_rom_buffer)
+            colsub.write(outfile_rom_buffer, patch_name='ancient_colsub')
         shopkeeper = NPCBlock(pointer=None, locid=location.locid)
         graphics = random.randint(14, 62)
         palette = random.choice(npc_palettes[graphics])
@@ -926,7 +926,7 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
             espersub = espersubs[esper.name]
             index = espersub.bytestring.index(None)
             espersub.bytestring[index] = 0x10 | len(location.npcs)
-            espersub.write(outfile_rom_buffer)
+            espersub.write(outfile_rom_buffer, patch_name='ancient_espersub')
             event_addr = (espersub.location - 0xa0000) & 0x3FFFF
             event_value = esperevents[esper.name]
             byte, bit = event_value // 8, event_value % 8
@@ -1003,7 +1003,7 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
     encrate_sub = Substitution()
     encrate_sub.set_location(0xC2BF)
     encrate_sub.bytestring = bytes(dungeon_rates)
-    encrate_sub.write(outfile_rom_buffer)
+    encrate_sub.write(outfile_rom_buffer, patch_name='ancient_encounter_rate')
 
     maxrank = max(locations, key=lambda l: l.ancient_rank).ancient_rank
     for location in locations:
@@ -1225,4 +1225,4 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
         assert not chosens
 
     final_cut.bytestring += bytearray([0xB2, 0x64, 0x13, 0x00])
-    final_cut.write(outfile_rom_buffer)
+    final_cut.write(outfile_rom_buffer, patch_name='ancient_final_cut')
