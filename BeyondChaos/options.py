@@ -490,7 +490,7 @@ ALL_MODES = [
         display_name='Race - Dragon Hunt',
         description="Kill all 8 dragons in the World of Ruin. Intended for racing.",
         forced_flags=["worringtriad"],
-        prohibited_flags={"j", "airship", "alasdraco", "thescenarionottaken", 'rushforpower', 'shadowstays'}
+        prohibited_flags={"j", "alasdraco", "thescenarionottaken", 'rushforpower', 'shadowstays', 'strangejourney'}
     ),
 ]
 
