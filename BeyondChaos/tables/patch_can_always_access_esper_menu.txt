@@ -1,5 +1,5 @@
 .addr   main-call               034d3d
-.addr   gogo-check              034d71
+.addr   gogo-check              034d6f
 .addr   check-learn-rate-call   0359f6
 .addr   check-learned-call      035a96
 .addr   main                    57f100
@@ -14,10 +14,10 @@
 .def    gogo-index              0c
 
 $gogo-check
-:       80 04
+:       C9 0E 90 04
 
-$main-call
-:       22 $main
+#$main-call             #commented out as it's duplicated in Myself's patches
+#:       22 $main
 
 #$check-learn-rate-call
 #:       22 $check-learn-rate
@@ -74,7 +74,7 @@ $check-character
 VALIDATION
 
 $gogo-check
-:       d0 04
+:       C9 0C D0 04
 
 $main-call
 :       a9 24

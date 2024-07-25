@@ -251,7 +251,7 @@ def run_console():
             for active_flag in active_flags:
                 if active_flag == flag:
                     new_flag = f'{active_flag.name}:{active_flag.value} ' \
-                        if not active_flag.inputtype == 'boolean' \
+                        if not active_flag.input_type == 'boolean' \
                         else f'{active_flag.name} '
                     flag_string += new_flag
                     current_characters += len(new_flag)
@@ -346,7 +346,7 @@ def run_console():
                     if flag.name == input_flag:
                         input_flag_found = True
                         while True:
-                            if flag.inputtype.lower() == 'combobox':
+                            if flag.input_type.lower() == 'combobox':
                                 if not flag_value:
                                     flag_value = input(f'Choose a value for {input_flag}. '
                                                        f'Valid values are the following: '
@@ -367,7 +367,7 @@ def run_console():
                                         active_flags.append(flag)
                                         os.system('cls' if os.name == 'nt' else 'clear')
                                     break
-                            elif flag.inputtype.lower() == 'integer':
+                            elif flag.input_type.lower() == 'integer':
                                 if not flag_value:
                                     flag_value = input(f'Choose a value for {input_flag}. '
                                                        f'Valid values are numbers '
@@ -397,7 +397,7 @@ def run_console():
                                     input('That flag value must be a whole number. Press enter to try again.')
                                     os.system('cls' if os.name == 'nt' else 'clear')
                                     flag_value = None
-                            elif flag.inputtype.lower() == 'float2':
+                            elif flag.input_type.lower() == 'float2':
                                 if not flag_value:
                                     flag_value = input(f'Choose a value for {input_flag}. '
                                                        f'Valid values are numbers '
@@ -428,7 +428,7 @@ def run_console():
                                     input('That flag value must be a whole number. Press enter to try again.')
                                     os.system('cls' if os.name == 'nt' else 'clear')
                                     flag_value = None
-                            elif flag.inputtype.lower() == 'boolean':
+                            elif flag.input_type.lower() == 'boolean':
                                 flag_value = True
                                 if flag in active_flags:
                                     try:
@@ -455,7 +455,7 @@ def run_console():
     for flag in ALL_FLAGS:
         for active_flag in active_flags:
             if active_flag == flag:
-                flag_string += f'{active_flag.name}:{active_flag.value} ' if not active_flag.inputtype == 'boolean' \
+                flag_string += f'{active_flag.name}:{active_flag.value} ' if not active_flag.input_type == 'boolean' \
                     else f'{active_flag.name} '
 
     # Speed dial save

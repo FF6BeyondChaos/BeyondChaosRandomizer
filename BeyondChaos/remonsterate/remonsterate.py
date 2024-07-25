@@ -12,6 +12,7 @@ from math import ceil
 from time import time
 from multiprocessing import Pipe
 from io import BytesIO
+from collections.abc import Callable
 
 VERSION = '5.3'
 randomize_connection = None
@@ -21,6 +22,7 @@ sprite_paths = os.path.join(os.getcwd(), "remonsterate", "sprites")
 monster_list = None
 outfile_rom_buffer = None
 seed = None
+pipe_print = lambda output, connection: print(output)
 
 
 def sig_func(c):
@@ -362,14 +364,17 @@ class MonsterSpriteObject(TableObject):
 
         return self.get_size_compatibility(image)
 
-    def select_image(self, images=None, list_of_monsters=None):
+    def select_image(self, list_of_monsters, images=None):
         monster_original_name = None
         if self.get_index() < len(list_of_monsters):
             monster_original_name = list_of_monsters[self.get_index()].name.strip("_")
         if self.is_protected:
             if monster_original_name:
-                randomize_connection.send("Remonsterate: " + monster_original_name +
-                                          " is protected and did not receive a randomized sprite.")
+                pipe_print(
+                    output="Remonsterate: " + monster_original_name +
+                           " is protected and did not receive a randomized sprite.",
+                    connection=randomize_connection
+                )
             self.load_image(self.image)
             return True
 
@@ -393,10 +398,12 @@ class MonsterSpriteObject(TableObject):
             if not candidates:
                 # There were no eligible sprites matching the whitelistd tags
                 if monster_original_name:
-                    randomize_connection.send("Remonsterate: " + monster_original_name +
-                                           " was not sprite randomized: "
-                                           "No eligible sprites matching the whitelist tags '" +
-                                        str(self.whitelist) + "' were found.")
+                    pipe_print(
+                        output="Remonsterate: " + monster_original_name + " was not sprite randomized: " +
+                               "No eligible sprites matching the whitelist tags '" + str(self.whitelist) +
+                               "' were found.",
+                        connection=randomize_connection
+                    )
                 self.load_image(self.image)
                 return True
 
@@ -405,18 +412,23 @@ class MonsterSpriteObject(TableObject):
             (hasattr(c, 'tags') and c.tags & self.blacklist)]
             if not candidates:
                 if monster_original_name:
-                    randomize_connection.send("Remonsterate: " + monster_original_name +
-                                           " was not sprite randomized: "
-                                           "No eligible sprites were left after processing blacklisted tags '" +
-                                        str(self.blacklist) + "'.")
+                    pipe_print(
+                        output="Remonsterate: " + monster_original_name + " was not sprite randomized: " +
+                               "No eligible sprites were left after processing blacklisted tags '" +
+                               str(self.blacklist) + "'.",
+                        connection=randomize_connection
+                    )
                 self.load_image(self.image)
                 return True
 
         if not candidates:
             self.load_image(self.image)
             if monster_original_name:
-                randomize_connection.send("Remonsterate: " + monster_original_name +
-                                       " was not sprite randomized: No suitable sprite was found.")
+                pipe_print(
+                    output="Remonsterate: " + monster_original_name +
+                           " was not sprite randomized: No suitable sprite was found.",
+                    connection=randomize_connection
+                )
             return True
 
         def sort_func(c):
@@ -433,7 +445,7 @@ class MonsterSpriteObject(TableObject):
 
         result = self.load_image(chosen)
         if not result:
-            self.select_image(candidates)
+            self.select_image(images=candidates, list_of_monsters=list_of_monsters)
         return True
 
     def remap_palette(self, data, rgb_palette):
@@ -486,8 +498,10 @@ class MonsterSpriteObject(TableObject):
         palette_indexes = set(image.tobytes())
         if max(palette_indexes) > 0xf:
             # This should no longer happen after prepare_image()
-            randomize_connection.send('Remonsterate: %s had too many colors and was excluded from use.'
-                                      % image.filename)
+            pipe_print(
+                output='Remonsterate: %s had too many colors and was excluded from use.' % image.filename,
+                connection=randomize_connection
+            )
             return False
 
         is_8color = max(palette_indexes) <= 7
@@ -827,7 +841,7 @@ def nuke():
 
 
 def prepare_image(image: Image) -> Image:
-    allowed_colors = 0x10
+    allowed_colors = 15
     image_filename = image.filename
 
     # If the image had transparent rows or columns, crop them out for efficiency
@@ -875,7 +889,9 @@ def prepare_image(image: Image) -> Image:
     # If the image has too many colors, convert it into a form with reduced colors
     # if max(palette_indexes) > allowed_colors:
     palette_indexes = set(image.tobytes())
-    if max(palette_indexes) != 8 and max(palette_indexes) != 16:
+    # if max(palette_indexes) < 7:
+    #     print('Image ' + image_filename + ' has too few palette indices: ' + str(max(palette_indexes)) + '.')
+    if max(palette_indexes) < 8 or max(palette_indexes) > 15:
         if image.mode == "P":
             # Images already in P mode cannot be converted to P mode to shrink their allowed colors, so
             #   temporarily convert them back to RGB
@@ -886,10 +902,18 @@ def prepare_image(image: Image) -> Image:
     return image
 
 
-def remonsterate(connection: Pipe, **kwargs):
+def remonsterate(connection: Pipe, print_method: Callable, **kwargs):
+    global randomize_connection
+    global pipe_print
+    randomize_connection = connection
+    pipe_print = print_method
+
     try:
         if "outfile_rom_buffer" not in kwargs.keys():
-            connection.send(RuntimeError("Remonsterate was not supplied an output file."))
+            pipe_print(
+                output=RuntimeError("Remonsterate was not supplied an output file."),
+                connection=randomize_connection
+            )
 
         global outfile_rom_buffer
         global seed
@@ -898,10 +922,7 @@ def remonsterate(connection: Pipe, **kwargs):
         images_tags_filename = kwargs.get("images_tags_filename", "images_and_tags.txt")
         monsters_tags_filename = kwargs.get("monsters_tags_filename", "monsters_and_tags.txt")
         rom_type = kwargs.get("rom_type", None)
-        list_of_monsters = kwargs.get("list_of_monsters", None)
-
-        global randomize_connection
-        randomize_connection = connection
+        list_of_monsters = kwargs.get("list_of_monsters")
         images = []
         try:
             for line in open(os.path.join(file_paths, images_tags_filename)):
@@ -922,15 +943,24 @@ def remonsterate(connection: Pipe, **kwargs):
                     # image.close()
                     images.append(image)
                 except FileNotFoundError:
-                    connection.send("Remonsterate: %s was listed in images_and_tags.txt, "
-                                    "but was not found in the sprites directory." % image_filename)
+                    pipe_print(
+                        output='Remonsterate: %s was listed in images_and_tags.txt, '
+                               'but was not found in the sprites directory.' % image_filename,
+                        connection=randomize_connection
+                    )
             if len(images) == 0:
-                connection.send("Remonsterate: images_and_tags.txt is empty. To use remonsterate, "
-                                "place .png images into the sprites folder and document the file paths to those images in "
-                                "images_and_tags.txt along with any applicable tags")
+                pipe_print(
+                    output='Remonsterate: images_and_tags.txt is empty. To use remonsterate, '
+                           'place .png images into the sprites folder and document the file paths to those images in '
+                           'images_and_tags.txt along with any applicable tags',
+                    connection=randomize_connection
+                )
                 return
         except FileNotFoundError as e:
-            connection.send(e)
+            pipe_print(
+                output=e,
+                connection=randomize_connection
+            )
             return
 
         begin_remonsterate(rom_type=rom_type)
@@ -952,7 +982,10 @@ def remonsterate(connection: Pipe, **kwargs):
                     MonsterSpriteObject.get(index).whitelist = whitelist
                     MonsterSpriteObject.get(index).blacklist = blacklist
         except FileNotFoundError:
-            connection.send("Remonsterate: No monsters_and_tags.txt file was found in the remonsterate directory.")
+            pipe_print(
+                output='Remonsterate: No monsters_and_tags.txt file was found in the remonsterate directory.',
+                connection=randomize_connection
+            )
         MonsterSpriteObject.import_images = sorted(images,
                                                    key=lambda i: i.filename)
 
@@ -960,16 +993,25 @@ def remonsterate(connection: Pipe, **kwargs):
         random.shuffle(msos)
         for mso in msos:
             if not mso.select_image(list_of_monsters=list_of_monsters):
-                connection.send("Remonsterate: All usable images have been exhausted. "
-                                "Some monsters may not be randomized.")
+                pipe_print(
+                    output='Remonsterate: All usable images have been exhausted. '
+                           'Some monsters may not be randomized.',
+                    connection=randomize_connection
+                )
                 break
 
         # Wrapped in a try/except/finally block so that even if finish_remonsterate errors, the images are closed
         results = finish_remonsterate(list_of_monsters)
-        connection.send((outfile_rom_buffer, results))
+        pipe_print(
+            output=(outfile_rom_buffer, results),
+            connection=randomize_connection
+        )
     except Exception as exc:
         # connection.send(type(exc)(traceback.format_exc()))
-        connection.send(exc)
+        pipe_print(
+            output=exc,
+            connection=randomize_connection
+        )
     finally:
         try:
             if images:
@@ -1017,7 +1059,11 @@ def begin_remonsterate(rom_type=None):
     for index in MonsterSpriteObject.PROTECTED_INDEXES:
         MonsterSpriteObject.get(index).image
 
-    write_patches(randomize_connection)
+    pipe_print(
+        output="Remonsterate: Writing patches...",
+        connection=randomize_connection
+    )
+    write_patches()
 
 
 def finish_remonsterate(list_of_monsters):
@@ -1071,7 +1117,10 @@ def construct_tag_file_from_dirs(sprite_directory, tag_file):
     walk_distance = 6
     sprite_directory_level = sprite_directory.count(os.path.sep)
     spritelist = ""
-    print("Generating images_and_tags.txt using the updated sprite files.")
+    pipe_print(
+        output="Generating images_and_tags.txt using the updated sprite files.",
+        connection=randomize_connection
+    )
     for root, dirs, files in os.walk(sprite_directory):
         current_walking_directory = os.path.abspath(root)
         current_directory_level = current_walking_directory.count(os.path.sep)
@@ -1082,7 +1131,10 @@ def construct_tag_file_from_dirs(sprite_directory, tag_file):
             #   the next directory. It does NOT delete or modify files on the
             #   hard drive.
             if len(dirs) > 0:
-                print("There were additional unexplored directories in " + current_walking_directory + ".")
+                pipe_print(
+                    output='There were additional unexplored directories in ' + current_walking_directory + '.',
+                    connection=randomize_connection
+                )
             del dirs[:]
         else:
             for file_name in files:

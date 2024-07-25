@@ -1,0 +1,145 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) <2024-2025> <BeyondChaosRandomizer>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+/*
+						Parent Layout Classes
+*/
+QFrame[class="flag_v_spacer"]{
+    margin: 5px 0 0 0;
+}
+QFrame[class="flag_h_spacer"]{
+    margin: 0 2px 0 2px;
+}
+/*
+						Labels
+*/
+QLabel[class="flag_message"]{
+    margin-left: 2px;
+}
+QLabel[class="game_mode_label"]{
+    padding-left: 22px;
+}
+QLabel[class="preset_label"]{
+    padding-left: 22px;
+}
+QLabel[class="preset_description"]{
+    font-size: 14px;
+    height: 24px;
+    color: #253340;
+    padding-left: 22px;
+}
+QLabel[class="current_preset"]{
+    font-size: 14px;
+    height: 24px;
+    color: #253340;
+}
+QLabel[class="error"]{
+    color: darkred;
+}
+/*
+						Buttons
+*/
+QPushButton[class="clear_ui"]{
+    font-size: 12px;
+    height: 60px
+}
+QPushButton[class="rom_file_picker"]{
+    font: bold;
+    font-size: 18px;
+    height: 24px;
+    background-color: #5A8DBE;
+    color: #E4E4E4;
+}
+QPushButton[class="rom_output_picker"]{
+    font: bold;
+    font-size: 18px;
+    height: 24px;
+    background-color: #5A8DBE;
+    color: #E4E4E4;
+}
+QPushButton[class="generate_button"]{
+    font: bold;
+    font-size: 18px;
+    height: 24px;
+    background-color: #5A8DBE;
+    color: #E4E4E4;
+}
+/*
+						Combo Boxes
+*/
+QComboBox
+{
+    selection-background-color: #3daee9;
+}
+QComboBox:hover{
+    border-color: #3daee9;
+    color: #eff0f1;
+}
+QComboBox QAbstractItemView
+{
+    selection-color: black;
+}
+/*
+						Single-line Text Boxes
+*/
+QTextEdit[class="traceback"]{
+    background-color: rgba(0,0,0,0); 
+    border: none;
+}
+/*
+						Multi-line Text Boxes
+*/
+/*
+						Number Boxes
+*/
+QSpinBox::up-button
+{
+     width: 20px;
+}
+QSpinBox::down-button
+{
+     width: 20px;
+}
+QSpinBox[class="batch_count"]
+{
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+    height: 20px;
+}
+QSpinBox[class="batch_count"]::up-button
+{
+     width: 20px;
+}
+QSpinBox[class="batch_count"]::down-button
+{
+     width: 20px;
+}
+QDoubleSpinBox::up-button
+{
+     width: 20px;
+}
+QDoubleSpinBox::down-button
+{
+     width: 20px;
+}

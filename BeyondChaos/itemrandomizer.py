@@ -98,31 +98,54 @@ def bit_mutate(byte, op="on", nochange=0x00):
 def extend_item_breaks(fout):
     break_sub = Substitution()
     break_sub.set_location(0x22735)
-    break_sub.bytestring = bytes([0x22, 0x13, 0x30, 0xF0])
-    break_sub.write(fout)
+    break_sub.bytestring = bytes([
+      0x22, 0xE3, 0x3F, 0xF0  # JSL $F03013
+    ])
+    break_sub.write(fout, patch_name='extend_item_breaks')
 
     break_sub.set_location(0x22743)
-    break_sub.bytestring = bytes([0x30, 0x05])
-    break_sub.write(fout)
+    break_sub.bytestring = bytes([
+      0x30, 0x05              # BMI $05
+    ])
+    break_sub.write(fout, patch_name='extend_item_breaks')
 
     break_sub.set_location(0x2274A)
-    break_sub.bytestring = bytes([0xAD, 0x10, 0x34])
-    break_sub.write(fout)
+    break_sub.bytestring = bytes([
+      0xAD, 0x10, 0x34        # LDA $3410   [Last spell cast]
+    ])
+    break_sub.write(fout, patch_name='extend_item_breaks')
 
     break_sub.set_location(0x229ED)
-    break_sub.bytestring = bytes([0x22, 0x00, 0x30, 0xF0, 0xEA, 0xEA])
-    break_sub.write(fout)
+    break_sub.bytestring = bytes([
+      0x22, 0xD0, 0x3F, 0xF0, # JSL $F03000
+      0xEA, 0xEA              # NOP #2
+    ])
+    break_sub.write(fout, patch_name='extend_item_breaks')
 
     break_sub.set_location(0x23658)
-    break_sub.bytestring = bytes([0xAD, 0x7E, 0x3A])
-    break_sub.write(fout)
+    break_sub.bytestring = bytes([
+      0xAD, 0x7E, 0x3A        # LDA $3A7E  [???]
+    ])
+    break_sub.write(fout, patch_name='extend_item_breaks')
 
-    break_sub.set_location(0x303000)
+    break_sub.set_location(0x303FD0)
     break_sub.bytestring = bytes(
-        [0xBD, 0xA4, 0x3B, 0x29, 0x0C, 0x0A, 0x0A, 0x0A, 0x0A, 0x8D, 0x89, 0x3A, 0xBD, 0x34, 0x3D, 0x8D, 0x7E, 0x3A,
-         0x6B, 0x08, 0xBF, 0x12, 0x50, 0xD8, 0x8D, 0x10, 0x34, 0xBF, 0x13, 0x50, 0xD8, 0x0A, 0x0A, 0x0A, 0x0A, 0x28,
-         0x29, 0xC0, 0x6B])
-    break_sub.write(fout)
+        [0xBD, 0xA4, 0x3B,         # LDA $3BA4,X   [Main hand properties, like Runic]
+         0x29, 0x0C,               # AND #$0C      [Consider bits 3 and 4]
+         0x0A, 0x0A, 0x0A, 0x0A,   # ASL #4        [x16]
+         0x8D, 0x89, 0x3A,         # STA $3A89     [Enable weapon spell proc if either is set]
+         0xBD, 0x34, 0x3D,         # LDA $3D34     [Main hand weapon spell index]
+         0x8D, 0x7E, 0x3A,         # STA $3A7E     [???]
+         0x6B,                     # RTL           [Exit]
+         0x08,                     # PHP
+         0xBF, 0x12, 0x50, 0xD8,   # LDA $D85012,X [Weapon spell id]
+         0x8D, 0x10, 0x34,         # STA $3410     [Save as last spell cast, for proccing]
+         0xBF, 0x13, 0x50, 0xD8,   # LDA $D85013,X [Weapon flags]
+         0x0A, 0x0A, 0x0A, 0x0A,   # ASL #4        [x16]
+         0x28,                     # PLP
+         0x29, 0xC0,               # AND #$C0      [Keep only bits 3 and 4]
+         0x6B])                    # RTL           [Exit]])
+    break_sub.write(fout, patch_name='extend_item_breaks')
 
 
 class ItemBlock:
@@ -934,7 +957,7 @@ IMP_MASK = 0x4000
 UMARO_ID = 13
 
 
-def reset_equippable(items, characters, numchars=NUM_CHARS):
+def reset_equippable(items, characters, numchars=NUM_CHARS, equip_anything=False):
     global changed_commands
     prevents = [i for i in items if i.prevent_encounters]
     for item in prevents:
@@ -948,6 +971,7 @@ def reset_equippable(items, characters, numchars=NUM_CHARS):
                 test |= IMP_MASK
                 item.equippable &= test
                 break
+    tools = [i for i in items if i.is_tool]
 
     items = [i for i in items if not (i.is_consumable or i.is_tool or i.prevent_encounters)]
     new_weaps = list(range(numchars))
@@ -1028,6 +1052,13 @@ def reset_equippable(items, characters, numchars=NUM_CHARS):
                     invert_rage_mask = 0xFFFF ^ rage_mask
                     item.equippable &= invert_rage_mask
                 assert not item.equippable & rage_mask
+
+    #Make tools inspectable but not equipppable
+    for item in [i for i in tools]:
+        item.itemtype &= 0xF8
+        item.itemtype |= 0x01
+        if not equip_anything:
+            item.equippable = 0
 
     return items
 
@@ -1234,7 +1265,7 @@ def get_ranked_items(rom_file_buffer: BytesIO = None, allow_banned=False):
     return sorted(items, key=lambda i: i.rank())
 
 
-def unhardcode_tintinabar(fout):
+def unhardcode_tintinabar(output_rom_buffer):
     # Apply Lenophis's unhardcoded tintinabar patch (solo version)
     tintinabar_sub = Substitution()
     tintinabar_sub.set_location(0x4A57)
@@ -1246,14 +1277,14 @@ def unhardcode_tintinabar(fout):
          0xA5, 0x1E, 0x4A, 0x4A, 0x4A, 0x4A, 0x4A, 0x85, 0x1E, 0xB9, 0x09, 0x16, 0x38, 0xE5, 0x1E, 0xF0, 0x02, 0xB0,
          0x02, 0x7B, 0x1A, 0x99, 0x09, 0x16, 0xC2, 0x21, 0x98, 0x69, 0x25, 0x00, 0xA8, 0x7B, 0xE2, 0x20, 0xE8, 0xE0,
          0x10, 0x00, 0xD0, 0x8D, 0xFA, 0x86, 0x24, 0xFA, 0x86, 0x22, 0xFA, 0x86, 0x20, 0xFA, 0x86, 0x1E, 0x28, 0x6B])
-    tintinabar_sub.write(fout)
+    tintinabar_sub.write(output_rom_buffer, patch_name='unhardcode_tintinabar')
 
     tintinabar_sub.set_location(0x6CF8)
     tintinabar_sub.bytestring = bytes(
         [0x8C, 0x48, 0x14, 0x64, 0x1B, 0xB9, 0x67, 0x08, 0x0A, 0x10, 0x11, 0x4A, 0x29, 0x07, 0xCD, 0x6D, 0x1A, 0xD0,
          0x09, 0xA5, 0x1B, 0x22, 0x77, 0x0E, 0xC2, 0x20, 0xF6, 0xDE, 0xC2, 0x21, 0x98, 0x69, 0x29, 0x00, 0xA8, 0xE2,
          0x20, 0xE6, 0x1B, 0xC0, 0x90, 0x02, 0xD0, 0xD9, 0x7B, 0x60])
-    tintinabar_sub.write(fout)
+    tintinabar_sub.write(output_rom_buffer, patch_name='unhardcode_tintinabar')
 
     tintinabar_sub.set_location(0xDEF6)
     tintinabar_sub.bytestring = bytes(
@@ -1261,7 +1292,7 @@ def unhardcode_tintinabar(fout):
          0x0C, 0x48, 0x14, 0x7A, 0x60, 0x8C, 0x04, 0x42, 0xA9, 0x25, 0x8D, 0x06, 0x42, 0x22, 0xD4, 0x4A, 0xC0, 0x7B,
          0xAD, 0x14, 0x42, 0xDA, 0x1A, 0xAA, 0xC2, 0x20, 0x38, 0x7B, 0x2A, 0xCA, 0xD0, 0xFC, 0xFA, 0x2C, 0x48, 0x14,
          0xE2, 0x20, 0x60])
-    tintinabar_sub.write(fout)
+    tintinabar_sub.write(output_rom_buffer, patch_name='unhardcode_tintinabar')
 
     tintinabar_sub.set_location(0x31DA9)
     tintinabar_sub.bytestring = bytes(
@@ -1269,10 +1300,10 @@ def unhardcode_tintinabar(fout):
          0x02, 0x20, 0xA9, 0x0E, 0x20, 0xC9, 0x1D, 0x7B, 0x3A, 0x85, 0x27, 0x64, 0x26, 0x60, 0x9C, 0xDF, 0x11, 0x9C,
          0x48, 0x14, 0x9C, 0x49, 0x14, 0xA2, 0x03, 0x00, 0xB5, 0x69, 0x30, 0x07, 0x22, 0x77, 0x0E, 0xC2, 0x20, 0x6C,
          0xF1, 0xCA, 0x10, 0xF2, 0x60, 0x00, 0xD0, 0xF0, 0x60])
-    tintinabar_sub.write(fout)
+    tintinabar_sub.write(output_rom_buffer, patch_name='unhardcode_tintinabar')
 
     tintinabar_sub.set_location(0x3F16C)
     tintinabar_sub.bytestring = bytes(
         [0xAD, 0xD8, 0x11, 0x10, 0x12, 0x7B, 0xB5, 0x69, 0x1A, 0xA8, 0x38, 0x7B, 0xC2, 0x20, 0x2A, 0x88, 0xD0, 0xFC,
          0x0C, 0x48, 0x14, 0xE2, 0x20, 0x60])
-    tintinabar_sub.write(fout)
+    tintinabar_sub.write(output_rom_buffer, patch_name='unhardcode_tintinabar')

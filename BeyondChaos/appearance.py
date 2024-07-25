@@ -148,7 +148,7 @@ def make_palette_repair(outfile_rom_buffer: BytesIO, main_palette_changes):
         bytestring.extend([0x43, c, after])
     repair_sub.bytestring = bytestring + [0xFE]
     repair_sub.set_location(0xCB154)  # Narshe secret entrance
-    repair_sub.write(outfile_rom_buffer)
+    repair_sub.write(outfile_rom_buffer, patch_name='make_palette_repair')
 
 
 NAME_ID_DICT = {
@@ -218,11 +218,11 @@ def manage_coral(outfile_rom_buffer: BytesIO, web_custom_coral_names=None):
     coral_sub = Substitution()
     coral_sub.set_location(0xEFC08) ##change the name when opening a chest
     coral_sub.bytestring = newcoralnamebytes
-    coral_sub.write(outfile_rom_buffer)
+    coral_sub.write(outfile_rom_buffer, patch_name='manage_coral')
 
     coral_sub.set_location(0xEFD7F) ##Change the name in the description
     coral_sub.bytestring = coraldescription
-    coral_sub.write(outfile_rom_buffer)
+    coral_sub.write(outfile_rom_buffer, patch_name='manage_coral')
 
     return sprite_log
 
@@ -299,8 +299,8 @@ def manage_character_names(outfile_rom_buffer: BytesIO, change_to, male,
             f.close()
         else:
             malenames = sorted(set(sanitize_names([name.strip() for name in male_names.split("\n")])))
-        if not male_names:
-            f = open_mei_fallback(MALE_NAMES_TABLE)
+        if not female_names:
+            f = open_mei_fallback(FEMALE_NAMES_TABLE)
             femalenames = sorted(set(sanitize_names([line.strip() for line in f.readlines()])))
             f.close()
         else:

@@ -6,6 +6,7 @@ import json
 from collections import defaultdict
 from os import path
 
+# TODO: Use Substitution class to make writes, since that class handles patch verification
 
 set_addressing_mode('hirom')
 

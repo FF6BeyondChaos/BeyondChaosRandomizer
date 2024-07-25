@@ -373,10 +373,6 @@ def write_patches(connection: Pipe = None):
     if not PATCH_FILENAMES:
         return
 
-    if connection:
-        connection.send("Remonsterate: Writing patches...")
-    else:
-        print("Remonsterate: Writing patches...")
     for patchfilename in PATCH_FILENAMES:
         write_patch(patchfilename)
 

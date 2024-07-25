@@ -75,6 +75,7 @@ class CharacterBlock:
         self.wor_location = None
         self.command_objs = []
         self.stats = {}
+        self.level_cap = 99
 
     def __repr__(self):
         s = "{0:02d}. {1}".format(self.id + 1, self.newname) + "\n"
@@ -110,6 +111,7 @@ class CharacterBlock:
             s += "Has natural magic.\n"
             for level, spell in self.natural_magic:
                 s += "  LV %s - %s\n" % (level, spell.name)
+        s += "Maximum level: " + str(self.level_cap) + "\n"
         return s.strip()
 
     def get_notable_equips(self):

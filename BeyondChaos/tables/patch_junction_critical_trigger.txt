@@ -1,3 +1,4 @@
+
 .addr   jun-checker                     {{jun-global-checker}}
 .addr   jun-queue-command               {{jun-global-queue-command}}
 .addr   jun-queue-self-spell            {{jun-global-queue-self-spell}}

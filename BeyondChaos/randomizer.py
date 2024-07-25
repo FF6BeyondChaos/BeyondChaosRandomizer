@@ -46,7 +46,7 @@ from patches import (
     allergic_dog, banon_life3, evade_mblock, death_abuse, no_kutan_skip,
     show_coliseum_rewards, cycle_statuses, no_dance_stumbles, fewer_flashes,
     change_swdtech_speed, change_cursed_shield_battles, sprint_shoes_break,
-    title_gfx, apply_namingway, improved_party_gear, patch_doom_gaze,
+    apply_namingway, improved_party_gear, patch_doom_gaze,
     nicer_poison, fix_xzone, imp_skimp, fix_flyaway, hidden_relic, y_equip_relics,
     fix_gogo_portrait, vanish_doom, stacking_immunities, mp_color_digits,
     can_always_access_esper_menu, alphabetized_lores, description_disruption,
@@ -70,6 +70,7 @@ from utils import (COMMAND_TABLE, LOCATION_TABLE, LOCATION_PALETTE_TABLE,
                    AutoLearnRageSub, pipe_print, set_parent_pipe)
 from wor import manage_wor_recruitment, manage_wor_skip
 from random import Random
+from patch_title import title_gfx
 from remonsterate.remonsterate import remonsterate
 
 
@@ -379,22 +380,22 @@ class AutoRecruitGauSub(Substitution):
         return bytes([0x50, 0xBC, 0x59, 0x10, 0x3F,
                       0x0B, 0x01, 0xD4, 0xFB, 0xB8, 0x49, 0xFE])
 
-    def write(self, stays_in_wor: bool):
+    def write(self, stays_in_wor: bool, patch_name: str = 'autorecruitgausub'):
         sub_addr = self.location - 0xa0000
         call_recruit_sub = Substitution()
         call_recruit_sub.bytestring = bytes([0xB2]) + int2bytes(sub_addr, length=3)
         call_recruit_sub.set_location(0xBC19C)
-        call_recruit_sub.write(outfile_rom_buffer)
+        call_recruit_sub.write(outfile_rom_buffer, patch_name=patch_name)
 
         if stays_in_wor:
             gau_stays_wor_sub = Substitution()
             gau_stays_wor_sub.bytestring = bytes([0xD4, 0xFB])
             gau_stays_wor_sub.set_location(0xA5324)
-            gau_stays_wor_sub.write(outfile_rom_buffer)
+            gau_stays_wor_sub.write(outfile_rom_buffer, patch_name='gau_stays')
 
         if Options_.is_flag_active('shuffle_commands') or Options_.is_flag_active('replace_commands'):
             REPLACE_ENEMIES.append(0x172)
-        super(AutoRecruitGauSub, self).write(outfile_rom_buffer)
+        super(AutoRecruitGauSub, self).write(outfile_rom_buffer, noverify=True, patch_name='auto_recruit_gau')
 
 
 class FreeBlock:
@@ -480,25 +481,25 @@ def relocate_ending_cinematic_data(data_blk_dst):
     copy_sub = Substitution()
     copy_sub.bytestring = bytes(outfile_rom_buffer.read(cinematic_data_length))
     copy_sub.set_location(data_blk_dst - 0xC00000)
-    copy_sub.write(outfile_rom_buffer)
+    copy_sub.write(outfile_rom_buffer, patch_name='rotate_ending_cinematic')
 
     # Blank the data in the newly free'd block
     copy_sub.set_location(cinematic_data_addr)
     copy_sub.bytestring = b'\x00' * cinematic_data_length
-    copy_sub.write(outfile_rom_buffer)
+    copy_sub.write(outfile_rom_buffer, patch_name='rotate_ending_cinematic')
 
     # Change load instructions to use new bank
     # LDA #$C2 -> LDA #$xx
     for addr in relocate_locations[:-5]:
         copy_sub.set_location(addr + 1)
         copy_sub.bytestring = bytes([new_dst_bnk])
-        copy_sub.write(outfile_rom_buffer)
+        copy_sub.write(outfile_rom_buffer, patch_name='rotate_ending_cinematic')
 
     # LDA $C2____,X -> LDA $xx____,X
     for addr in relocate_locations[-5:]:
         copy_sub.set_location(addr + 3)
         copy_sub.bytestring = bytes([new_dst_bnk])
-        copy_sub.write(outfile_rom_buffer)
+        copy_sub.write(outfile_rom_buffer, patch_name='rotate_ending_cinematic')
 
     return FreeBlock(cinematic_data_addr,
                      cinematic_data_addr + cinematic_data_length)
@@ -649,7 +650,7 @@ def randomize_colosseum(pointer: int) -> List:
         coliseum_run_sub = Substitution()
         coliseum_run_sub.bytestring = [0xEA] * 2
         coliseum_run_sub.set_location(0x25BEF)
-        coliseum_run_sub.write(outfile_rom_buffer)
+        coliseum_run_sub.write(outfile_rom_buffer, patch_name='fightclub')
 
     return results
 
@@ -708,18 +709,18 @@ def randomize_slots(pointer: int):
 def auto_recruit_gau(stays_in_wor: bool):
     arg_sub = AutoRecruitGauSub()
     arg_sub.set_location(0xcfe1a)
-    arg_sub.write(stays_in_wor)
+    arg_sub.write(stays_in_wor, patch_name='auto_recruit_gau')
 
     recruit_gau_sub = Substitution()
     recruit_gau_sub.bytestring = bytes([0x89, 0xFF])
     recruit_gau_sub.set_location(0x24856)
-    recruit_gau_sub.write(outfile_rom_buffer)
+    recruit_gau_sub.write(outfile_rom_buffer, patch_name='auto_recruit_gau')
 
 
 def auto_learn_rage():
     alr_sub = AutoLearnRageSub(require_gau=False)
     alr_sub.set_location(0x23b73)
-    alr_sub.write(outfile_rom_buffer)
+    alr_sub.write(outfile_rom_buffer, patch_name='auto_learn_rage')
 
 
 def manage_commands(commands: Dict[str, CommandBlock]):
@@ -743,12 +744,12 @@ def manage_commands(commands: Dict[str, CommandBlock]):
     learn_lore_sub = Substitution()
     learn_lore_sub.bytestring = bytes([0xEA, 0xEA, 0xF4, 0x00, 0x00, 0xF4, 0x00, 0x00])
     learn_lore_sub.set_location(0x236E4)
-    learn_lore_sub.write(outfile_rom_buffer)
+    learn_lore_sub.write(outfile_rom_buffer, patch_name='manage_commands_lore')
 
     learn_dance_sub = Substitution()
     learn_dance_sub.bytestring = bytes([0xEA] * 2)
     learn_dance_sub.set_location(0x25EE8)
-    learn_dance_sub.write(outfile_rom_buffer)
+    learn_dance_sub.write(outfile_rom_buffer, patch_name='manage_commands_dance')
 
     learn_swdtech_sub = Substitution()
     learn_swdtech_sub.bytestring = bytes([0xEB,  # XBA
@@ -756,86 +757,86 @@ def manage_commands(commands: Dict[str, CommandBlock]):
                                           0xEB,  # XBA
                                           0xEA])
     learn_swdtech_sub.set_location(0x261C7)
-    learn_swdtech_sub.write(outfile_rom_buffer)
+    learn_swdtech_sub.write(outfile_rom_buffer, patch_name='manage_commands_swdtech')
     learn_swdtech_sub.bytestring = bytes([0x4C, 0xDA, 0xA1, 0x60])
     learn_swdtech_sub.set_location(0xA18A)
-    learn_swdtech_sub.write(outfile_rom_buffer)
+    learn_swdtech_sub.write(outfile_rom_buffer, patch_name='manage_commands_swdtech')
 
     learn_blitz_sub = Substitution()
     learn_blitz_sub.bytestring = bytes([0xF0, 0x09])
     learn_blitz_sub.set_location(0x261CE)
-    learn_blitz_sub.write(outfile_rom_buffer)
+    learn_blitz_sub.write(outfile_rom_buffer, patch_name='manage_commands_blitz')
     learn_blitz_sub.bytestring = bytes([0xD0, 0x04])
     learn_blitz_sub.set_location(0x261D3)
-    learn_blitz_sub.write(outfile_rom_buffer)
+    learn_blitz_sub.write(outfile_rom_buffer, patch_name='manage_commands_blitz')
     learn_blitz_sub.bytestring = bytes([0x68,  # PLA
                                         0xEB,  # XBA
                                         0xEA, 0xEA, 0xEA, 0xEA, 0xEA])
     learn_blitz_sub.set_location(0x261D9)
-    learn_blitz_sub.write(outfile_rom_buffer)
+    learn_blitz_sub.write(outfile_rom_buffer, patch_name='manage_commands_blitz')
     learn_blitz_sub.bytestring = bytes([0xEA] * 4)
     learn_blitz_sub.set_location(0x261E3)
-    learn_blitz_sub.write(outfile_rom_buffer)
+    learn_blitz_sub.write(outfile_rom_buffer, patch_name='manage_commands_blitz')
     learn_blitz_sub.bytestring = bytes([0xEA])
     learn_blitz_sub.set_location(0xA200)
-    learn_blitz_sub.write(outfile_rom_buffer)
+    learn_blitz_sub.write(outfile_rom_buffer, patch_name='manage_commands_blitz')
 
     learn_multiple_sub = Substitution()
     learn_multiple_sub.set_location(0xA1B4)
     reljump = 0xFE - (learn_multiple_sub.location - 0xA186)
     learn_multiple_sub.bytestring = bytes([0xF0, reljump])
-    learn_multiple_sub.write(outfile_rom_buffer)
+    learn_multiple_sub.write(outfile_rom_buffer, patch_name='manage_commands_multiple')
 
     learn_multiple_sub.set_location(0xA1D6)
     reljump = 0xFE - (learn_multiple_sub.location - 0xA18A)
     learn_multiple_sub.bytestring = bytes([0xF0, reljump])
-    learn_multiple_sub.write(outfile_rom_buffer)
+    learn_multiple_sub.write(outfile_rom_buffer, patch_name='manage_commands_multiple')
 
     learn_multiple_sub.set_location(0x261DD)
     learn_multiple_sub.bytestring = bytes([0xEA] * 3)
-    learn_multiple_sub.write(outfile_rom_buffer)
+    learn_multiple_sub.write(outfile_rom_buffer, patch_name='manage_commands_multiple')
 
     rage_blank_sub = Substitution()
     rage_blank_sub.bytestring = bytes([0x01] + ([0x00] * 31))
     rage_blank_sub.set_location(0x47AA0)
-    rage_blank_sub.write(outfile_rom_buffer)
+    rage_blank_sub.write(outfile_rom_buffer, patch_name='manage_commands_rage')
 
-    # Let x-magic user use magic menu.
-    enable_xmagic_menu_sub = Substitution()
-    enable_xmagic_menu_sub.bytestring = bytes([0xDF, 0x78, 0x4D, 0xC3,  # CMP $C34D78,X
-                                               0xF0, 0x07,  # BEQ
-                                               0xE0, 0x01, 0x00,  # CPX #$0001
-                                               0xD0, 0x02,  # BNE
-                                               0xC9, 0x17,  # CMP #$17
-                                               0x6b  # RTL
-                                               ])
-    enable_xmagic_menu_sub.set_location(0x3F091)
-    enable_xmagic_menu_sub.write(outfile_rom_buffer)
+    # Let x-magic user use magic menu. Commented out as it's duplicated in Myself's patches
+    # enable_xmagic_menu_sub = Substitution()
+    # enable_xmagic_menu_sub.bytestring = bytes([0xDF, 0x78, 0x4D, 0xC3,  # CMP $C34D78,X
+    #                                           0xF0, 0x07,  # BEQ
+    #                                           0xE0, 0x01, 0x00,  # CPX #$0001
+    #                                           0xD0, 0x02,  # BNE
+    #                                           0xC9, 0x17,  # CMP #$17
+    #                                           0x6b  # RTL
+    #                                           ])
+    # enable_xmagic_menu_sub.set_location(0x3F091)
+    # enable_xmagic_menu_sub.write(outfile_rom_buffer, patch_name='manage_commands_xmagic')
 
-    enable_xmagic_menu_sub.bytestring = bytes([0x22, 0x91, 0xF0, 0xC3])
-    enable_xmagic_menu_sub.set_location(0x34d56)
-    enable_xmagic_menu_sub.write(outfile_rom_buffer)
+    # enable_xmagic_menu_sub.bytestring = bytes([0x22, 0x91, 0xF0, 0xC3])
+    # enable_xmagic_menu_sub.set_location(0x34d56)
+    # enable_xmagic_menu_sub.write(outfile_rom_buffer, patch_name='manage_commands_xmagic')
 
     # Prevent Runic, SwdTech, and Capture from being disabled/altered
     protect_battle_commands_sub = Substitution()
     protect_battle_commands_sub.bytestring = bytes([0x03, 0xFF, 0xFF, 0x0C, 0x17, 0x02, 0xFF, 0x00])
     protect_battle_commands_sub.set_location(0x252E9)
-    protect_battle_commands_sub.write(outfile_rom_buffer)
+    protect_battle_commands_sub.write(outfile_rom_buffer, patch_name='manage_commands_protect_battle_cmds')
 
     enable_morph_sub = Substitution()
     enable_morph_sub.bytestring = bytes([0xEA] * 2)
     enable_morph_sub.set_location(0x25410)
-    enable_morph_sub.write(outfile_rom_buffer)
+    enable_morph_sub.write(outfile_rom_buffer, patch_name='manage_commands_enable_morph')
 
     enable_mpoint_sub = Substitution()
     enable_mpoint_sub.bytestring = bytes([0xEA] * 2)
     enable_mpoint_sub.set_location(0x25E38)
-    enable_mpoint_sub.write(outfile_rom_buffer)
+    enable_mpoint_sub.write(outfile_rom_buffer, patch_name='manage_commands_enable_mpoint')
 
     ungray_statscreen_sub = Substitution()
     ungray_statscreen_sub.bytestring = bytes([0x20, 0x6F, 0x61, 0x30, 0x26, 0xEA, 0xEA, 0xEA])
     ungray_statscreen_sub.set_location(0x35EE1)
-    ungray_statscreen_sub.write(outfile_rom_buffer)
+    ungray_statscreen_sub.write(outfile_rom_buffer, patch_name='manage_commands_ungray')
 
     fanatics_fix_sub = Substitution()
     if Options_.is_flag_active('metronome'):
@@ -843,12 +844,7 @@ def manage_commands(commands: Dict[str, CommandBlock]):
     else:
         fanatics_fix_sub.bytestring = bytes([0xA9, 0x15])
     fanatics_fix_sub.set_location(0x2537E)
-    fanatics_fix_sub.write(outfile_rom_buffer)
-
-    if Options_.is_flag_active('lessfanatical'):  # remove the magic only tile when entering fanatic's tower
-        fanatics_fix_sub.bytestring = bytes([0x80])
-        fanatics_fix_sub.set_location(0x025352)
-        fanatics_fix_sub.write(outfile_rom_buffer)
+    fanatics_fix_sub.write(outfile_rom_buffer, patch_name='fanatics_fix')
 
     invalid_commands = ['fight', 'item', 'magic', 'xmagic',
                         'def', 'row', 'summon', 'revert']
@@ -912,7 +908,7 @@ def manage_commands(commands: Dict[str, CommandBlock]):
                         morph_char_sub = Substitution()
                         morph_char_sub.bytestring = bytes([0xC9, character.id])
                         morph_char_sub.set_location(0x25E32)
-                        morph_char_sub.write(outfile_rom_buffer)
+                        morph_char_sub.write(outfile_rom_buffer, noverify=True, patch_name='morph_char')
                         JUNCTION_MANAGER_PARAMETERS['morpher-index'] = character.id
             for index, command in enumerate(reversed(using)):
                 character.set_battle_command(index + 1, command=command)
@@ -1356,7 +1352,7 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
         spell.set_location(myfs.start)
         if not hasattr(spell, 'bytestring') or not spell.bytestring:
             spell.generate_bytestring()
-        spell.write(outfile_rom_buffer)
+        spell.write(outfile_rom_buffer, patch_name='manage_commands_new')
         command.setpointer(spell.location, outfile_rom_buffer)
         free_spaces = determine_new_free_spaces(free_spaces, myfs, spell.size)
 
@@ -1423,12 +1419,12 @@ def manage_commands_new(commands: Dict[str, CommandBlock]):
     gogo_enable_all_sub = Substitution()
     gogo_enable_all_sub.bytestring = bytes([0xEA] * 2)
     gogo_enable_all_sub.set_location(0x35E58)
-    gogo_enable_all_sub.write(outfile_rom_buffer)
+    gogo_enable_all_sub.write(outfile_rom_buffer, patch_name='gogo_enable_all_commands')
 
     cyan_ai_sub = Substitution()
     cyan_ai_sub.bytestring = bytes([0xF0, 0xEE, 0xEE, 0xEE, 0xFF])
     cyan_ai_sub.set_location(0xFBE85)
-    cyan_ai_sub.write(outfile_rom_buffer)
+    cyan_ai_sub.write(outfile_rom_buffer, patch_name='cyan_ai')
 
     return commands, free_spaces
 
@@ -1441,7 +1437,7 @@ def manage_suplex(commands: Dict[str, CommandBlock], monsters: List[MonsterBlock
     spell = SpellSub(spellid=0x5F)
     sb = SpellBlock(0x5F, infile_rom_buffer)
     spell.set_location(chosen_free_space.start)
-    spell.write(outfile_rom_buffer)
+    spell.write(outfile_rom_buffer, patch_name='suplexwrecks')
     suplex_command.targeting = sb.targeting
     suplex_command.setpointer(spell.location, outfile_rom_buffer)
     suplex_command.newname(sb.name, outfile_rom_buffer)
@@ -1462,10 +1458,10 @@ def manage_suplex(commands: Dict[str, CommandBlock], monsters: List[MonsterBlock
     learn_blitz_sub = Substitution()
     learn_blitz_sub.bytestring = [0xEA] * 2
     learn_blitz_sub.set_location(0x261E5)
-    learn_blitz_sub.write(outfile_rom_buffer)
+    learn_blitz_sub.write(outfile_rom_buffer, patch_name='suplexwrecks')
     learn_blitz_sub.bytestring = [0xEA] * 4
     learn_blitz_sub.set_location(0xA18E)
-    learn_blitz_sub.write(outfile_rom_buffer)
+    learn_blitz_sub.write(outfile_rom_buffer, patch_name='suplexwrecks')
 
 
 def manage_natural_magic(natural_magic_table):
@@ -1495,11 +1491,11 @@ def manage_natural_magic(natural_magic_table):
     except ValueError:
         return
 
-    #Ensure Celes does not learn her vanilla natural magic
+    # Ensure Celes does not learn her vanilla natural magic
     natmag_learn_sub = Substitution()
     natmag_learn_sub.set_location(0xa186)
     natmag_learn_sub.bytestring = bytes([0xEA] * 4)
-    natmag_learn_sub.write(outfile_rom_buffer)
+    natmag_learn_sub.write(outfile_rom_buffer, patch_name='learn_natural_magic')
 
     # natmag_learn_sub.set_location(NATURAL_MAGIC_TABLE)
     # natmag_learn_sub.bytestring = bytes(
@@ -1512,7 +1508,7 @@ def manage_natural_magic(natural_magic_table):
     #     0x4A, 0x4A, 0xAA, 0xA9, 0x00, 0x00, 0xE2, 0x20, 0xBF, 0xE1, 0x08, 0xF0, 0xC5, 0x0B, 0xF0, 0x02, 0xB0, 0x11,
     #     0x5A, 0xBF, 0xE0, 0x08, 0xF0, 0xA8, 0xB1, 0x09, 0xC9, 0xFF, 0xF0, 0x04, 0xA5, 0x0C, 0x91, 0x09, 0x7A, 0xE8,
     #     0xE8, 0x88, 0xD0, 0xE0, 0x6B] + [0xFF] * 2 * 16 * 12)
-    # natmag_learn_sub.write(outfile_rom_buffer)
+    # natmag_learn_sub.write(outfile_rom_buffer, patch_name='learn_natural_magic')
 
     spells = get_ranked_spells(infile_rom_buffer, magic_only=True)
     spell_ids = [spell.spellid for spell in spells]
@@ -1596,10 +1592,10 @@ def manage_equip_umaro(freespaces: list):
     equip_umaro_sub = Substitution()
     equip_umaro_sub.bytestring = [0xC9, 0x0E]
     equip_umaro_sub.set_location(0x31E6E)
-    equip_umaro_sub.write(outfile_rom_buffer)
+    equip_umaro_sub.write(outfile_rom_buffer, patch_name='manage_equip_umaro')
     equip_umaro_sub.bytestring = [0xEA] * 2
     equip_umaro_sub.set_location(0x39EF6)
-    equip_umaro_sub.write(outfile_rom_buffer)
+    equip_umaro_sub.write(outfile_rom_buffer, patch_name='manage_equip_umaro')
 
     infile_rom_buffer.seek(0xC359D)
     old_unequipper = infile_rom_buffer.read(218)
@@ -1632,17 +1628,17 @@ def manage_equip_umaro(freespaces: list):
     unequip_umaro_sub = Substitution()
     unequip_umaro_sub.bytestring = generate_unequipper(0xC351E)
     unequip_umaro_sub.set_location(0xC351E)
-    unequip_umaro_sub.write(outfile_rom_buffer)
+    unequip_umaro_sub.write(outfile_rom_buffer, patch_name='manage_equip_umaro')
 
     myfs = get_appropriate_free_space(freespaces, 234)
     pointer = myfs.start
     unequip_umaro_sub.bytestring = generate_unequipper(pointer, not_current_party=True)
     freespaces = determine_new_free_spaces(freespaces, myfs, unequip_umaro_sub.size)
     unequip_umaro_sub.set_location(pointer)
-    unequip_umaro_sub.write(outfile_rom_buffer)
+    unequip_umaro_sub.write(outfile_rom_buffer, patch_name='manage_equip_umaro')
     unequip_umaro_sub.bytestring = [pointer & 0xFF, (pointer >> 8) & 0xFF, (pointer >> 16) - 0xA]
     unequip_umaro_sub.set_location(0xC3514)
-    unequip_umaro_sub.write(outfile_rom_buffer)
+    unequip_umaro_sub.write(outfile_rom_buffer, patch_name='manage_equip_umaro')
 
     return freespaces
 
@@ -1698,9 +1694,9 @@ def manage_umaro(commands: Dict[str, CommandBlock]):
     umaro_exchange_sub = Substitution()
     umaro_exchange_sub.bytestring = [0xC9, umaro_risk.id]
     umaro_exchange_sub.set_location(0x21617)
-    umaro_exchange_sub.write(outfile_rom_buffer)
+    umaro_exchange_sub.write(outfile_rom_buffer, patch_name='manage_umaro')
     umaro_exchange_sub.set_location(0x20926)
-    umaro_exchange_sub.write(outfile_rom_buffer)
+    umaro_exchange_sub.write(outfile_rom_buffer, noverify=True, patch_name='manage_umaro')
     JUNCTION_MANAGER_PARAMETERS['berserker-index'] = umaro_risk.id
 
     spells = get_ranked_spells(infile_rom_buffer)
@@ -1717,7 +1713,7 @@ def manage_umaro(commands: Dict[str, CommandBlock]):
     storm_sub = Substitution()
     storm_sub.bytestring = bytes([0xA9, spell_id])
     storm_sub.set_location(0x21710)
-    storm_sub.write(outfile_rom_buffer)
+    storm_sub.write(outfile_rom_buffer, patch_name='random_blizzard_orb')
 
     return umaro_risk
 
@@ -1726,7 +1722,7 @@ def manage_sprint():
     auto_sprint = Substitution()
     auto_sprint.set_location(0x4E2D)
     auto_sprint.bytestring = bytes([0x80, 0x00])
-    auto_sprint.write(outfile_rom_buffer)
+    auto_sprint.write(outfile_rom_buffer, patch_name='manage_sprint')
 
 
 def name_swd_techs():
@@ -1745,12 +1741,12 @@ def name_swd_techs():
          0x9d, 0xfe, 0x92, 0xa5, 0xa2, 0x9c, 0x9e,
          0x82, 0xa5, 0x9e, 0x9a, 0xaf, 0x9e, 0xff,
          0xff, 0xff, 0xff, ])
-    swd_tech_sub.write(outfile_rom_buffer)
+    swd_tech_sub.write(outfile_rom_buffer, patch_name='swdtech_names')
 
     repoint_jokerdoom_sub = Substitution()
     repoint_jokerdoom_sub.set_location(0x0236B9)
     repoint_jokerdoom_sub.bytestring = bytes([0x94])
-    repoint_jokerdoom_sub.write(outfile_rom_buffer)
+    repoint_jokerdoom_sub.write(outfile_rom_buffer, patch_name='swdtech_names')
 
 
 def manage_skips():
@@ -1766,7 +1762,7 @@ def manage_skips():
         for byte in event:
             event_skip_sub.bytestring.append(int(byte, 16))
         event_skip_sub.set_location(int(address, 16))
-        event_skip_sub.write(outfile_rom_buffer)
+        event_skip_sub.write(outfile_rom_buffer, noverify=True, patch_name='manage_skips')
 
     def handle_normal():  # Replace events that should always be replaced
         write_to_address(split_line[0], split_line[1:])
@@ -1822,7 +1818,7 @@ def manage_skips():
                 palette_correct_sub = Substitution()
                 palette_correct_sub.bytestring = bytes([character_hp.palette])
                 palette_correct_sub.set_location(int(split_line[0], 16))
-                palette_correct_sub.write(outfile_rom_buffer)
+                palette_correct_sub.write(outfile_rom_buffer, patch_name='handle_palette')
 
     def handle_convergent_palette():
         if Options_.is_flag_active('thescenarionottaken'):
@@ -1881,7 +1877,7 @@ def manage_skips():
     # flashback_skip_sub = Substitution()
     # flashback_skip_sub.bytestring = bytes([0xB2, 0xB8, 0xA5, 0x00, 0xFE])
     # flashback_skip_sub.set_location(0xAC582)
-    # flashback_skip_sub.write(outfile_rom_buffer)
+    # flashback_skip_sub.write(outfile_rom_buffer, patch_name='flashback_skip')
 
     # boat_skip_sub = Substitution()
     # boat_skip_sub.bytestring = (
@@ -1907,7 +1903,7 @@ def manage_skips():
     #           # Load world map with party near Thamasa, return
     #           ))
     # boat_skip_sub.set_location(0xC615A)
-    # boat_skip_sub.write(outfile_rom_buffer)
+    # boat_skip_sub.write(outfile_rom_buffer, patch_name='boat_skip')
 
     leo_skip_sub = Substitution()
     leo_skip_sub.bytestring = (
@@ -1932,7 +1928,7 @@ def manage_skips():
               # call Thamasa entrance event CB/FFA6 to place NPCs, end.
               ))
     leo_skip_sub.set_location(0xBF2BB)
-    leo_skip_sub.write(outfile_rom_buffer)
+    leo_skip_sub.write(outfile_rom_buffer, patch_name='manage_skips')
 
     kefka_wins_skip_sub = Substitution()
     kefka_wins_skip_sub.bytestring = bytes(
@@ -1972,14 +1968,14 @@ def manage_skips():
         [0xC7, 0xF9, 0x7F, 0xFF]  # place airship, end
     )
     kefka_wins_skip_sub.set_location(0xBFFF4)
-    kefka_wins_skip_sub.write(outfile_rom_buffer)
+    kefka_wins_skip_sub.write(outfile_rom_buffer, patch_name='manage_skips')
 
     tintinabar_sub = Substitution()
     tintinabar_sub.set_location(0xC67CF)
     tintinabar_sub.bytestring = bytes(
         [0xC1, 0x7F, 0x02, 0x88, 0x82, 0x74, 0x68, 0x02, 0x4B, 0xFF, 0x02, 0xB6, 0xE2, 0x67, 0x02, 0xB3, 0x5E, 0x00,
          0xFE, 0x85, 0xC4, 0x09, 0xC0, 0xBE, 0x81, 0xFF, 0x69, 0x01, 0xD4, 0x88])
-    tintinabar_sub.write(outfile_rom_buffer)
+    tintinabar_sub.write(outfile_rom_buffer, patch_name='manage_skips')
 
     set_dialogue(0x2ff,
                  'For 2500 GP you can send 2 letters, a record, a Tonic, and a book.<line><choice> (Send them)  '
@@ -2026,11 +2022,11 @@ def activate_airship_mode(free_spaces: list):
     free_spaces = determine_new_free_spaces(free_spaces, myfs, set_airship_sub.size)
 
     set_airship_sub.set_location(pointer)
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
 
     set_airship_sub.bytestring = bytes([0xD2, 0xB9])  # airship appears in WoR
     set_airship_sub.set_location(0xA532A)
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
 
     set_airship_sub.bytestring = bytes([0x6B, 0x01, 0x04, 0x4A, 0x16, 0x01] +  # load WoR, place party
                                        [0xDD] +  # hide minimap
@@ -2039,55 +2035,55 @@ def activate_airship_mode(free_spaces: list):
                                        [0xC7, 0x4E, 0xf0] +  # place airship
                                        [0xD2, 0x8E, 0x25, 0x07, 0x07, 0x40])  # load beach with fish
     set_airship_sub.set_location(0xA51E9)
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
 
     # point to airship-placing script
     set_airship_sub.bytestring = bytes([0xB2, pointer & 0xFF, (pointer >> 8) & 0xFF,
                                         (pointer >> 16) - 0xA, 0xFE])
     set_airship_sub.set_location(0xCB046)
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
 
     # always access floating continent
     set_airship_sub.bytestring = bytes([0xC0, 0x27, 0x01, 0x79, 0xF5, 0x00])
     set_airship_sub.set_location(0xAF53A)  # need first branch for button press
     # ...  except in the World of Ruin
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
     set_airship_sub.bytestring = bytes([0xC0, 0xA4, 0x80, 0x6E, 0xF5, 0x00])
     set_airship_sub.set_location(0xAF579)  # need first branch for button press
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
 
     # always exit airship
     set_airship_sub.bytestring = bytes([0xFD] * 6)
     set_airship_sub.set_location(0xAF4B1)
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
     set_airship_sub.bytestring = bytes([0xFD] * 8)
     set_airship_sub.set_location(0xAF4E3)
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
 
     # chocobo stables are airship stables now
     set_airship_sub.bytestring = bytes([0xB6, 0x8D, 0xF5, 0x00, 0xB3, 0x5E, 0x00])
     set_airship_sub.set_location(0xA7A39)
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
     set_airship_sub.set_location(0xA8FB7)
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
     set_airship_sub.set_location(0xB44D0)
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
     set_airship_sub.set_location(0xC3335)
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
 
     # don't force Locke and Celes at party select
     set_airship_sub.bytestring = bytes([0x99, 0x01, 0x00, 0x00])
     set_airship_sub.set_location(0xAAB67)
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
     set_airship_sub.set_location(0xAF60F)
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
     set_airship_sub.set_location(0xCC2F3)
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
 
     # Daryl is not such an airship hog
     set_airship_sub.bytestring = bytes([0x6E, 0xF5])
     set_airship_sub.set_location(0x41F41)
-    set_airship_sub.write(outfile_rom_buffer)
+    set_airship_sub.write(outfile_rom_buffer, patch_name='activate_airship_mode')
 
     return free_spaces
 
@@ -2098,11 +2094,11 @@ def set_lete_river_encounters():
     # force pseudo random jump to have a battle (4 bytes)
     manage_lete_river_sub.bytestring = bytes([0xFD] * 4)
     manage_lete_river_sub.set_location(0xB0486)
-    manage_lete_river_sub.write(outfile_rom_buffer)
+    manage_lete_river_sub.write(outfile_rom_buffer, patch_name='lete_river_encounters')
     # force pseudo random jump to have a battle (4 bytes)
     manage_lete_river_sub.bytestring = bytes([0xFD] * 4)
     manage_lete_river_sub.set_location(0xB048F)
-    manage_lete_river_sub.write(outfile_rom_buffer)
+    manage_lete_river_sub.write(outfile_rom_buffer, patch_name='lete_river_encounters')
     # call subroutine CB0498 (4 bytes)
     if Options_.is_flag_active('thescenarionottaken'):
         battle_calls = [0xB066B,
@@ -2156,13 +2152,13 @@ def set_lete_river_encounters():
         if random.randint(0, 1) == 0:
             manage_lete_river_sub.bytestring = bytes([0xFD] * 4)
             manage_lete_river_sub.set_location(addr)
-            manage_lete_river_sub.write(outfile_rom_buffer)
+            manage_lete_river_sub.write(outfile_rom_buffer, patch_name='lete_river_encounters')
 
     if not Options_.is_flag_active('thescenarionottaken'):
         if random.randint(0, 1) == 0:
             manage_lete_river_sub.bytestring = bytes([0xFD] * 8)
             manage_lete_river_sub.set_location(0xB09C8)
-            manage_lete_river_sub.write(outfile_rom_buffer)
+            manage_lete_river_sub.write(outfile_rom_buffer, patch_name='lete_river_encounters')
 
 
 def manage_rng():
@@ -2484,7 +2480,7 @@ def manage_items(items: List[ItemBlock], changed_commands_mi: Set[int] = None) -
     auto_equip_sub = Substitution()
     auto_equip_sub.set_location(0x39EF9)
     auto_equip_sub.bytestring = bytes([0xA0, 0xF1, ])
-    auto_equip_sub.write(outfile_rom_buffer)
+    auto_equip_sub.write(outfile_rom_buffer, patch_name='modify_auto_equip')
 
     auto_equip_sub.set_location(0x3F1A0)
     auto_equip_sub.bytestring = bytes([0x20, 0xF2, 0x93,
@@ -2525,13 +2521,15 @@ def manage_items(items: List[ItemBlock], changed_commands_mi: Set[int] = None) -
                                        0xF0, 0x02,
                                        0xE6, 0x99,
                                        0x60])
-    auto_equip_sub.write(outfile_rom_buffer)
+    auto_equip_sub.write(outfile_rom_buffer, patch_name='modify_auto_equip')
+
     return items
 
 
 def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
     characters = get_characters()
-    reset_equippable(items, characters=characters)
+    reset_equippable(items, characters=characters, equip_anything=Options_.is_flag_active('equipanything'))
+
     equippable_dict = {'weapon': lambda item: item.is_weapon,
                        'shield': lambda item: item.is_shield,
                        'helm': lambda item: item.is_helm,
@@ -2608,7 +2606,7 @@ def manage_reorder_rages(rage_order_table):
     reordered_rages_sub = Substitution()
     reordered_rages_sub.bytestring = monster_order
     reordered_rages_sub.set_location(pointer)
-    reordered_rages_sub.write(outfile_rom_buffer)
+    reordered_rages_sub.write(outfile_rom_buffer, patch_name='rage_order')
     ((pointer >> 16) & 0x3F) + 0xC0, (pointer >> 8) & 0xFF, pointer & 0xFF
     return
 
@@ -2728,23 +2726,23 @@ def manage_esper_boosts(free_spaces: List[FreeBlock]) -> List[FreeBlock]:
                 esper_boost_sub.bytestring[index:index + 2] = [pointer1, pointer2]
             assert None not in esper_boost_sub.bytestring
 
-        boost_sub.write(outfile_rom_buffer)
+        boost_sub.write(outfile_rom_buffer, patch_name='manage_esper_boosts')
 
     esper_boost_sub = Substitution()
     esper_boost_sub.set_location(0x2615C)
     pointer1, pointer2 = (boost_subs[0].location, boost_subs[1].location)
     esper_boost_sub.bytestring = [pointer2 & 0xFF, (pointer2 >> 8) & 0xFF,
                                   pointer1 & 0xFF, (pointer1 >> 8) & 0xFF, ]
-    esper_boost_sub.write(outfile_rom_buffer)
+    esper_boost_sub.write(outfile_rom_buffer, patch_name='manage_esper_boosts')
 
     esper_boost_sub.set_location(0xFFEED)
     desc = [hex2int(shorttexttable[char]) for char in 'LV - 1   ']
     esper_boost_sub.bytestring = desc
-    esper_boost_sub.write(outfile_rom_buffer)
+    esper_boost_sub.write(outfile_rom_buffer, patch_name='manage_esper_boosts')
     esper_boost_sub.set_location(0xFFEF6)
     desc = [hex2int(shorttexttable[char]) for char in 'LV + 50% ']
     esper_boost_sub.bytestring = desc
-    esper_boost_sub.write(outfile_rom_buffer)
+    esper_boost_sub.write(outfile_rom_buffer, patch_name='manage_esper_boosts')
 
     death_abuse(outfile_rom_buffer)
 
@@ -2774,7 +2772,7 @@ def manage_espers(free_spaces: List[FreeBlock], replacements: dict = None) -> Li
     ragnarok_sub = Substitution()
     ragnarok_sub.set_location(0xC0B37)
     ragnarok_sub.bytestring = bytes([0xB2, 0x58, 0x0B, 0x02, 0xFE])
-    ragnarok_sub.write(outfile_rom_buffer)
+    ragnarok_sub.write(outfile_rom_buffer, patch_name='manage_esper_ragnarok')
     pointer = ragnarok_sub.location + len(ragnarok_sub.bytestring) + 1
 
     pointer1, pointer2 = pointer & 0xFF, (pointer >> 8) & 0xFF
@@ -2784,7 +2782,7 @@ def manage_espers(free_spaces: List[FreeBlock], replacements: dict = None) -> Li
                                      0xDD, 0x99,
                                      0x6B, 0x6C, 0x21, 0x08, 0x08, 0x80,
                                      0xB2, pointer1, pointer2, c])
-    ragnarok_sub.write(outfile_rom_buffer)
+    ragnarok_sub.write(outfile_rom_buffer, patch_name='manage_esper_ragnarok')
     ragnarok_sub.set_location(pointer)
     # CA5EA9
     ragnarok_sub.bytestring = bytes([0xB2, 0xA9, 0x5E, 0x00,  # event stuff
@@ -2796,7 +2794,7 @@ def manage_espers(free_spaces: List[FreeBlock], replacements: dict = None) -> Li
                                      0xF4, 0x8D,  # SFX
                                      0x86, ragnarok_id,  # receive esper
                                      0xFE, ])
-    ragnarok_sub.write(outfile_rom_buffer)
+    ragnarok_sub.write(outfile_rom_buffer, patch_name='manage_esper_ragnarok')
 
     free_spaces = manage_esper_boosts(free_spaces)
 
@@ -3631,6 +3629,13 @@ def manage_colorize_esper_world():
 
 
 def manage_encounter_rate() -> None:
+    # There's a series of encounter incrementors at C0/C92F (for the overworld) and C0/C2BF (for dungeons).
+    #   These get added to a counter that has been running since the last encounter.
+    #   If the carry is clear after this addition, no encounter occurs.
+    #   Molulu sets the values to FFFF so that the carry gets added every step when the charm is on,
+    #   and sets the other values to 0100 so that it takes 255 'checks' before an encounter triggers otherwise.
+    #  The game generates a random number every step, and if that number is below the threat meter >> 8,
+    #   then it triggers an encounter.
     if Options_.is_flag_active('dearestmolulu'):
         overworld_rates = bytes([1, 0, 1, 0, 1, 0, 0, 0,
                                  0xC0, 0, 0x60, 0, 0x80, 1, 0, 0,
@@ -3645,10 +3650,10 @@ def manage_encounter_rate() -> None:
         encrate_sub = Substitution()
         encrate_sub.set_location(0xC29F)
         encrate_sub.bytestring = overworld_rates
-        encrate_sub.write(outfile_rom_buffer)
+        encrate_sub.write(outfile_rom_buffer, patch_name='manage_encounter_rate')
         encrate_sub.set_location(0xC2BF)
         encrate_sub.bytestring = dungeon_rates
-        encrate_sub.write(outfile_rom_buffer)
+        encrate_sub.write(outfile_rom_buffer, patch_name='manage_encounter_rate')
         return
 
     get_namelocdict()
@@ -3700,6 +3705,9 @@ def manage_encounter_rate() -> None:
         rates = [item for sublist in rates for item in sublist]
         return rates
 
+    # 4x4 table of threat rates. One dimension is for up to four different encounter rates.
+    #   The other dimension is for the normal rate, charm bangle rate, moogle charm rate,
+    #   and charm bangle + moogle charm rate.
     base4 = [b_t[0] * b_t[1] for b_t in zip([0xC0] * 4, [1, 0.5, 2, 1])]
     bangle = 0.5
     moogle = 0.01
@@ -3710,7 +3718,7 @@ def manage_encounter_rate() -> None:
     encrate_sub = Substitution()
     encrate_sub.set_location(0xC29F)
     encrate_sub.bytestring = bytes(overworld_rates)
-    encrate_sub.write(outfile_rom_buffer)
+    encrate_sub.write(outfile_rom_buffer, patch_name='manage_encounter_rate')
 
     # dungeon encounters: normal, strongly affected by charms,
     # weakly affected by charms, and unaffected by charms
@@ -3739,7 +3747,7 @@ def manage_encounter_rate() -> None:
     encrate_sub = Substitution()
     encrate_sub.set_location(0xC2BF)
     encrate_sub.bytestring = bytes(dungeon_rates)
-    encrate_sub.write(outfile_rom_buffer)
+    encrate_sub.write(outfile_rom_buffer, patch_name='manage_encounter_rate')
 
 
 def manage_tower():
@@ -3756,7 +3764,7 @@ def manage_tower():
                                 0xBD3CC, 0xBD3ED, 0xBD414]:
                     thamasa_map_sub.set_location(address)
                     thamasa_map_sub.bytestring = bytes([0x57])
-                    thamasa_map_sub.write(outfile_rom_buffer)
+                    thamasa_map_sub.write(outfile_rom_buffer, patch_name='manage_tower_thamasa')
         location.write_data(outfile_rom_buffer)
 
     # Moving NPCs in the World of Ruin in the Beginner's House to prevent soft locks
@@ -4008,20 +4016,20 @@ def manage_equip_anything():
     equip_anything_sub = Substitution()
     equip_anything_sub.set_location(0x39b8b)
     equip_anything_sub.bytestring = bytes([0x80, 0x04])
-    equip_anything_sub.write(outfile_rom_buffer)
+    equip_anything_sub.write(outfile_rom_buffer, patch_name='equipanything')
     equip_anything_sub.set_location(0x39b99)
     equip_anything_sub.bytestring = bytes([0xEA, 0xEA])
-    equip_anything_sub.write(outfile_rom_buffer)
+    equip_anything_sub.write(outfile_rom_buffer, patch_name='equipanything')
 
 
 def manage_full_umaro():
     full_umaro_sub = Substitution()
     full_umaro_sub.bytestring = bytes([0x80])
     full_umaro_sub.set_location(0x20928)
-    full_umaro_sub.write(outfile_rom_buffer)
+    full_umaro_sub.write(outfile_rom_buffer, patch_name='manage_full_umaro')
     if Options_.is_flag_active('random_zerker'):
         full_umaro_sub.set_location(0x21619)
-        full_umaro_sub.write(outfile_rom_buffer)
+        full_umaro_sub.write(outfile_rom_buffer, patch_name='random_zerker')
 
 
 def manage_opening():
@@ -4149,7 +4157,7 @@ def manage_ending():
     ending_sync_sub = Substitution()
     ending_sync_sub.bytestring = bytes([0xC0, 0x07])
     ending_sync_sub.set_location(0x3CF93)
-    ending_sync_sub.write(outfile_rom_buffer)
+    ending_sync_sub.write(outfile_rom_buffer, patch_name='manage_ending')
 
 
 def manage_auction_house():
@@ -4197,10 +4205,10 @@ def manage_auction_house():
     if not Options_.is_flag_active('random_treasure'):
         return
 
-    auction_items = [(0xbc, 0xB4EF1, 0xB5012, 0x0A45, 500),  # Cherub Down
-                     (0xbd, 0xB547B, 0xB55A4, 0x0A47, 1500),  # Cure Ring
-                     (0xc9, 0xB55D5, 0xB56FF, 0x0A49, 3000),  # Hero Ring
-                     (0xc0, 0xB5BAD, 0xB5C9F, 0x0A4B, 3000),  # Zephyr Cape
+    auction_items = [(0xbc, 0xB4EF1, 0xB5012, 0x0A45, 500, 0),  # Cherub Down
+                     (0xbd, 0xB547B, 0xB55A4, 0x0A47, 1500, 1),  # Cure Ring
+                     (0xc9, 0xB55D5, 0xB56FF, 0x0A49, 3000, 2),  # Hero Ring
+                     (0xc0, 0xB5BAD, 0xB5C9F, 0x0A4B, 3000, 3),  # Zephyr Cape
                      ]
     items = get_ranked_items()
     itemids = [item.itemid for item in items]
@@ -4215,15 +4223,15 @@ def manage_auction_house():
         auction_sub = Substitution()
         auction_sub.set_location(auction_item[2])
         auction_sub.bytestring = bytes([0x6d, item.itemid, 0x45, 0x45, 0x45])
-        auction_sub.write(outfile_rom_buffer)
+        auction_sub.write(outfile_rom_buffer, patch_name='manage_auction_house')
 
-        addr = 0x303F00 + index * 6
+        addr = 0x303F00 + auction_item[5] * 6 #Needs 0x600 bytes
         auction_sub.set_location(addr)
         auction_sub.bytestring = bytes([0x66, auction_item[3] & 0xff, (auction_item[3] & 0xff00) >> 8, item.itemid,
                                         # Show text auction_item[3] with item item.itemid
                                         0x94,  # Pause 60 frames
                                         0xFE])  # return
-        auction_sub.write(outfile_rom_buffer)
+        auction_sub.write(outfile_rom_buffer, patch_name='manage_auction_house')
 
         addr -= 0xA0000
         addr_lo = addr & 0xff
@@ -4231,7 +4239,7 @@ def manage_auction_house():
         addr_hi = (addr & 0xff0000) >> 16
         auction_sub.set_location(auction_item[1])
         auction_sub.bytestring = bytes([0xB2, addr_lo, addr_mid, addr_hi])
-        auction_sub.write(outfile_rom_buffer)
+        auction_sub.write(outfile_rom_buffer, patch_name='manage_auction_house')
 
         opening_bid = str(auction_item[4])
 
@@ -4474,19 +4482,19 @@ def manage_clock():
     hour_sub.bytestring = bytearray([0xE4, 0x96, 0x00] * 6)
     hour_sub.bytestring[hour * 3] = 0xE2
     hour_sub.set_location(0xA96CF)
-    hour_sub.write(outfile_rom_buffer)
+    hour_sub.write(outfile_rom_buffer, patch_name='manage_clock')
 
     minute_sub = Substitution()
     minute_sub.bytestring = bytearray([0xFA, 0x96, 0x00] * 5)
     minute_sub.bytestring[minute * 3] = 0xF8
     minute_sub.set_location(0xA96E8)
-    minute_sub.write(outfile_rom_buffer)
+    minute_sub.write(outfile_rom_buffer, patch_name='manage_clock')
 
     second_sub = Substitution()
     second_sub.bytestring = bytearray([0x16, 0x97, 0x00] * 5)
     second_sub.bytestring[second * 3] = 0x0E
     second_sub.set_location(0xA96FE)
-    second_sub.write(outfile_rom_buffer)
+    second_sub.write(outfile_rom_buffer, patch_name='manage_clock')
 
     hour = (hour + 1) * 2
     minute = (minute + 1) * 10
@@ -4682,7 +4690,7 @@ def manage_dances(dance_names=None):
     dance_sub = Substitution()
     dance_sub.bytestring = bytes(dances)
     dance_sub.set_location(0x0FFE80)
-    dance_sub.write(outfile_rom_buffer)
+    dance_sub.write(outfile_rom_buffer, patch_name='manage_dances')
 
     # Randomize names
     bases = []
@@ -4724,8 +4732,10 @@ def manage_dances(dance_names=None):
     dance_names = [' '.join(prefix) for prefix in zip(used_prefixes, used_bases)]
     for index, name in enumerate(dance_names):
         name = name_to_bytes(name, 12)
-        outfile_rom_buffer.seek(0x26FF9D + index * 12)
-        outfile_rom_buffer.write(name)
+        dance_name_sub = Substitution()
+        dance_name_sub.set_location(0x26FF9D + index * 12)
+        dance_name_sub.bytestring = name
+        dance_name_sub.write(outfile_rom_buffer, patch_name='dance_names')
 
     for index, dance in enumerate(dance_names):
         from skillrandomizer import spellnames
@@ -4839,44 +4849,45 @@ def fix_flash_and_bioblaster():
         [0x00, 0x20, 0xD1, 0x01, 0xC9, 0x00, 0x85, 0xB0, 0xFF, 0xBA, 0xC0, 0x89, 0x10, 0xBB, 0xC2, 0x00, 0x8A, 0x89,
          0x20,
          0xB5, 0xF1, 0xBB, 0xD2, 0x00, 0x8A, 0xD1, 0x00, 0x81, 0x00, 0x00, 0xFF])
-    fix_flash_sub.write(outfile_rom_buffer)
+    # Noverify necessary to work with no flashing code - they overwrite and is required
+    fix_flash_sub.write(outfile_rom_buffer, noverify=True, patch_name='fix_flash_bioblaster')
 
     fix_flash_sub.set_location(0x108696)  # Make Flash have Schiller animation when used outside of Tools
     fix_flash_sub.bytestring = ([0x24, 0x81, 0xFF, 0xFF, 0xFF, 0xFF, 0x51, 0x00, 0x00, 0x9F, 0x10, 0x76, 0x81, 0x10])
-    fix_flash_sub.write(outfile_rom_buffer)
+    fix_flash_sub.write(outfile_rom_buffer, patch_name='fix_flash_bioblaster')
 
     fix_flash_sub.set_location(0x1088D4)  # Change Schiller animation data to look better with one flash
     fix_flash_sub.bytestring = [0x24, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0xE3, 0x00, 0x00, 0x6D, 0x10, 0x76, 0x81, 0x10]
-    fix_flash_sub.write(outfile_rom_buffer)
+    fix_flash_sub.write(outfile_rom_buffer, patch_name='fix_flash_bioblaster')
 
     fix_flash_sub.set_location(0x023D45)  # Tell X-Kill to point to Bomblet for animation, instead of Flash
     fix_flash_sub.bytestring = ([0xD8])
-    fix_flash_sub.write(outfile_rom_buffer)
+    fix_flash_sub.write(outfile_rom_buffer, patch_name='fix_flash_bioblaster')
 
     fix_flash_sub.set_location(0x108B82)  # Make Bomblet have X-Kill animation instead of nothing
     fix_flash_sub.bytestring = ([0xFF, 0xFF, 0x7F, 0x02, 0xFF, 0xFF, 0x35, 0x35, 0x00, 0xCC, 0x1B, 0xFF, 0xFF, 0x10])
-    fix_flash_sub.write(outfile_rom_buffer)
+    fix_flash_sub.write(outfile_rom_buffer, patch_name='fix_flash_bioblaster')
 
     fix_bio_blaster_sub = Substitution()  # Make Bio Blaster have correct animation when used outside of Tools
     fix_bio_blaster_sub.set_location(0x108688)
     fix_bio_blaster_sub.bytestring = (
         [0x7E, 0x02, 0xFF, 0xFF, 0x4A, 0x00, 0x00, 0x00, 0xEE, 0x63, 0x03, 0xFF, 0xFF, 0x10])
-    fix_bio_blaster_sub.write(outfile_rom_buffer)
+    fix_bio_blaster_sub.write(outfile_rom_buffer, patch_name='fix_flash_bioblaster')
 
     fix_bio_blaster_sub.set_location(
         0x02402D)  # Change Super Ball Item Animatino to point to 0xFFFF (No spell) animation
     fix_bio_blaster_sub.bytestring = ([0xFF])
-    fix_bio_blaster_sub.write(outfile_rom_buffer)
+    fix_bio_blaster_sub.write(outfile_rom_buffer, patch_name='fix_flash_bioblaster')
 
     fix_bio_blaster_sub.set_location(0x108DA4)  # Tell 0xFFFF (No spell) to have Super Ball animation
     fix_bio_blaster_sub.bytestring = (
         [0x0E, 0x02, 0xFF, 0xFF, 0xFF, 0xFF, 0xD1, 0x00, 0x00, 0xCA, 0x10, 0x85, 0x02, 0x03])
-    fix_bio_blaster_sub.write(outfile_rom_buffer)
+    fix_bio_blaster_sub.write(outfile_rom_buffer, patch_name='fix_flash_bioblaster')
 
     fix_bio_blaster_name_sub = Substitution()  # Change Spell Name to BioBlaster
     fix_bio_blaster_name_sub.set_location(0x26F971)
     fix_bio_blaster_name_sub.bytestring = ([0x81, 0xa2, 0xa8, 0x81, 0xa5, 0x9a, 0xac, 0xad, 0x9e, 0xab])
-    fix_bio_blaster_name_sub.write(outfile_rom_buffer)
+    fix_bio_blaster_name_sub.write(outfile_rom_buffer, patch_name='fix_flash_bioblaster')
 
 
 def sprint_shoes_hint():
@@ -4891,7 +4902,7 @@ def sprint_shoes_hint():
     sprint_sub = Substitution()
     sprint_sub.set_location(0xA790E)
     sprint_sub.bytestring = b'\xFE'
-    sprint_sub.write(outfile_rom_buffer)
+    sprint_sub.write(outfile_rom_buffer, patch_name='sprint_shoes_hint')
 
 
 def sabin_hint(commands: Dict[str, CommandBlock]):
@@ -4965,9 +4976,9 @@ def expand_rom():
     outfile_rom_buffer.seek(0, 2)
     if outfile_rom_buffer.tell() < 0x400000:
         expand_sub = Substitution()
-        expand_sub.set_location(outfile_rom_buffer.tell())
-        expand_sub.bytestring = bytes([0x00] * (0x400000 - outfile_rom_buffer.tell()))
-        expand_sub.write(outfile_rom_buffer)
+        expand_sub.set_location(0x3fffff)
+        expand_sub.bytestring = b'\x00'
+        expand_sub.write(outfile_rom_buffer, patch_name='expand_rom', noverify=True)
 
 
 def validate_rom_expansion():
@@ -4982,9 +4993,9 @@ def validate_rom_expansion():
         # Standardize on 48mbit for ExHIROM, for now
         if romsize < 0x600000:
             expand_sub = Substitution()
-            expand_sub.set_location(romsize)
-            expand_sub.bytestring = bytes([0x00] * (0x600000 - romsize))
-            expand_sub.write(outfile_rom_buffer)
+            expand_sub.set_location(0x5fffff)
+            expand_sub.bytestring = b'\x00'
+            expand_sub.write(outfile_rom_buffer, patch_name='validate_rom_expansion')
 
         outfile_rom_buffer.seek(0)
         bank = outfile_rom_buffer.read(0x10000)
@@ -5153,6 +5164,12 @@ def junction_everything(jm: JunctionManager,
         JUNCTION_MANAGER_PARAMETERS['monster-equip-drop-enabled'] = 1
 
     if Options_.is_flag_active('jejentojori'):
+        #Ensure merchants die to mp in case of Astral being innate on Locke
+        for monster in monsters:
+            if 'merchant' in monster.name.lower():
+                monster.misc1 |= 0x01
+                monster.write_stats(outfile_rom_buffer)
+
         for character in get_characters():
             if character.id >= 0x10:
                 continue
@@ -5378,6 +5395,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         seed = seed % (10 ** 10)
         reseed()
 
+        rng = Random(seed)
+
         outlog = None
         if not application or application != 'web':
             if '.' in infile_rom_path:
@@ -5433,7 +5452,23 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             if flag := Options_.is_flag_active(flag_name):
                 while True:
                     try:
-                        if flag.maximum_value < float(flag.value):
+                        if str(flag.value).lower() == 'random':
+                            # TODO: Make better weighting?
+                            # Get a random value for these seeds based on standard deviation.
+                            flag.value = 0
+                            if flag.name == 'randomboost':
+                                # Randomboost has a wider range, usually between 1.5 and 4.5,
+                                while (flag.value < 0.25):
+                                    flag.value = rng.gauss(float(flag.default_value) + 1, .70)
+                            else:
+                                # Boost flags generally roll between .5x and 1.6x, slightly favoring positive.
+                                while (flag.value < 0.25):
+                                    flag.value = rng.gauss(float(flag.default_value) + .1, .25)
+                            flag.value = round(flag.value, 2)
+                            #while flag.value == flag.default_value:
+                            #    flag.value = round(random.uniform(flag.minimum_value, flag.maximum_value), 2)
+                            break
+                        elif flag.maximum_value < float(flag.value):
                             error_message = ('The supplied value for ' +
                                              flag_name +
                                              ' was greater than the maximum '
@@ -5451,7 +5486,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                                              '.')
                         else:
                             flag.value = float(flag.value)
-                            if flag.inputtype == 'integer':
+                            if flag.input_type == 'integer':
                                 flag.value = int(flag.value)
                             break
                     except ValueError:
@@ -5513,8 +5548,6 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                    'The randomization is very thorough, so it may take some time.\n'
                    'Please be patient and wait for "randomization successful" to appear.')
 
-        rng = Random(seed)
-
         if Options_.is_flag_active('thescenarionottaken'):
             if Options_.is_flag_active('strangejourney'):
                 pipe_print('thescenarionottaken flag is incompatible with strangejourney')
@@ -5555,6 +5588,12 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             if Options_.is_flag_active('sketch'):
                 NEVER_REPLACE += ['sketch']
             _, freespaces = manage_commands_new(commands)
+
+        if Options_.is_flag_active('lessfanatical'):  # remove the magic only tile when entering fanatic's tower
+            fanatics_fix_sub = Substitution()
+            fanatics_fix_sub.bytestring = bytes([0x80])
+            fanatics_fix_sub.set_location(0x025352)
+            fanatics_fix_sub.write(outfile_rom_buffer, patch_name='lessfanatical')
 
         reseed()
 
@@ -5611,15 +5650,26 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
                 weapon_anim_fix = Substitution()
                 weapon_anim_fix.set_location(0x19DB8)
-                weapon_anim_fix.bytestring = bytes([0x22, 0x80, 0x30, 0xF0])
-                weapon_anim_fix.write(outfile_rom_buffer)
+                weapon_anim_fix.bytestring = bytes([0x22, 0xB0, 0x3F, 0xF0])
+                weapon_anim_fix.write(outfile_rom_buffer, patch_name='weapon_animation_fix')
 
-                weapon_anim_fix.set_location(0x303080)
+                weapon_anim_fix.set_location(0x303FB0)
                 weapon_anim_fix.bytestring = bytes(
-                    [0xE0, 0xE8, 0x02, 0xB0, 0x05, 0xBF, 0x00, 0xE4, 0xEC,
-                     0x6B, 0xDA, 0xC2, 0x20, 0x8A, 0xE9, 0xF0, 0x02, 0xAA,
-                     0x29, 0xFF, 0x00, 0xE2, 0x20, 0xBF, 0x00, 0x31, 0xF0, 0xFA, 0x6B])
-                weapon_anim_fix.write(outfile_rom_buffer)
+                    [0xE0, 0xE8, 0x02,          # CPX $02E8
+                    0xB0, 0x05,                 # BCS $05
+                    0xBF, 0x00, 0xE4, 0xEC,     # LDA $ECE400,X
+                    0x6B,                       # RTL
+                    0xDA,                       # PHX
+                    0xC2, 0x20,                 # REP #$20
+                    0x8A,                       # TXA
+                    0xE9, 0xF0, 0x02,           # SBC $02F0
+                    0xAA,                       # TAX
+                    0x29, 0xFF, 0x00,           # AND #$00FF
+                    0xE2, 0x20,                 # SEP #$20
+                    0xBF, 0x00, 0x31, 0xF0,     # LDA $F03100,X
+                    0xFA,                       # PLX
+                    0x6B])                      # RTL
+                weapon_anim_fix.write(outfile_rom_buffer, patch_name='weapon_animation_fix')
 
                 log(secret_item, section='secret items')
         reseed()
@@ -5679,8 +5729,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         if Options_.is_flag_active('random_palettes_and_names') or \
                 Options_.is_flag_active('swap_sprites') or \
                 Options_.is_any_flag_active(
-                    ['partyparty', 'bravenudeworld', 'suplexwrecks',
-                     'christmas', 'halloween', 'kupokupo', 'quikdraw', 'makeover']):
+                    ['partyparty', 'bravenudeworld', 'suplexwrecks', 'novanilla',
+                     'christmas', 'halloween', 'kupokupo', 'quikdraw', 'makeover', 'cloneparty', 'frenchvanilla']):
             sprite_log = manage_character_appearance(
                 outfile_rom_buffer,
                 preserve_graphics=preserve_graphics,
@@ -5704,21 +5754,23 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         # esper allocation table for other modules that rely on it
         # (i.e. junction effects)
         initialize_esper_allocation_table()
+
+        if Options_.is_flag_active('dancingmaduin'):
+            esper_allocations_address = allocate_espers(
+                Options_.is_flag_active('ancientcave'),
+                get_espers(infile_rom_buffer),
+                get_characters(),
+                Options_.get_flag_value('dancingmaduin'),
+                outfile_rom_buffer,
+                esper_replacements
+            )
+            nerf_paladin_shield()
+            verify = JUNCTION_MANAGER_PARAMETERS['esper-allocations-address']
+            assert esper_allocations_address == verify
+
         if Options_.is_flag_active('random_espers'):
-            dancingmaduin = Options_.is_flag_active('dancingmaduin')
-            if dancingmaduin:
-                esper_allocations_address = allocate_espers(
-                    Options_.is_flag_active('ancientcave'),
-                    get_espers(infile_rom_buffer),
-                    get_characters(),
-                    dancingmaduin.value,
-                    outfile_rom_buffer,
-                    esper_replacements
-                )
-                nerf_paladin_shield()
-                verify = JUNCTION_MANAGER_PARAMETERS['esper-allocations-address']
-                assert esper_allocations_address == verify
             manage_espers(esperrage_spaces, esper_replacements)
+
         reseed()
         myself_locations = myself_patches(outfile_rom_buffer)
         myself_name_bank = [(myself_locations['NAME_TABLE'] >> 16) + 0xC0]
@@ -5729,7 +5781,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         titlesub = Substitution()
         titlesub.bytestring = [0xFD] * 4
         titlesub.set_location(0xA5E8E)
-        titlesub.write(outfile_rom_buffer)
+        titlesub.write(outfile_rom_buffer, patch_name='title_screen')
 
         manage_opening()
         manage_ending()
@@ -5738,12 +5790,12 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         savetutorial_sub = Substitution()
         savetutorial_sub.set_location(0xC9AF1)
         savetutorial_sub.bytestring = [0xD2, 0x33, 0xEA, 0xEA, 0xEA, 0xEA]
-        savetutorial_sub.write(outfile_rom_buffer)
+        savetutorial_sub.write(outfile_rom_buffer, patch_name='save_tutorial')
 
         savecheck_sub = Substitution()
         savecheck_sub.bytestring = [0xEA, 0xEA]
         savecheck_sub.set_location(0x319f2)
-        savecheck_sub.write(outfile_rom_buffer)
+        savecheck_sub.write(outfile_rom_buffer, patch_name='save_check')
         reseed()
 
         if (Options_.is_flag_active('shuffle_commands') or Options_.is_flag_active(
@@ -5807,7 +5859,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             remove_forest_event_sub = Substitution()
             remove_forest_event_sub.set_location(0xBA3D1)
             remove_forest_event_sub.bytestring = bytes([0xFE])
-            remove_forest_event_sub.write(outfile_rom_buffer)
+            remove_forest_event_sub.write(outfile_rom_buffer, patch_name='remove_forest_event')
 
         reseed()
 
@@ -5840,7 +5892,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             starting_money_sub = Substitution()
             starting_money_sub.set_location(0xC9A93)
             starting_money_sub.bytestring = bytes([0x84, starting_money & 0xFF, (starting_money >> 8) & 0xFF])
-            starting_money_sub.write(outfile_rom_buffer)
+            starting_money_sub.write(outfile_rom_buffer, patch_name='starting_money')
 
             # do this after hidden formations
             katn = Options_.mode.name == 'katn'
@@ -5926,7 +5978,12 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         if Options_.is_flag_active('shadowstays'):
             shadow_stays(outfile_rom_buffer)
 
-        wor_free_char = 0xB  # gau
+        if Options_.is_flag_active('shuffle_commands') or \
+                Options_.is_flag_active('replace_commands') or \
+                Options_.is_flag_active('random_treasure'):
+            wor_free_char = 0xB  # gau
+        else:
+            wor_free_char = None
         alternate_gogo = Options_.is_flag_active('mimetime')
         if (Options_.is_flag_active('shuffle_wor') or alternate_gogo) and not Options_.is_flag_active('ancientcave'):
             include_gau = Options_.is_flag_active('shuffle_commands') or \
@@ -5969,7 +6026,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                     }
                     remonsterate_process = Process(
                         target=remonsterate,
-                        args=(remonsterate_connection,),
+                        args=(remonsterate_connection, pipe_print),
                         kwargs=remonsterate_kwargs
                     )
                     remonsterate_process.start()
@@ -6020,40 +6077,40 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                                                0xB1, 0x76, 0x0A, 0xAA, 0xC2, 0x20, 0xBD, 0x01, 0x20, 0x90, 0x02,
                                                0x7B, 0x3A, 0xAA, 0x7B, 0xE2, 0x20, 0x22, 0xD1, 0x24, 0xC1, 0x80,
                                                0xD7, ])
-            sketch_fix_sub.write(outfile_rom_buffer)
+            sketch_fix_sub.write(outfile_rom_buffer, patch_name='sketch_fix')
 
             sketch_fix_sub.set_location(0x12456)
             sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x18, 0xA0, 0x00, 0x00,
                                                0x86, 0x10, 0xA2, 0x3F, 0xAE, ])
-            sketch_fix_sub.write(outfile_rom_buffer)
+            sketch_fix_sub.write(outfile_rom_buffer, patch_name='sketch_fix')
 
             # Additional C1 sketch animation fix by Assassin, handles bad draw instruction
 
             sketch_fix_sub.set_location(0x12456)
             sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xA2, 0x00, 0x18, 0xA0, 0x00, 0x00,
                                                0x86, 0x10, 0xA2, 0x3F, 0xAE, ])
-            sketch_fix_sub.write(outfile_rom_buffer)
+            sketch_fix_sub.write(outfile_rom_buffer, patch_name='sketch_fix')
 
             sketch_fix_sub.set_location(0x1246C)
             sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, ])
-            sketch_fix_sub.write(outfile_rom_buffer)
+            sketch_fix_sub.write(outfile_rom_buffer, patch_name='sketch_fix')
 
             sketch_fix_sub.set_location(0x12484)
             sketch_fix_sub.bytestring = bytes(
                 [0x20, 0x8F, 0x24, 0xA2, 0x00, 0x14, 0xA0, 0x00, 0x24, 0x80, 0xD0, 0xDA, 0x86, 0x10,
                  0x20, 0x20, 0x20, 0x20, 0xF5, 0x24, 0x20, 0xE5, 0x24, 0x20, 0xA5, 0x22, 0xFA, 0x60,
                  0xEA, 0xEA, 0xEA, 0xEA, 0xEA, ])
-            sketch_fix_sub.write(outfile_rom_buffer)
+            sketch_fix_sub.write(outfile_rom_buffer, patch_name='sketch_fix')
 
             sketch_fix_sub.set_location(0x124A9)
             sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, ])
-            sketch_fix_sub.write(outfile_rom_buffer)
+            sketch_fix_sub.write(outfile_rom_buffer, patch_name='sketch_fix')
 
             sketch_fix_sub.set_location(0x124D1)
             sketch_fix_sub.bytestring = bytes([0x20, 0x8F, 0x24, 0xE0, 0xFF, 0xFF, 0xD0, 0x03,
                                                0x20, 0x20, 0x20, 0xA2, 0x00, 0x20, 0x20, 0x5C, 0x24, 0x6B, 0xEA,
                                                0x6B, ])
-            sketch_fix_sub.write(outfile_rom_buffer)
+            sketch_fix_sub.write(outfile_rom_buffer, patch_name='sketch_fix')
 
             sketch_fix_sub.set_location(0x124F9)
             sketch_fix_sub.bytestring = bytes(
@@ -6062,7 +6119,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                  0x0A, 0x0A, 0x0A, 0x0A, 0x8D, 0x69, 0x61, 0xBF, 0x00, 0x70, 0xD2, 0x29, 0xFF, 0x7F, 0x8D, 0xA8, 0x81,
                  0x7B, 0xBF, 0x01, 0x70, 0xD2, 0xE2, 0x20, 0x0A, 0xEB, 0x6A, 0x8D, 0xAC, 0x81,
                  0x0A, 0x0A, 0x0A, 0x7B, 0x2A, 0x8D, 0xAB, 0x81, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, 0xEA, ])
-            sketch_fix_sub.write(outfile_rom_buffer)
+            sketch_fix_sub.write(outfile_rom_buffer, patch_name='sketch_fix')
 
         # Code must be below assign_unused_enemy_formations and above randomize_music
         if Options_.is_flag_active('random_formations'):
@@ -6249,7 +6306,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             if not type(swdtech_speed) == bool:
                 change_swdtech_speed(outfile_rom_buffer, swdtech_speed)
         if Options_.is_flag_active('cursepower'):
-            change_cursed_shield_battles(outfile_rom_buffer, Options_.get_flag_value('cursepower'))
+            change_cursed_shield_battles(myself_locations['DECURSE_GOAL'], outfile_rom_buffer, Options_.get_flag_value('cursepower'))
 
         coral_log = manage_coral(outfile_rom_buffer, kwargs.get('web_custom_coral_names', None))
         log(coral_log, 'aesthetics')
@@ -6262,16 +6319,39 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
         if Options_.is_flag_active('nicerpoison'):
             nicer_poison(outfile_rom_buffer)
+
         if Options_.is_flag_active('levelcap'):
+            behavior = Options_.get_flag_value('cap_type') or 'Random'
 
-            maxlevel = Options_.get_flag_value('levelcap')
+            try:
+                min_level = int(Options_.get_flag_value('cap_min'))
+            except (ValueError, TypeError):
+                min_level = 1
 
-            if str(maxlevel).lower() == "random":
-                maxlevel = rng.randint(1, 99)
+            try:
+                max_level = int(Options_.get_flag_value('cap_max'))
+            except (ValueError, TypeError):
+                max_level = 99
 
-            level_cap(outfile_rom_buffer, int(maxlevel))
+            leveltable = myself_locations['LEVEL_CAP']
+            max_level_string = bytes()
 
-            log(str("\n MAX LEVEL: " + str(maxlevel)), section='characters')
+            if str(behavior).lower() == "random":
+                cap = rng.randint(min_level, max_level)
+                for character in characters:
+                    if character.id >= 14:
+                        continue
+                    character.level_cap = cap
+                    max_level_string += bytes([int(cap)])
+            elif str(behavior).lower() == "chaos":
+                for character in characters:
+                    if character.id >= 14:
+                        continue
+                    cap = rng.randint(min_level, max_level)
+                    character.level_cap = cap
+                    max_level_string += bytes([int(cap)])
+
+            level_cap(outfile_rom_buffer, max_level_string, leveltable)
 
         if Options_.is_flag_active('slowerbg'):
             slow_background_scrolling(outfile_rom_buffer)
@@ -6298,9 +6378,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
             rom_size = outfile_rom_buffer.tell()
             if rom_size < 0x700000:
                 expand_sub = Substitution()
-                expand_sub.set_location(rom_size)
-                expand_sub.bytestring = bytes([0x00] * (0x700000 - rom_size))
-                expand_sub.write(outfile_rom_buffer)
+                expand_sub.set_location(0x6fffff)
+                expand_sub.bytestring = b'\x00'
+                expand_sub.write(outfile_rom_buffer, patch_name='junction_expand_rom')
 
             if Options_.is_flag_active('playsitself'):
                 jm.patch_blacklist.add('patch_junction_focus_umaro.txt')
@@ -6312,6 +6392,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         validate_rom_expansion()
         rewrite_checksum()
         verify_randomtools_patches(outfile_rom_buffer)
+        Substitution.verify_all_writes(outfile_rom_buffer)
 
         if not application == 'web' and kwargs.get('generate_output_rom', True):
             with open(outfile_rom_path, 'wb+') as rom_file:

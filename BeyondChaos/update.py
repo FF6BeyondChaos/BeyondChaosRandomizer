@@ -93,6 +93,14 @@ _ASSETS = {
 }
 
 
+def internet_connectivity_available():
+    try:
+        requests.head(url='http://www.google.com')
+        return True
+    except Exception:
+        return False
+
+
 def get_remaining_api_calls():
     return send_get_request(url='https://api.github.com/rate_limit')['resources']['core']['remaining']
 
@@ -145,7 +153,12 @@ IUDMfyYGvvrC9Ajz+gQkT5Lp6flc1aPL5pqtiT/eBi3Tu8xMCH8d
         },
         url='https://api.github.com/app/installations/35180196/access_tokens')
 
-    access_token = response.json()['token']
+    try:
+        access_token = response.json()['token']
+    except KeyError:
+        raise KeyError('There was an error getting a token from GitHub to check for updates. '
+                       'Details of GitHubs response: ' + str(response.json()))
+
     request_headers = {
         'Accept': 'application/vnd.github+json',
         'Authorization': 'Bearer ' + access_token,
@@ -165,7 +178,14 @@ def send_get_request(url: str, stream=False):
     if not resp.ok:
         # Try refreshing the web token
         request_headers = {}
-        get_web_token()
+        try:
+            get_web_token()
+        except KeyError as ex:
+            # This should never happen, since prior calls to get_web_token are required to even get to the
+            #   section of code where send_get_request is called
+            print(str(ex))
+            raise ex
+
         resp = requests.get(
             url,
             headers=request_headers,
@@ -207,6 +227,10 @@ def prompt(prompt_type, message):
             prompt.setIcon(QMessageBox.Information)
             prompt.setStandardButtons(QMessageBox.Ok)
             prompt.exec()
+        elif prompt_type == 'error':
+            prompt.setIcon(QMessageBox.Critical)
+            prompt.setStandardButtons(QMessageBox.Ok)
+            prompt.exec()
     elif caller == 'console':
         while True:
             if prompt_type == 'yesno':
@@ -219,6 +243,9 @@ def prompt(prompt_type, message):
                 else:
                     print('Please choose either (Y)es or (N)o.')
             elif prompt_type == 'notify':
+                input('Press any button to continue.')
+                return True
+            elif prompt_type == 'Error':
                 input('Press any button to continue.')
                 return True
     else:
@@ -436,7 +463,11 @@ def run_updates(force_download=False, calling_program=None):
     caller = calling_program
     running_os = platform.system()
 
-    get_web_token()
+    try:
+        get_web_token()
+    except KeyError as ex:
+        print(str(ex))
+        return
 
     # Reorder the assets so updater is first, in case somebody reorders _ASSETS
     #   It's better to update the updater first in case it affects the rest of the process.
@@ -590,15 +621,29 @@ def run_updates(force_download=False, calling_program=None):
                     'The application must now restart to apply all updates.'
         )
         if isinstance(caller, QApplication):
-            subprocess.Popen(
-                args=[],
-                executable='BeyondChaos.exe'
-            )
+            try:
+                subprocess.Popen(
+                    args=[],
+                    executable='BeyondChaos.exe'
+                )
+            except FileNotFoundError:
+                prompt(
+                    prompt_type='error',
+                    message='Failed to restart the randomizer: Could not locate BeyondChaos.exe. '
+                            'Please restart the application manually.'
+                )
         elif caller == 'console':
-            subprocess.Popen(
-                args=[],
-                executable='beyondchaos_console.exe'
-            )
+            try:
+                subprocess.Popen(
+                    args=[],
+                    executable='beyondchaos_console.exe'
+                )
+            except FileNotFoundError:
+                prompt(
+                    prompt_type='error',
+                    message='Failed to restart the randomizer: Could not locate BeyondChaos_Console.exe. '
+                            'Please restart the application manually.'
+                )
         # Still clear the console, otherwise console output will still be there after restart
         os.system('cls' if os.name == 'nt' else 'clear')
         sys.exit()
@@ -682,8 +727,16 @@ def list_available_updates(refresh=False):
         # Returned cached updates
         return available_updates
 
-    get_web_token()
     available_updates = []
+    if not internet_connectivity_available():
+        return available_updates
+
+    try:
+        get_web_token()
+    except KeyError as ex:
+        print(str(ex))
+        return []
+
     for asset in _ASSETS:
         # Don't look for custom here. Custom is only updated if required files are missing.
         if asset == 'custom':
@@ -710,11 +763,10 @@ if __name__ == '__main__':
     for arg in args:
         if isinstance(arg, str) and arg.startswith('-pid '):
             parent_process_id = arg[len('-pid '):]
-    try:
-        # Test internet connectivity by using the simplest possible request to a reliable source
-        requests.head(url='http://www.google.com')
+
+    if internet_connectivity_available():
         run_updates()
-    except requests.exceptions.ConnectionError:
+    else:
         print('ERROR: No internet connection is available. '
               'Please connect to the internet and try running the updater again.')
         input('Press any key to exit...')

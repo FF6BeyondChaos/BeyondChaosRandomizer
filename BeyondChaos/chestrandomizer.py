@@ -594,7 +594,7 @@ class EventItem:
             event_item_sub.bytestring.extend([0xFD, 0xFD])  # Do nothing
         if not cutscene_skip or not self.cutscene_skip_pointer:
             event_item_sub.bytestring.extend(self.postfix_bytes)
-        event_item_sub.write(output_rom_buffer)
+        event_item_sub.write(output_rom_buffer, patch_name='chestrandomizer_event_data')
 
         duplicate_dict = duplicate_event_item_skip_dict if cutscene_skip else duplicate_event_item_dict
         if self.pointer in duplicate_dict:
@@ -609,7 +609,7 @@ class EventItem:
                 # Show text 0x06E5 at bottom, no text box, with item self.contents
                 0xFE])  # return
             event_item_sub.set_location(0x10CF4A)
-            event_item_sub.write(output_rom_buffer)
+            event_item_sub.write(output_rom_buffer, patch_name='chestrandomizer_event_data')
 
             # Change Lone Wolf text to say item placeholder instead of gold hairpin
             text = ("<line>Grrrr…<line>"
@@ -621,7 +621,7 @@ class EventItem:
             # move Lone Wolf talking into a subroutine
             event_item_sub.bytestring = bytes([0xB2, 0x4A, 0xCF, 0x06])
             event_item_sub.set_location(0xCD581)
-            event_item_sub.write(output_rom_buffer)
+            event_item_sub.write(output_rom_buffer, patch_name='chestrandomizer_event_data')
 
 
 # TODO: Maybe this should be in a text file
@@ -716,11 +716,11 @@ def mutate_event_items(outfile_rom_buffer: BytesIO, cutscene_skip=False, crazy_p
     event_item_sub = Substitution()
     event_item_sub.set_location(0x9926)
     event_item_sub.bytestring = bytes([0x8A, 0xD6, 0x99, 0xd6])  # pointer to new event commands 66 and 67
-    event_item_sub.write(outfile_rom_buffer)
+    event_item_sub.write(outfile_rom_buffer, patch_name='mutate_event_items')
     event_item_sub.set_location(0x9934)
     event_item_sub.bytestring = bytes(
         [0x13, 0xD6, 0x26, 0xD6, 0x71, 0xD6])  # pointers to new event commands 6D, 6E, and 6F
-    event_item_sub.write(outfile_rom_buffer)
+    event_item_sub.write(outfile_rom_buffer, patch_name='mutate_event_items')
 
     event_item_sub.set_location(0xD613)
     event_item_sub.bytestring = bytes([
@@ -728,7 +728,8 @@ def mutate_event_items(outfile_rom_buffer: BytesIO, cutscene_skip=False, crazy_p
         0xA5, 0xEB, 0x85, 0x1A, 0x8D, 0x83, 0x05, 0x20, 0xFC, 0xAC, 0x20, 0x06, 0x4D, 0xA9, 0x08, 0x85, 0xEB, 0x80,
         0x59,
 
-        # 6E (2 bytes) Give 100 * param GP to party and show message "Found <N> GP!" (It's 100 * param GP because that's what treasure chests do, but it doesn't need to be.)
+        # 6E (2 bytes) Give 100 * param GP to party and show message "Found <N> GP!"
+        #   (It's 100 * param GP because that's what treasure chests do, but it doesn't need to be.)
         0xA5, 0xEB, 0x85, 0x1A, 0x8D, 0x02, 0x42, 0xA9, 0x64, 0x8D, 0x03, 0x42, 0xEA, 0xEA, 0xEA, 0xAC, 0x16, 0x42,
         0x84, 0x22, 0x64, 0x24, 0xC2, 0x21, 0x98, 0x6D, 0x60, 0x18, 0x8D, 0x60, 0x18, 0x7B, 0xE2, 0x20, 0x6D, 0x62,
         0x18, 0x8D, 0x62, 0x18, 0xC9, 0x98, 0x90, 0x13, 0xAE, 0x60, 0x18, 0xE0, 0x7F, 0x96, 0x90, 0x0B, 0xA2, 0x7F,
@@ -738,7 +739,8 @@ def mutate_event_items(outfile_rom_buffer: BytesIO, cutscene_skip=False, crazy_p
         # 6F : (2 bytes) Show "Monster-in-a-box!" and start battle with formation from param
         0xA5, 0xEB, 0x85, 0x1A, 0x8D, 0x89, 0x07, 0x20, 0x06, 0x4D, 0xA9, 0x40, 0x85, 0xEB,
 
-        # Common code used by all three functions. Finishes setting parameters to jump into action B2 (call event subroutine)
+        # Common code used by all three functions. Finishes setting
+        #   parameters to jump into action B2 (call event subroutine)
         0x64, 0xEC, 0xA9, 0x00, 0x85, 0xED, 0xA9, 0x02, 0x4C, 0xA3, 0xB1,
 
         # 66 : (4 bytes) Show text $AAAA with item name $BB and wait for button press
@@ -748,7 +750,7 @@ def mutate_event_items(outfile_rom_buffer: BytesIO, cutscene_skip=False, crazy_p
         0xA5, 0xED, 0x85, 0x1A, 0x85, 0x22, 0x64, 0x24, 0x20, 0xE5, 0x02, 0xA9, 0x01, 0x20, 0x70, 0x9B, 0x4C, 0xBC,
         0xA4,
     ])
-    event_item_sub.write(outfile_rom_buffer)
+    event_item_sub.write(outfile_rom_buffer, patch_name='mutate_event_items')
 
     outfile_rom_buffer.seek(0xC3243)
     phoenix_events = outfile_rom_buffer.read(0x3F)

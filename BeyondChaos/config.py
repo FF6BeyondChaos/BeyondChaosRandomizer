@@ -9,7 +9,7 @@ try:
 except ImportError:
     TABLE_PATH = os.path.join(os.getcwd(), "tables")
 
-VERSION = "CE-6.0.0"
+VERSION = "CE-6.1.0"
 BETA = False
 VERSION_ROMAN = 'V BETA' if BETA else 'V'
 DEFAULT_CONFIG = {
@@ -44,7 +44,7 @@ SUPPORTED_PRESETS = {
                        'regionofdoom relicmyhat slowerbg tastetherainbow makeover partyparty '
                        'alasdraco capslockoff johnnydmad notawaiter remonsterate dancelessons '
                        'electricboogaloo randombosses dancingmaduin:1 swdtechspeed:random '
-                       'bsiab mimetime morefanatical mementomori:14',
+                       'mimetime morefanatical mementomori:14',
     'Chaotic Player': 'b c d e f g h i j k m n o p q r s t u w y z alphalores informativemiss '
                       'magicnumbers mpparty nicerpoison questionablecontent regionofdoom relicmyhat '
                       'slowerbg tastetherainbow makeover partyparty alasdraco capslockoff johnnyachaotic '

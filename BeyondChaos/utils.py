@@ -87,13 +87,15 @@ SONGS_TABLE = path.join(custom_path, "songs.txt")
 parent_connection = None
 
 
-def pipe_print(output=""):
-    global parent_connection
-    if parent_connection:
+def pipe_print(output="", connection: Pipe = None):
+    if not connection:
+        global parent_connection
+        connection = parent_connection
+    if connection:
         if isinstance(output, Exception):
-            parent_connection.send(type(output)(traceback.format_exc()))
+            connection.send(type(output)(traceback.format_exc()))
         else:
-            parent_connection.send(output)
+            connection.send(output)
     else:
         if isinstance(output, Exception):
             pipe_print(traceback.format_exc())
@@ -120,6 +122,8 @@ def open_mei_fallback(filename, mode='r', encoding=None):
 class Substitution:
     location = None
     bytestring = None
+    every_single_write = {}
+    noverify_writes = set()
 
     @property
     def size(self) -> int:
@@ -128,9 +132,96 @@ class Substitution:
     def set_location(self, location: int):
         self.location = location
 
-    def write(self, outfile_rom_buffer: BytesIO):
+    def write(self, outfile_rom_buffer: BytesIO, noverify: bool = False, patch_name: str = "Unknown"):
         outfile_rom_buffer.seek(self.location)
         outfile_rom_buffer.write(bytes(self.bytestring))
+        verification = (self.location, bytes(self.bytestring))
+        try:
+            self.every_single_write[patch_name].append(verification)
+        except KeyError:
+            self.every_single_write[patch_name] = [verification]
+        if noverify:
+            self.noverify_writes.add(verification)
+
+    @classmethod
+    def verify_all_writes(self, outfile_rom_buffer: BytesIO):
+        failed_patches = []
+        for patch_name, verifications in self.every_single_write.items():
+            for index, (address, data) in enumerate(verifications):
+                # Get the data from the output rom file. If the data in the file doesn't match the data the patch
+                #   contains, either the data did not write properly, or it was overwritten by another patch
+                outfile_rom_buffer.seek(address)
+                verify = outfile_rom_buffer.read(len(data))
+                if verify != data:
+                    conflicting_patch = None
+                    # Check if any other of the applied patches (or the same patch) have written the same data
+                    for conflicting_patch_name, conflicting_verifications in self.every_single_write.items():
+                        for index2, (conflicting_address, conflicting_data) in enumerate(conflicting_verifications):
+                            if (patch_name == conflicting_patch_name and
+                                    (address, data) == (conflicting_address, conflicting_data)):
+                                # Don't compare a change within a patch to itself, because they would
+                                #   obviously overwrite the same values/conflict
+                                # Note that it IS possible for a patch to conflict with itself, if two
+                                #   -different- changes overwrite the same code.
+                                continue
+                            if (conflicting_address + len(conflicting_data) < address or
+                                    (address + len(data)) < conflicting_address):
+                                # The upper bound of conflicting_address range is less than the lower bound
+                                #   of address range OR the upper bound of the address range is less than
+                                #   the lower bound of the conflicting_address range.
+                                # These changes do not overlap and cannot conflict.
+                                continue
+                            else:
+                                for addr in range(conflicting_address, conflicting_address + len(conflicting_data)):
+                                    if address <= addr <= address + len(data):
+                                        # For each addr in a conflicting verification, if the addr
+                                        #   lands within the other address range, we've identified
+                                        #   two patches that conflict. No need to continue checking.
+                                        conflicting_patch = (conflicting_patch_name, index2, (conflicting_address,
+                                                                                              conflicting_data))
+                                        break
+                            if conflicting_patch:
+                                # Conflict identified. No need to check additional verifications in this patch.
+                                break
+                        if conflicting_patch:
+                            # Conflict identified. No need to check additional patches.
+                            break
+                    for offset, (c1, c2) in enumerate(zip(verify, data)):
+                        if c1 != c2:
+                            break
+                    offset += address
+                    if (address, data) in self.noverify_writes:
+                        continue
+                        if conflicting_patch:
+                            print(f'WARNING: Patch {str(index + 1)} in {patch_name} conflicts with patch '
+                                  f'{str(conflicting_patch[1] + 1)} in {conflicting_patch[0]} '
+                                  f'at address {address:0>6x} at offset {offset:0>6x}, but is '
+                                  f'being ignored.')
+                        else:
+                            # No conflicting patch was found by the above detection code. The conflict
+                            #   might be caused by something being written directly to the
+                            #   output_rom_buffer via output_rom_buffer.write(). Only writes using the
+                            #   Substitution class can be detected.
+                            print(f'WARNING: Patch {str(index + 1)} in {patch_name} failed verification at address '
+                                  f'{address:0>6x} and offset {offset:0>6x}, but is being ignored. '
+                                  f'No conflicting patches were detected.')
+                    else:
+                        if conflicting_patch:
+                            failed_patches.append(f'Patch {str(index + 1)} in {patch_name} conflicts with patch '
+                                                  f'{str(conflicting_patch[1] + 1)} in {conflicting_patch[0]} '
+                                                  f'at address {address:0>6x} at offset {offset:0>6x}')
+                        else:
+                            # No conflicting patch was found by the above detection code. The conflict
+                            #   might be caused by something being written directly to the
+                            #   output_rom_buffer via output_rom_buffer.write(). Only writes using the
+                            #   Substitution class can be detected.
+                            failed_patches.append(f'Patch {str(index + 1)} in {patch_name} failed verification at ' +
+                                                  f'address {address:0>6x} and offset {offset:0>6x}. '
+                                                  f'No conflicting patch was identified.')
+        if failed_patches:
+            failed_patches = '\n- '.join(failed_patches)
+            raise Exception('The following patches failed '
+                            f'verification:\n- {failed_patches}')
 
 
 class AutoLearnRageSub(Substitution):
@@ -146,23 +237,23 @@ class AutoLearnRageSub(Substitution):
         bs += [0x20, 0x07, 0x4A, 0xAD, 0x0A, 0x30, 0x60]
         return bytes(bs)
 
-    def write(self, outfile_rom_buffer):
+    def write(self, outfile_rom_buffer, patch_name: str = 'autolearnragesub'):
         learn_leap_sub = Substitution()
         learn_leap_sub.bytestring = bytes([0xEA] * 7)
         learn_leap_sub.set_location(0x2543E)
-        learn_leap_sub.write(outfile_rom_buffer)
+        learn_leap_sub.write(outfile_rom_buffer, patch_name=patch_name)
 
         gau_cant_appear_sub = Substitution()
         gau_cant_appear_sub.bytestring = bytes([0x80, 0x0C])
         gau_cant_appear_sub.set_location(0x22FB5)
-        gau_cant_appear_sub.write(outfile_rom_buffer)
+        gau_cant_appear_sub.write(outfile_rom_buffer, patch_name=patch_name)
 
         vict_sub = Substitution()
         vict_sub.bytestring = bytes([0x20]) + int2bytes(self.location, length=2)
         vict_sub.set_location(0x25EE5)
-        vict_sub.write(outfile_rom_buffer)
+        vict_sub.write(outfile_rom_buffer, patch_name=patch_name)
 
-        super(AutoLearnRageSub, self).write(outfile_rom_buffer)
+        super(AutoLearnRageSub, self).write(outfile_rom_buffer, patch_name=patch_name)
 
 
 texttable = {}
@@ -1018,7 +1109,7 @@ def md5_update_from_file(filename, hash_value):
 def get_directory_hash(directory):
     return md5_update_from_dir(directory, hashlib.md5())
 
-  
+
 def timer(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
