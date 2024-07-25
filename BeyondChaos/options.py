@@ -436,6 +436,7 @@ ANCIENT_CAVE_PROHIBITED_FLAGS = {
     "airship",
     "alasdraco",
     "lessfanatical",
+    "fightclub",
     "mimetime",
     "morefanatical",
     "notawaiter",
