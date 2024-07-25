@@ -4205,10 +4205,10 @@ def manage_auction_house():
     if not Options_.is_flag_active('random_treasure'):
         return
 
-    auction_items = [(0xbc, 0xB4EF1, 0xB5012, 0x0A45, 500),  # Cherub Down
-                     (0xbd, 0xB547B, 0xB55A4, 0x0A47, 1500),  # Cure Ring
-                     (0xc9, 0xB55D5, 0xB56FF, 0x0A49, 3000),  # Hero Ring
-                     (0xc0, 0xB5BAD, 0xB5C9F, 0x0A4B, 3000),  # Zephyr Cape
+    auction_items = [(0xbc, 0xB4EF1, 0xB5012, 0x0A45, 500, 0),  # Cherub Down
+                     (0xbd, 0xB547B, 0xB55A4, 0x0A47, 1500, 1),  # Cure Ring
+                     (0xc9, 0xB55D5, 0xB56FF, 0x0A49, 3000, 2),  # Hero Ring
+                     (0xc0, 0xB5BAD, 0xB5C9F, 0x0A4B, 3000, 3),  # Zephyr Cape
                      ]
     items = get_ranked_items()
     itemids = [item.itemid for item in items]
@@ -4225,7 +4225,7 @@ def manage_auction_house():
         auction_sub.bytestring = bytes([0x6d, item.itemid, 0x45, 0x45, 0x45])
         auction_sub.write(outfile_rom_buffer, patch_name='manage_auction_house')
 
-        addr = 0x304A00 + index * 6 #Needs 0x600 bytes
+        addr = 0x303F00 + auction_item[5] * 6 #Needs 0x600 bytes
         auction_sub.set_location(addr)
         auction_sub.bytestring = bytes([0x66, auction_item[3] & 0xff, (auction_item[3] & 0xff00) >> 8, item.itemid,
                                         # Show text auction_item[3] with item item.itemid
