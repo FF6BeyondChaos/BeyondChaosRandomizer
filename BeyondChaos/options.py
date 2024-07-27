@@ -208,7 +208,7 @@ def get_mode(mode_name: str) -> Mode:
 def get_flag_string():
     flag_string = ''
     for flag in ALL_FLAGS:
-        if flag.value:
+        if not flag.value == '':
             if str(flag.value).lower() == 'true':
                 flag_string += flag.name + ' '
             else:
@@ -347,7 +347,7 @@ class Options:
     def get_flag_string():
         flag_string = ''
         for flag in ALL_FLAGS:
-            if flag.value:
+            if not flag.value == '':
                 if str(flag.value).lower() == 'true':
                     flag_string += flag.name + ' '
                 else:
