@@ -166,11 +166,15 @@ class ItemBlock:
 
     @property
     def is_tool(self):
-        return self.itemtype & 0x0f == 0x00
+        return self.itemtype & 0x0f == 0x00 or self.name in ['AutoCrossbow', 'NoiseBlaster', 'Bio Blaster',
+                                                             'Flash', 'Drill', 'Chain Saw', 'Air Anchor',
+                                                             'Debilitator']
 
     @property
     def is_weapon(self):
-        return self.itemtype & 0x0f == 0x01
+        return self.itemtype & 0x0f == 0x01 and self.name not in ['AutoCrossbow', 'NoiseBlaster', 'Bio Blaster',
+                                                                  'Flash', 'Drill', 'Chain Saw', 'Air Anchor',
+                                                                  'Debilitator']
 
     @property
     def is_armor(self):
