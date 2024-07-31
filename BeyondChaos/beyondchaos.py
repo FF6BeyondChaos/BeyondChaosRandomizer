@@ -1125,7 +1125,11 @@ class Window(QMainWindow):
                 # Block signals to prevent setValue from causing flag_value_changed from being called
                 control.blockSignals(True)
                 if not control.flag.value == '':
-                    control.setValue(int(control.flag.value))
+                    try:
+                        control.setValue(int(control.flag.value))
+                    except ValueError:
+                        if str(control.flag.value).lower() == control.flag.special_value_text.lower():
+                            control.setValue(control.minimum())
                 else:
                     control.setValue(int(control.flag.default_value))
                 control.blockSignals(False)
@@ -1133,7 +1137,11 @@ class Window(QMainWindow):
                 # Block signals to prevent setValue from causing flag_value_changed from being called
                 control.blockSignals(True)
                 if not control.flag.value == '':
-                    control.setValue(float(control.flag.value))
+                    try:
+                        control.setValue(float(control.flag.value))
+                    except ValueError:
+                        if str(control.flag.value).lower() == control.flag.special_value_text.lower():
+                            control.setValue(control.minimum())
                 else:
                     control.setValue(float(control.flag.default_value))
                 control.blockSignals(False)
