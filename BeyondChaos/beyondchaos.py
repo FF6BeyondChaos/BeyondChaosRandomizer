@@ -821,6 +821,7 @@ class Window(QMainWindow):
         widget_v_box_layout.addWidget(QLabel('Text-string of selected flags:'))
         self.flag_string = QLineEdit()
         self.flag_string.setText(Options_.get_flag_string())
+        self.flag_string.editingFinished.connect(lambda: self.flag_string_changed())
         widget_v_box_layout.addWidget(self.flag_string)
 
         btn_save = QPushButton('Save flags selection')
@@ -1002,6 +1003,13 @@ class Window(QMainWindow):
         Options_.mode = get_mode(self.sender().currentText())
         handle_conflicts_and_requirements()
         self.flag_string.setText(Options_.get_flag_string())
+
+    def flag_string_changed(self):
+        calling_control = self.sender()
+        activate_from_string(calling_control.text(), append=False)
+        self.update_control()
+        # Refreshing the flag string here removes any invalid text supplied in the flag string
+        calling_control.setText(Options_.get_flag_string())
 
     def update_preset_dropdown(self):
         text = self.preset_box.currentText()
