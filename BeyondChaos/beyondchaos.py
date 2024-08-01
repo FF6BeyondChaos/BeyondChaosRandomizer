@@ -778,11 +778,12 @@ class Window(QMainWindow):
                     flag.margins = [margin_top, margin_bottom]
 
                     h_spacer = QFrame()
-                    h_spacer.setFrameShape(QFrame.HLine)
-                    h_spacer.setFrameShadow(QFrame.Sunken)
                     if not flag_count == len(tab_flags):
+                        h_spacer.setFrameShape(QFrame.HLine)
+                        h_spacer.setFrameShadow(QFrame.Sunken)
                         h_spacer.setFixedHeight(2)
                         h_spacer.setProperty('class', 'flag_h_spacer')
+                        flag.spacers = [h_spacer]
                         tab_layout.addWidget(h_spacer, current_row, 0, 1, 6)
                         current_row += 1
                     else:
@@ -1087,8 +1088,11 @@ class Window(QMainWindow):
                     flag_object.value = flag_object.default_value.lower()
 
                 # Change spacers before revealing the flag, otherwise they will not display properly
-                for spacer in flag_object.margins:
-                    spacer.changeSize(0, spacer_fixed_height)
+                for margin in flag_object.margins:
+                    margin.changeSize(0, spacer_fixed_height)
+
+                for spacer in flag_object.spacers:
+                    spacer.setFixedHeight(2)
 
                 for control in flag_object.controls.values():
                     # Make all controls visible
@@ -1098,8 +1102,11 @@ class Window(QMainWindow):
                 # Set controls to default value (turn off flag)
                 flag_object.value = ''
 
-                for spacer in flag_object.margins:
-                    spacer.changeSize(0, 0)
+                for margin in flag_object.margins:
+                    margin.changeSize(0, 0)
+
+                for spacer in flag_object.spacers:
+                    spacer.setFixedHeight(0)
 
                 # Make all controls invisible
                 for control in flag_object.controls.values():
