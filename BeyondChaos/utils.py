@@ -191,7 +191,7 @@ class Substitution:
                             break
                     offset += address
                     if (address, data) in self.noverify_writes:
-                        #continue
+                        continue
                         if conflicting_patch:
                             print(f'WARNING: Patch {str(index + 1)} in {patch_name} conflicts with patch '
                                   f'{str(conflicting_patch[1] + 1)} in {conflicting_patch[0]} '
