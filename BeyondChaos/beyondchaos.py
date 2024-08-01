@@ -430,7 +430,7 @@ class Window(QMainWindow):
         # endregion geometry_data
 
         # values to be sent to Randomizer
-        self.version = 'CE-6.1.1'
+        self.version = 'CE-6.1.2'
         self.bingo_type = []
         self.bingo_size = 5
         self.bingo_diff = ''
@@ -778,11 +778,12 @@ class Window(QMainWindow):
                     flag.margins = [margin_top, margin_bottom]
 
                     h_spacer = QFrame()
-                    h_spacer.setFrameShape(QFrame.HLine)
-                    h_spacer.setFrameShadow(QFrame.Sunken)
                     if not flag_count == len(tab_flags):
+                        h_spacer.setFrameShape(QFrame.HLine)
+                        h_spacer.setFrameShadow(QFrame.Sunken)
                         h_spacer.setFixedHeight(2)
                         h_spacer.setProperty('class', 'flag_h_spacer')
+                        flag.spacers = [h_spacer]
                         tab_layout.addWidget(h_spacer, current_row, 0, 1, 6)
                         current_row += 1
                     else:
@@ -820,6 +821,7 @@ class Window(QMainWindow):
         widget_v_box_layout.addWidget(QLabel('Text-string of selected flags:'))
         self.flag_string = QLineEdit()
         self.flag_string.setText(Options_.get_flag_string())
+        self.flag_string.editingFinished.connect(lambda: self.flag_string_changed())
         widget_v_box_layout.addWidget(self.flag_string)
 
         btn_save = QPushButton('Save flags selection')
@@ -1002,6 +1004,13 @@ class Window(QMainWindow):
         handle_conflicts_and_requirements()
         self.flag_string.setText(Options_.get_flag_string())
 
+    def flag_string_changed(self):
+        calling_control = self.sender()
+        activate_from_string(calling_control.text(), append=False)
+        self.update_control()
+        # Refreshing the flag string here removes any invalid text supplied in the flag string
+        calling_control.setText(Options_.get_flag_string())
+
     def update_preset_dropdown(self):
         text = self.preset_box.currentText()
         index = self.preset_box.findText(text)
@@ -1087,8 +1096,11 @@ class Window(QMainWindow):
                     flag_object.value = flag_object.default_value.lower()
 
                 # Change spacers before revealing the flag, otherwise they will not display properly
-                for spacer in flag_object.margins:
-                    spacer.changeSize(0, spacer_fixed_height)
+                for margin in flag_object.margins:
+                    margin.changeSize(0, spacer_fixed_height)
+
+                for spacer in flag_object.spacers:
+                    spacer.setFixedHeight(2)
 
                 for control in flag_object.controls.values():
                     # Make all controls visible
@@ -1098,8 +1110,11 @@ class Window(QMainWindow):
                 # Set controls to default value (turn off flag)
                 flag_object.value = ''
 
-                for spacer in flag_object.margins:
-                    spacer.changeSize(0, 0)
+                for margin in flag_object.margins:
+                    margin.changeSize(0, 0)
+
+                for spacer in flag_object.spacers:
+                    spacer.setFixedHeight(0)
 
                 # Make all controls invisible
                 for control in flag_object.controls.values():
@@ -1125,7 +1140,11 @@ class Window(QMainWindow):
                 # Block signals to prevent setValue from causing flag_value_changed from being called
                 control.blockSignals(True)
                 if not control.flag.value == '':
-                    control.setValue(int(control.flag.value))
+                    try:
+                        control.setValue(int(control.flag.value))
+                    except ValueError:
+                        if str(control.flag.value).lower() == control.flag.special_value_text.lower():
+                            control.setValue(control.minimum())
                 else:
                     control.setValue(int(control.flag.default_value))
                 control.blockSignals(False)
@@ -1133,7 +1152,11 @@ class Window(QMainWindow):
                 # Block signals to prevent setValue from causing flag_value_changed from being called
                 control.blockSignals(True)
                 if not control.flag.value == '':
-                    control.setValue(float(control.flag.value))
+                    try:
+                        control.setValue(float(control.flag.value))
+                    except ValueError:
+                        if str(control.flag.value).lower() == control.flag.special_value_text.lower():
+                            control.setValue(control.minimum())
                 else:
                     control.setValue(float(control.flag.default_value))
                 control.blockSignals(False)

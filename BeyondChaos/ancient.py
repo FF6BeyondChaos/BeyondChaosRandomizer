@@ -45,7 +45,7 @@ def manage_map_names(outfile_rom_buffer: BytesIO):
 
 
 def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: BytesIO,
-                   form_music_overrides=None, randlog=None):
+                   form_music_overrides=None, randlog=None, shadowstays=False, noenc=False):
     if not form_music_overrides:
         form_music_overrides = {}
 
@@ -194,64 +194,67 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
 
     runaway = random.choice([c for c in characters if hasattr(c, "slotid")
                              and c.id == c.slotid]).slotid
-    if runaway in starting:
-        byte, bit = runaway // 8, runaway % 8
-        mem_addr = ((0x1b+byte) << 3) | bit
-        startsub.bytestring += bytearray([0xD7, mem_addr])
-    shadow_leaving_sub = Substitution()
-    shadow_leaving_sub.set_location(0x248A6)
-    shadow_leaving_sub.bytestring = bytearray([
-        0x1C, 0xDE + (runaway//8), 0x1E,     # TRB $1ede
-        0x20, 0xE3, 0x47,
-        0xAD, 0xFB + (runaway//8), 0x1E,     # LDA $1efb
-        0x09, 1 << (runaway % 8),           # ORA #$08
-        0x8D, 0xFB + (runaway//8), 0x1E,     # STA $1efb
-        0xAD, 0xDE + (runaway//8), 0x1E,     # LDA $1ede
-        0x29, 0xFF ^ (1 << (runaway % 8)),  # AND #$F7
-        0x8D, 0xDE + (runaway//8), 0x1E,     # STA $1ede
-        ])
-    while len(shadow_leaving_sub.bytestring) < 23:
-        shadow_leaving_sub.bytestring.append(0xEA)
-    shadow_leaving_sub.bytestring += bytearray([0xA9, 0xFE,
-                                                0x20, 0x92, 0x07])
-    shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
-    shadow_leaving_sub.set_location(0x24861)
-    shadow_leaving_sub.bytestring = bytearray([
-        0xAE, runaway, 0x30,
-        0x30, 0x26,
-        0x20, 0x5A, 0x4B,
-        0xC9, random.choice([0x20, 0x10, 0x8, 0x4, 0x2, 0x1]),
-        0xB0, 0x1F,
-        0xAD, 0x1F, 0x20,
-        0xD0, 0x1A,
-        0xAD, 0x76, 0x3A,
-        0xC9, 0x02,
-        0x90, 0x13,
-        0xBD, 0xE4, 0x3E,
-        0x89, 0xC2,
-        0xD0, 0x0C,
-        0xA9, 1 << (runaway % 8),
-        0x2C, 0xBD + (runaway//8), 0x3E,
-        0xD0, 0x05,
-        0x2C, 0xDE + (runaway//8), 0x1E,
-        ])
-    shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
-    shadow_leaving_sub.set_location(0x10A851)
-    shadow_leaving_sub.bytestring = bytearray([
-        0x0E, 0x03, runaway, 0x6A, 0xA8, 0x0F,
-        0x11,
-        0x01, 0xFB,
-        0x0E, 0x03, runaway, 0x7E, 0xA8, 0x0F,
-        0x01, 0xFC,
-        0x0E, 0x03, runaway, 0x92, 0xA8, 0x0F,
-        0x10, 0xFF,
-        ])
-    shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
-    shadow_leaving_sub.bytestring = bytearray([runaway])
-    shadow_leaving_sub.set_location(0x10FC2F)
-    shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
-    shadow_leaving_sub.set_location(0x10FC5D)
-    shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
+
+    if not shadowstays:
+
+        if runaway in starting:
+            byte, bit = runaway // 8, runaway % 8
+            mem_addr = ((0x1b+byte) << 3) | bit
+            startsub.bytestring += bytearray([0xD7, mem_addr])
+        shadow_leaving_sub = Substitution()
+        shadow_leaving_sub.set_location(0x248A6)
+        shadow_leaving_sub.bytestring = bytearray([
+            0x1C, 0xDE + (runaway//8), 0x1E,     # TRB $1ede
+            0x20, 0xE3, 0x47,
+            0xAD, 0xFB + (runaway//8), 0x1E,     # LDA $1efb
+            0x09, 1 << (runaway % 8),           # ORA #$08
+            0x8D, 0xFB + (runaway//8), 0x1E,     # STA $1efb
+            0xAD, 0xDE + (runaway//8), 0x1E,     # LDA $1ede
+            0x29, 0xFF ^ (1 << (runaway % 8)),  # AND #$F7
+            0x8D, 0xDE + (runaway//8), 0x1E,     # STA $1ede
+            ])
+        while len(shadow_leaving_sub.bytestring) < 23:
+            shadow_leaving_sub.bytestring.append(0xEA)
+        shadow_leaving_sub.bytestring += bytearray([0xA9, 0xFE,
+                                                    0x20, 0x92, 0x07])
+        shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
+        shadow_leaving_sub.set_location(0x24861)
+        shadow_leaving_sub.bytestring = bytearray([
+            0xAE, runaway, 0x30,
+            0x30, 0x26,
+            0x20, 0x5A, 0x4B,
+            0xC9, random.choice([0x20, 0x10, 0x8, 0x4, 0x2, 0x1]),
+            0xB0, 0x1F,
+            0xAD, 0x1F, 0x20,
+            0xD0, 0x1A,
+            0xAD, 0x76, 0x3A,
+            0xC9, 0x02,
+            0x90, 0x13,
+            0xBD, 0xE4, 0x3E,
+            0x89, 0xC2,
+            0xD0, 0x0C,
+            0xA9, 1 << (runaway % 8),
+            0x2C, 0xBD + (runaway//8), 0x3E,
+            0xD0, 0x05,
+            0x2C, 0xDE + (runaway//8), 0x1E,
+            ])
+        shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
+        shadow_leaving_sub.set_location(0x10A851)
+        shadow_leaving_sub.bytestring = bytearray([
+            0x0E, 0x03, runaway, 0x6A, 0xA8, 0x0F,
+            0x11,
+            0x01, 0xFB,
+            0x0E, 0x03, runaway, 0x7E, 0xA8, 0x0F,
+            0x01, 0xFC,
+            0x0E, 0x03, runaway, 0x92, 0xA8, 0x0F,
+            0x10, 0xFF,
+            ])
+        shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
+        shadow_leaving_sub.bytestring = bytearray([runaway])
+        shadow_leaving_sub.set_location(0x10FC2F)
+        shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
+        shadow_leaving_sub.set_location(0x10FC5D)
+        shadow_leaving_sub.write(outfile_rom_buffer, patch_name='ancient_shadow_leaving')
 
     esperevents = [
         "Ramuh", "Ifrit", "Shiva", "Siren", "Terrato", "Shoat", "Maduin",
@@ -996,14 +999,15 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
     if pointer >= 0xb6965:
         raise Exception("Cave events out of bounds. %x" % pointer)
 
-    # lower encounter rate
-    dungeon_rates = [0x38, 0, 0x20, 0, 0xb0, 0, 0x00, 1,
-                     0x1c, 0, 0x10, 0, 0x58, 0, 0x80, 0] + ([0]*16)
-    assert len(dungeon_rates) == 32
-    encrate_sub = Substitution()
-    encrate_sub.set_location(0xC2BF)
-    encrate_sub.bytestring = bytes(dungeon_rates)
-    encrate_sub.write(outfile_rom_buffer, patch_name='ancient_encounter_rate')
+    if not noenc:
+        # lower encounter rate
+        dungeon_rates = [0x38, 0, 0x20, 0, 0xb0, 0, 0x00, 1,
+                         0x1c, 0, 0x10, 0, 0x58, 0, 0x80, 0] + ([0]*16)
+        assert len(dungeon_rates) == 32
+        encrate_sub = Substitution()
+        encrate_sub.set_location(0xC2BF)
+        encrate_sub.bytestring = bytes(dungeon_rates)
+        encrate_sub.write(outfile_rom_buffer, patch_name='ancient_encounter_rate')
 
     maxrank = max(locations, key=lambda l: l.ancient_rank).ancient_rank
     for location in locations:

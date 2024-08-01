@@ -1171,7 +1171,7 @@ NORMAL_FLAGS = [
          long_description="Causes all items to be indestructible when broken for a spell.",
          category="battle",
          input_type="boolean",
-         conflicts=[],
+         conflicts=["nobreaks"],
          requirements=[{'i': True}],
          children={}
          ),
@@ -1183,7 +1183,7 @@ NORMAL_FLAGS = [
                           "some sanity checks, allowing them to be much more difficult and volatile",
          category="field",
          input_type="boolean",
-         conflicts=["ancientcave"],
+         conflicts=["ancientcave", "nomiabs"],
          requirements=[{'t': True}],
          children={}
          ),
@@ -1240,7 +1240,7 @@ NORMAL_FLAGS = [
          long_description="Chests will never have monster encounters in them.",
          category="field",
          input_type="boolean",
-         conflicts=["ancientcave"],
+         conflicts=["ancientcave", "bsiab"],
          requirements=[{'t': True}],
          children={}
          ),
