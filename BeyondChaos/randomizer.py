@@ -5524,6 +5524,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
         load_characters(infile_rom_buffer, force_reload=True)
         characters = get_characters()
 
+        #turn on ancientcave flag for those modes
+        Options_.activate_flag(Options_.mode.name, 'True')
+
         tm = gmtime(seed)
         if tm.tm_mon == 12 and (tm.tm_mday == 24 or tm.tm_mday == 25):
             Options_.activate_flag('christmas', True)
@@ -5785,7 +5788,9 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
         manage_opening()
         manage_ending()
-        manage_auction_house()
+
+        if not Options_.is_flag_active('ancientcave'):
+            manage_auction_house()
 
         savetutorial_sub = Substitution()
         savetutorial_sub.set_location(0xC9AF1)
@@ -5917,7 +5922,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
 
         if Options_.is_flag_active('ancientcave'):
             manage_ancient(Options_, outfile_rom_buffer, infile_rom_buffer, form_music_overrides=form_music,
-                           randlog=randomizer_log)
+                           randlog=randomizer_log, shadowstays=Options_.is_flag_active('shadowstays'), noenc=Options_.is_flag_active('dearestmolulu'))
         reseed()
 
         if Options_.is_flag_active('shuffle_commands') or \
