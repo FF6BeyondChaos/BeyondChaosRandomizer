@@ -96,113 +96,56 @@ def bit_mutate(byte, op="on", nochange=0x00):
 
 
 def extend_item_breaks(fout):
-    # This patch's purpose is to expand the spell ID triggered by
-    # an item break from 6 bits to 8.  This allows spells 40-FF to
-    # be used as break spells as well.
     break_sub = Substitution()
-
-    # The item attribute table at $D85000 has the equipment spell
-    # break at +$12.  Bit 6 is "cast randomly after weapon strike"
-    # and bit 7 is "remove from inventory when used".  Bits 0-5
-    # are the spell ID, limiting the spell ID to 00-3F.
-    #
-    # To fix this, we made all 8 bits of +$12 be the spell ID, and
-    # moved bits 6 and 7 to bits 2 and 3 of +$13.
-    break_sub.set_location(0x022735)
+    break_sub.set_location(0x22735)
     break_sub.bytestring = bytes([
-      0x22, 0xE3, 0x3F, 0xF0  # JSL $F03FE3   [item_break_get_attributes]
+      0x22, 0xE3, 0x3F, 0xF0  # JSL $F03013
     ])
     break_sub.write(fout, patch_name='extend_item_breaks')
 
-    # Adjust target of a BMI for the change in layout below.
-    break_sub.set_location(0x022743)
+    break_sub.set_location(0x22743)
     break_sub.bytestring = bytes([
       0x30, 0x05              # BMI $05
     ])
     break_sub.write(fout, patch_name='extend_item_breaks')
 
-    # Since we're not storing the spell ID in the same byte as the
-    # two flags anymore, we can't simply AND #$3F like the original
-    # code.  Load the spell ID stored by item_break_get_attributes.
-    break_sub.set_location(0x02274A)
+    break_sub.set_location(0x2274A)
     break_sub.bytestring = bytes([
       0xAD, 0x10, 0x34        # LDA $3410   [Last spell cast]
     ])
     break_sub.write(fout, patch_name='extend_item_breaks')
 
-    # With the bits moved, we need to update another location that
-    # uses them.
-    break_sub.set_location(0x0229ED)
+    break_sub.set_location(0x229ED)
     break_sub.bytestring = bytes([
-      0x22, 0xD0, 0x3F, 0xF0, # JSL $F03FD0   [item_break_weapon_data_hook]
+      0x22, 0xD0, 0x3F, 0xF0, # JSL $F03000
       0xEA, 0xEA              # NOP #2
     ])
     break_sub.write(fout, patch_name='extend_item_breaks')
 
-    # Read the full 8-bit spell ID written by item_break_weapon_data_hook.
-    break_sub.set_location(0x023658)
+    break_sub.set_location(0x23658)
     break_sub.bytestring = bytes([
-      0xAD, 0x7E, 0x3A        # LDA $3A7E  [Temporary memory written to below]
+      0xAD, 0x7E, 0x3A        # LDA $3A7E  [???]
     ])
     break_sub.write(fout, patch_name='extend_item_breaks')
 
-    # The new block of item break logic.
     break_sub.set_location(0x303FD0)
     break_sub.bytestring = bytes(
-        [# item_break_weapon_data_hook:
-         0xBD, 0xA4, 0x3B,         # LDA $3BA4,X   [Main hand properties, like Runic; $3D34,X was the original]
+        [0xBD, 0xA4, 0x3B,         # LDA $3BA4,X   [Main hand properties, like Runic]
          0x29, 0x0C,               # AND #$0C      [Consider bits 3 and 4]
          0x0A, 0x0A, 0x0A, 0x0A,   # ASL #4        [x16]
          0x8D, 0x89, 0x3A,         # STA $3A89     [Enable weapon spell proc if either is set]
          0xBD, 0x34, 0x3D,         # LDA $3D34     [Main hand weapon spell index]
-         0x8D, 0x7E, 0x3A,         # STA $3A7E     [Temporary location to retrieve later]
+         0x8D, 0x7E, 0x3A,         # STA $3A7E     [???]
          0x6B,                     # RTL           [Exit]
-         # item_break_get_attributes:
-         0x08,                     # PHP           [$C22741 expects carry flag to survive JSR $C2271A]
+         0x08,                     # PHP
          0xBF, 0x12, 0x50, 0xD8,   # LDA $D85012,X [Weapon spell id]
          0x8D, 0x10, 0x34,         # STA $3410     [Save as last spell cast, for proccing]
          0xBF, 0x13, 0x50, 0xD8,   # LDA $D85013,X [Weapon flags]
-         0x0A, 0x0A, 0x0A, 0x0A,   # ASL #4        [x16; clears carry hence why PHP+PLP needed]
-         0x28,                     # PLP           [Restore carry (and other flags)]
-         0x29, 0xC0,               # AND #$C0      [Keep only bits 2 and 3 (moved to 6 and 7)]
+         0x0A, 0x0A, 0x0A, 0x0A,   # ASL #4        [x16]
+         0x28,                     # PLP
+         0x29, 0xC0,               # AND #$C0      [Keep only bits 3 and 4]
          0x6B])                    # RTL           [Exit]])
     break_sub.write(fout, patch_name='extend_item_breaks')
-
-    # This next part fixes a minor problem with item breaks: items
-    # that break for spells that can target dead enemies/characters
-    # fizzle when the spell goes off if the target is dead.
-    # To work around this, we change the item break battle code to
-    # allow the spell to fire on a dead character if the spell is
-    # flagged to allow such.  In the vanilla game, that is 4 spells:
-    # Life, Life 2, Phoenix (summon), and ChokeSmoke.
-    break_sub.set_location(0x0218FD)
-    break_sub.bytestring = bytes([
-      0x5C, 0x60, 0x6B, 0xF0  # JML $F06B60   [item_break_life_fix]
-    ])
-    break_sub.write(fout, patch_name='extend_item_breaks_life_fix')
-
-    break_sub.set_location(0x306B60)
-    break_sub.bytestring = bytes(
-        [# item_break_life_fix:
-         0xAD, 0x10, 0x34,         # LDA.W $3410            [Load spell ID being cast by the weapon]
-         0xEB,                     # XBA                    [As a whole, load A with $XXYY with XX=spell and YY=0x0E,
-         0xA9, 0x0E,               # LDA.B #14               then write 16-bit to write both multiplicands together.]
-         0xC2, 0x30,               # REP #$30               [Use 16-bit A/X/Y for this part.]
-         0x8F, 0x02, 0x42, 0x00,   # STA.L $004202          [Trigger multiply]
-         0xDA,                     # PHX                    [4Cy Need to preserve X in this function.  Might as well
-                                   #                             do that while we have to wait 8 cycles anyway.]
-         0xAF, 0x16, 0x42, 0x00,   # LDA.L $004216          [4Cy before read happens = 8 total.  Read product.]
-         0xAA,                     # TAX                    [X = spell ID * 14]
-         0xBF, 0xC2, 0x6A, 0xC4,   # LDA.L $C46AC0 + 2,X    [Read spell special flags 1; 16-bit A reads an extra byte
-                                   #                         but avoids an extra SEP instruction, which is worse.]
-         0xFA,                     # PLX                    [Don't need X anymore so restore here before SEP.]
-         0xE2, 0x30,               # SEP #$30               [Back to 8-bit A/X/Y.]
-         0x0A,                     # ASL                    [Bit 2 ($04) is what we check.  Move it to bit 3.
-         0x29, 0x08,               # AND.B #$08              Combined, this says: if special flag bit 2 is clear, then
-         0x49, 0x08,               # EOR.B #$08              clear bit 3 of $0000BA, which means "able to target dead
-         0x14, 0xBA,               # TRB.B $BA               or hidden targets".]
-         0x5C, 0x01, 0x19, 0xC2])  # JML $C21901            [We now return to our regularly scheduled item break.]
-    break_sub.write(fout, patch_name='extend_item_breaks_life_fix')
 
 
 class ItemBlock:
