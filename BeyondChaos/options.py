@@ -854,7 +854,7 @@ NORMAL_FLAGS = [
          long_description="Combines the equipment and relic menus, and makes shop menus more informative.",
          category="quality_of_life",
          input_type="boolean",
-         conflicts=[],
+         conflicts=["equipanything"],
          requirements=[],
          children={}
          ),
@@ -1483,7 +1483,7 @@ NORMAL_FLAGS = [
                           "These often give strange defensive stats or weapon animations.",
          category="gamebreaking",
          input_type="boolean",
-         conflicts=[],
+         conflicts=["relicmyhat"],
          requirements=[],
          children={}
          ),
