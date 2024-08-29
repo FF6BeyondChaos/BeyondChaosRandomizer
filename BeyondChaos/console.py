@@ -331,10 +331,12 @@ def run_console():
                     pass
                 flag_input = flag_input.split('|')[2]
                 active_flags = []
-            if flag_input.lower() in SUPPORTED_PRESETS.keys():
-                flag_input = SUPPORTED_PRESETS[flag_input.lower()]
-                active_flags = []
-            input_flag_list = flag_input.split(' ')
+            for preset_key in SUPPORTED_PRESETS.keys():
+                if flag_input.lower() == preset_key.lower():
+                    flag_input = SUPPORTED_PRESETS[preset_key]
+                    active_flags = []
+                    break
+            input_flag_list = filter(lambda f: f != "", flag_input.split(' '))
             for input_flag in input_flag_list:
                 input_flag_found = False
                 if ':' in input_flag:
