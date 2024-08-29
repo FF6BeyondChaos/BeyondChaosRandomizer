@@ -723,3 +723,13 @@ name_icon           df
 name_text           Albatross
 description         Secret Item
 tier                high
+
+! Senzu Beans
+price               2
+itemtype            25
+breakeffect         31
+targeting           01
+equippable          00
+name_icon           df
+name_text           Senzu Beans
+tier                low
