@@ -650,7 +650,7 @@ def manage_ancient(Options_, outfile_rom_buffer: BytesIO, infile_rom_buffer: Byt
     random.shuffle(restmusics)
 
     optional_chars = [c for c in characters if hasattr(c, "slotid")]
-    optional_chars = [c for c in optional_chars if c.slotid == runaway or
+    optional_chars = [c for c in optional_chars if (c.slotid == runaway and c.id not in starting) or
                       (c.id not in starting and c.id in charcands)]
     if Options_.is_flag_active("speedcave"):
         while len(optional_chars) < 24:
