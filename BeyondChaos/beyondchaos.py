@@ -430,7 +430,7 @@ class Window(QMainWindow):
         # endregion geometry_data
 
         # values to be sent to Randomizer
-        self.version = 'CE-6.1.2'
+        self.version = 'CE-6.1.3'
         self.bingo_type = []
         self.bingo_size = 5
         self.bingo_diff = ''

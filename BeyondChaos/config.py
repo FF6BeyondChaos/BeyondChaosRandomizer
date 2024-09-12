@@ -9,7 +9,7 @@ try:
 except ImportError:
     TABLE_PATH = os.path.join(os.getcwd(), "tables")
 
-VERSION = "CE-6.1.2"
+VERSION = "CE-6.1.3"
 BETA = False
 VERSION_ROMAN = 'V BETA' if BETA else 'V'
 DEFAULT_CONFIG = {
@@ -27,7 +27,6 @@ MD5HASHNORMAL = "e986575b98300f721ce27c180264d890"
 MD5HASHTEXTLESS = "f08bf13a6819c421eee33ee29e640a1d"
 MD5HASHTEXTLESS2 = "e0984abc9e5dd99e4bc54e8f9e0ff8d0"
 
-# Supported preset names must be lowercase.
 SUPPORTED_PRESETS = {
     'New Player': 'b c e f g i n o p q r s t w y z alphalores informativemiss '
                   'magicnumbers mpparty nicerpoison questionablecontent regionofdoom relicmyhat '
