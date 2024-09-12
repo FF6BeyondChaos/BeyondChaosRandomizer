@@ -619,7 +619,9 @@ class ItemBlock:
             self.features['otherproperties'] &= 0xFB
 
         self.features['targeting'] = spell.targeting & 0xef
-        self.mutate_name()
+
+        if (self.features['otherproperties'] & 0x04) or (not no_breaks and self.itemtype & 0x20):
+            self.mutate_name()
 
     def get_element(self, elem_byte, as_array=False):
         ELEM_FLAGS = {e: 1 << i for i, e in
