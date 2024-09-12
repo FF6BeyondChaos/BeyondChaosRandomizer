@@ -5669,7 +5669,7 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                     0xAA,                       # TAX
                     0x29, 0xFF, 0x00,           # AND #$00FF
                     0xE2, 0x20,                 # SEP #$20
-                    0xBF, 0x00, 0x31, 0xF0,     # LDA $F03100,X
+                    0xBF, 0x00, 0x47, 0xF0,     # LDA $F04700,X
                     0xFA,                       # PLX
                     0x6B])                      # RTL
                 weapon_anim_fix.write(outfile_rom_buffer, patch_name='weapon_animation_fix')

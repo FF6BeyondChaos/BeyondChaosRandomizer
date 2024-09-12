@@ -370,7 +370,7 @@ class ItemBlock:
             if self.itemid < 93:
                 outfile_rom_buffer.seek(0x2CE408 + (8 * self.itemid))
             else:
-                outfile_rom_buffer.seek(0x303100 + (8 * (self.itemid - 93)))
+                outfile_rom_buffer.seek(0x304700 + (8 * (self.itemid - 93)))
             outfile_rom_buffer.write(bytes(self.weapon_animation))
 
         outfile_rom_buffer.seek(0x12B300 + (13 * self.itemid))
