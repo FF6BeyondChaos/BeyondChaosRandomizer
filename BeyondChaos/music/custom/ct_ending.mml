@@ -3,6 +3,7 @@
 #TITLE To Far Away Times
 #ALBUM Chrono Trigger
 #COMPOSER Yasunori Mitsuda
+#TRANS mfvitools
 #ARRANGED emberling
 
 ########## ------------------
@@ -69,8 +70,8 @@
 #drum "c"= 4b |7 p64
 
 
-{1}&2r1$
-t119%v40%b0,90%f0,0%e1%k-1[8r1]{'CpuSetValue 1'}[4r1]{'CpuSetValue 2'}
+{1}t119%v40%b0,90%f0,0&2r1$
+%e1%k-1[8r1]{'CpuSetValue 1'}[4r1]{'CpuSetValue 2'}
 '2i' p64'2o''2v*v1.27'd8.'2v*v.55'd2^4^16^2'2v*v1.27'e8.'2v*v.55'e8.'2v*v1.27'
 g8g16'2v*v.55'g8g2^4^16^2'2v*v1.27'g8.'2v*v.55'g8.'2v*v1.27'f+8f+16'2v*v.55'
 f+8f+2^4^16^2'2v*v1.27'e8.'2v*v.55'e8.'2v*v1.27'f+16e16d16'2v*v.55'f+16

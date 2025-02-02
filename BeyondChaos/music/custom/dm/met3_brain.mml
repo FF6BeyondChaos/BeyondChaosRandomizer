@@ -1,6 +1,7 @@
 #TITLE Mother Brain
 #ALBUM Super Metroid
 #COMPOSER Minako Hamano
+#TRANS VGMTrans
 #ARRANGED emberling
 
 #VARIANT ~_
@@ -15,7 +16,7 @@
 #WAVE 0x25 0xB0 organ
 #WAVE 0x28 0x5A timpani
 
-#def init= t44 %v50 %b0,70 %f0,0
+#def init= t44 %v50 %b0,70 %f0,0 %x255
 
 #def high= |0 o5 'h' %e1
 #def mid=  |1 o5 'm' %e1

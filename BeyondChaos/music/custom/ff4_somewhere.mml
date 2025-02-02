@@ -1,0 +1,100 @@
+##created with sqspcmml beta 1.1.7b
+
+#TITLE Somewhere in the World
+#ALBUM Final Fantasy IV
+#COMPOSER Nobuo Uematsu
+#TRANS mfvitools
+#ARRANGED emberling
+
+#WAVE 0x20 0x65
+#WAVE 0x21 0x61
+#WAVE 0x22 0x53
+#WAVE 0x23 0x0A
+#WAVE 0x24 0x38
+
+#def 0i=   |0
+#def 0o=   o6
+#def 0v=   v80
+#def 0f= v1,80
+
+#def 1i=   |1
+#def 1o=   o6
+#def 1v=   v100
+#def 1f= v1,100
+
+#def 2i=   |2
+#def 2o=   o4
+#def 2v=   v72
+#def 2f= v1,72
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v80
+#def 3f= v1,80
+
+#def 4i=   |4 %y4%s1%r13
+#def 4o=   o4
+#def 4v=   v63
+#def 4f= v1,63
+
+## auto percussion  0x23
+#drum "h"= 5a
+
+#def a= '0v*v.27''0f*v28,.80'
+#def b= '0v*v.30''0f*v28,.90'
+#def c= '0v*v.33''0f*v28,1'
+#def d= '0v*v.38''0f*v28,1.15'
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+t81%v70%b0,70%f0,0'0v*v.80'p75{'VolEnvMode 12'}%r3{'Duration 95%'}
+
+'0i' %e1
+$101'0o-o1'[%r3'a'e2'a'd+2'a'e2'a'd+2'a'e8'a'f+8'a'g2.'a'e8'a'f+8'a'g2.<]
+;101
+
+
+{2}
+'0v*v.90'p70{'VolEnvMode 12'}%r3{'Duration 95%'}
+'0i' %e1
+$201'0o-o1'[%r3'b'c2>'b'b2<'b'c2>'b'b2<'b'c8'b'd8'b'd+2.'b'c8'b'd8'b'd+2.<]
+;201
+
+
+{3}
+'0v*v1.00'p60{'VolEnvMode 12'}%r3{'Duration 95%'}
+'0i' %e1
+$301'0o-o2'[%r3'c'a2'c'a2'c'a2'c'a2'c'a8'c'a8'c'a2.'c'a8'c'a8'c'a2.<]
+;301
+
+{5}
+{'VolEnvMode 11'}%r19{'Duration 95%'}
+'1i' %e1
+$501'1o-o2'p75'1v*v.75'%r19a8<c8e8g8f+8e8d+8>b8a8<c8e8g8f+8e8d+8>b8p25
+'1v*v.75'a24<c24d+24g8p50'1v*v.50'>a24<c24d+24g8p75'1v*v.25'a24<c24d+24
+g8p100'1v*v.15'>a24<c24d+24g8p100'1v*v.75'>>a24<c24d+24g8p75'1v*v.50'>
+a24<c24d+24g8p50'1v*v.25'a24<c24d+24g8p25'1v*v.15'>a24<c24d+24g8
+;501
+
+
+{4}
+$ '2v*v1.00'p64 '2i' {'VolEnvMode 11'}%r13{'Duration 95%'}
+'2o'%e0a16r16a8(e16g16)a4.^16r16(e16g16)a16r16a8(e16g16)a4.^16r16<(g16a16)
+>a16a16r8
+'0v*v1.15'p55'0i'%r3'0o-o2'%e1 'd'd+2'd'd4r4'd'c2>'d'b4
+;
+
+{6}
+'3v*v1.00'p64
+'3i' {'VolEnvMode 11'}%r0{'Duration 90%'}
+$701'3o'" !!!o %r0h8h8"r2."h8h8"r2."h16h16"r8r2.r1
+;701
+
+{7}
+$ '4v*v1.00'p64 '4i' {'VolEnvMode 11'}{'Duration 95%'}
+'4o'%e0a16r16a8e16g16a4.^16r16e16g16a16r16a8e16g16a4.^16r16<(g16a16)
+>a16a16r8
+r2r4r4r2r4
+;

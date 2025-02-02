@@ -1,0 +1,324 @@
+#TITLE Find Your Way
+#ALBUM Final Fantasy VIII
+#COMPOSER Nobuo Uematsu
+#TRANS VGMTrans
+#ARRANGED emberling
+
+#WAVE 0x20 0x65 strings
+#WAVE 0x21 0x61 harp
+#WAVE 0x22 0x07 piano
+#WAVE 0x23 0x19 celesta
+#WAVE 0x24 0x59 pizzi
+#WAVE 0x25 0xA5 flute
+#WAVE 0x26 0x94 oboe
+#WAVE 0x27 0x95 clari
+#WAVE 0x28 0x90 bassoon
+#WAVE 0x29 0x28 tbell
+#WAVE 0x2A 0x9E triangle
+#WAVE 0x2B 0x67 str alt
+
+## Double tempo for shorter note gaps
+#def init= t150 %v50 %b0,100 %f0,0
+
+#def strings=  |0 o5 %e1
+#def stringl=  |B o5 %e1 %s7
+#def harp=     |1 o5 %e1 %r14
+#def piano=    |2 o5 %e1
+#def celesta=  |3 o4 %e1 %y0%s3%r13
+#def pizzi=    |4 o4 %e1
+#def flute=    |5 o4 %e1
+#def oboe=     |6 o5 %e1
+#def clari=    |7 o5 %e1
+#def bassoon=  |8 o6 %e1
+#def tbell=    |9 o5 %e1 %y1%s0
+#def triangle= |A o6 %e1 
+
+#def s= v48
+#def h= v120
+#def p= v144
+#def e= v96
+#def z= v78
+#def f= v24
+#def o= v33
+#def c= v49
+#def b= v17
+#def t= v84
+#def a= v48
+
+#def sf= v1,48
+#def hf= v1,120
+#def pf= v1,144
+#def ef= v1,96
+#def zf= v1,78
+#def ff= v1,24
+#def of= v1,33
+#def cf= v1,49
+#def bf= v1,17
+#def tf= v1,84
+#def af= v1,48
+
+#def srel= %r25
+
+#drum "t"= 7c+ |A p56 'a' %y4%s0%r14 k-8
+
+{1}
+'init'
+$
+## 1~4
+'harp'
+[4
+r4 p62 'h*v.8' e4 p84 'h*v.7' f4 p72 'h*v.8' e4
+r4 p62         f4 p84 'h*v.7' g4 p72 'h*v.8' e4
+]
+## 5~8
+[4
+r4 p62 'h*v.8'>b4<p84 'h*v.7' c4 p72 'h*v.8'>b4<
+r4 p62         c4 p84 'h*v.7' d4 p72 'h*v.8'>b4<
+]
+## 9~16
+[
+ [3
+  r4 p62 'h*v.8' e4 p84 'h*v.7' f4 p72 'h*v.8' e4
+  r4 p62         f4 p84 'h*v.7' g4 p72 'h*v.8' e4
+ ]
+ r4 p62 'h*v.8' d4 p84 'h*v.7' f4 p72 'h*v.8' d4
+ r4 p62         e4 p84 'h*v.7' f4 p72 'h*v.8' e4
+]
+## 17~24
+[
+ [3
+  r4 p62 'h*v.8' c+4 p84 'h*v.7' d4 p72 'h*v.8' c+4
+  r4 p62         d4  p84 'h*v.7' e4 p72 'h*v.8' c+4
+ ]
+ r4 p62 'h*v.8'>b4< p84 'h*v.7' d4 p72 'h*v.8'>b4<
+ r4 p62         c+4 p84 'h*v.7' d4 p72 'h*v.8' c+4
+]
+## 25~29
+r1r1r1r1
+'bassoon-o1' 'b*v2' p95 m48,18,207
+d+2. f2 f+2 g+4 a1^1^1. %r23 ^2
+## 30~34
+'flute' 'f*v1.5' p35
+a2. b2 < c2 d4 d+1^1^1. %r24 ^2
+'pizzi+o1' p40 'z' l2 m
+r1 g g d+ d+ c1
+;
+
+{2}
+$
+## 1~4
+'harp-o1' p57 'h*v.8' a1 a2
+'strings+o1' p5 's*v.044''sf*v96,.628'b2
+'harp-o1' p57 'h*v.8' a2
+'strings+o1' p5 's*v.044''sf*v96,.628'g2
+'harp-o1' p57 'h*v.8' a2
+'strings+o1' p5 's*v.044''sf*v96,.628'd2
+'harp-o1' p57 'h*v.8' a1 a1 a1 a1
+## 5~8
+[ e1 e2
+'strings+o1' p5 's*v.044''sf*v96,.628'b2
+'harp-o1' p57 'h*v.8' e2
+'strings+o1' p5 's*v.044''sf*v96,.628'g2
+'harp-o1' p57 'h*v.8' e2
+'strings+o1' p5 's*v.044''sf*v96,.628'd2
+'harp-o1' p57 'h*v.8' ]
+## 9~16
+[ [6 a1] g1 a1 ]
+## 17~24
+[ [6 f+1] e1 f+1 ]
+## 25~29
+[6 d+1] [4 f+1]
+## 30~34
+a1 a1 < [8 c1]
+;
+
+{3}
+$
+## 1~4
+'celesta+o1' p110 'e' b4<d4d2
+'tbell-o1' p20 't' a2
+'strings+o1' p45
+       's*v.044''sf*v96,.628' d2 'srel'
+^2 %r0 's*v.044''sf*v96,.628' c2 'srel'
+^2 %r0 's*v.044''sf*v96,.628'>a2
+'celesta+o2' p110 'e' c4>a4a2
+'stringl-o3' p64 's*v.718' a1 'sf*v192,.384' ^1 'sf*v192,.050' ^1
+## 5~8
+'celesta+o1' p110 'e' g4e4e2
+'tbell-o1' p20 't' e2
+'strings+o1' p45
+       's*v.044''sf*v96,.628' d2 'srel'
+^2 %r0 's*v.044''sf*v96,.628'>b2 'srel'
+^2 %r0 's*v.044''sf*v96,.628' a2<
+r1r2
+       's*v.044''sf*v96,.628' d2 'srel'
+^2 %r0 's*v.044''sf*v96,.628'>b2 'srel'
+^2 %r0 's*v.044''sf*v96,.628' a2
+## 9~16
+'piano+o1' p90 l4
+[
+[3 %r22 ^2 %r 'p*v.53'a 'p*v.71'a 'p*v.89'g 'p*v.71'f 'p*v.53'e j3 'p*v.35'e] e
+d 'p*v.71'e 'p*v.89'fg  e 'p*v.71'e 'p*v.53'e 'p*v.35'e
+]
+## 17~24
+[
+[3 %r22 ^2 %r 'p*v.53'f+ 'p*v.71'f+ 'p*v.89'e 'p*v.71'd 'p*v.53'c+ j3 'p*v.35'c+] c+
+>b< 'p*v.71'c+ 'p*v.89'de  c+ 'p*v.71'c+ 'p*v.53'c+ 'p*v.35'c+
+]
+## 25~29
+'harp-o1'
+  [3 r4 p62 'h*v.8' a+2 p72 a+4
+     r4 p62         b2  p72 a+4]
+< r4 p62 c+2 p72 c+4
+r4 p62 d4 p84 'h*v.7' e4 p72 'h*v.8' c+4
+r4 p62 c+4 p84 'h*v.7' d4 p72 'h*v.8' c+4
+r4 p62 d4 p84 'h*v.7' e4 p72 'h*v.8' c+4
+## 30~34
+r4 p62 e2 p72 e4
+r4 p62 f2 p72 e4
+[ r4 p62 g2 p72 g4
+r4 p62 g+4 p84 'h*v.7' a+4 p72 'h*v.8' g4
+r4 p62 g4  p84 'h*v.7' g+4 p72 'h*v.8' g4
+r4 p62 g+4 p84 'h*v.7' a+4 p72 'h*v.8' g4 ]
+;
+
+{4}
+$
+## 1~4
+'flute+o1' p35 'f' m48,18,207
+[e1^1^1.. %r24 ^4 %r0]
+## 5~8
+[e1^1^1.. %r24 ^4 %r0]m
+## 9~16
+'piano+o1' p90 l4
+[
+[3 %r24 ^2 %r r12 'p*v.53'c 'p*v.71'c 'p*v.89'c 'p*v.71'c 'p*v.53'c j3 'p*v.35'c6] c6
+> r12 b 'p*v.71'b 'p*v.89'bbb 'p*v.71'a 'p*v.53'g+ 'p*v.35'g6 <
+]>
+## 17~24
+[
+[3 %r24 ^2 %r r12 'p*v.53'a 'p*v.71'a 'p*v.89'a 'p*v.71'a 'p*v.53'a j3 'p*v.35'a6] a6
+r12 g+ 'p*v.71'g+ 'p*v.89'g+g+g+ 'p*v.71'f+ 'p*v.53'f 'p*v.35'e6
+]
+## 25~29
+'harp-o1' p84 'h*v.7'
+[3 r2 b2 r2 <c+2>] r2 <d2
+'pizzi+o1' p40 'z' l2
+f+ f+ e d c+1
+## 30~34
+'harp' p84 'h*v.7'
+r2 f2 r2 g2
+[ 'harp' p84 'h*v.7'  r2 g+2
+'pizzi+o2' p40 'z' l2
+c c > a+ g+ g1
+]
+;
+
+
+{5}
+$
+## 1~4
+'oboe' p55 'o' m48,18,207
+[a1^1^1.. %r22 ^4 %r0]
+## 5~8
+[g1^1^1.. %r22 ^4 %r0]m
+## 9~16
+'piano' p90 l4
+[
+[3 %r26 ^2 %r r6 'p*v.53'a 'p*v.71'a 'p*v.89'a 'p*v.71'a 'p*v.53'a j3 'p*v.35'a12] a12
+r6 g 'p*v.71'g 'p*v.89'gg    <c 'p*v.71'c 'p*v.53'c 'p*v.35'c12>
+]
+## 17~24
+[
+[3 %r26 ^2 %r r6 'p*v.53'f+ 'p*v.71'f+ 'p*v.89'f+ 'p*v.71'f+ 'p*v.53'f+ j3 'p*v.35'f+12] f+12
+r6 e 'p*v.71'e 'p*v.89'ee    a 'p*v.71'a 'p*v.53'a 'p*v.35'a12
+]
+## 25~29
+[7r1] 'pizzi+o1' p40 'z' l2
+c+ c+ > a a f+1 <
+## 30~34
+r1r1r1 g g d+ d+ c1 r1r1r1r1
+;
+
+
+{6}
+$
+## 1~4
+'clari-o1' p75 'c'
+[a1^1^1.. %r21 ^4 %r0]
+## 5~8
+[b1^1^1.. %r21 ^4 %r0]m
+## 9~16
+'tbell-o1' p20 't'
+a1^1 a1^1 a1^1 r1^1
+a1^1 a1^1 a1^1 r1^1
+## 17~24
+'strings+o1' p5 l4
+[
+[3 v48,0 ^2 's*v.044''sf*v96,.391'f+2 e d c+. j3 'sf*v24,.044' ^8] ^8
+>b< c+ d e c+2 'sf*v96,.267'^2
+]
+## 25~29
+"!!!o"
+r1r1 r1r1 r1r1 r1"t1" ^1^1
+## 30~34
+r1r1 r1"t1" ^1^1 ^1"t1" ^1^1 k0
+;
+
+
+{7}
+$
+## 1~4
+'bassoon-o2' p95 'b'
+[a1^1^1.. %r23 ^4 %r0]
+## 5~8
+<[e1^1^1.. %r23 ^4 %r0]m
+## 9~16
+[16r1]
+## 17~24
+'strings' p25 l4
+[
+[3 v48,0 ^2 's*v.044''sf*v96,.391'<c+2> b b a. j3 'sf*v24,.044' ^8] ^8
+e2 g+2 a2 'sf*v96,.267'^2
+]
+## 25~29
+[5r1r1]
+## 30~34
+[5r1r1]
+;
+
+
+{8}
+$
+## 1~4
+'strings+o1' p25
+r1
+r2     's*v.044''sf*v96,.628'e2 'srel'
+^2 %r0 's*v.044''sf*v96,.628'd2 'srel'
+^2 %r0 's*v.044''sf*v96,.628'>b2 'srel'
+^1
+'tbell-o1' p20 't' a1 ^1 r1
+## 5~8
+'celesta+o1' p110 'e*v.75' f+4>b4b1
+'strings+o1' p25
+       's*v.044''sf*v96,.628' e2 'srel'
+^2 %r0 's*v.044''sf*v96,.628' c2 'srel'
+^2 %r0 's*v.044''sf*v96,.628'>b2 'srel'
+r1.<
+   %r0 's*v.044''sf*v96,.628' e2 'srel'
+^2 %r0 's*v.044''sf*v96,.628' c2 'srel'
+^2 %r0 's*v.044''sf*v96,.628'>b2 'srel'
+## 9~16
+[16r1]
+## 17~24
+'strings' p45 l4
+[
+[3 v48,0 ^2 's*v.044''sf*v96,.391'f+2 e d c+. j3 'sf*v24,.044' ^8] ^8
+>b< c+ d e c+2 'sf*v96,.267'^2
+]
+## 25~29
+[5r1r1]
+## 30~34
+[5r1r1]
+;
+

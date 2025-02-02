@@ -1,0 +1,158 @@
+##created with sqspcmml beta 1.1.7b
+
+#TITLE The Tower of Bab-il
+#ALBUM Final Fantasy IV
+#COMPOSER Nobuo Uematsu
+#TRANS mfvitools
+#ARRANGED emberling
+
+########## ------------------
+#SHORTNAME FF4 Tower of Babil
+
+#WAVE 0x20 0x35
+#WAVE 0x21 0x65
+#WAVE 0x22 0x81
+#WAVE 0x23 0x1F
+#WAVE 0x24 0x61
+#WAVE 0x25 0x66
+
+#def 0i=   |0
+#def 0o=   o4
+#def 0v=   v80
+#def 0f= v1,80
+
+#def 1b=   |5
+#def 1i=   |1
+#def 1o=   o6
+#def 1v=   v80
+#def 1f= v1,80
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v64
+#def 2f= v1,64
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v100
+#def 3f= v1,100
+
+#def 4i=   |4
+#def 4o=   o6
+#def 4v=   v80
+#def 4f= v1,80
+
+#drum "g"= 5e
+#drum "a"= 5f+
+
+#drum "s"= 5f+ '3v*v.45'
+#drum "r"= 5f+ '3v*v.39'
+#drum "q"= 5f+ '3v*v.33'
+#drum "p"= 5f+ '3v*v.27'
+
+#drum `s`= 5e '3v*v.45'
+#drum `r`= 5e '3v*v.36'
+#drum `q`= 5e '3v*v.27'
+#drum `p`= 5e '3v*v.18'
+
+{1}
+t146%v50%b0,70%f0,0
+'4v*v.85'p25'4i'%e1
+r1'4o-o2'r2p144,100%r19
+d16g16b16<d16g16b16<d16g16
+'0v*v1.05'p65
+'0i' {'VolEnvMode 11'}%r13{'Duration 95%'}%e0
+$101[[4'0o+o1'%r13c8r8>g8r8][4f8r8<c8r8>]<[4d+8r8>a+8r8<][4>g+8r8<d+8r8
+]]>[d+6r12d+12d+12d+12d+6r3d+6r12d+12d+12d+12d+6r12a+4f6r12f12f12f12f6
+r3f6r12f12f12f12g12g12g12a12a12a12]g+6r12g+12g+12g+12g+6r3g+6r12g+12g+12
+g+12g+12<d+12>g+12<g+6>g+12g6r12g12g12g12g6r3g6r12g12g12g12g+12g+12g+12
+a+12a+12a+12g+6r12g+12g+12g+12g+6r3g+6r12g+12g+12g+12g+12<d+12>g+12<g+6
+>g+12g6r12g12g12g12g6r3g6r12g12g12g12<d12d12d12>b12b12b12
+;101
+
+
+{6}
+'1v*v1.00'p60
+'1b' {'VolEnvMode 13'}%r3{'Duration 95%'}%e1r1r1
+$201[[4'1o-o2'%r3g8r8a+8r8][4a8r8f8r8][4g8r8a+8r8][4<c8r8>g+8r8]][[8g16
+r8.][5a16r8.]a4a+4<c4>][8g+16r8.][5a+16r8.]a+4<c4d4>[8g+16r8.][5b16r8.
+]b4g4f4
+;201
+
+
+{4}
+'1v*v.90'p50
+'1i' {'VolEnvMode 13'}%r3{'Duration 95%'}%e1m90,18,203'1o-o1'%r3c8>b8<
+d+8d8g+8g8<c8>b8<d+8d8g+8g8<c8>b8<d+8d8
+$303[>>[4d+12f12g12a12g12j4,301f12]
+$301a+12a4.^24<c+12c4.^24f+12f4.^24a+12a2>[4g12a12a+12<c12>a+12j4,302a12
+]
+$302<d12c4.^24f12d+4.^24a+12g+4.^24<d12c2]>[>g2f2g2a+2a1a4a12a12a12a+12
+a+12a+12<c12c12c12]>g+2g2g+2<c2>a+1a+4a+12a+12a+12<c12c12c12d12d12d12>
+g+2g2g+2<c2>b1b4<d12d12d12c12c12c12>b12b12b12<<
+;303
+
+
+{5}
+'1v*v.90'p80
+'1i' {'VolEnvMode 13'}%r3{'Duration 95%'}%e1m90,18,203'1o-o2'%r3g+8g8<
+c8>b8<d+8d8g+8g8<c8>b8<d+8d8g+8g8<c8>b8
+$403[>[4c12d12d+12f12d+12j4,401d12]
+$401f+12f4.^24a+12a4.^24<c+12c4.^24f+12f2>[4d+12f12g12a12g12j4,402f12]
+
+$402a+12g+4.^24<d12c4.^24f12d+4.^24a+12g+2]>[d+2>a+2<d+2d2c1c4f12f12f12
+g12g12g12a12a12a12]c2>a+2<c2d+2d1d4d12d12d12d+12d+12d+12f12f12f12c2>a+2
+<c2d+2d1d4f12f12f12d+12d+12d+12d12d12d12<
+;403
+
+
+{2}
+'4v*v.85'p25
+'4i' %r19%e1r1'4o-o2'r2p144,100%r19
+r32d+16g+16<c16d+16g+16<c16d+16g+32
+'2v*v1.00'p64
+'2i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e1m48,18,207
+$501['2o+o1'%r0c1>g2d+4.^24a+12a1^2.r4<d+1>a+2g4.^24<d12c1^2.r4]>a+2.^8
+a+16<c16d4.^24c12>a+4.^24<c12>a2f1^4r4a+2.^8a+16<c16d4.^24c12>a+4.^24<
+c12>a1^2.r4<c2.^8c16d16d+4.^24d12c4.^24d12>a+2g1^4r4<c2.^8c16d16d+4.^24
+d12c4.^24d12>b1^2.r4
+;501
+
+
+{3}
+p40
+'3i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e0r1r1
+$601
+##[8'3o''3v*v.45'%r0"a4a12a12a12a4a12a12a12a4a12a12a12a12a12a12a12a12
+##a12"][8"a4a12a12a12a2a4a12a12a12a12a12a12a12a12a12"]
+[8 "s4 s12q12r12 s4 s12q12r12 s4 s12q12r12 s12q12r12 s12q12r12"]
+[8 "s4 s12q12r12 s2 s4 s12q12r12 s12q12r12 s12q12r12"]
+;601
+
+{7}
+'4v*v.85'p25
+'4i' {'VolEnvMode 11'}%r19{'Duration 95%'}%e1r1r1
+$701[31r1]r2p25p144,100'4o-o2'd32d+32g32g+32b32<c32d32d+32g32g+32b32<c32d32
+d+32g32g+32
+;701
+
+{7}
+&191 r1 r1
+$ '1v*v.50'p64'1i'%e1
+['1o'%r3c1>g2d+4.^24a+12a1^2.r4<d+1>a+2g4.^24<d12c1^2.r4]>a+2.^8
+a+16<c16d4.^24c12>a+4.^24<c12>a2f1^4r4a+2.^8a+16<c16d4.^24c12>a+4.^24<
+c12>a1^2.r4<c2.^8c16d16d+4.^24d12c4.^24d12>a+2g1^4r4<c2.^8c16d16d+4.^24
+d12c4.^24d12>b2 %r8 ^2 %r14 ^2
+'4v*v.85''4i' p25p144,100'4o-o2'
+d32d+32g32g+32b32<c32d32d+32g32g+32b32<c32d32d+32g32g+32
+;
+
+
+{8}
+p90 &194
+'3i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e0r1r1
+$801
+[8 `s4 s12q12r12 s4 s12q12r12 s4 s12q12r12 s12q12r12 s12q12r12`]
+[8 `s4 s12q12r12 s2 s4 s12q12r12 s12q12r12 s12q12r12`]
+;801
+

@@ -1,0 +1,72 @@
+#TITLE Save Music
+#ALBUM Final Fantasy
+#COMPOSER Nobuo Uematsu
+#TRANS VGMTrans
+#ARRANGED emberling
+
+#WAVE 0x20 0x20 celesta
+#WAVE 0x21 0xA5 flute
+
+#def celesta= |0 o5 %y0%s1%r12
+#def flute= |1 o4 m24,18,215 ` %y0%s4
+
+#def c= v48
+#def f= v64
+#def cf= v1,48
+#def ff= v1,64
+
+#def init= t95 %v50 %b0,70 %f0,0
+
+#cdef ` %r5
+#cdef ~ %r23
+
+{1}
+'init' p70 'flute+o2' 'f*v.648' l8
+e~^` c+~^` d~^` >b~^`
+t90 a4
+t72 ~^4`
+t55 'ff*v24,.506' <c+ 'ff*v24,.441' ^ 'ff*v24,.389' ^ 'ff*v24,.364' ^
+~^
+;
+
+{2}
+p70 'flute+o2' 'f*v.648' l8
+r d~^` e~^` c+~^` d~^4` > b4 ~^2
+^
+;
+
+{3}
+p100 'flute+o1' 'f*v.450' l8
+a2 g2 f4g4
+'ff*v24,.351' e 'ff*v24,.306' ^ 'ff*v24,.270' ^ 'ff*v24,.253' ^
+~^
+;
+
+{4}
+p40 'flute+o1' 'f*v.450'
+l4 c+~^`> b~^` f~^`
+l8 'ff*v24,.351' a 'ff*v24,.306' ^ 'ff*v24,.270' ^ 'ff*v24,.253' ^
+~^
+;
+
+{5}
+p40 'flute' 'f*v.450'
+l4 r a~^` g~^` g~^ ^ ~^8
+;
+
+{6}
+p60 'celesta+o2' 'c*v.648' l8
+edc+e dc+>b<d >a4b4< c+2 ~^8
+;
+
+{7}
+p90 'celesta+o1' 'c*v.450' l8
+a2 g2 f4g4 e2
+~^
+;
+
+{8}
+p30 'celesta+o1' 'c*v.450' l4
+c+>a bg fg a2
+~^8
+;

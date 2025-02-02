@@ -1,0 +1,513 @@
+#TITLE Determination from Within
+#ALBUM Tales of Berseria
+#COMPOSER Motoi Sakuraba
+#TRANS emberling
+#ARRANGED emberling
+
+#VARIANT `/! 
+#VARIANT `~ part1
+#VARIANT _/ part2
+
+#WAVE 0x20 0x62
+#WAVE 0x21 0x67
+#WAVE 0x22 0x70
+#BRR 0x23; ../samples/legacy/05_cello_1, 4710, B020, FFE0
+#WAVE 0x24 0x72
+
+#WAVE 0x28 0x5A
+#WAVE 0x2C 0x2C
+#WAVE 0x2D 0x2D
+
+#def init= t100 %v50 %b0,100 %f0,0
+
+#def violin= |0 o5 p54
+#def viola= |2 o5 p76
+#def cello= |3 o6 p60 
+#def cello2= |4 o5 p60 
+#def bass= |1 o5 p68
+#def timpani= |8 o5 p48 %y1%s2%r10
+
+#def cellol= |1 o5 p60 %y0%s3 %a10
+#def violal= |0 o5 p76
+
+#def s= v60
+#def a= v60
+#def c= v100
+#def b= v80
+#def t= v75
+
+#def al= v40
+#def cl= v60
+
+#def sf= v1,60
+#def af= v1,60
+#def cf= v1,100
+#def bf= v1,80
+#def tf= v1,100
+
+#def orchCym= v100
+#def crashCym= v100
+#def revFade= v1,100
+
+#def rev96= v0 v96,100 p64 p96,80
+
+#drum "n"= 5a |C 'orchCym*v.50' p80 %y1%s0%r9
+#drum "o"= 5a |C 'orchCym*v.75' p80 %y1%s0%r9
+#drum "p"= 5a |C 'orchCym*v1.0' p80 %y1%s0%r9
+#drum "r"= 5f+ |D m255,1 %r0
+#drum "x"= 5g+ |D 'crashCym*v0.60' p80 %r15
+#drum "y"= 5g+ |D 'crashCym*v1.00' p80 %r15
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}$ 'init' %e1
+` ## begin part 1
+'bass-o2' 'b' l8
+e2..d   c1
+>a1     b1<
+e2..d   c2..>b
+a1      b1<
+## 9
+e2..d   c2.c4
+>a1     b1<
+e2..d   c1
+>a1     b1<
+## 17
+c1      d2>b2<
+c2d2    >b1<
+c1      d2>b2<
+c2d2    >b1
+## 25
+b1<
+e1      ^2.d4
+c1      ^1
+## 30
+c2..c   d2>b2<
+c2d2    >b1<
+c1      d2>b2<
+c2d2    >b1
+b1
+` ## end part 1
+~ ## loop transition for part 1
+t192,20
+'bf*v192,.2' b1
+t100
+~ ## end loop transition
+! ## part 1 to part 2 transition
+b1<
+! ## end part transition
+_ ## setup part 2
+'bass-o2' 'b' l8
+_ ## end part 2 setup
+/ ## begin part 2
+## 40
+[
+f+4.d^2 e4..a16^4g+4
+f+4.d^2 ea16b16r16e16r16a16^4g+4
+f+4.d^2 e4..a16^4g+4
+f+4.d^2 a2e2 j2
+f+4.d^2 ^2c+2
+]
+## 50
+# # f+4.d^2 e4..a16^4g+4
+# # f+4.d^2 ea16b16r16e16r16a16^4g+4
+# # f+4.d^2 e4..a16^4g+4
+# # f+4.d^2 a2e2
+## 58
+f+1     d1
+f+1     d1
+/ ## end part 2
+;
+
+{2}$ %e1
+` ## begin part 1
+'cello-o1' 'c' l8 %r11 m48,18,223
+(g.f+.'c*v1.3'd'c') (>b.a.<d)    >b2(a.g.f+)
+'c*v.8'a2 'c*v.6'(e4a4)          b2 'c*v.3'<d(c4>b<)'c'
+(g.f+.)d (>b.a.<'c*v1.3'd)'c'    >b2(a.g.f+)
+'c*v.6'a2 'cf*v96,1.3'(b.<c.)d   'cf*v192,1'e2d+2
+## 9
+(g.f+.d) (>b.a.<d)               >'cf*v48,1.3'b2'c'(a.g.f+)
+'c*v.8'a2 'c*v.6'(e4a4)          b1<
+'c*v.8'g.(f+.d) >b.(a.<d)        >'cf*v96,1.3'b2'c'a.(g.f+)
+'c*v.6'a2 'cf*v96,1'(b.<c.d)     'cf*v96,1.3' %r8 (e2 %r3 d+.e.f+) %r15
+## 17
+(g16f+16)g8%r11^4'c*v.8'(e.f+.g) 'cf*v48,1.2'(a.b.f+) 'c'(d.e.f+)
+'c*v.7'g.(f+.g) 'cf*v48,1'a4d4    b1
+'cf*v192,.8'g16(f+16g4.)(e.f+.g) 'cf*v48,1.2'(a.b6m3,-5^48)f+ d.'c*v.8'(e.f+)
+'c'(g16f+16'cf*v3,1.3'm3,1f+4.)'c''cf*v12,1.3'a6m3,-2^48'c'g.'c*v.6'a
+                                 'c''cf*v168,1.2'b4%r0^2%r11^8'c*v.8'm3,2e
+## 25
+>'cf*v48,1.1'b2.'cf*v48,.8'^4
+e.(b.<g) 'cf*v48,1'e2            'cf*v36,.7'(g.f+.)e>'cf*v24,1'b.(a.'c*v.8'g)
+(c.g.<d %r2'cf*v48,1.3' m4,-2^2  %r11^.>)'c'(b.<c>) 'cf*v96,.6'(b.a.g)<
+## 30
+'c'(g16f+16)'c*v.8'g4'cf*v24,1.3'^'c*v.8'e.(f+.g)
+                                 'cf*v72,1.3'a.m4,2^.'c'f+ d.'c*v.8'(e.f+)
+'c*v.7'g.(f+.g) a'cf*v24,1.2'^d'cf*v24,.6'^      
+                                 b1'c*v.8'
+(g16f+16)m3,1g-4'cf*v24,1.1'^'c*v.8'e.(f+.g)
+                                 (a.b.)m3,2e d.(e.f+)
+(g16f+16)m5,1g-4.(m4,2g.g.a)     'cf*v96,1.3'b2..'c'f+
+>%r7 b1 
+` ## end part 1
+~ ## loop transition for part 1
+^2. v48,0 ^4
+~ ## end loop transition
+! ## part 1 to part 2 transition
+%r11<'c*v.7'f+.(c.d+) >a.<(c.d+)
+! ## end part transition
+_ ## setup part 2
+_ ## end part 2 setup
+/ ## begin part 2
+## 40
+'cello2-o1' l8 'c' %r11 m48,18,223
+(a4c+8)'c*v.8'd4'cf*v24,1.1'b4'c*v.8'a8   l16      'c'(g+8a)g+rf+r'cf*v72,1.3'e4.r'c'f+g+
+(a4c+8)'c*v.8'd4'cf*v24,1.1'b4'c*v.8'a8            (g+8ab)rer'cf*v24,1.2'<c+4.>r'c'(f+g+)
+a4'c*v.6'c+8'cf*v24,.9'd4'cf*v24,1.1'b4'c*v.9'a8   'c*v.8'(g+8a)'c'g+rf+re4.rf+(g+
+a4c+8)d4'cf*v24,1.1'(b4'cf*v24,1'a8)      l8       <c+.'c*v1.1'(d.c+)>'c'b.'c*v.9'(a.g+)
+%r7 f+1                                            'c*v.7'%r11f+2f4.'c'(f+16g+16)
+## 50
+(a4c+8)d4'cf*v72,1.1'm4,2(a4'c*v.8'a8)
+                                      l16 'c'(g+8a)g+rf+r'c*v.8''cf*v72,1.2'e4.r'c*v.8'(f+g+)
+'c*v1.1'(a4c+8)d4('cf*v48,1.2'b4'c*v.8'a8)       (g+8a)brer<'cf*v36,1.2'c+4.>r'c*v.6'(f+g+)
+'c*v.8''cf*v24,1'(a4c+8)'cf*v80,1.2'd4(b4'c'a8)  'c*v.6'(g+8a)'c*v.8'g+rf+r'cf*v60,1'e4.rf+g+
+a4c+8m3,1d-4m3,2'cf*v24,1.2'a4'c*v.8'a8
+l8    'c*v.55'a.'c*v.75'm4,2a.a 'c*v.55'g+.'c*v.75'm3,-2(g+.g+)
+## 58
+'c*v.5''cf*v144,.65' %r5  a1            'cf*v6,.9'^1
+'c*v.5''cf*v144,.65' (a2..g+)        'c*v.5''cf*v144,.65'a1
+/ ## end part 2
+;
+
+{3}$ %e1
+` ## begin part 1
+'viola-o1' 'a*v.6' l8 %r10 m48,18,223
+b2..a                     'af*v255,1'g2^g(ab)
+<c1                       d2>b2'af*v255,.6'
+b2..a                     g2^'af*v72,.8'g(ab)'af*v255,1'
+<c2(e.c.)f+               g2'af*v96,.5'f+4>b4<
+## 9
+'af*v96,.6'e2.(f+g)       'af*v192,1'(e.f+.g)(a.g.a)
+<c2^.>'a*v.8'(b.a)        'af*v96,1'b2'a*v.8'f+4'a*v.6'd4
+'af*v96,1'(e16d16e^2f+g)  'a*v.8''af*v192,1'(e.f+.g) (a.g.a)
+e2(<c.>b.a)               'af*v48,1.2'b4'af*v48,1'^4'af*v96,.8'(f+.g.a)
+## 17
+e2^.d.e                   'af*v48,1'f+2d2
+'a*v.8'e2'af*v48,1.2'f+2  ^2'a*v.8'd+2
+e2..(d16e16)              'af*v72,1'f+2^.'a*v.8'(m3,-2f+.f+)
+e2'a*v.7'f+2              'a*v.5''af*v72,1'(d+2^.'a*v1.3'e.)'a*v.8''af*v96,1'f+
+## 25
+%r3^2'af*v96,1.3'^2%r10
+>'a*v.6'g1                'af*v192,1'b.<(c.d) e.(m4,2e.g)
+e1                        ^2'af*v96,1.2'f+2
+## 30
+'a*v.8'e2.(de)            'af*v48,1'f+2d2'a*v.8'
+e2'af*v48,1'f+2           ^2'a*v.6'(d+4.>b<)
+e2..'af*v56,1'(d16e16     f+2^.'a*v.6'(e.f+)
+'a*v.8'e2f+2              'a*v.0''af*v48,1.2'(d+2^.e.f+)
+'a*v.0''af*v96,.8'b2f+2   
+` ## end part 1
+~ ## loop transition for part 1
+^2 v96,0 ^2
+~ ## end loop transition
+! ## part 1 to part 2 transition
+'a*v.6'd+.(c.d+)c.d+.d+
+! ## end part transition
+_ ## setup part 2
+'viola' 'a*v.6' l8 %r10 m48,18,223
+_ ## end part 2 setup
+/ ## begin part 2
+## 40
+'af*v255,1'c+4.>a^2      b4..<c+16^4>b4<
+c+4.'a*v.8'>a^2          b4..<'af*v24,1'e16^4'a*v.8'd4
+c+4.>a^2      b4..<'af*v24,1'c+16^4>'a*v.8'b4<
+'af*v48,1.1'c+4.>'a*v.7'a^2      <'af*v48,1.2'(e2>'af*v3,1'b.)(m5,2b.b)
+a1            'a*v.2''af*v72,.8'a2g+2<
+## 50
+'a*v.7'c+4.>a^2      'a*v.8'b4..<'af*v48,1'c+16^4>'a*v.9'b4<
+'a'c+4.>'a*v.8'a^2      'a*v48,1'b4..<'a*v.8''af*v36,1.1'(e16^4'a*v.9'd4)
+c+4.>'a*v.8'a^2      'af*v48,1'b4..<'a*v.8''af*v36,1.1'c+16^4>'a*v.9'b4
+<c+8'af*v48,.5'^4
+'cello-o1' p64 l8 %r11 m48,18,223
+'c*v.6''cf*v120,.8'd^2       c+.'c'm3,1(d-.c+)>'c*v.8'b.'c'm5,2b.b)<
+## 58
+%r7 c+1               'cf*v6,1.3'^1 %r11
+'c*v.5'f+.'c*v.7'(m4,2f+.f+) 'c*v.6'e.(d.'cf*v6,1'c+)
+        'c*v.8'm3,1d-.>'c*v.7'a.<'c*v.9'm3,2(d d.)>'c*v.6'(a.g+)
+/ ## end part 2
+;
+
+{4}$ %e1
+` ## begin part 1
+'violin-o2' 's*v.6' m48,18,207
+b2..a   g1
+e1      f+1
+b2..a   g2..f+
+e1      f+1
+## 9
+<<< 's*v.5''sf*v96,1' l8 %r6
+g2..(f+16g16)                  's*v.5''sf*v48,1'a2's*v.5''sf*v48,1'b2
+(<c.>b.a) 's*v.5''sf*v48,1'e2  m3,2e2 m4,2c2 's*v.8''sf*v96,1'
+e2..(f+16g16)                  's*v.5''sf*v48,1'a2's*v.5''sf*v48,.8'b2
+(<c2^.>'sf*v56,1'b.a)          'sf*v96,1.3'(f+2.ga)
+## 17
+'s'b1                          v96,0^2's*v.3''sf*v96,1'(b2
+b.)(a.b) <c4>(ba)              's*v.7''sf*v96,1'm3,2a2's*v.8'(f+.m3,1^.a)
+'sf*v96,1'b1                   v96,0^2's*v.5''sf*v24,.8'b.'s'(m3,-2b.b)
+<c.>'s*v.8'(b.a)<'s'(d.c.'s*v1.3'd)    's*v.8''sf*v48,1.3'd+2>'s'b2
+## 25
+'sf*v24,1.1'(<c.>b.a) 's*v.9'g8.m8,-1^16^4
+'sf*v24,1.1'(g.'sf*v36,.8'f+.)d>b.(a.<d8)   'sf*v96,1.3'>m6,2a2.<'s*v.8'cd
+'sf*v24,1.1'g.'sf*v56,.9'm6,-1^.d>(b.a.)<d  >m4,2a2'sf*v96,1.2'a2<
+## 30
+'s*v.8'b1                      %r12 ^2 %r6 's*v.4''sf*v96,1'b2
+^.(a.b) <c.(m6,-1c.>a)         's*v.7'm5,2'sf*v48,1'a2 's*v.8'(f+.m4,1^.a)
+b1                             %r16 ^2 %r6 %a7 m3,2a. %a15 (m3,-2b.b)
+'sf*v36,1.2'<c.>'s*v.8'(b.a) <'sf*v36,1.2'd.'s'(c.d)
+                               'sf*v72,1.3'd+2>'s'b2
+'sf*v96,1.15'f+1               
+` ## end part 1
+~ ## loop transition for part 1
+'sf*v96,1'^2 'sf*v96,.25'^2
+~ ## end loop transition
+! ## part 1 to part 2 transition
+<d+.>m3,2g.<c> f+4.%r19^
+! ## end part transition
+_ ## setup part 2
+'violin' m48,18,207
+_ ## end part 2 setup
+/ ## begin part 2
+## 40
+'s*v.33' %r8 >
+f+4.d^2 e4..a16^4g+4
+f+4.d^2 e4..a16^4g+4
+f+4.d^2 e4..a16^4g+4
+f+4.d^2 a2e2
+f+4.d^2 ^2
+"!!!o o4p4"
+## 50
+'violin+o1' 's*v.5' %r8
+'sf*v72,1'c+4. %r15 ^4 %r8 's*v.8'e4's*v.6'f+      'sf*v48,1'g+4..m3,1a-16^4's*v.9'g+4
+'sf*v72,1'm3,2e4.'s*v.9'e4'sf*v72,.7'dc+>b
+                                         'sf*v36,1'g+4..<m3,2's*v.8''sf*v48,1'd16^4's*v.8'd4
+c+4.'s*v.4'd4's*v.9'm3,2d4's*v.8'f+     'sf*v48,1.1'g+4..'s*v.9''sf*v36,1.1'm3,1a-16^4's'g+4
+'sf*v48,1.1'f+4.'s*v.9''sf*v36,1.1'e4's*v.9'd's*v.8'c+'s*v.5'>b
+        'sf*v36,.8'm4,2b.<'s'm3,1d-.c+>'s*v.8'b.'s'm3,-2b.'s*v.9'g+
+## 58
+'s'f+2..'s*v.8'e                        's'f+2.'s*v.7'g+'s*v.6'm4,1a-
+'s*v.7''sf*v72,1'f+2..'s*v.6'm3,-2f+    's*v.8''s*v96,1.2'f+1
+/ ## end part 2
+;
+
+{5}$ %e1
+` ## begin part 1
+'timpani-o1' 't' l8
+e2..>b        <c2.c4>
+a2.a4         b2't*v.2''tf*v96,1' b[12b32]
+<e2..d>       b2.b4
+a2<c.>a.<c>   b2b4't*v.5''tf*v48,1' [8b32]
+## 9
+<e2.'t*v.85'e't*v.7'd    't'c2.c4>
+'t*v.85'a2e4a4           't*v.7'b2b.f+.b
+<'t'e2.d4                c2't*v.85'c4't*v.7'c4>
+'t*v.85'a2a.e.a          't*v.7'b2b.'tf*v56,.85'b16[8b32]
+## 17
+<'t'c2..'t*v.85'c        d2..>b
+<'t'c2d2>                b2't*v.7'f+4b4
+<'t'c2..'t*v.85'c        d2..>b
+<c2d2>                   't'b1
+## 25
+f+2't*v.85'f+4't*v.5''tf*v48,1'[8b32]
+<e2..'t*v.7'e            't*v.85'e2e4d4
+'t'c2..'t*v.7'c          c2>'t*v.6'b4'tf*v48,1'[8b32]
+## 30
+<c2..'t*v.85'c           d2..>b
+<'t'c2't*v.85'd2>        b2't*v.7'f+4b4
+<'t'c2..'t*v.85'c        d2..>b
+<'t'c2't*v.85'd2>        't'b1
+f+2't*v.7'b16't*v.2''tf*v78,.85'[14b32]
+` ## end part 1
+~ ## loop transition for part 1
+'t''tf*v48,.25'[8b32]'tf*v48,.125'[8b32] v96,0 [16b32]
+~ ## end loop transition
+! ## part 1 to part 2 transition
+<'t*v1.3'a4a4a4a8't'a8
+! ## end part transition
+_ ## setup part 2
+'timpani-o1' l8
+_ ## end part 2 setup
+/ ## begin part 2
+## 40
+'t*v1.3'f+4.d^2          't*v1.6'e4^16't*v.85'ea16^4't*v.5''tf*v42,.85'[8g+32]
+'t'f+4't*v.5'f+'t*v1.6'd2't*v.7'd
+                         't*v1.6'e.'t*v.85'b't'e't*v1.6'a16^4't*v.5''tf*v42,.85'[8g+32]
+'t*v1.3'f+4.d4.'t*v.5''tf*v42,.85'[8d32]
+                         't*v1.3'e4..'t*v.7'a16^4't*v.85'g+4
+'t'f+4.'t*v1.3'd2't'd    a4't*v1.3'a4't*v1.6'e4't*v.85'e4
+'t'f+4.'t*v.85'd4't*v.7'd't*v.85'd't'd
+                         't*v1.3'd2c+4't''tf*v36,1.3'[4c+16]
+## 50
+f+4.d^2                  e4^16't*v.85'ea^.'t*v.7''tf*v48,1'[4g+16]
+f+4.'t*v1.3'd2't'd       't*v1.6'e^.'t*v.85'e't*v1.6'a^.'t*v.7''tf*v48,1'[4g+16]
+'t*v1.3'f+4.'t*v1.6'd2^  e^.'t*v.85'ea^.'t*v.7''tf*v48,1'[4g+16]
+f+4.'t*v1.3'd2't*v.85'd  't'a4a4't*v1.6'e4't''tf*v24,.7'f+24f+24f+24't''tf*v24,.7'e24e24e24
+## 58
+f+4.'t*v1.6'f+^2         't*v.7'd4.d4. d12't*v.85'd12't'd12
+f+4.'t*v1.3'f+^2         't'd4.d4.'t*v.85''tf*v42,1.3'[8d32]
+/ ## end part 2
+;
+
+{6} %e1
+` ## begin part 1
+"n1"$"^1^1^1 !!!o"
+"n1^1^1^2" 'rev96' "r2"
+## 9
+"y1^1^1^1"
+"x1^1^1^2" 'rev96' "r2"
+## 17
+"y1^1^1^2" k-4 "n4n4" k0
+"p1^1o2n2p1"
+## 25
+^2 'rev96' "r2"
+"y1^1^1^2" 'rev96' "r2"
+## 30
+"y1^1^1^2n4o4"
+"p1^1o2n2p1"
+"o1"
+` ## end part 1
+~ ## loop transition for part 1
+^1 "n1"
+~ ## end loop transition
+! ## part 1 to part 2 transition
+"x2" 'rev96' "r2"
+! ## end part transition
+_ ## setup part 2
+"!!!o" $
+_ ## end part 2 setup
+/ ## begin part 2
+## 40
+"y1^1^1^1"
+"p1^1^1^1"
+"p1o2" 'rev96' "r2"
+## 50
+"y1^1^1^2" 'rev96' "r2"
+"y1^1x1^2" 'rev96' "r2"
+## 58
+"y1^1"
+"p1n2" 'rev96' "r2"
+/ ## end part 2
+## loop
+!"y1"!
+;
+
+{7}$ %e1
+` ## begin part 1
+'cellol-o1' 'cl' l8
+g.f+.d >b.a.<d    >b2a.g.f+
+a2 e4a4           b2 'cl*v.33'<dc4>b<'cl'
+g.f+.d >b.a.<d    >b2a.g.f+
+a2 b.<c.d         e2d+2
+## 9
+g.f+.d >b.a.<d    >b2a.g.f+
+a2 e4a4           b1<
+g.f+.d >b.a.<d    >b2a.g.f+
+a2 b.<c.d         e2d+.e.f+
+## 17
+g16f+16g4.e.f+.g  a.b.f+ d.e.f+
+g.f+.g a4d4       b1
+g16f+16g4.e.f+.g  a.b.f+ d.e.f+
+g16f+16g4.a.g.a   b2..f+
+## 25
+>b1
+e.b.<g e2         g.f+.e>b.a.g
+c.g.<d c2         ^.>b.<c> b.a.g<
+## 30
+g16f+16g4.e.f+.g  a.b.f+ d.e.f+
+g.f+.g a4d4       b1
+g16f+16g4.e.f+.g  a.b.f+ d.e.f+
+g16f+16g4.a.g.a   b2..f+
+>b1              
+` ## end part 1
+~ ## loop transition for part 1
+%r9 ^1
+~ ## end loop transition
+! ## part 1 to part 2 transition
+<f+.c.d+ >a.<c.d+
+! ## end part transition
+_ ## setup part 2
+'cellol-o1' 'cl' l8
+_ ## end part 2 setup
+/ ## begin part 2
+## 40
+a4c+8d4b4a8   l16 g+8ag+rf+re4.rf+g+
+a4c+8d4b4a8       g+8abrer<c+4.>rf+g+
+a4c+8d4b4a8       g+8ag+rf+re4.rf+g+
+a4c+8d4b4a8   l8  <c+.d.c+>b.a.g+
+f+1               ^2f4.f+16g+16
+## 50
+a4c+8d4b4a8   l16 g+8ag+rf+re4.rf+g+
+a4c+8d4b4a8       g+8abrer<c+4.>rf+g+
+a4c+8d4b4a8       g+8ag+rf+re4.rf+g+
+a4c+8d4b4a8   l8  c+.d.c+>b.<c+.>b<
+## 58
+c+1               ^1
+f+.g+.f+ e.d.c+   d.>a.<e d.>a.g+
+/ ## end part 2
+;
+
+{8}$ %e1
+` ## begin part 1
+'violal-o1' 'al' l8
+b2..a     g2^gab
+<c1       d2>b2
+b2..a     g2.ab
+<c2e.c.f+ g2f+4>b4<
+## 9
+e2.f+g        e.f+.g a.g.a
+<c2^.>b.a     b2f+4d4
+e16d16e^2f+g  e.f+.g a.g.a
+e2<c.>b.a     b2f+.g.a
+## 17
+e2^.d.e       f+2d2
+e2f+2         ^2d+2
+e2..d+16e16   f+2^.e.f+
+e2f+2         d+2^.e.f+
+## 25
+^1
+>g1           b.<c.d e.f+.g
+e1            ^2f+2
+## 30
+e2.de         f+2d2
+e2f+2         ^2d+2
+e2..d16e16    f+2^.e.f+
+e2f+2         d+2^.e.f+
+b2f+2         
+` ## end part 1
+~ ## loop transition for part 1
+%r9 ^1
+~ ## end loop transition
+! ## part 1 to part 2 transition
+d+.c.d+c.d+.d+
+! ## end part transition
+_ ## setup part 2
+'violal' 'al' l8
+_ ## end part 2 setup
+/ ## begin part 2
+## 40
+c+4.>a^2      b4..<c+16^4>b4<
+c+4.>a^2      b4..<e16^4d4
+c+4.>a^2      b4..<c+16^4>b4<
+c+4.>a^2      <e2>b.<c+.>b
+a1            ^2g+2<
+## 50
+c+4.>a^2      b4..<c+16^4>b4<
+c+4.>a^2      b4..<e16^4d4
+c+4.>a^2      b4..<c+16^4>b4
+c+4.d^2       a.b.a g+.f+.g+
+## 58
+a1            ^1
+a2..g+        a1
+/ ## end part 2
+;
