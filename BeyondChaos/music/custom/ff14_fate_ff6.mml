@@ -1,0 +1,279 @@
+#TITLE Hard to Miss (FF6 Decisive ver.)
+#ALBUM Final Fantasy X|V: A Realm Reborn
+#COMPOSER Masayoshi Soken, Nobuo Uematsu
+#TRANS emberling (XIV) / VGMTrans (VI)
+#ARRANGED emberling
+
+########## ------------------
+#SHORTNAME FF14 Hard2Miss FF6
+
+## Structure and rhythm: The Decisive Battle [Final Fantasy VI] - Uematsu
+## Melody and harmony: Hard to Miss [Final Fantasy XIV: A Realm Reborn] - Soken
+## Additional transitions:
+## 1. from A Tonberry's Tears (Soken)
+##      via Penitus (c. Soken, arr. Nobuko Toda/Yoshitaka Suzuki)
+## 2. from Wicked Winds Whisper (Soken)
+
+#WAVE 0x20 0x65 violas
+#WAVE 0x21 0xB4 organ
+#WAVE 0x22 0x42 distguitar
+#WAVE 0x23 0x54 synbass
+#WAVE 0x24 0x2D crash cymbal
+#WAVE 0x25 0x3A hihat
+#WAVE 0x26 0x3C hihat
+#WAVE 0x27 0x0A kick
+#WAVE 0x28 0x1D hard snare
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v100
+#def 0f= v1,100
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v90
+#def 1f= v1,90
+
+#def 2i=   |2
+#def 2o=   o4
+#def 2v=   v80
+#def 2f= v1,80
+
+#def 3i=   |3 %r0
+#def 3o=   o5
+#def 3v=   v120
+#def 3f= v1,120
+
+#def 4i=   |4
+#def 4o=   o6
+#def 4v=   v115
+#def 4f= v1,115
+
+#def 5i=   |5
+#def 5o=   o5
+#def 5v=   v100
+#def 5f= v1,100
+
+#def 6i=   |6
+#def 6o=   o5
+#def 6v=   v100
+#def 6f= v1,100
+
+#def 7i=   |7 %e0
+#def 7o=   o5
+#def 7v=   v100
+#def 7f= v1,100
+
+#def 8i=   |8 %e1
+#def 8o=   o5
+#def 8v=   v100
+#def 8f= v1,100
+
+#drum "a"=5f  |7 '7v*v0.40' p64 %e0
+#drum "a+"=5f |7 '7v*v0.80' p64 %e0
+#drum "b"=5f  |7 '7v*v1.20' p64 %e0
+#drum "r"=5a  |8 '8v*v0.80' p64 %r20 %e0
+#drum "s"=5a  |8 '8v*v1.20' p64 %e1
+#drum "t"=5a  |8 '8v*v1.20' p64 #%r0 %e1
+#drum "c"=5a  |5 '5v*v0.40' p74
+#drum "o"=5g  |6 '6v*v0.40' p74
+#drum "y"=5e  |4 '4v*v.80' p54
+
+#def s7= '0v*v.70'
+#def s6= '0v*v.60'
+#def s4= '0v*v.40'
+#def g8= '2v*v.70'
+#def g4= '2v*v.35'
+#def g3= '2v*v.30'
+
+#def tune=
+
+{1} 'tune'
+t105%x210%b0,70%f0,0%v50
+'0v*v.60''0i' p44%e1
+$ '0o+o1' l16
+d+c>g< fc>g< d+c>g< dc>g< d+cfc
+d+>bg< f>bg< d+>bg< d>bg< d+>b<f>b<
+g>a+g< f>a+g< d+>a+g< d>a+g< c>a+<cd
+c>af< fc>a< <c8^2>
+>g8f8<cfrf8d+a+8g+8g8 d+1
+c8d+8fd+8a+8g+g8g+8f8
+gdc>g<r8 gd>bgr8grg+r<
+gdc>g<r8 gd>bgr4.<
+##
+[4's7'd+'s4'd+d+]'s6'd+8d+8
+[3's7'd+'s4'd+d+]'s7'd's4'dd's6'd8d8
+[4's7'd+'s4'd+d+]'s6'd+8d+8
+[3's7'd+'s4'd+d+]'s7'd's4'dd's6'cdd+f
+##
+'0v*v.80' l8
+g2d+.f.g    a+.<c.>g2c
+g2d+.f.g    a+.<c.>g2c
+f.d+.g+2c   f.d+.a+4.ra+
+<c.>c.d+g+.>g+.<c
+l16 c+dd+g8df+8b2
+##
+>c4a+4f4<d4 a+4a4f4d4
+;
+
+{5} 'tune'
+$'0v*v.60''0i' p40%e1 '0o' l16
+gd+c gfc gd+c gdc gd+gd+
+gd+>b< gf>b< gd+>b< gd>b< gd+gd+
+a+d+>a+< a+f>a+< a+d+>a+< a+d>a+< gfga+
+fc>a< afc <c>af <fc>a <c>faf
+d+8d8g+<crd8cg8f8d+8 c1>
+g8<c8dc8g8dd+8f8d8
+d>bgdr8< d>bgdr8 drd+r<
+d>bgdr8< d>bgdr4.><
+##
+['s7'g's4'gg]['s7'a+'s4'a+a+]'s6'a+8a+8
+['s7'g+'s4'g+g+]['s7'a+'s4'a+a+]'s6'a+8a+8
+['s7'g's4'gg]['s7'a+'s4'a+a+]'s6'a+8a+8
+['s7'g+'s4'g+g+]['s7'a+'s4'a+a+]'s6'a+8<c8
+##
+'1v*v.40''1i''1o+o1' p94%e1m48,18,239 l8
+c.>g.<c4.>g<d  >b.g^.^4ba+<
+d+.d.>a+4.g4   f2^g+gf
+c4.g+.g.f4     g4.a+.<c.>a+g
+<c4..dd+>a+<c. l16 ddrd ddrd rddr drdr
+##
+'0v*v.60''0i'p40%e1'0o-o1'm
+l2 ga+<df
+;
+
+{2} 'tune'
+$
+'1v*v.60''1i' p84%e1 '1o+o1' l16
+d+c>g< fc>g< d+c>g< dc>g< d+cfc
+d+>bg< f>bg< d+>bg< d>bg< d+>b<f>b<
+g>a+g< f>a+g< d+>a+g< d>a+g< c>a+<cd
+c>af< fc>a< f8^2
+>g8f8<cfrf8d+a+8g+8g8 d+1
+c>g<d+cfd+ca+ d+g+gd+g+cfc
+gdc>g<r8 gd>bg<r8grg+r
+gdc>g<r8 gd>bgr4.<
+##
+cd+fd+fa+fg+ g8fg8>a+ga+
+<c8>d+a+8d+g+<c f>g+a+<fd+>fa+f
+g<d+fd+f>a+<a+g+ g8g+a+8g+gc
+<c>cd+g+a+d+g+<c> a+d>a+<df8d8
+##
+'1v*v.40' l8
+d+.f.d+.d.d+f     d+.f.d+d4 l16 d+dd+f l8
+g.f.d+.d. l16 c>a+<cd l8     c.f.<c4>fec
+>g+.f.<c.f.^d+     f.d+.a+.g+.gd+
+>f<d+16fd+a+g+gg+.
+l16 ggrgggrg rggrgrgr
+##
+l8 c.a+.c f.<d.>f
+l8 a+.a.f
+l16 rfd>a+<cdd+f
+;
+
+{6} 'tune' $
+'2v*v.80''2i' p90%e0%r13 '2o'< l16
+c1
+>br8b^2.
+a+r8a+r8a+r8a+r8a+8g8
+ar8ar8ar8ar8a8f8
+g+4a+8.g^2
+<c1>
+g+4<c8.>f^2
+g1
+r1<
+##
+[4'g8'c'g3'cc]'g8'c8d8
+[3'g8'd+'g3'd+d+]'g8'd'g3'dd'g8'd8>a+8<
+[4'g8'c'g3'cc]'g8'c8d8
+['g8'd+'g3'd+d+]['g8'd'g3'dd]'g8'>a+8b8<
+##
+l8
+c4.>dd+2
+b.g.^<d.>g.^
+a+4.cd2
+[3 a'g4'a16'g8'] f'g4'f16'g8' fg+
+f4.g+g2
+<c.>g.^<c.>a+.^
+[4 f'g4'f16'g8']ff
+[4 g'g4'g16'g8']gg
+##
+'1v*v.40''1i' p94%e1'1o'
+l8 g.g.g a+.a+.a+ <d.d.d
+l16 rd>a+g fga+<c
+;
+
+{3} 'tune'
+'3v*v.70''3i'p64%e0
+$
+'3o+o1' l16
+c1> br8b2^<gdd+>g
+a+r8a+r8a+r8a+r8a+8g8  ar8ar8a8^2
+g+4a+8.g8<gd+8>a+8b8   <c4d4d+8.g^4>
+f4<c8.>g8<fc8>f8f+8
+gr8gr8gr8gr8g8f8      gr8gr8gr8gr8g8a+8<
+##
+cr8cr8cr8cr8c8d8     d+r8d+r8d+r8dr8d8>a+8<
+cr8cr8cr8cr8c8d8     d+r8d+r8dr8dr8>a+8b8<
+##
+l8
+c4.dd+.c.>a+    b.<g^.d.g^.>
+a+4.<cd.a+.g    >a.<c.>f4<fe>g+
+f.c.g+g.<f.d+   c.>g.a+<c.>a+.g
+f4.<cfd+16fd+16c16>a+16 g4.<df4g>g
+##
+<c.>a+.a f.<d.^>
+a+.a.fd.a+.^
+;
+
+{7}
+%e0 $
+"y1y1" ^1^1 ["y4y8.y16^2" ^1] r1
+##
+r1r1r1r1
+##
+"y1^1^1^1 y1^1 y1..b8b8"
+##
+"y2y2y2y2"
+;
+
+{8} $
+r1r1
+l32 [["c16 c c c16 o16 c16 o16"] ["c16 o16"]]
+l16 "^co8.oc8 c8o8cco8"
+l16 [4"cco8"]
+l16 "^co8.oc8 c8o8cco8"
+l32 [6["c16 c c c16 o16 c16 o16"] ["c16 o16"]]
+##
+l16 "^8.occ8o c8o8ccoc"
+l16 "c8cocc8o c8o8ccoc"
+l16 "c8cocc8o c8o8ccoc"
+l16 "c8cocc8o co8ccoco"
+l16 "^8.occ8o c8o8ccoc"
+l16 "c8occc8o c8o8ccoc"
+l16 "^8c8c8co c8c8coc8"
+l16 [3"oc8c32c32"]"oco8"
+##
+l8 ["^ccc coc16o16c"]
+;
+
+{4}
+%e0 $ l16
+"b1 b8.b^2."
+"b8.b8.b8.b8.sbsb" [4"sbb"]"sbsb"
+"sb8bsbbs8b8bb8sb" "b8s8bsbb8bs8b8s8"
+"sb8bsbbs8b8bb8sb" "b8.b8.b8.b8.sbsb" "b8.b8.b8.b8sssss"
+##
+[4 "b8.b8.s8.b8.b8s8"]
+##
+"b8sa8bs8       b8s12r24bas8"
+"b8s12a24b8s8   b8s12a24b8s8"
+"b8s12a24b8s8   b8s12r24b8s8"
+"b8s12r24b8s8   rbsa32a+32a+bsa+"
+"ba+s12r24basa  basa48a+24basb"
+"basa48a+24basa basa+48r24basa"
+"basa48a+24basa basa+48r24basa"
+"bbsr32t32ba32a32sa bbsb48s24sbsb"
+##
+[":s: !o b8sb8.s8 b8.b8.s8"]
+;

@@ -1,0 +1,265 @@
+#TITLE Dungeon
+#ALBUM Final Fantasy
+#COMPOSER Nobuo Uematsu
+#TRANS FamiStudio / emberling
+#ARRANGED emberling
+## Some elements modeled after FF PIXEL REMASTER Ver. arr. Shingo Kataoka
+
+#WAVE 0x20 0x66
+#WAVE 0x21 0x84
+#WAVE 0x22 0x89
+#WAVE 0x23 0x02
+#WAVE 0x24 0x09
+#WAVE 0x28 0x1F
+#WAVE 0x2C 0x2D
+#WAVE 0x2F 0xBB
+
+#def init= t150 %v50 %b0,100 %f0,0
+
+#def strings= |0 o5
+#def horn= |1 o5
+#def brass= |2 o5
+#def piano= |3 o5
+#def hiano= |4 o4
+
+#def s= v70
+#def h= v45
+#def t= v85
+#def p= v80
+
+#def sf= v1,70
+#def hf= v1,45
+#def tf= v1,70
+#def pf= v1,80
+
+#cdef ~ %r20^%r11
+
+#def rel3b= %r31
+#def hfull= 'p*v.67'
+#def hdamp= 'p*v.40'
+
+#def strEnvInit= 's*v1.2''sf*v12,.5'
+#def strEnv=['sf*v6,.8'^32'sf*v6,.4'^32]'sf*v9,1.1'^16
+
+#def snrVol= v80
+#def snrEnv= %a15%r20
+#def boomVol= v80
+#def altVol= v60
+#def altEnv= %a12%r24
+
+#drum "s+"=5c+|8 p64 'snrVol*v1.250' 'snrEnv'
+#drum "s"=5c+ |8 p64 'snrVol*v1.000' 'snrEnv'
+#drum "r"=5c+ |8 p64 'snrVol*v0.875' 'snrEnv'
+#drum "q"=5c+ |8 p64 'snrVol*v0.750' 'snrEnv'
+#drum "p"=5c+ |8 p64 'snrVol*v0.625' 'snrEnv'
+#drum "o"=5c+ |8 p64 'snrVol*v0.500' 'snrEnv'
+#drum "n"=5c+ |8 p64 'snrVol*v0.375' 'snrEnv'
+#drum "t"=5d+ |8 p64 'snrVol*v1.000' 'snrEnv'
+
+#drum `s+`=5c+|8 p10 'altVol*v1.250' 'altEnv'
+#drum `s`=5c+ |8 p64 'altVol*v1.000' 'altEnv'
+#drum `r`=5c+ |8 p42 'altVol*v0.750' 'altEnv'
+#drum `q`=5c+ |8 p74 'altVol*v0.625' 'altEnv'
+#drum `p`=5c+ |8 p106'altVol*v0.500' 'altEnv'
+#drum `o`=5c+ |8 p90 'altVol*v0.375' 'altEnv'
+#drum `n`=5c+ |8 p58 'altVol*v0.250' 'altEnv'
+#drum `t`=5c+ |8 p26 'altVol*v1.250' 'altEnv'
+
+#drum "a"=3a |F p64 'boomVol*v0.33' %r15
+#drum "b"=3a |F p64 'boomVol*v0.67' %r15
+#drum "c"=3a |F p64 'boomVol*v1.00' %r15
+
+#drum "v"=5f+ |C p54 v40 %a3%r3
+#drum "y"=5f+ |C p54 v75 %a15%r16
+#drum "x"=5f+ |C p94 v50 %a15%r19
+#drum "z"=5f+ |C p24 v50 %a15%r19
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} %e1 'init' $
+'piano''p' p64 l16 [
+[f+~g+~ f+~g+~ g+~d+~] d+~g~
+[b<~c+~> b<~c+~ c+~>g+~] <c>~g+~ ]
+##
+'strings+o1' p74
+[%r 's' l16 gg+'strEnvInit'g'strEnv' ^2 'sf*v24,1.5' ^8
+%y0%s6%r22 l4 's'^a+ag+ ] <
+[%r 's' l16 cc+'strEnvInit'c'strEnv' ^2 'sf*v24,1.5' ^8
+%y0%s6%r22 l4 's'^d+dc+ ]
+##
+'strings'%a15%y2%s4%r11's*v1.2' p74 l16 [
+[f+~g+~ f+~g+~ g+~d+~] d+~g~
+[b<~c+~> b<~c+~ c+~>g+~] <c>~g+~ ]
+##
+'strings' p74
+[%r 's' l16 gg+'strEnvInit'g'strEnv' ^2 'sf*v24,1.5' ^8
+%y0%s6%r22 l4 's'^a+ag+ ] <
+[%r 's' l16 cc+'strEnvInit'c'strEnv' ^2 'sf*v24,1.5' ^8
+%y0%s6%r22 l4 's'^d+dc+ %k7 ] %k0
+;
+
+{2} %e1  $
+'piano''p*v.95' p64 l16 [
+[~g~g ~g~a+ ~g~c] ~e~a+
+[~<c~c> ~<c~d+ ~c>~f] <~>a+~f]
+##
+'strings-o3' 's*v1.2' p54 l8
+[g1 %r19 ^4 %r0 <a+<c>abg+a+>]
+<[c1 %r19 ^4 %r0 d+f+dfc+e]
+##
+'strings'%a15%y2%s4%r11's*v1.15' p74 p64 l16 [
+[~g~g ~g~a+ ~g~c] ~e~a+
+[~<c~c> ~<c~d+ ~c>~f] <~>a+~f]
+##
+'horn-o1' 'h' p48 m48,18,223 [
+l24 c4.(d+g)<c^4 %r20 ^4 %r0
+l16 (d+f)d+4.d8r8c+8r8
+l24 c4.(d+g)<c^4 %r20 ^4 %r0>
+l16 (gg+)g4.f+8r8f8r8>]
+m
+;
+
+{3} %e1
+'piano-o1''p*v1.4' p44 [
+l4 c8~ l2 c8~ l8 [3c8~]
+l4 [4f8~] l8 f8~ ]
+$ ##
+"!!!o" l16
+[ p0,72,48
+"s4  n8q4  o8q8po"
+"s8t4.   q8poqpon"
+"s8pon8q8pon8q8po"
+"s8t4.   q8pos8on"
+]
+##
+[
+"s8pon8s4  poqopns8pos8pos8po"
+"s8pon8s8pon8s8pon8s8pon8s8po"
+] p
+##
+[4
+"s+8s4n24o24p24  s+4.op"
+"s+8s4 ops+8 ops+8 op"
+]
+##
+"s8"`pon8s4  poqopns8pos8pos8po`
+`s8pon8s8pon8s8pon8s8pon8s8po`
+`s8pon8s4  poqopns8pos8pos8po`
+`s8pon8s8pon8s8pon8s8pon8s8po`
+;
+
+{4} %e1
+'piano-o1''p*v1.2' p54 [
+l8 g8.~^16  g8.~^16 r4 l16 [3g8.~]
+l8 < [4 c8.~^16] l16 c8.~> ]
+$ ##
+'brass-o1' 't' p88 l8
+[d4c f4d g4. %r20 ^ %r0 [3 f %r20 ^ %r0 m-1] %k0]
+[g4f a+4g <c4. %r20 ^ %r0> [3 a+ %r20 ^ %r0 m-1] %k0]
+##
+[['t*v1.5'c't*v.5'^4]^4[3't*v1.5'c't*v.5'^]
+[4't*v1.5'f't*v.5'^4]'t*v1.5'f't*v.5'^]
+##
+'t' [[
+%r0 c4. %r21 ^8 %r0 c16 %r21 ^4..
+%r0 c4 %r15 ^8 j2 ^8 %r0 d+8r8f8r8 ] %r0 >a+<d+cf %r20 ^
+]
+##
+'piano-o1''p*v1.4' p44 [
+l4 c8~ l2 c8~ l8 [3c8~]
+l4 [4f8~] l8 f8~ ]
+;
+
+{5} %e1 'init'
+'hiano+o1''p*v.33' p74 l16 [
+[f+~g+~ f+~g+~ g+~d+~] d+~g~
+[b<~c+~> b<~c+~ c+~>g+~] <c>~g+~ ]
+$ ##
+'horn''h*v.5' p48 m48,18,223 l8
+['hf*v96,1' d1 %r22 ^4 %r0 [3 f8 'h*v.5'p98 f8 'h'p48 m-1] %k0]
+['hf*v96,1' g1 %r22 ^4 %r0 [3 a+8 'h*v.5'p98 a+8 'h'p48 m-1] %k0]
+m
+##
+'hiano+o1' p74
+[
+'hfull'g'hdamp'rf+'hfull'g'hdamp'rcd+r
+'hfull'g'hdamp'f+'hfull'g'hdamp'g+'hfull'g'hdamp'f+ j2
+'hfull'<c>'hdamp'rg'hfull'<c'hdamp'rc+'hfull'c'hdamp'>r
+g<'hfull'c'hdamp'rd+'hfull'c'hdamp'>a+ ]
+l16 'hfull'<c8>'hdamp'gfg8 'hfull'<c8>'hdamp'fgf8 'hfull'<c8>'hdamp'gfg8
+'hfull'<d+8>'hdamp'gfg8  <c>gf8
+##
+'strings-o2''s*v1.2' p54 l8 [[
+%r0 c4. %r21 ^8 %r0 c16 %r21 ^4..
+%r0 c4 %r15 ^8 j2 ^8 %r0 d+8r8f8r8 ] %r0 >a+<d+cf %r20 ^ %k7
+]%k0
+##
+'piano-o1''p*v1.2' p54 [
+l8 g8.~^16  g8.~^16 r4 l16 [3g8.~]
+l8 < [4 c8.~^16] l16 c8.~> ]
+;
+
+{6} %e1 
+'hiano+o1''p*v.30' p74 l16 p0,36,63 [
+[~g~g ~g~a+ ~g~c] ~e~a+
+[~<c~c> ~<c~d+ ~c>~f] <~>a+~f ] p
+$ ##
+'hiano+o2' 'p*v.30' p64 p0,24,127 l24
+[[3 g8f+fe j3 f8f+8] a+ag<c8> agfb8 g+fd+a+8]
+[[3 <c8>ba+a j3 a+8b8] <d+dcf8 dc>a+<e8 c+>a+g+<d+8>]
+p
+##
+'strings+o1''s*v.67' p44 l8
+[cr4cr2[3cr] [4fr4]fr]
+##
+'strings' p84
+[%r 's*v.67' l16 dd+'strEnvInit*v.67*v,.67'd'strEnv*v,.67' ^2 'sf*v24,.75' ^8
+%y0%s6%r22 l4 's'^fed+ ]
+[%r 's*v.67' l16 gg+'strEnvInit*v.67*v,.67'g'strEnv*v,.67' ^2 'sf*v24,.75' ^8
+%y0%s6%r22 l4 's'^a+ag+ %k7]%k0
+##
+'strings-o2' 's' p84 l8
+[ %r0 c8 %r19 ^4 %r0 c8 %r19 ^2 [3 %r0 c8 %r19 ^8]
+ [4 %r0 f8 %r19 ^4] %r0 f8 %r19 ^8 ]
+;
+
+{7} %e1 'init'
+'hiano+o2''p*v.18' p74 l16 p0,48,128 [
+[f+~g+~ f+~g+~ g+~d+~] d+~g~
+[b<~c+~> b<~c+~ c+~>g+~] <c>~g+~ ] p
+$ ##
+'strings+o1' p84
+[%r 's*v.67' l16 dd+'strEnvInit*v.67*v,.67'd'strEnv*v,.67' ^2 'sf*v24,.75' ^8
+%y0%s6%r22 l4 's'^fed+ ]
+[%r 's*v.67' l16 gg+'strEnvInit*v.67*v,.67'g'strEnv*v,.67' ^2 'sf*v24,.75' ^8
+%y0%s6%r22 l4 's'^a+ag+ ]
+##
+'strings''s*v.67' p54 l8
+[d+r4d+r2 d+rd+rgr [4g+r4]g+r]
+##
+"!!!o"
+[4 "v2y1x4z4" ]
+##
+'strings''s*v.75' p64 p0,36,127 l16 %y4%s3%r31[
+[f+gg+g f+gg+a+ g+gd+c] d+ega+
+[b<cc+c> b<cc+d+ c+c>g+f] <c>a+g+f ]
+p
+;
+
+{8} %e1 
+'hiano+o2''p*v.2' p74 l16 p0,48,127 [
+[~g~g ~g~a+ ~g~c] ~e~a+
+[~<c~c> ~<c~d+ ~c>~f] <~>a+~f ] p
+$ ##
+"!!!o"
+[3 "c4.a4.a4. s4.^2"]
+   "c4.a4.a4. s8a4b4c4"
+##
+[ "c4.c4.^4c4b4c4" "c4.c4.c4.c4.c4"]
+##
+[4 "b2c2 c2a4b4" ]
+##
+"y4.^4.^4b4a4a4" "b4.a4.b4.a4.a4"
+"b4.a4.^4b4a4a4" "b4.a4.b4.a4.a4"
+;

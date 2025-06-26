@@ -1,0 +1,328 @@
+#TITLE Towering Mountain
+#ALBUM Lufia 2: Rise of the Sinistrals
+#COMPOSER Yasunori Shiono
+#TRANS mfvitools (sxc2mml)
+#ARRANGED emberling
+
+#VARIANT ~ 
+#VARIANT / vic
+
+#WAVE 0x20 ~0x65~/0x67/ strings
+#WAVE 0x21 ~0x81~/0x82/ trumpet
+#WAVE 0x22 ~0x51~/0x51/ bass
+#WAVE 0x23 ~0x28~/0x28/ bells
+#WAVE 0x24 ~0x5A~/0x5A/ timpani
+#WAVE 0x25 ~0x67~/0x00/ strings
+#WAVE 0x28 ~0x1B~/0x1B/ snare
+#WAVE 0x29 ~0x1F~/0x00/ snare
+#WAVE 0x2C ~0x2D~/0x2D/ cymbal
+
+#def init= t129 %v50 %b0,70 %f0,0
+#ext init= %d2,13,7,7,11
+#ext init= %d8,15,0,5,26
+#ext init= %d9,11,7,7,17
+#ext init= %dC,15,7,7,17
+
+#def strings=  |0  o5 %e1
+#def trumpet=  |1  o5 %e1 /%a15,0,5,0/
+#def bass=     |2  o7 %e0
+#def bells=    |3  o4 %e1 %r17
+#def timpani=  |4  o7 %e1
+#def stringl= ~|5~ o5 %e1 /|0/ %a15,2,3,1
+
+#def s= v225
+#def t= v200
+#def b= v200
+#def l= v333
+#def d= v233
+#def se= v60
+
+#def tv= m6,24,204
+#def sev= m6,32,207
+
+#def snVol= v225
+#def srVol= v50
+#def cyVol= v225
+
+#drum "s"=5f+ ~|8~/|8/ p72 %e0 'snVol*v.45'
+#drum "r"=5e  ~|9~/|8/ p84 %e1 'srVol*v.45'
+
+#drum "y"=5f  |C p48 %e1 'cyVol*v.40'
+#drum "x"=5a+ |C p48 %e1 'cyVol*v.40'
+
+{1}
+'init'
+'strings-o1' p40 's*v.24' l12
+r4 a+<fd+ a+4 a+<fd+
+a+2.a+6<c
+c+2d+2
+>a+16 %r26 ^2...
+r1
+$ ## 6
+'strings-o1' p80 's*v.32' l12
+[
+a+8r8<f2&10d+&26rg16
+f4>a+2a+<f>a+
+<g+2a+2
+f16 %r26 ^2... r2. %r j2 r4>
+] p40 's*v.24'
+c+6d+
+## 16
+f2.fc+f    d+2>a+2<
+d2.d+4     f2a+2
+f2.fc+f    d+2>a+2
+f2g2       a2a+4<c4>
+## 24
+p80 's*v.32'
+[
+a+8r8<f2&10d+&26rg16
+f4>a+2a+<f>a+
+<g+2a+2
+f16 %r26 ^2... r2. %r j2 r4>
+] p40 's*v.24'
+c+6d+
+## 34
+f2.fc+f    d+2>a+2<
+d2.d+4     f2a+2
+f2.fc+f    d+2g2
+f2d+2      d2c2
+## 42
+c+2.>a+<cc+    c+2>a+4<c+4
+c2>g+2         d+4g+4<c4>g+4<
+c+2.>a+<cc+    c+2>a+4<c+4
+c2>g+2         d+4g+4<c4>g+4<
+c+2.>a+<cc+    c+2>a+4<c+4
+c2>g+2         d+4g+4<c4>g+4<
+c+2.>a+<cc+    c+2>a+2<
+&190fv2,0&2^   's*v.24'^2>f2
+;
+
+{2}
+'trumpet-o1' p100 't*v.32'
+r2a+2 ^1 <a+2<c2 a+16 %r28 ^2...
+r1
+$ ## 6
+'timpani-o3' p72 'd*v.50' m l12
+[
+a+2.a+a+a+
+a+2.a+a+a+
+<c+2d+2>
+a+2.a+a+a+
+a+2. j2 a+a+a+
+] 'trumpet' %r9 p80 't*v.32''tv' l12
+f6g
+## 16
+g+4f4c+4g+4    g2d+2
+f1             ^2.f6g
+g+4f4c+4g+4    g2a+2
+<c1            ^1
+## 24
+'timpani-o3' p72 'd*v.50' m l12
+[
+a+2.a+a+a+
+a+2.a+a+a+
+<c+2d+2>
+a+2.a+a+a+
+a+2. j2 a+a+a+
+] 'trumpet' %r9 p80 't*v.32''tv' l12
+f6g
+## 34
+g+4f4c+4g+4    g2d+2
+f1             ^2.f6g
+g+4f4c+4g+4    g2a+2
+<c1            ^2.
+'strings+o1' p80 m 's*v.32' l12
+&10fr32&10fr32&10fr32
+## 42
+f2d+2        >a+2<c+4cc+d+
+c2>g+2       d+2.< l24 frfrfr l12
+f2d+2        >a+2<c+4cc+d+
+c2c+2        d+1
+c+2>a+2      f+2<c+4cc+d+
+c2>g+2       d+1<
+c+2>a+2      f+2<c+4cc+d+
+c2d+2        >fga gaa+ aa+<c dd+f
+;
+
+{3} 
+'stringl-o3=@15,3,5,0' p64 's*v.40'
+a+1^1 <f+2g+2
+'bass-o3' 'b*v.40' l8
+a+r a+r a+r a+r a+r a+r a+r a+r 
+$ ## 6
+'bass-o3' 'b*v.40' l8
+[[a+r a+r a+r a+r] <c+r c+r d+r d+r> [a+r a+r a+r a+r]]
+## 16
+<c+r c+r c+r c+r d+r d+r d+r d+r>
+ a+r a+r a+r a+r a+r a+r a+r a+r
+<c+r c+r c+r c+r d+r d+r d+r d+r
+ fr  fr  fr  fr  fr  fr  fr  fr  >
+## 24
+[[a+r a+r a+r a+r] <c+r c+r d+r d+r> [a+r a+r a+r a+r]]
+## 34
+<c+r c+r c+r c+r d+r d+r d+r d+r>
+ a+r a+r a+r a+r a+r a+r a+r a+r
+<c+r c+r c+r c+r d+r d+r d+r d+r
+ fr  fr  fr  fr  fr  fr  fr  fr  
+## 42
+[4
+f+r f+r f+r f+r f+r f+r f+r f+r 
+fr  fr  fr  fr  fr  fr  fr  fr  
+]
+;
+
+{4}
+l12
+"s4 sss s4 sss"
+"s2.s6s"
+"s2s4..s32s32"
+"s4s4s4sss"
+"s4s4s4sss"
+$ ## 6
+"!!!o"
+"s4s4s4sss"
+[9"s4s4s4sss"]
+## 16
+[8"s4s4s4sss"]
+## 24
+[10"s4s4s4sss"]
+## 34
+[7"s4s4s4sss"]
+"s4sss s4sss"
+## 42
+[15"s4s4s4sss"]
+"s4sss s4sss"
+;
+
+{5}
+"r4"
+'trumpet-o1' p80 't*v.32' l12
+rfd+ r4 a+<fd+
+a+2.a+6<c
+c+2d+2
+>a+16 %r27 ^2...
+r1
+$ ## 6
+'strings' p40 's*v.24' l12
+r1 r1 f2g2 d16 %r27 ^2... r1 %r
+r1 r1 f2g2 d16 %r27 ^2... r2.
+'timpani-o3' p72 'd*v.50' l12 a+a+<c
+## 16
+c+1         d+2d+2>
+a+2.a+a+a+  a+2.a+a+<c
+c+1         d+2d+2>
+f2<c2>      f2<c2>
+## 24
+'strings' p40 's*v.24' l12
+r1 r1 f2g2 d16 %r27 ^2... r1 %r
+r1 r1 f2g2 d16 %r27 ^2... r2.
+'timpani-o3' p72 'd*v.50' l12 a+a+<c
+## 34
+c+1         d+2d+2>
+a+2.a+a+a+  a+2.a+a+<c
+c+1         d+2d+2>
+f2<c2>      f4<c4>f4<c4
+## 42
+l4 [3
+f+2f+2      f+c+f+c+
+f2f2        fcfc ]
+f+2f+2      f+c+f+c+
+f2f2        l12 >f4<ccc>f4<ccc
+;
+
+{6}
+'timpani-o3' p72 'd*v.50' l12
+a+1
+^2.a+6a+
+f+2g+2
+a+2.a+a+a+
+a+2.a+a+a+
+$ ## 6
+'stringl-o1' p120 'se*v.32''sev' l12
+[
+a+8r8<f2&10d+&26rg16
+f4>a+2a+<f>a+
+<g+2a+2
+f16 %r26 ^2... r2. %r r4>
+]m
+## 16
+"!!!o"
+"y1 y2y2 y1 y1"
+"y1 y2y2 y2y2 y2y2"
+## 24
+'stringl-o1' p120 'se*v.32''sev' l12
+[
+a+8r8<f2&10d+&26rg16
+f4>a+2a+<f>a+
+<g+2a+2
+f16 %r26 ^2... r2. %r r4>
+]m
+## 34
+"!!!o"
+"y1 y2y2 y1 ^1"
+"y1 y2y2 y2y2 y4y4y4y4"
+## 42
+'bells+o1' p40 'l*v.24' l4
+c+1    >a+2<c+2
+c1     >g+d+g+<c
+c+2c2  >a+2<c+2
+c1     >g+1<
+c+1    >a+2<c+2
+c1     >g+d+g+<c
+c+2c2  >a+2<c+2
+c2d+2  f1
+;
+
+{7}
+'trumpet-o2' p40 't*v.32'
+r4a+2. ^1 <<f+2g+2
+"!!!o" l12
+"r4r4r4rrr"
+"r4r4r4rrr"
+$ ## 6
+'stringl' p10 'se*v.24''sev' l12
+r1 r1 f2g2 d16 %r27 ^2... r1 %r
+r1 r1 f2g2 d16 %r27 ^2... r1 %r
+## 16
+f2.fc+f    d+2>a+2<
+d2.d+4     f2a+2
+f2.fc+f    d+2>a+2
+f2g2       a2a+4<c4
+## 24
+r1 r1 f2g2 d16 %r27 ^2... r1 %r
+r1 r1 f2g2 d16 %r27 ^2... r1 %r
+## 34
+f2.fc+f    d+2>a+2<
+d2.d+4     f2a+2
+f2.fc+f    d+2g2
+f2d+2      d2c4
+'se*v.32'p120<'sev+m,,16'
+&10fr32&10fr32&10fr32
+## 42
+f2d+2        >a+2<c+4cc+d+
+c2>g+2       d+2.< l24 frfrfr l12
+f2d+2        >a+2<c+4cc+d+
+c2c+2        d+1
+c+2>a+2      f+2<c+4cc+d+
+c2>g+2       d+1<
+c+2>a+2      f+2<c+4cc+d+
+c2d+2        >fga gaa+ aa+<c dd+f
+;
+
+{8}
+"y1^1 y2y2 y1^1"
+$ ## 6
+"!!!o" l12
+"r4r4r4rrr"
+[9"r4r4r4rrr"]
+## 16
+[8"r4r4r4rrr"]
+## 24
+[10"r4r4r4rrr"]
+## 34
+[7"r4r4r4rrr"]
+"r4rrr r4rrr"
+## 42
+[3 "y2.rrr" [3"r4r4r4rrr"]]
+"y2.rrr" "r4r4r4rrr" "x2x2 x4x4x4x4"
+;

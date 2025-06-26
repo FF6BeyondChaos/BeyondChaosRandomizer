@@ -1,7 +1,9 @@
 #TITLE Overworld
 #ALBUM Super Mario Bros. 2
 #COMPOSER Koji Kondo
+#TRANS VGMTrans
 #ARRANGED emberling
+# Based on SUPER MARIO ALL STARS ver.
 
 #WAVE 0x20 0x94 oboe
 #WAVE 0x21 0x22 vibra

@@ -1,0 +1,209 @@
+#TITLE Final Zone / Robotnik
+#ALBUM Sonic the Hedgehog
+#COMPOSER Masato Nakamura
+#TRANS vgm2mid
+#ARRANGED emberling
+
+#WAVE 0x20 0xC1 synth
+#WAVE 0x21 0x04 piano/synth
+#WAVE 0x22 0x81 trumpet
+#WAVE 0x23 0x51 bass
+#WAVE 0x26 0x65 strings
+#WAVE 0x27 0x76 vox
+#WAVE 0x28 0x5A timpani
+#WAVE 0x29 0x1F snare
+#WAVE 0x2C 0x2D crash
+
+#def init= t125 %v50 %b0,100 %f0,0 %x232
+
+#def lead= |0 o6 %e1 'y' %a13%y2%s4%r3
+#def plux= |1 o6 %e1 'p' %s5%r16
+#def plex= @3 o6 %e1 'x' %a9%y6%s0%r12
+#def trumpet= |2 o6 %e1 't'
+#def bass= |3 o7 %e0 'b' %a14%y2%s4
+#def strings= |6 o6 %e1 's' %r3
+#def vox= |7 o6 %e1 'v' %r9
+#def timpani= |8 o5 %e1 'd'
+
+#def y= v150
+#def p= v72
+#def x= v48
+#def t= v64
+#def b= v112
+#def s= v64
+#def v= v80
+
+#def timpaVol= v96
+#def snareVol= v64
+#def cymVol= v72
+
+#drum "e"=4e |8 p48 'timpaVol' %e1
+#drum "d"=4d |8 p48 'timpaVol' %e1
+#drum "a"=3a |8 p48 'timpaVol' %e1
+#drum "g+"=3g+ |8 p48 'timpaVol' %e1
+#drum "g"=3g |8 p48 'timpaVol' %e1
+#drum "s"= 5g |9 p72 'snareVol' %e1 %a13
+#drum "r"= 5f+ |C p88 'cymVol' %e1 %a6
+#drum "w"= 5f+ |C p88 'cymVol' %e1 %r16
+#drum "w-"= 5f+ |C p88 'cymVol*v.5' %e1 %r16
+#drum "x"= 5f+ |C p88 'cymVol*v.5' %e1 %y2%s1%r20
+#drum "y"= 5f+ |C p88 'cymVol*v1.33' %e1 %y0%s5%r20
+#drum "z"= 5f+ |C p64 'cymVol' %e1 %y0%s6%r21
+
+#def trans= %k-2
+#def detrans= %k0
+#def replux= %y%s5%r16
+
+{1}
+'init'
+'lead+o1*v.30' p64 l16
+brg+rg+rbb r2
+$##
+[
+'lead*v.30' p64 l4 m42,18,239
+rab<c dc>b<c e1^1>
+ rab<c dc>b<c f1 g2g+2
+##
+>a4a4a4a4 b4b4b4b4<
+]
+## robotnik
+"!!!o z2^8"
+'trans'
+'vox*v.71' p56 l16 m48,18,207
+f+rbr<c+r d1>
+r4.brgre4.    r4.<drc+r>a4.
+r2r8f+rbr<c+r d1>
+r4.brgre4br   <ere4er frf4fr
+'detrans'
+;
+
+{2}
+'trumpet+o1*v.87' p72 l16
+er>erer<ee r2
+$##
+[
+['trumpet-o2*v.87' p72 l16 m48,18,207
+r2r8ar<crer aga8^2.
+^8<<c8r8>arfrd4.
+^8<d8r8cr>brg+4. ]
+##
+>a2b4<c4> b2<c4d4>
+]
+## robotnik
+'trans' l12 't*v1.00'
+ba<c>b2.  r4f+4b4<c+4   d1 e1>
+ba<c>b2.  r4f+4b4<c+4   d1 e2f2
+##
+'vox+o1*v.71+%r5' p56 l16 m48,18,207 &95f+
+'detrans' &1
+;
+
+{3}
+'bass-o2*v.77' p64 l16
+er>erer<ee r4.c>b
+$##
+[
+'bass-o3*v.77' p64
+[a4a8.aa8a4e8    aea4e8a4g4
+ f4f8.ff8f4c8    g8g4g8g+8g+4j2<c>b ] g+8
+##
+ f4f8.ff8f4c8    g8g4g8e8e4<c>b
+]
+## robotnik
+'trans' l8
+bb<ddc+c+cc>  b4.<f+b4a4
+gg4dgg4f+     ee4>b<ee4>b
+bb<ddc+c+cc>  b4.<f+b4a4
+gg4dgg4f+     ee4edd4d
+'detrans'
+;
+
+{4}
+'plux+o1*v.84' p56 l16
+er>erer<ee r2
+$##
+[
+'plux-o2*v.71' p42 l8
+[[aebe<c>ebe] aebe<c>eae be<d>e<c>ebe]
+##
+<< l16 %y4%s0 'p*v.36'
+[4 <c>ba+a] [4 <dc+c>b]
+]>>
+## robotnik
+'trans'
+'replux''p*v.71' l8
+bf+<d>f+bf+ef+  bf+<d>f+bf+af+
+gf+af+gf+ef+    af+gf+<c+>f+ef+
+bf+<d>f+bf+ef+  bf+<d>f+bf+af+
+gf+bf+af+gf+    af+bf+<c+>b<fc+
+'detrans'
+;
+
+{6}
+'lead+o1*v.30' p80 p0,12,64 l16
+k-1 brg+rg+rbb r2 k0
+$##
+[
+'lead*v.30+%r1' p80 p0,24,64 l4 m k-2
+rab<c dc>b<c e1^1>
+rab<c dc>b<c f1 g2g+2
+##
+>a4a4a4a4 b4b4b4b4
+]
+k0p
+## robotnik
+'trans'
+'strings*v.30-o1' m p64  l16
+r2r8f+rbr<c+r d1>
+r4.brgre4.    r4.<drc+r>a4.
+r2r8f+rbr<c+r d1>
+r4.brgre4br   <ere4er frf4fr
+'detrans'
+;
+
+{5}
+l16 "e8g+8g+8ee ^8ss ssg+g+"
+$##
+[
+"!!!o"
+["s4s8.ss8s8e8a8 s8s4s8s4s4"
+"s4s8.ss8s8eea8 s8s4s8s8s4s8"]
+##
+"s4s8.ss8s4s8" l8 "dgdgdgdg"
+]
+## robotnik
+l12
+[3"!o s4ssss8s4s8  s4.s8s4s4"]
+     "s4ssss8s4s8  s8s4s8s8s4s8"
+;
+
+{7}
+"z2z2"
+$##
+[
+'plex-o2*v.71' p16 l8
+[[aebe<c>ebe] aebe<c>eae be<d>e<c>ebe]
+##
+<< l16 'x*v.30'
+[4 <c>ba+a] [4 <dc+c>b]
+]>
+## robotnik
+'trans'
+'replex''x*v.30' l8
+bf+<d>f+bf+ef+  bf+<d>f+bf+af+
+gf+af+gf+ef+    af+gf+<c+>f+ef+
+bf+<d>f+bf+ef+  bf+<d>f+bf+af+
+gf+bf+af+gf+    af+bf+<c+>b<fc+
+'detrans'
+;
+{8}
+"w4w4w4w4"
+$
+[ "!!!o"
+"y4"[15"x4"]
+"z4"[15"x4"]
+["z4x4z4z4"]
+]
+"w-4"[15"x4"]
+"z4"[15"x4"]
+;

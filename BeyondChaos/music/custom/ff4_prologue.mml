@@ -1,0 +1,173 @@
+##created with sqspcmml beta 1.1.7b
+
+#TITLE Prologue
+#ALBUM Final Fantasy IV
+#COMPOSER Nobuo Uematsu
+#TRANS mfvitools
+#ARRANGED emberling
+
+#WAVE 0x20 0x65
+#WAVE 0x21 0x81
+#WAVE 0x22 0x08
+#WAVE 0x23 0x2D
+#WAVE 0x24 0x5A
+#WAVE 0x25 0xA5
+#WAVE 0x26 0x66
+
+#def 0i=   |0 %y0%s5
+#def 0ib=  |6 %y0%s5 %a11
+#def 0o=   o6
+#def 0v=   v80
+#def 0f= v1,80
+
+#def 1i=   |1
+#def 1o=   o5
+#def 1v=   v75
+#def 1f= v1,75
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v50
+#def 2f= v1,50
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v90
+#def 3f= v1,80
+
+#def 4i=   |4 %y0%s1%r13
+#def 4o=   o4
+#def 4v=   v90
+#def 4f= v1,80
+
+#def 5i=   |5
+#def 5o=   o5
+#def 5v=   v40
+#def 5f= v1,40
+
+## auto percussion  0x23
+#drum "h"= 5f+
+
+#cdef ( %l1
+#cdef ) %l0
+
+{3}
+t244%v50%b0,70%f0,0'0v*v1.00'p90
+'0i' %e1'0o-o1'%r3
+f1.f6f6f6f2f2f2f2
+g+1.g+6g+6g+6g+2g+2g+2g+2
+<c1.c6c6c6c2c2c2c2
+ c1.c6c6c6 t224 c2 t212 c2 t196 c2 t184 c2 t248
+$
+[>f2a+2<c2>f2<     d+1d2c2
+ >a+2a4a+4<c2>a+2  a+1a1
+ g2<c2d2>g2        <f1d+2d2
+ c2>b4<d4c2>g2     <d1 j2 c1] c2c8d8d+8f8
+ g1^4r4g2          f1^4r4d2
+ d+2d+4d4c2>b2<    c2d2d+2f2
+ g+1^4r4g+2        g1^4r4d+2
+ f2f4f+4f2f4f+4    f2d+2d2c2
+;
+
+{4}
+'0v*v.90'p72'0i'%r3%e1'0o-o1'
+c1.c6c6c6     c2c2c2c2
+f1.f6f6f6     f2f2f2f2
+a+1.a+6a+6a+6 a+2a+2a+2a+2
+a1.a6a6a6     a2a2a2a2
+$
+[d1f2c2       g1a1
+ g2d+2e2g2    g1.f2
+ d+1f1        g1^1
+ g2f2e1       f1^1]
+<d+1^4r4d+2   d1^4r4>a+2
+g+1g1         ^1^1
+<f1.f2        d+1.c2
+c+1c2>a+2     a+2g2a1
+;
+
+{5}
+'0v*v.90'p55'0i'%r3%e1'0o-o2'
+a+1.a+6a+6a+6a+2a+2a+2a+2
+<c+1.c+6c+6c+6c+2c+2c+2c+2
+f1.f6f6f6f2f2f2f2
+f1.f6f6f6d+2d+2d+2d+2
+$
+[ >a+1a1       g1f1
+  a+1^1        <c2>g4a+4a2f2
+  <c1>b1       <d+1f1
+  d+2d2c2>a+2  a2f4g4a4a+4 <j2 c2] c4d4
+a+1.a4g4          f2f2d2f2
+d+2c2d2f2         d+1^1
+g+2>g+4a+4<c4c+4  d+4f4g2c4d4d+4f4g2
+a+1g+2f+2         f1^1
+;
+
+{6}
+'0v*v1.00'p45'0i'%r3%e1'0o-o2'
+f1.f6f6f6f2f2f2f2
+f+1.f+6f+6f+6f+2f+2f+2f+2
+f1.f6f6f6f2f2f2f2
+f1.f6f6f6f2f2f2f2>
+$
+[ a+1a1        g1f1
+  d+1e1        f1^1
+  <d+1d1       c1>b1
+  <c1>a+1      a1f1]
+d+4r4<d+4d4 d+4f4g4a4      a+2a+2 f2d2>
+g+2.g+4 g2b2               <c1>a+1
+<c+1.c+2 c1.>g2            f+2<f+2> a+4<c4c+4d+4 f1> f1
+;
+
+{2}
+'1v*v1.10''1i'p65 m48,18,199 %r1 %e1 '1o'
+r1r1r1r3f12r12a+12r12f12r12a+12r12
+<c1^1^1^3> g+12r12<c12r12>g+12r12<c12r12
+d+1^1^1^3  c12r12d+12r12c12r12d+12r12
+f1^1^1^1
+'5v*v1.25''5i' %r8
+$ '5o'
+[>f2a+2<c2>f2<       d+1(d2c2)
+ >a+2(a4a+4)<c2>a+2  a+1a1
+ g2<c2d2>g2          <f1(d+2d2)
+ c2>(b4<d4)c2>g2     <d1c1]
+ g1^4r4g2            f1^4r4d2
+ d+2(d+4d4)c2>b2<    (c2d2)d+2f2
+ g+1^4r4g+2          g1^4r4d+2
+ f2(f4f+4)f2(f4f+4)  f2d+2d2c2
+;
+
+{1}
+'2v*v1.27'p20'2i'%r8%e1'2o-o2' m40,6,199
+f1^1^1^1
+f+1^1^1^1
+f1^1^1^1
+f1^1^1^1
+'0v*v1.27'mp35'0ib'%r8
+$ '0o-o4'
+[ a+1a1        g1f1
+  d+1e1        f1^1
+  <d+1d1       c1>b1
+  <c1>a+1      a1f1]
+d+4r4<d+4d4 d+4f4g4a4      a+2a+2 f2d2>
+g+2.g+4 g2b2               <c1>a+1
+<c+1.c+2 c1.>g2            f+2<f+2> a+4<c4c+4d+4 f1> f1
+;
+
+{7}
+'3v*v.75'p82'3i'%r13%e1'3o'
+[4"h1^1^1^1"]
+$
+["h1^1^1^1"[12r1]]
+["h1^1^1^1"] "h1^1" "h1^1" "h1^1^1^1"
+;
+
+{8}
+'4i'p47'4o''4v*v.50'%e1
+[15r1]r2 '4f*v96,1.27'[6f12]
+$
+[a+1 [14^1] ^2 '4v*v.75''4f*v96,1.27' [6f12]]
+a+1.d+2a+1.'4v*v.75''4f*v96,1.27'[6f12]
+g+1d1<c1.>'4v*v.75''4f*v96,1.27'[6g12]
+<c+1.>g+2<c1.>g2a+1f1a+1.'4v*v.75''4f*v96,1.27'[6f12]
+;

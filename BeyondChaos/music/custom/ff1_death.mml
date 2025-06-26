@@ -1,0 +1,186 @@
+#TITLE Game Over
+#ALBUM Final Fantasy
+#COMPOSER Nobuo Uematsu
+#TRANS VGMTrans
+#ARRANGED emberling
+
+#WAVE 0x20 0x65
+#WAVE 0x21 0x62
+#WAVE 0x22 0x67
+#WAVE 0x23 0x70
+#WAVE 0x24 0x57
+
+#def strMid= |0 o5 's' %a13%y0%s4%r2
+#def strHigh= |1 o5 'h' %y0%s3%r3
+#def strBass= |0 o5 'b' %a13%y0%s4%r2
+#def violin= |3 o5 'v' %r5
+#def pizzi= |4 o5 'p' %r14
+
+#def s= v90
+#def h= v96
+#def b= v120
+#def v= v80
+#def p= v90
+
+#def sf= v1,90
+#def hf= v1,96
+#def bf= v1,120
+#def vf= v1,80
+#def pf= v1,90
+
+#def p02= p100
+#def p06= p0
+#def p09= p10
+#def p13= p100
+
+#def init= %x240 %v50 %b0,100 %f0,0
+
+{1} %e1
+'init' l8 p70 t78
+'strMid-o1*v.557' a<c+ 's*v.746'd 's*v.805'e
+## 3
+t80
+'s*v1.081'f4. 's*v1.046'>a 's*v1.134'a+4 <gf
+'s*v1.029'e 's*v1.134'f 's*v1.064'e 's*v.703'>g 's*v.508'a2
+'s*v.582'<d4.> 's*v1.116'f 's*v.962'e4 's*v.717'b <'s*v.760'd
+'s*v.996'd 's*v1.134'c+ t67's*v.851'e8.'sf*v36,.136'^8^48r24 t73 's*v.851'c+ 's*v.866'd 's*v.851'e
+## 7
+t80
+f4. 's*v.914'>a 's*v1.029'a+4 <'s*v1.134'g 's*v.979'f
+'s*v.946'e 's*v.996'f e >'s*v.851'ga4 's*v1.134'a+<c
+'s*v.882'd4. 's*v1.116'e 's*v.760'd4 's*v1.134'c+ 's*v.851'd16^24r48
+d2 t52 'sf*v24,.795'^ 'sf*v24,.567'^ 'sf*v24,.273'^ v24,0 ^
+;
+
+{2} %e1
+l8 p90
+r'strMid-o1*v.760'a 's*v.820'b <'s*v.946'c+
+## 3
+'s*v.417'd4. >'s*v.428'f 's*v.395'g2<
+'s*v.634'c2 's*v1.134'fedc
+>'s*v.544'a+2 's*v.608'b3^8r24
+'s*v.962'a 's*v.979'g <'s*v.898'c+16.'sf*v45,.189'^4r32 's*v.675'a 's*v.790'b <'s*v.835'c+
+## 7
+d2 's*v.866'g 's*v1.046'fed
+'s*v.689'c2 's*v.866'f 's*v1.046'ed 's*v.898'c
+>'s*v.717'a+2 's*v.406'a2<
+<'s*v.375'd> 's*v.731'a 's*v.851'ga 's*v.450'f8.'sf*v52,.038'^16^4
+;
+
+{3} %e1
+l8 'p02'
+r 'strBass-o1*v.179'g 'b*v.359'f 'b*v.478'e>
+## 3
+'b*v.851'd6r12 <'p09''b*v.344'e 'b*v.194'f>
+    'p02''b*v.851'g6r12 <'p09''b*v.508'a 'b*v.569'a+>
+'p02''b*v.728'c6r12 <'p09''b*v.538'c 'b*v.518'e>
+    'p02''b*v.639'&44f  'bf*v39,.048' &44^ r24
+'b*v.715'a+6r12 <<'p09''b*v.549'd 'p*v.528'f>>
+    'p02''b*v.923'e6r12 <'p09''b*v.518'g+ 'b*v.478'b>
+'p02''b*v.627'a16.'bf*v54,.226'^32^4 r8
+    r8 <'b*v.257'g 'b*v.407'f 'b*v.567'e>
+## 7
+'b*v.823'd6r12 <'b*v.417'e 'b*v.234'f>
+    'b*v.837'g6r12 <'b*v.369'a 'b*v.281'a+>
+'b*v.823'c6r12 <'b*v.369'c 'b*v.250'e>
+    'b*v.823'f6r12 <'b*v.369'f 'b*v.250'a>
+'b*v.879'>a+6r12< <'b*v.591'd 'b*v.369'a>
+    'b*v.754'>a< 'b*v.823'e 'b*v.591'a< c+
+f2 'bf*v24,.543'^ 'bf*v24,.441'^ 'bf*v24,.289'^ 'bf*v24,.078'^
+;
+
+{4} %e1
+r2
+## 3
+l2 p87
+'pizzi-o2*v1.23' dg
+'p*v.610'c 'p*v.852'f
+'p*v.953'a+ 'p*v1.23'e
+'p*v1.27'a1
+## 7
+'p*v1.23'dg
+cf
+a+a
+d 'p13''strHigh-o2*v.591'd
+;
+
+{5} %e1
+l8 'p06'
+'strHigh-o1*v.484'a <'h*v.532'c+ 'h*v.621'd 'h*v.790'e
+## 3
+'h*v.775'f4. >'h*v.703'aa+4< gf
+'h*v1.012'efe >'h*v.496'ga2<
+'h*v.703'd4. >fe4b< 'h*v.496'd
+'h*v.820'd 'h*v.703'c+e3r24 c+ 'h*v.717'd 'h*v.703'e
+## 7
+f4. >'h*v.760'a 'h*v.851'a+4< 'h*v.703'gf
+'h*v.496'e 'h*v.532'fe >'h*v.703'ga4a+< 'h*v.731'c
+'h*v.760'd4. 'h*v.703'ed4c+d d1
+;
+
+{6} %e1
+l8 p70
+'violin-o1*v.557' a<c+ 'v*v.746'd 'v*v.805'e
+## 3
+'v*v1.081'f4. 'v*v1.046'>a 'v*v1.134'a+4 <gf
+'v*v1.029'e 'v*v1.134'f 'v*v1.064'e 'v*v.703'>g 'v*v.508'a2
+'v*v.582'<d4.> 'v*v1.116'f 'v*v.962'e4 'v*v.717'b <'v*v.760'd
+'v*v.996'd 'v*v1.134'c+ 'v*v.851'e8.'vf*v36,.136'^8^48r24 'v*v.851'c+ 'v*v.866'd 'v*v.851'e
+## 7
+f4. 'v*v.914'>a 'v*v1.029'a+4 <'v*v1.134'g 'v*v.979'f
+'v*v.946'e 'v*v.996'f e >'v*v.851'ga4 'v*v1.134'a+<c
+'v*v.882'd4. 'v*v1.116'e 'v*v.760'd4 'v*v1.134'c+ 'v*v.851'd16^24r48
+d2 'vf*v24,.795'^ 'vf*v24,.567'^ 'vf*v24,.273'^ v24,0 ^
+;
+
+{7} %e1
+l8 p90
+r'violin-o1*v.760'a 'v*v.820'b <'v*v.946'c+
+## 3
+'v*v.417'd4. >'v*v.428'f 'v*v.395'g2<
+'v*v.634'c2 'v*v1.134'fedc
+>'v*v.544'a+2 'v*v.608'b3^8r24
+'v*v.962'a 'v*v.979'g <'v*v.898'c+16.'vf*v45,.189'^4r32 'v*v.675'a 'v*v.790'b <'v*v.835'c+
+## 7
+d2 'v*v.866'g 'v*v1.046'fed
+'v*v.689'c2 'v*v.866'f 'v*v1.046'ed 'v*v.898'c
+>'v*v.717'a+2 'v*v.406'a2<
+<'v*v.375'd> 'v*v.731'a 'v*v.851'ga 'v*v.450'f8.'vf*v52,.038'^16^4
+;
+
+{8} %e1
+r2
+## 3
+'p09' l8 'strBass-o2*v.498' rar4 'b*v.469'<rdr4>
+'b*v.549'rgr4 r2
+'b*v.528'<rfr4> rbr4
+'p02' <'b*v.206'f 'b*v.289'e 'p13''b*v.533'g'bf*v36,.051'^. r. r4>'p02'
+## 7
+'b*v.754'rar4 'b*v.489'<rdr4>
+'b*v.579'rgr4 <rcr4>
+'b*v.823'rfr4 'b*v.533'<a4 'b*v.715'g4>
+r2'b*v.953''bf*v24,.868'd8 'bf*v24,.711'^8 'bf*v24,.467'^8 'bf*v24,.126'^8
+;
+
+## Sample info
+## VAB  0: Sample [01 02 03 04 05 06 07] [08 09 0A]
+## VAB  1: Sample [01 02 03 04 05 06 07]
+## VAB  2: Sample [01 02 03 04 05 06 07]
+## VAB  3: Sample [01 02 03 04 05 06 07]
+## VAB  4: Sample [01 02 03 04 05 06 07]
+## VAB  5: Sample [0C]
+## VAB  6: Sample [0D 0E]
+## VAB  7: Sample [0F]
+## VAB  8: Sample [0C]
+## VAB  9: Sample [01 02 03 04 05 06 07]
+## VAB 10: Sample [01 02 03 04 05 06 07] [08 09 0A]
+## VAB 11: Sample [01 02 03 04 05 06 07]
+## VAB 12: Sample [01 02 03 04 05 06 07]
+## VAB 13: Sample [01 02 03 04 05 06 07]
+## 01 - 07: String quartet
+## 08 - 0A: Chorused strings
+## 0B: Bass strings
+## 0C: Pizzicato
+## 0D - 0E: High strings
+## 0F - data corrupted
+

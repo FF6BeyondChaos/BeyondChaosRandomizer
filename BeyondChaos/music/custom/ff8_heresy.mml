@@ -1,0 +1,189 @@
+#TITLE Heresy
+#ALBUM Final Fantasy VIII
+#COMPOSER Nobuo Uematsu
+#TRANS VGMTrans
+#ARRANGED emberling
+
+#WAVE 0x20 0xB0
+#WAVE 0x21 0xB6
+#WAVE 0x22 0xB9
+#WAVE 0x23 0xD5
+#WAVE 0x24 0x5A
+#WAVE 0x25 0xC4
+#WAVE 0x26 0x08
+
+#def init= t130 %v50 %b0,100 %f0,0
+
+#def organsub= |0 o6 v135 p65 %a12
+#def layersub= |1 o5 v105 p65
+#def organmid= |0 o5 v150 p60 %a12
+#def layermid= |2 o5 v90  p70
+#def organalt= |3 o3 v150 p60 %a12
+
+#def timpani= |4 o6 p64
+#def piano= |6 o5 p16 v56 %y0%s3
+#def pilayer= |5 o5 p112 v72 %a6%r3 m24,18,215
+
+#def t=    v127
+#def tf= v1,127
+
+{1} 'init' %e1
+'organmid+o1*v.15' ## v80 ex30
+d1>g+1<c+1>g1
+^1^1 [24 %r1 ^8 %r0 ^8]
+$
+%r16 ^1^1r1r1r1r1r1r1
+## 11 15
+'organsub-o2*v.32' ## v65 ex80
+[g1^1 a+1^1 g+1^1 g1^1] ^1^1
+## 20 28
+'piano-o2' l4
+[f1.fg+  ^1.g+g   ^1.ga+    ^1.a+b
+ ^1.b<c  ^1.c>b   ^1.b<c    ^1^1>]
+;
+
+{2} %e1
+'organalt+o1*v.15' v0,18,191
+d1>g+1<c+1>g1
+[8 ^1]
+$
+'organalt*v.32' v## v65 ex80
+[4 g4r4] [4 a+4r4] [4 g+4r4] [4 g4r4] 
+## 11
+[8 a+16r8.] <[8 d16r8.] [8 c16r8.] [8 d16r8.]
+## 15
+l4
+>a+<dcd  >a+<dcd+
+dfef  dfeg
+d+g+gg+  d+gfg
+dgfg  dfef
+>a+<dcd  >a+<fef
+## 20 28
+'pilayer-o2' l4
+[f1.fg+  ^1.g+g   ^1.ga+    ^1.a+b
+ ^1.b<c  ^1.c>b   ^1.b<c    ^1^1>]
+m
+;
+
+{3} %e1
+'layermid+o1*v.15'
+d1>g+1<c+1>g1
+'organsub*v.32' ## v65 ex80
+[3 d4c+16r8.] d4>a+16r8.<
+[3 f4e16r8.] f4d16r8.
+[3 d+4d16r8.] d+4c16r8.
+[3 d4c+16r8.] d4>a+16r8.<
+$ ## 07 11 15
+'organsub*v.32' ## v65 ex80
+[3
+[3 d4c+16r8.] d4>a+16r8.<
+[3 f4e16r8.] f4d16r8.
+[3 d+4d16r8.] d+4c16r8.
+[3 d4c+16r8.] d4>a+16r8.<
+]
+[3 d4c+16r8.] d4>a+16r8.<
+## 20 28
+l4
+[16 fr fr fr fr]
+;
+
+{4} %e1
+r1r1r1r1
+'layersub*v.32' ## v65 ex80
+[3 d4c+16r8.] d4>a+16r8.<
+[3 f4e16r8.] f4d16r8.
+[3 d+4d16r8.] d+4c16r8.
+[3 d4c+16r8.] d4>a+16r8.<
+$
+'layersub*v.32'
+[3
+[3 d4c+16r8.] d4>a+16r8.<
+[3 f4e16r8.] f4d16r8.
+[3 d+4d16r8.] d+4c16r8.
+[3 d4c+16r8.] d4>a+16r8.<
+]
+[3 d4c+16r8.] d4>a+16r8.<
+## 20
+'organsub*v.32' l4
+[16 cr] [>[4 br]<[4 cr]]
+## 28
+'organalt+o1*v.24' l4 v0,18,191
+f1.fg+  ^1.g+g   ^1.ga+    ^1.a+b
+^1.b<c  ^1.c>b   ^1.b<c    ^1^1 v
+;
+
+{5} %e1
+r1r1r1r1
+'organsub-o1*v.32' ## v65 ex80
+[4 g4r4] [4 a+4r4] [4 g+4r4] [4 g4r4]
+$
+'organsub-o1*v.32' ## v65 ex80
+[3 [4 g4r4] [4 a+4r4] [4 g+4r4] [4 g4r4]]
+[3 g4r4] g4
+'timpani-o2'
+'t*v.4'g12't*v.6'g12't*v.8'g12
+## 20
+'organsub-o1*v.32' l4
+[8 fr fr fr fr]
+## 28
+<[16 cr] [>[4 br]<[4 cr]]
+;
+
+{6} %e1
+r1r1r1r1
+'layersub-o1*v.32' ## v65 ex80
+[4 g4r4] [4 a+4r4] [4 g+4r4] [4 g4r4]
+$
+'layersub-o1*v.32' p64 ## v65 ex80
+[4 g4r4] [4 a+4r4] [4 g+4r4] [4 g4r4]
+## 11
+'layermid*v.32' ## v80 ex64 x2
+[8 a+16r8.] <[8 d16r8.] [8 c16r8.] [8 d16r8.]
+## 15
+l4
+>a+<dcd  >a+<dcd+
+dfef  dfeg
+d+g+gg+  d+gfg
+dgfg  dfef
+>a+<dcd  >a+<fef
+## 20
+'layersub*v.32' l4
+[16 cr] [>[4 br]<[4 cr]]
+## 28
+'layermid+o1*v.24' l4
+f1.fg+  ^1.g+g   ^1.ga+    ^1.a+b
+^1.b<c  ^1.c>b   ^1.b<c    ^1^1
+;
+
+{7} %e1
+[12r1]
+$
+'layermid*v.32' p64 ## v65 ex80
+[4 g4r4] [4 a+4r4] [4 g+4r4] [4 g4r4] 
+## 11 15
+'layersub-o1*v.32'## v65 ex80
+[[4 g4r4] [4 a+4r4] [4 g+4r4] [4 g4r4]]
+[4 g4r4]
+## 20
+'layermid*v.32' l4
+[8 fr fr fr fr]
+## 28
+'organsub-o1*v.32' l4
+[8 fr fr fr fr]
+;
+
+{8} %e1
+[12r1]
+$
+[8r1]
+## 11 15
+'layersub-o2*v.32' ## v65 ex80
+[g1^1 a+1^1 g+1^1 g1^1] ^1^1
+## 20 28
+'timpani-o2'['t*v1'
+f1 [7^1]
+[ 't*v.05''tf*v180,.80'[16f16]'tf*v180,.05'[16f16] ^1 j2 ^1]
+j2 ^2. 't*v.4'f12't*v.6'f12't*v.8'f12
+] ^1
+;
+

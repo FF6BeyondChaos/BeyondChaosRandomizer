@@ -1,0 +1,652 @@
+#TITLE Dreams of the Brave
+#ALBUM Xenogears
+#COMPOSER Yasunori Mitsuda
+#TRANS VGMTrans
+#ARRANGED emberling
+
+#VARIANT *~ 
+#VARIANT /* part1
+#VARIANT _~ part2
+
+#WAVE 0x20 0x66 strings x1
+#WAVE 0x21 0x63 strings x2
+#WAVE 0x22 0x94 bassoon
+#WAVE 0x23 0x92 oboe
+#WAVE 0x24 0x80 trumpet x2
+#WAVE 0x25 0x82 trumpet x1
+#WAVE 0x26 0x83 trombone
+#WAVE 0x27 0x7E horn
+#WAVE 0x28 0xC0 flute
+#WAVE 0x29 0x61 harp
+#WAVE 0x2A 0x1F snare
+#WAVE 0x2B 0x5A timpani
+#WAVE 0x2C 0x2C cymbal
+#WAVE 0x2D 0x29 bell
+#WAVE 0x2E 0x6C tambourine
+
+#def init= t123 %v40 %b0,85 %f0,0
+#ext init= %d6,15,7,7,3
+#ext init= %d7,15,0,5,5
+#ext init= %d8,15,7,7,8 
+#ext init= %d9,15,0,2,12
+#ext init= %dA,14,7,7,20
+#ext init= %dC,15,0,1,14
+
+#def strings= |0 o5
+#def stringsslow= |0,9,7,7,0 o5
+#def stringx= |1 o5
+#def bassoon= |2 o5
+#def oboe=    |3 o4
+#def trumpets=|4 o5
+#def trumpet= |5 o5
+#def trombone=|6 o6
+#def horn=    |7 o4
+#def flutes=  |8 o3
+#def harp=    |9 o5
+#def timpani= |B o5
+#def bell=    |D o4
+#def flute=   @3,12,0,6,8 o5
+
+#def s= v209
+#def b= v375
+#def o= v125
+#def t= v144
+#def n= v219
+#def h= v166
+#def f= v188
+#def p= v188
+#def d= v188
+#def l= v125
+#def e= v156
+
+#def sb= v240 ## strings + bassoon
+
+#def sf= v1,209
+#def bf= v1,375
+#def of= v1,125
+#def tf= v1,144
+#def nf= v1,219
+#def hf= v1,166
+#def ff= v1,188
+#def pf= v1,188
+#def df= v1,188
+#def lf= v1,125
+#def ef= v1,156
+
+#def r= %r22
+
+#def strenv87= %a11,0,6,21
+
+#def snareVol=    v156
+#def snareFade= v1,156
+#def cymbVol= v500
+#def bdrVol= v188
+#def tambVol=    v125
+#def tambFade= v1,125
+#def anVol= v219
+
+#drum "a-"=4f+ |B p45 'd*v.377' %y
+#drum "a"= 4f+ |B p45 'd*v.559' %y
+#drum "b-"=3a  |B p80 'bdrVol*v0.255' %r20 ## vol.64 vel.113
+#drum "b"= 3a  |B p80 'bdrVol*v0.450' %r20 ## vol.85 vel.113
+#drum "b+"=3a  |B p80 'bdrVol*v0.696' %r20 ## vol.94 vel.127
+#drum "c-"=4a  |B p45 'd*v.377' %y
+#drum "c"= 4a  |B p45 'd*v.559' %y
+#drum "d"= 3a  |B p80 'bdrVol*v0.323' %r20 ## vol.72 vel.113
+#drum "d-"=3a  |B p80 'bdrVol*v0.323' %r20 ## vol.83 vel.71
+
+#drum "y-"=5g+ |C p45 'cymbVol*v0.136' %y ## vol.66 vel.80
+#drum "y"= 5g+ |C p45 'cymbVol*v0.255' %y ## vol.64 vel.113
+#drum "w-"=5g+ |C p45 'cymbVol*v0.077' %y ## vol.64 vel.62
+#drum "w"= 5g+ |C p45 'cymbVol*v0.229' %y ## vol.64 vel.107
+#drum "x+"=5g  |C p56 'cymbVol*v0.229' %a4
+#drum "x"= 5g  |C p56 'cymbVol*v0.127' %a4
+#drum "x-"=5^  |C p56 'cymbVol*v0.127' %a15,7,7,17
+#drum "z"= 5g  |C p56 'cymbVol*v0.255' %a4
+#drum "z+"=5g  |C p56 'cymbVol*v0.255' %a6
+#drum "z-"=5^  |C p56 'cymbVol*v0.255' %a15,7,7,17
+
+#drum "n"= 3d  |E p64 'anVol*v0.489' ## vol.87 vel.115
+
+#drum "t"= 5a+ |E p30 'tambVol*v0.248' ## vol.58 vel.123
+#drum "t-"=5a+ |E p30 'tambVol*v0.168' ## vol.58 vel.101
+#drum "u-"=5a+ |E p30 'tambVol*v0.124' ## vol.58 vel. 87
+#drum "u"= 5a+ |E p30 'tambFade*v36,.021' ## vol.58 vel.36
+#drum "v+"=5a+ |E p30 'tambVol*v0.303' ## vol.64 vel.123
+#drum "v"= 5a+ |E p30 'tambVol*v0.204' ## vol.64 vel.101
+#drum "v-"=5a+ |E p30 'tambVol*v0.151' ## vol.64 vel.87
+
+#drum "s"= 5g+ |A p85                  
+
+#drum `a`= 5g+ |A p85 'snareVol*v0.404' ## vol.74 vel.123
+#drum `b`= 5g+ |A p85 'snareVol*v0.341' ## vol.74 vel.113
+#drum `c`= 5g+ |A p85 'snareVol*v0.273' ## vol.74 vel.101
+#drum `d`= 5g+ |A p85 'snareVol*v0.202' ## vol.74 vel. 87
+#drum `e`= 5g+ |A p85 'snareVol*v0.171' ## vol.74 vel. 80
+#drum `f`= 5g+ |A p85 'snareVol*v0.135' ## vol.74 vel. 71
+#drum `g`= 5g+ |A p85 'snareVol*v0.103' ## vol.74 vel. 62
+#drum `h`= 5g+ |A p85 'snareVol*v0.067' ## vol.74 vel. 50
+#drum `i`= 5g+ |A p85 'snareVol*v0.035' ## vol.74 vel. 36
+#drum `j`= 5g+ |A p85 'snareVol*v0.509' ## vol.83 vel.123
+
+#drum `k`= 5g+ |A p85 'snareVol*v0.585' ## vol.89 vel.123
+#drum `l`= 5g+ |A p85 'snareVol*v0.494' ## vol.89 vel.113
+#drum `m`= 5g+ |A p85 'snareVol*v0.394' ## vol.89 vel.101
+#drum `n`= 5g+ |A p85 'snareVol*v0.293' ## vol.89 vel. 87
+#drum `o`= 5g+ |A p85 'snareVol*v0.247' ## vol.89 vel. 80
+#drum `p`= 5g+ |A p85 'snareVol*v0.195' ## vol.89 vel. 71
+#drum `q`= 5g+ |A p85 'snareVol*v0.149' ## vol.89 vel. 62
+#drum `r`= 5g+ |A p85 'snareVol*v0.097' ## vol.89 vel. 50
+#drum `s`= 5g+ |A p85 'snareVol*v0.050' ## vol.89 vel. 36
+
+#drum `t`= 5g+ |A p85 'snareVol*v0.450' ## vol.85 vel.113
+#drum `u`= 5g+ |A p85 'snareVol*v0.360' ## vol.85 vel.101
+#drum `v+`=5g+ |A p85 'snareVol*v0.312' ## vol.85 vel. 94
+#drum `v`= 5g+ |A p85 'snareVol*v0.267' ## vol.85 vel. 87
+#drum `w`= 5g+ |A p85 'snareVol*v0.178' ## vol.85 vel. 71
+#drum `x`= 5g+ |A p85 'snareVol*v0.136' ## vol.85 vel. 62
+#drum `y`= 5g+ |A p85 'snareVol*v0.088' ## vol.85 vel. 50
+#drum `z`= 5g+ |A p85 'snareVol*v0.046' ## vol.85 vel. 36
+
+#drum `a-`=5g+ |A p85 'snareVol*v0.200' ## vol.52 vel.123
+#drum `b-`=5g+ |A p85 'snareVol*v0.169' ## vol.52 vel.113
+#drum `c-`=5g+ |A p85 'snareVol*v0.135' ## vol.52 vel.101
+#drum `d-`=5g+ |A p85 'snareVol*v0.100' ## vol.52 vel. 87
+#drum `e-`=5g+ |A p85 'snareVol*v0.084' ## vol.52 vel. 80
+#drum `f-`=5g+ |A p85 'snareVol*v0.067' ## vol.52 vel. 71
+#drum `g-`=5g+ |A p85 'snareVol*v0.051' ## vol.52 vel. 62
+#drum `h-`=5g+ |A p85 'snareVol*v0.033' ## vol.52 vel. 50
+#drum `i-`=5g+ |A p85 'snareVol*v0.017' ## vol.52 vel. 36
+
+#drum `k-`=5g+ |A p85 'snareVol*v0.509' ## vol.83 vel.123
+#drum `l-`=5g+ |A p85 'snareVol*v0.429' ## vol.83 vel.113
+#drum `m-`=5g+ |A p85 'snareVol*v0.343' ## vol.83 vel.101
+#drum `n-`=5g+ |A p85 'snareVol*v0.255' ## vol.83 vel. 87
+#drum `o-`=5g+ |A p85 'snareVol*v0.215' ## vol.83 vel. 80
+#drum `p-`=5g+ |A p85 'snareVol*v0.170' ## vol.83 vel. 71
+#drum `q-`=5g+ |A p85 'snareVol*v0.129' ## vol.83 vel. 62
+#drum `r-`=5g+ |A p85 'snareVol*v0.084' ## vol.83 vel. 50
+#drum `s-`=5g+ |A p85 'snareVol*v0.044' ## vol.83 vel. 36
+
+#drum `t-`=5g+ |A p85 'snareVol*v0.303' ## vol.64 vel.123
+#drum `u-`=5g+ |A p85 'snareVol*v0.255' ## vol.64 vel.113
+#drum `v-`=5g+ |A p85 'snareVol*v0.204' ## vol.64 vel.101
+#drum `w-`=5g+ |A p85 'snareVol*v0.151' ## vol.64 vel. 87
+#drum `x-`=5g+ |A p85 'snareVol*v0.101' ## vol.64 vel. 71
+#drum `y-`=5g+ |A p85 'snareVol*v0.077' ## vol.64 vel. 62
+#drum `z-`=5g+ |A p85 'snareVol*v0.050' ## vol.64 vel. 50
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} %e1
+'init'
+* ## part1 start
+[5 "y-2y-2y-4y-2."]
+"y-2y-2y-4y-2"
+/$/ ## part1 loop (4th early)
+'trombone' p75 'n*v.232' m48,18,223 l16 ## vol.61 vel.113
+c+rd+r
+## 13
+[
+e1  ^4^rd+r e8d+24e24d+24 c+r>br<
+c+1 ^2^8r8  c+rd+r
+e8f+re1^rd+r e8d+24e24d+24 c+r>br<
+c+1 j2 ^2^8r8  c+rd+r ] 'n*v.275' c+12r6r2 ## vol.61 vel.123
+'trumpet' p40 't*v.404' m18,18,231 l16 ## vol.74 vel.123
+[[[ c+8d+8
+## 29
+#def sub129=      $129r8e8d+8 ;130
+    er8.e8d+8 erj1,129f+4ed+  $130 e8d+24e24d+24c+4.r8 ]]%k3]%k0
+'t*v.391' g8a8
+## 45
+'trumpets' ## ^^ vol.74 vel.121
+a+2..aa+ <c2.^12'r'^24%r>a+<c
+d12r6r4 d12r6r4 d12r6 d12r6r2
+'t*v.189'd12r6r4 d12r6r4 d12r6 d12r6 ## vel.84
+m
+/r4/ ## part1 only -- loop a 4th early
+~ ## full version -- with harp (early loop)
+$ 'harp+o1' p10 'p*v.115''pf*v96,.224' l16 ## vol.64 vel. 76 -> vol.72 vel.94
+d4>>a4
+~
+* ## part1 end
+~_$_ ## 51 part2 begin
+'strings=@11,7,7,0' p25 's*v.177' l8 ## vol.64 vel.94
+[
+ [aragad araga<d    crc>b<cj2>a b(a24b24a24)gadc] d decd4.>
+]
+## 67
+'s*v.262'<|1 p64 ## vol.78 vel.94 // make octave because there's an oboe layer at -1oct
+[[
+frf4ed er(e6d24e24)dc j2
+drd4c>b< c>ab<cde
+ ] d1^4 j2 e4
+]          cd
+# ## 83
+e1^1^4 'r' ^2
+'trombone' p70 'n*v.237' m24,18,223 l16 ## vol.69 vel.101
+[[[c+'r'^%r d+'r'^%r
+## 87 + 95
+  e'r'^8.%r e'r'^%r d+'r'^%r  e'r'^ j2 ^8%r e'r'^%r d+'r'^%r  e8d+24e24d+24c+8'r'^4.%r ]
+                                       %rf+8.'r'^%red+        e8d+24e24d+24c+8'r'^4.%r
+]%k3]%k0
+g'r'^%ra'r'^%r
+## 103
+a+2.'r'^8%raa+   <c2.'r'^8%r>a+<c
+[[4 %rd'r'^8. j3,0j4 ^4] j2 ^2 'n*v.176'] ## vol.69 vel.87
+m
+~ ## part2 end
+_ ## harp for part2-only
+'harp+o1' p10 'p*v.115''pf*v96,.224' l16 ## vol.64 vel. 76 -> vol.72 vel.94
+d4>>a4
+_
+;
+*'sub129'*
+
+{2} %e1
+* ## part1 start
+r1r1r1r1
+'strings-o2' p100 's*v.489' l16 ## vol.87 vel.115
+[[[4 %r f+.'r'^32^8 j3,0 ^4] ^4] 'stringx-o1']
+/$/ ## part1 loop
+## 13
+'flutes+o1' p31 'f*v.237' l16 m48,18,207 ## vol.69 vel.101
+[
+r2. c+rd+r        e4^rd+r e8d+24e24d+24 c+r>br<
+c+1               ^2^6r12r4
+r2. c+rd+r        e8f+re4j2^4g+4
+f+2c+2            ^2^6r12r4]
+'f*v.168' g+2
+'f*v.247' l24 'ff*v96,.101'[6%l1f+g+%l0]'ff*v96,.241'[6%l1f+g+%l0]'f*v.352'f+16&180r
+m
+## 29
+'stringsslow' p75 's*v.352' l4 ## vol.69 vel.123
+[e1  ^.c+f+.        e^.f+.  e.c+f+.]
+# ## 37
+'s*v.404' ## vol.74 vel.123
+[g1  ^.ea.          g^.a.   g.ea.]
+## 45
+'stringx-o1' p100 's*v.273' ##'s*v.427' ## vol.76 vel.123
+## This section tests a bit overloud, so I'm taking the quieter sustain volume
+## from the equivalent in the final measures of part 2.
+d+1 f2.^12'r'^24%r f12'r'^24%r 's*v.427'
+[[g16'r'^4..%r][g16'r'^8.%r]r2 's*v.213'] ## vol.76 vel.87
+* ## part1 end
+~$ ## 51 part2 begin
+'stringsslow-o1' p120 's*v.242' l4 ## vol.81 vel.87
+[
+a1^1^ 's*v.283'gab's*v.242'    ##        vel.94
+a1^1^2. j2 g
+]          ^
+## 67
+'s*v.255' ## vol.83 vel.87
+[
+a2.<c2.>g1.
+a2.<c2. k-1 d1. k0>
+]
+# ## 83
+<^1.c+2.
+"!!!o y2."
+## 87
+'timpani-o1' p45 'd*v.423' l8 ## vol.87 vel.107
+[4f+2f+2f+4f+2.]
+# ## 95
+[4a2a2a4a2j4^4] "!!!o x+4"
+## 103
+["!!!o w2^8"
+ 'trumpet' p64 't*v.385' j2 g16 r16r4] ## vol.83 vel.107
+                            f16 r16r4
+"!!!o w2w2w4w2. w-2w-2w-4w-2."
+~ ## part2 end
+;
+
+{3} %e1
+* ## part1 start
+'timpani-o1' p45 'd*v.559' l12 ## vol.87 vel.123
+[6 f+2f+2    f+4f+4^6'd*v.186''df*v64,.559'f+f+f+f+] ## v.186 = vel.71
+/$/ ## part1 loop
+## 13
+[8 "a4b4a4b4" j8  "a4a4^6" 'd*v.186''df*v64,.559'"aaaa"] ":b:a1"
+## 29
+l16 [
+"a4b4a4b4  a8b4a4" <c+4> 'd*v.377''df*v24,.559'f+f+ ## v.377 = vel.101
+"a4b4a-8a4.  a4b8" p45%y'd*v.559'<<c+4>f+4 'd*v.377''df*v24,.559'f+f+]
+# ## 37
+[ ":a:"
+"c4b4c4b4  c8b4c4" <e4> 'd*v.377''df*v24,.559'aa
+"c4b4c-8c4.  c4b8" p45%y'd*v.559'<<e4>a4 'd*v.377''df*v24,.559'aa]
+## 45
+<[
+['d*v.472'd+8'd*v.559'd+4 j2 'd*v.280'd+'d*v.377'd+] d+8 ## v.472 = vel.113 / v.280 = vel.87
+%k2]%k0>
+g2g2 g4g2.
+'d*v.280' g2g2g4g4
+/^2/ ## part1 only -- no harp
+* ## part1 end (early)
+~$^8 ## full ver. start / part2 loop
+'harp' p10 'p*v.115''pf*v96,.224' l16 ## vol.64 vel. 76 -> vol.72 vel.94
+g4>d8
+~ ## full ver. end
+~_{3}%e1_ ## 51 part2 begin
+'strings-o2=@13,1,2,0' p100 l16
+## here we're trying to combine a sustained strings bass + staccato bassoon
+ ## strings vol.87 vel.98 -> .355 (/2) // bassoon vol.78 vel.105 or vel.80 -> .327 / .190
+[16 'sb*v.505'd4'sb*v.368'd4d4]
+## 67
+ ## strings vol.87 vel.104 -> .400 (/2) // bassoon vol.78 vel.105 or vel.80 -> .327 / .190
+[4
+'sb*v.527'd4'sb*v.390'd4dr's*v.400'd8
+'sb*v.527'c4'sb*v.390'c4cr's*v.400'c8
+j2,374
+['sb*v.527'g4'sb*v.390'g4g4]
+]
+# ## 83
+[3'sb*v.527'a4'sb*v.390'a4a4]'sb*v.327' a16'r'^8.^2
+## 87
+'bassoon-o2' p64 'b*v.124' l16 ## vol.58 vel.87
+f+'r'^%r <c+'r'^%r f+'r'^4%r>
+f+       <c+'r'^%r f+'r'^8.%r>
+f+'r'^%r <c+'r'^%r f+'r'^%r c+'r'^^2%r>
+[3
+[f+'r'^%r <c+'r'^%r f+'r'^8.%r>]
+f+'r'^%r <c+'r'^%r f+'r'^%r c+'r'^^2%r>
+]
+# ## 95
+[4
+[a'r'^%r <e'r'^%r a'r'^8.%r>]
+a'r'^%r <e'r'^%r a'r'^%r e'r'^^2%r>
+]
+## 103
+'stringx-o1' p100 's*v.273' ## vol.74 vel.101
+d+1 f2.^12r24 'strenv87'f8
+g2g2g4g2.
+'s*v.067' ## vol.74 vel.50
+g2g2g4g4
+~ ## part2 end (2nd early)
+;
+
+$374 l16
+'sb*v.527'g4'sb*v.390'g4gr's*v.447'%a10,0,5,24 l8 a  b<c>abga %a13,1,2,0 $0]
+
+{4} %e1
+* ## part1 start
+/ ## In part1-only, since the loop point is midway, we include this drum sequence twice
+[6
+l24 `a6ed  adc12b12`     l32 `a6d12` 'snareVol*v.404''snareFade*v36,.035'[6"s"]"s16"
+l32 `b4` 'snareVol*v.404''snareFade*v48,.035'[8"s"]"s8" l24 `gfd c12b12a12`]
+/
+/$ `!!!o` / ## part1 loop
+## 13
+/[8/ ~[14~ ## Full version is merged with the identical measure 1-12 section
+l24 `a6ed  adc12b12` l32 `a6d12` 'snareVol*v.404''snareFade*v36,.035'[6"s"]"s16" /j8,428/~j14,428~
+l32 `b4` 'snareVol*v.404''snareFade*v48,.035'[8"s"]"s8" l24 `gfd c12b12a12`]  $428 `:i: j2.`
+'snareVol*v.097''snareFade*v24,.494' l32 "sssss16" `:l:k16`
+## 29
+l32 [4 [`m8k8` 'snareFade*v36,.097' [6"s"]"s16"] `:r:`
+l16 `kpnm` l32 `k8`'snareVol*v.494''snareFade*v18,.195'"ssss" l16 `n8km` l32 'snareVol*v.195''snareFade*v48,.585'"sss16s16s16" `:k:`
+l24 `k8` 'snareVol*v.293''snareFade*v24,.585'"ssss8" l16 `nmkm` l32 `kkmn` 'snareVol*v.293''snareFade*v48,.585' l16 "ssss" `:k:`
+l16 `k` 'snareVol*v.293''snareFade*v36,.585'"ssss8" 'snareVol*v.494''snareFade*v18,.195'l32"ssss" `n8m8` `kmn16m16l16`]
+ ## note: 4th iteration here is slightly different in source
+ ## but not significantly enough to alter here.
+ ## 3rd/4th iteration has trivial master volume increase.
+ ## 4th has some of the velocities compressed slightly but same pattern.
+## 45
+[4 l32 `m8` 'snareVol*v.585''snareFade*v24,.195'"ssss s8"`o16n16`]
+[4 l32 'snareVol*v.585''snareFade*v24,.195'"ssss s8" j3,0 ^4] ^4
+[4 l32 'snareVol*v.394''snareFade*v24,.050'"ssss s8" j3,0 ^4]
+m72,1"z4"
+* ## part1 end
+~$ ## 51 part2 begin
+* ## complete revc if full version, skip first drum(s)
+"z-2"
+"!!!o" "b-4" [45"b-4"]
+*_ ## don't skip first drum if only part2
+"!!!o" "b-4" [47"b-4"]
+_ ## end branch
+## 67 -> 83
+[5 `!o`
+l16 `t4tuvwv8u8`
+l24 `t4` 'snareFade*v40,.088' [6"s"] `v8u8`
+l32 `t4` 'snareFade*v36,.046' [6"s"]"s16" `v8u8` j5,486
+l24 'snareVol*v.450''snareFade*v40,.088' [6"s"] `v+8`
+l32 'snareVol*v.450''snareFade*v18,.178' "ssss" l16 `wvut`
+] $486                   `:u: u2.`
+## 87 + 95
+[8 l32
+[4 'snareVol*v.303''snareFade*v36,.050' [6"s"]"s16"j3,0j4"^4"]^2
+]
+## 103
+[4 l32 `l-8` 'snareVol*v.509''snareFade*v24,.170' "sssss8" `n-16m-16`]
+[4 'snareVol*v.509''snareFade*v24,.170' "sssss8" j3,0 ^4 ] ^4
+[4 'snareVol*v.200''snareFade*v24,.067' "sssss8" j3,0 ^4 ] ^4
+~ ## part2 end
+;
+
+{5} %e1
+* ## part1 start
+[8r1]
+'bassoon-o2' p40 'b*v.149' l16
+/ [2 [4 %r f+.'r'^32^8 j3,0 ^4] ^4]/
+/$ 'bassoon-o2' p40 'b*v.149' l16 / ## part1 loop (splits this section)
+## 13
+/ [4 [4 %r f+.'r'^32^8 j3,0 ^4] ^4]/
+~ [6 [4 %r f+.'r'^32^8 j3,0 ^4] ^4]~
+# ## 21
+'strings' p25 's*v.161' ## vol.66 vel.87
+g+1 ^2b2 a+1 ^2.r4
+g+1 ^2b2 a+1 's*v.327' f+12r6r2. ## vol.66 vel.101
+## 29
+'stringx' 'p25' 's*v.429' l16 ## vol.83 vel.113
+[[4 [4 %rb'r'^^4 j3,0 ^8] ^8]%k3]%k0
+## 45
+'stringx' p75 's*v.404' ## vol.74 vel.123
+a+1 <c2.^12'r'^24%r c12'r'^24%r
+[[d16'r'^4..%r][d16'r'^8.%r]r2 's*v.202'] ## vol.74 vel.87
+* ## part1 end
+~$ ## 51 part2 begin
+'flute' p64 'e*v.305' m18,18,223 l8 ## vol.85 vel.93
+[
+ [aragad araga<d  crc>b<cj2>a b(a24b24a24)gadc] d decd4.>
+]m
+## 67
+'stringsslow' p75 's*v.303' l4 ## vol.78 vel.101
+[
+f2.e2.d1c>b<
+f2.e2g k1 d1. k0
+]
+# ## 83
+'s*v.202' p64 a1^1^4 ## vol.74 vel.87
+"!!!o d2"
+'strings''strenv87' p25 's*v.379' l8  ## vol.78 vel.113
+[[[ c+d+
+## 87 + 95
+e4ed+ j1,587 e%r0 f+8.'strenv87'^16e16d+16 $588 %r0 e(d+24e24d+24)c+8 'strenv87' ^4.]
+#def sub587= $587 e4e8d+8 ;588
+]%k3]%k0
+'s*v.414' ga ## vol.78 vel.118
+## 103
+|1 l16 ## pick up the -1oct part that begins here
+a+2.'r'^8%r aa+    <c2.'r'^8%r>a+<c
+'strenv87' d2d2d4d2.
+'s*v.190' d2d2d4d2. ## vol.78 vel.80
+~ ## part2 end
+;
+~'sub587'~
+
+{6} %e1
+* ## part1 start
+[6 ^4"b2b2b2."]
+/$/ ## part1 loop
+## 13
+[7 "y-2y-2y-4y-2."]
+"y-2y-2y2.z4"
+## 29
+[ "y2y2  y4.y4.^4" "y4.^4y4. y4.y4.z4" ]
+  "y2y2  y4.y4.z4" "y4.^4y4. y4.y4.^4"
+  "y2y2  y4.y4.^4" "y4.^4y4. y4.y4.^8z8"
+## 45
+"^8y2y2y2y4z+8"
+"y2y2y4y2."
+"y-2y-2y-4y-4"
+/^2/ ## part1 only -- no harp
+* ## part1 end
+~$ ## full ver. start
+'harp' p10 'p*v.115''pf*v96,.224' l16 ## vol.64 vel. 76 -> vol.72 vel.94
+ra4>g8.
+~ ## full ver. end
+_{6}%e1_ ## part2-only entry point
+~ ## 51 part2 begin
+'timpani' p45 'd*v.326' l8 ## vol.87 vel.94
+[
+d4 "!!!o n4." 'timpani-o1' p45 'd*v.326' a<d2.
+d4 "!!!o n2"  'timpani'    p45 'd*v.326' d2>a4<
+d4 "!!!o n2"  'timpani'    p45 'd*v.326' d2^>a<
+d4 "!!!o n2"  'timpani'    p45 'd*v.326' d2.
+]
+## 67
+[[
+d4 "!!!o d4d" 'timpani'    p45 'd*v.326' d
+c4 "!!!o d4d" 'timpani'    p45 'd*v.326' c> j2,673
+g4 "!!!o d" 'timpani' p45 'd*v.326' d "!!!o d4" 'timpani-o1' p45 'd*v.326'
+g4 "!!!o d" 'timpani' p45 'd*v.326' d "!!!o d"  'timpani-o1' p45 'd*v.326' g<
+] $673 [g4 "!!!o d" 'timpani-o1' p45 'd*v.326' g "!!!o d4" 'timpani-o1' p45 'd*v.326']<
+]>
+# ## 83
+[3 a4 "!!!o d" 'timpani-o1' p45 'd*v.326' a "!!!o d4" 'timpani-o1' p45 'd*v.326'] a2.
+## 87
+'trumpets-o1' p74 't*v.343' l16 ## vol.83 vel.101
+[4br4.. br4.. br8. br8. r2]
+# ## 95
+<[4dr4.. dr4.. dr8. dr8. r2]
+## 103
+[ 'timpani' p45 'd*v.472' d+8 "!!!o b4."] ## vol.87 vel.113
+[ 'timpani' p45 'd*v.472' f8 "!!!o b4."]
+'timpani-o1' p45 'd*v.472' g2g2g4g2.
+                 'd*v.186' g2g2g4g4 ## vol.87 vel.71
+~ ## part2 end
+;
+
+{7} %e1
+* ## part1 start
+[8r1]
+/ ## part one only -- this part is split into two by loop point
+[ l32 "t2t2 t4uuuuuuu16^2"]
+/
+/$ "!!!o" / ## part1 loop
+## 13
+/ [4 l32 "t2t2 t4uuuuuuu16^2"] /
+~ [6 l32 "t2t2 t4uuuuuuu16^2"] ~ ## full version only -- not split
+# ## 21
+'horn-o1' p80 'h*v.237' m48,18,207 ## vol.69 vel.101
+b1  ^2g+2  a+1  ^2.r4
+b1  ^2g+2  a+1  'h*v.297'a+12r6r2.
+m
+## 29
+"!!!o" [64 "v+8v-16v-16"]
+## 45
+[4 "v+8v4v-16v16"]
+"v+2v+2v+4v+2."
+"v-2v-2v-4v-4"
+/^2/ ## part1 only -- no harp
+* ## part1 end
+~$^8. ## full ver. start
+'harp' p10 'p*v.115''pf*v96,.224' l16 ## vol.64 vel. 76 -> vol.72 vel.94
+d4>>a16<
+~ ## full ver. end
+_{7}%e1_ ## part2-only entry point
+_'harp-o1' p10 'p*v.224'_
+~ ## 51 part2 begin
+l4 [
+^8g<da> a<g<d>> a<g<df+16.f+32^8f+>a>
+  g<da> a<g<d>> g<da<ed>g8>]
+## 67
+'p*v.258' ## vol.72 vel.101
+[
+r8a<ea> g<dg cgb agd>
+  a<ea> g<dg da<d> bj2ba8>
+]                     b8 m72,1"!!!o x4" 
+# ## 83
+"x-4"
+'harp' p10 'p*v.258'
+l4 e<d ad>e>
+l24 >a<a<c+^8^4
+'p*v.192' ## vol.72 vel.87
+eb<e48^8>
+'p*v.128' ## vol.72 vel.71
+a<a<c+8.^4
+"!!!o x4"
+## 87
+"x-1" r1r1r1
+r1r1r1 r2.
+'oboe' p35 'o*v.303' l16 ## vol.78 vel.101
+[[ erf+r
+gr8. grf+r grj1,797a8.rgf+ $798 g8f+24g24f+24e8r4. ]] r4
+#def sub797=l16$797r8grf+r ;798
+## 103
+p64 [[
+'bassoon-o2' 'b*v.210' d+r ## vol.58 vel.113
+'trumpet' 't*v.385' a+rr4 ## vol.83 vel.107
+]%k2]%k0
+gr4.. gr4.. gr8. gr8. r2
+'t*v.215' ## vol.83 vel.80
+gr4.. gr4.. gr8. gr8.
+~ ## part2 end
+;
+~'sub797'~
+
+{8} %e1
+* ## part1 start
+[12r1]
+/$/ ## part1 loop
+## 13
+'stringx-o1' p100 's*v.409' l16 ## vol.81 vel.113
+[7 [4 %r f+.'r'^32^8 j3,0 ^4] ^4] [3 %r f+.'r'^32^4.] ^2 %r
+## 29
+l16 [[
+[3's*v.450' f+r 's*v.178' f+rj3f+r] ## vol.85 vel.113/71
+[3's*v.450' f+r 's*v.178' f+rj2,0f+r$0]
+[2's*v.450' f+r 's*v.178' f+rf+rj2f+rf+r]
+[3's*v.450' f+r 's*v.178' f+rj2,0f+r$0]
+]%k3]%k0
+## 45
+'horn' p80 'h*v.341' l16 m48,18,207 ## vol.74 vel.113
+r4.gaa+4..r
+r4.aa+<c4.>a+<c
+m 'bell+o1' p64
+'l*v.429' g1 g1 ## vol.83 vel.113
+'l*v.170' g1 g1 ## vol.83 vel.71
+* ## part1 end
+~$ ## 51 part2 begin
+'harp-o1' p10 'p*v.224' l4 ## vol. 72 vel.94
+[
+da<g> d<da> d<da <g8.g16ed>>
+da<g> d<da> da<g <dc>b>
+]
+## 67
+'p*v.258' ## vol.72 vel.101
+[
+d<df> c<ce> g<da <c>ba>
+d<df> c<ce> g<gb <c>aj2g>
+]                      g8d8>
+# ## 83
+a8<da<e e>ad8>
+^48e24b24<e4.>
+'p*v.192' ## vol.72 vel.87
+a24<a24<c+8.
+'p*v.128' ## vol.72 vel.71
+e24b24<e24^8^2
+## 87
+'stringx-o1' p100 's*v.341' ## vol.74 vel.113
+[[4 [4 %r f+16'r'^8. j3,0 ^4] ^4] %k3]%k0
+## 103
+m48,18,207
+r8 'trumpet' p64 't*v.385' g16 r8. ## vol.83 vel.107
+'horn' p80 'h*v.372' g16a16a+4..r16 ## vol.74 vel.118
+r8 'trumpet' p64 't*v.385' f16 r8.
+'horn' p80 'h*v.372' a16a+16<c4^12r24>a+16<c16
+m "!!!o"
+"b2b2b4b2."
+"d-2d-2d-4d-2."
+~ ## part2 end
+;

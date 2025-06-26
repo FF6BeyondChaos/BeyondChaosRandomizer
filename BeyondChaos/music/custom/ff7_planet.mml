@@ -1,0 +1,286 @@
+#TITLE Listen to the Cries of the Planet
+#ALBUM Final Fantasy VII
+#COMPOSER Nobuo Uematsu
+#TRANS VGMTrans
+#ARRANGED emberling
+
+#WAVE 0x20 0xC4 synst
+#WAVE 0x21 0x08 lpiano
+#WAVE 0x22 0x28 tbell
+#WAVE 0x23 0x65 strings
+#WAVE 0x24 0x73 vox
+#WAVE 0x25 0x94 oboe/bsn
+#WAVE 0x26 0x59 pizzi
+#WAVE 0x27 0xA7 flute
+#WAVE 0x28 0x95 clari
+#WAVE 0x29 0x61 harp
+#WAVE 0x2A 0x93 oboe
+
+#def init= t85 %v50 %b0,100 %f0,0
+
+#def synst= |0 o6
+#def lpian= |1 o7
+#def tbell= |2 o5
+#def strings= |3 o5
+#def vox=   |4 o5
+#def bssn=  |5 o6
+#def pizzi= |6 o5
+#def flute= |7 o6 %r1
+#def clari= |8 o5 %r1
+#def harp=  |9 o5 %r12
+#def oboe=  |A o5 %r1 %a6
+
+#def y= v108
+#def l= v40
+#def b= v64
+#def s= v100
+#def v= v100
+#def n= v80
+#def p= v64
+#def f= v125
+#def c= v125
+#def o= v125
+#def h= v64
+
+#def sf= v1,100
+#def vf= v1,100
+#def ff= v1,125
+#def cf= v1,125
+#def of= v1,125
+
+{1} %e1 'init'
+'synst-o2' p64 'y*v.63'
+%l1 l8
+ d m3,7 d m3,5 a m3,-4 <d> m3,-3 a+ m3,2 g
+$
+[35 m3,-7 a m3,7 d m3,5 a m3,-4 <d> m3,-3 a+ m3,2 g]
+[4 m3,-7 a m3,7 d m3,5 a m3,-3 <d> m3,-4 b m3,2 g]
+[9 m3,-7 a m3,7 d m3,5 a m3,-4 <d> m3,-3 a+ m3,2 g]
+;
+
+{6} %e1
+'synst-o2' p10 'y*v.29'
+%l1 l8 r8
+ d $ m3,7 d m3,5 a m3,-4 <d> m3,-3 a+ m3,2 g
+[31 m3,-7 a m3,7 d m3,5 a m3,-4 <d> m3,-3 a+ j31 m3,2 g]
+## 33
+[4
+'bssn-o2' p20 'n' d16
+'synst-o2' p10 'y*v.29' %l1
+a16 m3,-7 a m3,7 d
+'bssn-o2' p20 'n' f16
+'synst-o2' p10 'y*v.29' %l1
+<d16 m3,-4 d> m3,-3 a+
+]
+[4
+'bssn-o2' p20 'n' d16
+'synst-o2' p10 'y*v.29' %l1
+a16 m3,-7 a m3,7 d
+'bssn-o2' p20 'n' f16
+'synst-o2' p10 'y*v.29' %l1
+<d16 m3,-3 d> m3,-4 b
+]
+[8
+'bssn-o2' p20 'n' d16
+'synst-o2' p10 'y*v.29' %l1
+a16 m3,-7 a m3,7 d
+'bssn-o2' p20 'n' f16
+'synst-o2' p10 'y*v.29' %l1
+<d16 m3,-4 d> m3,-3 a+
+]
+m3,2 g m3,-7 a
+;
+
+{8} %e1
+'synst-o2' p120 'y*v.14'
+%l1 l8 r4
+ d $ m3,7 d m3,5 a m3,-4 <d> m3,-3 a+ m3,2 g
+[11 m3,-7 a m3,7 d m3,5 a m3,-4 <d> j11 m3,-3 a+ m3,2 g]
+## 13
+'vox-o1' p104 'v*v.34'
+'vf*v12,.39' a1 'vf*v96,.09' ^2
+'synst-o2' p120 'y*v.14' %l1
+[ m3,-3 a+ m3,2 g m3,-7 a m3,7 d m3,5 a m3,-4 <d>]
+## 17
+'lpian-o3' p4 'l' d1.
+'synst-o2' p120 'y*v.14' %l1
+[6 m3,-3 a+ m3,2 g m3,-7 a m3,7 d m3,5 a m3,-4 <d>]
+## 25
+'vox-o1' p104 'v*v.09'
+'vf*v24,.39' a1 'vf*v96,.09' ^2
+'synst-o2' p120 'y*v.14' %l1
+[ m3,-3 a+ m3,2 g m3,-7 a m3,7 d m3,5 a m3,-4 <d>]
+## 29
+'lpian-o3' p4 'l' d1.
+'synst-o2' p120 'y*v.14' %l1
+[2 m3,-3 a+ m3,2 g m3,-7 a m3,7 d m3,5 a m3,-4 <d>]
+## 33
+'clari' p44 m96,18,202
+'c*v.39'f1'cf*v96,.09'^2
+'c*v.39'e1'cf*v96,.09'^2
+'c*v.39'd2.^2.^2.^4'cf*v96,.09'^2
+'c*v.39'f1'cf*v96,.09'^2
+'c*v.39'e1'cf*v96,.09'^2
+'c*v.39'f2.^2.^2.^4'cf*v96,.09'^2
+m
+'synst-o2' p120 'y*v.14' %l1
+m3,-3 a+ m3,2 g m3,-7 a
+;
+
+{2} %e1 $
+r2.r2.r2.r2.
+## 5
+'tbell-o1' p120 'b'
+d2.^2.^2.^2.
+d2.^2.
+'vox' p104 'v*v.09'
+'vf*v144,.39' g1 &90^ 'vf*v6,.34' ^32
+## 13
+'vf*v12,.39' f1 'vf*v96,.09' ^2
+'strings' p84 's*v.29'
+'sf*v48,.49'g4^16.'sf*v6,.29'^32
+'sf*v48,.49'a+2^8..'sf*v6,.29'^32
+'sf*v48,.49'a4^16.'sf*v6,.29'^32
+## 17
+'tbell-o1' p120 'b'
+d4.
+'pizzi-o1' p110 'p' l8
+aa+g  ar4fr4
+[3 dr4aa+g  ar4fr4]
+## 25
+'vox' p104 'v*v.09'
+'vf*v24,.39' f1 'vf*v96,.09' ^2
+'strings' p84 's*v.29'
+'sf*v48,.49'g4^16.'sf*v6,.29'^32
+'sf*v48,.49'a+2^8..'sf*v6,.29'^32
+'sf*v48,.49'a4^16.'sf*v6,.29'^32
+## 29
+'tbell-o1' p120 'b'
+d4.
+'pizzi-o1' p110 'p' l8
+aa+g  ar4fr4
+dr4aa+g  ar4fr4
+## 33
+'harp' p94 'h' l8
+[4 daa+<ed4>]
+[4 dab<fd4>]
+[8 daa+<ed4>]
+;
+
+{3} %e1 $
+r2.r2.r2.r2.
+## 5
+'lpian-o3' p4 'l'
+d2.^2.^2.^2.
+d2.^2.
+'vox' p104 'v*v.09'
+'vf*v144,.39' e1 &90^ 'vf*v6,.34' ^32
+## 13
+'vf*v12,.39' d1 'vf*v96,.09' ^2
+'strings+o1' p54 's*v.29'
+'sf*v48,.49'c4^16.'sf*v6,.29'^32
+'sf*v48,.49'd2^8..'sf*v6,.29'^32
+'sf*v48,.49'd4^16.'sf*v6,.29'^32
+## 17
+'sf*v49,.49'>a2.'sf*v144,.09'^2.
+'lpian-o3' p4 'l' r1. d1. ^1.
+## 25
+'vox' p104 'v*v.09'
+'vf*v24,.39' d1 'vf*v96,.09' ^2
+'strings+o1' p54 's*v.29'
+'sf*v48,.49'c4^16.'sf*v6,.29'^32
+'sf*v48,.49'd2^8..'sf*v6,.29'^32
+'sf*v48,.49'd4^16.'sf*v6,.29'^32
+## 29
+'sf*v49,.49'>a2.'sf*v144,.09'^2. r1.
+## 33
+'flute' p50 m96,18,202
+'f*v.29'd1'ff*v96,.09'^2
+'f*v.29'c1'ff*v96,.09'^2
+>'f*v.29'b2.^2.^2.^4'ff*v96,.09'^2<
+'f*v.29'd1'ff*v96,.09'^2
+'f*v.29'c1'ff*v96,.09'^2
+'f*v.29'd2.^2.^2.^4'ff*v96,.09'^2
+m
+;
+
+{4} %e1 $
+r2.r2.r2.r2.
+## 5
+[6r2.]
+'vox' p104 'v*v.09'
+'vf*v144,.39' c1 &90^ 'vf*v6,.34' ^32
+## 13
+'strings+o1' p24 's*v.09'
+'sf*v144,.49'd1 &90^ 'sf*v6,.29' ^32
+'sf*v48,.49'e4^16.'sf*v6,.29'^32
+'sf*v48,.49'g2^8..'sf*v6,.29'^32
+'sf*v48,.49'f4^16.'sf*v6,.29'^32
+## 17
+'sf*v49,.49'd2.'sf*v144,.09'^2.
+'tbell-o1' p120 'b' r1. d1. r1.
+## 25
+'strings+o1' p24 's*v.09'
+'sf*v144,.49'd1 &90^ 'sf*v6,.29' ^32
+'sf*v48,.49'e4^16.'sf*v6,.29'^32
+'sf*v48,.49'g2^8..'sf*v6,.29'^32
+'sf*v48,.49'f4^16.'sf*v6,.29'^32
+## 29
+'sf*v49,.49'd2.'sf*v144,.09'^2. r1.
+## 33
+'strings+o1' p24 's*v.09'
+%l1 'sf*v144,.49'd2d2'sf*v96,.09'd2 %l0
+%l1 'sf*v144,.49'c2c2'sf*v96,.09'c2 %l0
+>%l1'sf*v144,.49'b2.b2.b2.'sf*v144,.09'b2. %l0<
+%l1 'sf*v144,.49'd2d2'sf*v96,.09'd2 %l0
+%l1 'sf*v144,.49'c2c2'sf*v96,.09'c2 %l0
+%l1 'sf*v144,.49'd2.d2.d2.'sf*v144,.09'd2. %l0
+;
+
+{7} %e1 $
+r2.r2.r2.r2.
+## 5
+[8r2.]
+## 13
+'strings' p54 's*v.09'
+'sf*v144,.49'a1 &90^ 'sf*v6,.29' ^32
+r1.
+## 17
+p84
+'sf*v49,.49'f2.'sf*v144,.09'^2.
+r1.r1.r1.
+## 25
+p54
+'sf*v144,.49'a1 &90^ 'sf*v6,.29' ^32
+r1.
+## 29
+p84
+'sf*v49,.49'f2.'sf*v144,.09'^2.
+r1.
+## 33
+'oboe' p80 m96,18,202
+'o*v.39'a+1'of*v96,.09'^2
+'o*v.39'g1'of*v96,.09'^2
+'o*v.39'g2.^2.^2.^4'of*v96,.09'^2
+'o*v.39'a+1'of*v96,.09'^2
+'o*v.39'g1'of*v96,.09'^2
+'o*v.39'a2.^2.^2.^4'of*v96,.09'^2
+m
+;
+
+{5} %e1 $
+r2.r2.r2.r2.
+## 5
+[8r2.]
+## 13
+'bssn-o2' p20 'n' l16
+[20 drr4 frr4 ]
+## 33
+'strings' p54 's*v.09'
+%l1 'sf*v144,.49'a+2a+2'sf*v96,.09'a+2 %l0
+%l1 'sf*v144,.49'g2g2'sf*v96,.09'g2 %l0
+%l1'sf*v144,.49'g2.g2.g2.'sf*v144,.09'g2. %l0
+%l1 'sf*v144,.49'a+2a+2'sf*v96,.09'a+2 %l0
+%l1 'sf*v144,.49'g2g2'sf*v96,.09'g2 %l0
+%l1 'sf*v144,.49'a2.a2.a2.'sf*v144,.09'a2. %l0
+;

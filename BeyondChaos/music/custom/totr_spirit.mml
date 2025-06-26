@@ -1,0 +1,320 @@
+#TITLE The Spirit Chaser
+#ALBUM Treasure of the Rudras
+#COMPOSER Ryuji Sasai
+#TRANS VGMTrans
+#ARRANGED emberling
+
+## CREDITS NOTE:
+## While this is a fresh arrangement of this track using VGMTrans as source,
+## several embellishments are copied from a previous arrangement credited to
+## Gi Nattak & emberling. this previous arrangement was the result of adding
+## these embellishments and other fixes (by emberling) to a preexisting
+## arrangement by Gi Nattak which (uncredited and unknown to me at the time)
+## was sourced from a MIDI by Robert Hansson.
+## None of the material in this arrangement comes from that original arrangement,
+## but arguably that original arrangement may have some foundational inspiration
+## for several of those details taken from the second/previous arrangement.
+
+#WAVE 0x20 0x66 strings
+#WAVE 0x21 0x39 overdrive
+#WAVE 0x22 0x45 dist.buzz
+#WAVE 0x23 0x48 dist.open
+#WAVE 0x24 0x49 dist.mute
+#WAVE 0x25 0x51 bass
+#WAVE 0x28 0x0C kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x4A toms
+#WAVE 0x2C 0x2D crash
+#WAVE 0x2F 0x3D hihat
+
+#def init= t123 %v50 %b0,70 %f0,0
+
+#def strings= |0 o5 %e1 m32,18,195 %a13 %y2 %s5
+#def odlead=  |1 o6 %e1 m8,18,255               %r9
+#def buzzy=   |2 o4 %e1 m
+#def dclear=  |3 o5                             %r15
+#def dopen=   |3 o4                             
+#def dmute=   |4 o4                      
+#def bass=    |5 o5 %e0 m          %a14 %y1 %s5 %r0
+#def odlayer= |1 o5 %e1 m
+#def sawlayer=@6 o4 %e1 m6,18,215       %y3 %s1
+#def eplayer= @3 o6 %e1 m6,18,215
+
+#def s= v230
+#def o= v160
+#def z= v108
+#def d= v132
+#def n= v77
+#def m= v60
+#def b= v120
+#def l= v79
+#def y= v79
+#def e= v40
+
+#def kickV= v175
+#def snareV= v175
+#def tomV= v75
+#def hatV= v120
+#def cymbV= v200
+
+#drum "k"= 5g+ |8 'kickV*v.50'  p64 %e0
+#drum "s"= 5g+ |9 'snareV*v.50' p64 %e1
+#drum "s-"=5g+ |9 'snareV*v.50' p64 %e0
+#drum "e+"=5^                       %e1
+
+#drum "d"= 5c+ |A 'tomV*v1.05' p114 %e1
+#drum "b+"=4a+ |A 'tomV*v1.25' p74  %e1
+#drum "b"= 4a+ |A 'tomV*v1.05' p74  %e1
+#drum "a+"=4g+ |A 'tomV*v1.50' p64  %e1
+#drum "a"= 4g+ |A 'tomV*v1.05' p54  %e1
+#drum "g"= 4f+ |A 'tomV*v1.05' p34  %e1
+
+#drum "o"= 5g+ |F 'hatV*v.40'  p64  %e1 %y1 %s0 %r0
+#drum "h"= 5g+ |F 'hatV*v.40'  p64  %e1 %y3 %s0 %r31
+
+#drum "y"= 5g+ |C 'cymbV*v.63' p64  %e1 %r20
+#drum "y-"=5g+ |C 'cymbV*v.63' p34  %e1 %r20
+#drum "y+"=5g+ |C 'cymbV*v.63' p94  %e1 %r20
+#drum "x"= 5a  |C 'cymbV*v.63' p64  %e1 %r20
+#drum "x-"=5a  |C 'cymbV*v.63' p34  %e1 %r20
+#drum "x+"=5a  |C 'cymbV*v.63' p94  %e1 %r20
+#drum "w"= 6c  |C 'cymbV*v.63' p64  %e1 %r20
+#drum "w-"=6c  |C 'cymbV*v.63' p34  %e1 %r20
+#drum "w+"=6c  |C 'cymbV*v.63' p94  %e1 %r20
+#drum "v"= 6d+ |C 'cymbV*v.63' p64  %e1 %r20
+#drum "v-"=6d+ |C 'cymbV*v.63' p34  %e1 %r20
+#drum "v+"=6d+ |C 'cymbV*v.63' p94  %e1 %r20
+#drum "u"= 6f  |C 'cymbV*v.63' p64  %e1 %r20
+#drum "u-"=6f  |C 'cymbV*v.63' p34  %e1 %r20
+#drum "u+"=6f  |C 'cymbV*v.63' p94  %e1 %r20
+#drum "z"= 6g  |C 'cymbV*v.63' p64  %e1 %r20
+#drum "z-"=6g  |C 'cymbV*v.63' p34  %e1 %r20
+#drum "z+"=6g  |C 'cymbV*v.63' p94  %e1 %r20
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+'init'
+r8
+'strings' p114 's*v.31'
+[g+4g2. f+4f2.]
+p64 [<c4>b2. a+4a2.]
+$ ## 10
+'odlead+o1' p64 'o*v.26' l16
+f4                >(fg+)<(cf)  d+4             m16,-1^m0,0c+(c>a+)
+(eg)(a+<c+)       (c>a+g+)g    f4..m16,-7^m0,0
+g+m72,-1^.m18,2^. (cf)(gg+)    (a+<c>a+)m4,1g- ^g+(a+<c)
+(c+c)(>b<c)       >(g+a+)(gg+) f4.m32,-3^8m0,0<
+fd+c+c            >a+g+gg+     (a+gc)(<c>      gc)(a+g+)
+(gg+gf)           (ef)(ge)     fc(fg+          m32,-1^m0,0)a+(g+g)
+<c>f<fr           e>f<f>f<     gra+r           g+rgr
+e8cm4,1g-         ^c(eg)         m8,1e4.. %r19 ^48 m16,-7 ^24 m0,0
+## 18
+'strings' p64 's*v.50' l16
+[[
+a+fc+<c  ^>f<c+d+  fc+>g+<g  d+>a+<gg+
+j2 f8.g8.g+8 f8.g8.g+8>] j2 f2 c>f<c>a+  ^g+gd+] [4 efg] fgg+a+>
+## 26
+g+4a+4g4d+4       c4rcc+d+f2
+<c2d+4^c+c>a+     g+8g8e8g8f2
+<c4rcc+c>a+2      g4refgg+2
+<c4f4>a+4ra+<cc+> g4<c4f2
+;
+
+{2}
+r8
+'strings' p9 's*v.31'
+[4 d+4d2. c+4c2.]
+$ ## 10
+m %e1 p9 l16
+[
+'dclear''d*v.39'g+8 'dmute''m*v.62'ff ffff
+'dclear''d*v.39'a+8 'dmute''m*v.62'gg gggg
+'dclear''d*v.39'g8  'dmute''m*v.62'ee eeee
+'dclear''d*v.39'g+8 'dmute''m*v.62'fff 'dopen+o1''n*v.62'c+c>a+
+'dclear''d*v.39'g+8 'dmute''m*v.62'ff ffff
+'dclear''d*v.39'a+8 'dmute''m*v.62'gg gggg
+'dclear''d*v.39'e8  'dmute''m*v.62'ee eeee
+'dopen''n*v.62'fgg+f <c>a+g+g
+]
+## 18
+'dclear''d*v.39'
+[4
+f8 'dmute''m*v.62'a+a+a+ 'dclear''d*v.39'g8.
+g+8 'dmute+o1''m*v.62'c+c+c+ 'dclear''d*v.39'a+8.  j4,225
+f8 'dmute''m*v.62'ff ffff 'dclear''d*v.39'g+8.g8. j1,219 d+8]
+$219 g+8] $225
+g8 'dmute+o1''m*v.62'cc cccc 'dclear''d*v.39'g8.g8.g8
+## 26
+'strings+o1' p64 's*v.31' l16
+c4c+4>a+4g4     e4refgg+2
+g+2a+4^g+gf     f8e8c8e8c2
+g+4rg+a+g+g2    e4rcc+d+f2
+g+4<c4>g4rgg+a+ c4e4<c2>
+;
+
+{3}
+r8
+'bass-o1' p64 'b*v.63' p0,48,127 l16
+[56fr]p f+4f2.
+$ ## 10
+'bass-o1' p64 'b*v.63'
+[
+ffff ffff gggg gggg    eeee eeee ffff f<c+c>a+
+ffff ffff gggg gggg    eeee eeee fgg+f<c>a+g+g
+]
+## 18
+[4 a+a+a+a+ a+<c8.  c+c+c+c+ c+d+8. j4 >
+   ffg+f    <c>fg+f f8.f8.f8]          cccc cccc cccc cccc>
+## 26
+[
+ffff ffff gggg gggg    eeee eeee ffff f<c+c>a+
+ffff ffff gggg gggg    eeee eeee fgg+f <c>a+g+g
+]
+;
+
+{4}
+[8 [3&2"s-64e+32"] j8 "k4k4k4k8"]
+## ":s-e+: k4k2^8d24b24a24"
+":s-e+: k4k4o4o4"
+$ ## 10
+"!!!o" l16
+[3 "k8s8 k8s8 kks8 k8s8"] "k8s8 k8s8 kks8 ksss"
+[3 "k8s8 k8s8 kks8 k8s8"] "k8s8 k8s8 kd32d32dbbaag"
+## 18
+"k8s8 ks8. k8s8 ks8." "k8s8 kks8 k8sk kks8"
+"k8s8 ks8. k8s8 ks8." "k8s8 kks8 k8sk ^ks8"
+"k8s8 ks8. k8s8 ks8." "k8s8 kks8 k8sk ^sk8"
+"k8a+8 kb+8. k8s8 kb32b32ag" "ksks ksks kssk ddb24b24a24"
+## 26
+[3 "!o k8s8 k8s8 kks8 k8s8"] "k8s8 k8s8 kks8 ksss"
+[3    "k8s8 k8s8 kks8 k8s8"] "ks32s32ss ksss kd32d32db baag"
+;
+
+{5}
+r8
+r1r1r1r1
+'strings' p114 's*v.31'
+g+4g2. f+4f2.
+g+4g2.
+'buzzy' p64 'z*v.49'
+f+4f2.
+$ ## 10
+'buzzy' p119 l16
+[
+<'z*v.49'%r15 f8> 'z*v.62'%r22 ff ffff
+<'z*v.49'%r15 g8> 'z*v.62'%r22 gg gggg
+<'z*v.49'%r15 e8> 'z*v.62'%r22 ee eeee
+<'z*v.49'%r15 f8> 'z*v.62'%r22 fff 'z*v.49'%r15 <c+c>a+
+<             f8> 'z*v.62'%r22 ff ffff
+<'z*v.49'%r15 g8> 'z*v.62'%r22 gg gggg
+<'z*v.49'%r15 e8> 'z*v.62'%r22 ee eeee
+'z*v.49'%r15 fgg+f<c>a+g+g
+]
+## 18
+[4
+'z*v.49'%r15 a+8 'z*v.62'%r22 a+a+a+ 'z*v.49'%r15 <c8.
+             c+8 'z*v.62'%r22 c+c+c+ 'z*v.49'%r15 d+8. j4,525
+['z*v.49'%r15 f8 'z*v.62'%r22 >ff ffff<]>] $525 ['z*v.49'%r15 c8 'z*v.62'%r22 cc cccc]>
+## 26
+[
+'z*v.82'%r25 ffff ffff gggg gggg eeee eeee ffff f 'z*v.49'%r0 <c+c>a+
+'z*v.82'%r25 ffff ffff gggg gggg eeee eeee 'z*v.49'%r0 fgg+f <c>a+g+g
+]
+;
+
+{6}
+r8
+'strings-o3' p64 's*v.32' %a15
+[8 f4f2.]
+$ ## 10
+m %e1 p9 k1 l16
+[
+'dclear''d*v.39'c8  'dmute''m*v.62'ff ffff
+'dclear''d*v.39'g8  'dmute''m*v.62'gg gggg
+'dclear''d*v.39'e8  'dmute''m*v.62'ee eeee
+'dclear''d*v.39'f8  'dmute''m*v.62'fff 'dopen+o1''n*v.16'c+c>a+
+'dclear''d*v.39'f8  'dmute''m*v.62'ff ffff
+'dclear''d*v.39'g8  'dmute''m*v.62'gg gggg
+'dclear''d*v.39'c8  'dmute''m*v.62'ee eeee
+'dopen''n*v.16'fgg+f <c>a+g+g
+]
+## 18
+'dclear''d*v.39'
+[4
+>a+8< 'dmute''m*v.62'a+a+a+ 'dclear''d*v.39'c8.
+c+8 'dmute+o1''m*v.62'c+c+c+ 'dclear''d*v.39'd+8.  j4,625
+c8 'dmute''m*v.62'ff ffff 'dclear''d*v.39'f8.d+8. j1,619 >a+8<]
+$619 f8] $625
+c8 'dmute''m*v.62'ff ffff 'dclear''d*v.39'c8.c8.c8
+## 26
+'buzzy' p9 l16
+[
+'z*v.66'%r25 ffff ffff gggg gggg eeee eeee ffff f 'z*v.39'%r0 <c+c>a+
+'z*v.66'%r25 ffff ffff gggg gggg eeee eeee 'z*v.39'%r0 fgg+f <c>a+g+g
+]
+;
+
+{7}
+r8
+[7r1]
+"y4y4" ^4. "d24b24a24"
+$ ## 10
+"!!!o" l8
+[4 "y4hh hhhh hhhh hhhh"]
+## 18
+"y4^16y8.y4^16y8."
+
+#"y8h8h8" %k4 "y-8y+8.y-8." %k11 "y+8" %k0
+#"y4^16" %k7 "y-8." %k9 "y+4^16" %k7 "y-8." %k0
+#"y8h8h8h8" %k4 "y-8.y+8.y-8" %k0
+#"y4^16" %k9 "y-8.y+4^16y-8." %k0
+#"y-4h8h8y-8." %k1 "y+8.y+8" %k0
+
+"y8h8h8" "w-8w+8.w-8." "z+8"
+"y4^16" "v-8." "u+4^16" "v-8."
+"y8h8h8h8" "w-8.w+8.w-8"
+"y4^16" "u-8.u+4^16u-8."
+"y-4h8h8y-8." "x+8.x+8"
+
+"y4^16y8.y2"
+^2"y8.y16^4"
+## 26
+l8
+"y4hh hhhh hhhh hhhh"
+"y4hh hhhh"
+"y4y4y4hh"
+"y4hh hhhh hhhh hhhh"
+"y4hh hhhh"
+"y4y4hhhh"
+;
+
+{8}
+r8
+[7r1]
+'strings' p114 's*v.31'
+f+4f2.
+$ ## 10
+'odlayer+o1' p64 'l*v.26' l16
+f4        >fg+<cf   d+4       ^c+c>a+
+ega+<c+   c>a+g+g   f2
+g+4       cfgg+     a+<c>a+g  ^g+a+<c
+c+c>b<c   >g+a+gg+  f2<
+fd+c+c    >a+g+gg+  a+gc<c>   gca+g+
+gg+gf     efge      fcfg+     ^a+g+g
+<c>f<f>f< e>f<f>f<  gga+a+    g+g+gg
+e8cg      ^ceg      f2
+## 18
+'sawlayer' p64 'y*v.50' %p1 l16
+[[
+a+fc+<c  ^>f<c+d+  fc+>g+<g  d+>a+<gg+
+j2 f8.g8.g+8 f8.g8.g+8>] j2 f2 c>f<c>a+  ^g+gd+] [4 efg] fgg+a+
+%p0
+## 26
+'eplayer+o1' p64 'e*v.50' l16
+c4c+4>a+4g4     e4refgg+2
+g+2a+4^g+gf     f8e8c8e8f2
+g+4rg+a+g+a+2   e4refgf2
+<c4c4>a+4rgg+a+ g4<c4f2
+;

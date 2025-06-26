@@ -1,0 +1,238 @@
+#TITLE Marble Zone
+#ALBUM Sonic the Hedgehog
+#COMPOSER Masato Nakamura
+#TRANS vgm2mid
+#ARRANGED emberling
+
+#WAVE 0x20 0xB2 lead
+#WAVE 0x21 0xB3 organ
+#WAVE 0x22 0x22 vibe
+#WAVE 0x23 0x19 epiano
+#WAVE 0x24 0x52 bass
+#WAVE 0x25 0x56 slap
+#WAVE 0x26 0x40 synth
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x0F percus
+
+#def lead= |0 o5 'l' %e1 m24,18,239 v0,36,255 %r2
+#def organ= |1 o5 'o' %e1 mv
+#def vibe= |2 o5 'v' %e1 mv %a11%y4%s3%r14
+#def epiano= |3 o4 'e' %e1 vm
+#def bass= |4 o6 'b' %e0 mv %s3
+#def slap= |5 o6 's' %e0 mv %a11
+#def synth= |6 o4 'y' %e1 mv
+
+#def lf= v1,120
+#def l=    v120
+#def vf= v1,58
+#def v=    v58
+
+#def o= v77
+#def e= v77
+#def b= v115
+#def s= v96
+#def y= v77
+
+#def init= t133 %v50 %b0,70 %f0,0 %x244
+
+#drum "k"=5a |8 p64 v120 %e0
+#drum "s"=5a |9 p64 v120 %e0
+
+#def percus= |A p88 v48 %e0 %r22
+
+#drum "c"= 4g  'percus'
+#drum "c+"=4g+ 'percus'
+#drum "d"= 4a  'percus'
+#drum "d+"=4a+ 'percus'
+#drum "e"= 4b  'percus'
+#drum "f"= 5c  'percus'
+#drum "f+"=5c+ 'percus'
+#drum "g" =5d  'percus'
+#drum "g+"=5d+ 'percus'
+#drum "a"= 5e  'percus'
+#drum "a+"=5f  'percus'
+#drum "b"= 5f+ 'percus'
+#drum "h"= 7a+ 'percus'
+#drum "f-"=4c  'percus'
+
+{1}
+'init'
+'lead-o1*v.542' p60 p0,36,20 l8
+r8r2 ab<ce
+p
+$
+'lead*v.542' p64 p0,36,20 l8
+[3b.r16ba] baec
+g4af2 v24,0 ^ p
+'vibe+o1*v.638' p100 p180,40 l16
+fd>af< d>afd afd>a< fd>a v12,0 f
+'lead*v.542' p64 p0,36,20 l8
+[3a.r16ag] a4b4
+f4.e^1 >ab<ce
+
+[3b.r16ba] baec
+g4af2 v24,0 ^ p
+'vibe+o1*v.638' p100 p180,40 l16
+fd>af< d>afd afd>a< fd>a v12,0 f
+'lead*v.542' p64 p0,36,20 l8
+a2.b4   g+2.b8.r16
+b4.a^1.
+## 19
+'vibe*v.638' p l16 [
+p80a8 <p100c> p80a <p100c8> p80a8
+p90b8 p70g8 p50d8 p90b8
+p60f8 p80a p60f p80a8 p60f8
+p70g8 p80a8 p90b8 p70g8
+]
+;
+
+{2}
+'bass-o2*v.741' p64 l16
+eee8r8> e2.
+$
+'bass-o2*v.741' p64 l16
+[
+ [>ara8< ere8 drd8 ere8]
+ [drd8 ara8 frf8 ara8] j2,215
+ [>grg8<drd8>brb8<drd8]
+ crc8 grg8 ere8 grg8       >brb8< frf8 ere8 >brb8<
+]$215
+>brb8< frf8 drd8 frf8      ere8 brb8 g+rg+8 brb8
+>ara8< ere8 crc8 ere8      >ara8< ere8 drd8 ere8
+## 19
+l8 >
+[a4.a g4.g f4.f g4.g]
+;
+
+{3}
+"s16s16s4 k4k4k4" $
+l8 "!!!o"
+["kc+kf+kekf+"]
+["!o kekakf+ka"]
+["!o kckekdke"]
+"kd+kg+kf+kg+ kdkf+kf+kd"
+
+["!o kc+kf+kekf+"]
+["!o kekakf+ka"]
+"kdkf+kekf+" "kf+kf-kakf-"
+"kc+kf+kd+kf+" "kc+kf+kekf+"
+## 19
+["!o k4ka k4kg+ k4kf+ k4kg+"]
+;
+
+{4}
+'epiano+o1*v.610' p75
+e16e16e8r8> e2^8
+$
+'organ*v.529' p55 l16
+[b8.rbr<c8r8>b4r8]
+<[r4.crr4crr8]>
+[a8.rarb8r8a4r8]
+r4.grr4grr8
+'vibe+o1*v.638' l8
+p100 f4f p80 d4> p60 b p40 g+8. v12,0 ^16
+
+'organ*v.529' p55 l16
+[b8.rbr<c8r8>b4r8]
+<[r4.crr4crr8]>
+f8.rfra8r8f4r8
+g+8.rg+rb8r8g+4r8
+<r4.crr4cr8.  e8.rerd8r8cr>b4.<
+## 19
+'synth+o1*v.529' p60
+r8ercr>ar<
+r8dr>brgr<
+r8cr>arfr<
+r8dr>brgr<
+
+r8ercr>ar<
+r8dr>brgr<
+r8cr>arfr<
+'lead-o1*v.542' p60 p0,36,20 l8 ab<ce p
+&12
+;
+
+{5}
+'slap-o1*v.741' p55
+e16e16e8r8> e2^8
+$
+'organ*v.529' p50 l16
+[g8.rgra8r8g4r8]
+[r4.arr4ar8.]
+[f8.rfrg8r8f4r8]
+r4.err4er8. r1
+
+[g8.rgra8r8g4r8]
+[r4.arr4ar8.]
+d8.rdrf8r8d4r8
+e8.rerg+8r8e4r8
+r4.arr4ar8.   <c8.rcr>b8r8arg+4.
+## 19
+'o*v.265' l16
+a8<c>a<c8>a8 b8g8d8b8
+f8afa8f8  g8a8b8g8
+<c8ece8c8 d8>b8g8g8
+a8<c>a<c8>a8  b8<c8d8e8
+&12
+;
+
+{6}
+l16 "hhh4f+2."
+$
+l4 "!!!o"
+["!o c+f+ef+"]
+["!o eaf+a"]
+["!o cede"]
+"c+g+f+g+ df+f+d"
+
+["!o c+f+ef+"]
+["!o eaf+a"]
+"df+ef+ f+f-af-"
+"c+f+d+f+ c+f+ef+"
+## 19
+"a2g+2f+2g+2 a2g+2f+2g+2"
+;
+
+{7}
+r8r1
+&9r
+$
+r1r1r1
+'vibe+o1*v.397' p60 p180,0 l16
+fd>af< d>afd afd>a< fd>af ^1
+r1r2..
+<< l8
+p60 f4f p40 d4> p20 b p0 g+4.^2
+r2r1r1
+< p60 p180,0 l16
+fd>af< d>afd afd>a< fd>af ^1
+r1r1r1
+l16 < [
+p40a8 <p60c> p40a <p60c8> p40a8
+p50b8 p30g8 p10d8 p50b8
+p20f8 p40a p20f p40a8 p20f8
+p30g8 p40a8 p50b8 p30g8
+]
+;
+
+{8}
+r8r1
+$
+'lead*v0' p64 p0,36,20 l8
+r1r1r2.. 'lf*v24,.499' f16^1
+'vibe-o1*v0' pp40 l16
+'vf*v12,.638' f^1
+r1r1
+'vibe*v0' l8 pp40 
+r2r g+8. 'vf*v12,.638' ^8.^2
+'lead*v0' p64 p0,36,20 l8
+r2r1r2.. 'lf*v24,.499' f16^1
+'vibe-o1*v0' pp40 l16
+'vf*v12,.638' f^1
+r1r1r1
+## 19
+r1r1r1r2
+'synth+o1*v.529' p60 l16
+r8dr>brgr<
+;

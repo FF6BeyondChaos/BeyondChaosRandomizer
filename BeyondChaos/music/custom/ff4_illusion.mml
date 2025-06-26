@@ -1,0 +1,103 @@
+##created with sqspcmml beta 1.1.7b
+
+#TITLE Illusionary World
+#ALBUM Final Fantasy IV
+#COMPOSER Nobuo Uematsu
+#TRANS mfvitools
+#ARRANGED emberling
+
+#WAVE 0x20 0xA5
+#WAVE 0x21 0x60
+#WAVE 0x22 0x53
+#WAVE 0x23 0x65
+
+#def 0i=   |0 %y0%s5%r2
+#def 0o=   o5
+#def 0v=   v80
+#def 0f= v1,80
+
+#def 1i=   |1 %y3%s5%r15
+#def 1o=   o6
+#def 1v=   v105
+#def 1f= v1,105
+
+#def 2i=   |2 %y0%s5
+#def 2o=   o4
+#def 2v=   v105
+#def 2f= v1,105
+
+#def 3i=   |3
+#def 3o=   o6
+#def 3v=   v60
+#def 3f= v1,60
+
+#def e= '3v*v.285''3f*v36,.57'
+#def b= '3v*v.5''3f*v36,1'
+
+{1}
+t119%v50%b0,85%f0,0'0v*v.75'p70
+ {'VolEnvMode 11'}{'Duration 95%'}%e1m90,18,207
+$101'0i'['0o'e4.e4e8e4.f4g8e2.c4.d4.e2.^2.>b2.^2.]a8g+8a8b8a8b8<c8>b8<c8
+d8c8d8e4.c4d8>b2.a8g+8a8b8a8b8<c8>b8<c8d8c8d8e2.c4.d4.f2.a2.g+2.^2%r27^4
+;101
+
+
+{2}
+'1v*v.75'p80
+'1i' {'VolEnvMode 11'}{'Duration 95%'}%e1
+$201['1o-o2'f8g+8<c8e8c8>g+8f8g+8<c8e8c8>g+8f8g+8<c8e8c8>g+8f8g+8<c8
+e8c8>g+8c8e8f+8b8f+8e8c8e8f+8b8f+8e8c8e8f+8b8f+8e8c8e8f+8b8f+8e8]>a8<e8
+a8>g+8<e8g+8>g8<e8g8>f+8<d8f+8>f8<c8f8a8<c8f8>>e8b8<e8g+8b8<e8>>a8<e8a8
+>g+8<e8g+8>g8<e8g8>f+8<d8f+8>f8<c8f8a8<c8f8a8f8c8>a8f8c8>b8<d8f8a8b8<d8
+f8d8>b8a8f8d8>e8b8<e8g+8b8<e8g+2.
+;201
+
+
+{3}
+'2v*v1.00'p65
+'2i' {'VolEnvMode 11'}%r13{'Duration 95%'}%e0m120,18,203
+$301['2o'%r13f2.^4.<c4.f2.^4.c4.>c2.^4.f+4.c2.^2.]a4.g+4.g4.f+4.f2.e2.
+a4.g+4.g4.f+4.f2.^2.b2.^2.e2.^2.
+;301
+
+
+{4}
+p60
+'3i' {'VolEnvMode 12'}%r3{'Duration 95%'}%e1m90,18,199
+$401[r2.'3o'%r3'e'c2.'e'e2.'e'g+2.'e'b2.^2.^2.^2.]r4.'e'e4.r4.'e'd4.'e'e2.^2.r4.'e'e4.r4.'e'd4.'e'e2.
+^2.'e'd2.^2.'e'e2.^2%r27^4
+;401
+
+
+{5}
+p55
+'3i' {'VolEnvMode 12'}%r3{'Duration 95%'}%e1m90,18,199
+$501[r2.'3o-o1'%r3'e'g+2.^2.^2.<'e'e2.^2.^2.^2.]r4.>'e'b4.r4.'e'a4.'e'a2.'e'g+2.r4.'e'b4.r4.
+'e'a4.'e'a2.^2.^2.^2.'e'g+2.^2%r27^4
+;501
+
+
+{6}
+p50
+'3i' {'VolEnvMode 12'}%r3{'Duration 95%'}%e1m90,18,199
+$601[r2.'3o-o1'%r3'e'e2.^2.^2.'e'f+2.'e'e2.>'e'b2.^2.]r4.<'e'e4.r4.'e'f+4.'e'f2.'e'e2.r4.'e'e4.r4.
+'e'f+4.'e'f2.^2.^2.^2.'e'e2.^2%r27^4
+;601
+
+
+{7}
+p45
+'3i' {'VolEnvMode 12'}%r3{'Duration 95%'}%e1m90,18,199
+$701[r2.r2.r2.r2.r2.r2.r2.r2.]'3o-o2'%r3'b'e2.^4.'b'd4.'b'c4.'b'f4.'b'e2.'b'e2.^4.'b'd4.'b'c2.
+'b'd2.'b'f2.'b'a2.'b'g+2.^2%r27^4
+;701
+
+{8}
+'1v*v.15'p80 &1r p0,72,32
+'1i' %a13 {'VolEnvMode 11'}{'Duration 95%'}%e1
+$201['1o-o1'f8g+8<c8e8c8>g+8f8g+8<c8e8c8>g+8f8g+8<c8e8c8>g+8f8g+8<c8
+e8c8>g+8c8e8f+8b8f+8e8c8e8f+8b8f+8e8c8e8f+8b8f+8e8c8e8f+8b8f+8e8]>a8<e8
+a8>g+8<e8g+8>g8<e8g8>f+8<d8f+8>f8<c8f8a8<c8f8>>e8b8<e8g+8b8<e8>>a8<e8a8
+>g+8<e8g+8>g8<e8g8>f+8<d8f+8>f8<c8f8a8<c8f8a8f8c8>a8f8c8>b8<d8f8a8b8<d8
+f8d8>b8a8f8d8>e8b8<e8g+8b8<e8g+2.
+;201
