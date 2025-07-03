@@ -728,8 +728,7 @@ def hidden_relic(output_rom_buffer: BytesIO, amount, feature_exclusion_list=None
 
     while iteration < 14:
 
-        char_selection = char_list.pop(random.randint(0, len(char_list) - 1))
-
+        char_selection = char_list.pop(0)
         # Set event byte based on character ID
         if char_selection.id >= 8:
             event_byte = 0xDD

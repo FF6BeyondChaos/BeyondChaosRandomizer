@@ -1,5 +1,8 @@
 from io import BytesIO
+
+from BeyondChaos.options import Options_
 from utils import CHAR_TABLE, hex2int, utilrandom as random
+from itemrandomizer import (get_ranked_items, get_item, ItemBlock)
 
 equip_offsets = {"weapon": 15,
                  "shield": 16,
@@ -76,6 +79,7 @@ class CharacterBlock:
         self.command_objs = []
         self.stats = {}
         self.level_cap = 99
+        self.relic_selection = 0xFF
 
     def __repr__(self):
         s = "{0:02d}. {1}".format(self.id + 1, self.newname) + "\n"
@@ -111,7 +115,15 @@ class CharacterBlock:
             s += "Has natural magic.\n"
             for level, spell in self.natural_magic:
                 s += "  LV %s - %s\n" % (level, spell.name)
+        items = sorted(get_ranked_items(), key=lambda item: item.name)
+        if self.relic_selection == 0xFF:
+            s += "Innate Relic: None" + "\n"
+        else:
+            relic = get_item(self.relic_selection)
+            s += "Innate Relic: " + str(relic.name) + "\n"
+
         s += "Maximum level: " + str(self.level_cap) + "\n"
+
         return s.strip()
 
     def get_notable_equips(self):
