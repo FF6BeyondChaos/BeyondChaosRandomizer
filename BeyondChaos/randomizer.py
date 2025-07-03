@@ -6349,7 +6349,8 @@ def randomize(connection: Pipe = None, **kwargs) -> str | None:
                     character.level_cap = cap
                     max_level_string += bytes([int(cap)])
             elif str(behavior).lower() == "chaos":
-                for character in characters:
+                sorted_characters =sorted(characters, key=lambda character: character.id)
+                for character in sorted_characters:
                     if character.id >= 14:
                         continue
                     cap = rng.randint(min_level, max_level)
