@@ -1,0 +1,195 @@
+#TITLE Stolen Materia
+#ALBUM Final Fantasy VII
+#COMPOSER Nobuo Uematsu
+#TRANS VGMTrans
+#ARRANGED emberling
+
+#WAVE 0x20 0xA5
+#WAVE 0x21 0x59
+#WAVE 0x22 0x58
+#WAVE 0x23 0x96
+#WAVE 0x24 0x94
+#WAVE 0x25 0x90
+#WAVE 0x26 0x50
+#WAVE 0x27 0x92
+#WAVE 0x28 0x6C
+#WAVE 0x29 0x6D
+#WAVE 0x2A 0x57
+
+#def init= t112 %v50 %b0,50 %f0,0 %x232
+
+#def flute= |0 o5 %e1 %r9 m24,18,207
+#def pizzi= |1 o5 %e1 m
+#def pizzl= |2 o7 %e1 m
+#def clari= |3 o5 %e1 %r5 m24,18,207
+#def bassn= |4 o6 %e1 %r3 m %y0%s5
+#def bassl= |5 o7 %e1 %r3 m %a6
+#def pizzb= |6 o7 %e1 m
+#def oboen= |4 o5 %e1 %r7 %a6    m22,18,223
+#def oboel= |7 o4 %e1 %r7 %y2%s1 m16,18,207
+#def pizlb= |A o6 %e1 m
+
+#def f= v65
+#def p= v100
+#def z= v38
+#def c= v100
+#def b= v100
+#def bl= v16
+#def u= v125
+#def o= v125
+#def ol= v62
+#def ul= v62
+
+#drum "t"=5c |8 p64 %e1 v75
+#drum "b"=5e |9 p64 %e1 v50
+
+{1}
+'init'
+$
+[
+'flute' p16 'f' l16
+e8br8.fr  f+8br8.f+r
+g8br8.gr  >brr4
+'clari-o1' p84 'c' l8
+b    <c4>bra+4.<c>    b j2
+'flute' p16 'f' l16
+a+8br
+'clari-o1' p84 'c' l8
+a+b
+'flute' p16 'f' l16
+a+8brd+8
+]
+l8 gd+f+er4.
+##
+r1r2r8
+'oboen' p95 'o' l8
+gabr
+'clari' p84 'c' l16
+grg8f+rer8.
+'oboen+o1' p95 'o' l8
+e>br4b<c>bgabr
+'clari' p84 'c' l16
+grg8f+re8br8.>br<
+r8grg8f+rer
+'oboen' p95 'o' l8
+gabr
+'clari' p84 'c' l16
+grg8f+rer8.
+'oboen+o1' p95 'o' l8
+ger4
+ef+edd+e
+'clari' p84 'c' l16
+r8grg8f+re8br8.>br<
+r8grg8f+rer4..
+;
+
+{2}
+$
+[
+'pizzi-o1' p105 'p' l8
+ebrf f+brf+ gbrg >br4.
+'bassn-o2' p25 'b' l8
+c4dre4.g  f+ j2
+'pizzi-o1' p105 'p' l8
+a+b
+'bassn-o2' p25 'b'
+ed+
+'pizzi-o1' p105 'p' l8
+a+bd+
+]
+l8 r>br<er4.
+##
+r1r2r8
+'oboel' p95 'ol' l8
+gabr
+'clari' p84 'c' l16
+ere8dr>br8.
+'oboel+o1' p95 'ol' l8
+e>br4b<c>bgabr
+'clari' p84 'c' l16
+ere8dr>b8<gr8.>gr<
+r8ere8dr>br
+'oboel' p95 'ol' l8
+gabr
+'clari' p84 'c' l16
+ere8dr>br8.
+'oboel+o1' p95 'ol' l8
+ger4
+ef+edd+e
+'clari' p84 'c' l16
+r8ere8dr>b8<gr8.>gr<
+r8ere8dr>br4..
+;
+
+{3}
+$
+[
+'pizzl-o1' p105 'z' l8
+ebrf f+brf+ gbrg >br4.
+'bassl-o2' p25 'bl' l8
+c4dre4.g  f+ j2
+'pizzl-o1' p105 'z' l8
+a+b
+'bassl-o2' p25 'bl'
+ed+
+'pizzl-o1' p105 'z' l8
+a+bd+
+]
+l8 r>br<er4.
+##
+[5
+'pizzb-o2' p64 'u' l16
+er
+'pizzi-o1' p105 'p' l8
+bb
+'pizzb-o3' p64 'u' l16
+brer
+'pizzi-o1' p105 'p' l8
+bbr4 bbr4 bbr
+]
+;
+
+{4}
+$
+[8r1]
+##
+[20
+'bassn-o2' p25 'b' l16 er
+"!!!o t8t8"
+'bassn-o3' p25 'b' l16 br
+]
+;
+
+{5}
+$
+[8r1]
+##
+[20
+'bassl-o2' p25 'bl' l16 er
+"!!!o b8b8"
+'bassl-o3' p25 'bl' l16 br
+]
+;
+
+{6}
+$
+[8r1]
+##
+[5
+'pizlb-o2' p64 'ul' l16
+er
+'pizzl-o1' p105 'p' l8
+bb
+'pizlb-o3' p64 'ul' l16
+brer
+'pizzl-o1' p105 'p' l8
+bbr4 bbr4 bbr
+]
+;
+
+## 1 oboe/clarinet
+## 2 oboe/clarinet
+## 3 pbass/pizzi
+## 4 bassoon/tambourine
+## 5 bassoon/tambourine
+## 6 .../pizzi

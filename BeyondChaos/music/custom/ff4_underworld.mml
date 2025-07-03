@@ -1,0 +1,213 @@
+##created with sqspcmml beta 1.1.7b
+
+#TITLE Land of Dwarves
+#ALBUM Final Fantasy IV
+#COMPOSER Nobuo Uematsu
+#TRANS mfvitools
+#ARRANGED emberling
+
+#WAVE 0x20 0x51
+#WAVE 0x21 0x65
+#WAVE 0x22 0xA5
+#WAVE 0x23 0x3B
+#WAVE 0x24 0x1C
+#WAVE 0x25 0x0A
+#WAVE 0x26 0x66
+
+#def 0i=   |0
+#def 0o=   o5
+#def 0v=   v64
+#def 0f= v1,64
+
+#def 1i=   |1
+#def 1o=   o6
+#def 1v=   v55
+#def 1f= v1,55
+
+#def 2i=   |2
+#def 2o=   o5
+#def 2v=   v55
+#def 2f= v1,55
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v140
+#def 3f= v1,140
+
+#def 4i=   |4
+#def 4o=   o5
+#def 4v=   v64
+#def 4f= v1,64
+
+#def 5i=   |5
+#def 5o=   o5
+#def 5v=   v64
+#def 5f= v1,64
+
+#def 6i=   |6
+#def 6o=   o6
+#def 6v=   v55
+#def 6f= v1,55
+
+## auto percussion  0x23
+#drum "h"= 5a %e1 %r25
+## auto percussion  0x24
+#drum "i"= 5a %e0
+## auto percussion  0x25
+#drum "j"= 5a %e0
+
+#drum "e"= 5^ %e1
+
+{1}
+t130%v50%b0,85%f0,0%x244
+'6v*v.50'p40
+'6i' {'VolEnvMode 13'}%r3{'Duration 95%'}%e1'6o-o2''6v*v.70'%r3g16r16'6v*v.35'
+g16r16'6v*v.70'b16r16'6v*v.35'b16r16<'6v*v.70'd16r16'6v*v.35'd16r16'6v*v.70'
+f+16r16'6v*v.35'f+16r16r1'6v*v.70'>a16r16'6v*v.35'a16r16<'6v*v.70'c+16r16'6v*v.35'c+16r16'6v*v.70'
+e16r16'6v*v.35'e16r16'6v*v.70'g16r16'6v*v.35'g16r16r1
+'0v*v.90'p65'0i' {'VolEnvMode 11'}%r13{'Duration 95%'}%e0m72,50,199
+$102'0o'%r13e8e8r4.<d8c+8>a8b8b8e8e8r2r8a8g8g8e8e8<c+8c+8r1c8c8>c8c8r8
+<e16r16{'PitchSlideMode delay=24 len=24 depth=-11'}d8m24,-11^8{'PitchSlideOff'}
+>e8e8r4e8e8r4d8a16r16<d16r16f2^8r8d+16r16c4d16r16>a+4f8g2.<d4g1[>f4.<c4
+g4e8f4>f8f4<f4e8d+4.>d+4.a+4<d+4.>d+2^8j2,101c+4.g+4<d+4c8c+4>c+8c+4g+4
+<c+8c4.c8>g4.g8c4.<c4d4e8]
+$101a4.<a4.d4e4.c+4.>a4<d2.>a4d4.a8<e16r16c8>f+4
+;102
+
+
+{3}
+'1v*v.50'p40
+'1i' {'VolEnvMode 13'}%r3{'Duration 95%'}%e1'1o-o2''1v*v.70'%r3g16r16'1v*v.35'
+g16r16'1v*v.70'b16r16'1v*v.35'b16r16<'1v*v.70'd16r16'1v*v.35'd16r16'1v*v.70'
+f+16r16'1v*v.35'f+16r16<'1v*v.20'a8b8'1v*v.35'a8b8'1v*v.50'a8b8'1v*v.65'
+a8b8'1v*v.70'>>a16r16'1v*v.35'a16r16<'1v*v.70'c+16r16'1v*v.35'c+16r16'1v*v.70'
+e16r16'1v*v.35'e16r16'1v*v.70'g16r16'1v*v.35'g16r16'1v*v.20'<a8<c+8'1v*v.35'
+>a8<c+8'1v*v.50'>a8<c+8'1v*v.65'>a8<c+8>>
+$201
+'1o-o2'p40
+'1v*v.70'g16r16'1v*v.35'g16r16'1v*v.70'b16r16'1v*v.35'b16r16'1v*v.70'
+<d16r16'1v*v.35'd16r16'1v*v.70'f+16r16'1v*v.35'f+16r16<'1v*v.20'a8b8'1v*v.35'
+a8b8'1v*v.50'a8b8'1v*v.65'a8b8'1v*v.70'>>a16r16'1v*v.35'a16r16<'1v*v.70'
+c+16r16'1v*v.35'c+16r16'1v*v.70'e16r16'1v*v.35'e16r16'1v*v.70'g16r16'1v*v.35'
+g16r16'1v*v.20'<a8<c+8'1v*v.35'>a8<c+8'1v*v.50'>a8<c+8'1v*v.65'>a8<c+8
+'1v*v.80'>>e2g4a4b2<d2c1d2c2>b1^1
+
+
+'1v*v.75'p50
+[r1'1o'%r3a4g4f4e4d+1^2.d4j2,501c+1c2c+4d+4e2.f4g1]
+$501c+2.d4e4.f4.g4g1f+1
+;201
+
+
+{5}
+'1v*v.50'p90
+'1i' {'VolEnvMode 13'}%r3{'Duration 95%'}%e1'1o-o2''1v*v.70'%r3e16r16'1v*v.35'
+e16r16'1v*v.70'g16r16'1v*v.35'g16r16'1v*v.70'b16r16'1v*v.35'b16r16<'1v*v.70'
+d16r16'1v*v.35'd16r16'1v*v.20'<f+8g8'1v*v.35'f+8g8'1v*v.50'f+8g8'1v*v.65'
+f+8g8'1v*v.70'>>g16r16'1v*v.35'g16r16'1v*v.70'a16r16'1v*v.35'a16r16'1v*v.70'
+<c+16r16'1v*v.35'c+16r16'1v*v.70'e16r16'1v*v.35'e16r16'1v*v.20'<e8g8'1v*v.43'
+e8g8'1v*v.50'e8g8'1v*v.65'e8g8>
+$301'1v*v.70'>e16r16'1v*v.35'e16r16'1v*v.70'g16r16'1v*v.35'g16r16'1v*v.70'
+b16r16'1v*v.35'b16r16<'1v*v.70'd16r16'1v*v.35'd16r16'1v*v.20'<f+8g8'1v*v.35'
+f+8g8'1v*v.50'f+8g8'1v*v.65'f+8g8'1v*v.70'>>g16r16'1v*v.35'g16r16'1v*v.70'
+a16r16'1v*v.35'a16r16'1v*v.70'<c+16r16'1v*v.35'c+16r16'1v*v.70'e16r16'1v*v.35'
+e16r16'1v*v.20'<e8g8'1v*v.35'e8g8'1v*v.50'e8g8'1v*v.65'e8g8'1v*v.80'>c2
+e4f+4g2f+4g4f1d+1d1^1f1^1d+1^1c+1^1c1^1f1^1d+1^1e1e4.c+4.e4d1^1
+;301
+
+
+{2}
+'6v*v.50'p90
+'6i' {'VolEnvMode 13'}%r3{'Duration 95%'}%e1'6o-o2''6v*v.70'%r3e16r16'6v*v.35'
+e16r16'6v*v.70'g16r16'6v*v.35'g16r16'6v*v.70'b16r16'6v*v.35'b16r16<'6v*v.70'
+d16r16'6v*v.35'd16r16r1>'6v*v.70'g16r16'6v*v.35'g16r16'6v*v.70'a16r16'6v*v.35'a16r16'6v*v.70'
+<c+16r16'6v*v.35'c+16r16'6v*v.70'e16r16'6v*v.35'e16r16r1
+'2v*v1.05'p70
+'2i' {'VolEnvMode 11'}%r4{'Duration 95%'}%e1m36,18,207
+$402'2o'%r4e2.g4b2<d2c+1>a2^8a8a8b8<c2d4c4>b4g4e4g4a2.^8g8a2.^8g8g1^2.
+r4[a2<c2>b2<c2>a+2.a4g1j2,401f2g+2g2g+2g2.f4e1]
+$401a+2.a4g4.f4.e4a1^2.r4
+;402
+
+
+{6}
+r1r1r1r1
+$502
+'6v*v.50'p40
+'6i' {'VolEnvMode 13'}%r3{'Duration 95%'}%e1'6o-o2''6v*v.70'%r3g16r16'6v*v.35'
+g16r16'6v*v.70'b16r16'6v*v.35'b16r16<'6v*v.70'd16r16'6v*v.35'd16r16'6v*v.70'
+f+16r16'6v*v.35'f+16r16r1'6v*v.70'>a16r16'6v*v.35'a16r16<'6v*v.70'c+16r16'6v*v.35'c+16r16'6v*v.70'
+e16r16'6v*v.35'e16r16'6v*v.70'g16r16'6v*v.35'g16r16r1
+r1r1r1r1r1r1
+'1i' {'VolEnvMode 13'}%r3{'Duration 95%'}%e1
+'1v*v.80''1o-o1'p40
+a1^1g1^1f1^1g1^1a1^1g1^1g2.a4a+1a1^1
+;502
+
+{8}
+r1r1r1r1
+$
+'6v*v.50'p90
+'6i' {'VolEnvMode 13'}%r3{'Duration 95%'}%e1'6o-o2''6v*v.70'%r3e16r16'6v*v.35'
+e16r16'6v*v.70'g16r16'6v*v.35'g16r16'6v*v.70'b16r16'6v*v.35'b16r16<'6v*v.70'
+d16r16'6v*v.35'd16r16r1>'6v*v.70'g16r16'6v*v.35'g16r16'6v*v.70'a16r16'6v*v.35'a16r16'6v*v.70'
+<c+16r16'6v*v.35'c+16r16'6v*v.70'e16r16'6v*v.35'e16r16r1
+r1r1r1r1r1r1
+[16r1]
+;
+
+{7}
+'3v*v.25'p100
+'3i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e0r1r1r1r1
+$601'3o'[20" !!!o %r0h8"r4.][64"h4"]
+;601
+
+
+{4}
+'5v*v1.27'p60
+'4i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e0r1r1r1r1
+$702'5o'
+'5i' " !!!o %r0j8j8"r4
+'4i' '4v*v1.27'" !!!o %r0i24e12"r4
+'5i' '5v*v1.27'" !!!o %r0j8j8"r4"j8"
+'4i' '4v*v1.27'" !!!o %r0i24e12"r8"i24e12i24e12"
+'5i' '5v*v1.27'" !!!o %r0j8"r4.
+'4i' '4v*v1.27'" !!!o %r0i24e12"r4
+'5i' '5v*v1.27'" !!!o %r0j8j8"r8"j8"r8
+'4i' '4v*v1.27'" !!!o %r0i24e12"r4.
+'5i' '5v*v1.27'" !!!o %r0j8j8"r4."j8"
+'4i' '4v*v1.27'" !!!o %r0i24e12"r8
+'5i' '5v*v1.27'" !!!o %r0j8j8"r4"j8j8"r4"j8"r4"j8"
+'4i' '4v*v1.27'" !!!o %r0i24e12"
+'5i' '5v*v1.27'" !!!o %r0j8"r4r8"j8"
+'4i' '4v*v1.27'" !!!o %r0i24e12"
+'5i' '5v*v1.27'" !!!o %r0j8"
+'4i' '4v*v1.27'" !!!o %r0i24e12"r8"i24e12i24e12"
+'5i' '5v*v1.27'" !!!o %r0j8"r4.
+'4i' '4v*v1.27'" !!!o %r0i24e12"r8
+'5i' '5v*v1.27'" !!!o %r0j8"r8"j8"r8"j8j8"
+'4i' '4v*v1.27'" !!!o %r0i24e12"
+'5i' '5v*v1.27'" !!!o %r0j8"r4["j8"r4"j8"
+'4i' '4v*v1.27'" !!!o %r0i24e12"r4
+'5i' '5v*v1.27'" !!!o %r0j8j8"r8"j8j8"r2"j8"r4"j8"r4
+'4i' '4v*v1.27'" !!!o %r0i24e12"r8
+'5i' '5v*v1.27'" !!!o %r0j8"r4"j8"r4
+'4i' '4v*v1.27'" !!!o %r0i24e12"
+'5i' '5v*v1.27'" !!!o %r0j8"j2,701"j8"r4"j8"
+'4i' '4v*v1.27'" !!!o %r0i24e12"r4
+'5i' '5v*v1.27'" !!!o %r0j8j8"r8"j8j8"r2"j8"r4"j8"
+'4i' '4v*v1.27'" !!!o %r0i24e12"r4
+'5i' '5v*v1.27'" !!!o %r0j8j8"r4"j8"r8"j8"
+'4i' '4v*v1.27'" !!!o %r0i24e12"
+'5i' '5v*v1.27'" !!!o %r0j8"]
+$701"j8"r4"j8"r4
+'4i' '4v*v1.27'" !!!o %r0i24e12"r8
+'5i' '5v*v1.27'" !!!o %r0j8"r4"j8"r4
+'4i' '4v*v1.27'" !!!o %r0i24e12"
+'5i' '5v*v1.27'" !!!o %r0j8j8"r4"j8"r8"j8"
+'4i' '4v*v1.27'" !!!o %r0i24e12"r8
+'5i' '5v*v1.27'" !!!o %r0j8"r4"j8"
+'4i' '4v*v1.27'" !!!o %r0i24e12"
+'5i' '5v*v1.27'" !!!o %r0j8"r8"j8
+";702
+

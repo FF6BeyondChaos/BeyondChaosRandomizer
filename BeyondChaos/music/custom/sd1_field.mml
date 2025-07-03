@@ -1,0 +1,298 @@
+#TITLE Endless Battlefield
+#ALBUM Sword of Mana
+#COMPOSER Kenji Ito
+#TRANS emberling
+#ARRANGED emberling
+
+#WAVE 0x20 0x87 brass
+#WAVE 0x21 0x62 strings
+#WAVE 0x22 0x63 strings
+#WAVE 0x23 0x67 strings
+#WAVE 0x24 0x50 pizzi
+#WAVE 0x25 0x61 harp
+#WAVE 0x26 0x55 bass
+#WAVE 0x28 0x1F snare
+#WAVE 0x29 0x3B hihat
+
+#def init= t137 %v50 %b0,70 %f0,0
+
+#def brass=   |0 o5 %y0%s4 %r4
+#def strings= |1 o5
+#def harp=    |5 o5
+#def harplo=  |4 o6
+#def chord=   |3 o5 %a7%y4%s2%r15
+#def bass=    |6 o7 %a11
+#def basslyr= |2 o5
+
+#def t= v127
+#def s= v64
+#def h= v56
+#def u= v72
+#def c= v32
+#def b= v36
+#def l= v64
+
+#def se= 's*v.75' %r3
+#def he= 'h*v.5' %r22
+#def ue= 'u*v.5' %r22
+
+#def tsus= %r4
+#def trel= %r20
+#def srel= %r20
+
+#def snV= v80 %r21
+#def hhV= v48 %y4%s0
+
+#drum "p"= 5e |8 p64 'snV*v0.70' %a10
+#drum "q"= 5e |8 p64 'snV*v0.70' %a15
+#drum "r"= 5e |8 p64 'snV*v0.85' %a15
+#drum "s"= 5e |8 p64 'snV*v1.00' %a15
+
+#drum "h"= 6c |9 p96 'hhV*v1.00'
+#drum "i"= 6c |9 p96 'hhV*v0.75'
+#drum "j"= 6c |9 p96 'hhV*v0.50'
+
+{1} %e1 'init'
+'strings+o1' p44 's' l16
+[3 e4.d4.g4    e8.d8.c8^4d4]
+   e4.d4.g4    g+1
+$ ## 9
+'brass''t' p84 l16 m24,18,195
+a4^ea<ce2      ^8.d8.c8>b4g4
+b8.<c8.>b8e2   ^4..'trel'^^2'tsus'
+a4^ea<ce2      ^8.d8.c8>b8.<c8.d8
+e4.g4f+fe4     g+1
+## 17
+a4^gfed2                   ^4e4f4a4
+g4.e4ff+g4                 c2'trel'^8'tsus'd8c>b8.
+a2'trel'^8'tsus'<c8>b8a8   g4.b4a+ag4
+a2...'trel'^
+'strings''s'm l8
+a4agab<cd
+## 25
+e4.d4.g4
+e^32d.^32c4.d4
+>b4.<g4.d4
+^2^16'srel'^16
+'brass''t' p84 l16 m24,18,195 b<cdc>bg
+## 29
+a8.b8.<c8> b4g4
+<c8.d8.e8  d+8.e8.f+8
+e1'trel'^2^'tsus'dc>b <c>bag+
+m
+;
+
+{2} %e1
+p64 p0,24,127 l16 
+['harplo-o2''u' f
+'harp-o1''h' fa<c fa<cf afc>a fc>af]
+['harplo-o2''u' g
+'harp-o1''h' gb<d gb<dg bgd>b gd>bg]
+['harplo-o2''u' f
+'harp-o1''h' fa<c fa<cf afc>a fc>af]
+'harplo-o2''u' g
+'harp-o1''h' gb<d gb<dg bgd>b gd>bg
+eb<eg+ >b<eg+b eg+b<e> g+b<eg+
+p
+$ ## 9
+'strings''s' p44 l4
+e2ab  <c>abg
+e2ag  fcdg
+e2ab  <c>abg
+<c.ed+16d16c>  b2g+8.a8.b8
+## 17
+a2fa      bgab
+<c.>ba8g  a8.g8.e8de
+a.fg8a    g.ba+16a16g
+e.d.g     's*v.7' e k-1 aaa k0
+## 25
+p64 p0,24,127 l16
+['harplo-o2''u' f
+'harp-o1''h' fa<c fa<cf afc>a fc>af]
+['harplo-o2''u' e
+'harp-o1''h' egb <dgb<d j2 gd>bg d>bge]
+p g2
+## 29
+'strings''s*v.9' p44 l8
+c.d.eg4d4
+>g.a.b^.<c+.d+ 's'
+g+.a.ba.g+.f+
+l16 e>b<eg+ bg+b<e g+2
+;
+
+{3} %e0
+'bass-o2''b' p64 l16
+f1^1
+g1^1
+f4r8<f4r8c4>  f8.<fr8c4>frf8f8
+g4r8<g4r8>g4    e2<e8.>b8.e8
+$ ## 9
+'bass-o2''b' p64 l16
+[3
+  [3 a8<ar>] g8<gr>
+  [f8<fr>] [g8<gr>]
+]
+<[4 c8<cr>]>
+[e8<er>]e8.f+8.g+8
+## 17
+[4 f8<fr>]
+[4 g8<gr>]
+<[3 c8<cr>]> b8<br>
+[3 a8<ar>] g8<gr>
+f8.<fr8c4>frf8f8
+g8.<gr8d4>grg4
+[8 a8<ar>]
+## 25
+f4r8f4r8f4
+f8.<fr8c4>frf4
+e4r8e4r8e4
+e8.<er8>b4ere4
+## 29
+[f8<fr>] [g8<gr>]
+<[c8<cr>]> [b8<br>]
+[4er][4dr]
+e4<e4>b4e4
+;
+
+{4} %e1
+r1r1r1r1 l16
+[3 "s8qrs8 s8qrs8 s8r8"]
+"s2 srqrs4"
+$ ## 9
+"!!!o"
+[3 [7"s8qr"] "sqrs"]
+[6":r: s8qr"] "s8.s8.s8"
+## 17
+[2 [7"s8qr"] "sqrs"]
+"s8.r8.s4q8r8s8"
+"s8.r8.s4qrs4"
+[7":r: s8qr"] "sqrs"
+## 25
+"h4.h8^2" "^2^8i8h8j8"
+"h4.h4.h4" "h2^8qrs4"
+## 29
+[7":r: s8qr"] "sqrs"
+[":p: s8.r8.sp"]
+[4 "srqr"]
+;
+
+{5} %e1
+'strings-o1''s' p84 l8
+a1 ^4gf4ga4
+b1 ^4ag4ab4
+a1 ^4gf4ga4
+b1 <d1
+$ ## 9
+'basslyr-o2''l' p64 l16
+[3
+  [3 a8<ar>] g8<gr>
+  [f8<fr>] [g8<gr>]
+]
+<[4 c8<cr>]>
+[e8<er>]e8.f+8.g+8
+## 17
+[4 f8<fr>]
+[4 g8<gr>]
+<[3 c8<cr>]> b8<br>
+[3 a8<ar>] g8<gr>
+f8.<fr8c4>frf8f8
+g8.<gr8d4>grg4
+[8 a8<ar>]
+## 25
+r8
+'strings+o1''se' p44 l8
+e4.d4.g4
+ed4c4.d4
+>b4.<g4.d4
+^2.'srel'^8
+## 29
+'basslyr-o2''l' p64 l16
+[f8<fr>] [g8<gr>]
+<[c8<cr>]> [b8<br>]
+[4er][4dr]
+e4<e4>b4e4
+;
+
+{6} %e1
+'basslyr-o2''l' p64 l16
+f1^1
+g1^1
+f4r8<f4r8c4>  f8.<fr8c4>frf8f8
+g4r8<g4r8>g4    e2<e8.>b8.e8
+$ ## 9
+'chord''c' p96 l4
+aaag   ffgg
+aaag   ffgg
+aaag   ffgg
+cccc   eee8.f+8.g+8
+## 17
+ffff   gggg
+ccc>b< aaag
+f.f.^  g.g.^
+aaaa   aaag
+## 25
+'basslyr-o2''l' p64 l16
+f4r8f4r8f4
+f8.<fr8c4>frf4
+e4r8e4r8e4
+e8.<er8>b4ere4
+## 29
+'chord''c' p32 l4
+aabb               <cc>bb
+b8.b8.b8 a8.a8.a8  g+g+eg+
+;
+
+{7} %e1
+r16.
+p64 p0,24,127 l16 
+['harplo-o2''ue'f
+'harp-o1''he' fa<c fa<cf afc>a fc>af]
+['harplo-o2''ue' g
+'harp-o1''he' gb<d gb<dg bgd>b gd>bg]
+['harplo-o2''ue' f
+'harp-o1''he' fa<c fa<cf afc>a fc>af]
+'harplo-o2''ue' g
+'harp-o1''he' gb<d gb<dg bgd>b gd>bg
+eb<eg+ >b<eg+b eg+b<e> g+b<e32
+p
+$ ## 9
+'chord-o1''c' p32 l4
+c>b<cd  ecd>b<
+c>b<c>b aabb<
+c>b<cd  ecd>b<
+eege    f+d>b8.<c8.d8
+## 17
+cc>a<c  d>b<cd
+eeed    cc>bb<
+c.c.^   d.d.^
+ccc>b<  ccc>b<
+## 25
+r16.
+p64 p0,24,127 l16
+['harplo-o2''ue' f
+'harp-o1''he' fa<c fa<cf afc>a fc>af]
+['harplo-o2''ue' e
+'harp-o1''he' egb <dgb<d j2 gd>bg d>bge]
+p g8 ^32^4
+## 29
+'chord-o1''c' p96 l4
+ffgg               eef+f+
+e8.e8.e8 d8.d8.d8  eeg+e
+;
+
+{8} %e1
+r1r1r1r1 l8
+[3 "hij hij hj"] "h2 ijih"
+$ ## 9
+"!!!o"
+"hj" [29"hj"] "h2"
+## 17
+[16 ":j:hj"]
+"h2^iji" "h2^j16i16h4"
+[8  ":j:hj"]
+## 25
+r1r1r1r2r8 "h16j16h4"
+## 29
+[8  ":j:hj"]
+["h8.i8.i8"] "h4h4h4h4"
+;

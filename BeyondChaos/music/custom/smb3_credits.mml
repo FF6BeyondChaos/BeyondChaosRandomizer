@@ -1,7 +1,9 @@
 #TITLE Ending Credits
 #ALBUM Super Mario Bros. 3
 #COMPOSER Koji Kondo
+#TRANS VGMTrans
 #ARRANGED emberling
+# Based on SUPER MARIO ALL STARS ver.
 
 #WAVE 0x20 0x62 strings
 #WAVE 0x21 0xA8 harmonica

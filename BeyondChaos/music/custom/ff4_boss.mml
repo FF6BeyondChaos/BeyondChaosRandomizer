@@ -1,0 +1,173 @@
+##created with sqspcmml beta 1.1.7b
+
+#TITLE Battle 2
+#ALBUM Final Fantasy IV
+#COMPOSER Nobuo Uematsu
+#TRANS mfvitools
+#ARRANGED emberling
+
+#WAVE 0x20 0x65
+#WAVE 0x21 0x82
+#WAVE 0x22 0x51
+#WAVE 0x23 0x2D
+#WAVE 0x24 0x3B
+#WAVE 0x25 0x1C
+#WAVE 0x26 0x0B
+
+#def 0i=   |0
+#def 0o=   o6
+#def 0v=   v70
+#def 0f= v1,70
+
+#def 1i=   |1 %y0%s5%r2
+#def 1o=   o5
+#def 1v=   v56
+#def 1f= v1,56
+
+#def 2i=   |2 %a12%y1%s4
+#def 2o=   o5
+#def 2v=   v78
+#def 2f= v1,78
+
+#def 3i=   |3
+#def 3o=   o5
+#def 3v=   v94
+#def 3f= v1,94
+
+#def 4i=   |4
+#def 4o=   o5
+#def 4v=   v130
+#def 4f= v1,130
+
+#def 5i=   |5
+#def 5o=   o5
+#def 5v=   v62
+#def 5f= v1,62
+
+#def 6i=   |6
+#def 6o=   o5
+#def 6v=   v78
+#def 6f= v1,78
+
+## auto percussion  0x23
+#drum "h"= 5f
+## auto percussion  0x24
+#drum "i"= 5f+ %e1 %r24
+## auto percussion  0x25
+#drum "j"= 5g %e1
+## auto percussion  0x26
+#drum "k"= 5b %e0
+
+#drum "y"= 5f %r13
+#drum "x"= 5f %r16
+
+#drum "k"= 5b %e0 '6i''6v*v1.27' p65
+#drum "s"= 5g %e1 '5i''5v*v1.27' p65 %r20
+#drum "h"= 5f+ %e0 '4i''4v*v.30' p80 %r24
+
+#cdef ( %g1
+#cdef ) %g0
+
+#def r16= %r31 ^16 %r3
+
+{1}
+t173%v50%b0,85%f0,0%x240
+'0v*v1.15'
+'0i' {'VolEnvMode 13'}%r3{'Duration 95%'}%e1m90,18,203'0o-o2'p25p72,105
+%r3g24a+24<c+24e24g24a+24<c+24e24g24'0o-o2'r1^2p75(g16a16a+16<c16c+16d+16
+e16f16)
+$102[g4<g4f+2^4d8d+8f4d+8d8d+8c2.^8^4d4d+4a+4a1^1^1^2^8f+8g8d+8d8c16r2.
+r16r2r8>f+8g8d+8d8c16r16d8c16r2r16j2,101r1]
+$101r2d+16f16g16g+16b16<c16d16d+16f4g+4g4g+4<c8>g+8g8g+8g4f4>a+8<c8c+2
+c+8d+8f4.f+8g+8f+8f8f+8g+4<c2.^1^1^1>f+1^1d+1^1d1^2d4e4f1^2f4g4g+1^1g8
+r4g8r4g8r8r8g8r4g8r8g8r8>
+;102
+
+
+{6}
+'0v*v1.05'p85
+'0i' {'VolEnvMode 13'}%r3{'Duration 95%'}%e1m92,18,203'0o-o1'r24r48p25
+p72,105%r3g24a+24<c+24e24g24a+24<c+24e24g24'0o-o2'r48r6r2.r1
+$202[<c16'r16'd+16'r16'd16'r16'd+16'r16'f+16'r16'd+16'r16'd16'r16'd+16'r16'c16'r16'd+16'r16'
+d16'r16'd+16'r16'd16'r16'f16'r16'd+16'r16'f16'r16'c16'r16'd+16'r16'd16'r16'd+16'r16'g16'r16'
+d+16'r16'd16'r16'd+16'r16'c16'r16'd+16'r16'f+4g4<d+4d+1d1c+1c1>f+8g16'r16'r2.r1>f+8
+g16'r16'>b8<c16'r16'r2j2,201r1]
+$201r2<c16d16d+16f16g16g+16b16<c16c+2d+2f2d+2>f+1a+1<c1f4g+2.^1^1>a+1^1
+f+1^1a1^1a1^2a4b4<c1^1c8r4c8r4c8r8r8c8r4c8r8c8r8>>
+;202
+
+
+{3}
+'1v*v.85'p55
+'1i' {'VolEnvMode 11'}{'Duration 95%'}%e1m90,18,207'1o-o3'p105p72,25
+g24a+24<c+24e24g24a+24<c+24e24g24'1o'r1r1
+$301[>g16r16g16r8.g16r16f+16r16f+16r8.f+16r16g16r16g16r8.g16r16g+16r16
+g+16r8.g+16r16g16r16g16r8.g16r16g16r16g16r8.g16r16g4<d4d+4a+4<c1>b1a+1
+a1r1r1c4>b16r16<c16r16d4c16r16d16r16d+4d16r16d+16r16f4d+16r16f16r16][4
+c+16r16c+16r4r16]>a+1<c+2f+4c+4f1^1<c4f2.^1'1v*v1.15'>f+4a+4g+4a+4<c+8
+>a+8g+8a+8g+4f+4d+4f+4f4f+4a+8f+8f8f+8f4d+4f+8g+8a2.^2a4b4<c1^2c4d4d+1
+^1'1v*v.85'd8r4d8r4d8r8r8d8r4d8r8d8r8>
+;301
+
+
+{5}
+'1v*v.85'p45
+'1i' {'VolEnvMode 11'}{'Duration 95%'}%e1m95,18,207'1o-o2'r24r48p105
+p72,25g24a+24<c+24e24g24a+24<c+24e24g24'1o'r48r6r2.r1
+$401>[d+16r16d+16r8.d+16r16d+16r16d+16r8.d+16r16d+16r16d+16r8.d+16r16f16
+r16f16r8.f16r16d+16r16d+16r8.d+16r16d+16r16d+16r8.d+16r16d+4a4a+4<g4f+1
+f1e1d+1r1r1>g2f2d+2d2]f16r16f16r4r16g16r16g16r4r16g+16r16g+16r4r16g16r16
+g16r4r16f+1^2a+4f+4g+1^1^1<g+4<c2.>>[22f+16r16f+16f+16]f+4f+4f1^2f4f4d+1
+^2d+16f16g16g+16a+16<c16d16d+16f8r4f8r4f8r8r8f8r4f8r8f8r8
+;401
+
+
+{2}
+'2v*v1.00'p65
+'2i' {'VolEnvMode 11'}%r13{'Duration 95%'}%e0'2o'r4.[%r13g8g8g8g8g8g8f8
+f8]<
+$501[24>c8<c8>b8<c8>d+8<c8>d8<c8]>[4c+8c+8r4][f+4.<c+4f+8>a+8<c8>][4f4.
+<c4f8>a+8<c8>][7f+8<f+16r16>]f8<f16r16[8>d+8<d+16r16][7>d8<d16r16]>e8<
+e16r16[7>f8<f16r16]>g8<g16r16[8>g+8<g+16r16]>g4<d8g4g+8g8d8>g8<c8d8g4g+8
+g4
+;501
+
+
+{8}
+'3v*v.75'p40
+'3i' {'VolEnvMode 11'}%r13{'Duration 95%'}%e1'3o'r4.r1r1
+$801[" !!!o y1"^1^1r1r1r1r1r1r1r1r1r1]r4"x4"^4"x4"^4"x4"^4"x4"^1r1
+r1r1r1r1"y1"^1r1r1"y1"^1"y1"^1"y1"^1"x4.x4.x4"^8"x4.x4x4
+";801
+
+{4}
+r4.
+"k4k4k4k4" "k4k4s8k8s8k8"
+$
+"!!!o" l16
+[48 "k8hhs8hh"]
+## 28
+[4 "!! k8k8s4"]
+## 30
+l8 [3 "k4skhks4" "k4skhksk"]
+## 36
+[5 "!! khshkksh" "kkskhksh"]
+## 46
+"skkskkskkskksksk"
+;
+
+{7}
+r4.
+"h4h4h4h4" "h4h4h4h4"
+$
+l16
+[96"h4"]
+## 28
+[4 "h2"]
+## 30
+[6 "h4h2h4"]
+## 36
+l8 [5 "h4h4hhh4" "hhhh4hh4"]
+## 46
+r1r1
+;

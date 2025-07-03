@@ -1,0 +1,225 @@
+#TITLE Green Hill Zone
+#ALBUM Sonic the Hedgehog
+#COMPOSER Masato Nakamura
+#TRANS vgm2mid
+#ARRANGED emberling
+
+#WAVE 0x20 0x17 epiano
+#WAVE 0x21 0x07 piano
+#WAVE 0x22 0x06 hipiano
+#WAVE 0x23 0x62 strings
+#WAVE 0x24 0xC2 synstr
+#WAVE 0x25 0x7E horn
+#WAVE 0x26 0x55 bass
+#WAVE 0x27 0x56 slap
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x3B hihat
+#BRR 0x2B; brr/kick_plus_hihat, 0, 0, F 5 7 0
+
+#def epiano= |0 o5 'e' %y2%s3%r12 m24,18,240
+#def piano= |1 o5 'p' m %e1
+#def hipiano= |2 o2 'v' m %e1
+#def strings= |3 o6 's' m %e1 %r2
+#def synst= |4 o7 'y' m %e1 %r10
+#def horn= |5 o4 'h' m12,18,223 %e1 %y0%s3%r6
+#def bass= |6 o6 'b' m %e0 %y4%s2%r13 %a13
+#def slap= |7 o6 'z' m %e0 %a11
+
+#def e= v167
+#def p= v64
+#def y= v64
+#def h= v72
+#def v= v64
+#def s= v72
+#def y= v64
+#def b= v96
+#def z= v80
+
+#def vf= v1,64
+
+#def init= t150 %v50 %b0,70 %f0,0
+
+#drum "k"=5a |8 p64 v100 %e0
+#drum "c"=5a |B p64 v100 %e0
+#drum "h"=5a |A p64 v75 %e0
+#drum "s"=5a |9 p64 v100 %e0
+
+#cdef ~ %r23^%r10
+#def r4= %r21^16%r12^8.
+
+{1}
+'init'
+'hipiano+o1*v.63' l16 p127
+afaf bgbg <c>a<c>a <d>b<d>b
+##
+'horn*v1.00' l8 p64
+e6r12r d6r12r e6r12r d6r12r erdr
+f6r12r e6r12r d4^1
+[d6r12r e6r12r f6r12] f6r12r e8^2^1
+##
+$
+'epiano+o1*v.54' l8 p64<
+r2c>a4<c       >b4<c>b4g4.
+'r4'^a<ed4c    >b4<c>b4g4.
+'r4'^4<c>a4<c  >b4<c>b4g4.
+'r4'^aaf4a     g4ag4c4.<
+
+'r4'^4c>a4<c   >b4<c>b4g4.
+'r4'^a<ed4c    >b4<c>b4g4.
+'r4'^4<c>a4<c  >b4<c>b4g4.
+'r4'^aaf4a     g4ag4cce
+##
+'horn+o1*v1.00' p64 
+l4 a+.a.g.f. l8 erdr>
+l4 a.b.<c.d. l8 erar
+l4 g+.g.f.d+. l8 drcr
+rgag4.a
+'strings+o1*v.57' l8 p64 m24,18,255 e.r16efege.r16c m
+;
+ 
+{2}
+'slap-o2*v.84' p64 l8
+ra<a>a a+<a+>b<b
+##
+'bass-o1*v.84' p64 l16
+[24 c24r12 ] crc8 >ara8 a+ra+8 brb8<
+[29 c24r12 ] c8d8e8
+##
+$ 'bass-o1*v.84' p64
+[
+ [ [7 f24r12] f8
+   [5 e24r12] c8d8e8 ]
+ [7 f24r12] f8
+ [7 e24r12] e8
+ [7 d24r12] d8
+ [5 c24r12] j2 c8d8e8
+] c24r12 c24r12 c24r12
+##
+'slap-o2*v.84' p64
+l4 a+.a.g.f. l8 erdr
+l4 a.b.<c.d. l8 erar
+l4 g+.g.f.d+. l8 drcr
+l4 >g.<d.>g. l8 <g>e<e>f<f>g<g
+;
+
+{3}
+l8 r"kskksss"
+$
+"!!!o"
+[7 "chschcsh"] "chschsss"
+;
+
+{4}
+'hipiano+o1*v.60' l16 p0 k2
+afaf bgbg <c>a<c>a <d>b<d>b<
+k0
+##
+%k-1 'synst-o1*v.60' l8 p64
+[c4~ >a+4~<] c~>a+~<
+c+4~ c4~ >a+4^2..~<
+[>a+4~ <c4~ c+~] c+4~ c^2^1
+%k0
+##
+$
+'strings*v.47-o1' l8 p64 p0,4,63
+[eecc>aaff<  dd>bbgg<dd]
+eecc>aaff< dd>bbggee< cc>aaffdd bb
+<< 's*v.46' l4 gab 's*v.50'<
+c1^d>bg<   c1^>bgb<
+c1^d>bg<   c1^1
+p
+##
+'horn+o1*v1.00' k1 p64 l8
+d1.^cde
+^1.^cce
+d+1.^cd+d
+k0 > c4.c4.c4.c4.crcr
+m
+;
+
+{5}
+l8 "h4h4h4hh"
+##
+%k-1 'synst-o2*v.60' l8 p32
+[g+4~ f+4~] g+~ f+~
+a+4~ g+4~ f+4^2..~
+[f+4~ g+4~ a+~] a+4~ g+^2^1
+%k0
+##
+$
+l16 p64
+['piano+o1*v1.01' r4er r4e8^4
+                  r4dr r4 'strings*v.57' ga<c8j2>a8] e8
+'piano+o1*v1.01' r4er r4e8^4
+                 r4dr r4 'strings*v.57' ga<c8>a8
+'piano+o1*v1.01' r4cr r4c8^4
+'strings*v.57' r8<cr8.>a4grar<cr
+
+'s*v.50'>> e8crr4r4e8cr  d8>brr4. <<'s*v.57' ga<c8>a8
+'s*v.50'>  e8crr4r4e8cr  d8>brr4. <<'s*v.57' ga<c8e8
+'s*v.50'>> e8crr4r4e8cr  d8>brr4. <<'s*v.57' ga<c8>a8
+'s*v.50'>  c8>arr2r8 <<<'s*v.57'e8  r8c8r8>a8a8ar<crer
+##
+l8 'strings*v.43' p96
+[4 a+f<d>f] [4ae<c>e] [4g+d+<c>d+] [4<c>a<e>a]
+;
+
+{6}
+r1
+##
+%k-1 'synst-o2*v.60' l8 p96
+[f4~ d+4~] f~ d+~
+f+4~ f4~ d+4^2..~
+[d+4~ f4~ f+~] f+4~ f^2^1
+%k0
+##
+$
+l16 'piano+o1*v1.01' p64
+[3 r4cr r4c8^4 >r4br< r4d8^4]> r4ar r4a8^4  r4br r4b8^4<
+[3 r4er r4e8^4 r4dr r4d8^4] r4cr r4c8^4  >r4br r4b8^4
+##
+'epiano+o1*v.39' p64 l8
+d1.^cde
+^1.^cce
+d+1.^cd+d^1
+'horn*v1.00' p64 l8 ra4.arar
+;
+
+{7}
+r1
+##
+'piano+o2*v.64' l16 p64
+[16 cr>brargr<]
+##
+$
+l16 'piano*v1.01' p64
+[3 r1r2r8b4.] r1 r4gr r4g8^4<
+[3 r4cr r4c8^4 >r4br r4b8^4<]> r4ar r4a8^4  r4gr r4g8^4
+##
+'synst*v.47-o2' p64 
+l16 f4^r f4^r f4^r f4^r l8 frfr
+l16 e4^r e4^r e4^r e4^r l8 erer
+l16 d+4^r d+4^r d+4^r d+4^r l8 d+rd+r
+l16 a4^r a4^r a4^r a4^r l8 arar
+;
+
+{8}
+r1
+##
+'hipiano+o2*v.63' l16 p127
+'vf*v192,.47' [8 p0 e p127 c]
+'vf*v144,.38' [5 p0 e p127 c]
+                 p0 e
+"!!!o" r "h4"
+[11 r4 "h4"] r8 "h8h8h8"
+##
+$ "!!!o" l8
+[[15 r4"h4"] r"hhh"]
+##
+'synst*v.47-o2' p64 
+l16 d4^r d4^r d4^r d4^r l8 drdr
+l16 c4^r c4^r c4^r c4^r l8 crcr
+l16 c4^r c4^r c4^r c4^r l8 crcr
+l16 f4^r f4^r f4^r f4^r l8 frfr
+;

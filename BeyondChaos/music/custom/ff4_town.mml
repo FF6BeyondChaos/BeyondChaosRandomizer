@@ -1,0 +1,88 @@
+##created with sqspcmml beta 1.1.7c
+
+#TITLE Welcome to Our Town!
+#ALBUM Final Fantasy IV
+#COMPOSER Nobuo Uematsu
+#TRANS mfvitools
+#ARRANGED emberling
+
+#WAVE 0x20 0xA5
+#WAVE 0x21 0x61
+#WAVE 0x22 0x65
+
+#def 0i=   |0,15,0,4,0
+#def 0o=   o5
+#def 0v=   v60
+#def 0f= v1,60
+
+#def 1i=   |1,15,6,3,19
+#def 1o=   o6
+#def 1v=   v133
+#def 1f= v1,133
+
+#def 2i=   |2
+#def 2o=   o6
+#def 2v=   v50
+#def 2f= v1,50
+
+#def a75= '2v*v.375''2f*v24,.75'
+#def a90= '2v*v.450''2f*v24,.90'
+#def a00= '2v*v.500''2f*v24,1'
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1}
+t75%v50%b0,85%f0,0m36,18,215'0v*v1.00'p65
+'0i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e1
+$101'0o'%r0e4<c+4>(b8a8)g8f8e4.(d+16e16)f+2e8c+8g4f+8c+8d8e8e4.(d16c+16)d2f8
+e8f8g8a4g8f8f4e2>b8<c+8(d8c+8)d8>a8g+4<(e8>b8)<d4c+2.(f8e8)f8g8a4(g8f8)f4e4.e8
+a8<c8(c8>b8)b8a8a8g8g8f+8b1
+;101
+
+
+{2}
+m32,18,207'0v*v.75'p60
+'0i' {'VolEnvMode 11'}%r0{'Duration 95%'}%e1
+$201'0o'%r0c+2d2c+4>g+4a2g4b4a+4f+4b1a2<d2c+2.r4>b8a8g+8f+8e2a1a2b2<c1
+f+4d+4>b4a4g+1
+;201
+
+
+{3}
+'1v*v.65'p35
+'1i' {'VolEnvMode 11'}{'Duration 95%'}%e1
+$301'1o-o2'a8<c+8e4d8f8a8<d8>>g+8<c+8e8g+8f+2c+4>b4a+2b8<d8f+8b8<d2
+>>a4<d8e8f4b4<c+2c+16>a16e16a16e16c+16>a16e16f+8b8<d8f+8g+4.e8>a4.<e8a2
+>a4<d8e8f4b4<c2c16>g16e16g16e16c16>g16e16b8<d+8f+4>a8b8<d+4e8>b8a8b8g+2
+
+;301
+
+
+{4}
+'2v*v.75'p85
+'2i' {'VolEnvMode 12'}{'Duration 95%'}%e1
+$401'2o-o1'%r3'a75'c+2'a75'd4'a75'f4'a75'e2'a75'f+2'a75'g2'a75'f+4'a75'e4'a75'd1'a75'd1'a75'c+1'a75'd2'a75'e2'a75'd4'a75'c+2.'a75'd1'a75'd4'a75'e2.'a75'd+1'a75'e1
+;401
+
+
+{7}
+'2v*v.90'p75
+'2i' {'VolEnvMode 12'}{'Duration 95%'}%e1
+$501'2o-o2'%r3'a90'a1'a90'g+2'a90'a2'a90'b2'a90'a+2'a90'b1'a90'a1'a90'a1'a90'b2'a90'g+2'a90'a1'a90'a2'a90'b2'a90'<c1>'a90'b2'a90'a2'a90'g+1
+;501
+
+
+{5}
+'2v*v1.00'p50
+'2i' {'VolEnvMode 12'}{'Duration 95%'}%e1
+$601'2o-o3'%r3'a00'a2'a00'<d2'a00'c+2'a00'd2'a00'c+4>'a00'b4'a00'a+4'a00'f+4'a00'b1<'a00'd1>'a00'a1'a00'b2<'a00'e2>'a00'a1<'a00'd2>'a00'g2<'a00'c1>'a00'b1<'a00'e1
+;601
+
+
+{6}
+'2v*v.75'p40
+'2i' {'VolEnvMode 12'}{'Duration 95%'}%e1
+$701'2o-o4'%r3'a75'a2<'a75'd2'a75'c+2'a75'd2'a75'c+4>'a75'b4'a75'a+4'a75'f+4'a75'b1<'a75'd1>'a75'a1'a75'b2'a75'<e2>'a75'a1<'a75'd2>'a75'g2<'a75'c1>'a75'b1<'a75'e1
+;701
+

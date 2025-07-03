@@ -1,0 +1,446 @@
+#TITLE Blade's Exaltation
+#ALBUM Final Fantasy X|V: Dawntrail
+#COMPOSER Masayoshi Soken
+#TRANS emberling
+#ARRANGED emberling
+
+#VARIANT / tr
+#VARIANT _
+
+#SFXV ` *
+
+#WAVE 0x20 0x63 strings
+#WAVE 0x21 0x72 violin
+#WAVE 0x22 0x82 trumpet
+#WAVE 0x23 0x51 bass
+#WAVE 0x24 0x14 guitar
+#BRR 0x25; brr/nylon4th-EAEAE, @168bl, e+20, FFF0, {240}
+#WAVE 0x26 0x6C tambourine
+#WAVE 0x27 0x6A shaker
+#WAVE 0x28 0x0A kick
+#WAVE 0x29 0x1C snare
+#WAVE 0x2A 0x7A conga
+#WAVE 0x2B 0x6E tabla
+#WAVE 0x2C 0x2D crash
+#WAVE 0x2D 0x2A ride
+#WAVE 0x2E 0x3E hihat
+#WAVE 0x2F 0x3A hihat
+
+#def init= t127 %v50 %b0,85 %f0,0
+
+#def strings= |0 o5 m
+#def violin=  |1 o5 m24,18,239
+#def trumpet= |2 o5 m32,18,223 %r10
+#def bass=    |3 o7 m %r16
+#def guitar=  |4 o5 m
+#def fourth=  |5 o5 m 
+
+#def s= v44
+#def sl= v33
+#def v= v62
+#def t= v35
+#def b= v88
+#def g= v55
+#def gs= v71
+#def gh= v88
+#def gl= v65
+#def c= v127
+#def cm= v127
+
+#def stspicatto= %a15%r19
+#def midspicatto= %a15%r16
+#def stlegato= %a8%r9
+#def stlegatwo= %a15%r9
+#def bassnorm= %a11
+#def basshard= %a15
+#def rhythg= %y3%s4%r20
+#def plucklayer= %y5%s1%r17
+#def chordmute= %y3%s2%r20
+#def gcm= %y0%s0
+#def gsm= %r22
+
+#def vl= %r13
+#def vr= %r24
+
+#def vkick= _v88_ /v66/
+#def vsnare= v66
+#def vsnarepat= v33
+#def vsnarebrush= v44
+#def vtabla= v66
+#def vopen= v44
+#def vclosed= v28
+#def vtamb= v50
+#def vshaker=v28
+#def vconga= v66
+#def vcrash= v83
+#def vride= v83
+
+#def vkickalt= v55
+#def vsnarealt= v66
+
+#drum "d-"=5a |8 _p64_ 'vkick*v0.40' %e0 /p48/
+#drum "k-"=5a |8 _p64_ 'vkick*v0.67' %e0 /p48/
+#drum "k"=5a  |8 _p64_ 'vkick*v1.00' %e0 /p48/
+#drum "l-"=5f |B p72 'vtabla*v0.50' %e0
+#drum "l"= 5f |B p80 'vtabla*v0.75' %e0
+#drum "l+"=5f |B p96 'vtabla*v1.00' %e0
+#drum "p-"=5g |9 p48 'vsnarepat*v0.67' %e0 %a15 %r28
+#drum "p"=5g  |9 p48 'vsnarepat*v1.00' %e0 %a15 %r28
+#drum "p+"=5g |9 p48 'vsnarepat*v1.33' %e0 %a15 %r27
+#drum "q"=5b |9 p48 'vsnare*v0.50' %e1  %a11 %r0
+#drum "r"=5b |9 p48 'vsnare*v0.75' %e1  %a11 %r0
+#drum "s"=5b |9 p48 'vsnare*v1.00' %e1  %a11 %r0
+#drum "t"=5b |9 p48 'vsnare*v1.25' %e1  %a11 %r0
+#drum "u"=5b |9 p48 'vsnare*v1.50' %e1  %a11 %r0
+#drum "r+"=5b |9 p48 'vsnare*v0.75' %e1 %a15 %r0
+#drum "s+"=5b |9 p48 'vsnare*v1.00' %e1 %a15 %r0
+#drum "t+"=5b |9 p48 'vsnare*v1.25' %e1 %a15 %r0
+
+#drum ~o~=6d |8 p84 'vkickalt*v0.67' _%e1 %a13%y6%s0_ /%e0/
+#drum ~p~=6d |8 p84 'vkickalt*v1.00' _%e1 %a13%y6%s0_ /%e0/
+#drum ~q~=5b- |9 p84 'vsnarealt*v0.50' %e1  %a11 %r0
+#drum ~r~=5b- |9 p84 'vsnarealt*v0.75' %e1  %a11 %r0
+#drum ~s~=5b- |9 p84 'vsnarealt*v1.00' %e1  %a11 %r0
+#drum ~t~=5b- |9 p84 'vsnarealt*v1.25' %e1  %a13 %r0
+
+#drum "q-"=5a |9 p48 'vsnarebrush*v0.50' %e1  %a11 %r24
+#drum "r-"=5a |9 p48 'vsnarebrush*v0.75' %e1  %a11 %r24
+#drum "s-"=5a |9 p48 'vsnarebrush*v1.00' %e1  %a11 %r24
+
+#drum "o+"=5f |E _p40_ 'vopen*v1.00' %e1 %y1 /p48/
+#drum "o"= 5f |E _p40_ 'vopen*v.80' %e0 %y2  /p48/
+#drum "f"=5g  |F _p40_ 'vclosed*v0.50' %e0   /p48/
+#drum "g"=5g  |F _p40_ 'vclosed*v0.75' %e0   /p48/
+#drum "h"=5g  |F _p40_ 'vclosed*v1.00' %e0   /p48/
+#drum "i"=5g+  |D p60 'vride*v1.00' %e1 %r17
+#drum "j"=5g+  |D p60 'vride*v0.75' %e1 %r17
+#drum "j-"=5g+ |D p60 'vride*v0.50' %e1 %r17
+
+#drum "m"=5a |6 p72 'vtamb*v1.00' %e0 %a15
+#drum "n"=6c |6 _p44_ 'vtamb*v0.33' %e1 %a12 /p48/
+
+#drum "a"=5b |A p72 'vconga*v0.50' %e0
+#drum "b"=5b |A p72 'vconga*v0.75' %e0
+#drum "c"=5b |A p72 'vconga*v1.00' %e0
+#drum "a-"=5g |A p72 'vconga*v0.50' %e0
+#drum "b-"=5g |A p72 'vconga*v0.75' %e0
+#drum "c-"=5g |A p72 'vconga*v1.00' %e0
+#drum "c+"=6a- |A p72 'vconga*v0.80' %e0
+
+#drum "v-"=5a |7 _p44_ 'vshaker*v0.25' %e0 /p48/
+#drum "v"=5a  |7 _p44_ 'vshaker*v0.50' %e0 /p48/
+#drum "w"=5a  |7 _p44_ 'vshaker*v0.75' %e0 /p48/
+#drum "x"=5a  |7 _p44_ 'vshaker*v1.00' %e0 /p48/
+
+#drum "y"=5g |C p56 'vcrash*v1.00' %e1 %r15
+#drum "z"=5g |C p56 'vcrash*v0.85' %e1 %r17
+#drum "z+"=5f+ |C p96 'vcrash*v0.85' %e1 %r17
+#drum "z-"=5g  |C p32 'vcrash*v0.85' %e1 %r17
+#drum "y-"=5g+ |C p56 'vcrash*v1.25' %e1 %r20 %y2%s2
+#drum "y+"=5f+ |C p96 'vcrash*v0.50' %e1 %r17 %y2%s2
+#drum ~z~=5g |C p56 'vcrash*v1.12' %e1 %r17
+#drum ~z-~=5g  |C p32 'vcrash*v1.12' %e1 %r17
+
+#cdef ( %l1
+#cdef ) %l0
+
+{1} ## Melody A
+'init' $ m
+['guitar''g' p52 %e1 l16
+c8r'g*v.7'er4r4'g'>b4
+a8ra8rr4.g4
+f8.fr4.<'gs'm10,1e8e8d8'g'
+>a8.ar4.b8rb8.]
+##
+'violin''v' p68 %e1 'vl' l16
+a2'vr'^'vl'eab<cd'vr'm12,-2^'vl'>b
+<cm3,-1^>a8.g'vr'^'vl'a4'vr'^'vl'e4
+f8.a.m16,-2^.f8g4^'vr'^'vl'b8
+m3,1b8.b8.a8 (g+ab)e8.b8<
+##
+c2 'vr'^'vl'cdefg'vr'm6,-2^'vl'e24m4,-2^48
+m5,7d8.g8.f8 e8.d8.>b8
+a8.<e8.c8 d4'vr'^8'vl'>e8
+a8.<e8.c8d8.c8.>b8
+a2.'vr'^8'vl'(ae)
+a2..'vr'^8
+##
+'guitar''gh*v1.2' p76 %e1 l16 %a12 m32,18,215 %y0%s3
+m8,5e2        reab<cdr>b
+m12,1b8a8rgra ^4e4
+f8.a8.f8      m6,2f4.b8
+<c8.>b8.a8    g+abe^4
+#
+<c2                         ^cdefgr(e32d32)
+m6,2g8.g8.f8                (e32f32e8)d8'gh*v.5'd'gh*v1.2'>b8
+a8'gh*v.8'a'gh*v1.2'<e8rc8  m4,2c4.>e8
+a8'gh*v.8'a'gh*v1.2'<e8'gh*v.5'e'gh*v1.2'c8
+                            m8,2c8^24(d48^32'gh*v1.5'c32^8)'gh'>b8
+#
+'gh*v1.2'a2.^16. %a9 'gh'a24'gh*v.6'e12 %a12 'gh'a32^1
+##
+'fourth''cm*v.5''chordmute' p52
+e32r.'cm'e8edr e8e8de
+'guitar''g''gcm' d8. %r
+p40 'gl*v.9''gsm' >a8<c4
+'trumpet+%r4''t*v.75' p64 g2r8 m
+'guitar''gl*v.9''gsm' p40 c8d+4
+'trumpet+o1''t' p92 l8 d4.[cd
+d+4fd+ d4>a+4< c2j2^r]^4.r
+;
+
+{2} ## Rhythm guitar / 2nd prio melodic
+$
+['fourth''c' p52 %e1 l16
+e8.er4r4d4
+c8.c8rr8r4>b4
+a8.ar4r2<
+c8.cr4r8d8rd8.]
+##
+e8.e8.e8 e8.d8.^8
+c8.c8.c8 c4>b4
+a8.a8ra8 b8.b8rb8<
+c8.c8rc8 >bbrbrbb8<
+#
+e8.e8.e8 e8.d8.^8
+c8.c8.c8 ccrc>b4
+a8.a8ra8 b8.b8rb8<
+c8.c8rc8 >b8.b8.b8<
+#
+'c*v.8' [e8.e8r8. e8.erd8.]
+##
+'rhythg''c'
+[e8.e8.e8    ^e8.d4
+c8.c8ccr    ccrc>bbrb
+a8.a8aa8    b8.b8rb8
+<c8.c8.cc>  bbrbrbb8<]
+#
+'c*v.9' %r [e8.e8r8. e8.erd8.]
+##
+{'fourth'}'cm*v.75''chordmute' {p52}
+c24r12'cm'c8cr8 c8c8r8>b8.
+'guitar''gl*v1.0' 'gsm' p40 r>b8<f8.
+'fourth''c*v.9' p52 e2r8
+'guitar''gl*v1.1' 'gsm' p40 rd8g+8.
+'trumpet''t*v.8' p36 l8 g4.[g+a+
+g+4.a a+4f4 g2j2^r]^4.r
+;
+
+{3} ## Harmony A
+$
+['strings' p80 l16 %e1
+[3 's''stspicatto' e8re8r8.r4 j3 's*v.4''stlegato' c4] r4
+'s*v.6'c8r's*v.8'c8r r4 d8rd8.]
+##
+'s*v1.2''midspicatto' l16
+e8re8rer e8rd^4
+e8re8rer eere>b4<
+c8rc8rcr d8rd8rdr
+c8rc8rcr eere8ree
+##
+e8re8rer e8rd^4
+e8re8rer eere>b4<
+'guitar-o1''gs'p40 %e1 l16
+a8.<e8.c8d4r8>e8
+a8.<e8.c8d8.c8.>b8
+'fourth''c*v.8'p52 [c8.c8r8. c8.cr>b8.<]
+##
+'bass-o2''bassnorm''b' p64 %e0 l16
+a8re8ra8   g8rd8rg8
+f8rc8rf8   e8r>b8r<e8
+d8rf8rd8   e8r>b8r<e8
+f8rc8rf8   'basshard'g+eg+e8r'bassnorm'g+8>
+#
+a8.<e8.a8> g8.<d8.g8>
+f8.<c8.f8  (e32f32e8)>b8.<e8
+d8.>a8.<d8 e8.>b8.<e8
+f8.c8.f8   'basshard'm8,1g8.'bassnorm'e8.>b8<
+#
+'fourth''c*v.9'p52 %e1 [c8.c8r8. c8.cr>b8.<]
+##
+r4 "!!!o r-r-r-r r-r-r-s+k"
+'guitar''g''gcm' %e1 p52 g+8.
+^4.
+'strings''s*v.5''stlegatwo' p80 e2r8
+'bass-o2''bassnorm''b*v.33' p64 %e0 l16
+ffffr8 'b'> g8.rg8<g>g8r
+#
+g+8.<d+8.g+8 g8.d8.>g8
+<c8.>g8.<c4>g4.
+g+8.<d+8.>g+8 a+2
+<c8.>g8.c8^2
+;
+
+{4} ## Mainly beat
+$
+[32"k8l+8"]
+##
+[l16 "!%e0 k8lrk8s8"]
+[5 l16 "!%e0 k8.rk8s8"]
+"ksrtksrt"
+##
+[7 "!%e0 k8lrk8s8"]
+        "k8.rk8s8"
+"kqrk8.c+k- kqrk-qrkr"
+"k8.k8.c+k- kqsk-tskt"
+##
+#[15 "!!!o kq-r-q- r+q-r-q-"]
+#         "kq-r-q- s-q-r-q-"
+[16 "!!!o kq-r-q-" j16 "r+q-r-q-"] "s-q-r-q-"
+#
+#~p8rp8qp8 pops8op8~
+#~p8rp8qp8 popt8opo~
+[~!!!o p8rp8qp8~ j2 ~pops8op8~] ~:p:popt8opo~
+##
+~ooro oror o4~ "o4"
+#"srqs8. k4 kk-skk-d-"    ## <               | 
+#"srqs8. k-r-8r-d-8 sksq" ## < compresses to v
+["!!!o srqs8." j2 "k4 kk-tkk-d-"] ":s:k-r-8r-d-8 tktr"
+#
+"k4p+4t+4p+4 k4p+4t+tk-8t+tk-r"
+"k4p+8p8t+4p8p8 k8.k8.k8 srqrutsu"
+;
+
+{5} ## Mainly hihat/shaker
+$ l16
+#["y1^1 ^2^8qrspqr ^4. qrsprstptu"]
+# [
+#[3 "o+4h8fgh8h8o4"]
+#"o+4h2." ]
+[[3"o+4h8fgh8"j3"h8o4"] ":h:qrspqr" "o+4h8" "qrsprstptu"]
+##
+##[16"!!!o xvwv"]
+###
+##["xvwv xvl+v"]
+##[4"xvwv"]
+##"xvwl+ xvl+v xvwv xvl+v"
+##"xvwl+ xvl+v xvwl xvl+v"
+[24 "!!!o xv" j18,513j20,513 "wv"]
+["xvwl+ xvl+v xvw" j2 "v xvl+v"] ":w:l xvl+v"
+#
+"xwvw" "^8l+4l4l+8"
+"^8l4l+vwv-vwxvl+v"
+## swap to 4th priority melodic (guitar lead layer)
+'guitar-o1''gl*v.7' p40 %e1 l16 m28,18,207
+a2                     reab<cd8>b
+<c8>a8.'gl*v.4'gr'gl'a ^4e4
+f8.a8.f8               m12,1g-4.b8
+<c8.>b8.a'gl*v.7'f+    'gl*v1.2'(g+a)'gl'be8.b8
+#
+m12,1b2                ^<cdefg'gl*v.4'f'gl'e
+m3,5e8.g8.f8            %g1 e32(f32e8)%g0 d8.>b8
+a8a<e8'gl*v.5'e'gl'c8  d4.>e8
+a8'gl*v.7'a'gl'<e8'gl*v.5'e'gl'c8
+                       (c32e32^^24) %a11 e48^32c32^8 %a15 >b8
+#
+&165a 'gl*v.5' %a11 ae %a13 'gl*v.8' a1^64 m
+##
+r4r32 "!!!o q-q-q-q- q-q-k-.^4"
+#"hgfh8. z8^2"
+#"hgfh8. z-8^2"
+["!!!o hgfh8." j2 ~z8^2~] ":h:"~z-8^2~
+^8[6"i4"] ^8"j-8j8"
+^8[6"i4"]"j-4j8"
+;
+
+$513 l16 ":v:l+v"]
+
+{6} ## Harmony B
+$
+['strings' p56 l16 %e1
+[3'sl''stspicatto' c8rc8r8.r4 j3 'sl*v.4''stlegato' >a4<] r4
+'sl*v.6'>a8r'sl*v.8'a8r r4 g8rg8.]
+##
+'guitar''g' p52 %e1 l16
+c8.c8.c8 c8.>b8.^8
+a8.a8.a8 a4g4
+f8.f8rf8 g8.g8rg8
+a8.a8ra8 'gs'g+r8e8.g+8'g'<
+#
+c8.c8.c8 c8.>b8.^8
+a8.a8.a8 aarag4
+f8.f8rf8 g8.g8rg8
+a8.a8ra8 'gs'g+8.g+8.g+8
+#
+'guitar-o1''gs'p40
+a1^1
+## swap to shaker/hihat
+l8 "!!!o"
+r["ghghgmg"
+"hghghogf" j2 "f"]
+#
+r4 "hghghh16o16" "hghghgo+4"
+"z-2z4.z+8 z-2z2"
+#
+"!!!o" l16 [4"gvgvnvgv"]
+##
+r1 %e1
+'guitar''gl*v.4''gsm' %a12 p72 ab<cf^8
+'fourth-o1''c*v.9' p52 g2r8
+'guitar+o1''gl*v.4''gsm' %a12 p72 cdd+g+^8
+'fourth''c*v.9' p52 d8^2
+'strings-o1''s*v.7''stlegato' v0,12,240 p64 [g+2a+2<c1>] v
+;
+
+*
+{7} ## Mainly conga
+$ l16 [
+[3 r4. "abc8 a-b-c-8 a-b"]
+r4. "abcb- abcb- ab" ]
+##
+[2 "c8.c-8.l+b"]
+# [4 "c8.c-8.a-b"]
+# [4 "c8ab-"]
+# #
+# [7 "c8.c-8.a-b"]
+[11 "c8.c-8.a-b" j4,712]
+"cb-a-b ca-b-a"
+#
+"c8lc-8.a-b"
+"c8^32c8^32c-8."
+"c8.c-8.a-b"
+"ca-b-ca-b-ca-"
+## hand
+[16 "!!!o" r8"ll-8.l+8"]
+##
+[r8"ll+8.l4l4l+8"]
+##
+r1
+#'guitar''gl*v.4''gsm' %a12 p72 ab<cf^2. cdd+g+^2
+r1r2.
+[17"!!!o wvv-v"]
+;
+
+$712 l16 [4":b:c8ab-"]]
+
+{8} ## Additional perc
+$ l16
+#["y1^1 ^2^8qrspqr ^4. qrsprstptu"]
+# [
+#[3 "o+4h8fgh8h8o4"]
+#"o+4h2." ]
+["y1^1 ^2^8h8o4 ^1"]
+##
+"!!!o y1"
+"^8l4l+4l4l+8"
+"^8ll+8.l+4l-4l8"
+"^8ll+8.l+8q"r8"lq"r"l+8"
+##
+"y1" ^4."l+2l+8"
+"z-2z+2z2z+2"
+"z2z-8.z+8.z8  z+2^8l4z-8"
+##
+"y1^1^1^1"
+"z-1^1"
+'guitar-o1''plucklayer''gl' p20 %e0 l16 m
+a8'gl*v.6'a'gl*v.8' %a13 <e8. 'gl*v.6' %a11 c8d4.>e8
+'gl*v.5' %a13 a8 %a11 a<e8.c8 (c32e32^^24)e48^32c32^8 >b8
+"!!!o z1^1"
+##
+r1
+r2r8 "g8h8g8"
+r2 ["h8g8"]
+#
+["y-4"[7"y+4"]]
+;
+*

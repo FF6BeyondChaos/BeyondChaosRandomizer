@@ -4,6 +4,7 @@
 #COMPOSER Masakazu Sugimori
 #ARRANGED Cecil188
 ##with reference to sheet music arranged by KKslida2
+#TRANS KKslida2
 
 #WAVE 0x20 0x63 (strings - oct)
 #WAVE 0x21 0x51 (bass)
