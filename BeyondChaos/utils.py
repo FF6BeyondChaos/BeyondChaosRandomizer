@@ -121,9 +121,12 @@ def open_mei_fallback(filename, mode='r', encoding=None):
 
 class Substitution:
     location = None
-    bytestring = None
-    every_single_write = {}
-    noverify_writes = set()
+    bytestring : bytes = None
+    write_history = []
+    patch_name_counts : dict[str, int] = {}
+
+    #every_single_write = {}
+    #noverify_writes = set()
 
     @property
     def size(self) -> int:
@@ -132,7 +135,7 @@ class Substitution:
     def set_location(self, location: int):
         self.location = location
 
-    def write(self, outfile_rom_buffer: BytesIO, noverify: bool = False, patch_name: str = "Unknown"):
+    def write_old(self, outfile_rom_buffer: BytesIO, noverify: bool = False, patch_name: str = "Unknown"):
         outfile_rom_buffer.seek(self.location)
         outfile_rom_buffer.write(bytes(self.bytestring))
         verification = (self.location, bytes(self.bytestring))
@@ -143,8 +146,74 @@ class Substitution:
         if noverify:
             self.noverify_writes.add(verification)
 
+    def write(self, outfile_rom_buffer: BytesIO, noverify: bool = False, patch_name: str = "Unknown"):
+        data = bytes(self.bytestring)
+        outfile_rom_buffer.seek(self.location)
+        outfile_rom_buffer.write(data)
+        self.protect(range(self.location, self.location + len(data)), noverify=noverify, patch_name=patch_name, data=data)
+
+    def protect(self, patch_range: range, noverify: bool = False, patch_name: str = "Unknown", data: bytes = None):
+        ''' Protect a range of bytes without changing its content '''
+
+        # Increment count for this patch_name
+        count = self.patch_name_counts.get(patch_name)
+        if count == None: count = 0
+        count += 1
+        self.patch_name_counts[patch_name] = count
+
+        # Add verification for later
+        verification = (patch_name, count, patch_range, noverify, data)
+        self.write_history.append(verification)
+
     @classmethod
     def verify_all_writes(self, outfile_rom_buffer: BytesIO):
+        verify_list = []
+        failed_patches = []
+        for i, history_tuple in enumerate(self.write_history):
+            # We use our history tuple as both a raw tuple and unpacked
+            patch_range:range
+            (patch_name, patch_index, patch_range, noverify, data) = history_tuple
+
+            # Is this write conflicting with previous protected ranges?
+            patch2_range:range
+            for (patch2_name, patch2_index, patch2_range, noverify2, data2) in verify_list:
+                merge_range = range(max(patch_range[0], patch2_range[0]), min(patch_range[-1], patch2_range[-1])+1)
+                if merge_range.stop > merge_range.start:
+                    # Range conflict, test bytes within the conflict range
+                    conflict = True     # Assume conflict if no data was provided for the protected range
+                    if data2 is not None:
+                        outfile_rom_buffer.seek(merge_range.start)
+                        verify_length = merge_range.stop - merge_range.start
+                        verify_range = range(merge_range.start-patch2_range.start, merge_range.start-patch2_range.start+verify_length)
+                        verify_og = outfile_rom_buffer.read(verify_length)
+                        verify_w = data2[verify_range.start:verify_range.stop]
+                        conflict = verify_og != verify_w
+
+                    # Conflict detected?
+                    if conflict:
+                        failed_message = (
+                            f'WARNING: Patch {patch_name} #{patch_index} at {patch_range.start:0>6x}-{patch_range.stop-1:0>6x} '
+                            f'conflicts with patch '
+                            f'{patch2_name} #{patch2_index} at {patch2_range.start:0>6x}-{patch2_range.stop-1:0>6x} '
+                            f'within {merge_range.start:0>6x}-{merge_range.stop-1:0>6x}'
+                        )
+                        print(failed_message)
+                        failed_patches.append(failed_message)
+
+            # Add to verify list for possible later conflict
+            if not noverify:
+                verify_list.append(history_tuple)
+        
+        # Raise exception
+        if failed_patches:
+            failed_patches = '\n- '.join(failed_patches)
+            #raise Exception('The following patches failed '
+            #                f'verification:\n- {failed_patches}')
+
+        return
+
+    @classmethod
+    def verify_all_writes_old(self, outfile_rom_buffer: BytesIO):
         failed_patches = []
         for patch_name, verifications in self.every_single_write.items():
             for index, (address, data) in enumerate(verifications):
@@ -368,6 +437,17 @@ def int2bytes(value, length=2, reverse=True):
         bs = reversed(bs)
 
     return bytes(bs[:length])
+
+
+def int2bytes_array(array: list, length=2):
+    data = []
+    ranged = range(length)
+    for value in array:
+        for x in ranged:
+            data.append(value & 0xff)
+            value >>= 8
+
+    return bytes(data)
 
 
 def read_multi(infile_rom_buffer: BytesIO, length=2, reverse=True):
@@ -849,12 +929,12 @@ def generate_character_palette(skintones_unused=None, char_hues_unused=None, tra
         return dynamic
 
     if not trance:
-        skintone = skintones_unused.pop(0)
+        skintone = random.choice(skintones_unused)
         skin_hue = guess_hue(list(skintone[0]))
-        hair_hue = char_hues_unused.pop(0)
-        cloth_hue_deg = nudge_apart(hue_deg(char_hues_unused.pop(0)), skin_hue)
+        hair_hue = random.choice(char_hues_unused)
+        cloth_hue_deg = nudge_apart(hue_deg(random.choice(char_hues_unused)), skin_hue)
         cloth_hue = hue_rgb(cloth_hue_deg)
-        acc_hue = hue_rgb(nudge_apart(hue_deg(char_hues_unused.pop(0)), skin_hue))
+        acc_hue = hue_rgb(nudge_apart(hue_deg(random.choice(char_hues_unused)), skin_hue))
 
         new_palette = [[0, 0, 0], [3, 3, 3]] + list(skintone)
         new_palette = list(map(components_to_color, new_palette)) * 3

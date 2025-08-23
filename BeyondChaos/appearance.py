@@ -1,15 +1,17 @@
+from ctypes import BigEndianStructure
 import itertools
 import os
 import string
 import options
 import pathlib
+import colorsys
 
 from character import get_characters
 from utils import (CHARACTER_PALETTE_TABLE, EVENT_PALETTE_TABLE, FEMALE_NAMES_TABLE, MALE_NAMES_TABLE,
                    MOOGLE_NAMES_TABLE, RIDING_SPRITE_TABLE, SPRITE_REPLACEMENT_TABLE, CORAL_TABLE,
                    generate_character_palette, get_palette_transformer, hex2int, name_to_bytes,
                    open_mei_fallback, read_multi, shuffle_char_hues, custom_path,
-                   Substitution, utilrandom as random, write_multi)
+                   Substitution, utilrandom as random, write_multi, int2bytes_array)
 from io import BytesIO
 
 SPRITE_REPLACEMENT_PATH = os.path.join(custom_path, "sprites")
@@ -47,8 +49,15 @@ class SpriteReplacement:
             else:
                 self.portrait_filename = None
 
+        self.field_palette_filename = None
+        if self.file is not None and self.file[-4:] == ".bin":
+            self.field_palette_filename = self.file[:-4] + ".pal"
+            
     def has_custom_portrait(self):
         return self.portrait_filename is not None and self.portrait_palette_filename is not None
+
+    def has_field_palette(self):
+        return self.field_palette_filename is not None
 
     def is_on(self, checklist):
         for g in self.uniqueids:
@@ -73,7 +82,7 @@ def get_sprite_replacements(web_custom_sprite_replacements=None):
 
 
 def recolor_character_palette(outfile_rom_buffer: BytesIO, pointer, palette=None, flesh=False, middle=True,
-                              santa=False, skintones=None, char_hues=None, trance=False):
+                              santa=False, skintones=None, char_hues=None, trance=False, skip_index_zero=False):
     outfile_rom_buffer.seek(pointer)
     if palette is None:
         palette = [read_multi(outfile_rom_buffer, length=2) for _ in range(16)]
@@ -134,10 +143,15 @@ def recolor_character_palette(outfile_rom_buffer: BytesIO, pointer, palette=None
 
         palette = new_palette
 
+    palette_rtn = palette
+    if skip_index_zero:
+        pointer += 2
+        palette = palette[1:]
     outfile_rom_buffer.seek(pointer)
-    for p in palette:
-        write_multi(outfile_rom_buffer, p, length=2)
-    return palette
+    data: bytes = int2bytes_array(palette)
+    outfile_rom_buffer.write(data)
+
+    return palette_rtn
 
 
 def make_palette_repair(outfile_rom_buffer: BytesIO, main_palette_changes):
@@ -489,7 +503,7 @@ def get_sprite_swaps(char_ids, male, female, vswaps, web_custom_sprite_replaceme
         female_candidates = [c for c in replace_candidates if c.gender == "female"]
         male_candidates = [c for c in replace_candidates if c.gender == "male"]
         neutral_candidates = [c for c in replace_candidates if c.gender != "male" and c.gender != "female"]
-
+        
     swap_to = {}
     for char_id in random.sample(char_ids, len(char_ids)):
         if not is_replaced[char_id]:
@@ -783,12 +797,17 @@ def manage_character_appearance(outfile_rom_buffer: BytesIO, preserve_graphics=F
     outfile_rom_buffer.seek(0x17D660)
     outfile_rom_buffer.write(chains)
 
-    manage_palettes(outfile_rom_buffer, change_to, char_ids)
+    if options.Options_.is_flag_active('hdmapalette'):
+        hdma_palette(outfile_rom_buffer, swap_to)
+    else:
+        manage_palettes(outfile_rom_buffer, change_to, char_ids)
 
     return sprite_log
 
 
 def manage_palettes(outfile_rom_buffer: BytesIO, change_to, char_ids):
+    if options.Options_.is_flag_active('hdmapalette'):
+        return
     sabin_mode = options.Options_.is_flag_active('suplexwrecks')
     tina_mode = options.Options_.is_flag_active('bravenudeworld')
     christmas_mode = options.Options_.is_flag_active('christmas')
@@ -884,20 +903,8 @@ def manage_palettes(outfile_rom_buffer: BytesIO, change_to, char_ids):
         make_palette_repair(outfile_rom_buffer, main_palette_changes)
 
     if new_palette_mode:
-        char_hues = [0, 10, 20, 30, 45, 60, 75, 90, 120, 150, 180, 200, 220, 240, 270, 300, 330]
-        char_hues.append(random.choice([0, 0, 345, random.randint(105, 135)]))
-        char_hues = shuffle_char_hues(char_hues)
-        skintones = [((31, 24, 17), (25, 13, 7)),
-                     ((31, 23, 15), (25, 15, 8)),
-                     ((31, 24, 17), (25, 13, 7)),
-                     ((31, 25, 15), (25, 19, 10)),
-                     ((31, 25, 16), (24, 15, 12)),
-                     ((27, 17, 10), (20, 12, 10)),
-                     ((25, 20, 14), (19, 12, 4)),
-                     ((27, 22, 18), (20, 15, 12)),
-                     ((28, 22, 16), (22, 13, 6)),
-                     ((28, 23, 15), (22, 16, 7)),
-                     ((27, 23, 15), (20, 14, 9))]
+        char_hues = get_char_hues()
+        skintones = get_skinstones()
         snowmanvampire = ((29, 29, 30), (25, 25, 27))
         if christmas_mode or random.randint(1, 100) > 66:
             skintones.append(snowmanvampire)
@@ -967,4 +974,345 @@ def manage_palettes(outfile_rom_buffer: BytesIO, change_to, char_ids):
 
         outfile_rom_buffer.seek(pointer)
         outfile_rom_buffer.write(data)
+
+def get_char_hues():
+    char_hues = get_char_hues_base()
+    char_hues.append(random.choice([0, 0, 345, random.randint(105, 135)]))
+    char_hues = shuffle_char_hues(char_hues)
+    return char_hues
+def get_char_hues_base():
+    return [0, 10, 20, 30, 45, 60, 75, 90, 120, 150, 180, 200, 220, 240, 270, 300, 330]
+def get_skinstones():
+    skintones = [
+        ((31, 24, 17), (25, 13, 7)),
+        ((31, 23, 15), (25, 15, 8)),
+        ((31, 24, 17), (25, 13, 7)),
+        ((31, 25, 15), (25, 19, 10)),
+        ((31, 25, 16), (24, 15, 12)),
+        ((27, 17, 10), (20, 12, 10)),
+        ((25, 20, 14), (19, 12, 4)),
+        ((27, 22, 18), (20, 15, 12)),
+        ((28, 22, 16), (22, 13, 6)),
+        ((28, 23, 15), (22, 16, 7)),
+        ((27, 23, 15), (20, 14, 9))]
+    return skintones
+
+
+#  HDMA palette Made by Myself086
+
+# FIELD_PALETTE contains palettes of 16 colors, 32 bytes per palette
+# Color index 0 is reserved for PAL and CMD listed below
+# Color 12 bit 15 is set when the palette is only 12 colors instead of 16 which is important for the solver's efficiency
+
+# High byte command (CMD) for FIELD_PALETTE from myselfpatches.py
+HDMA_PALETTE__CMD_NEVER_CHANGE = 0x00
+HDMA_PALETTE__CMD_ALWAYS_CHANGE = 0x02
+HDMA_PALETTE__CMD_IF_PALETTE_0 = 0x04       # If original palette match, change
+HDMA_PALETTE__CMD_IF_PALETTE_1 = 0x06
+HDMA_PALETTE__CMD_IF_PALETTE_2 = 0x08
+HDMA_PALETTE__CMD_IF_PALETTE_3 = 0x0a
+HDMA_PALETTE__CMD_IF_PALETTE_4 = 0x0c
+HDMA_PALETTE__CMD_IF_PALETTE_5 = 0x0e
+HDMA_PALETTE__CMD_IF_PALETTE_6 = 0x10
+HDMA_PALETTE__CMD_IF_PALETTE_7 = 0x12
+HDMA_PALETTE__CMD_IFNOT_PALETTE_0 = 0x14    # If original palette doesn't match, change
+HDMA_PALETTE__CMD_IFNOT_PALETTE_1 = 0x16
+HDMA_PALETTE__CMD_IFNOT_PALETTE_2 = 0x18
+HDMA_PALETTE__CMD_IFNOT_PALETTE_3 = 0x1a
+HDMA_PALETTE__CMD_IFNOT_PALETTE_4 = 0x1c
+HDMA_PALETTE__CMD_IFNOT_PALETTE_5 = 0x1e
+HDMA_PALETTE__CMD_IFNOT_PALETTE_6 = 0x20
+HDMA_PALETTE__CMD_IFNOT_PALETTE_7 = 0x22
+HDMA_PALETTE__CMD_USE_ORIGINAL = 0x24       # Force using original palette* (PAL equivalent exists)
+
+# Low byte destination palette (PAL) for FIELD_PALETTE from myselfpatches.py
+HDMA_PALETTE__PAL_CUSTOM_COUNT = 0xe0       # Number of palettes located in FIELD_PALETTE
+HDMA_PALETTE__PAL_MOD_BOTTOM = 0xe0         # Palettes affected by event color modifiers (do not use in python)
+HDMA_PALETTE__PAL_MOD_TOP = 0xef
+HDMA_PALETTE__PAL_VANILLA_BOTTOM = 0xf0     # Original palettes**
+HDMA_PALETTE__PAL_VANILLA_TOP = 0xf7
+HDMA_PALETTE__PAL_VANILLA_X = 0xf8          # Force using original palette* (CMD equivalent exists)
+HDMA_PALETTE__PAL_DEFAULT = 0xfe            # Default gray palette (can use in python but may not solve properly)
+HDMA_PALETTE__PAL_UNKNOWN = 0xff            # Assumed unknown/unused by the solver (do not use in python)
+
+# * "Force using original palette" will pick a palette between 0xf0 to 0xf7 based on the palette designated to the sprite.
+# ** "Original palettes" are the original 8 hardware palettes used by the game during field display.
+
+def hdma_palette(outfile_rom_buffer: BytesIO, swap_to: dict[int, SpriteReplacement]):
+    if not options.Options_.is_flag_active('hdmapalette'):
+        return
+    random_palette_order = False        # Randomize custom palette order (TODO: Add flag for this)
+    random_color_palette = False        # Ignore exact custom palettes and create random palettes based on them (TODO: Add flag for this)
+
+    HUE_THRESHOLD = 48                  # For determining hue groups, hue/360
+
+    _sub = Substitution()
+
+    # Get palette table location
+    from myselfpatches import myself_patches
+    palette_location = myself_patches(outfile_rom_buffer).get("FIELD_PALETTE")
+
+    # Get/set methods for new palettes
+    def bytes_to_rgb(byte_data, mult=0x1f):
+        (byte0, byte1) = byte_data[0:2]
+        color = byte0 + (byte1 << 8)
+        mult = mult / 0x1f
+        r = ((color >> 0) & 0x1f) * mult
+        g = ((color >> 5) & 0x1f) * mult
+        b = ((color >> 10) & 0x1f) * mult
+        return (r, g, b)
+    def get_cmd(index: int):
+        outfile_rom_buffer.seek(palette_location + index * 32 + 0)
+        return outfile_rom_buffer.read(2)
+    def set_cmd(index: int, pal, cmd):
+        _sub.set_location(palette_location + index * 32 + 0)
+        _sub.bytestring = bytes([pal, cmd])
+        _sub.write(outfile_rom_buffer, noverify=True, patch_name = "hdma_palette_cmd")
+    def set_pal_rgb(index: int, rgb_values):
+        if len(rgb_values) > 15: rgb_values = rgb_values[:15]
+        data = []
+        for (r, g, b) in rgb_values:
+            # Format: 0bbbbbgggggrrrrr
+            data.append(
+                ((r & 0x1f) << 0) |
+                ((g & 0x1f) << 5) |
+                ((b & 0x1f) << 10)
+            )
+        set_pal_value(index, data)
+    def set_pal_value(index: int, values):
+        if len(values) > 15: values = values[:15]
+        data = []
+        for val in values:
+            data.append((val >> 0) & 0xff)
+            data.append((val >> 8) & 0xff)
+        set_pal_data(index, bytes(data))
+    def set_pal_data(index: int, data: bytes):
+        if len(data) > 30: data = data[:30]
+        _sub.set_location(palette_location + index * 32 + 2)
+        _sub.bytestring = data
+        _sub.write(outfile_rom_buffer, noverify=True, patch_name = "hdma_palette")
+
+    # Method for generating a summary of the custom palettes
+    unchanging = None
+    hue_groups: dict[int, list[int]] = None
+    char_hues_groups: dict[int, list[int]] = None
+    skintones = None
+    hls_base: list[int] = None
+    lightness_ranges = None                 # Unused
+    ALL_CHAR_HUES = get_char_hues_base()    # Used as constant
+    def gen_palette_summary(palette_data: bytes):
+        outer_range = range(0, len(palette_data) & ~0x1f, 0x20)
+        inner_range = range(3*2, 16*2, 2)
+
+        # Default summary
+        nonlocal unchanging, hue_groups, char_hues_groups, skintones, hls_base, lightness_ranges, ALL_CHAR_HUES
+        unchanging = [0, 1, 2]
+        hue_groups = {}
+        char_hues_groups = {}
+        skintones = get_skinstones()
+        hls_base = [None] * 16
+        #lightness_ranges: list[range | None] = [None] * 16
+
+        # Unchanging colors
+        if len(palette_data) >= 0x40:
+            for x in inner_range:
+                x2 = x>>1
+                if x2>>1 != 3:      # Not skin tone
+                    main_color = palette_data[x:x+2]
+                    same = True
+                    if palette_data[x+1] < 0x80:    # Check for unused color
+                        for y in outer_range:
+                            if main_color != palette_data[y+x:y+x+2]:
+                                same = False
+                                break
+                    if same:
+                        unchanging.append(x2)
+
+        # Create groups
+        def append_hue_group(index, hue_value):
+            if hue_value >= 0:
+                # Find most similar hue group
+                best_hue = None
+                best_diff = 0xffff
+                for (key, indices) in hue_groups.items():
+                    diff = abs(hue_value - key)
+                    if best_diff > diff:
+                        best_diff = diff
+                        best_hue = key
+                # Add to new group or existing group
+                if best_diff > HUE_THRESHOLD:
+                    # New group
+                    hue_groups[int(hue_value)] = [index]
+                    char_hues_groups[index] = temp_list = get_char_hues_base()
+                    random.shuffle(temp_list)
+                else:
+                    # Exisitng group
+                    hue_groups[best_hue].append(index)
+            else:
+                # TODO: Gray groups?
+                pass
+        for x in inner_range:
+            x2 = x>>1
+
+            # Get rgb and hls
+            (r, g, b) = bytes_to_rgb(palette_data[x:x+2], mult = 1)
+            (h, l, s) = [z*360.0 for z in colorsys.rgb_to_hls(r,g,b)]
+
+            # Record base hls
+            hls_base[x2] = [h, l, s]
+
+            # Changing?
+            if x2 not in unchanging and x2 >> 1 != 3:
+                # Add to hue group or gray group
+                append_hue_group(x2, h if s > 48 else -1)
+
+        # Remove used hue groups if randomization is necessary
+        if not random_color_palette and len(palette_data) < 0x20 * 5:
+            for _, group in hue_groups.items():
+                x2 = group[0]
+                x = x2 << 1
+
+                # Get hues for this group
+                hue_group = char_hues_groups[x2]
+
+                for y in outer_range:
+                    # Get rgb and hls
+                    (r, g, b) = bytes_to_rgb(palette_data[x:x+2], mult = 1)
+                    (h, l, s) = [z*360.0 for z in colorsys.rgb_to_hls(r,g,b)]
+
+                    # Find most similar hue group
+                    best_hue = None
+                    best_diff = 0xffff
+                    for key in ALL_CHAR_HUES:
+                        diff = abs(h - key)
+                        if best_diff > diff:
+                            best_diff = diff
+                            best_hue = key
+
+                    # Remove most similar hue
+                    if best_hue in hue_group:
+                        hue_group.remove(best_hue)
+
+        return
+
+    # Find first extra palette
+    extra_palette = 0xff
+    for x in range(HDMA_PALETTE__PAL_CUSTOM_COUNT):
+        (pal, cmd) = get_cmd(x)
+        if HDMA_PALETTE__CMD_IF_PALETTE_0 <= cmd <= HDMA_PALETTE__CMD_IFNOT_PALETTE_7 and pal < HDMA_PALETTE__PAL_CUSTOM_COUNT:
+            extra_palette = pal
+            break
+
+    # Apply palette changes
+    for x in range(0, extra_palette):
+        swap: SpriteReplacement = swap_to.get(x)
+        if swap is None:
+            # Use original palette for unchanged sprites
+            set_cmd(x, 0, HDMA_PALETTE__CMD_USE_ORIGINAL)
+        else:
+            # Load custom palette if the file exists
+            palette_data = None
+            if swap.has_field_palette():
+                try:
+                    f = open_mei_fallback(os.path.join(SPRITE_REPLACEMENT_PATH, swap.field_palette_filename), "rb")
+                except IOError:
+                    pass
+                else:
+                    palette_data = f.read()
+                    f.close()
+
+            # TEST ONLY
+            if swap.name.lower() == "locke":
+                pass
+
+            # Main palette name based on character ID
+            pal_name = x
+
+            # .pal file found?
+            if palette_data is not None and len(palette_data) >= 0x20:
+                # Split palettes from the .pal file
+                palettes: list[bytes] = []
+                for y in range(0, len(palette_data) & ~0x1f, 0x20):
+                    palettes.append(palette_data[y:y+0x20])
+
+                # Apply custom palette either linearly or randomly
+                pal_valid_summary = False
+                pal_main = palettes[0] if palettes else None
+                while True:
+                    # Apply one palette to this pal_name
+                    pal = None if len(palettes) == 0 else palettes.pop(0 if not random_palette_order else random.randrange(0, len(palettes)))
+                    if pal is not None and not random_color_palette:
+                        set_pal_data(pal_name, pal[2:])
+                    else:
+                        # Get palette summary
+                        if not pal_valid_summary:
+                            gen_palette_summary(palette_data)
+                            pal_valid_summary = True
+
+                        # Generate palette based on summary
+                        base_hues = {}
+                        colors = [0x1f, 0x7c] * 16      # Fill with error color
+                        for c in range(16):
+                            c2=c*2
+                            if c in unchanging:
+                                colors[c2:c2+2] = pal_main[c2:c2+2]
+                            else:
+                                hue_key = None
+                                for key, items in hue_groups.items():
+                                    if c in items:
+                                        hue_key = items[0]
+                                        break
+                                if c == 6:
+                                    (r, g, b) = skintones[0][0]
+                                elif c == 7:
+                                    (r, g, b) = skintones.pop(0)[1]
+                                elif hue_key is not None:
+                                    (h, l, s) = hls_base[c]
+                                    if hue_key not in base_hues:
+                                        h = base_hues[hue_key] = char_hues_groups[hue_key].pop(0)
+                                        h = base_hues[hue_key] = char_hues_groups[hue_key].pop(0)
+                                        h = base_hues[hue_key] = char_hues_groups[hue_key].pop(0)
+                                        h = base_hues[hue_key] = char_hues_groups[hue_key].pop(0)
+                                    else:
+                                        h = base_hues[hue_key]
+                                    (h, l, s) = [z/360.0 for z in [h, l, s]]
+                                    (r, g, b) = [z*0x1f for z in colorsys.hls_to_rgb(h, l, s)]
+                                else:
+                                    (r, g, b) = [31, 0, 31]     # Error color
+                                new_data = (
+                                    (int(r + 0.5) << 0) |
+                                    (int(g + 0.5) << 5) |
+                                    (int(b + 0.5) << 10))
+                                colors[c2:c2+2] = [new_data & 0xff, new_data >> 8]
+
+                        # Write palette data
+                        set_pal_data(pal_name, bytes(colors[2:]))
+
+                    # Get next pal_name if valid alternate
+                    (pal, cmd) = get_cmd(pal_name)
+                    if HDMA_PALETTE__CMD_IF_PALETTE_0 <= cmd <= HDMA_PALETTE__CMD_IFNOT_PALETTE_7 and pal < HDMA_PALETTE__PAL_CUSTOM_COUNT:
+                        pal_name = pal
+                    else:
+                        break
+
+                # Temp set palette
+                #set_pal_data(x, palette_data[2:32])
+            else:
+                # No .pal file, generate random palette based on the old palette randomizer
+                while True:
+                    # Write palette
+                    recolor_character_palette(
+                        outfile_rom_buffer, palette_location + pal_name * 32, palette=None,
+                        flesh=False, santa=False,           # flesh and santa not supported here
+                        skintones=skintones, char_hues=char_hues,
+                        skip_index_zero=True)               # Color index 0 is reserved for scripts
+
+                    # Get next pal_name if valid alternate
+                    (pal, cmd) = get_cmd(pal_name)
+                    if HDMA_PALETTE__CMD_IF_PALETTE_0 <= cmd <= HDMA_PALETTE__CMD_IFNOT_PALETTE_7 and pal < HDMA_PALETTE__PAL_CUSTOM_COUNT:
+                        pal_name = pal
+                    else:
+                        break
+
+    return
 

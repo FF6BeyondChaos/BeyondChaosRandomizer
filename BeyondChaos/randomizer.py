@@ -2606,7 +2606,7 @@ def manage_reorder_rages(rage_order_table):
     reordered_rages_sub = Substitution()
     reordered_rages_sub.bytestring = monster_order
     reordered_rages_sub.set_location(pointer)
-    reordered_rages_sub.write(outfile_rom_buffer, patch_name='rage_order')
+    reordered_rages_sub.write(outfile_rom_buffer, noverify=True, patch_name='rage_order')
     ((pointer >> 16) & 0x3F) + 0xC0, (pointer >> 8) & 0xFF, pointer & 0xFF
     return
 

@@ -356,13 +356,15 @@ class Options:
 
     @staticmethod
     def get_flag(flag_name: str) -> Flag:
+        flag_name = flag_name.lower()
         for flag in ALL_FLAGS:
-            if flag.name.lower() == flag_name.lower() or flag.description.lower() == flag_name.lower():
+            if flag.name.lower() == flag_name or flag.description.lower() == flag_name:
                 return flag
 
     def is_flag_active(self, flag_attribute: str):
+        flag_attribute = flag_attribute.lower()
         for flag in self.active_flags:
-            if flag.name.lower() == flag_attribute.lower() or flag.description.lower() == flag_attribute.lower():
+            if flag.name.lower() == flag_attribute or flag.description.lower() == flag_attribute:
                 return flag
 
     def is_any_flag_active(self, flag_names: List[str]):
@@ -371,17 +373,19 @@ class Options:
                 return True
 
     def get_flag_value(self, flag_name: str):
+        flag_name = flag_name.lower()
         try:
             for flag in self.active_flags:
-                if flag.name.lower() == flag_name.lower():
+                if flag.name.lower() == flag_name:
                     if not isinstance(flag.value, bool):
                         return flag.value
         except KeyError:
             return None
 
     def activate_flag(self, flag_name: str, flag_value=True):
+        flag_name = flag_name.lower()
         for flag in ALL_FLAGS:
-            if flag.name.lower() == flag_name.lower():
+            if flag.name.lower() == flag_name:
                 if flag in self.active_flags:
                     return
                 flag.value = flag_value
@@ -393,6 +397,7 @@ class Options:
                 return
 
     def deactivate_flag(self, flag_name: str):
+        flag_name = flag_name.lower()
         for index, flag in enumerate(self.active_flags):
             if flag.name == flag_name:
                 del self.active_flags[index]
@@ -444,9 +449,9 @@ ANCIENT_CAVE_PROHIBITED_FLAGS = {
     "strangejourney",
     "worringtriad",
     "thescenarionottaken",
-    'regionofdoom'
+    'regionofdoom',
     'morefanatical',
-    'lessfanatical'
+    'lessfanatical',
 }
 
 ALL_MODES = [
@@ -1578,6 +1583,17 @@ NORMAL_FLAGS = [
          input_type='boolean',
          conflicts=[],
          requirements=[{"mementomori": '*'}],
+         children={}
+         ),
+
+    # WIP codes
+    Flag(name='hdmapalette',
+         description='HDMA PALETTE',
+         long_description='Allows using custom character sprite palettes',
+         category='experimental',
+         input_type='boolean',
+         conflicts=[],
+         requirements=[],
          children={}
          ),
 
