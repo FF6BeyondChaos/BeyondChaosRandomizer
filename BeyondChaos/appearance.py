@@ -904,7 +904,7 @@ def manage_palettes(outfile_rom_buffer: BytesIO, change_to, char_ids):
 
     if new_palette_mode:
         char_hues = get_char_hues()
-        skintones = get_skinstones()
+        skintones = get_skintones()
         snowmanvampire = ((29, 29, 30), (25, 25, 27))
         if christmas_mode or random.randint(1, 100) > 66:
             skintones.append(snowmanvampire)
@@ -982,7 +982,7 @@ def get_char_hues():
     return char_hues
 def get_char_hues_base():
     return [0, 10, 20, 30, 45, 60, 75, 90, 120, 150, 180, 200, 220, 240, 270, 300, 330]
-def get_skinstones():
+def get_skintones():
     skintones = [
         ((31, 24, 17), (25, 13, 7)),
         ((31, 23, 15), (25, 15, 8)),
@@ -1097,6 +1097,7 @@ def hdma_palette(outfile_rom_buffer: BytesIO, swap_to: dict[int, SpriteReplaceme
     hue_groups: dict[int, list[int]] = None
     char_hues_groups: dict[int, list[int]] = None
     skintones = None
+    char_hues = None
     hls_base: list[int] = None
     lightness_ranges = None                 # Unused
     ALL_CHAR_HUES = get_char_hues_base()    # Used as constant
@@ -1109,7 +1110,7 @@ def hdma_palette(outfile_rom_buffer: BytesIO, swap_to: dict[int, SpriteReplaceme
         unchanging = [0, 1, 2]
         hue_groups = {}
         char_hues_groups = {}
-        skintones = get_skinstones()
+        skintones = get_skintones()
         hls_base = [None] * 16
         #lightness_ranges: list[range | None] = [None] * 16
 
@@ -1146,7 +1147,7 @@ def hdma_palette(outfile_rom_buffer: BytesIO, swap_to: dict[int, SpriteReplaceme
                     char_hues_groups[index] = temp_list = get_char_hues_base()
                     random.shuffle(temp_list)
                 else:
-                    # Exisitng group
+                    # Existing group
                     hue_groups[best_hue].append(index)
             else:
                 # TODO: Gray groups?
