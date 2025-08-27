@@ -392,11 +392,11 @@ class ItemBlock:
 
     @property
     def has_disabling_status(self):
-        if self.features['statusacquire2'] & 0xf9:
+        if self.features['statusacquire2'] & 0xf9: #Disallow Auto-Condemned, Auto-Mute, Auto-Berserk, Auto-Muddle, Auto-Seizure, Auto-Sleep
             return True
-        if self.features['statusacquire3'] & 0x14:
+        if self.features['statusacquire3'] & 0x14: #Disallow Auto-Slow, Auto-Stop
             return True
-        if (self.features['specialaction'] & 0xf0) in {0x50, 0x60, 0xC0}:
+        if (self.features['specialaction'] & 0xf0) in {0x50, 0x60, 0xC0}: #Disallow Drain HP, Drain MP, Heals Target
             return True
         return False
 
