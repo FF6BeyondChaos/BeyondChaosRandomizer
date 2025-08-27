@@ -2525,6 +2525,16 @@ def manage_items(items: List[ItemBlock], changed_commands_mi: Set[int] = None) -
 
     return items
 
+def is_bad_item_for_manage_equipment(equip_item, character_me):
+    if equip_item.has_disabling_status and (0xE <= character_me.id <= 0xF or character_me.id > 0x1B):
+        return True
+    elif (Options_.is_flag_active('dearestmolulu') and
+          equip_item.prevent_encounters and
+          character_me.id in [14, 16, 17]):
+        return True
+    else:
+        return False
+
 
 def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
     characters = get_characters()
@@ -2561,16 +2571,18 @@ def manage_equipment(items: List[ItemBlock]) -> List[ItemBlock]:
                 while True:
                     equip_item = equippable_items.pop(random.randint(0, len(equippable_items) - 1))
                     equip_id = equip_item.itemid
-                    if equip_item.has_disabling_status and (0xE <= character_me.id <= 0xF or character_me.id > 0x1B):
-                        equip_id = 0xFF
-                    elif (Options_.is_flag_active('dearestmolulu') and
-                          equip_item.prevent_encounters and
-                          character_me.id in [14, 16, 17]):
-                        # don't give moogle charm to Banon, or Guest Ghosts during dearestmolulu
+                    if is_bad_item_for_manage_equipment(equip_item, character_me):
                         equip_id = 0xFF
                     else:
+                        # Rarely, try a random item.
                         if equip_type not in ['weapon', 'shield'] and random.randint(1, 100) == 100:
                             equip_id = random.randint(0, 0xFF)
+                            # Check whether random selection is bad, too.
+                            new_lookup = [item for item in items if item.itemid == equip_id]
+                            if (len(new_lookup) == 1) and is_bad_item_for_manage_equipment(new_lookup[0], character_me):
+                                # OK, give up.
+                                equip_id = 0xFF
+                                break
                     if equip_id != 0xFF or len(equippable_items) == 0:
                         break
                 outfile_rom_buffer.write(bytes([equip_id]))
