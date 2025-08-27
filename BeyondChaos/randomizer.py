@@ -2530,7 +2530,7 @@ def is_bad_item_for_manage_equipment(equip_item, character_me):
         return True
     elif (Options_.is_flag_active('dearestmolulu') and
           equip_item.prevent_encounters and
-          character_me.id in [14, 16, 17]):
+          character_me.id in [14, 16, 17]): # don't give moogle charm to Banon, or Guest Ghosts during dearestmolulu
         return True
     else:
         return False
