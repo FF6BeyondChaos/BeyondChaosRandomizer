@@ -1,17 +1,22 @@
-from .psx_file_extractor import FileManager, SANDBOX_PATH
-from .utils import (read_multi, write_multi, classproperty,
-                    random, md5hash, cached_property, clached_property,
-                    ips_patch, map_to_snes, read_lines_nocomment)
-from _io import BytesIO, BufferedRandom
-from functools import total_ordering
-from os import path
-from hashlib import md5
 import re
-from sys import stdout
 import string
-from copy import copy
 from collections import Counter
+from copy import copy
+from functools import total_ordering
+from hashlib import md5
+from math import ceil
+from os import path
+from sys import stdout
 
+from _io import BufferedRandom, BytesIO
+
+from .psx_file_extractor import SANDBOX_PATH, FileManager
+from .unpacker import Unpacker
+from .utils import (MODULE_FILEPATH, cached_property, clached_property,
+                    classproperty)
+from .utils import fake_yaml as yaml
+from .utils import (hexify, ips_patch, map_to_snes, md5hash, random,
+                    read_lines_nocomment, read_multi, write_multi)
 
 try:
     from sys import _MEIPASS
@@ -42,11 +47,13 @@ PSX_FILE_MANAGER = None
 OPEN_FILES = {}
 ALL_FILES = set()
 REMOVED_FILES = set()
+REIMPORTED_FILES = set()
 MAX_OPEN_FILE_COUNT = 100
 ADDRESSING_MODE = None
 MAPPINGS = {}
 PATCH_PARAMETERS = {}
 FULL_PATCH_CHANGELIST = {}
+PATCHCODE_ALIASES = {}
 
 
 def get_open_file(filepath, sandbox=False):
@@ -54,6 +61,8 @@ def get_open_file(filepath, sandbox=False):
         if filepath.closed:
             filepath = open(filepath.name, 'r+b')
         return filepath
+    if filepath.endswith(';1'):
+        filepath = filepath[:-2]
     filepath = filepath.replace('/', path.sep)
     filepath = filepath.replace('\\', path.sep)
     assert filepath not in REMOVED_FILES
@@ -103,6 +112,16 @@ def get_psx_file_manager():
     return PSX_FILE_MANAGER
 
 
+def reimport_psx_file(filepath, new_target_sector=None, verify=None):
+    if filepath.startswith(SANDBOX_PATH):
+        name = filepath[len(SANDBOX_PATH):].lstrip(path.sep)
+        close_file(filepath)  # do before importing to flush the file
+        PSX_FILE_MANAGER.import_file(name, filepath=filepath,
+                                     new_target_sector=new_target_sector,
+                                     verify=verify)
+        REIMPORTED_FILES.add(filepath)
+
+
 def reimport_psx_files():
     if not SANDBOX_PATH:
         return
@@ -110,17 +129,16 @@ def reimport_psx_files():
         return
     last_import = -1
     for (n, filepath) in enumerate(sorted(ALL_FILES)):
-        if filepath.startswith(SANDBOX_PATH):
-            count = int(round(9 * n / len(ALL_FILES)))
-            if count > last_import:
-                if count == 0:
-                    print('Re-importing files...')
-                last_import = count
-                stdout.write('%s ' % (10-count))
-                stdout.flush()
-            name = filepath[len(SANDBOX_PATH):].lstrip(path.sep)
-            close_file(filepath)  # do before importing to flush the file
-            PSX_FILE_MANAGER.import_file(name, filepath)
+        if filepath in REIMPORTED_FILES:
+            continue
+        count = int(round(9 * n / len(ALL_FILES)))
+        if count > last_import:
+            if count == 0:
+                print('Re-importing files...')
+            last_import = count
+            stdout.write('%s ' % (10-count))
+            stdout.flush()
+        reimport_psx_file(filepath)
     stdout.write('\n')
     PSX_FILE_MANAGER.finish()
 
@@ -162,6 +180,23 @@ def set_addressing_mode(mode):
 def get_addressing_mode():
     global ADDRESSING_MODE
     return ADDRESSING_MODE
+
+
+def set_patch_aliases(filename):
+    filepath = path.join(MODULE_FILEPATH, filename)
+    for line in read_lines_nocomment(filepath):
+        while '  ' in line:
+            line = line.replace('  ', ' ')
+        alias, code = line.split(' ')[:2]
+        alias = alias.lower()
+        if not alias.startswith('.'):
+            alias = f'.{alias}'
+        if alias in PATCHCODE_ALIASES:
+            raise Exception(f'Duplicate alias: {alias}')
+        if code.startswith('.') and code in PATCHCODE_ALIASES:
+            PATCHCODE_ALIASES[alias] = PATCHCODE_ALIASES[code]
+            continue
+        PATCHCODE_ALIASES[alias] = code
 
 
 def determine_global_table(outfile, interactive=True, allow_conversions=True):
@@ -236,15 +271,6 @@ def patch_filename_to_bytecode(patchfilename, mapping=None, parameters=None):
                 pass
         return value
 
-    def hexify(value):
-        s = ''
-        while True:
-            s = ' '.join([s, '{0:0>2x}'.format(value & 0xff)]).strip()
-            value >>= 8
-            if not value:
-                break
-        return s.strip()
-
     if parameters is not None:
         for parameter_name, value in parameters.items():
             value = clean_parameter(value)
@@ -267,10 +293,13 @@ def patch_filename_to_bytecode(patchfilename, mapping=None, parameters=None):
             temp[key] = offset
         mapping = temp
 
+    if mapping is not None:
+        sorted_mapping_keys = sorted(mapping.keys())
+
     def map_address(address):
         if mapping is None:
             return address
-        for start, finish in sorted(mapping.keys()):
+        for start, finish in sorted_mapping_keys:
             if start <= address <= finish:
                 return address + mapping[start, finish]
         raise Exception('No valid mapping for {0:0>6x} in {1}.'.format(
@@ -286,6 +315,10 @@ def patch_filename_to_bytecode(patchfilename, mapping=None, parameters=None):
     read_into = patch
     valparmatcher = re.compile('({{([^:]*)=([^}]*)}})')
     defparmatcher = re.compile('({{([^:]*):([^}]*)}})')
+
+    sorted_patch_parameters = sorted(PATCH_PARAMETERS,
+                                     key=lambda n: (-len(n), n))
+
     f = open(patchfilename)
     for line in f:
         line = line.strip()
@@ -324,7 +357,7 @@ def patch_filename_to_bytecode(patchfilename, mapping=None, parameters=None):
                 line = line.replace(to_replace, '{{%s}}' % name)
 
         if '{{' in line:
-            for name in sorted(PATCH_PARAMETERS, key=lambda n: (-len(n), n)):
+            for name in sorted_patch_parameters:
                 if name not in line:
                     continue
                 to_replace = '{{%s}}' % name
@@ -432,10 +465,45 @@ def patch_filename_to_bytecode(patchfilename, mapping=None, parameters=None):
                 _, length = word.split(',')
                 length = int(length)
                 next_address += length
-            else:
+            elif word.startswith('.'):
                 next_address += 1
+            else:
+                try:
+                    int(word, 0x10)
+                    next_address += ceil(len(word)/2)
+                except ValueError:
+                    next_address += 1
+
+    def check_is_hex(s):
+        try:
+            int(s, 0x10)
+            return True
+        except ValueError:
+            return False
+
+    for aname in sorted(code_addresses):
+        if check_is_hex(aname):
+            raise Exception('Address name "%s" cannot be '
+                            'a hexidecimal number.' % aname)
+        if aname.startswith('.'):
+            raise Exception('Address "%s" cannot start '
+                            'with a period.' % aname)
+
+    for lname in sorted(labels):
+        if check_is_hex(lname):
+            raise Exception('Label name "%s" cannot be '
+                            'a hexidecimal number.' % lname)
+        if lname.startswith('.'):
+            raise Exception('Label "%s" cannot start '
+                            'with a period.' % lname)
 
     for defname in sorted(definitions):
+        if check_is_hex(defname):
+            raise Exception('Definition name "%s" cannot be '
+                            'a hexidecimal number.' % defname)
+        if defname.startswith('.'):
+            raise Exception('Definition "%s" cannot start '
+                            'with a period.' % defname)
         for aname in sorted(code_addresses):
             if defname in aname.lower():
                 raise Exception('Address "%s" cannot contain '
@@ -445,10 +513,15 @@ def patch_filename_to_bytecode(patchfilename, mapping=None, parameters=None):
                 raise Exception('Label "%s" cannot contain '
                                 'definition "%s".' % (lname, defname))
 
+    sorted_aliases = sorted(PATCHCODE_ALIASES, key=lambda a: (-len(a), a))
+    sorted_labels = sorted(labels, key=lambda l: (-len(l), l))
     for read_into in (patch, validation):
         for (address, filename) in sorted(read_into):
             code = read_into[address, filename]
-            for name in sorted(labels, key=lambda l: (-len(l), l)):
+            for alias in sorted_aliases:
+                if alias in code:
+                    code = code.replace(alias, PATCHCODE_ALIASES[alias])
+            for name in sorted_labels:
                 if name in code:
                     direct = '@%s' % name
                     if direct in code:
@@ -501,7 +574,14 @@ def patch_filename_to_bytecode(patchfilename, mapping=None, parameters=None):
                     code = code.replace('%s,%s' % (name, length), replacement)
                     code = code.replace(name, replacement)
 
-            code = bytearray(map(lambda s: int(s, 0x10), code.split()))
+            code = code.split()
+            temp = []
+            for c in code:
+                numbytes = ceil(len(c) / 2)
+                c = int(c, 0x10).to_bytes(length=numbytes,
+                                          byteorder='little')
+                temp.append(c)
+            code = bytearray(b''.join(temp))
             read_into[address, filename] = code
 
     f.close()
@@ -771,6 +851,19 @@ def gen_random_normal(random_degree=None):
         return (value_c * (1-factor)) + (value_a * factor)
 
 
+def gen_random_gravity(items, random_degree=None, gravity=1):
+    if random_degree is None:
+        random_degree = get_random_degree()
+    if random_degree == 0:
+        return items[0]
+
+    value = gen_random_normal(random_degree=random_degree)
+    value = abs(value-0.5) * 2
+    max_index = len(items)-1
+    index = int(round((value ** gravity) * max_index))
+    return items[index]
+
+
 def mutate_normal(base, minimum, maximum, random_degree=None,
                   return_float=False, wide=False):
     assert minimum <= base <= maximum
@@ -873,7 +966,8 @@ class TableSpecs:
     def __init__(self, specfile, pointer=None, count=None,
                  grouped=False, pointed=False, delimit=False,
                  pointerfilename=None):
-        self.attributes = []
+        self.filename = None
+        self.attributes = None
         self.bitnames = {}
         self.total_size = 0
         self.pointer = pointer
@@ -883,6 +977,16 @@ class TableSpecs:
         self.pointedpoint1 = False
         self.delimit = delimit
         self.pointerfilename = pointerfilename
+        if self.count is None and self.pointer is None and \
+                self.pointerfilename is None:
+            self.packed = True
+            self.load_packed(specfile)
+        else:
+            self.packed = False
+            self.load_standard(specfile)
+
+    def load_standard(self, specfile):
+        self.attributes = []
         for line in open(specfile):
             line = line.strip()
             if not line or line[0] == "#":
@@ -912,6 +1016,46 @@ class TableSpecs:
                 self.total_size += (int(a)*int(b))
             self.attributes.append((name, size, other))
 
+    def load_packed(self, specfile):
+        self.pointer, self.packed_finish = None, None
+        self.attributes = {}
+        with open(specfile) as f:
+            self.unpacker_config = yaml.safe_load(f.read())
+            f.seek(0)
+            for line in f:
+                if line.startswith('#!'):
+                    line = line[2:].strip()
+                    while '  ' in line:
+                        line = line.replace('  ', ' ')
+                    if line.count('=') == 1:
+                        line = line.split()
+                        if len(line) != 3 or line[1] != '=':
+                            continue
+                        name, _, source = line
+                        self.attributes[name] = source
+                    elif line.count(':') == 1:
+                        line = line.replace(' ', '')
+                        source, names = line.split(':')
+                        names = names.split(',')
+                        for name in names:
+                            self.attributes[name] = f'{source}.{name}'
+                    elif line.count('-') == 1 and ' ' not in line:
+                        start, finish = line.split('-')
+                        try:
+                            start = int(start, 0x10)
+                            finish = int(finish, 0x10)
+                        except ValueError:
+                            continue
+                        assert finish > start
+                        self.pointer = start
+                        self.packed_finish = finish
+        self.original_pointer = self.pointer
+        self.packed_length = self.packed_finish - self.pointer
+        if 'filename' in self.unpacker_config:
+            self.filename = self.unpacker_config['filename']
+        else:
+            self.filename = GLOBAL_OUTPUT
+
 
 @total_ordering
 class TableObject(object):
@@ -925,18 +1069,21 @@ class TableObject(object):
         assert hasattr(self, 'specs')
         assert isinstance(self.specs.total_size, int)
         assert index is not None
-        if hasattr(self.specs, 'subfile'):
-            self.filename = path.join(SANDBOX_PATH, self.specs.subfile)
-        else:
-            self.filename = filename
-        if self.filename != GLOBAL_OUTPUT and PSX_FILE_MANAGER is None:
-            create_psx_file_manager(filename)
         self.pointer = pointer
         self.groupindex = groupindex
         self.variable_size = size
         self.index = index
-        if filename:
-            self.read_data(None, pointer)
+        if self.specs.packed:
+            self.filename = filename
+        else:
+            if hasattr(self.specs, 'subfile'):
+                self.filename = path.join(SANDBOX_PATH, self.specs.subfile)
+            else:
+                self.filename = filename
+            if self.filename != GLOBAL_OUTPUT and PSX_FILE_MANAGER is None:
+                create_psx_file_manager(filename)
+            if filename:
+                self.read_data(None, pointer)
         key = (type(self), self.index)
         assert key not in GRAND_OBJECT_DICT
         GRAND_OBJECT_DICT[key] = self
@@ -999,6 +1146,12 @@ class TableObject(object):
 
         cls._every = list(get_table_objects(cls))
         return cls.every
+
+    @classproperty
+    def count(cls):
+        if cls.specs.count is not None:
+            return cls.specs.count
+        return len(cls.every)
 
     @classproperty
     def randomize_order(cls):
@@ -1369,6 +1522,9 @@ class TableObject(object):
         return specsattrs
 
     def read_data(self, filename=None, pointer=None):
+        if self.specs.packed:
+            return self.read_packed_data()
+
         if pointer is None:
             pointer = self.pointer
         if filename is None:
@@ -1400,6 +1556,47 @@ class TableObject(object):
                     value.append(read_multi(f, numbytes))
             self.old_data[name] = copy(value)
             setattr(self, name, value)
+
+    def read_packed_data(self):
+        main = self._unpacked
+        self.old_data = {}
+        for name, source in self.specs.attributes.items():
+            current = main
+            sequence = source.split('.')
+            if sequence[0] in ['main', '']:
+                sequence = sequence[1:]
+            for key in sequence:
+                if isinstance(current, dict) and key in current:
+                    current = current[key]
+                elif hasattr(current, key):
+                    current = getattr(current, key)
+                else:
+                    raise Exception(f'Unable to find value at {source}')
+            self.old_data[name] = copy(current)
+            setattr(self, name, current)
+
+    def update_packed_data(self):
+        main = self._unpacked
+        for name, source in self.specs.attributes.items():
+            current = main
+            sequence = source.split('.')
+            if sequence[0] in ['main', '']:
+                sequence = sequence[1:]
+            for key in sequence:
+                if key == sequence[-1]:
+                    break
+                if isinstance(current, dict) and key in current:
+                    current = current[key]
+                elif hasattr(current, key):
+                    current = getattr(current, key)
+                else:
+                    raise Exception(f'Unable to find value at {source}')
+            value = getattr(self, name)
+            if isinstance(current, dict) and key in current:
+                current[key] = value
+            else:
+                getattr(current, key)
+                setattr(current, key, value)
 
     def copy_data(self, another):
         for name, _, _ in self.specs.attributes:
@@ -1458,6 +1655,9 @@ class TableObject(object):
 
     @classmethod
     def write_all(cls, filename):
+        if cls.specs.packed:
+            return cls.write_all_packed(filename)
+
         if cls.specs.pointedpoint1 or not (
                 cls.specs.grouped or cls.specs.pointed or cls.specs.delimit):
             for o in cls.every:
@@ -1531,6 +1731,74 @@ class TableObject(object):
                 f.seek(pointer)
                 f.write(chr(cls.specs.delimitval))
                 pointer += 1
+
+    @classmethod
+    def write_all_packed(cls, filename):
+        config = cls.specs.unpacker_config
+        unpacked = cls._full_unpacked
+        objects = {}
+        for o in cls.every:
+            o.update_packed_data()
+            if o._unpointer in unpacked['main_data']:
+                p = o._unpointer
+            else:
+                p = o.pointer - cls.specs.pointer
+            objects[p] = o
+
+        relative_to = 0
+        if 'main_pointers' in unpacked:
+            if 'relative_to' in config['main_pointers']:
+                relative_to = config['main_pointers']['relative_to']
+            for p in unpacked['main_pointers']:
+                if p is None:
+                    assert p not in objects
+                    assert p not in unpacked['main_data']
+                    continue
+                if hasattr(p, 'pointer') and p in objects:
+                    unpacked['main_data'][p] = \
+                            objects[p]._unpacked
+                    continue
+                if p.pointer+relative_to not in objects:
+                    raise Exception(
+                            f'{cls}: Missing unpacker data for pointer {p:x}')
+                unpacked['main_data'][p] = \
+                        objects[p.pointer+relative_to]._unpacked
+        else:
+            unpacked['main_data'] = [v._unpacked for v in objects.values()]
+
+        config = cls.specs.unpacker_config
+        pointer = cls.specs.pointer
+        filename = cls.specs.filename
+        unpacker = Unpacker(config)
+        unpacker.set_unpacked(unpacked)
+        packed = unpacker.repack()
+        if len(packed) > cls.specs.packed_length and \
+                pointer == cls.specs.original_pointer:
+            print(f'WARNING: {cls.__name__} packed data '
+                  'exceeds original length.')
+
+        f = get_open_file(filename)
+        ignore_sections = {}
+        for section in cls.specs.unpacker_config:
+            if 'data_type' not in section:
+                continue
+            if section['data_type'] != 'ignore':
+                if 'ignore' in str(section):
+                    raise NotImplementedError
+                continue
+            start, finish = section['start'], section['finish']
+            length = finish-start
+            f.seek(start)
+            blob = f.read(length)
+            assert len(blob) == length
+            ignore_sections[start] = blob
+
+        f.seek(pointer)
+        f.write(packed)
+
+        for start, blob in ignore_sections.items():
+            f.seek(start)
+            f.write(blob)
 
     def preprocess(self):
         return
@@ -2105,7 +2373,9 @@ def get_table_objects(objtype, filename=None):
         objects.append(obj)
         return size
 
-    if pointerfilename is not None:
+    if objtype.specs.packed:
+        objects = get_packed_objects(objtype, objtype.specs.filename)
+    elif pointerfilename is not None:
         for line in open(path.join(tblpath, pointerfilename)):
             line = line.strip()
             if not line or line[0] == '#':
@@ -2198,6 +2468,61 @@ def get_table_objects(objtype, filename=None):
     return get_table_objects(objtype, filename=filename)
 
 
+def get_packed_objects(objtype, filename):
+    config = objtype.specs.unpacker_config
+    pointer = objtype.specs.pointer
+    finish = objtype.specs.packed_finish
+    f = get_open_file(filename)
+    f.seek(pointer)
+    data = f.read(finish-pointer)
+    label = f'{objtype.__name__} {pointer:x}'
+    unpacker = Unpacker(config, label=label)
+    unpacker.set_packed(data)
+    assert not hasattr(objtype, '_unpacked')
+    unpacked = unpacker.unpack()
+
+    objtype._full_unpacked = unpacked
+    relative_to = 0
+    if 'main_pointers' in unpacked:
+        main_data = []
+        if 'relative_to' in config['main_pointers']:
+            relative_to = config['main_pointers']['relative_to']
+            if isinstance(relative_to, str):
+                relative_to = unpacker.get_address(relative_to)
+        for p in unpacked['main_pointers']:
+            if p is None:
+                main_data.append((None, None))
+                continue
+            main_data.append((p, unpacked['main_data'][p]))
+    else:
+        assert isinstance(unpacked['main_data'], list)
+        main_data = list(enumerate(unpacked['main_data']))
+        if config['main_data']['data_type'] == 'regular_list':
+            total_length = len(data)
+            num_items = len(main_data)
+            if total_length % num_items == 0:
+                item_length = total_length // num_items
+                main_data = [(n*item_length, i) for (n, i) in main_data]
+
+    objects = []
+    for p, data in main_data:
+        if p is None and data is None:
+            continue
+        assert isinstance(data, dict)
+        if hasattr(p, 'pointer'):
+            obj = objtype(filename, pointer=pointer+p.pointer+relative_to,
+                          index=len(objects), groupindex=0)
+        else:
+            obj = objtype(filename, pointer=pointer+p+relative_to,
+                          index=len(objects), groupindex=0)
+        obj._unpointer = p
+        obj._unpacked = dict(data)
+        obj.read_data()
+        objects.append(obj)
+
+    return objects
+
+
 def set_table_specs(objects, filename=None):
     if filename is None:
         filename = GLOBAL_TABLE
@@ -2280,7 +2605,9 @@ def set_table_specs(objects, filename=None):
             point1 = False
             delimit = False
             pointdelimit = False
-            if len(line) <= 3:
+            if len(line) <= 2:
+                objname, tablefilename = tuple(line)
+            elif len(line) <= 3:
                 objname, tablefilename, pointerfilename = tuple(line)
             else:
                 objname, tablefilename, pointer, count = tuple(line)

@@ -1,5 +1,3 @@
-from .utils import cached_property, read_lines_nocomment, summarize_state, \
-                    utilrandom as random
 from collections import defaultdict
 from copy import deepcopy
 from functools import total_ordering
@@ -7,13 +5,15 @@ from hashlib import md5
 from itertools import product
 from os import listdir, path
 from sys import stdout
-from time import time, sleep
-from .utils import fake_yaml as yaml
+from time import sleep, time
 
+from .utils import MODULE_FILEPATH, cached_property
+from .utils import fake_yaml as yaml
+from .utils import read_lines_nocomment, summarize_state
+from .utils import utilrandom as random
 
 DEBUG = False
 REDUCE = True
-MODULE_FILEPATH, _ = path.split(__file__)
 DEFAULT_CONFIG_FILENAME = path.join(MODULE_FILEPATH, 'default.doorrouter.yaml')
 
 
@@ -3427,11 +3427,13 @@ class Graph(RollbackMixin):
                   annotate_edges=False,
                   height=720, width=1280,
                   rooted_only=True, physics=True):
-        from pyvis.network import Network
-        from math import sin, cos, pi
-        import networkx
         import colorsys
         import json
+        from math import cos, pi, sin
+
+        import networkx
+        from pyvis.network import Network
+
         if relabel is None:
             relabel = {}
         if ignore_edges is None:
