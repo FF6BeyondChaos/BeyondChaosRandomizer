@@ -1,5 +1,6 @@
 {
     "Dirk": [
+        "physical"
     ],
     "MithrilKnife": [
         "physical"
@@ -605,7 +606,9 @@
     "Earrings": [
         "magic"
     ],
-    "Atlas Armlet": [],
+    "Atlas Armlet": [
+        "physical"
+    ],
     "Blizzard Orb": [
         "fire",
         "ice"
@@ -624,7 +627,8 @@
         "status"
     ],
     "Hero Ring": [
-        "magic"
+        "magic",
+        "physical"
     ],
     "Ribbon": [
         "berserk",
@@ -731,7 +735,5 @@
     ],
     "Sprint Shoes": [
         "haste"
-    ],
-    "Rename Card": [
     ]
 }

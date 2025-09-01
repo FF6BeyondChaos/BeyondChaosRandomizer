@@ -4228,7 +4228,16 @@
         "physical",
         "physical"
     ],
-    "Umaro 10f": [],
+    "Umaro 10f": [
+        "-fire",
+        "-fire",
+        "-poison",
+        "-poison",
+        "ice",
+        "ice",
+        "physical",
+        "physical"
+    ],
     "Umaro 110": [
         "-fire",
         "-fire",
@@ -4333,7 +4342,8 @@
         "ice"
     ],
     "Kefka 11a": [
-        "nuke"
+        "physical",
+        "physical"
     ],
     "Tentacle 11b": [
         "-ice",
@@ -4686,8 +4696,16 @@
         "water",
         "water"
     ],
-    "Colossus": [],
-    "CzarDragon": [],
+    "Colossus": [
+        "-wind",
+        "-wind",
+        "physical",
+        "physical"
+    ],
+    "CzarDragon": [
+        "physical",
+        "physical"
+    ],
     "Master Pug": [
         "physical",
         "physical",

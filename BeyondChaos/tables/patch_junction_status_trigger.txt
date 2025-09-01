@@ -3,170 +3,285 @@
 .addr   jun-check-entity-can-act        {{jun-global-check-entity-can-act}}
 .addr   jun-check-are-same-team         {{jun-global-check-are-same-team}}
 .addr   jun-deduct-item-if-possible     {{jun-global-deduct-item-if-possible}}
+.addr   jun-generic-dispatch            {{jun-global-generic-dispatch}}
 .addr   jun-mult                        {{jun-global-mult}}
 .addr   jun-rng1                        {{jun-global-rng1}}
+.addr   jun-rng2-noluck                 {{jun-global-rng2-noluck}}
 .addr   jun-count-bits                  {{jun-global-count-bits}}
 .addr   jun-queue-command               {{jun-global-queue-command}}
 .addr   main                            622080
 .addr   main-auto-item                  6222c0
+.addr   main-veil                       622400
+.addr       status-set-1-address            7e3dd4
+.addr       status-set-2-address            7e3de8
+.addr       status-clear-1-address          7e3dfc
+.addr       status-clear-2-address          7e3e10
+.addr       current-status-1-address        7e3ee4
+.addr       current-status-2-address        7e3ef8
+.addr       immunity-1-address              7e331c
+.addr       immunity-2-address              7e3330
 .addr   use-best-item                   622200
 .addr       inventory-address               7e2686
 .addr       inventory-quantity-address      7e2689
 .addr       item-properties-type            185000
 .addr       item-properties-status-byte     185015
 .addr   do-auto-item                    622280
+.addr   handle-safe-shell-immunity      622480
 
 .def    wound-status                80 00
 .def    zombie-status               02 00
 .def    remedy-status               65 48
 
-024585: 22 $main
-:       ea
+.def    status-safe                 40
+.def    status-shell                20
+.def    status-safe-shell           60
+.def    bad-status-1                67      # does not include wound
+.def    bad-status-2                f9
+.def    bad-status-3                14      # stop, slow
+.def    bad-status-4                02      # freeze
+
+0220d2: .jsl $handle-safe-shell-immunity
+:       .nop .nop
+
+02439d: .jsl $main-veil
+:       .nop
+
+024585: .jsl $main
+:       .nop
 
 $main
-:       da 08
-:       c0 08
-:       90 main-is-human
-:       22 $jun-rng1
-:       b0 exit-main
+:       .phx .php
+:       .cpy 08
+:       .bcc main-is-human
+:       .jsl $jun-rng1
+:       .bcs exit-main
 .label main-is-human
-:       20 $main-auto-item,2
+:       .jsr.addr $main-auto-item,2
 
 .label exit-main
-:       28 fa
-:       a5 fc
-:       89 02 00
-:       6b
+:       .plp .plx
+:       .lda.dp fc
+:       .bit 0002
+:       .rtl
+
+$main-veil
+:       .lda.addr.y $current-status-2-address,2
+:       .bit status-safe-shell 00
+:       .beq exit-veil-just-exit
+:       .tyx
+:       .lda.addr.x $status-set-2-address,2
+:       .and.addr.x $immunity-2-address,2
+:       .ora.addr.x $current-status-2-address,2
+:       .eor.addr.x $current-status-2-address,2
+:       .and bad-status-3 bad-status-4
+:       .pha
+:       .lda.addr.x $status-set-1-address,2
+:       .and.addr.x $immunity-1-address,2
+:       .ora.addr.x $current-status-1-address,2
+:       .eor.addr.x $current-status-1-address,2
+:       .and bad-status-1 bad-status-2
+:       .pha
+:       .ora.sr 03
+:       .beq exit-veil
+.label veil-bad-status
+:       .jsl $jun-rng2-noluck
+:       .bit 0001
+:       .bne veil-choose-shell
+:       .lda status-safe 00
+:       .bra veil-safe-shell-chosen
+.label veil-choose-shell
+:       .lda status-shell 00
+.label veil-safe-shell-chosen
+:       .bit.addr.x $current-status-2-address,2
+:       .beq exit-veil
+:       .pha
+:       .lda {{jun-index-veil}} 00
+:       .jsl $jun-checker
+:       .beq exit-veil-pla
+:       .lda.addr.x $immunity-2-address,2
+:       .ora.sr 01
+:       .sta.addr.x $immunity-2-address,2
+:       .lda.addr.x $status-clear-2-address,2
+:       .ora.sr 01
+:       .sta.addr.x $status-clear-2-address,2
+:       .lda.addr.x $status-set-1-address,2
+:       .ora.sr 03
+:       .eor.sr 03
+:       .sta.addr.x $status-set-1-address,2
+:       .lda.addr.x $status-set-2-address,2
+:       .ora.sr 05
+:       .eor.sr 05
+:       .sta.addr.x $status-set-2-address,2
+.label exit-veil-pla
+:       .pla
+.label exit-veil
+:       .pla
+:       .pla
+.label exit-veil-just-exit
+:       .pea 450d
+:       .jsl $jun-generic-dispatch
+:       .lda.dp fc
+:       .rtl
+
+$handle-safe-shell-immunity
+:       .pea 527d
+:       .jsl $jun-generic-dispatch
+:       .pea 2675
+:       .jsl $jun-generic-dispatch
+:       .php
+:       .sep 20
+:       .lda {{jun-index-glass-aura}}
+:       .jsl $jun-checker
+:       .bne safe-shell-immunity-disable
+:       .lda {{jun-index-discharge}}
+:       .jsl $jun-checker
+:       .bne safe-shell-immunity-disable
+:       .lda {{jun-index-veil}}
+:       .jsl $jun-checker
+:       .beq safe-shell-immunity-exit
+.label safe-shell-immunity-disable
+:       .lda.addr.x $immunity-2-address,2
+:       .ora status-safe-shell
+:       .sta.addr.x $immunity-2-address,2
+.label safe-shell-immunity-exit
+:       .plp
+:       .rtl
 
 $main-auto-item
-:       a5 fc
-:       19 e4 3e
-:       59 e4 3e
-:       48
+:       .lda.dp fc
+:       .ora.addr.y 3ee4
+:       .eor.addr.y 3ee4
+:       .pha
 
-:       29 wound-status
-:       f0 no-fenix
-:       83 01
-:       a9 {{jun-index-auto-down}} 00
-:       20 $do-auto-item,2
+:       .and wound-status
+:       .beq no-fenix
+:       .sta.sr 01
+:       .lda {{jun-index-auto-down}} 00
+:       .jsr.addr $do-auto-item,2
 
 .label no-fenix
-:       a3 01
-:       29 zombie-status
-:       f0 no-revivify
-:       83 01
-:       a9 {{jun-index-auto-revivify}} 00
-:       20 $do-auto-item,2
+:       .lda.sr 01
+:       .and zombie-status
+:       .beq no-revivify
+:       .sta.sr 01
+:       .lda {{jun-index-auto-revivify}} 00
+:       .jsr.addr $do-auto-item,2
 
 .label no-revivify
-:       a3 01
-:       29 remedy-status
-:       f0 no-remedy
-:       83 01
-:       a9 {{jun-index-auto-remedy}} 00
-:       20 $do-auto-item,2
+:       .lda.sr 01
+:       .and remedy-status
+:       .beq no-remedy
+:       .sta.sr 01
+:       .lda {{jun-index-auto-remedy}} 00
+:       .jsr.addr $do-auto-item,2
 
 .label no-remedy
-:       68
-:       60
+:       .pla
+:       .rts
 
 $do-auto-item
-:       48
+:       .pha
 
-:       a2 12
+:       .ldx 12
 .label auto-item-loop
-:       22 $jun-check-are-same-team
-:       f0 auto-item-skip
-:       22 $jun-check-entity-can-act
-:       f0 auto-item-skip
-:       a3 01
-:       22 $jun-checker
-:       f0 auto-item-skip
-:       20 $use-best-item,2
-:       f0 auto-item-skip
-:       e2 20
-:       9d f4 32
-:       8d 7b 3a
-:       a9 01
-:       8d 7a 3a
-:       c2 20
-:       b9 18 30
-:       85 b8
-:       22 $jun-queue-command
+:       .jsl $jun-check-are-same-team
+:       .beq auto-item-skip
+:       .jsl $jun-check-entity-can-act
+:       .beq auto-item-skip
+:       .lda.sr 01
+:       .jsl $jun-checker
+:       .beq auto-item-skip
+:       .jsr.addr $use-best-item,2
+:       .beq auto-item-skip
+:       .sep 20
+:       .sta.addr.x 32f4
+:       .sta.addr 3a7b
+:       .lda 01
+:       .sta.addr 3a7a
+:       .rep 20
+:       .lda.addr.y 3018
+:       .sta.dp b8
+:       .jsl $jun-queue-command
 .label auto-item-skip
-:       ca ca
-:       10 auto-item-loop
+:       .dex .dex
+:       .bpl auto-item-loop
 
-:       68
-:       60
+:       .pla
+:       .rts
 
 $use-best-item
-:       da 08
-:       c2 30
-:       5a
-:       a9 ff 00
-:       48
+:       .phx .php
+:       .rep 30
+:       .phy
+:       .lda 00ff
+:       .pha
 
-:       a0 00 00
+:       .ldy 0000
 .label use-best-inventory-loop
-:       b9 $inventory-quantity-address,2
-:       29 ff 00
-:       f0 use-best-inventory-skip
-:       b9 $inventory-address,2
-:       29 ff 00
-:       09 00 1e
-:       22 $jun-mult
-:       aa
-:       bf $item-properties-type
-:       29 2f 00
-:       c9 26 00
-:       d0 use-best-inventory-skip
-:       bf $item-properties-status-byte
-:       c3 0d
-:       f0 use-best-inventory-found-best
-:       23 0d
-:       f0 use-best-inventory-skip
-:       da
-:       a2 00 00
-:       22 $jun-count-bits
-:       8a
-:       fa
-:       eb
-:       c3 01
-:       90 use-best-inventory-skip
-:       e2 20
-:       b9 $inventory-address,2
-:       c2 20
-:       83 01
+:       .lda.addr.y $inventory-quantity-address,2
+:       .and 00ff
+:       .beq use-best-inventory-skip
+:       .lda.addr.y $inventory-address,2
+:       .and 00ff
+:       .ora 1e00
+:       .jsl $jun-mult
+:       .tax
+:       .lda.long.x $item-properties-type
+:       .and 002f
+:       .cmp 0026
+:       .bne use-best-inventory-skip
+:       .lda.long.x $item-properties-status-byte
+:       .cmp.sr 0d
+:       .beq use-best-inventory-found-best
+:       .and.sr 0d
+:       .beq use-best-inventory-skip
+:       .phx
+:       .ldx 0000
+:       .jsl $jun-count-bits
+:       .txa
+:       .plx
+:       .xba
+:       .cmp.sr 01
+:       .bcc use-best-inventory-skip
+:       .sep 20
+:       .lda.addr.y $inventory-address,2
+:       .rep 20
+:       .sta.sr 01
 .label use-best-inventory-skip
-:       c8 c8 c8 c8 c8
-:       c0 00 05
-:       d0 use-best-inventory-loop
+:       .iny .iny .iny .iny .iny
+:       .cpy 0500
+:       .bne use-best-inventory-loop
 
 .label exit-use-best
-:       68
-:       7a
-:       28 fa
-:       29 ff 00
-:       c9 ff 00
-:       f0 use-best-nothing-found
-:       c0 08
-:       b0 use-best-monster-success
-:       22 $jun-deduct-item-if-possible
+:       .pla
+:       .ply
+:       .plp .plx
+:       .and 00ff
+:       .cmp 00ff
+:       .beq use-best-nothing-found
+:       .cpy 08
+:       .bcs use-best-monster-success
+:       .jsl $jun-deduct-item-if-possible
 .label use-best-nothing-found
-:       60
+:       .rts
 .label use-best-monster-success
-:       c2 02
-:       60
+:       .rep 02
+:       .rts
 
 .label use-best-inventory-found-best
-:       e2 20
-:       b9 $inventory-address,2
-:       c2 20
-:       83 01
-:       80 exit-use-best
+:       .sep 20
+:       .lda.addr.y $inventory-address,2
+:       .rep 20
+:       .sta.sr 01
+:       .bra exit-use-best
 
 VALIDATION
 
-024585: a5 fc
-:       89 02 00
+0220d2: .jsr.addr 527d
+:       .jsr.addr 2675
+
+02439d: .jsr.addr 450d
+:       .lda.dp fc
+
+024585: .lda.dp fc
+:       .bit 0002

@@ -1,161 +1,187 @@
 .addr   jun-checker                     {{jun-global-checker}}
 .addr   jun-check-entity-living         {{jun-global-check-entity-living}}
+.addr   check-able-bodied               {{jun-global-check-able-bodied}}
+
 .addr   main-focus                      620800
 .addr   main-lucid-dead                 620860
 .addr   return-focus                    02095c
 .addr   check-lucid-dead                620d00
-.addr   check-focus                     620d80
-.addr   check-able-bodied               620d40
+.addr   check-focus                     622f80
 
-020956: 5c $main-focus
-:       ea ea
+.addr   zombie-status-address           7e3ee4
+.addr   berserk-muddle-status-address   7e3ee5
+.addr   dance-status-address            7e3ef8
+.addr   rage-status-address             7e3ef9
+.def    status-zombie           02
+.def    status-berserk-muddle   30
+.def    status-dance            01
+.def    status-rage             01
 
-02597a: 22 $main-lucid-dead
+020956: .jml $main-focus
+:       .nop .nop
+
+02597a: .jsl $main-lucid-dead
 
 $main-focus
-:       f4 c2 b0
-:       f4 01 21
+:       .pea b0c2
+:       .pea 2101
 
-:       20 $check-focus,2
-:       f0 no-focus
-:       c2 20
-:       a9 ff cf
-:       23 03
-:       83 03
-:       a9 fe fe
-:       23 01
-:       83 01
-:       e2 20
+:       .jsr.addr $check-focus,2
+:       .beq no-focus
+:       .rep 20
+:       .lda cfff
+:       .and.sr 03
+:       .sta.sr 03
+:       .lda fefe
+:       .and.sr 01
+:       .sta.sr 01
+:       .sep 20
 
 .label no-focus
-:       20 $check-lucid-dead,2
-:       f0 no-lucid-dead
-:       c2 20
-:       a9 fd ff
-:       23 03
-:       83 03
-:       e2 20
+:       .jsr.addr $check-lucid-dead,2
+:       .beq no-lucid-dead
+:       .rep 20
+:       .lda fffd
+:       .and.sr 03
+:       .sta.sr 03
+:       .sep 20
 
 .label no-lucid-dead
-:       bd 18 30
-:       2c 2c 3f
-:       f0 main-focus-exit
-:       a9 {{jun-index-highwind}}
-:       22 $jun-checker
-:       f0 main-focus-exit
-:       c2 20
-:       a9 ff df
-:       23 01
-:       83 01
-:       e2 20
+:       .lda.addr.x 3018
+:       .bit.addr 3f2c
+:       .beq main-focus-exit
+:       .lda {{jun-index-highwind}}
+:       .jsl $jun-checker
+:       .beq main-focus-exit
+:       .rep 20
+:       .lda dfff
+:       .and.sr 01
+:       .sta.sr 01
+:       .sep 20
 
 .label main-focus-exit
-:       5c $return-focus
+:       .jml $return-focus
 
 $main-lucid-dead
-:       20 $check-lucid-dead,2
-:       d0 lucid-dead-active
-:       a9 40
-:       04 b8
+:       .jsr.addr $check-lucid-dead,2
+:       .bne lucid-dead-active
+:       .lda 40
+:       .tsb.dp b8
 .label lucid-dead-active
-:       6b
+:       .rtl
 
 $check-able-bodied
-:       08
-:       22 $jun-check-entity-living
-:       f0 exit-not-able-bodied
+:       .php
+:       .jsl $jun-check-entity-living
+:       .beq exit-not-able-bodied
 
-:       c2 20
-:       a9 c2 b8
-:       3c e4 3e
-:       d0 exit-not-able-bodied
-:       a9 10 22
-:       3c f8 3e
-:       d0 exit-not-able-bodied
+:       .rep 20
+:       .lda b8c2
+:       .bit.addr.x 3ee4
+:       .bne exit-not-able-bodied
+:       .lda 2210
+:       .bit.addr.x 3ef8
+:       .bne exit-not-able-bodied
 
 .label exit-able-bodied
-:       28
-:       c2 02
-:       60
+:       .plp
+:       .rep 02
+:       .rts
 .label exit-not-able-bodied
-:       28
-:       e2 02
-:       60
+:       .plp
+:       .sep 02
+:       .rts
 
 $check-lucid-dead
-:       e0 08
-:       b0 exit-lucid-no-stack
-:       48
-:       86 10
+:       .cpx 08
+:       .bcs exit-lucid-no-stack
 
-:       a9 {{jun-index-lucid-dead}}
-:       22 $jun-checker
-:       d0 exit-has-lucid-dead
+:       .pha
+:       .stx.dp 10
 
-:       a2 06
+:       .lda status-zombie
+:       .bit.addr.x $zombie-status-address,2
+:       .beq exit-no-lucid-dead
+
+:       .lda {{jun-index-lucid-dead}}
+:       .jsl $jun-checker
+:       .bne exit-has-lucid-dead
+
+:       .ldx 06
 .label necromancer-loop
-:       e4 10
-:       f0 necromancer-skip
-:       20 $check-able-bodied,2
-:       f0 necromancer-skip
-:       a9 {{jun-index-necromancer}}
-:       22 $jun-checker
-:       d0 exit-has-lucid-dead
+:       .cpx.dp 10
+:       .beq necromancer-skip
+:       .jsr.addr $check-able-bodied,2
+:       .beq necromancer-skip
+:       .lda {{jun-index-necromancer}}
+:       .jsl $jun-checker
+:       .bne exit-has-lucid-dead
 .label necromancer-skip
-:       ca ca
-:       10 necromancer-loop
+:       .dex .dex
+:       .bpl necromancer-loop
 
 .label exit-no-lucid-dead
-:       a6 10
-:       68
+:       .ldx.dp 10
+:       .pla
 .label exit-lucid-no-stack
-:       e2 02
-:       60
+:       .sep 02
+:       .rts
 .label exit-has-lucid-dead
-:       a6 10
-:       68
-:       c2 02
-:       60
+:       .ldx.dp 10
+:       .pla
+:       .rep 02
+:       .rts
 
 $check-focus
-:       e0 08
-:       b0 exit-focus-no-stack
-:       48
-:       86 10
+:       .cpx 08
+:       .bcs exit-focus-no-stack
+:       .pha
+:       .stx.dp 10
 
-:       a9 {{jun-index-focus}}
-:       22 $jun-checker
-:       d0 exit-has-focus
+:       .lda status-berserk-muddle
+:       .bit $berserk-muddle-status-address,2
+:       .bne attempt-focus
+:       .lda status-dance
+:       .bit $dance-status-address,2
+:       .bne attempt-focus
+:       .lda status-rage
+:       .bit $rage-status-address,2
+:       .beq exit-no-focus
 
-:       a2 06
+.label attempt-focus
+:       .lda {{jun-index-focus}}
+:       .jsl $jun-checker
+:       .bne exit-has-focus
+
+:       .ldx 06
 .label commander-loop
-:       e4 10
-:       f0 commander-skip
-:       20 $check-able-bodied,2
-:       f0 commander-skip
-:       a9 {{jun-index-commander}}
-:       22 $jun-checker
-:       d0 exit-has-focus
+:       .cpx.dp 10
+:       .beq commander-skip
+:       .jsr.addr $check-able-bodied,2
+:       .beq commander-skip
+:       .lda {{jun-index-commander}}
+:       .jsl $jun-checker
+:       .bne exit-has-focus
 .label commander-skip
-:       ca ca
-:       10 commander-loop
+:       .dex .dex
+:       .bpl commander-loop
 
 .label exit-no-focus
-:       a6 10
-:       68
+:       .ldx.dp 10
+:       .pla
 .label exit-focus-no-stack
-:       e2 02
-:       60
+:       .sep 02
+:       .rts
 .label exit-has-focus
-:       a6 10
-:       68
-:       c2 02
-:       60
+:       .ldx.dp 10
+:       .pla
+:       .rep 02
+:       .rts
 
 VALIDATION
 
-020956: f4 c2 b0
-:       f4 01 21
+020956: .pea b0c2
+:       .pea 2101
 
-02597a: a9 40
-:       04 b8
+02597a: .lda 40
+:       .tsb.dp b8
