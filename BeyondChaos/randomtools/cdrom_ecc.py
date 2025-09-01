@@ -69,7 +69,42 @@ def encode_L2_Q(data):
     return data
 
 
-def get_edc_ecc(data):
+EDC_ECC_CACHE = {}
+
+
+def get_edc_ecc_cache_key(data):
+    length = len(data)
+    if length > 0x808:
+        index = min(0x10, length - 0x808)
+        return data[index:index+0x808]
+    return data
+
+
+def cache_edc_ecc(data, edc_ecc=None):
+    key = get_edc_ecc_cache_key(data)
+    if edc_ecc is None:
+        assert len(data) == 0x930
+        edc_ecc = data[0x10+len(key):]
+        assert len(edc_ecc) == 0x118
+    if isinstance(edc_ecc, bytes):
+        edc = edc_ecc[:4]
+        ecc = edc_ecc[4:]
+    else:
+        edc, ecc = edc_ecc
+    assert len(edc) == 4
+    assert len(ecc) == 0x114
+    if key in EDC_ECC_CACHE and EDC_ECC_CACHE[key] != (edc, ecc):
+        assert len(data) >= 0x818
+        edc, ecc = get_edc_ecc(data[:0x818], use_cache=False)
+    EDC_ECC_CACHE[key] = (edc, ecc)
+
+
+def get_edc_ecc(data, use_cache=True):
+    if use_cache:
+        key = get_edc_ecc_cache_key(data)
+        if key in EDC_ECC_CACHE:
+            return EDC_ECC_CACHE[key]
+        original_data = data
     assert len(data) == 0x818
     edc = crc32(data[0x10:0x818])
     for _ in range(4):
@@ -81,7 +116,11 @@ def get_edc_ecc(data):
     temp = encode_L2_Q(temp)
     data += bytes(temp[-0x114:])
     assert len(data) == 0x930
-    return data[0x818:0x81c], data[0x81c:]
+    edc, ecc = data[0x818:0x81c], data[0x81c:]
+    if not use_cache:
+        return edc, ecc
+    EDC_ECC_CACHE[key] = (edc, ecc)
+    return get_edc_ecc(original_data, use_cache=True)
 
 
 def get_edc_form2(data):

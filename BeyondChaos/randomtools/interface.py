@@ -1,20 +1,20 @@
-from sys import argv
-from os import stat, listdir, path
 import string
-from time import time
-from shutil import copyfile
 from collections import defaultdict
+from os import listdir, path, stat
+from shutil import copyfile
+from sys import argv
+from time import time
 
-from .tablereader import (
-    determine_global_table, sort_good_order, set_table_specs,
-    set_global_output_filename, select_patches, write_patches, verify_patches,
-    get_random_degree, set_random_degree, get_difficulty, set_difficulty,
-    set_seed, get_seed, close_file, get_addressing_mode, set_addressing_mode,
-    reimport_psx_files)
-from .utils import (
-    utilrandom as random, rewrite_snes_title, rewrite_snes_checksum,
-    md5hash)
 from .psx_file_extractor import DELTA_FILE
+from .tablereader import (close_file, determine_global_table,
+                          get_addressing_mode, get_difficulty,
+                          get_random_degree, get_seed, reimport_psx_files,
+                          select_patches, set_addressing_mode, set_difficulty,
+                          set_global_output_filename, set_patch_aliases,
+                          set_random_degree, set_seed, set_table_specs,
+                          sort_good_order, verify_patches, write_patches)
+from .utils import md5hash, rewrite_snes_checksum, rewrite_snes_title
+from .utils import utilrandom as random
 
 sourcefile = None
 outfile = None
@@ -252,6 +252,7 @@ def run_interface(objects, custom_degree=False, custom_difficulty=False,
     try:
         print('Making copy of rom file...')
         if snes:
+            set_patch_aliases('reference.65816.txt')
             snescopy(sourcefile, outfile)
             if lorom:
                 set_addressing_mode('lorom')

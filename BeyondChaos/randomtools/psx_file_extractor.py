@@ -3,7 +3,8 @@ from os import makedirs, path, stat, environ
 from string import printable
 from sys import argv
 from .utils import cached_property
-from .cdrom_ecc import get_edc_ecc
+from .cdrom_ecc import get_edc_ecc, cache_edc_ecc
+from .cdrom_ecc import get_edc_ecc_cache_key
 
 
 SYNC_PATTERN = bytes([0] + ([0xFF]*10) + [0])
@@ -33,6 +34,8 @@ def file_from_sectors(imgname, initial_sector, tempname=None):
     sector_index = initial_sector
     while True:
         pointer = sector_index * 0x930
+        f.seek(pointer)
+        cache_edc_ecc(f.read(0x930))
         f.seek(pointer+0x12)
         submode = ord(f.read(1))
         f.seek(pointer+0x16)
@@ -164,6 +167,7 @@ class FileManager(object):
         self.sector = sector
         self.files = read_directory(
             imgname, dirname, minute=minute, second=second, sector=sector)
+        self.moved_files = {}
 
     @property
     def flat_files(self):
@@ -342,7 +346,9 @@ class FileManager(object):
         return new_file
 
     def import_file(self, name, filepath=None, new_target_sector=None,
-                    force_recalc=False, verify=False, template=None):
+                    force_recalc=False, verify=None, template=None):
+        if DEBUG and verify is None:
+            verify = True
         if not name.endswith(';1'):
             name = name + ';1'
         if filepath is None:
@@ -360,7 +366,7 @@ class FileManager(object):
                 old_size = ceil(old_file.filesize / 0x800)
                 if new_size <= old_size:
                     new_target_sector = old_file.target_sector
-            else:
+            elif verify is None:
                 verify = True
         else:
             assert template
@@ -371,8 +377,11 @@ class FileManager(object):
             verify = True
             force_recalc = True
 
+        if new_target_sector != old_file.target_sector:
+            self.moved_files[name] = (old_file.target_sector,
+                                      new_target_sector)
+
         assert new_target_sector is not None
-        verify = verify or DEBUG
 
         if verify:
             end_sector = new_target_sector + new_size
@@ -460,7 +469,7 @@ class FileEntry:
 
     @property
     def num_sectors(self):
-        num_sectors = self.filesize / 0x800
+        num_sectors = self.filesize // 0x800
         if self.filesize > num_sectors * 0x800:
             num_sectors += 1
         return max(num_sectors, 1)

@@ -1,0 +1,13 @@
+logic_filename:       router_logic.txt
+nodes_filename:       router_nodes.txt
+retry_limit:           500  # Max loops before reaching goal
+retry_limit_close:    1000  # Max loops to cleanup once goal has been reached
+time_limit:            300  # Seconds before giving up
+fg_cache_limit:      10000  # Max cache size for node guarantee simplification
+map_size:             1.00  # Percentage of all possible nodes to connect
+map_strictness:       0.95  # Lower bound portion of selected nodes to connect
+avoid_softlocks:      True  # Create a graph where you can't get stuck
+skip_complex_nodes:   0.00  # Rate to skip nodes that are difficult to route
+lazy_complex_nodes:   False # Simplify complex nodes (softlock potential)
+goal_based_missables: False # Missable nodes only relevant if required by goal
+no_logic:             False # Disable maze routing logic

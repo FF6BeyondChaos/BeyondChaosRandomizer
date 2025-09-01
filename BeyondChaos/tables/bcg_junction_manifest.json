@@ -196,7 +196,13 @@
         "atma_force":           "ab",
         "corrosive":            "ac",
         "overheal":             "ad",
-        "juggler":              "ae"
+        "juggler":              "ae",
+        "angel_wing":           "af",
+        "glass_aura":           "b0",
+        "power_charge":         "b1",
+        "discharge":            "b2",
+        "aura_hunter":          "b3",
+        "veil":                 "b4"
     },
 
     "junction_short_names": {
@@ -372,7 +378,13 @@
         "atma_force":           "Atma Force",
         "corrosive":            "Corrosive",
         "overheal":             "Overheal",
-        "juggler":              "Juggler"
+        "juggler":              "Juggler",
+        "angel_wing":           "Angel Wing",
+        "glass_aura":           "Glass Aura",
+        "power_charge":         "Power Charge",
+        "discharge":            "Discharge",
+        "aura_hunter":          "Aura Hunter",
+        "veil":                 "Veil"
     },
 
     "junction_tags": {
@@ -548,7 +560,13 @@
         "atma_force":           ["life", "-death", "heal"],
         "corrosive":            ["poison", "debuff", "-heal"],
         "overheal":             ["heal"],
-        "juggler":              ["defend"]
+        "juggler":              ["defend"],
+        "angel_wing":           ["magic", "berserk"],
+        "glass_aura":           ["defend", "buff", "safe", "shell"],
+        "power_charge":         ["buff", "fire", "ice", "bolt", "poison", "wind", "pearl", "earth", "water"],
+        "discharge":            ["safe", "shell", "physical", "magic", "buff"],
+        "aura_hunter":          ["safe", "shell", "debuff", "buff"],
+        "veil":                 ["safe", "shell", "debuff", "status", "heal"]
     },
 
     "esper_tags":       "tags_esper.json",
@@ -773,7 +791,7 @@
         "every_monster":    ["quickening", "reverse"]
     },
 
-    "always_banlist":       ["luck_font", "luck_sink"],
+    "always_banlist":       ["luck_font", "luck_sink", "junction_jammer"],
     "character_banlist":    [],
     "esper_banlist":        ["repel_nuke", "caller"],
     "equip_banlist":        ["repel_nuke", "boost_nuke"],
@@ -801,9 +819,11 @@
         "bit-to-combatant-index":           "6109c0",
         "bit-to-index":                     "6108d0",
         "check-are-same-team":              "6105e0",
+        "check-able-bodied":                "622f40",
         "check-blacklist":                  "610180",
         "check-blacklist-monster-version":  "6102c0",
-        "check-count-all-living":           "610680",
+        "check-count-all-living":           "610580",
+        "check-count-half-living":          "610680",
         "check-entity-can-act":             "6106c0",
         "check-entity-living":              "610600",
         "check-entity-present":             "610640",
@@ -822,6 +842,7 @@
         "check-whitelist-monster-version":  "610280",
         "checker":                          "610000",
         "checker-y":                        "6100e0",
+        "checker-half":                     "6100f0",
         "command-custom-mp-spell":          "61f184",
         "command-final-attack":             "61f188",
         "command-fixed-damage":             "61f18a",
@@ -843,6 +864,7 @@
         "monster-equip-steal-enabled":      "6104fc",
         "monster-equip-drop-enabled":       "6104fe",
         "mult":                             "610800",
+        "mult32":                           "610b00",
         "queue-command":                    "610ff0",
         "queue-self-spell":                 "610fc0",
         "reload-character-commands":        "610f80",
@@ -1408,6 +1430,25 @@
         ],
         "juggler": [
             "patch_junction_damage_trigger.txt"
+        ],
+        "angel_wing": [
+            "patch_junction_angel_wing.txt",
+            "patch_junction_hit_trigger.txt"
+        ],
+        "glass_aura": [
+            "patch_junction_damage_trigger.txt"
+        ],
+        "power_charge": [
+            "patch_junction_damage_trigger.txt"
+        ],
+        "discharge": [
+            "patch_junction_damage_trigger.txt"
+        ],
+        "aura_hunter": [
+            "patch_junction_damage_trigger.txt"
+        ],
+        "veil": [
+            "patch_junction_status_trigger.txt"
         ]
     }
 }
