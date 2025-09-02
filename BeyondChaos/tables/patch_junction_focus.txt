@@ -139,13 +139,13 @@ $check-focus
 :       .stx.dp 10
 
 :       .lda status-berserk-muddle
-:       .bit $berserk-muddle-status-address,2
+:       .bit.addr.x $berserk-muddle-status-address,2
 :       .bne attempt-focus
 :       .lda status-dance
-:       .bit $dance-status-address,2
+:       .bit.addr.x $dance-status-address,2
 :       .bne attempt-focus
 :       .lda status-rage
-:       .bit $rage-status-address,2
+:       .bit.addr.x $rage-status-address,2
 :       .beq exit-no-focus
 
 .label attempt-focus
